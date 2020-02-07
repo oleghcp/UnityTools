@@ -8,6 +8,7 @@ using UU.RNGenerators;
 using UnityEngine;
 
 using UR = UnityEngine.Random;
+using UU.BitMasks;
 
 namespace UU
 {

@@ -4,6 +4,7 @@ using UU.MathExt;
 using UnityEditor;
 using UU.Collections;
 using UUEditor.Drawers;
+using UU.BitMasks;
 
 namespace UUEditor.Windows
 {

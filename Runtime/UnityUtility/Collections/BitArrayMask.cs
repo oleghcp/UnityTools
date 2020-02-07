@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UU.BitMasks;
 
 namespace UU.Collections
 {
@@ -408,7 +409,7 @@ namespace UU.Collections
 
             for (int i = 0; i < lastElement; i++)
             {
-                count += BitMaskExtensions.GetUnitsCount(m_array[i]);
+                count += BitMask.GetUnitsCount(m_array[i]);
             }
 
             return count;
@@ -430,8 +431,8 @@ namespace UU.Collections
 
         public int ToIntBitMask(bool throwIfOutOfRange = true)
         {
-            if (throwIfOutOfRange && m_length > BitMaskExtensions.SIZE)
-                throw new InvalidOperationException("Bit array has length more than " + BitMaskExtensions.SIZE.ToString());
+            if (throwIfOutOfRange && m_length > BitMask.SIZE)
+                throw new InvalidOperationException("Bit array has length more than " + BitMask.SIZE.ToString());
 
             return m_array.Length > 0 ? m_array[0] : 0;
         }
@@ -443,9 +444,9 @@ namespace UU.Collections
 
         // -- //
 
-        public static BitArrayMask CreateFromBitMask(int bitMask, int length = BitMaskExtensions.SIZE)
+        public static BitArrayMask CreateFromBitMask(int bitMask, int length = BitMask.SIZE)
         {
-            if (length > BitMaskExtensions.SIZE || length < 0)
+            if (length > BitMask.SIZE || length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative or more than 32.");
 
             return new BitArrayMask()

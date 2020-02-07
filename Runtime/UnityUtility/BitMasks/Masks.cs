@@ -1,42 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UU.Collections;
 
-namespace UU.Collections
+namespace UU.BitMasks
 {
     public static class Masks
     {
         public static int CreateMask(int flag0)
         {
             int mask = 0;
-            mask.AddFlag(flag0);
+            BitMask.AddFlag(ref mask, flag0);
             return mask;
         }
 
         public static int CreateMask(int flag0, int flag1)
         {
             int mask = 0;
-            mask.AddFlag(flag0);
-            mask.AddFlag(flag1);
+            BitMask.AddFlag(ref mask, flag0);
+            BitMask.AddFlag(ref mask, flag1);
             return mask;
         }
 
         public static int CreateMask(int flag0, int flag1, int flag2)
         {
             int mask = 0;
-            mask.AddFlag(flag0);
-            mask.AddFlag(flag1);
-            mask.AddFlag(flag2);
+            BitMask.AddFlag(ref mask, flag0);
+            BitMask.AddFlag(ref mask, flag1);
+            BitMask.AddFlag(ref mask, flag2);
             return mask;
         }
 
         public static int CreateMask(int flag0, int flag1, int flag2, int flag3)
         {
             int mask = 0;
-            mask.AddFlag(flag0);
-            mask.AddFlag(flag1);
-            mask.AddFlag(flag2);
-            mask.AddFlag(flag3);
+            BitMask.AddFlag(ref mask, flag0);
+            BitMask.AddFlag(ref mask, flag1);
+            BitMask.AddFlag(ref mask, flag2);
+            BitMask.AddFlag(ref mask, flag3);
             return mask;
         }
 
@@ -44,7 +45,7 @@ namespace UU.Collections
         {
             int mask = 0;
             for (int i = 0; i < flags.Length; i++)
-            { mask.AddFlag(flags[i]); }
+            { BitMask.AddFlag(ref mask, flags[i]); }
             return mask;
         }
 

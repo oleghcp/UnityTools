@@ -1,180 +1,180 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace UU.Collections
+namespace UU
 {
-    public static partial class BitMaskExtensions
+    public static class BitMask
     {
         internal const int SIZE = 32;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEmpty(this int value)
+        public static bool IsEmpty(int mask)
         {
-            return value == 0;
+            return mask == 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNotEmpty(this int value)
+        public static bool IsNotEmpty(int mask)
         {
-            return value != 0;
+            return mask != 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsFull(this int value)
+        public static bool IsFull(int mask)
         {
-            return value == -1;
+            return mask == -1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddFlag(this ref int value, int index)
+        public static void AddFlag(ref int mask, int index)
         {
-            value |= 1 << index;
+            mask |= 1 << index;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RemoveFlag(this ref int value, int index)
+        public static void RemoveFlag(ref int mask, int index)
         {
-            value &= ~(1 << index);
+            mask &= ~(1 << index);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SwitchFlag(this ref int value, int index)
+        public static void SwitchFlag(ref int mask, int index)
         {
-            value ^= 1 << index;
+            mask ^= 1 << index;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ContainsFlag(this int value, int index)
+        public static bool ContainsFlag(int mask, int index)
         {
-            return (value & 1 << index) != 0;
+            return (mask & 1 << index) != 0;
         }
 
-        public static void SetFlag(this ref int value, int index, bool flagValue)
+        public static void SetFlag(ref int mask, int index, bool flagValue)
         {
-            if (flagValue) { value.AddFlag(index); }
-            else { value.RemoveFlag(index); }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddFlags(this ref int value, int otherFlags)
-        {
-            value |= otherFlags;
+            if (flagValue) { AddFlag(ref mask, index); }
+            else { RemoveFlag(ref mask, index); }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RemoveFlags(this ref int value, int otherFlags)
+        public static void AddFlags(ref int mask, int otherMask)
         {
-            value ^= value & otherFlags;
+            mask |= otherMask;
         }
 
-        public static void SetFlags(this ref int value, int otherFlags, bool flagValue)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void RemoveFlags(ref int mask, int otherMask)
         {
-            if (flagValue) { value.AddFlags(otherFlags); }
-            else { value.RemoveFlags(otherFlags); }
+            mask ^= mask & otherMask;
         }
 
-        public static void AddAll(this ref int value, int length = SIZE)
+        public static void SetFlags(ref int mask, int otherMask, bool flagValue)
+        {
+            if (flagValue) { AddFlags(ref mask, otherMask); }
+            else { RemoveFlags(ref mask, otherMask); }
+        }
+
+        public static void AddAll(ref int mask, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             if (length == SIZE)
             {
-                value = -1;
+                mask = -1;
             }
             else
             {
                 for (int i = 0; i < length; i++)
                 {
-                    value.AddFlag(i);
+                    AddFlag(ref mask, i);
                 }
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Clear(this ref int value)
+        public static void Clear(ref int mask)
         {
-            value = 0;
+            mask = 0;
         }
 
-        public static void SetAll(this ref int value, bool flagValue, int length = SIZE)
+        public static void SetAll(ref int mask, bool flagValue, int length = SIZE)
         {
-            if (flagValue) { value.AddAll(length); }
-            else { value.Clear(); }
+            if (flagValue) { AddAll(ref mask, length); }
+            else { Clear(ref mask); }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void InvertAll(this ref int value)
+        public static void InvertAll(ref int mask)
         {
-            value = ~value;
+            mask = ~mask;
         }
 
-        public static bool AllOf(this int value, int otherFlags)
+        public static bool AllOf(int mask, int otherMask)
         {
             for (int i = 0; i < SIZE; i++)
             {
-                if (otherFlags.ContainsFlag(i) && !value.ContainsFlag(i))
+                if (ContainsFlag(otherMask, i) && !ContainsFlag(mask, i))
                     return false;
             }
 
             return true;
         }
 
-        public static bool AnyOf(this int value, int otherFlags)
+        public static bool AnyOf(int mask, int otherMask)
         {
             for (int i = 0; i < SIZE; i++)
             {
-                if (otherFlags.ContainsFlag(i) && value.ContainsFlag(i))
+                if (ContainsFlag(otherMask, i) && ContainsFlag(mask, i))
                     return true;
             }
 
             return false;
         }
 
-        public static bool AllFor(this int value, int length)
+        public static bool AllFor(int mask, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             if (length == SIZE)
-                return value.IsFull();
+                return IsFull(mask);
 
             for (int i = 0; i < length; i++)
             {
-                if (!value.ContainsFlag(i))
+                if (!ContainsFlag(mask, i))
                     return false;
             }
             return true;
         }
 
-        public static bool AnyFor(this int value, int length)
+        public static bool AnyFor(int mask, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             if (length == SIZE)
-                return value.IsNotEmpty();
+                return IsNotEmpty(mask);
 
             for (int i = 0; i < length; i++)
             {
-                if (value.ContainsFlag(i))
+                if (ContainsFlag(mask, i))
                     return true;
             }
             return false;
         }
 
-        public static int GetCount(this int value, int length = SIZE)
+        public static int GetCount(int mask, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             if (length == SIZE)
-                return GetUnitsCount(value);
+                return GetUnitsCount(mask);
 
             int count = 0;
             for (int i = 0; i < length; i++)
             {
-                if (value.ContainsFlag(i))
+                if (ContainsFlag(mask, i))
                     count++;
             }
             return count;

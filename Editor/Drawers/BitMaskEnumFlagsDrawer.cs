@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEditor;
 using UU.Collections;
 using UUEditor.Windows;
+using UU;
+using UU.BitMasks;
 
 namespace UUEditor.Drawers
 {
@@ -33,9 +35,9 @@ namespace UUEditor.Drawers
                 {
                     values = Enum.GetValues((drawer.attribute as BitMaskEnumFlagsAttribute).EnumType);
 
-                    if (values.Length > BitMaskExtensions.SIZE)
+                    if (values.Length > BitMask.SIZE)
                     {
-                        m_error = "Enum values amount cannot be more than " + BitMaskExtensions.SIZE.ToString();
+                        m_error = "Enum values amount cannot be more than " + BitMask.SIZE.ToString();
                         return;
                     }
 

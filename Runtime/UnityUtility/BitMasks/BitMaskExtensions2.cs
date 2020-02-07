@@ -1,76 +1,77 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using UU.Collections;
 
-namespace UU.Collections
+namespace UU.BitMasks
 {
     public static partial class BitMaskExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Add<TEnum>(this ref int mask, TEnum flag) where TEnum : Enum
         {
-            mask.AddFlag(flag.ToInteger());
+            BitMask.AddFlag(ref mask, flag.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Remove<TEnum>(this ref int mask, TEnum flag) where TEnum : Enum
         {
-            mask.RemoveFlag(flag.ToInteger());
+            BitMask.RemoveFlag(ref mask, flag.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Switch<TEnum>(this ref int mask, TEnum flag) where TEnum : Enum
         {
-            mask.SwitchFlag(flag.ToInteger());
+            BitMask.SwitchFlag(ref mask, flag.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TEnum>(this in int mask, TEnum flag) where TEnum : Enum
         {
-            return mask.ContainsFlag(flag.ToInteger());
+            return BitMask.ContainsFlag(mask, flag.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Set<TEnum>(this ref int mask, TEnum flag, bool value) where TEnum : Enum
+        public static void Set<TEnum>(this ref int mask, TEnum flag, bool flagValue) where TEnum : Enum
         {
-            mask.SetFlag(flag.ToInteger(), value);
+            BitMask.SetFlag(ref mask, flag.ToInteger(), flagValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void AddAll<TEnum>(this ref int mask) where TEnum : Enum
         {
-            mask.AddAll(Enum<TEnum>.Count);
+            BitMask.AddAll(ref mask, Enum<TEnum>.Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SetAll<TEnum>(this ref int mask, bool value) where TEnum : Enum
+        public static void SetAll<TEnum>(this ref int mask, bool flagValue) where TEnum : Enum
         {
-            mask.SetAll(value, Enum<TEnum>.Count);
+            BitMask.SetAll(ref mask, flagValue, Enum<TEnum>.Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TEnum>(this int mask) where TEnum : Enum
         {
-            return mask.AllFor(Enum<TEnum>.Count);
+            return BitMask.AllFor(mask, Enum<TEnum>.Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TEnum>(this int mask) where TEnum : Enum
         {
-            return mask.AnyFor(Enum<TEnum>.Count);
+            return BitMask.AnyFor(mask, Enum<TEnum>.Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetCount<TEnum>(this int mask) where TEnum : Enum
         {
-            return mask.GetCount(Enum<TEnum>.Count);
+            return BitMask.GetCount(mask, Enum<TEnum>.Count);
         }
 
         // -- //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Set<TEnum>(this BitArrayMask mask, TEnum flag, bool value) where TEnum : Enum
+        public static void Set<TEnum>(this BitArrayMask mask, TEnum flag, bool flagValue) where TEnum : Enum
         {
-            mask.Set(flag.ToInteger(), value);
+            mask.Set(flag.ToInteger(), flagValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
