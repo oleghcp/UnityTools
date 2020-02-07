@@ -1,8 +1,8 @@
 {
   "name": "com.unityutility.extensions",
   "version": "1.0.0",
-  "displayName": "Additions and Extensions for Unity",
-  "description": "A set of helpful code stuff for Unity\n\nLatest release: 2019.07.28",
+  "displayName": "Unity Utility",
+  "description": "A set of helpful code stuff for Unity\n\nLatest release: 2020.02.07",
   "unity": "2018.3",
   "author": {
     "name": "Oleg Pulkin"
