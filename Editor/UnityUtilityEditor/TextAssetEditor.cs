@@ -50,8 +50,11 @@ namespace UUEditor
             }
             else
             {
+                GUILayout.Space(5f);
+
                 GUI.enabled = true;
                 EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.Space();
                 if (GUILayout.Button("Apply"))
                 {
                     File.WriteAllText(m_path, m_text);
@@ -65,6 +68,7 @@ namespace UUEditor
                     GUIUtility.keyboardControl = 0;
                     f_loadText();
                 }
+                EditorGUILayout.Space();
                 EditorGUILayout.EndHorizontal();
 
                 GUILayout.Space(5f);

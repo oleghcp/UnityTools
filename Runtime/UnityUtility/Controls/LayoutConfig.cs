@@ -4,7 +4,7 @@ using UnityEngine;
 #pragma warning disable CS0169, CS0649
 namespace UU.Controls
 {
-    [CreateAssetMenu(menuName = "Input/Layout Config", fileName = "LayoutConfig")]
+    [CreateAssetMenu(menuName = "Input (ext.)/Layout Config", fileName = "LayoutConfig")]
     public sealed class LayoutConfig : ScriptableObject
     {
         [SerializeField, HideInInspector]

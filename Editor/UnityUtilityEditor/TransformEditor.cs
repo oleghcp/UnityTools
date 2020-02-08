@@ -205,19 +205,19 @@ namespace UUEditor
 
         // Menu Items //
 
-        private const string LOCAL_MENU_NAME = "CONTEXT/Transform/Show Local Values (ext.)";
-        private const string WORLD_MENU_NAME = "CONTEXT/Transform/Show World Values (ext.)";
+        //private const string LOCAL_MENU_NAME = "CONTEXT/Transform/Show Local Values (ext.)";
+        //private const string WORLD_MENU_NAME = "CONTEXT/Transform/Show World Values (ext.)";
 
-        [MenuItem(LOCAL_MENU_NAME)]
-        private static void f_showLocal() { s_world = false; }
+        //[MenuItem(LOCAL_MENU_NAME)]
+        //private static void f_showLocal() { s_world = false; }
 
-        [MenuItem(LOCAL_MENU_NAME, true)]
-        private static bool f_showLocalValidate() { return s_world; }
+        //[MenuItem(LOCAL_MENU_NAME, true)]
+        //private static bool f_showLocalValidate() { return s_world; }
 
-        [MenuItem(WORLD_MENU_NAME)]
-        private static void f_showWorld() { s_world = true; }
+        //[MenuItem(WORLD_MENU_NAME)]
+        //private static void f_showWorld() { s_world = true; }
 
-        [MenuItem(WORLD_MENU_NAME, true)]
-        private static bool f_showWorldValidate() { return !s_world; }
+        //[MenuItem(WORLD_MENU_NAME, true)]
+        //private static bool f_showWorldValidate() { return !s_world; }
     }
 }

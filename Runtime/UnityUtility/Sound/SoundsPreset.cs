@@ -20,7 +20,7 @@ namespace UU.Sound
         internal float MaxDist;
     }
 
-    [CreateAssetMenu(menuName = "Sound/Sounds Preset", fileName = "SoundsPreset")]
+    [CreateAssetMenu(menuName = "Sound (ext.)/Sounds Preset", fileName = "SoundsPreset")]
     public sealed class SoundsPreset : ScriptableObject
     {
         [Serializable]

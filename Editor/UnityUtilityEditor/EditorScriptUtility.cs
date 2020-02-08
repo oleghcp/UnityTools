@@ -12,7 +12,7 @@ namespace UUEditor
 {
     internal static class EditorScriptUtility
     {
-        internal const string Category = "UnityUtility";
+        internal const string CATEGORY = "UnityUtility";
 
         internal static Assembly[] GetAssemblies()
         {

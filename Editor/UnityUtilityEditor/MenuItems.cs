@@ -7,49 +7,49 @@ namespace UUEditor
 {
     internal static class MenuItems
     {
-        [MenuItem(EditorScriptUtility.Category + "/Sound/Create Sounds Preset")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Sound/Create Sounds Preset")]
         private static void CreateSoundsPreset()
         {
             EditorScriptUtility.CreateAsset("SoundsPreset");
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/Sound/Create Music Preset")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Sound/Create Music Preset")]
         private static void CreateMusicPreset()
         {
             EditorScriptUtility.CreateAsset("MusicPreset");
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/Input/Create Input Layout Config")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Input/Create Input Layout Config")]
         private static void CreateLayoutSet()
         {
             EditorScriptUtility.CreateAsset("LayoutConfig", "LayoutConfig");
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/Input/Gamepad Axes")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Input/Gamepad Axes")]
         private static void GetAxisCreateWindow()
         {
             EditorWindow.GetWindow(typeof(AxisCreateWindow), true, "Gamepad Axes");
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/GameObjects/Create Rect Plane")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/GameObjects/Create Rect Plane")]
         private static void GetCreateRectPlaneWizard()
         {
             ScriptableWizard.DisplayWizard("Create Rect Plane", typeof(CreateRectPlaneWizard));
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/GameObjects/Create Figured Plane")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/GameObjects/Create Figured Plane")]
         private static void GetCreateFiguredPlaneWizard()
         {
             ScriptableWizard.DisplayWizard("Create Figured Plane", typeof(CreateFiguredPlaneWizard));
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/GameObjects/Create Shape")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/GameObjects/Create Shape")]
         private static void GetCreateShapeWizard()
         {
             ScriptableWizard.DisplayWizard("Create Shape", typeof(CreateShapeWizard));
         }
 
-        [MenuItem(EditorScriptUtility.Category + "/Assets/Create Scriptable Object")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Assets/Create Scriptable Object")]
         private static void GetScriptableObjectWindow()
         {
             EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");
@@ -57,7 +57,7 @@ namespace UUEditor
 
         // ------------- //
 
-        [MenuItem(EditorScriptUtility.Category + "/About", priority = 50)]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/About", priority = 50)]
         private static void GetAboutWindow()
         {
             EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
@@ -99,14 +99,16 @@ namespace UUEditor
         [MenuItem("Assets/Show Guid (ext.)", priority = 20)]
         private static void ShowGUID()
         {
-            Debug.Log(Selection.assetGUIDs[0]);
+            var guids = Selection.assetGUIDs;
+
+            for (int i = 0; i < guids.Length; i++)
+                Debug.Log(guids[i]);
         }
 
         [MenuItem("Assets/Find References In Project (ext.)", true)]
-        [MenuItem("Assets/Show Guid (ext.)", true)]
-        private static bool f_validateObjects()
+        private static bool ValidateObjects()
         {
-            return Selection.assetGUIDs.Length == 1;
+            return Selection.assetGUIDs.Length == 1 && EditorSettings.serializationMode == SerializationMode.ForceText;
         }
 
 #if UNITY_2019_1_OR_NEWER

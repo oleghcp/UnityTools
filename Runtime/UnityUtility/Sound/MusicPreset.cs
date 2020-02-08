@@ -24,7 +24,7 @@ namespace UU.Sound
         internal float RisingDur;
     }
 
-    [CreateAssetMenu(menuName = "Sound/Music Preset", fileName = "MusicPreset")]
+    [CreateAssetMenu(menuName = "Sound (ext.)/Music Preset", fileName = "MusicPreset")]
     public sealed class MusicPreset : ScriptableObject
     {
         [Serializable]
