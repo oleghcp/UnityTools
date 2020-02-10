@@ -1,32 +1,3 @@
-# ====== #
-# Custom #
-# ====== #
-.UnityProject
-
-# =============== #
-# Unity generated #
-# =============== #
-#UnityProject/Temp
-#UnityProject/Library
-#UnityProject/Logs
-#UnityProject/ProjectSettings
-#UnityProject/Packages
- 
-# ============= #
-# IDE generated #
-# ============= #
-#UnityProject/[Oo]bj
-*.userprefs
-*.csproj
-*.pidb
-*.suo
-*.sln
-*.user
-*.unityproj
-*.booproj
-*.idc
-*.vs
- 
 # ============ #
 # OS generated #
 # ============ #
