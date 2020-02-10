@@ -55,6 +55,14 @@ namespace UU.Async
         }
 
         /// <summary>
+        /// Skips the current coroutine at the queue.
+        /// </summary>
+        public void SkipCurrent()
+        {
+            if (f_isAlive()) { Runner.SkipCurrent(); }
+        }
+
+        /// <summary>
         /// Stops the task and marks it as non-alive.
         /// </summary>
         public void Stop()

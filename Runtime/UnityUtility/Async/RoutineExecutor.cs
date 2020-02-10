@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UU.Collections;
 using UU.Scripts;
 
@@ -40,12 +39,6 @@ namespace UU.Async
         }
 
         // - - //
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal TaskInfo GetTask()
-        {
-            return new TaskInfo(this);
-        }
 
         internal TaskInfo RunAsync(IEnumerator routine)
         {
