@@ -30,8 +30,7 @@ namespace UU.GameConsole
         private object m_cmdRun;
         private Dictionary<string, MethodInfo> m_commands;
 
-        private object[] m_invokeParams;
-        private List<string> m_cmdKeys;
+        private string[][] m_invokeParams;
 
         private List<string> m_cmdHistory;
         private int m_curHistoryIndex;
@@ -50,8 +49,7 @@ namespace UU.GameConsole
             m_pointerEventData = new PointerEventData(EventSystem.current);
             m_stringBuilder = new StringBuilder();
 
-            m_cmdKeys = new List<string>();
-            m_invokeParams = new[] { m_cmdKeys };
+            m_invokeParams = new string[1][];
 
             m_cmdHistory = new List<string>() { string.Empty };
 
@@ -69,7 +67,7 @@ namespace UU.GameConsole
         {
             if (Input.GetKeyDown(KeyCode.BackQuote))
             {
-                fSwitch();
+                f_switch();
                 Switched_Event?.Invoke(m_isOn);
             }
 
@@ -77,16 +75,16 @@ namespace UU.GameConsole
             {
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {
-                    fFindCmd(_field.text);
+                    f_findCmd(_field.text);
                 }
 
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    fSwitchHistoryLine(true);
+                    f_switchHistoryLine(true);
                 }
                 else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    fSwitchHistoryLine(false);
+                    f_switchHistoryLine(false);
                 }
 
                 float axis = Input.GetAxis("Mouse ScrollWheel");
@@ -101,7 +99,7 @@ namespace UU.GameConsole
         /// <summary>
         /// Creates a command line (aka console/terminal). Takes command container.
         /// Commands are just functions of the view:
-        /// public string commandname(List<string> options).
+        /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
@@ -129,7 +127,7 @@ namespace UU.GameConsole
         {
             if (!m_isOn) { return; }
 
-            fEnterCmd(_field.text);
+            f_enterCmd(_field.text);
 
             _field.text = string.Empty;
             _field.OnPointerClick(m_pointerEventData);
@@ -137,12 +135,12 @@ namespace UU.GameConsole
 
         public void GetCmd()
         {
-            fFindCmd(string.Empty);
+            f_findCmd(string.Empty);
         }
 
         public void Switch()
         {
-            fSwitch();
+            f_switch();
         }
 
         public void WriteLine(string txt, Color color)
@@ -159,7 +157,7 @@ namespace UU.GameConsole
         //Inner funcs//
         ///////////////
 
-        private void fEnterCmd(string text)
+        private void f_enterCmd(string text)
         {
             if (m_cmdRun == null)
             {
@@ -167,30 +165,40 @@ namespace UU.GameConsole
                 return;
             }
 
-            if (text.Length == 0) { return; }
-
-            text = text.ToLower();
-
             if (text.HasUsefulData())
             {
-                m_cmdKeys.Clear();
-                m_cmdKeys.AddRange(text.Split(' '));
-                string cmd = m_cmdKeys.PullOut(0);
+                text = text.ToLower();
 
-                if (m_commands.ContainsKey(cmd))
+                string[] words = text.Split(' ');
+                string command = words[0];
+
+                if (m_commands.TryGetValue(command, out MethodInfo method))
                 {
-                    object keys = m_commands[cmd].Invoke(m_cmdRun, m_invokeParams);
-                    if (keys == null) { _log.WriteLine(text, CMD_COLOR); }
-                    else { _log.WriteLine(string.Concat("cmd options: ", cmd, " ", keys), UPS_COLOR); }
+                    if (words.Length > 1)
+                    {
+                        m_invokeParams[0] = new string[words.Length - 1];
+                        Array.Copy(words, 1, m_invokeParams[0], 0, m_invokeParams[0].Length);
+                    }
+
+                    object cmdKeysParseError = method.Invoke(m_cmdRun, m_invokeParams);
+                    m_invokeParams[0] = null;
+
+                    if (cmdKeysParseError == null)
+                        _log.WriteLine(text, CMD_COLOR);
+                    else
+                        _log.WriteLine("cmd options error: " + cmdKeysParseError, UPS_COLOR);
                 }
-                else { _log.WriteLine("unknown: " + cmd, UPS_COLOR); }
+                else
+                {
+                    _log.WriteLine("unknown: " + command, UPS_COLOR);
+                }
 
                 m_cmdHistory.Add(text);
                 m_curHistoryIndex = 0;
             }
         }
 
-        private void fFindCmd(string text)
+        private void f_findCmd(string text)
         {
             if (m_cmdRun == null)
             {
@@ -213,41 +221,45 @@ namespace UU.GameConsole
             }
             else
             {
-                m_stringBuilder.Clear();
-                for (int i = 0; i < cmds.Length; i++) { m_stringBuilder.Append(cmds[i] + "   "); }
-                _log.WriteLine(m_stringBuilder.ToString(), CMD_COLOR);
+                for (int i = 0; i < cmds.Length; i++)
+                {
+                    m_stringBuilder.Append(cmds[i]).Append("   ");
+                }
 
-                _field.text = text + fGetCommon(cmds, text.Length);
+                string line = m_stringBuilder.ToString();
+                m_stringBuilder.Clear();
+
+                _log.WriteLine(line, CMD_COLOR);
+                _field.text = text + f_getCommon(cmds, text.Length);
                 _field.caretPosition = _field.text.Length;
             }
         }
 
-        private string fGetCommon(string[] strings, int startIndex = 0)
+        private string f_getCommon(string[] strings, int startIndex = 0)
         {
-            string bStr = strings[0];
+            string baseStr = strings[0];
 
             int characters = 0;
 
-            for (int j = startIndex; j < bStr.Length; j++)
+            for (int j = startIndex; j < baseStr.Length; j++)
             {
                 for (int i = 1; i < strings.Length; i++)
                 {
-                    if (bStr[j] != strings[i][j])
+                    if (baseStr[j] != strings[i][j])
                     {
-                        return bStr.Substring(startIndex, characters);
+                        return baseStr.Substring(startIndex, characters);
                     }
                 }
 
                 characters++;
             }
 
-            return bStr.Substring(startIndex, characters);
+            return baseStr.Substring(startIndex, characters);
         }
 
-        private void fSwitchHistoryLine(bool back)
+        private void f_switchHistoryLine(bool back)
         {
             if (m_cmdHistory.Count == 0) { return; }
-
 
             if (back)
             {
@@ -263,7 +275,7 @@ namespace UU.GameConsole
             _field.caretPosition = _field.text.Length;
         }
 
-        private void fSwitch()
+        private void f_switch()
         {
             StopAllCoroutines();
             StartCoroutine(Switch(!m_isOn));
