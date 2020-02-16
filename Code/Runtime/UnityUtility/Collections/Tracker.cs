@@ -5,7 +5,14 @@ namespace UU.Collections
 {
     public class Tracker : Refreshable
     {
-        private Node m_runNode;
+        private class EmptyNode : ActiveNode
+        {
+            public bool Changed => false;
+            void ActiveNode.Check() { }
+            void ActiveNode.Force() { }
+        }
+
+        private ActiveNode m_runNode;
 
         public Tracker()
         {
@@ -27,39 +34,29 @@ namespace UU.Collections
             m_runNode = new EmptyNode();
         }
 
-        public Node AddBaseValueNode<T>(Func<T> getter, Action<T> setter = null) where T : struct, IEquatable<T>
+        public Node AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
         {
-            return m_runNode = new BaseValueNode<T>(getter, setter, m_runNode);
+            return m_runNode = new NodeForValueType<T>(m_runNode, getter, onChangedCallback);
         }
 
-        public Node AddBaseObjectNode<T>(Func<T> getFunc, Action<T> setter = null) where T : class
+        public Node AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
         {
-            return m_runNode = new BaseObjectNode<T>(getFunc, setter, m_runNode);
+            return m_runNode = new NodeForRefType<T>(m_runNode, getter, onChangedCallback);
         }
 
-        public Node AddStructParam<TParam>(Func<TParam> paramGetter) where TParam : struct, IEquatable<TParam>
+        public Node AddNodeBasedOnPrev(Action onChangedCallback)
         {
-            return m_runNode = new ExtenderWithStruct<TParam>(paramGetter, m_runNode);
+            return m_runNode = new DependentNode(m_runNode, onChangedCallback, new[] { m_runNode });
         }
 
-        public Node AddObjectParam<TParam>(Func<TParam> paramGetter) where TParam : class
+        public Node AddDependentNode(Node dependency, Action onChangedCallback)
         {
-            return m_runNode = new ExtenderWithClass<TParam>(paramGetter, m_runNode);
+            return m_runNode = new DependentNode(m_runNode, onChangedCallback, new[] { dependency });
         }
 
-        public Node AddRelativeParam(Node otherNode)
+        public Node AddDependentNode(Action onChangedCallback, params Node[] dependencies)
         {
-            return m_runNode = new RelativeExtender(m_runNode, otherNode);
-        }
-
-        public Node AddRelativeNode<T>(Action<T> setter)
-        {
-            return m_runNode = new RelativeNodeToPrev<T>(setter, m_runNode);
-        }
-
-        public Node AddRelativeNode<T>(Node relativeTo, Action<T> setter)
-        {
-            return m_runNode = new RelativeNodeToTarget<T>(setter, m_runNode, relativeTo);
+            return m_runNode = new DependentNode(m_runNode, onChangedCallback, dependencies);
         }
     }
 }

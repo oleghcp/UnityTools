@@ -4,66 +4,26 @@ namespace UU.Collections
 {
     public interface Node
     {
-        Node Prev { get; }
-        bool Extender { get; }
         bool Changed { get; }
-        bool RelativeChanged { get; }
-        void Check();
-        void Force();
     }
 
     internal static class TrackerNodes
     {
-        public interface BaseNode<T> : Node
+        public interface ActiveNode : Node
         {
-            T Value { get; }
+            void Check();
+            void Force();
         }
 
         // -- //
 
-        public class EmptyNode : Node
+        public abstract class NodeDecorator : ActiveNode
         {
-            public Node Prev
-            {
-                get { return null; }
-            }
+            private ActiveNode m_prevNode;
 
-            public bool Extender
-            {
-                get { return false; }
-            }
+            public abstract bool Changed { get; }
 
-            public bool Changed
-            {
-                get { return false; }
-            }
-
-            public bool RelativeChanged
-            {
-                get { return false; }
-            }
-
-            void Node.Check() { }
-            void Node.Force() { }
-        }
-
-        // -- //
-
-        public abstract class NodeDecorator
-        {
-            private Node m_prevNode;
-
-            public Node Prev
-            {
-                get { return m_prevNode; }
-            }
-
-            public virtual bool Extender
-            {
-                get { return false; }
-            }
-
-            public NodeDecorator(Node prevNode)
+            public NodeDecorator(ActiveNode prevNode)
             {
                 m_prevNode = prevNode;
             }
@@ -86,325 +46,113 @@ namespace UU.Collections
 
         // -- //
 
-        public class BaseValueNode<T> : NodeDecorator, BaseNode<T> where T : struct, IEquatable<T>
+        public class NodeForValueType<T> : NodeDecorator where T : struct, IEquatable<T>
         {
-            private Func<T> m_getFunc;
-            private Action<T> m_setFunc;
+            private Func<T> m_getter;
+            private Action m_onChangedCallback;
 
             private T m_cache;
             private bool m_changed;
 
-            public bool Changed
-            {
-                get { return m_changed; }
-            }
+            public override bool Changed => m_changed;
 
-            public bool RelativeChanged
+            public NodeForValueType(ActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
             {
-                get { return m_changed; }
-            }
-
-            public T Value
-            {
-                get { return m_cache; }
-            }
-
-            public BaseValueNode(Func<T> getFunc, Action<T> setFunc, Node prevNode) : base(prevNode)
-            {
-                m_getFunc = getFunc;
-                m_setFunc = setFunc;
+                m_getter = getter;
+                m_onChangedCallback = onChangedCallback;
             }
 
             protected override void InnerCheck()
             {
-                T tmp = m_getFunc();
+                T tmp = m_getter();
 
                 if (m_changed = !m_cache.Equals(tmp))
                 {
                     m_cache = tmp;
-                    m_setFunc?.Invoke(tmp);
+                    m_onChangedCallback?.Invoke();
                 }
             }
 
             protected override void InnerForce()
             {
-                m_cache = m_getFunc();
-                m_setFunc?.Invoke(m_cache);
+                m_cache = m_getter();
+                m_onChangedCallback?.Invoke();
             }
         }
 
-        public class BaseObjectNode<T> : NodeDecorator, BaseNode<T> where T : class
+        // -- //
+
+        public class NodeForRefType<T> : NodeDecorator where T : class
         {
-            private Func<T> m_getFunc;
-            private Action<T> m_setFunc;
+            private Func<T> m_getter;
+            private Action m_onChangedCallback;
 
             private T m_cachedObject;
 
             private bool m_changed;
 
-            public bool Changed
-            {
-                get { return m_changed; }
-            }
+            public override bool Changed => m_changed;
 
-            public bool RelativeChanged
+            public NodeForRefType(ActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
             {
-                get { return m_changed; }
-            }
-
-            public T Value
-            {
-                get { return m_cachedObject; }
-            }
-
-            public BaseObjectNode(Func<T> getFunc, Action<T> setFunc, Node prevNode) : base(prevNode)
-            {
-                m_getFunc = getFunc;
-                m_setFunc = setFunc;
+                m_getter = getter;
+                m_onChangedCallback = onChangedCallback;
             }
 
             protected override void InnerCheck()
             {
-                T tmp = m_getFunc();
+                T tmp = m_getter();
 
                 if (m_changed = m_cachedObject != tmp)
                 {
                     m_cachedObject = tmp;
-                    m_setFunc?.Invoke(tmp);
+                    m_onChangedCallback?.Invoke();
                 }
             }
 
             protected override void InnerForce()
             {
-                m_cachedObject = m_getFunc();
-                m_setFunc?.Invoke(m_cachedObject);
+                m_cachedObject = m_getter();
+                m_onChangedCallback?.Invoke();
             }
         }
 
         // -- //
 
-        public class ExtenderWithStruct<TParam> : NodeDecorator, BaseNode<TParam> where TParam : struct, IEquatable<TParam>
+        public class DependentNode : NodeDecorator
         {
-            private Func<TParam> m_getParamFunc;
-            private TParam m_cachedParam;
-            private bool m_changed;
+            private Action m_onChangedCallback;
+            private Node[] m_dependencies;
 
-            public override bool Extender
+            public override bool Changed
             {
-                get { return true; }
-            }
-
-            public bool Changed
-            {
-                get { return m_changed; }
-            }
-
-            public bool RelativeChanged
-            {
-                get { return m_changed || Prev.RelativeChanged; }
-            }
-
-            public TParam Value
-            {
-                get { return m_cachedParam; }
-            }
-
-            public ExtenderWithStruct(Func<TParam> getParamFunc, Node prevNode) : base(prevNode)
-            {
-                if (prevNode is EmptyNode)
-                    throw new InvalidOperationException("Param checker cannot be added first.");
-
-                m_getParamFunc = getParamFunc;
-            }
-
-            protected override void InnerCheck()
-            {
-                TParam tmpParam = m_getParamFunc();
-
-                if (m_changed = !m_cachedParam.Equals(tmpParam))
-                    m_cachedParam = tmpParam;
-            }
-
-            protected override void InnerForce()
-            {
-                m_cachedParam = m_getParamFunc();
-            }
-        }
-
-        public class ExtenderWithClass<TParam> : NodeDecorator, BaseNode<TParam> where TParam : class
-        {
-            private Func<TParam> m_getParamFunc;
-            private TParam m_cachedParam;
-            private bool m_changed;
-
-            public override bool Extender
-            {
-                get { return true; }
-            }
-
-            public bool Changed
-            {
-                get { return m_changed; }
-            }
-
-            public bool RelativeChanged
-            {
-                get { return m_changed || Prev.RelativeChanged; }
-            }
-
-            public TParam Value
-            {
-                get { return m_cachedParam; }
-            }
-
-            public ExtenderWithClass(Func<TParam> getParamFunc, Node prevNode) : base(prevNode)
-            {
-                if (prevNode is EmptyNode)
-                    throw new InvalidOperationException("Param checker cannot be added first.");
-
-                m_getParamFunc = getParamFunc;
-            }
-
-            protected override void InnerCheck()
-            {
-                TParam tmpParam = m_getParamFunc();
-
-                if (m_changed = m_cachedParam != tmpParam)
-                    m_cachedParam = tmpParam;
-            }
-
-            protected override void InnerForce()
-            {
-                m_cachedParam = m_getParamFunc();
-            }
-        }
-
-        public class RelativeExtender : NodeDecorator, Node
-        {
-            private Node m_relativeTo;
-
-            public bool Changed
-            {
-                get { return m_relativeTo.Changed; }
-            }
-
-            public bool RelativeChanged
-            {
-                get { return m_relativeTo.Changed || Prev.RelativeChanged; }
-            }
-
-            public override bool Extender
-            {
-                get { return true; }
-            }
-
-            public RelativeExtender(Node prevNode, Node dependency) : base(prevNode)
-            {
-                if (prevNode is EmptyNode)
-                    throw new InvalidOperationException("Param checker cannot be added first.");
-
-                m_relativeTo = dependency;
-            }
-
-            protected override void InnerCheck() { }
-
-            protected override void InnerForce() { }
-        }
-
-        // -- //
-
-        public class RelativeNodeToPrev<T> : NodeDecorator, BaseNode<T>
-        {
-            private Action<T> m_setFunc;
-            private BaseNode<T> m_relativeTo;
-
-            public bool Changed
-            {
-                get { return Prev.RelativeChanged; }
-            }
-
-            public bool RelativeChanged
-            {
-                get { return Prev.RelativeChanged; }
-            }
-
-            public T Value
-            {
-                get { return m_relativeTo.Value; }
-            }
-
-            public RelativeNodeToPrev(Action<T> setFunc, Node prevNode) : base(prevNode)
-            {
-                m_setFunc = setFunc;
-
-                Node relative = prevNode;
-
-                while (relative.Extender)
+                get
                 {
-                    relative = relative.Prev;
+                    for (int i = 0; i < m_dependencies.Length; i++)
+                    {
+                        if (m_dependencies[i].Changed)
+                            return true;
+                    }
+
+                    return false;
                 }
+            }
 
-                BaseNode<T> basicNode = relative as BaseNode<T>;
-
-                if (basicNode == null)
-                    throw new InvalidOperationException("There is no basic node.");
-
-                m_relativeTo = basicNode;
+            public DependentNode(ActiveNode prevNode, Action onChangedCallback, Node[] dependencies) : base(prevNode)
+            {
+                m_onChangedCallback = onChangedCallback;
+                m_dependencies = dependencies;
             }
 
             protected override void InnerCheck()
             {
-                if (Prev.RelativeChanged)
-                    m_setFunc(m_relativeTo.Value);
+                if (Changed)
+                    m_onChangedCallback();
             }
 
             protected override void InnerForce()
             {
-                m_setFunc(m_relativeTo.Value);
-            }
-        }
-
-        public class RelativeNodeToTarget<T> : NodeDecorator, BaseNode<T>
-        {
-            private Action<T> m_setFunc;
-            private BaseNode<T> m_relativeTo;
-
-            public bool Changed
-            {
-                get { return m_relativeTo.Changed; }
-            }
-
-            public bool RelativeChanged
-            {
-                get { return m_relativeTo.Changed; }
-            }
-
-            public T Value
-            {
-                get { return m_relativeTo.Value; }
-            }
-
-            public RelativeNodeToTarget(Action<T> setFunc, Node prevNode, Node dependency) : base(prevNode)
-            {
-                m_setFunc = setFunc;
-
-                BaseNode<T> basicNode = dependency as BaseNode<T>;
-
-                if (basicNode == null)
-                    throw new InvalidOperationException("There is no basic node.");
-
-                m_relativeTo = basicNode;
-            }
-
-            protected override void InnerCheck()
-            {
-                if (m_relativeTo.Changed)
-                    m_setFunc(m_relativeTo.Value);
-            }
-
-            protected override void InnerForce()
-            {
-                m_setFunc(m_relativeTo.Value);
+                m_onChangedCallback();
             }
         }
     }
