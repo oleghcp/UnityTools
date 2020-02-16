@@ -49,11 +49,6 @@ namespace UU.Collections
             return m_runNode = new DependentNode(m_runNode, onChangedCallback, new[] { m_runNode });
         }
 
-        public Node AddDependentNode(Node dependency, Action onChangedCallback)
-        {
-            return m_runNode = new DependentNode(m_runNode, onChangedCallback, new[] { dependency });
-        }
-
         public Node AddDependentNode(Action onChangedCallback, params Node[] dependencies)
         {
             return m_runNode = new DependentNode(m_runNode, onChangedCallback, dependencies);
