@@ -10,6 +10,7 @@ namespace UU.Scripts
     public abstract class SingleScript<T> : Script, IDisposable where T : SingleScript<T>
     {
         private static T s_inst;
+        private static bool s_locked;
 
         /// <summary>
         /// Static instance of SingleScript`1.
@@ -20,9 +21,12 @@ namespace UU.Scripts
             {
                 if (s_inst == null)
                 {
-                    s_inst = FindObjectOfType<T>();
-                    if (s_inst == null)
+                    if (s_locked)
+                        throw new InvalidOperationException($"The instance of {typeof(T).Name} is being configured. Avoid recursive calls.");
+
+                    if ((s_inst = FindObjectOfType<T>()) == null)
                         throw new ObjectNotFoundException($"There is no any instance of {typeof(T).Name}.");
+
                     s_inst.Construct();
                 }
 
@@ -44,8 +48,10 @@ namespace UU.Scripts
         {
             if (s_inst == null)
             {
+                s_locked = true;
                 Construct();
                 s_inst = this as T;
+                s_locked = false;
             }
         }
 
