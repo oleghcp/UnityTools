@@ -1,28 +1,41 @@
 ﻿using UnityObject = UnityEngine.Object;
+
+using System;
 using UnityEngine;
-using UU;
 using UnityEditor;
+using UU;
 
 namespace UUEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DrawSOFieldsAttribute))]
     public class DrawSOFieldsDrawer : PropertyDrawer
     {
-        private float m_height = EditorGUIUtility.singleLineHeight;
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            position.height = m_height = EditorGUIUtility.singleLineHeight;
+            Type type = fieldInfo.FieldType;
+            Type soType = typeof(ScriptableObject);
+            bool canDraw = type.IsSubclassOf(soType) || type == soType;
+            canDraw |= type.IsArray && (type.GetElementType().IsSubclassOf(soType) || type.GetElementType() == soType);
 
-            if (!fieldInfo.FieldType.IsSubclassOf(typeof(ScriptableObject)))
+
+            if (!canDraw)
             {
                 EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use DrawSOFields with ScriptableObject.");
                 return;
             }
 
-            Rect foldPos = position;
-            foldPos.width -= EditorGUI.PrefixLabel(position, label).width;
-            property.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(foldPos, property.isExpanded, string.Empty);
+            position.height = EditorGUIUtility.singleLineHeight;
+
+            if (property.objectReferenceValue != null)
+            {
+                Rect foldPos = position;
+
+                if (type.IsArray)
+                    foldPos.x += 16f;
+
+                foldPos.width -= EditorGUI.PrefixLabel(position, label).width;
+                property.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(foldPos, property.isExpanded, string.Empty);
+            }
 
             EditorGUI.PropertyField(position, property);
 
@@ -47,7 +60,6 @@ namespace UUEditor.Drawers
                     EditorGUI.PropertyField(rect, iterator, true);
                     float shift = EditorGUI.GetPropertyHeight(iterator);
                     rect.y += shift;
-                    m_height += shift;
                 }
 
                 EditorGUI.indentLevel--;
@@ -59,7 +71,21 @@ namespace UUEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return m_height;
+            if (property.objectReferenceValue != null && property.isExpanded)
+            {
+                SerializedObject serObject = new SerializedObject(property.objectReferenceValue);
+                SerializedProperty iterator = serObject.GetIterator();
+                float height = 0;
+
+                for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
+                {
+                    height += EditorGUI.GetPropertyHeight(iterator);
+                }
+
+                return height;
+            }
+
+            return EditorGUIUtility.singleLineHeight;
         }
     }
 }
