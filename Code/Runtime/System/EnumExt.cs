@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
-namespace UU
+namespace System
 {
     public static class Enum<TEnum> where TEnum : Enum
     {
