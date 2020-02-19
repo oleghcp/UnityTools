@@ -78,6 +78,24 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
+        /// Indicates whether the specified array is null or it's length equals zero.
+        /// </summary>        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrEmpty<T>(this T[] array)
+        {
+            return ArrayExt.IsNullOrEmpty(array);
+        }
+
+        /// <summary>
+        /// Indicates whether the specified array is not null and contains at least one element.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool HasAnyData<T>(this T[] array)
+        {
+            return ArrayExt.HasAnyData(array);
+        }
+
+        /// <summary>
         /// Returns an index of an element with the minimum parameter value.
         /// </summary>
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
