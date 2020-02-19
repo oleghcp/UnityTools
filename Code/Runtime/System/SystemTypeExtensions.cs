@@ -23,7 +23,25 @@ namespace System
         }
 
         /// <summary>
-        /// Indicates whether the string is not null and not an empty string.
+        /// Indicates whether the specified string is null or an empty string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+
+        /// <summary>
+        /// Indicates whether the specified string is null, empty, or consists only of white-space characters.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrWhiteSpace(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
+        }
+
+        /// <summary>
+        /// Indicates whether the specified string is not null and not an empty string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasAnyData(this string str)
@@ -32,7 +50,7 @@ namespace System
         }
 
         /// <summary>
-        ///Indicates whether the string is not null, empty, and doesn't consist only of white-space characters.
+        ///Indicates whether the specified string is not null, empty, and doesn't consist only of white-space characters.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasUsefulData(this string str)
@@ -40,6 +58,9 @@ namespace System
             return !string.IsNullOrWhiteSpace(str);
         }
 
+        /// <summary>
+        /// Gets the underlying type code of the specified Type
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TypeCode GetTypeCode(this Type type)
         {
