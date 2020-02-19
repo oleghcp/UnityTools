@@ -46,10 +46,13 @@ namespace System
             return Type.GetTypeCode(type);
         }
 
+        /// <summary>
+        /// Returns true if type is the specified type or subclass of the specified type;
+        /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Is(this Type type, TypeCode typeCode)
+        public static bool Is(this Type type, Type familyType)
         {
-            return Type.GetTypeCode(type) == typeCode;
+            return type.IsSubclassOf(familyType) || type == familyType;
         }
     }
 }

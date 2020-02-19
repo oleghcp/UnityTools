@@ -31,7 +31,7 @@ namespace UUEditor.Drawers
                     values = Enum.GetValues((drawer.attribute as BitMaskEnumFlagsAttribute).EnumType);
                     m_array = true;
                 }
-                else if (drawer.fieldInfo.FieldType.Is(TypeCode.Int32))
+                else if (drawer.fieldInfo.FieldType.GetTypeCode() == TypeCode.Int32)
                 {
                     values = Enum.GetValues((drawer.attribute as BitMaskEnumFlagsAttribute).EnumType);
 
@@ -45,7 +45,7 @@ namespace UUEditor.Drawers
                 }
                 else
                 {
-                    m_error = "Use BitMaskEnumFlags with BitMask or BitArrayMask.";
+                    m_error = "Use BitMaskEnumFlags with Int32 or BitArrayMask.";
                     return;
                 }
 

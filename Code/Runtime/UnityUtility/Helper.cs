@@ -39,7 +39,7 @@ namespace UU
 
             Type type = sourceObj.GetType();
 
-            if (!type.Is(TypeCode.Object))
+            if (type.GetTypeCode() != TypeCode.Object)
                 return sourceObj;
 
             if (sourceObj is Delegate)
@@ -50,7 +50,7 @@ namespace UU
                 Array sourceArray = sourceObj as Array;
                 Type elementType = type.GetElementType();
 
-                if (!elementType.Is(TypeCode.Object))
+                if (elementType.GetTypeCode() != TypeCode.Object)
                     return sourceArray.Clone();
 
                 Array destArray = Array.CreateInstance(elementType, sourceArray.Length);

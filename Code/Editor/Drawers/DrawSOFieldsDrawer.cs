@@ -14,9 +14,7 @@ namespace UUEditor.Drawers
         {
             Type type = fieldInfo.FieldType;
             Type soType = typeof(ScriptableObject);
-            bool canDraw = type.IsSubclassOf(soType) || type == soType;
-            canDraw |= type.IsArray && (type.GetElementType().IsSubclassOf(soType) || type.GetElementType() == soType);
-
+            bool canDraw = type.Is(soType) || (type.IsArray && type.GetElementType().Is(soType));
 
             if (!canDraw)
             {
