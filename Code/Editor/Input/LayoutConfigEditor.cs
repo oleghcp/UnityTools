@@ -182,8 +182,8 @@ namespace UUEditor.Input
             if (selector == null)
             {
                 selector = new TypeSelector();
-                var ass = EditorScriptUtility.GetAssemblies();
-                selector.Types = EditorScriptUtility.GetTypes(ass, type => type.IsSubclassOf(typeof(Enum)));
+                var ass = EditorUtilityExt.GetAssemblies();
+                selector.Types = EditorUtilityExt.GetTypes(ass, type => type.IsSubclassOf(typeof(Enum)));
                 if (selector.Types.Length > 0)
                 {
                     selector.Types = selector.Types.OrderBy(itm => itm.FullName).ToArray();

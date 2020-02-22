@@ -30,8 +30,8 @@ namespace UUEditor.Window
                 return fine;
             }
 
-            Assembly[] assemblies = EditorScriptUtility.GetAssemblies();
-            Type[] types = EditorScriptUtility.GetTypes(assemblies, select);
+            Assembly[] assemblies = EditorUtilityExt.GetAssemblies();
+            Type[] types = EditorUtilityExt.GetTypes(assemblies, select);
             m_types = types.Select(itm => itm.Name).ToArray();
         }
 
@@ -59,9 +59,9 @@ namespace UUEditor.Window
                 if (EditorScriptUtility.DrawCenterButton("Create", 50f, 30f))
                 {
                     if (m_targetRoot == null)
-                        EditorScriptUtility.CreateAsset(m_types[m_index]);
+                        EditorUtilityExt.CreateScriptableObjectAsset(m_types[m_index]);
                     else
-                        EditorScriptUtility.CreateAsset(m_types[m_index], m_targetRoot);
+                        EditorUtilityExt.CreateScriptableObjectAsset(m_types[m_index], m_targetRoot);
 
                     if (!m_keepOpened)
                         Close();

@@ -11,19 +11,19 @@ namespace UUEditor
         [MenuItem(EditorScriptUtility.CATEGORY + "/Sound/Create Sounds Preset")]
         private static void CreateSoundsPreset()
         {
-            EditorScriptUtility.CreateAsset("SoundsPreset");
+            EditorUtilityExt.CreateScriptableObjectAsset("SoundsPreset");
         }
 
         [MenuItem(EditorScriptUtility.CATEGORY + "/Sound/Create Music Preset")]
         private static void CreateMusicPreset()
         {
-            EditorScriptUtility.CreateAsset("MusicPreset");
+            EditorUtilityExt.CreateScriptableObjectAsset("MusicPreset");
         }
 
         [MenuItem(EditorScriptUtility.CATEGORY + "/Input/Create Input Layout Config")]
         private static void CreateLayoutSet()
         {
-            EditorScriptUtility.CreateAsset("LayoutConfig", "LayoutConfig");
+            EditorUtilityExt.CreateScriptableObjectAsset("LayoutConfig", "LayoutConfig");
         }
 
         [MenuItem(EditorScriptUtility.CATEGORY + "/Input/Gamepad Axes")]
@@ -71,7 +71,7 @@ namespace UUEditor
         {
             List<string> referingObjectGuids = new List<string>();
 
-            if (!EditorScriptUtility.FindReferences(Selection.assetGUIDs[0], referingObjectGuids))
+            if (!EditorUtilityExt.FindReferences(Selection.assetGUIDs[0], referingObjectGuids))
             {
                 Debug.Log("There are no dependencies.");
                 return;
@@ -153,9 +153,6 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UU;
-using UU.MathExt;
 
 namespace Project
 {
