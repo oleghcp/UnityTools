@@ -1,4 +1,4 @@
-using UUEditor.Windows;
+using UUEditor.Window;
 using System.IO;
 using UnityEditor;
 using UnityEngine;

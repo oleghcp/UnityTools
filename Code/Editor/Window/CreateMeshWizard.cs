@@ -3,7 +3,7 @@ using UnityEditor;
 using System.IO;
 using UU;
 
-namespace UUEditor.Windows
+namespace UUEditor.Window
 {
     internal abstract class CreateMeshWizard : ScriptableWizard
     {

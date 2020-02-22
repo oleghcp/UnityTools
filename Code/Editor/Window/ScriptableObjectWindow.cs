@@ -6,7 +6,7 @@ using UnityEditor;
 using System.Reflection;
 using System.Linq;
 
-namespace UUEditor.Windows
+namespace UUEditor.Window
 {
     internal class ScriptableObjectWindow : EditorWindow
     {

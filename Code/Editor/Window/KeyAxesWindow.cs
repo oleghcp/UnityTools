@@ -5,7 +5,7 @@ using UnityEditor;
 using UU.Collections;
 using UUEditor.Drawers;
 
-namespace UUEditor.Windows
+namespace UUEditor.Window
 {
     internal class KeyAxesWindow : EditorWindow
     {

@@ -1,7 +1,7 @@
 ﻿using UU.Collections;
 using UnityEditor;
 using UnityEngine;
-using UUEditor.Windows;
+using UUEditor.Window;
 
 namespace UUEditor.Drawers
 {

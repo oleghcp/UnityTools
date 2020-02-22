@@ -5,7 +5,7 @@ using UnityEditor;
 using UU.Controls;
 using UU.Controls.ControlStuff;
 using UU.Collections;
-using UUEditor.Windows;
+using UUEditor.Window;
 using UU;
 
 namespace UUEditor.Input

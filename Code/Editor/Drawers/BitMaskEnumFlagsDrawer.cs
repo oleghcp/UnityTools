@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 using UU.Collections;
-using UUEditor.Windows;
+using UUEditor.Window;
 using UU;
 using UU.BitMasks;
 

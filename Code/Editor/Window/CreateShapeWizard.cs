@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace UUEditor.Windows
+namespace UUEditor.Window
 {
     internal class CreateShapeWizard : CreateMeshWizard
     {
