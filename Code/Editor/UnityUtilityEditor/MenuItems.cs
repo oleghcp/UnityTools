@@ -69,15 +69,17 @@ namespace UUEditor
         [MenuItem("Assets/Find References In Project (ext.)", priority = 25)]
         private static void FindRefs()
         {
+            string targetGuid = Selection.assetGUIDs[0];
+
             List<string> referingObjectGuids = new List<string>();
 
-            if (!EditorUtilityExt.FindReferences(Selection.assetGUIDs[0], referingObjectGuids))
+            if (!EditorUtilityExt.FindReferences(targetGuid, referingObjectGuids))
             {
                 Debug.Log("There are no dependencies.");
                 return;
             }
 
-            ReferencesWindow.Create(referingObjectGuids);
+            ReferencesWindow.Create(targetGuid, referingObjectGuids);
         }
 
         [MenuItem("Assets/Find References In Project (ext.)", true)]
