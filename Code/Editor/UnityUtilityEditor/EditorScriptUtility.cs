@@ -14,6 +14,32 @@ namespace UUEditor
     {
         internal const string CATEGORY = "UnityUtility";
 
+        internal static bool FindReferences(string targetGuid, List<string> referingObjectGuids)
+        {
+            string[] assetGuids = AssetDatabase.FindAssets(string.Empty);
+
+            bool noDependencies = true;
+
+            for (int i = 0; i < assetGuids.Length; i++)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
+                string[] dependencies = AssetDatabase.GetDependencies(assetPath);
+
+                foreach (var dependency in dependencies)
+                {
+                    string dependencyGuid = AssetDatabase.AssetPathToGUID(dependency);
+
+                    if (dependencyGuid == targetGuid && dependencyGuid != assetGuids[i])
+                    {
+                        noDependencies = false;
+                        referingObjectGuids.Add(assetGuids[i]);
+                    }
+                }
+            }
+
+            return !noDependencies;
+        }
+
         internal static Assembly[] GetAssemblies()
         {
             var files = Directory.GetFiles(@"Library\ScriptAssemblies\", "*.dll", SearchOption.AllDirectories);
