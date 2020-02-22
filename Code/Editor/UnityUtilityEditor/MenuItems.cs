@@ -77,10 +77,7 @@ namespace UUEditor
                 return;
             }
 
-            for (int i = 0; i < referingObjectGuids.Count; i++)
-            {
-                Debug.Log(AssetDatabase.GUIDToAssetPath(referingObjectGuids[i]));
-            }
+            ReferencesWindow.Create(referingObjectGuids);
         }
 
         [MenuItem("Assets/Find References In Project (ext.)", true)]
