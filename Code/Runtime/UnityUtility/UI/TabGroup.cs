@@ -1,29 +1,32 @@
-﻿namespace UU.UI
+﻿using UnityEngine;
+
+namespace UU.UI
 {
-    public class TabGroup : UIScript
+    [DisallowMultipleComponent]
+    public class TabGroup : MonoBehaviour
     {
-        private TabSelector m_cur;
+        private AbstractTabSelector m_cur;
 
         private void Start()
         {
-            m_cur?.OnSelect();
+            if (m_cur != null)
+                m_cur.OnSelect();
         }
 
-        internal void OnSectorChosen(TabSelector selector)
+        internal void OnSectorChosen(AbstractTabSelector selector)
         {
             if (m_cur != null)
                 m_cur.OnDeselect();
 
-            m_cur = selector;
-            m_cur.OnSelect();
+            (m_cur = selector).OnSelect();
         }
 
-        internal void RegSelector(TabSelector selector)
+        internal void RegSelector(AbstractTabSelector selector)
         {
             if (m_cur == null)
                 m_cur = selector;
 
-            selector.SetUp(this);
+            selector.SetUp(this, m_cur == selector);
         }
     }
 }

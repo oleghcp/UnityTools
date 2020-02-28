@@ -3,7 +3,7 @@
 #pragma warning disable CS0649
 namespace UU.UI
 {
-    public class TabSelector : UIScript
+    public abstract class AbstractTabSelector : MonoBehaviour
     {
         [SerializeField]
         private GameObject _selected;
@@ -13,7 +13,6 @@ namespace UU.UI
         private GameObject _content;
 
         private TabGroup m_group;
-        private bool m_selected;
 
         private void Awake()
         {
@@ -23,36 +22,39 @@ namespace UU.UI
                 group.RegSelector(this);
             else
                 Msg.Warning("TabGroup component is not found.");
+
+            OnAwake();
         }
 
-        internal void SetUp(TabGroup group)
+        internal void SetUp(TabGroup group, bool isActive)
         {
             m_group = group;
-            f_switch();
+            f_switch(isActive);
         }
 
         internal void OnSelect()
         {
-            m_selected = true;
-            f_switch();
+            f_switch(true);
         }
 
         internal void OnDeselect()
         {
-            m_selected = false;
-            f_switch();
+            f_switch(false);
         }
 
-        public void OnClick()
+        protected virtual void OnAwake() { }
+
+        protected void OnClick()
         {
             m_group.OnSectorChosen(this);
         }
 
-        private void f_switch()
+        private void f_switch(bool select)
         {
-            _content.SetActive(m_selected);
-            _selected.SetActive(m_selected);
-            _unselected.SetActive(!m_selected);
+            _content.SetActive(select);
+            _selected.SetActive(select);
+            _unselected.SetActive(!select);
+            transform.SetAsLastSibling();
         }
     }
 }
