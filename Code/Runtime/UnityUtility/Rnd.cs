@@ -21,7 +21,7 @@ namespace UU
 
         static Rnd()
         {
-            s_rng = new DotNetRNG();
+            s_rng = new UnityRNG();
         }
 
         public static void OverrideRandomizer(RNG randomizer)

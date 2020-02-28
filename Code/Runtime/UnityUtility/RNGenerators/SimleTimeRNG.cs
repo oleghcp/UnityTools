@@ -1,5 +1,4 @@
-﻿using UU.MathExt;
-using System;
+﻿using System;
 
 namespace UU.RNGenerators
 {
