@@ -1,28 +1,10 @@
-﻿using UU;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 
 namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
-        /// <summary>
-        /// Shuffles the elements of an entire collection.
-        /// </summary>
-        public static void Shuffle<T>(this IList<T> list)
-        {
-            int last = list.Count;
-
-            while (last > 1)
-            {
-                int cur = Rnd.Random(last--);
-
-                T value = list[cur];
-                list[cur] = list[last];
-                list[last] = value;
-            }
-        }
-
         /// <summary>
         /// Returns an index of the first entrance of the specified element or -1 if the element is not found.
         /// </summary>
@@ -251,6 +233,23 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
+        /// Shuffles the elements of an entire collection.
+        /// </summary>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            int last = list.Count;
+
+            while (last > 1)
+            {
+                int cur = UU.Rnd.Random(last--);
+
+                T value = list[cur];
+                list[cur] = list[last];
+                list[last] = value;
+            }
+        }
+
+        /// <summary>
         /// Finds specified element.
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -267,6 +266,24 @@ namespace System.Collections.Generic
         public static T Find<T>(this T[] array, Predicate<T> match)
         {
             return Array.Find(array, match);
+        }
+
+        /// <summary>
+        /// Performs the specified action on each element of the System.Collections.Generic.IList`1.
+        /// </summary>
+        public static void ForEach<T>(this IList<T> collection, Action<T> action)
+        {
+            for (int i = 0; i < collection.Count; i++)
+                action(collection[i]);
+        }
+
+        /// <summary>
+        /// Performs the specified action on each element of the System.Collections.Generic.IEnumerable`1.
+        /// </summary>
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            foreach (var item in collection)
+                action(item);
         }
 
         /// <summary>
@@ -405,6 +422,24 @@ namespace System.Collections.Generic
         public static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dict)
         {
             return new ReadOnlyDictionary<TKey, TValue>(dict);
+        }
+
+        /// <summary>
+        /// Performs the specified action on each element of the System.Collections.Generic.IDictionary`2.
+        /// </summary>
+        public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> collection, Action<KeyValuePair<TKey, TValue>> action)
+        {
+            foreach (var item in collection)
+                action(item);
+        }
+
+        /// <summary>
+        /// Performs the specified action on each element of the System.Collections.Generic.IDictionary`2.
+        /// </summary>
+        public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> collection, Action<TKey, TValue> action)
+        {
+            foreach (var item in collection)
+                action(item.Key, item.Value);
         }
     }
 }
