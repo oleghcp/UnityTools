@@ -3,6 +3,7 @@ using UnityEditor;
 using System.IO;
 using UU;
 
+#pragma warning disable CS0649
 namespace UUEditor.Window
 {
     internal abstract class CreateMeshWizard : ScriptableWizard

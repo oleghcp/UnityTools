@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace UU.Sound.SoundProviderStuff
 {
+    [DisallowMultipleComponent]
     public class MusObject : SoundObjectInfo, Poolable
     {
         [SerializeField]

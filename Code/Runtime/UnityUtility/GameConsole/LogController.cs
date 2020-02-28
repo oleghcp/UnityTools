@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UU.Collections;
 using UU.MathExt;
 
+#pragma warning disable CS0649
 namespace UU.GameConsole
 {
     internal class LogController : UIScript

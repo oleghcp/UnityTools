@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using System.Text;
 using UU.Scripts;
 
+#pragma warning disable CS0649
 namespace UU.GameConsole
 {
     public class Terminal : SingleUIScript<Terminal>

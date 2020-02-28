@@ -2,7 +2,7 @@
 
 namespace UU.Sound.SoundProviderStuff
 {
-    public abstract class SoundObjectInfo : Script
+    public abstract class SoundObjectInfo : MonoBehaviour
     {
         internal abstract string ClipName { get; }
         internal abstract AudioSource AudioSource { get; }

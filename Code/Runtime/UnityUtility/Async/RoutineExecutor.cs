@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using UU.Collections;
 using UU.Scripts;
 
 namespace UU.Async
 {
+    [DisallowMultipleComponent]
     internal class RoutineExecutor : Script, Poolable
     {
         internal uint ID;

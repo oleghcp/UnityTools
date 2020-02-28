@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UU.Collections;
 
+#pragma warning disable CS0649
 namespace UU.GameConsole
 {
     internal class LogLine : UIScript, Poolable
