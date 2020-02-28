@@ -1,6 +1,7 @@
 ﻿using System;
 using UU.MathExt;
 using UnityEngine;
+using static System.Math;
 
 namespace UU
 {
@@ -43,8 +44,8 @@ namespace UU
         public static Vector2 RotateVector(in Vector2 rotated, float angle)
         {
             angle = angle.ToRadians();
-            float sin = (float)Math.Sin(angle);
-            float cos = (float)Math.Cos(angle);
+            float sin = (float)Sin(angle);
+            float cos = (float)Cos(angle);
 
             return new Vector2(rotated.x * cos - rotated.y * sin, rotated.x * sin + rotated.y * cos);
         }
@@ -57,8 +58,8 @@ namespace UU
         {
             angle = angle.ToRadians();
 
-            float sin = (float)Math.Sin(angle);
-            float cos = (float)Math.Cos(angle);
+            float sin = (float)Sin(angle);
+            float cos = (float)Cos(angle);
 
             float oneMinusCos = 1f - cos;
             float oneMinusCosByXY = oneMinusCos * axis.x * axis.y;
@@ -83,7 +84,21 @@ namespace UU
         public static Vector2 AngleToVector2(float angle)
         {
             angle = angle.ToRadians();
-            return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+            return new Vector2((float)Cos(angle), (float)Sin(angle));
+        }
+
+        /// <summary>
+        /// Creates a rotation with the specified forward and upwards directions.
+        /// </summary>
+        /// <param name="forward">The direction to look in.</param>
+        /// <param name="angle">The angle in degrees around forward vector.</param>
+        /// <returns></returns>
+        public static Quaternion LookRotation(Vector3 forward, float angle)
+        {
+            float halfAngle = angle.ToRadians() * 0.5f;
+            Vector3 xyz = forward.normalized * (float)Sin(halfAngle);
+            float w = (float)Cos(halfAngle);
+            return new Quaternion(xyz.x, xyz.y, xyz.z, w);
         }
     }
 }
