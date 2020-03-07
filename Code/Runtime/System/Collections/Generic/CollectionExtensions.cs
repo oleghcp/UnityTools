@@ -78,70 +78,6 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Returns an index of an element with the minimum parameter value.
-        /// </summary>
-        public static int IndexOfMin<TSource, TKey>(this IList<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
-        {
-            if (collection.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            if (typeof(TKey).IsValueType)
-                return CollectionHelper.ValueMin(collection, selector, out _);
-            else
-                return CollectionHelper.RefMin(collection, selector, out _);
-        }
-
-        /// <summary>
-        /// Returns an index of an element with the maximum parameter value.
-        /// </summary>
-        public static int IndexOfMax<TSource, TKey>(this IList<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
-        {
-            if (collection.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            if (typeof(TKey).IsValueType)
-                return CollectionHelper.ValueMax(collection, selector, out _);
-            else
-                return CollectionHelper.RefMax(collection, selector, out _);
-        }
-
-        /// <summary>
-        /// Returns an element with the minimum parameter value.
-        /// </summary>
-        public static TSource GetWithMin<TSource, TKey>(this IList<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
-        {
-            if (collection.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            TSource res;
-
-            if (typeof(TKey).IsValueType)
-                CollectionHelper.ValueMin(collection, selector, out res);
-            else
-                CollectionHelper.RefMin(collection, selector, out res);
-
-            return res;
-        }
-
-        /// <summary>
-        /// Returns an element with the maximum parameter value.
-        /// </summary>
-        public static TSource GetWithMax<TSource, TKey>(this IList<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
-        {
-            if (collection.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            TSource res;
-
-            if (typeof(TKey).IsValueType)
-                CollectionHelper.ValueMax(collection, selector, out res);
-            else
-                CollectionHelper.RefMax(collection, selector, out res);
-
-            return res;
-        }
-
-        /// <summary>
         /// Returns a subarray of the specified length starting from the specified index.
         /// </summary>
         public static T[] GetSubArray<T>(this List<T> list, int startIndex, int length)
@@ -206,30 +142,6 @@ namespace System.Collections.Generic
         public static void Sort<T>(this T[] array, Comparison<T> comparer)
         {
             Array.Sort(array, comparer);
-        }
-
-        /// <summary>
-        /// Sorts by selected key.
-        /// </summary>                
-        /// <param name="keySelector">Reference to selecting function.</param>
-        public static void Sort<TSource, TKey>(this TSource[] array, Func<TSource, TKey> keySelector) where TKey : IComparable<TKey>
-        {
-            if (typeof(TKey).IsValueType)
-                Array.Sort(array, (itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
-            else
-                Array.Sort(array, (itm1, itm2) => CollectionHelper.Compare(keySelector(itm1), keySelector(itm2)));
-        }
-
-        /// <summary>
-        /// Sorts by selected key.
-        /// </summary>                
-        /// <param name="keySelector">Reference to selecting function.</param>
-        public static void Sort<TSource, TKey>(this List<TSource> list, Func<TSource, TKey> keySelector) where TKey : IComparable<TKey>
-        {
-            if (typeof(TKey).IsValueType)
-                list.Sort((itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
-            else
-                list.Sort((itm1, itm2) => CollectionHelper.Compare(keySelector(itm1), keySelector(itm2)));
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 {
     internal static class CollectionHelper
     {
-        public static int ValueMin<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : IComparable<TKey>
+        public static int ValueMin<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
         {
             int index = 0;
             result = collection[index];
@@ -25,7 +25,7 @@
             return index;
         }
 
-        public static int ValueMax<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : IComparable<TKey>
+        public static int ValueMax<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
         {
             int index = 0;
             result = collection[index];
@@ -48,7 +48,7 @@
             return index;
         }
 
-        public static int RefMin<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : IComparable<TKey>
+        public static int RefMin<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
         {
             int index = 0;
             result = collection[index];
@@ -71,7 +71,7 @@
             return index;
         }
 
-        public static int RefMax<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : IComparable<TKey>
+        public static int RefMax<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
         {
             int index = 0;
             result = collection[index];
@@ -94,7 +94,7 @@
             return index;
         }
 
-        public static int Compare<T>(T a, T b) where T : IComparable<T>
+        public static int Compare<T>(T a, T b) where T : class, IComparable<T>
         {
             if (a != null)
                 return a.CompareTo(b);
