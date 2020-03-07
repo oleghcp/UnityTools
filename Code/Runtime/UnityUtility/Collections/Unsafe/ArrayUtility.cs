@@ -4,6 +4,21 @@ namespace UU.Collections.Unsafe
 {
     public static class ArrayUtility
     {
+        public static unsafe T[] ToArray<T>(T* array, int length) where T : unmanaged
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+
+            T[] newArray = new T[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                newArray[i] = array[i];
+            }
+
+            return newArray;
+        }
+
         public static unsafe void Sort<T>(T* array, int length) where T : unmanaged, IComparable<T>
         {
             if (array == null)
