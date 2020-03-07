@@ -20,20 +20,11 @@ namespace UU.Sound
 
         // -- //
 
-        public override bool Equals(object obj)
-        {
-            return obj is SoundKey && Equals((SoundKey)obj);
-        }
-
-        public bool Equals(SoundKey other)
-        {
-            return HASH == other.HASH;
-        }
-
-        public override int GetHashCode()
-        {
-            return HASH;
-        }
+        public override bool Equals(object obj) => obj is SoundKey && Equals((SoundKey)obj);
+        public bool Equals(SoundKey other) => HASH == other.HASH;
+        public override int GetHashCode() => HASH;
+        public static bool operator ==(SoundKey a, SoundKey b) => a.HASH == b.HASH;
+        public static bool operator !=(SoundKey a, SoundKey b) => a.HASH != b.HASH;
     }
 
     public class SoundProvider
