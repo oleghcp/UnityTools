@@ -45,15 +45,15 @@ namespace System.IO
     public static class IOExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetParentPath(this DirectoryInfo dir, int steps = 1)
+        public static string GetParentPath(this DirectoryInfo self, int steps = 1)
         {
-            return PathExt.GetParentPath(dir.FullName, steps);
+            return PathExt.GetParentPath(self.FullName, steps);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetParentPath(this FileInfo file, int steps = 1)
+        public static string GetParentPath(this FileInfo self, int steps = 1)
         {
-            return PathExt.GetParentPath(file.FullName, steps);
+            return PathExt.GetParentPath(self.FullName, steps);
         }
     }
 }

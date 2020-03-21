@@ -29,72 +29,72 @@ namespace System
         /// Retrieves the name of the constant in the specified enumeration that has the specified value.
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetName(this Enum value)
+        public static string GetName(this Enum self)
         {
-            return Enum.GetName(value.GetType(), value);
+            return Enum.GetName(self.GetType(), self);
         }
 
         /// <summary>
         /// Returns integer value of converted enumeration or non-standard integer enumeration (such as byte, short, etc.)
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ToInteger(this Enum value)
+        public static int ToInteger(this Enum self)
         {
-            return Convert.ToInt32(value);
+            return Convert.ToInt32(self);
         }
 
         /// <summary>
         /// Indicates whether the specified string is null or an empty string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty(this string str)
+        public static bool IsNullOrEmpty(this string self)
         {
-            return string.IsNullOrEmpty(str);
+            return string.IsNullOrEmpty(self);
         }
 
         /// <summary>
         /// Indicates whether the specified string is null, empty, or consists only of white-space characters.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrWhiteSpace(this string str)
+        public static bool IsNullOrWhiteSpace(this string self)
         {
-            return string.IsNullOrWhiteSpace(str);
+            return string.IsNullOrWhiteSpace(self);
         }
 
         /// <summary>
         /// Indicates whether the specified string is not null and not an empty string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasAnyData(this string str)
+        public static bool HasAnyData(this string self)
         {
-            return !string.IsNullOrEmpty(str);
+            return !string.IsNullOrEmpty(self);
         }
 
         /// <summary>
         ///Indicates whether the specified string is not null, empty, and doesn't consist only of white-space characters.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasUsefulData(this string str)
+        public static bool HasUsefulData(this string self)
         {
-            return !string.IsNullOrWhiteSpace(str);
+            return !string.IsNullOrWhiteSpace(self);
         }
 
         /// <summary>
         /// Gets the underlying type code of the specified Type
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TypeCode GetTypeCode(this Type type)
+        public static TypeCode GetTypeCode(this Type self)
         {
-            return Type.GetTypeCode(type);
+            return Type.GetTypeCode(self);
         }
 
         /// <summary>
         /// Returns true if type is the specified type or subclass of the specified type;
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Is(this Type type, Type familyType)
+        public static bool Is(this Type self, Type familyType)
         {
-            return type.IsSubclassOf(familyType) || type == familyType;
+            return self.IsSubclassOf(familyType) || self == familyType;
         }
     }
 }
