@@ -1,9 +1,30 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Text;
+using UU;
 
 namespace System
 {
     public static class SystemTypeExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToString(this int self, int radix)
+        {
+            return ConvertUtility.DecimalToStringWithCustomRadix(self, radix);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToString(this long self, int radix)
+        {
+            return ConvertUtility.DecimalToStringWithCustomRadix(self, radix);
+        }
+
+        public static string Cut(this StringBuilder self)
+        {
+            var value = self.ToString();
+            self.Clear();
+            return value;
+        }
+
         /// <summary>
         /// Retrieves the name of the constant in the specified enumeration that has the specified value.
         /// </summary>        

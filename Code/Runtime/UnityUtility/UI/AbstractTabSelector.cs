@@ -11,24 +11,26 @@ namespace UU.UI
         private GameObject _unselected;
         [SerializeField]
         private GameObject _content;
-
-        private TabGroup m_group;
+        [SerializeField, HideInInspector]
+        private TabGroup _group;
 
         private void Awake()
         {
-            TabGroup group = transform.parent.GetComponentInParent<TabGroup>();
-
-            if (group != null)
-                group.RegSelector(this);
-            else
-                Msg.Warning("TabGroup component is not found.");
-
+            _group.RegSelector(this);
             OnAwake();
+        }
+
+        private void OnValidate()
+        {
+            _group = transform.parent.GetComponentInParent<TabGroup>(true);
+
+            if (_group == null)
+                Debug.LogError("TabGroup component is not found.");
         }
 
         internal void SetUp(TabGroup group, bool isActive)
         {
-            m_group = group;
+            _group = group;
             f_switch(isActive);
         }
 
@@ -46,7 +48,7 @@ namespace UU.UI
 
         protected void OnClick()
         {
-            m_group.OnSectorChosen(this);
+            _group.OnSectorChosen(this);
         }
 
         private void f_switch(bool select)

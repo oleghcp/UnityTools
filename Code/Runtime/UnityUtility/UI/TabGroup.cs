@@ -7,10 +7,15 @@ namespace UU.UI
     {
         private AbstractTabSelector m_cur;
 
-        private void Start()
+        public void OnActivate(bool on)
         {
-            if (m_cur != null)
+            if (m_cur == null)
+                return;
+
+            if (on)
                 m_cur.OnSelect();
+            else
+                m_cur.OnDeselect();
         }
 
         internal void OnSectorChosen(AbstractTabSelector selector)

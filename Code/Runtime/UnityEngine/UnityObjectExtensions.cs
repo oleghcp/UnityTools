@@ -353,6 +353,31 @@ namespace UnityEngine
             }
         }
 
+        public static T GetComponentInParent<T>(this Transform self, bool includeInactive) where T : Component
+        {
+            if (!includeInactive)
+                return self.GetComponentInParent<T>();
+
+            for (var p = self; p != null; p = p.parent)
+            {
+                var component = p.GetComponent<T>();
+                if (component != null)
+                    return component;
+            }
+
+            return null;
+        }
+
+        public static void DestroyChildren(this Transform self)
+        {
+            int length = self.childCount;
+
+            for (int i = 0; i < length; i++)
+            {
+                self.GetChild(i).gameObject.Destroy();
+            }
+        }
+
         /// <summary>
         /// Transforms rotation from local space to world space.
         /// </summary>

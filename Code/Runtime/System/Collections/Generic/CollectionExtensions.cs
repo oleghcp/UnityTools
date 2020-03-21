@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace System.Collections.Generic
 {
@@ -60,21 +61,63 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Indicates whether the specified array is null or it's length equals zero.
+        /// Indicates whether the specified collection is null or it's length equals zero.
         /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty<T>(this T[] array)
+        public static bool IsNullOrEmpty<T>(this ICollection<T> array)
         {
-            return ArrayExt.IsNullOrEmpty(array);
+            return array == null || array.Count == 0;
         }
 
         /// <summary>
-        /// Indicates whether the specified array is not null and contains at least one element.
+        /// Indicates whether the specified collection is not null and contains at least one element.
+        /// </summary>
+        public static bool HasAnyData<T>(this ICollection<T> array)
+        {
+            return array != null && array.Count > 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the specified collection is null or it's length equals zero.
+        /// </summary>    
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> array)
+        {
+            if (array == null)
+                return true;
+
+            if (array is ICollection<T> collection)
+                return collection.Count == 0;
+
+            return !array.GetEnumerator().MoveNext();
+        }
+
+        /// <summary>
+        /// Indicates whether the specified collection is not null and contains at least one element.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasAnyData<T>(this T[] array)
+        public static bool HasAnyData<T>(this IEnumerable<T> array)
         {
-            return ArrayExt.HasAnyData(array);
+            return !array.IsNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
+        /// </summary>
+        public static string ConcatToString<T>(this IEnumerable<T> self, string separator = "")
+        {
+            StringBuilder builder = new StringBuilder();
+
+            using (IEnumerator<T> iterator = self.GetEnumerator())
+            {
+                iterator.MoveNext();
+                builder.Append(iterator.Current.ToString());
+
+                while (iterator.MoveNext())
+                {
+                    builder.Append(separator).Append(iterator.Current.ToString());
+                }
+            }
+
+            return builder.ToString();
         }
 
         /// <summary>
