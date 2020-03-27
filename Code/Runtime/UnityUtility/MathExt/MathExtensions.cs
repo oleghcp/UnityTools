@@ -439,5 +439,23 @@ namespace UU.MathExt
         {
             return value != 0;
         }
+
+        /// <summary>
+        /// Casts float value to integer.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ToInt(this float value)
+        {
+            return (int)value;
+        }
+
+        /// <summary>
+        /// Casts integer value to float.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ToFloat(this int value)
+        {
+            return value;
+        }
     }
 }

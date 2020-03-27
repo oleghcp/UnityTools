@@ -12,12 +12,12 @@ namespace UUEditor.Window
         private UnityObject m_target;
         private UnityObject[] m_objects;
 
-        public static void Create(string targetObjectGuid, List<string> referingObjectGuids)
+        public static void Create(string targetObjectGuid, List<object> referingObjectGuids)
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>("References");
 
             window.m_target = EditorUtilityExt.LoadAssetByGuid(targetObjectGuid);
-            window.m_objects = referingObjectGuids.Select(itm => EditorUtilityExt.LoadAssetByGuid(itm)).ToArray();
+            window.m_objects = referingObjectGuids.Select(itm => EditorUtilityExt.LoadAssetByGuid(itm.ToString())).ToArray();
         }
 
         private void OnGUI()

@@ -102,22 +102,37 @@ namespace System.Collections.Generic
         /// <summary>
         /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString<T>(this IEnumerable<T> self, string separator = "")
         {
-            StringBuilder builder = new StringBuilder();
+            return string.Join(separator, self);
+        }
 
-            using (IEnumerator<T> iterator = self.GetEnumerator())
-            {
-                iterator.MoveNext();
-                builder.Append(iterator.Current.ToString());
+        /// <summary>
+        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this IEnumerable<string> self, string separator = "")
+        {
+            return string.Join(separator, self);
+        }
 
-                while (iterator.MoveNext())
-                {
-                    builder.Append(separator).Append(iterator.Current.ToString());
-                }
-            }
+        /// <summary>
+        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString<T>(this IEnumerable<T> self, string separator, int startIndex, int count)
+        {
+            return string.Join(separator, self, startIndex, count);
+        }
 
-            return builder.ToString();
+        /// <summary>
+        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this IEnumerable<string> self, string separator, int startIndex, int count)
+        {
+            return string.Join(separator, self, startIndex, count);
         }
 
         /// <summary>

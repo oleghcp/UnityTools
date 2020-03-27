@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace UUEditor
 {
@@ -67,19 +68,44 @@ namespace UUEditor
         // ------------- //
 
         [MenuItem("Assets/Find References In Project (ext.)", priority = 25)]
-        private static void FindRefs()
+        private static void FindReferences()
         {
-            string targetGuid = Selection.assetGUIDs[0];
+            var targetGuid = Selection.assetGUIDs[0];
+            var progress = new EditorUtilityExt.SearchProgress();
+            var isCanseled = false;
+            IEnumerator iterator;
 
-            List<string> referingObjectGuids = new List<string>();
-
-            if (!EditorUtilityExt.FindReferences(targetGuid, referingObjectGuids))
+            if (EditorSettings.serializationMode == SerializationMode.ForceText)
             {
-                Debug.Log("There are no dependencies.");
-                return;
+                iterator = EditorUtilityExt.FindReferencesByText(targetGuid, progress);
+            }
+            else
+            {
+                iterator = EditorUtilityExt.FindReferences(targetGuid, progress);
             }
 
-            ReferencesWindow.Create(targetGuid, referingObjectGuids);
+            EditorApplication.update += Proceed;
+
+            void Proceed()
+            {
+                if (!isCanseled && iterator.MoveNext())
+                {
+                    isCanseled = EditorUtility.DisplayCancelableProgressBar("Searching references", "That could take a while...", progress.Progress);
+                    return;
+                }
+
+                EditorApplication.update -= Proceed;
+
+                EditorUtility.ClearProgressBar();
+
+                if (progress.FoundObjects.Count == 0)
+                {
+                    Debug.Log("There are no dependencies.");
+                    return;
+                }
+
+                ReferencesWindow.Create(targetGuid, progress.FoundObjects);
+            }
         }
 
         [MenuItem("Assets/Find References In Project (ext.)", true)]
@@ -87,45 +113,6 @@ namespace UUEditor
         {
             return Selection.assetGUIDs.Length == 1;
         }
-
-        #region Old variant of Find References function
-        //[MenuItem("Assets/Find References In Project (ext.)", priority = 25)]
-        //private static void FindRefs()
-        //{
-        //    string guid = Selection.assetGUIDs[0];
-        //    string assetsFolderPath = Application.dataPath;
-        //    bool hasRefs = false;
-
-        //    void check(string ext)
-        //    {
-        //        string[] files = Directory.GetFiles(assetsFolderPath, ext, SearchOption.AllDirectories);
-
-        //        foreach (var filePath in files)
-        //        {
-        //            string text = File.ReadAllText(filePath);
-
-        //            if (text.Contains(guid))
-        //            {
-        //                hasRefs = true;
-        //                Debug.Log(filePath.Remove(0, assetsFolderPath.Length));
-        //            }
-        //        }
-        //    }
-
-        //    check("*.prefab");
-        //    check("*.unity");
-        //    check("*.asset");
-
-        //    if (!hasRefs)
-        //        Debug.Log("There is no references.");
-        //}
-
-        //[MenuItem("Assets/Find References In Project (ext.)", true)]
-        //private static bool FindRefsValidation()
-        //{
-        //    return Selection.assetGUIDs.Length == 1 && EditorSettings.serializationMode == SerializationMode.ForceText;
-        //}
-        #endregion
 
         [MenuItem("Assets/Show Guid (ext.)", priority = 20)]
         private static void ShowGUID()

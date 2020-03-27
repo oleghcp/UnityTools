@@ -24,21 +24,26 @@ namespace System.IO
         private static string f_getParentPath(string path, int steps, Func<char, bool> separatorChecker)
         {
             string parent = path;
+            int maxLength = path.Length;
 
             for (int i = 0; i < steps; i++)
             {
                 bool terminator = true;
-                for (int j = parent.Length - 1; j >= 0; j--)
+                for (int j = maxLength - 1; j >= 0; j--)
                 {
                     if (separatorChecker(parent[j]))
                     {
-                        if (!terminator) { parent = parent.Substring(0, j); break; }
+                        if (!terminator)
+                        {
+                            maxLength = j;
+                            break;
+                        }
                     }
                     else { terminator = false; }
                 }
             }
 
-            return parent;
+            return parent.Substring(0, maxLength);
         }
     }
 
