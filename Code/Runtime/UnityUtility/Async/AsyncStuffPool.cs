@@ -1,6 +1,6 @@
-﻿using UU.Collections;
+﻿using UnityEngine.SceneManagement;
+using UU.Collections;
 using UU.IDGenerating;
-using UnityEngine.SceneManagement;
 
 namespace UU.Async
 {
@@ -10,8 +10,8 @@ namespace UU.Async
         {
             private const string RUNNER_NAME = "Task";
 
-            public ObjectPool<RoutineRunner> RunnersPool;
-            public IDGenerator<uint> IdProvider;
+            public readonly ObjectPool<RoutineRunner> RunnersPool;
+            public readonly IDGenerator<uint> IdProvider;
 
             public Data()
             {
@@ -27,7 +27,7 @@ namespace UU.Async
             }
         }
 
-        private static Data s_inst;
+        private static readonly Data s_inst;
 
         static AsyncStuffPool()
         {

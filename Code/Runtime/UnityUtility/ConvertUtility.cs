@@ -24,18 +24,18 @@ namespace UU
             if (decimalNumber == 0)
                 return "0";
 
-            var index = BITS_IN_LONG - 1;
-            var currentNumber = Math.Abs(decimalNumber);
-            var charArray = new char[BITS_IN_LONG];
+            int index = BITS_IN_LONG - 1;
+            long currentNumber = Math.Abs(decimalNumber);
+            char[] charArray = new char[BITS_IN_LONG];
 
             while (currentNumber != 0)
             {
-                var remainder = (int)(currentNumber % radix);
+                int remainder = (int)(currentNumber % radix);
                 charArray[index--] = SYMBOLS[remainder];
                 currentNumber /= radix;
             }
 
-            var result = new string(charArray, index + 1, BITS_IN_LONG - index - 1);
+            string result = new string(charArray, index + 1, BITS_IN_LONG - index - 1);
             if (decimalNumber < 0)
             {
                 result = "-" + result;
@@ -65,7 +65,7 @@ namespace UU
 
             long result = 0;
             long multiplier = 1;
-            for (var i = number.Length - 1; i >= 0; i--)
+            for (int i = number.Length - 1; i >= 0; i--)
             {
                 var c = number[i];
                 if (i == 0 && c == '-')
@@ -75,7 +75,7 @@ namespace UU
                     break;
                 }
 
-                var digit = SYMBOLS.IndexOf(c);
+                int digit = SYMBOLS.IndexOf(c);
                 if (digit == -1)
                     throw new ArgumentException("Invalid character in the arbitrary numeral system number", nameof(number));
 
