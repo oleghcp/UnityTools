@@ -101,6 +101,7 @@ namespace UU.Async
             return obj is TaskInfo && this == (TaskInfo)obj;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(TaskInfo other)
         {
             return this == other;
