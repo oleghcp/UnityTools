@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace UUEditor
 {
-    [CustomEditor(typeof(RoutineExecutor))]
-    internal class RoutineExecutorEditor : Editor
+    [CustomEditor(typeof(RoutineRunner))]
+    internal class RoutineRunnerEditor : Editor
     {
-        private RoutineExecutor m_target;
+        private RoutineRunner m_target;
 
         private void Awake()
         {
-            m_target = target as RoutineExecutor;
+            m_target = target as RoutineRunner;
         }
 
         public override void OnInspectorGUI()

@@ -2,16 +2,16 @@
 
 namespace UU.Async
 {
-    internal class RoutineEnumerator : IEnumerator
+    internal class RoutineIterator : IEnumerator
     {
-        private readonly RoutineExecutor OWNER;
+        private readonly RoutineRunner m_owner;
 
-        private IEnumerator m_cur;
+        private IEnumerator m_curRoutine;
         private bool m_isPaused;
 
         internal bool IsEmpty
         {
-            get { return m_cur == null; }
+            get { return m_curRoutine == null; }
         }
 
         internal bool IsPaused
@@ -19,14 +19,14 @@ namespace UU.Async
             get { return m_isPaused; }
         }
 
-        internal RoutineEnumerator(RoutineExecutor owner)
+        internal RoutineIterator(RoutineRunner owner)
         {
-            OWNER = owner;
+            m_owner = owner;
         }
 
         internal void Fill(IEnumerator routine)
         {
-            m_cur = routine;
+            m_curRoutine = routine;
         }
 
         internal void Pause(bool value)
@@ -36,22 +36,22 @@ namespace UU.Async
 
         public void Reset()
         {
-            m_cur = null;
+            m_curRoutine = null;
             m_isPaused = false;
         }
 
         object IEnumerator.Current
         {
-            get { return m_cur.Current; }
+            get { return m_curRoutine.Current; }
         }
 
         bool IEnumerator.MoveNext()
         {
             if (m_isPaused) { return true; }
 
-            bool canMove = m_cur.MoveNext();
+            bool canMove = m_curRoutine.MoveNext();
 
-            if (!canMove) { OWNER.OnCoroutineEnded(); }
+            if (!canMove) { m_owner.OnCoroutineEnded(); }
 
             return canMove;
         }

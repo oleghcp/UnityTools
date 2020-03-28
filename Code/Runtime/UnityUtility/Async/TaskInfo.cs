@@ -8,15 +8,15 @@ namespace UU.Async
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TaskInfo : IEquatable<TaskInfo>
     {
-        private readonly uint ID;
-        internal RoutineExecutor Runner;
+        private readonly uint m_id;
+        private readonly RoutineRunner m_runner;
 
         /// <summary>
         /// Provides task ID.
         /// </summary>
         public uint TaskId
         {
-            get { return ID; }
+            get { return m_id; }
         }
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace UU.Async
 
         public bool IsPaused
         {
-            get { return f_isAlive() && Runner.IsPaused; }
+            get { return f_isAlive() && m_runner.IsPaused; }
         }
 
-        internal TaskInfo(RoutineExecutor runner)
+        internal TaskInfo(RoutineRunner runner)
         {
-            Runner = runner;
-            ID = runner.ID;
+            m_runner = runner;
+            m_id = runner.ID;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace UU.Async
         /// </summary>
         public void Pause()
         {
-            if (f_isAlive()) { Runner.Pause(); }
+            if (f_isAlive()) { m_runner.Pause(); }
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace UU.Async
         /// </summary>
         public void Resume()
         {
-            if (f_isAlive()) { Runner.Resume(); }
+            if (f_isAlive()) { m_runner.Resume(); }
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace UU.Async
         /// </summary>
         public void SkipCurrent()
         {
-            if (f_isAlive()) { Runner.SkipCurrent(); }
+            if (f_isAlive()) { m_runner.SkipCurrent(); }
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace UU.Async
         /// </summary>
         public void Stop()
         {
-            if (f_isAlive()) { Runner.Stop(); }
+            if (f_isAlive()) { m_runner.Stop(); }
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace UU.Async
         {
             if (f_isAlive())
             {
-                Runner.Add(routine);
-                Runner.StartRunning();
+                m_runner.Add(routine);
+                m_runner.StartRunning();
             }
             else
             {
@@ -91,7 +91,7 @@ namespace UU.Async
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool f_isAlive()
         {
-            return Runner != null && Runner.ID == ID;
+            return m_runner != null && m_runner.ID == m_id;
         }
 
         // -- //
@@ -108,17 +108,17 @@ namespace UU.Async
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(ID.GetHashCode(), Runner.GetHashCode());
+            return Helper.GetHashCode(m_id.GetHashCode(), m_runner.GetHashCode());
         }
 
         public static bool operator ==(TaskInfo a, TaskInfo b)
         {
-            return a.ID == b.ID && a.Runner == b.Runner;
+            return a.m_id == b.m_id && a.m_runner == b.m_runner;
         }
 
         public static bool operator !=(TaskInfo a, TaskInfo b)
         {
-            return a.ID != b.ID || a.Runner != b.Runner;
+            return a.m_id != b.m_id || a.m_runner != b.m_runner;
         }
     }
 }

@@ -10,25 +10,20 @@ namespace UU.Async
         {
             private const string RUNNER_NAME = "Task";
 
-            public ObjectPool<RoutineExecutor> RunnersPool;
-            public UintIDGenerator IDs;
+            public ObjectPool<RoutineRunner> RunnersPool;
+            public IDGenerator<uint> IdProvider;
 
             public Data()
             {
-                IDs = new UintIDGenerator();
-                RunnersPool = new ObjectPool<RoutineExecutor>(f_create);
+                IdProvider = new UintIDGenerator();
+                RunnersPool = new ObjectPool<RoutineRunner>(f_create);
 
-                SceneManager.sceneUnloaded += SceneUnloadedHandler;
+                SceneManager.sceneUnloaded += _ => RunnersPool.Clear();
             }
 
-            private RoutineExecutor f_create()
+            private RoutineRunner f_create()
             {
-                return Script.CreateInstance<RoutineExecutor>(RUNNER_NAME);
-            }
-
-            private void SceneUnloadedHandler(Scene scene)
-            {
-                RunnersPool.Clear();
+                return Script.CreateInstance<RoutineRunner>(RUNNER_NAME);
             }
         }
 
@@ -41,15 +36,15 @@ namespace UU.Async
 
         internal static uint GetNewId()
         {
-            return s_inst.IDs.GetNewId();
+            return s_inst.IdProvider.GetNewId();
         }
 
-        internal static RoutineExecutor GetExecutor()
+        internal static RoutineRunner GetExecutor()
         {
             return s_inst.RunnersPool.Get();
         }
 
-        internal static void Return(RoutineExecutor runner)
+        internal static void Return(RoutineRunner runner)
         {
             s_inst.RunnersPool.Release(runner);
         }

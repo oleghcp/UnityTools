@@ -8,11 +8,11 @@ using UU.Scripts;
 namespace UU.Async
 {
     [DisallowMultipleComponent]
-    internal class RoutineExecutor : Script, Poolable
+    internal class RoutineRunner : Script, Poolable
     {
         internal uint ID;
 
-        private RoutineEnumerator m_routine;
+        private RoutineIterator m_routine;
         private Queue<IEnumerator> m_queue;
         private Action m_update;
 
@@ -23,7 +23,7 @@ namespace UU.Async
 
         private void Awake()
         {
-            m_routine = new RoutineEnumerator(this);
+            m_routine = new RoutineIterator(this);
             m_queue = new Queue<IEnumerator>();
 
             m_update = () =>
