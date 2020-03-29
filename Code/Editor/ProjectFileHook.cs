@@ -1,5 +1,4 @@
 #if VS_FILE_HOOK
-using System;
 using System.Linq;
 using System.Xml.Linq;
 using System.IO;
@@ -21,17 +20,17 @@ public class ProjectFileHook
 
     private static string HandleNewFile(string name, string content)
     {
-        var document = XDocument.Parse(content);
+        XDocument document = XDocument.Parse(content);
 
-        var checkComdition = new Func<XElement, bool>(item =>
+        bool checkComdition(XElement item)
         {
             return item.Name.LocalName == "Reference" &&
                    item.Attribute("Include")?.Value == "Boo.Lang";
-        });
+        }
 
-        foreach (var element in document.Root.Elements())
+        foreach (XElement element in document.Root.Elements())
         {
-            var booReferenceElement = element.Elements().FirstOrDefault(checkComdition);
+            XElement booReferenceElement = element.Elements().FirstOrDefault(checkComdition);
 
             if (booReferenceElement != null)
             {
@@ -41,17 +40,17 @@ public class ProjectFileHook
         }
 
         const string warns = "CS0649, IDE0044";
-        var xName = document.Root.GetDefaultNamespace() + "NoWarn";
+        XName xName = document.Root.GetDefaultNamespace() + "NoWarn";
 
-        foreach (var element in document.Root.Elements())
+        foreach (XElement element in document.Root.Elements())
         {
             if (element.Name.LocalName == "PropertyGroup")
             {
-                var attribute = element.Attribute("Condition");
+                XAttribute attribute = element.Attribute("Condition");
 
                 if (attribute != null)
                 {
-                    var value = attribute.Value;
+                    string value = attribute.Value;
 
                     if (value.Contains("Debug") || value.Contains("Release"))
                     {
@@ -66,7 +65,7 @@ public class ProjectFileHook
             }
         }
 
-        using (var writer = new Utf8StringWriter())
+        using (Utf8StringWriter writer = new Utf8StringWriter())
         {
             document.Save(writer);
             content = writer.ToString();
