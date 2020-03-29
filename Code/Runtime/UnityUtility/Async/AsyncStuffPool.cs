@@ -11,11 +11,11 @@ namespace UU.Async
             private const string RUNNER_NAME = "Task";
 
             public readonly ObjectPool<RoutineRunner> RunnersPool;
-            public readonly IDGenerator<uint> IdProvider;
+            public readonly IDGenerator<ulong> IdProvider;
 
             public Data()
             {
-                IdProvider = new UintIDGenerator();
+                IdProvider = new UlongIDGenerator();
                 RunnersPool = new ObjectPool<RoutineRunner>(f_create);
 
                 SceneManager.sceneUnloaded += _ => RunnersPool.Clear();
@@ -34,7 +34,7 @@ namespace UU.Async
             s_inst = new Data();
         }
 
-        internal static uint GetNewId()
+        internal static ulong GetNewId()
         {
             return s_inst.IdProvider.GetNewId();
         }

@@ -4,7 +4,7 @@ namespace UU.Async
 {
     internal class RoutineIterator : IEnumerator
     {
-        private readonly RoutineRunner m_owner;
+        private readonly ITask m_owner;
 
         private IEnumerator m_curRoutine;
         private bool m_isPaused;
@@ -19,7 +19,7 @@ namespace UU.Async
             get { return m_isPaused; }
         }
 
-        internal RoutineIterator(RoutineRunner owner)
+        internal RoutineIterator(ITask owner)
         {
             m_owner = owner;
         }

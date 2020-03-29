@@ -16,10 +16,10 @@ namespace UUEditor
 
         public override void OnInspectorGUI()
         {
-            if (m_target.ID != 0)
+            if (m_target.Id != 0)
             {
                 GUILayout.Space(10f);
-                EditorGUILayout.LabelField("Task ID: " + m_target.ID.ToString());
+                EditorGUILayout.LabelField("Task ID: " + m_target.Id.ToString());
                 EditorGUILayout.LabelField("Status: " + (m_target.IsPaused ? "Paused" : "Running"));
                 Repaint();
             }

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace UU.Async
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TaskInfo : IEquatable<TaskInfo>
     {
-        private readonly uint m_id;
-        private readonly RoutineRunner m_runner;
+        private readonly ulong m_id;
+        private readonly ITask m_task;
 
         /// <summary>
         /// Provides task ID.
         /// </summary>
-        public uint TaskId
+        public ulong TaskId
         {
             get { return m_id; }
         }
@@ -29,13 +27,13 @@ namespace UU.Async
 
         public bool IsPaused
         {
-            get { return f_isAlive() && m_runner.IsPaused; }
+            get { return f_isAlive() && m_task.IsPaused; }
         }
 
-        internal TaskInfo(RoutineRunner runner)
+        internal TaskInfo(ITask runner)
         {
-            m_runner = runner;
-            m_id = runner.ID;
+            m_task = runner;
+            m_id = runner.Id;
         }
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace UU.Async
         /// </summary>
         public void Pause()
         {
-            if (f_isAlive()) { m_runner.Pause(); }
+            if (f_isAlive()) { m_task.Pause(); }
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace UU.Async
         /// </summary>
         public void Resume()
         {
-            if (f_isAlive()) { m_runner.Resume(); }
+            if (f_isAlive()) { m_task.Resume(); }
         }
 
         /// <summary>
@@ -59,7 +57,7 @@ namespace UU.Async
         /// </summary>
         public void SkipCurrent()
         {
-            if (f_isAlive()) { m_runner.SkipCurrent(); }
+            if (f_isAlive()) { m_task.SkipCurrent(); }
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace UU.Async
         /// </summary>
         public void Stop()
         {
-            if (f_isAlive()) { m_runner.Stop(); }
+            if (f_isAlive()) { m_task.Stop(); }
         }
 
         /// <summary>
@@ -77,8 +75,8 @@ namespace UU.Async
         {
             if (f_isAlive())
             {
-                m_runner.Add(routine);
-                m_runner.StartRunning();
+                m_task.Add(routine);
+                m_task.StartRunning();
             }
             else
             {
@@ -91,7 +89,7 @@ namespace UU.Async
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool f_isAlive()
         {
-            return m_runner != null && m_runner.ID == m_id;
+            return UnityObjectUtility.IsAlive(m_task) && m_task.Id == m_id;
         }
 
         // -- //
@@ -109,17 +107,17 @@ namespace UU.Async
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(m_id.GetHashCode(), m_runner.GetHashCode());
+            return m_id.GetHashCode();
         }
 
         public static bool operator ==(TaskInfo a, TaskInfo b)
         {
-            return a.m_id == b.m_id && a.m_runner == b.m_runner;
+            return a.m_id == b.m_id;
         }
 
         public static bool operator !=(TaskInfo a, TaskInfo b)
         {
-            return a.m_id != b.m_id || a.m_runner != b.m_runner;
+            return a.m_id != b.m_id;
         }
     }
 }
