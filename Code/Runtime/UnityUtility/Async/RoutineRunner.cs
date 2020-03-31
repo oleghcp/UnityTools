@@ -34,7 +34,7 @@ namespace UnityUtility.Async
             m_update = () =>
             {
                 if (m_iterator.IsEmpty && m_queue.Count == 0)
-                    AsyncStuffPool.Return(this);
+                    Tasks.Return(this);
             };
 
             f_init();
@@ -110,7 +110,7 @@ namespace UnityUtility.Async
 
         private void f_init()
         {
-            m_id = AsyncStuffPool.GetNewId();
+            m_id = Tasks.GetNewId();
             Updater.Frame_Event += m_update;
         }
 
