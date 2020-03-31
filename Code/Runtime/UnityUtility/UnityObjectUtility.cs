@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using UnityObject = UnityEngine.Object;
 
-namespace UU
+namespace UnityUtility
 {
     public static class UnityObjectUtility
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.Collections.Unsafe
+namespace UnityUtility.Collections.Unsafe
 {
     public static class ArrayUtility
     {

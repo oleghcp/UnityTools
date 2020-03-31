@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UU.Collections;
-using UU.MathExt;
+using UnityUtility.Collections;
+using UnityUtility.MathExt;
 
 #pragma warning disable CS0649
-namespace UU.GameConsole
+namespace UnityUtility.GameConsole
 {
     internal class LogController : UIScript
     {

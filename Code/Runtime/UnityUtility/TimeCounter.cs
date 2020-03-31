@@ -1,6 +1,6 @@
-﻿using UU.MathExt;
+﻿using UnityUtility.MathExt;
 
-namespace UU
+namespace UnityUtility
 {
     public struct TimeCounter
     {

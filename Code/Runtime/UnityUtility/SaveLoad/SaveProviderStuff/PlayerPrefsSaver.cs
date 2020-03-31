@@ -1,9 +1,9 @@
 ﻿using System;
-using UU.MathExt;
+using UnityUtility.MathExt;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 
-namespace UU.SaveLoad.SaveProviderStuff
+namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
     /// <summary>
     /// Saves and loads data through UnityEngine.PlayerPrefs.

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UU.UI
+namespace UnityUtility.UI
 {
     [DisallowMultipleComponent]
     public class TabSelectorClickable : AbstractTabSelector, IPointerClickHandler

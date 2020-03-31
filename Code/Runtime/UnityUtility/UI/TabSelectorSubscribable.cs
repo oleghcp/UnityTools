@@ -2,7 +2,7 @@
 using UnityEngine;
 
 #pragma warning disable CS0649
-namespace UU.UI
+namespace UnityUtility.UI
 {
     [DisallowMultipleComponent]
     public class TabSelectorSubscribable : AbstractTabSelector

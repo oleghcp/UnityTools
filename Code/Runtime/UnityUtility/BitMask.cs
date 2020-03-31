@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace UU
+namespace UnityUtility
 {
     public static class BitMask
     {

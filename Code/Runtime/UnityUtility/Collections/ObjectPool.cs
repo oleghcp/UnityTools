@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UU.Collections
+namespace UnityUtility.Collections
 {
     public interface Poolable
     {

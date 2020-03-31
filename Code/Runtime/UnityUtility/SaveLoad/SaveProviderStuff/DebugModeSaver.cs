@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace UU.SaveLoad.SaveProviderStuff
+namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
     /// <summary>
     /// Saves all data to non-encrypted text files. Can be used for debuging and so on.

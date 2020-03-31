@@ -211,7 +211,7 @@ namespace System.Collections.Generic
 
             while (last > 1)
             {
-                int cur = UU.Rnd.Random(last--);
+                int cur = UnityUtility.Rnd.Random(last--);
 
                 T value = self[cur];
                 self[cur] = self[last];

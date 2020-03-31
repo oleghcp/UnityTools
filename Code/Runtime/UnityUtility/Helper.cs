@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace UU
+namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class NonClonedAttribute : Attribute { }

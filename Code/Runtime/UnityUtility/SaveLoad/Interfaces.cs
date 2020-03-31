@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.SaveLoad
+namespace UnityUtility.SaveLoad
 {
     public interface Saver
     {

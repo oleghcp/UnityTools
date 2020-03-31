@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UU.UI
+namespace UnityUtility.UI
 {
     [DisallowMultipleComponent]
     public class TabGroup : MonoBehaviour

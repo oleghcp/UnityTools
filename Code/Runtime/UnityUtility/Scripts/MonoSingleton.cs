@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     /// <summary>
     /// Represents implementation of MonoBehaviour singleton with lazy initialization.

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using UU;
-using UU.Async;
-using UU.IdGenerating;
+using UnityUtility;
+using UnityUtility.Async;
+using UnityUtility.IdGenerating;
 
 namespace UUEditor.Async
 {

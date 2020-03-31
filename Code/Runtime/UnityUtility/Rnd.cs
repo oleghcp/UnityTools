@@ -1,16 +1,16 @@
 ﻿using System;
-using UU.Collections.Unsafe;
+using UnityUtility.Collections.Unsafe;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UU.Collections;
-using UU.MathExt;
-using UU.RNGenerators;
+using UnityUtility.Collections;
+using UnityUtility.MathExt;
+using UnityUtility.RNGenerators;
 using UnityEngine;
 
 using UR = UnityEngine.Random;
-using UU.BitMasks;
+using UnityUtility.BitMasks;
 
-namespace UU
+namespace UnityUtility
 {
     /// <summary>
     /// Class for generating random data.

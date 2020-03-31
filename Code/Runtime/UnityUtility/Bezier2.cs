@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     public class Bezier2
     {

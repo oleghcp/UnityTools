@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEditor;
-using UU.Collections;
+using UnityUtility.Collections;
 using UUEditor.Window;
-using UU;
-using UU.BitMasks;
+using UnityUtility;
+using UnityUtility.BitMasks;
 
 namespace UUEditor.Drawers
 {

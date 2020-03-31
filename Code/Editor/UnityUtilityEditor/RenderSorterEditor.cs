@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UU.Scripts;
+using UnityUtility.Scripts;
 
 namespace UUEditor
 {

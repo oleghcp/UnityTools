@@ -1,8 +1,8 @@
 ﻿using UnityEngine.SceneManagement;
-using UU.Collections;
-using UU.IdGenerating;
+using UnityUtility.Collections;
+using UnityUtility.IdGenerating;
 
-namespace UU.Async
+namespace UnityUtility.Async
 {
     internal static class AsyncStuffPool
     {

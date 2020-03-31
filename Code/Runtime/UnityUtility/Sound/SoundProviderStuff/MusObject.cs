@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UU.Collections;
+using UnityUtility.Collections;
 using System;
-using UU.Scripts;
-using UU.MathExt;
+using UnityUtility.Scripts;
+using UnityUtility.MathExt;
 using System.Runtime.CompilerServices;
 
-namespace UU.Sound.SoundProviderStuff
+namespace UnityUtility.Sound.SoundProviderStuff
 {
     [DisallowMultipleComponent]
     public class MusObject : SoundObjectInfo, Poolable

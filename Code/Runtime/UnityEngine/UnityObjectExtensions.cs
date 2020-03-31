@@ -1,7 +1,7 @@
 ﻿using UnityObject = UnityEngine.Object;
 using System;
 using System.Collections.Generic;
-using UU;
+using UnityUtility;
 using System.Runtime.CompilerServices;
 
 namespace UnityEngine

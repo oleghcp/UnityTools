@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Text;
 
-namespace UU.Controls.ControlStuff
+namespace UnityUtility.Controls.ControlStuff
 {
     internal class GamepadInputConverter
     {

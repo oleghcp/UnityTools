@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.EditorCoroutines.Editor;
-using UU.Async;
+using UnityUtility.Async;
 using static Unity.EditorCoroutines.Editor.EditorCoroutineUtility;
 
 namespace UUEditor.Async

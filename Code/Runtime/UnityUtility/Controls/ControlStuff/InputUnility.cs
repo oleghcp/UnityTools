@@ -2,7 +2,7 @@
 using System.Text;
 using UnityEngine;
 
-namespace UU.Controls.ControlStuff
+namespace UnityUtility.Controls.ControlStuff
 {
     public static class InputUnility
     {

@@ -1,4 +1,4 @@
-﻿namespace UU.RNGenerators
+﻿namespace UnityUtility.RNGenerators
 {
     public interface RNG
     {

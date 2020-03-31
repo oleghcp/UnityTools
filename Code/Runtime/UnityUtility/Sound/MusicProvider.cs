@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using UU.Sound.SoundProviderStuff;
-using UU.Collections;
-using UU.MathExt;
-using UU.SaveLoad;
+using UnityUtility.Sound.SoundProviderStuff;
+using UnityUtility.Collections;
+using UnityUtility.MathExt;
+using UnityUtility.SaveLoad;
 
-namespace UU.Sound
+namespace UnityUtility.Sound
 {
     public class MusicProvider
     {

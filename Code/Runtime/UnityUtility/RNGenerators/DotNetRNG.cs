@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.RNGenerators
+namespace UnityUtility.RNGenerators
 {
     public sealed class DotNetRNG : Random, RNG
     {

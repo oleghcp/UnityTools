@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UU.UI
+namespace UnityUtility.UI
 {
     //Based on http://www.sharkbombs.com/2015/02/10/tooltips-with-the-new-unity-ui-ugui/
     public class TooltipTrigger : Script, IPointerEnterHandler, IPointerExitHandler

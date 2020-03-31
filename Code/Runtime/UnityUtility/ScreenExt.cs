@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     /// <summary>
     /// A set of common math functions.

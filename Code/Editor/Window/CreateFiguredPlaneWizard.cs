@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Linq;
-using UU.MathExt;
+using UnityUtility.MathExt;
 
 namespace UUEditor.Window
 {

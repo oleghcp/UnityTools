@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     /// <summary>
     /// UnityEngine.Debug wrapper which is created mostly to hide the logger property from substitution in C# text editor.

@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UU.Collections;
-using UU.Scripts;
+using UnityUtility.Collections;
+using UnityUtility.Scripts;
 
-namespace UU.Async
+namespace UnityUtility.Async
 {
     [DisallowMultipleComponent]
     internal class RoutineRunner : Script, ITask, Poolable

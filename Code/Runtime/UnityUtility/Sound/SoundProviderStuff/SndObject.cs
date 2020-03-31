@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using UU.Collections;
-using UU.Scripts;
+using UnityUtility.Collections;
+using UnityUtility.Scripts;
 using System;
-using UU.MathExt;
+using UnityUtility.MathExt;
 using System.Runtime.CompilerServices;
 
-namespace UU.Sound.SoundProviderStuff
+namespace UnityUtility.Sound.SoundProviderStuff
 {
     [DisallowMultipleComponent]
     public class SndObject : SoundObjectInfo, Poolable

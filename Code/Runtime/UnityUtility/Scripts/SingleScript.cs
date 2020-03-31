@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     /// <summary>
     /// Represents implementation of MonoBehaviour singleton. It has no dynamic creation of an instance.

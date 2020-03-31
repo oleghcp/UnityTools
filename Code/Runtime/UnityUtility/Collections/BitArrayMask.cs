@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UU.BitMasks;
+using UnityUtility.BitMasks;
 
-namespace UU.Collections
+namespace UnityUtility.Collections
 {
     //Based on System.Collections.BitArray
     [Serializable]

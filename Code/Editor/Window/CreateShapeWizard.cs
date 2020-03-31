@@ -1,4 +1,4 @@
-﻿using UU.MathExt;
+﻿using UnityUtility.MathExt;
 using System;
 using UnityEngine;
 

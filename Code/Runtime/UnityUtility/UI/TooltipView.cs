@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UU.Scripts;
+using UnityUtility.Scripts;
 
 #pragma warning disable CS0649
-namespace UU.UI
+namespace UnityUtility.UI
 {
     //Based on http://www.sharkbombs.com/2015/02/10/tooltips-with-the-new-unity-ui-ugui/
     public class TooltipView : SingleUIScript<TooltipView>

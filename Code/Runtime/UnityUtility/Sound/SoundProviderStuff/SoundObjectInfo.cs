@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UU.Sound.SoundProviderStuff
+namespace UnityUtility.Sound.SoundProviderStuff
 {
     public abstract class SoundObjectInfo : MonoBehaviour
     {

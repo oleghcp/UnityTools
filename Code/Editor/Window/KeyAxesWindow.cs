@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UU.MathExt;
+using UnityUtility.MathExt;
 using UnityEditor;
-using UU.Collections;
+using UnityUtility.Collections;
 using UUEditor.Drawers;
 
 namespace UUEditor.Window

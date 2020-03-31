@@ -7,10 +7,10 @@ using System.Reflection;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Text;
-using UU.Scripts;
+using UnityUtility.Scripts;
 
 #pragma warning disable CS0649
-namespace UU.GameConsole
+namespace UnityUtility.GameConsole
 {
     public class Terminal : SingleUIScript<Terminal>
     {

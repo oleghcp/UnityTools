@@ -1,4 +1,4 @@
-﻿namespace UU.Controls
+﻿namespace UnityUtility.Controls
 {
     public interface InputObtainer : Refreshable
     {

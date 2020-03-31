@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace UU.SaveLoad
+namespace UnityUtility.SaveLoad
 {
     /// <summary>
     /// Mark non-static fields which you want to save and load.

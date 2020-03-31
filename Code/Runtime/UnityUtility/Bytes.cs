@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using UU.Collections;
+using UnityUtility.Collections;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     [Serializable, StructLayout(LayoutKind.Explicit)]
     public struct Bytes : IEquatable<Bytes>, IEnumerable<byte>

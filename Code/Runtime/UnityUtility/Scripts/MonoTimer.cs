@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UU.MathExt;
+using UnityUtility.MathExt;
 
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     public sealed class MonoTimer : Script, Timer
     {

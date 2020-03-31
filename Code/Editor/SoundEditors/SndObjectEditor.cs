@@ -1,4 +1,4 @@
-﻿using UU.Sound.SoundProviderStuff;
+﻿using UnityUtility.Sound.SoundProviderStuff;
 using UnityEditor;
 
 namespace UUEditor.SoundEditors

@@ -1,8 +1,8 @@
-﻿using UU.MathExt;
+﻿using UnityUtility.MathExt;
 using System;
 using UnityEngine;
 
-namespace UU.NumericEntities
+namespace UnityUtility.NumericEntities
 {
     [Serializable]
     public struct SpendingInt : SpendingEntity<int>, IEquatable<SpendingInt>

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace UU.BitMasks
+namespace UnityUtility.BitMasks
 {
     public static partial class BitMaskExtensions
     {

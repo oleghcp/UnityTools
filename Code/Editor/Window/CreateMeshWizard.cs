@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.IO;
-using UU;
+using UnityUtility;
 
 #pragma warning disable CS0649
 namespace UUEditor.Window

@@ -1,8 +1,8 @@
-﻿using UU.Controls.ControlStuff;
+﻿using UnityUtility.Controls.ControlStuff;
 using System;
 using UnityEngine;
 
-namespace UU.Controls
+namespace UnityUtility.Controls
 {
     public enum GamepadType : byte
     {

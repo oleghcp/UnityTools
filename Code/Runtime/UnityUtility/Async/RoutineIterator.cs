@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace UU.Async
+namespace UnityUtility.Async
 {
     internal class RoutineIterator : IEnumerator
     {

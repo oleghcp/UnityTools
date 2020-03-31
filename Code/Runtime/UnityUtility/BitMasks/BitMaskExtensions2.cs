@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using UU.Collections;
+using UnityUtility.Collections;
 
-namespace UU.BitMasks
+namespace UnityUtility.BitMasks
 {
     public static partial class BitMaskExtensions
     {

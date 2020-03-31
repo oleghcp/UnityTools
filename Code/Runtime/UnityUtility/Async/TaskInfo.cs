@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 
-namespace UU.Async
+namespace UnityUtility.Async
 {
     public struct TaskInfo : IEquatable<TaskInfo>
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using UU.Controls.ControlStuff;
+using UnityUtility.Controls.ControlStuff;
 using System.Collections.Generic;
-using UU.MathExt;
+using UnityUtility.MathExt;
 
-namespace UU.Controls
+namespace UnityUtility.Controls
 {
     public sealed class GamepadInputObtainer : InputObtainer
     {

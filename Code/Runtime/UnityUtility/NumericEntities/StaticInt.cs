@@ -1,8 +1,8 @@
-﻿using UU.MathExt;
+﻿using UnityUtility.MathExt;
 using System;
 using System.Collections.Generic;
 
-namespace UU.NumericEntities
+namespace UnityUtility.NumericEntities
 {
     public sealed class StaticInt : StaticEntity<int>
     {

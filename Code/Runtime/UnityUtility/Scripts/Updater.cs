@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     internal class Updater : Script
     {

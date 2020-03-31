@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     /// <summary>
     /// SingleScript with RectTransform.

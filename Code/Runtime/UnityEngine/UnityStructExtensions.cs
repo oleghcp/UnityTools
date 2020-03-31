@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using UU;
-using UU.MathExt;
+using UnityUtility;
+using UnityUtility.MathExt;
 
 namespace UnityEngine
 {

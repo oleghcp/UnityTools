@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU
+namespace UnityUtility
 {
     //This code is from https://www.pvladov.com/
     public static class ConvertUtility

@@ -1,7 +1,7 @@
 ﻿using System;
-using static UU.Collections.TrackerNodes;
+using static UnityUtility.Collections.TrackerNodes;
 
-namespace UU.Collections
+namespace UnityUtility.Collections
 {
     public class Tracker : Refreshable
     {

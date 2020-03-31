@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.SaveLoad.SaveProviderStuff
+namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
     /// <summary>
     /// A serializer for SaveProvider (UU.XmlUtility wrapper).

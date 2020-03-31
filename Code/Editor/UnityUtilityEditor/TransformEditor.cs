@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UU.MathExt;
+using UnityUtility.MathExt;
 using System.Collections.Generic;
-using UU;
+using UnityUtility;
 
 namespace UUEditor
 {

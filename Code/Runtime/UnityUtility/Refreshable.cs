@@ -1,4 +1,4 @@
-﻿namespace UU
+﻿namespace UnityUtility
 {
     public interface Refreshable
     {

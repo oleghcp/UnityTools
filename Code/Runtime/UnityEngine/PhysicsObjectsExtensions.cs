@@ -1,4 +1,4 @@
-﻿using UU.Collections;
+﻿using UnityUtility.Collections;
 using System.Runtime.CompilerServices;
 
 namespace UnityEngine

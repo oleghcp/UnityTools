@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using UnityEditor;
-using UU.Collections;
+using UnityUtility.Collections;
 
 namespace UUEditor
 {

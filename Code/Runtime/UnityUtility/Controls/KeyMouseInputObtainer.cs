@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UU.Controls.ControlStuff;
+using UnityUtility.Controls.ControlStuff;
 using System;
 
-namespace UU.Controls
+namespace UnityUtility.Controls
 {
     public sealed class KeyMouseInputObtainer : InputObtainer
     {

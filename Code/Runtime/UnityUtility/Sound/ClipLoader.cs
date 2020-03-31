@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UU.Sound
+namespace UnityUtility.Sound
 {
     public interface ClipLoader
     {

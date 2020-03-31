@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.Collections
+namespace UnityUtility.Collections
 {
     public interface Node
     {

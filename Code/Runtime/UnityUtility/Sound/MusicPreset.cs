@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 #pragma warning disable CS0649
-namespace UU.Sound
+namespace UnityUtility.Sound
 {
     [Serializable]
     internal class MPreset

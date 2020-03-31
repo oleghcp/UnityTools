@@ -2,11 +2,11 @@
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
-using UU.Controls;
-using UU.Controls.ControlStuff;
-using UU.Collections;
+using UnityUtility.Controls;
+using UnityUtility.Controls.ControlStuff;
+using UnityUtility.Collections;
 using UUEditor.Window;
-using UU;
+using UnityUtility;
 
 namespace UUEditor.Input
 {

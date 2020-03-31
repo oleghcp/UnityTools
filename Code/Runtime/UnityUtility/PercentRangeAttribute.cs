@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class PercentRangeAttribute : PropertyAttribute

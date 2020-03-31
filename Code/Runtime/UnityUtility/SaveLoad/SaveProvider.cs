@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using UU.Async;
-using UU.MathExt;
-using UU.SaveLoad.SaveProviderStuff;
+using UnityUtility.Async;
+using UnityUtility.MathExt;
+using UnityUtility.SaveLoad.SaveProviderStuff;
 
-namespace UU.SaveLoad
+namespace UnityUtility.SaveLoad
 {
     /// <summary>
     /// Keeps, saves and loads game data.

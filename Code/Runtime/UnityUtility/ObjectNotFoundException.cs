@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU
+namespace UnityUtility
 {
     public class ObjectNotFoundException : Exception
     {

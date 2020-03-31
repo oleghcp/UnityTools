@@ -1,5 +1,5 @@
-﻿using UU;
-using UU.MathExt;
+﻿using UnityUtility;
+using UnityUtility.MathExt;
 using UnityEditor;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-﻿namespace UU
+﻿namespace UnityUtility
 {
     /// <summary>
     /// Counts FPS.

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace UU.Sound.SoundProviderStuff
+namespace UnityUtility.Sound.SoundProviderStuff
 {
     public sealed class DefaultClipLoader : ClipLoader
     {

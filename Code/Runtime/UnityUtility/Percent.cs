@@ -1,8 +1,8 @@
-﻿using UU.MathExt;
+﻿using UnityUtility.MathExt;
 using System;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     [Serializable]
     public struct Percent : IComparable, IComparable<Percent>, IEquatable<Percent>

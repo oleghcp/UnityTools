@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 
 #pragma warning disable CS0659, CS0661, IDE0016
-namespace UU.Collections
+namespace UnityUtility.Collections
 {
     public struct ReadOnlyArray<T> : IEnumerable<T>, IEquatable<ReadOnlyArray<T>>, IList<T>, IList
     {

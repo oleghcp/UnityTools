@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace UU.Async
+namespace UnityUtility.Async
 {
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.

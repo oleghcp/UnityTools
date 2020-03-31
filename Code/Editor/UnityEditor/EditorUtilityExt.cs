@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.IO;
 using UnityEngine;
-using UU.MathExt;
+using UnityUtility.MathExt;
 using System.Collections;
 
 namespace UnityEditor

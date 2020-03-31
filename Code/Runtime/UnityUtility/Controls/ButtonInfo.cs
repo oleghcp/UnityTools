@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.Controls
+namespace UnityUtility.Controls
 {
     public struct ButtonInfo : IEquatable<ButtonInfo>
     {

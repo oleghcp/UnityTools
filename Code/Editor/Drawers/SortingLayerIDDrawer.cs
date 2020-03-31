@@ -2,9 +2,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UU;
+using UnityUtility;
 using UnityEditor;
-using UU.MathExt;
+using UnityUtility.MathExt;
 
 namespace UUEditor.Drawers
 {

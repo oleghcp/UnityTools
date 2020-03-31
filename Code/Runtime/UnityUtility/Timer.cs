@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU
+namespace UnityUtility
 {
     public interface Timer
     {

@@ -1,4 +1,4 @@
-﻿namespace UU.IdGenerating
+﻿namespace UnityUtility.IdGenerating
 {
     public class IntIdGenerator : IdGenerator<int>
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UU.Collections;
+using UnityUtility.Collections;
 
-namespace UU.BitMasks
+namespace UnityUtility.BitMasks
 {
     public static class Masks
     {

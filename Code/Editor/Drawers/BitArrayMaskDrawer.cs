@@ -1,4 +1,4 @@
-﻿using UU.Collections;
+﻿using UnityUtility.Collections;
 using UnityEditor;
 using UnityEngine;
 using UUEditor.Window;

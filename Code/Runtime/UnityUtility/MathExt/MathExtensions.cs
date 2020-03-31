@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace UU.MathExt
+namespace UnityUtility.MathExt
 {
     public static class MathExtensions
     {

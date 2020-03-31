@@ -1,9 +1,9 @@
 ﻿using System;
-using UU.MathExt;
+using UnityUtility.MathExt;
 using UnityEngine;
 using static System.Math;
 
-namespace UU
+namespace UnityUtility
 {
     public static class MathUtility
     {

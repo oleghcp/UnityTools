@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace UU.SaveLoad.SaveProviderStuff
+namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
     public class BaseKeyGenerator : KeyGenerator
     {

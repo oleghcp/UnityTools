@@ -1,7 +1,7 @@
 using UnityEngine;
 
 #pragma warning disable CS0649
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     [RequireComponent(typeof(Renderer)), DisallowMultipleComponent]
     public class RenderSorter : Script

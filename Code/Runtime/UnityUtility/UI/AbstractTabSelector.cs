@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 #pragma warning disable CS0649
-namespace UU.UI
+namespace UnityUtility.UI
 {
     public abstract class AbstractTabSelector : MonoBehaviour
     {

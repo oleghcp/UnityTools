@@ -2,8 +2,8 @@
 using System;
 using UnityEngine;
 using UnityEditor;
-using UU.MathExt;
-using UU.Sound;
+using UnityUtility.MathExt;
+using UnityUtility.Sound;
 
 namespace UUEditor.SoundEditors
 {

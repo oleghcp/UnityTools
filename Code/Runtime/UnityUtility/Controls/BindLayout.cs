@@ -1,9 +1,9 @@
-﻿using UU.Controls.ControlStuff;
+﻿using UnityUtility.Controls.ControlStuff;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UU.Controls
+namespace UnityUtility.Controls
 {
     [Serializable]
     public struct KeyAxes

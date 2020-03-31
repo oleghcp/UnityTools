@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     public abstract class UIScript : Script
     {

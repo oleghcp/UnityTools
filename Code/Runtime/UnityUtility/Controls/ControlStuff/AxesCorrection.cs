@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.Controls.ControlStuff
+namespace UnityUtility.Controls.ControlStuff
 {
     internal static class AxesCorrection
     {

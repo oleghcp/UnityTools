@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using UnityEditor;
-using UU.Collections;
+using UnityUtility.Collections;
 using UUEditor.Drawers;
-using UU.BitMasks;
+using UnityUtility.BitMasks;
 
 namespace UUEditor.Window
 {

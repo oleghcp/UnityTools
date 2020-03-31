@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.Scripts
+namespace UnityUtility.Scripts
 {
     [AttributeUsage(AttributeTargets.Class)]
     public abstract class CreateInstanceAttribute : Attribute

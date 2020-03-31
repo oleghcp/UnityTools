@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UU.NumericEntities
+namespace UnityUtility.NumericEntities
 {
     public enum ResizeType : byte { NewValue, Increase, Decrease }
 

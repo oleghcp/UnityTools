@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace UU
+namespace UnityUtility
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Arc3

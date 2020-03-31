@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU.SaveLoad.SaveProviderStuff
+namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
     /// <summary>
     /// A serializer for SaveProvider (UnityEngine.JsonUtility wrapper).

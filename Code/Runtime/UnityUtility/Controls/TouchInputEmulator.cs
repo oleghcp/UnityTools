@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace UU.Controls
+namespace UnityUtility.Controls
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ScreenTouch

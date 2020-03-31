@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU.NumericEntities
+namespace UnityUtility.NumericEntities
 {
     [Serializable]
     public struct AccumInt : AccumEntity<int>, IEquatable<AccumInt>

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UU.BitMasks
+namespace UnityUtility.BitMasks
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class BitMaskEnumFlagsAttribute : PropertyAttribute
