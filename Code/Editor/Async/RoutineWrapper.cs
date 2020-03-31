@@ -8,7 +8,7 @@ namespace UUEditor.Async
 {
     internal class RoutineWrapper : ITask
     {
-        private ulong m_id;
+        private long m_id;
 
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
@@ -16,9 +16,9 @@ namespace UUEditor.Async
 
         public bool IsPaused => m_iterator.IsPaused;
 
-        public ulong Id => m_id;
+        public long Id => m_id;
 
-        public RoutineWrapper(ulong id)
+        public RoutineWrapper(long id)
         {
             m_id = id;
             m_iterator = new RoutineIterator(this);

@@ -2,6 +2,7 @@
 using System.Collections;
 using UU;
 using UU.Async;
+using UU.IdGenerating;
 
 namespace UUEditor.Async
 {
@@ -10,12 +11,14 @@ namespace UUEditor.Async
     /// </summary>
     public static class EditorTasks
     {
+        private static readonly IdGenerator<long> s_idProvider = new NegativeLongIdGenerator();
+
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator run)
         {
-            return new RoutineWrapper(AsyncStuffPool.GetNewId()).RunAsync(run);
+            return new RoutineWrapper(s_idProvider.GetNewId()).RunAsync(run);
         }
 
         /// <summary>
@@ -23,7 +26,7 @@ namespace UUEditor.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true)
         {
-            return new RoutineWrapper(AsyncStuffPool.GetNewId()).RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
+            return new RoutineWrapper(s_idProvider.GetNewId()).RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace UUEditor.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run)
         {
-            return new RoutineWrapper(AsyncStuffPool.GetNewId()).RunAsync(Script.RunByConditionRoutine(condition, run));
+            return new RoutineWrapper(s_idProvider.GetNewId()).RunAsync(Script.RunByConditionRoutine(condition, run));
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace UUEditor.Async
         /// </summary>
         public static TaskInfo RunNextFrame(Action run)
         {
-            return new RoutineWrapper(AsyncStuffPool.GetNewId()).RunAsync(Script.RunAfterFramesRoutine(1, run));
+            return new RoutineWrapper(s_idProvider.GetNewId()).RunAsync(Script.RunAfterFramesRoutine(1, run));
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace UUEditor.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run)
         {
-            return new RoutineWrapper(AsyncStuffPool.GetNewId()).RunAsync(Script.RunAfterFramesRoutine(frames, run));
+            return new RoutineWrapper(s_idProvider.GetNewId()).RunAsync(Script.RunAfterFramesRoutine(frames, run));
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace UUEditor.Async
         /// </summary>
         public static TaskInfo RunWhile(Func<bool> condition, Action run)
         {
-            return new RoutineWrapper(AsyncStuffPool.GetNewId()).RunAsync(Script.RunWhileRoutine(condition, run));
+            return new RoutineWrapper(s_idProvider.GetNewId()).RunAsync(Script.RunWhileRoutine(condition, run));
         }
     }
 }

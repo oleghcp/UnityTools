@@ -10,7 +10,7 @@ namespace UU.Async
     [DisallowMultipleComponent]
     internal class RoutineRunner : Script, ITask, Poolable
     {
-        private ulong m_id;
+        private long m_id;
 
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
@@ -21,7 +21,7 @@ namespace UU.Async
             get { return m_iterator.IsPaused; }
         }
 
-        public ulong Id
+        public long Id
         {
             get { return m_id; }
         }

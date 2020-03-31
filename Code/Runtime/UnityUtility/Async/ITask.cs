@@ -4,7 +4,7 @@ namespace UU.Async
 {
     internal interface ITask
     {
-        ulong Id { get; }
+        long Id { get; }
         bool IsPaused { get; }
         TaskInfo RunAsync(IEnumerator routine);
         void Pause();

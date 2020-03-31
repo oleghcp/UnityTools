@@ -6,13 +6,13 @@ namespace UU.Async
 {
     public struct TaskInfo : IEquatable<TaskInfo>
     {
-        private readonly ulong m_id;
+        private readonly long m_id;
         private readonly ITask m_task;
 
         /// <summary>
         /// Provides task ID.
         /// </summary>
-        public ulong TaskId
+        public long TaskId
         {
             get { return m_id; }
         }

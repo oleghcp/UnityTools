@@ -1,6 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 using UU.Collections;
-using UU.IDGenerating;
+using UU.IdGenerating;
 
 namespace UU.Async
 {
@@ -11,11 +11,11 @@ namespace UU.Async
             private const string RUNNER_NAME = "Task";
 
             public readonly ObjectPool<RoutineRunner> RunnersPool;
-            public readonly IDGenerator<ulong> IdProvider;
+            public readonly IdGenerator<long> IdProvider;
 
             public Data()
             {
-                IdProvider = new UlongIDGenerator();
+                IdProvider = new LongIdGenerator();
                 RunnersPool = new ObjectPool<RoutineRunner>(f_create);
 
                 SceneManager.sceneUnloaded += _ => RunnersPool.Clear();
@@ -34,7 +34,7 @@ namespace UU.Async
             s_inst = new Data();
         }
 
-        internal static ulong GetNewId()
+        internal static long GetNewId()
         {
             return s_inst.IdProvider.GetNewId();
         }

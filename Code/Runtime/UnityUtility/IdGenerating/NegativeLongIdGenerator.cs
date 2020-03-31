@@ -1,6 +1,6 @@
 ﻿namespace UU.IdGenerating
 {
-    public class NegativeLongIdGenerator
+    public class NegativeLongIdGenerator : IdGenerator<long>
     {
         private long m_lastId;
 
