@@ -63,6 +63,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Indicates whether the specified collection is null or it's length equals zero.
         /// </summary>        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty<T>(this ICollection<T> self)
         {
             return self == null || self.Count == 0;
@@ -71,6 +72,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Indicates whether the specified collection is not null and contains at least one element.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasAnyData<T>(this ICollection<T> self)
         {
             return self != null && self.Count > 0;
