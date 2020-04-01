@@ -54,13 +54,13 @@ namespace UnityUtility.GameConsole
 
             m_cmdHistory = new List<string>() { string.Empty };
 
-            Msg.Log_Event += DebugLogHandler;
+            Application.logMessageReceived += DebugLogHandler;
         }
 
         protected override void CleanUp()
         {
 #if UNITY_EDITOR
-            Msg.Log_Event -= DebugLogHandler;
+            Application.logMessageReceived -= DebugLogHandler;
 #endif
         }
 
@@ -282,7 +282,7 @@ namespace UnityUtility.GameConsole
             StartCoroutine(Switch(!m_isOn));
         }
 
-        private void DebugLogHandler(LogType logType, object msg)
+        private void DebugLogHandler(string msg, string stackTrace, LogType logType)
         {
             Color colour;
 
