@@ -1,14 +1,40 @@
-using UnityUtilityEditor.Window;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
+using UnityUtilityEditor.Window;
 
 namespace UnityUtilityEditor
 {
     internal static class MenuItems
     {
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Remove Empty Folders")]
+        private static void RemoveEmptyFolders()
+        {
+            removeEmptyFolders(Application.dataPath);
+
+            void removeEmptyFolders(string path)
+            {
+                IEnumerable<string> directories = Directory.EnumerateDirectories(path);
+
+                foreach (string directory in directories)
+                {
+                    removeEmptyFolders(directory);
+                }
+
+                IEnumerable<string> entries = Directory.EnumerateFileSystemEntries(path);
+
+                if (entries.Any()) { return; }
+
+                string relativePath = "Assets" + path.Substring(Application.dataPath.Length);
+                AssetDatabase.DeleteAsset(relativePath);
+
+                Debug.Log("Deleted: " + relativePath);
+            }
+        }
+
         [MenuItem(EditorScriptUtility.CATEGORY + "/Sound/Create Sounds Preset")]
         private static void CreateSoundsPreset()
         {
@@ -70,9 +96,9 @@ namespace UnityUtilityEditor
         [MenuItem("Assets/Find References In Project (ext.)", priority = 25)]
         private static void FindReferences()
         {
-            var targetGuid = Selection.assetGUIDs[0];
-            var progress = new EditorUtilityExt.SearchProgress();
-            var isCanseled = false;
+            string targetGuid = Selection.assetGUIDs[0];
+            EditorUtilityExt.SearchProgress progress = new EditorUtilityExt.SearchProgress();
+            bool isCanseled = false;
             IEnumerator iterator;
 
             if (EditorSettings.serializationMode == SerializationMode.ForceText)
@@ -117,10 +143,12 @@ namespace UnityUtilityEditor
         [MenuItem("Assets/Show Guid (ext.)", priority = 20)]
         private static void ShowGUID()
         {
-            var guids = Selection.assetGUIDs;
+            string[] guids = Selection.assetGUIDs;
 
             for (int i = 0; i < guids.Length; i++)
+            {
                 Debug.Log(guids[i]);
+            }
         }
 
 #if UNITY_2019_1_OR_NEWER
