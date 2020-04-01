@@ -1,9 +1,9 @@
 ﻿using UnityUtility.Collections;
 using UnityEditor;
 using UnityEngine;
-using UUEditor.Window;
+using UnityUtilityEditor.Window;
 
-namespace UUEditor.Drawers
+namespace UnityUtilityEditor.Drawers
 {
     internal abstract class BitArrayMaskWindow : EditorWindow
     {

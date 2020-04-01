@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using UnityUtility.MathExt;
 
-namespace UUEditor.Window
+namespace UnityUtilityEditor.Window
 {
     internal class CreateFiguredPlaneWizard : CreateMeshWizard
     {

@@ -1,11 +1,11 @@
-using UUEditor.Window;
+using UnityUtilityEditor.Window;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
-namespace UUEditor
+namespace UnityUtilityEditor
 {
     internal static class MenuItems
     {
@@ -139,6 +139,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityUtility;
 
 namespace Project
 {

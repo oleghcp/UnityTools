@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityUtility.Collections;
 
-namespace UUEditor
+namespace UnityUtilityEditor
 {
     internal static class EditorScriptUtility
     {

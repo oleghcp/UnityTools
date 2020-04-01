@@ -3,7 +3,7 @@ using UnityUtility.MathExt;
 using UnityEditor;
 using UnityEngine;
 
-namespace UUEditor.Drawers
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(Bytes))]
     internal class BytesDrawer : PropertyDrawer

@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UUEditor
+namespace UnityUtilityEditor
 {
     [CustomEditor(typeof(RoutineRunner))]
     internal class RoutineRunnerEditor : Editor

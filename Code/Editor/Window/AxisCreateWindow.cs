@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityUtility.Controls.ControlStuff;
 using System.Text;
 
-namespace UUEditor.Window
+namespace UnityUtilityEditor.Window
 {
     internal class AxisCreateWindow : EditorWindow
     {

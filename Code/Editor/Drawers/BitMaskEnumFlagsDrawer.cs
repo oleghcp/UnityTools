@@ -2,11 +2,11 @@
 using UnityEngine;
 using UnityEditor;
 using UnityUtility.Collections;
-using UUEditor.Window;
+using UnityUtilityEditor.Window;
 using UnityUtility;
 using UnityUtility.BitMasks;
 
-namespace UUEditor.Drawers
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(BitMaskEnumFlagsAttribute))]
     internal class BitMaskEnumFlagsDrawer : PropertyDrawer

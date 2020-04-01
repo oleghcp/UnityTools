@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityUtility.Scripts;
 
-namespace UUEditor
+namespace UnityUtilityEditor
 {
     [CustomEditor(typeof(RenderSorter)), CanEditMultipleObjects]
     internal class RenderSorterEditor : Editor

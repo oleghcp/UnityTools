@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityUtility.MathExt;
 using UnityUtility.Sound;
 
-namespace UUEditor.SoundEditors
+namespace UnityUtilityEditor.SoundEditors
 {
     internal abstract class SoundsPresetEditor : Editor
     {

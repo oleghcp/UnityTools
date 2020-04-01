@@ -4,7 +4,7 @@ using Unity.EditorCoroutines.Editor;
 using UnityUtility.Async;
 using static Unity.EditorCoroutines.Editor.EditorCoroutineUtility;
 
-namespace UUEditor.Async
+namespace UnityUtilityEditor.Async
 {
     internal class RoutineWrapper : ITask
     {

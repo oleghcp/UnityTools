@@ -5,10 +5,10 @@ using UnityEditor;
 using UnityUtility.Controls;
 using UnityUtility.Controls.ControlStuff;
 using UnityUtility.Collections;
-using UUEditor.Window;
+using UnityUtilityEditor.Window;
 using UnityUtility;
 
-namespace UUEditor.Input
+namespace UnityUtilityEditor.Input
 {
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor

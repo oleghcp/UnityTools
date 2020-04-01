@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UUEditor.Window
+namespace UnityUtilityEditor.Window
 {
     internal class AboutWindow : EditorWindow
     {

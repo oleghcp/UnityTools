@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityUtility;
 
-namespace UUEditor.Drawers
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DrawSOFieldsAttribute))]
     public class DrawSOFieldsDrawer : PropertyDrawer

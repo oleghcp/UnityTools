@@ -4,7 +4,7 @@ using UnityUtility.MathExt;
 using System.Collections.Generic;
 using UnityUtility;
 
-namespace UUEditor
+namespace UnityUtilityEditor
 {
     [CustomEditor(typeof(Transform)), CanEditMultipleObjects]
     internal class TransformEditor : Editor

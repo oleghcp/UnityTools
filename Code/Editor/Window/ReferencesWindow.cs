@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 
-namespace UUEditor.Window
+namespace UnityUtilityEditor.Window
 {
     internal class ReferencesWindow : EditorWindow
     {

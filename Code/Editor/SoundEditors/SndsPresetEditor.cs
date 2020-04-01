@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityUtility.MathExt;
 using UnityUtility.Sound;
 
-namespace UUEditor.SoundEditors
+namespace UnityUtilityEditor.SoundEditors
 {
     [CustomEditor(typeof(SoundsPreset))]
     internal class SndsPresetEditor : SoundsPresetEditor

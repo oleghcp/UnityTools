@@ -4,7 +4,7 @@ using UnityUtility;
 using UnityUtility.Async;
 using UnityUtility.IdGenerating;
 
-namespace UUEditor.Async
+namespace UnityUtilityEditor.Async
 {
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.

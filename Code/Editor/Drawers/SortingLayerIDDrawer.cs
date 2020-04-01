@@ -6,7 +6,7 @@ using UnityUtility;
 using UnityEditor;
 using UnityUtility.MathExt;
 
-namespace UUEditor.Drawers
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(SortingLayerIDAttribute))]
     internal class SortingLayerIDDrawer : PropertyDrawer

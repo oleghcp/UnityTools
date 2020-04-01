@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEditor;
 using UnityUtility.Collections;
-using UUEditor.Drawers;
+using UnityUtilityEditor.Drawers;
 using UnityUtility.BitMasks;
 
-namespace UUEditor.Window
+namespace UnityUtilityEditor.Window
 {
     internal class EnumBitArrayMaskWindow : BitArrayMaskWindow
     {

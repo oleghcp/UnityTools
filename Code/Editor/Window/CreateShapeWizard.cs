@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 #pragma warning disable CS0649
-namespace UUEditor.Window
+namespace UnityUtilityEditor.Window
 {
     internal class CreateShapeWizard : CreateMeshWizard
     {

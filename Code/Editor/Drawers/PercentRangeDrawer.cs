@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UUEditor.Drawers
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(PercentRangeAttribute))]
     internal class PercentRangeDrawer : PropertyDrawer
