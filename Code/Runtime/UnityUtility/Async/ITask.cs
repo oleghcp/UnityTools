@@ -2,7 +2,7 @@
 
 namespace UnityUtility.Async
 {
-    internal interface ITask
+    public interface ITask
     {
         long Id { get; }
         bool IsPaused { get; }
@@ -10,7 +10,6 @@ namespace UnityUtility.Async
         void Pause();
         void Resume();
         void Add(IEnumerator routine);
-        void StartRunning();
         void SkipCurrent();
         void Stop();
         void OnCoroutineEnded();

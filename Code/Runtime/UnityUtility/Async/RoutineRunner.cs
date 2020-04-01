@@ -15,6 +15,7 @@ namespace UnityUtility.Async
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
         private Action m_update;
+        private ITaskFactory _owner;
 
         public bool IsPaused
         {
@@ -34,10 +35,15 @@ namespace UnityUtility.Async
             m_update = () =>
             {
                 if (m_iterator.IsEmpty && m_queue.Count == 0)
-                    Tasks.Return(this);
+                    _owner.Release(this);
             };
 
             f_init();
+        }
+
+        public void SetUp(ITaskFactory owner)
+        {
+            _owner = owner;
         }
 
         private void OnDestroy()
@@ -66,10 +72,7 @@ namespace UnityUtility.Async
         public void Add(IEnumerator routine)
         {
             m_queue.Enqueue(routine);
-        }
 
-        public void StartRunning()
-        {
             if (m_iterator.IsEmpty && m_queue.Count > 0)
             {
                 f_runAsync(m_queue.Dequeue());
@@ -110,7 +113,7 @@ namespace UnityUtility.Async
 
         private void f_init()
         {
-            m_id = Tasks.GetNewId();
+            m_id = _owner.GetNewId();
             Updater.Frame_Event += m_update;
         }
 

@@ -69,19 +69,17 @@ namespace UnityUtility.Async
         }
 
         /// <summary>
-        /// Adds new task to the queue. It is allowed if the current task is alive.
+        /// Adds new routine to the queue. It is allowed if the current task is alive.
         /// </summary>
-        public void ContinueWith(IEnumerator routine)
+        public void Add(IEnumerator routine)
         {
             if (f_isAlive())
             {
                 m_task.Add(routine);
-                m_task.StartRunning();
+                return;
             }
-            else
-            {
-                throw new InvalidOperationException("Task is not alive.");
-            }
+
+            throw new InvalidOperationException("Task is not alive.");
         }
 
         // - - //

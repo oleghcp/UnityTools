@@ -1,63 +1,39 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using UnityEngine.SceneManagement;
-using UnityUtility.Collections;
-using UnityUtility.IdGenerating;
 
 namespace UnityUtility.Async
 {
+    public interface ITaskFactory : IDisposable
+    {
+        long GetNewId();
+        void Release(ITask runner);
+        ITask GetRunner();
+    }
+
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.
     /// </summary>
     public static class Tasks
     {
-        private class Data
-        {
-            private const string RUNNER_NAME = "Task";
-
-            public readonly ObjectPool<RoutineRunner> RunnersPool;
-            public readonly IdGenerator<long> IdProvider;
-
-            public Data()
-            {
-                IdProvider = new LongIdGenerator();
-                RunnersPool = new ObjectPool<RoutineRunner>(f_create);
-
-                SceneManager.sceneUnloaded += _ => RunnersPool.Clear();
-            }
-
-            private RoutineRunner f_create()
-            {
-                return Script.CreateInstance<RoutineRunner>(RUNNER_NAME);
-            }
-        }
-
-        private static readonly Data s_inst;
+        private static ITaskFactory s_factory;
 
         static Tasks()
         {
-            s_inst = new Data();
+            s_factory = new SimpleRoutineRunnerFactory();
         }
 
-        internal static long GetNewId()
+        public static void OverrideFactory(ITaskFactory newFactory)
         {
-            return s_inst.IdProvider.GetNewId();
+            s_factory.Dispose();
+            s_factory = newFactory;
         }
-
-        internal static void Return(RoutineRunner runner)
-        {
-            s_inst.RunnersPool.Release(runner);
-        }
-
-        // -- //
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator run)
         {
-            return GetExecutor().RunAsync(run);
+            return s_factory.GetRunner().RunAsync(run);
         }
 
         /// <summary>
@@ -65,7 +41,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true)
         {
-            return GetExecutor().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
+            return s_factory.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
         }
 
         /// <summary>
@@ -73,7 +49,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run)
         {
-            return GetExecutor().RunAsync(Script.RunByConditionRoutine(condition, run));
+            return s_factory.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
         }
 
         /// <summary>
@@ -81,7 +57,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunNextFrame(Action run)
         {
-            return GetExecutor().RunAsync(Script.RunAfterFramesRoutine(1, run));
+            return s_factory.GetRunner().RunAsync(Script.RunAfterFramesRoutine(1, run));
         }
 
         /// <summary>
@@ -89,7 +65,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run)
         {
-            return GetExecutor().RunAsync(Script.RunAfterFramesRoutine(frames, run));
+            return s_factory.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
         }
 
         /// <summary>
@@ -97,15 +73,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunWhile(Func<bool> condition, Action run)
         {
-            return GetExecutor().RunAsync(Script.RunWhileRoutine(condition, run));
-        }
-
-        // -- //
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static RoutineRunner GetExecutor()
-        {
-            return s_inst.RunnersPool.Get();
+            return s_factory.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
         }
     }
 }

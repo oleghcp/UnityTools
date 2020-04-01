@@ -44,10 +44,7 @@ namespace UnityUtilityEditor.Async
         public void Add(IEnumerator routine)
         {
             m_queue.Enqueue(routine);
-        }
 
-        public void StartRunning()
-        {
             if (m_iterator.IsEmpty && m_queue.Count > 0)
             {
                 f_runAsync(m_queue.Dequeue());
