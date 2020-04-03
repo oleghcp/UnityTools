@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtility.Collections;
 using UnityUtility.IdGenerating;
@@ -11,6 +11,7 @@ namespace UnityUtility.Async
 
         private readonly ObjectPool<RoutineRunner> m_runnersPool;
         private readonly IdGenerator<long> m_idProvider;
+        private bool _disposed;
 
         public SimpleRoutineRunnerFactory(string gameObjectName = "Task")
         {
@@ -29,6 +30,13 @@ namespace UnityUtility.Async
 
         public void Release(ITask runner)
         {
+            if (_disposed)
+            {
+                (runner as Poolable).CleanUp();
+                (runner as RoutineRunner).Destroy();
+                return;
+            }
+
             m_runnersPool.Release(runner as RoutineRunner);
         }
 
@@ -54,7 +62,9 @@ namespace UnityUtility.Async
         #region IDisposable
         public void Dispose()
         {
+            _disposed = true;
             SceneManager.sceneUnloaded -= SceneUnloadedHandler;
+            m_runnersPool.Clear(item => item.Destroy());
         }
         #endregion
     }
