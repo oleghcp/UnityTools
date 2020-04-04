@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine;
 
 namespace UnityUtility.Async
 {
@@ -17,7 +18,8 @@ namespace UnityUtility.Async
     {
         private static ITaskFactory s_factory;
 
-        static Tasks()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void SetUp()
         {
             s_factory = new SimpleRoutineRunnerFactory();
         }

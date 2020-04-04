@@ -37,13 +37,12 @@ namespace UnityUtility.Async
                 if (m_iterator.IsEmpty && m_queue.Count == 0)
                     _owner.Release(this);
             };
-
-            f_init();
         }
 
         public void SetUp(ITaskFactory owner)
         {
             _owner = owner;
+            f_init();
         }
 
         private void OnDestroy()
