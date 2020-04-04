@@ -4,30 +4,17 @@ using UnityEngine;
 
 namespace UnityUtility.Async
 {
-    public interface ITaskFactory : IDisposable
-    {
-        long GetNewId();
-        void Release(ITask runner);
-        ITask GetRunner();
-    }
-
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.
     /// </summary>
     public static class Tasks
     {
-        private static ITaskFactory s_factory;
+        private static TaskFactory s_factory;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void SetUp()
+        private static void f_setUp()
         {
-            s_factory = new SimpleRoutineRunnerFactory();
-        }
-
-        public static void OverrideFactory(ITaskFactory newFactory)
-        {
-            s_factory.Dispose();
-            s_factory = newFactory;
+            s_factory = new TaskFactory();
         }
 
         /// <summary>

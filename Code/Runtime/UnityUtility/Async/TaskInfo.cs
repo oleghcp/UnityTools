@@ -32,8 +32,7 @@ namespace UnityUtility.Async
 
         internal TaskInfo(ITask runner)
         {
-            m_task = runner;
-            m_id = runner.Id;
+            m_id = (m_task = runner).Id;
         }
 
         /// <summary>

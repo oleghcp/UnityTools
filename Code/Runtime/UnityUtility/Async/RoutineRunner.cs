@@ -10,12 +10,14 @@ namespace UnityUtility.Async
     [DisallowMultipleComponent]
     internal class RoutineRunner : Script, ITask, Poolable
     {
+        private const string EXCEPTION_TEXT = "Task cannot be stopped. Check Async System Settings.";
+
         private long m_id;
 
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
         private Action m_update;
-        private ITaskFactory _owner;
+        private TaskFactory m_owner;
 
         public bool IsPaused
         {
@@ -35,14 +37,17 @@ namespace UnityUtility.Async
             m_update = () =>
             {
                 if (m_iterator.IsEmpty && m_queue.Count == 0)
-                    _owner.Release(this);
+                    m_owner.Release(this);
             };
         }
 
-        public void SetUp(ITaskFactory owner)
+        public void SetUp(TaskFactory owner, bool dontDestroyOnLoad)
         {
-            _owner = owner;
+            m_owner = owner;
             f_init();
+
+            if (dontDestroyOnLoad)
+                gameObject.Immortalize();
         }
 
         private void OnDestroy()
@@ -80,12 +85,22 @@ namespace UnityUtility.Async
 
         public void SkipCurrent()
         {
+            if (!m_owner.CanBeStopped)
+            {
+                throw new InvalidOperationException(EXCEPTION_TEXT);
+            }
+
             StopAllCoroutines();
             f_onCoroutineEnded();
         }
 
         public void Stop()
         {
+            if (!m_owner.CanBeStopped)
+            {
+                throw new InvalidOperationException(EXCEPTION_TEXT);
+            }
+
             StopAllCoroutines();
             m_queue.Clear();
             f_onCoroutineEnded();
@@ -112,7 +127,7 @@ namespace UnityUtility.Async
 
         private void f_init()
         {
-            m_id = _owner.GetNewId();
+            m_id = m_owner.GetNewId();
             Updater.Frame_Event += m_update;
         }
 
