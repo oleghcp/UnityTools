@@ -10,7 +10,7 @@ namespace UnityUtility
 
         static UnityObjectUtility()
         {
-            s_isNativeObjectAlive = f_createDelegate<Func<UnityObject, bool>>(typeof(UnityObject), nameof(s_isNativeObjectAlive));
+            s_isNativeObjectAlive = f_createDelegate<Func<UnityObject, bool>>(typeof(UnityObject), "IsNativeObjectAlive");
         }
 
         public static bool IsNullOrDead(object obj)
@@ -19,7 +19,7 @@ namespace UnityUtility
                 return true;
 
             if (obj is UnityObject uObj)
-                return s_isNativeObjectAlive(uObj);
+                return !s_isNativeObjectAlive.Invoke(uObj);
 
             return false;
         }
