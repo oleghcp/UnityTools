@@ -17,6 +17,11 @@ namespace UnityUtility.Async
             s_factory = new TaskFactory();
         }
 
+        public static void RegisterStopper(ITaskStopper stopper)
+        {
+            s_factory.RegisterStopper(stopper);
+        }
+
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>

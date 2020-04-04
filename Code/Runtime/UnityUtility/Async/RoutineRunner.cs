@@ -16,8 +16,9 @@ namespace UnityUtility.Async
 
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
-        private Action m_update;
         private TaskFactory m_owner;
+
+        private Action m_update;
 
         public bool IsPaused
         {
@@ -46,6 +47,9 @@ namespace UnityUtility.Async
             m_owner = owner;
             f_init();
 
+            if (m_owner.CanBeStoppedGlobaly)
+                m_owner.StopTasks_Event += Stop;
+
             if (dontDestroyOnLoad)
                 gameObject.Immortalize();
         }
@@ -53,6 +57,8 @@ namespace UnityUtility.Async
         private void OnDestroy()
         {
             Updater.Frame_Event -= m_update;
+            if (m_owner.CanBeStoppedGlobaly)
+                m_owner.StopTasks_Event -= Stop;
         }
 
         // - - //
@@ -101,6 +107,11 @@ namespace UnityUtility.Async
                 throw new InvalidOperationException(EXCEPTION_TEXT);
             }
 
+            if (m_id == 0L)
+            {
+                return;
+            }
+
             StopAllCoroutines();
             m_queue.Clear();
             f_onCoroutineEnded();
@@ -122,7 +133,7 @@ namespace UnityUtility.Async
             if (m_queue.Count > 0)
                 f_runAsync(m_queue.Dequeue());
             else
-                m_id = 0;
+                m_id = 0L;
         }
 
         private void f_init()

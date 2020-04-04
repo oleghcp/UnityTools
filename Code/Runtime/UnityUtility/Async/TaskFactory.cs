@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtility.Collections;
 using UnityUtility.IdGenerating;
@@ -12,6 +13,11 @@ namespace UnityUtility.Async
         bool DoNotDestroyOnLoad { get; }
     }
 
+    public interface ITaskStopper
+    {
+        event Action StopAllTasks_Event;
+    }
+
     internal class TaskFactory
     {
         private class DefaultSettings : IAsyncSettings
@@ -21,15 +27,27 @@ namespace UnityUtility.Async
             bool IAsyncSettings.DoNotDestroyOnLoad => true;
         }
 
+        public event Action StopTasks_Event;
+
         private readonly string GAME_OBJECT_NAME;
         private readonly ObjectPool<RoutineRunner> m_runnersPool;
         private readonly IdGenerator<long> m_idProvider;
 
-        private bool m_canBeStopped;
-        private bool m_canBeStoppedGlobaly;
-        private bool m_dontDestroyOnLoad;
+        private readonly bool m_canBeStopped;
+        private readonly bool m_canBeStoppedGlobaly;
+        private readonly bool m_dontDestroyOnLoad;
 
-        public bool CanBeStopped => m_canBeStopped;
+        private ITaskStopper m_stopper;
+
+        public bool CanBeStopped
+        {
+            get { return m_canBeStopped; }
+        }
+
+        public bool CanBeStoppedGlobaly
+        {
+            get { return m_canBeStoppedGlobaly; }
+        }
 
         public TaskFactory(string gameObjectName = "Task")
         {
@@ -46,6 +64,21 @@ namespace UnityUtility.Async
 
             if (!m_dontDestroyOnLoad)
                 SceneManager.sceneUnloaded += _ => m_runnersPool.Clear();
+        }
+
+        public void RegisterStopper(ITaskStopper stopper)
+        {
+            if (!m_canBeStoppedGlobaly)
+            {
+                throw new InvalidOperationException("Tasks cannot be stopped due to the current system option. Check Async System Settings.");
+            }
+
+            if (m_stopper == stopper)
+            {
+                throw new InvalidOperationException("Stop object is already set.");
+            }
+
+            (m_stopper = stopper).StopAllTasks_Event += () => StopTasks_Event?.Invoke();
         }
 
         public long GetNewId()
