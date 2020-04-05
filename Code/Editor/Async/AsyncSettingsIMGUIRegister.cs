@@ -4,47 +4,52 @@ using UnityEngine;
 using UnityUtility.Async;
 
 #if UNITY_2018_3_OR_NEWER
-internal static class AsyncSettingsIMGUIRegister
+namespace UnityUtilityEditor.Async
 {
-    private static GUIContent s_labelForStopField;
-    private static GUIContent s_labelForGlobalStopField;
-    private static GUIContent s_labelForDestoryField;
-
-    [SettingsProvider]
-    public static SettingsProvider CreateMyCustomSettingsProvider()
+    internal static class AsyncSettingsIMGUIRegister
     {
-        s_labelForStopField = new GUIContent("Allow stop tasks",
-            $"Option for providing possibility to stop each task manually using {nameof(TaskInfo)}.{nameof(TaskInfo.Stop)}() or {nameof(TaskInfo)}.{nameof(TaskInfo.SkipCurrent)}()");
+        private static GUIContent s_labelForStopField;
+        private static GUIContent s_labelForGlobalStopField;
+        private static GUIContent s_labelForDestoryField;
 
-        s_labelForGlobalStopField = new GUIContent("Allow stop all tasks",
-            "Option for providing possibility to stop all tasks globally by registering object with global stopping event.");
-
-        s_labelForDestoryField = new GUIContent("Don't destroy on load",
-            "Whether tasks runners should be destroyed when scene unloaded.");
-
-        return new SettingsProvider("Project/" + TaskSystem.SYSTEM_NAME, SettingsScope.Project)
+        [SettingsProvider]
+        public static SettingsProvider CreateMyCustomSettingsProvider()
         {
-            guiHandler = f_drawGui,
-            keywords = new HashSet<string> { "Async", "Async System", "Stop", "Destroy" },
-        };
-    }
+            string typeName = nameof(TaskInfo);
 
-    private static void f_drawGui(string searchContext)
-    {
-        var settings = AsyncSystemSettings.GetSerializedObject();
+            s_labelForStopField = new GUIContent("Allow stop tasks",
+                $"Option for providing possibility to stop each task manually using {typeName}.{nameof(TaskInfo.Stop)}() or {typeName}.{nameof(TaskInfo.SkipCurrent)}()");
 
-        var property = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
+            s_labelForGlobalStopField = new GUIContent("Allow stop all tasks",
+                "Option for providing possibility to stop all tasks globally by registering object with global stopping event.");
 
-        property.boolValue = EditorGUILayout.Toggle(s_labelForStopField, property.boolValue);
+            s_labelForDestoryField = new GUIContent("Don't destroy on load",
+                "Whether task runners should be destroyed when scene is unloaded.");
 
-        GUI.enabled = property.boolValue;
+            return new SettingsProvider("Project/" + TaskSystem.SYSTEM_NAME, SettingsScope.Project)
+            {
+                guiHandler = f_drawGui,
+                keywords = new HashSet<string> { "Async", "Async System", "Stop", "Destroy" },
+            };
+        }
 
-        EditorGUILayout.PropertyField(settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName), s_labelForGlobalStopField);
-        EditorGUILayout.PropertyField(settings.FindProperty(AsyncSystemSettings.DontDestroyOnLoadName), s_labelForDestoryField);
+        private static void f_drawGui(string searchContext)
+        {
+            var settings = AsyncSystemSettings.GetSerializedObject();
 
-        GUI.enabled = true;
+            var property = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
 
-        settings.ApplyModifiedProperties();
+            property.boolValue = EditorGUILayout.Toggle(s_labelForStopField, property.boolValue);
+
+            GUI.enabled = property.boolValue;
+
+            EditorGUILayout.PropertyField(settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName), s_labelForGlobalStopField);
+            EditorGUILayout.PropertyField(settings.FindProperty(AsyncSystemSettings.DontDestroyOnLoadName), s_labelForDestoryField);
+
+            GUI.enabled = true;
+
+            settings.ApplyModifiedProperties();
+        }
     }
 }
 #endif
