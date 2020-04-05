@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace UnityUtility.Async
@@ -8,26 +9,28 @@ namespace UnityUtility.Async
         [SerializeField]
         private bool _canBeStopped = true;
         [SerializeField]
-        private bool _canBeStoppedGlobaly;
+        private bool _canBeStoppedGlobally = false;
         [SerializeField]
         private bool _dontDestroyOnLoad = true;
 
         public bool CanBeStopped => _canBeStopped;
-        public bool CanBeStoppedGlobaly => _canBeStopped && _canBeStoppedGlobaly;
+        public bool CanBeStoppedGlobally => _canBeStopped && _canBeStoppedGlobally;
         public bool DoNotDestroyOnLoad => !_canBeStopped || _dontDestroyOnLoad;
 
 #if UNITY_EDITOR
-        private static readonly string SETTINGS_PATH = $"Assets/Resources/{nameof(AsyncSystemSettings)}.asset";
+        private static readonly string SETTINGS_PATH = $"Assets/{nameof(Resources)}/{nameof(AsyncSystemSettings)}.asset";
 
-        private static string CanBeStoppedName => nameof(_canBeStopped);
-        private static string CanBeStoppedGlobalyName => nameof(_canBeStoppedGlobaly);
-        private static string DontDestroyOnLoadName => nameof(_dontDestroyOnLoad);
+        public static string CanBeStoppedName => nameof(_canBeStopped);
+        public static string CanBeStoppedGloballyName => nameof(_canBeStoppedGlobally);
+        public static string DontDestroyOnLoadName => nameof(_dontDestroyOnLoad);
 
         public static AsyncSystemSettings GetOrCreateSettings()
         {
             var settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(SETTINGS_PATH);
             if (settings == null)
             {
+                string path = Path.Combine(Application.dataPath, nameof(Resources));
+                Directory.CreateDirectory(path);
                 settings = CreateInstance<AsyncSystemSettings>();
                 AssetDatabase.CreateAsset(settings, SETTINGS_PATH);
                 AssetDatabase.SaveAssets();

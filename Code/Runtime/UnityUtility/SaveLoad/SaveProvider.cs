@@ -161,7 +161,7 @@ namespace UnityUtility.SaveLoad
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TaskInfo CollectAsync(int fieldPerFrame = 1)
         {
-            return Tasks.StartAsync(CollectRoutine(fieldPerFrame));
+            return TaskSystem.StartAsync(CollectRoutine(fieldPerFrame));
         }
 
         /// <summary>

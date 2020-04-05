@@ -7,7 +7,7 @@ namespace UnityUtility.Async
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.
     /// </summary>
-    public static class Tasks
+    public static class TaskSystem
     {
         public const string SYSTEM_NAME = "Async System";
 

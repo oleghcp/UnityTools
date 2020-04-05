@@ -9,7 +9,7 @@ namespace UnityUtility.Async
     internal interface IAsyncSettings
     {
         bool CanBeStopped { get; }
-        bool CanBeStoppedGlobaly { get; }
+        bool CanBeStoppedGlobally { get; }
         bool DoNotDestroyOnLoad { get; }
     }
 
@@ -23,7 +23,7 @@ namespace UnityUtility.Async
         private class DefaultSettings : IAsyncSettings
         {
             bool IAsyncSettings.CanBeStopped => true;
-            bool IAsyncSettings.CanBeStoppedGlobaly => false;
+            bool IAsyncSettings.CanBeStoppedGlobally => false;
             bool IAsyncSettings.DoNotDestroyOnLoad => true;
         }
 
@@ -34,7 +34,7 @@ namespace UnityUtility.Async
         private readonly IdGenerator<long> m_idProvider;
 
         private readonly bool m_canBeStopped;
-        private readonly bool m_canBeStoppedGlobaly;
+        private readonly bool m_canBeStoppedGlobally;
         private readonly bool m_dontDestroyOnLoad;
 
         private ITaskStopper m_stopper;
@@ -44,9 +44,9 @@ namespace UnityUtility.Async
             get { return m_canBeStopped; }
         }
 
-        public bool CanBeStoppedGlobaly
+        public bool CanBeStoppedGlobally
         {
-            get { return m_canBeStoppedGlobaly; }
+            get { return m_canBeStoppedGlobally; }
         }
 
         public TaskFactory(string gameObjectName = "Task")
@@ -56,7 +56,7 @@ namespace UnityUtility.Async
             IAsyncSettings settings = GetSettings();
 
             m_canBeStopped = settings.CanBeStopped;
-            m_canBeStoppedGlobaly = settings.CanBeStoppedGlobaly;
+            m_canBeStoppedGlobally = settings.CanBeStoppedGlobally;
             m_dontDestroyOnLoad = settings.DoNotDestroyOnLoad;
 
             m_idProvider = new LongIdGenerator();
@@ -68,9 +68,9 @@ namespace UnityUtility.Async
 
         public void RegisterStopper(ITaskStopper stopper)
         {
-            if (!m_canBeStoppedGlobaly)
+            if (!m_canBeStoppedGlobally)
             {
-                throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {Tasks.SYSTEM_NAME} settings.");
+                throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {TaskSystem.SYSTEM_NAME} settings.");
             }
 
             if (m_stopper == stopper)
