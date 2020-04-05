@@ -70,7 +70,7 @@ namespace UnityUtility.Async
         {
             if (!m_canBeStoppedGlobaly)
             {
-                throw new InvalidOperationException("Tasks cannot be stopped due to the current system option. Check Async System Settings.");
+                throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {Tasks.SYSTEM_NAME} settings.");
             }
 
             if (m_stopper == stopper)

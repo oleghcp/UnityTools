@@ -10,7 +10,7 @@ namespace UnityUtility.Async
     [DisallowMultipleComponent]
     internal class RoutineRunner : Script, ITask, Poolable
     {
-        private const string EXCEPTION_TEXT = "Task cannot be stopped. Check Async System Settings.";
+        private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + Tasks.SYSTEM_NAME + " settings.";
 
         private long m_id;
 

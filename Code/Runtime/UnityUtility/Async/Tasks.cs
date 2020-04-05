@@ -9,6 +9,8 @@ namespace UnityUtility.Async
     /// </summary>
     public static class Tasks
     {
+        public const string SYSTEM_NAME = "Async System";
+
         private static TaskFactory s_factory;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
