@@ -10,7 +10,6 @@ namespace UnityUtility.Async
     {
         bool CanBeStopped { get; }
         bool CanBeStoppedGlobally { get; }
-        bool DoNotDestroyOnLoad { get; }
     }
 
     public interface ITaskStopper
@@ -24,7 +23,6 @@ namespace UnityUtility.Async
         {
             bool IAsyncSettings.CanBeStopped => true;
             bool IAsyncSettings.CanBeStoppedGlobally => false;
-            bool IAsyncSettings.DoNotDestroyOnLoad => true;
         }
 
         public event Action StopTasks_Event;
@@ -49,20 +47,20 @@ namespace UnityUtility.Async
             get { return m_canBeStoppedGlobally; }
         }
 
-        public TaskFactory(string gameObjectName = "Tasks")
+        public TaskFactory(string gameObjectName, IdGenerator<long> idProvider, bool doNotDestroyOnLoad)
         {
             IAsyncSettings settings = GetSettings();
 
             m_canBeStopped = settings.CanBeStopped;
             m_canBeStoppedGlobally = settings.CanBeStoppedGlobally;
-            m_dontDestroyOnLoad = settings.DoNotDestroyOnLoad;
+            m_dontDestroyOnLoad = doNotDestroyOnLoad;
 
             m_gameObject = new GameObject(gameObjectName);
 
             if (m_dontDestroyOnLoad)
                 m_gameObject.Immortalize();
 
-            m_idProvider = new LongIdGenerator();
+            m_idProvider = idProvider;
             m_runnersPool = new ObjectPool<RoutineRunner>(f_create);
 
             if (!m_dontDestroyOnLoad)

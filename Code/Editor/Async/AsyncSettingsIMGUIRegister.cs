@@ -37,14 +37,19 @@ namespace UnityUtilityEditor.Async
         {
             var settings = AsyncSystemSettings.GetSerializedObject();
 
-            var property = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
+            var canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
+            var canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
 
-            property.boolValue = EditorGUILayout.Toggle(s_labelForStopField, property.boolValue);
+            canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(s_labelForStopField, canBeStoppedProperty.boolValue);
 
-            GUI.enabled = property.boolValue;
+            GUI.enabled = canBeStoppedProperty.boolValue;
 
-            EditorGUILayout.PropertyField(settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName), s_labelForGlobalStopField);
-            EditorGUILayout.PropertyField(settings.FindProperty(AsyncSystemSettings.DontDestroyOnLoadName), s_labelForDestoryField);
+            canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(s_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
+
+            if (canBeStoppedGloballyProperty.boolValue)
+            {
+                EditorGUILayout.HelpBox("Are you sure? Stopping all tasks globally is a dangerous practice.", MessageType.Warning);
+            }
 
             GUI.enabled = true;
 

@@ -10,19 +10,15 @@ namespace UnityUtility.Async
         private bool _canBeStopped = true;
         [SerializeField]
         private bool _canBeStoppedGlobally = false;
-        [SerializeField]
-        private bool _dontDestroyOnLoad = true;
 
         public bool CanBeStopped => _canBeStopped;
         public bool CanBeStoppedGlobally => _canBeStopped && _canBeStoppedGlobally;
-        public bool DoNotDestroyOnLoad => !_canBeStopped || _dontDestroyOnLoad;
 
 #if UNITY_EDITOR
         private static readonly string SETTINGS_PATH = $"Assets/{nameof(Resources)}/{nameof(AsyncSystemSettings)}.asset";
 
         public static string CanBeStoppedName => nameof(_canBeStopped);
         public static string CanBeStoppedGloballyName => nameof(_canBeStoppedGlobally);
-        public static string DontDestroyOnLoadName => nameof(_dontDestroyOnLoad);
 
         public static AsyncSystemSettings GetOrCreateSettings()
         {
