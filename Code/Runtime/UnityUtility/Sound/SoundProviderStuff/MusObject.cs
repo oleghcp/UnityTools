@@ -126,7 +126,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         private void f_init()
         {
-            Updater.Frame_Event += m_update;
+            ApplicationUtility.OnUpdate_Event += m_update;
         }
 
         private void f_play()
@@ -162,7 +162,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
             gameObject.SetActive(false);
             _audioSource.clip = null;
             m_fading = false;
-            Updater.Frame_Event -= m_update;
+            ApplicationUtility.OnUpdate_Event -= m_update;
         }
         #endregion
 

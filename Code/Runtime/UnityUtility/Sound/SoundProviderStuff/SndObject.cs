@@ -65,7 +65,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
         private void OnDestroy()
         {
             m_provider.RemoveSound(this);
-            Updater.Frame_Event -= m_update;
+            ApplicationUtility.OnUpdate_Event -= m_update;
         }
 
         ////////////////
@@ -167,7 +167,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         private void f_init()
         {
-            Updater.Frame_Event += m_update;
+            ApplicationUtility.OnUpdate_Event += m_update;
         }
 
         #region IPoolable
@@ -184,7 +184,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
             _audioSource.clip = null;
             _audioSource.spatialBlend = 0f;
             Sender = null;
-            Updater.Frame_Event -= m_update;
+            ApplicationUtility.OnUpdate_Event -= m_update;
         }
         #endregion
 

@@ -56,7 +56,7 @@ namespace UnityUtility.Async
 
         private void OnDestroy()
         {
-            Updater.Frame_Event -= m_update;
+            ApplicationUtility.OnUpdate_Event -= m_update;
             if (m_owner.CanBeStoppedGlobally)
                 m_owner.StopTasks_Event -= Stop;
         }
@@ -139,7 +139,7 @@ namespace UnityUtility.Async
         private void f_init()
         {
             m_id = m_owner.GetNewId();
-            Updater.Frame_Event += m_update;
+            ApplicationUtility.OnUpdate_Event += m_update;
         }
 
         private void f_runAsync(IEnumerator routine)
@@ -158,7 +158,7 @@ namespace UnityUtility.Async
         void Poolable.CleanUp()
         {
             gameObject.SetActive(false);
-            Updater.Frame_Event -= m_update;
+            ApplicationUtility.OnUpdate_Event -= m_update;
         }
         #endregion
     }
