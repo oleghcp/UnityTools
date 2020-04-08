@@ -29,13 +29,13 @@ namespace UnityUtility.Async
 
         public event Action StopTasks_Event;
 
-        private readonly string GAME_OBJECT_NAME;
         private readonly ObjectPool<RoutineRunner> m_runnersPool;
         private readonly IdGenerator<long> m_idProvider;
 
         private readonly bool m_canBeStopped;
         private readonly bool m_canBeStoppedGlobally;
         private readonly bool m_dontDestroyOnLoad;
+        private readonly GameObject m_gameObject;
 
         private ITaskStopper m_stopper;
 
@@ -49,15 +49,18 @@ namespace UnityUtility.Async
             get { return m_canBeStoppedGlobally; }
         }
 
-        public TaskFactory(string gameObjectName = "Task")
+        public TaskFactory(string gameObjectName = "Tasks")
         {
-            GAME_OBJECT_NAME = gameObjectName;
-
             IAsyncSettings settings = GetSettings();
 
             m_canBeStopped = settings.CanBeStopped;
             m_canBeStoppedGlobally = settings.CanBeStoppedGlobally;
             m_dontDestroyOnLoad = settings.DoNotDestroyOnLoad;
+
+            m_gameObject = new GameObject(gameObjectName);
+
+            if (m_dontDestroyOnLoad)
+                m_gameObject.Immortalize();
 
             m_idProvider = new LongIdGenerator();
             m_runnersPool = new ObjectPool<RoutineRunner>(f_create);
@@ -102,13 +105,13 @@ namespace UnityUtility.Async
         {
             IAsyncSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
 
-            return (settings == null ? new DefaultSettings() : settings) as IAsyncSettings;
+            return (settings ?? new DefaultSettings()) as IAsyncSettings;
         }
 
         private RoutineRunner f_create()
         {
-            var taskRunner = Script.CreateInstance<RoutineRunner>(GAME_OBJECT_NAME);
-            taskRunner.SetUp(this, m_dontDestroyOnLoad);
+            var taskRunner = m_gameObject.AddComponent<RoutineRunner>();
+            taskRunner.SetUp(this);
             return taskRunner;
         }
     }

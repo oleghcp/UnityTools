@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityUtility.Collections;
 
 namespace UnityUtility.Async
 {
-    [DisallowMultipleComponent]
     internal class RoutineRunner : Script, Poolable
     {
         private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + TaskSystem.SYSTEM_NAME + " settings.";
@@ -41,16 +39,13 @@ namespace UnityUtility.Async
             };
         }
 
-        public void SetUp(TaskFactory owner, bool dontDestroyOnLoad)
+        public void SetUp(TaskFactory owner)
         {
             m_owner = owner;
             f_init();
 
             if (m_owner.CanBeStoppedGlobally)
                 m_owner.StopTasks_Event += Stop;
-
-            if (dontDestroyOnLoad)
-                gameObject.Immortalize();
         }
 
         private void OnDestroy()
@@ -150,13 +145,11 @@ namespace UnityUtility.Async
         #region IPoolable
         void Poolable.Reinit()
         {
-            gameObject.SetActive(true);
             f_init();
         }
 
         void Poolable.CleanUp()
         {
-            gameObject.SetActive(false);
             ApplicationUtility.OnUpdate_Event -= m_update;
         }
         #endregion

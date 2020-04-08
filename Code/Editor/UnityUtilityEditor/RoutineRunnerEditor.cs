@@ -1,6 +1,5 @@
-﻿using UnityUtility.Async;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEditor;
+using UnityUtility.Async;
 
 namespace UnityUtilityEditor
 {
@@ -16,13 +15,15 @@ namespace UnityUtilityEditor
 
         public override void OnInspectorGUI()
         {
-            if (m_target.Id != 0)
+            if (m_target.Id == 0L)
             {
-                GUILayout.Space(10f);
-                EditorGUILayout.LabelField("Task ID: " + m_target.Id.ToString());
-                EditorGUILayout.LabelField("Status: " + (m_target.IsPaused ? "Paused" : "Running"));
-                Repaint();
+                EditorGUILayout.HelpBox("Inactive", MessageType.Info);
+                return;
             }
+
+            EditorGUILayout.LabelField("Task ID: " + m_target.Id.ToString());
+            EditorGUILayout.LabelField("Status: " + (m_target.IsPaused ? "Paused" : "Running"));
+            Repaint();
         }
     }
 }
