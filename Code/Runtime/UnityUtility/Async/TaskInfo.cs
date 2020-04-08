@@ -7,7 +7,7 @@ namespace UnityUtility.Async
     public struct TaskInfo : IEquatable<TaskInfo>
     {
         private readonly long m_id;
-        private readonly ITask m_task;
+        private readonly RoutineRunner m_task;
 
         /// <summary>
         /// Provides task ID.
@@ -30,7 +30,7 @@ namespace UnityUtility.Async
             get { return f_isAlive() && m_task.IsPaused; }
         }
 
-        internal TaskInfo(ITask runner)
+        internal TaskInfo(RoutineRunner runner)
         {
             m_id = (m_task = runner).Id;
         }

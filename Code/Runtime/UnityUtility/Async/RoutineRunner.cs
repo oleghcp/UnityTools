@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Collections;
-using UnityUtility.Scripts;
 
 namespace UnityUtility.Async
 {
     [DisallowMultipleComponent]
-    internal class RoutineRunner : Script, ITask, Poolable
+    internal class RoutineRunner : Script, Poolable
     {
         private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + TaskSystem.SYSTEM_NAME + " settings.";
 
@@ -119,7 +118,7 @@ namespace UnityUtility.Async
 
         // - - //
 
-        void ITask.OnCoroutineEnded()
+        public void OnCoroutineEnded()
         {
             f_onCoroutineEnded();
         }

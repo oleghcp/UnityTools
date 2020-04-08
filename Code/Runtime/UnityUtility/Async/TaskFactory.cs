@@ -86,12 +86,12 @@ namespace UnityUtility.Async
             return m_idProvider.GetNewId();
         }
 
-        public void Release(ITask runner)
+        public void Release(RoutineRunner runner)
         {
-            m_runnersPool.Release(runner as RoutineRunner);
+            m_runnersPool.Release(runner);
         }
 
-        public ITask GetRunner()
+        public RoutineRunner GetRunner()
         {
             return m_runnersPool.Get();
         }

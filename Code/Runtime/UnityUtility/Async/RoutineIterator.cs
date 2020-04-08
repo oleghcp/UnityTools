@@ -4,7 +4,7 @@ namespace UnityUtility.Async
 {
     internal class RoutineIterator : IEnumerator
     {
-        private readonly ITask m_owner;
+        private readonly RoutineRunner m_owner;
 
         private IEnumerator m_curRoutine;
         private bool m_isPaused;
@@ -19,7 +19,7 @@ namespace UnityUtility.Async
             get { return m_isPaused; }
         }
 
-        internal RoutineIterator(ITask owner)
+        internal RoutineIterator(RoutineRunner owner)
         {
             m_owner = owner;
         }
