@@ -8,11 +8,11 @@ namespace System
 
         static Enum()
         {
-            Count = EnumExt.GetNames<TEnum>().Length;
+            Count = EnumUtility.GetNames<TEnum>().Length;
         }
     }
 
-    public static class EnumExt
+    public static class EnumUtility
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] GetNames<TEnum>() where TEnum : Enum

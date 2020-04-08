@@ -19,7 +19,7 @@ namespace UnityEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetViewBounds(this Camera cam)
         {
-            return ScreenExt.GetViewBounds(cam.transform.position, cam.orthographicSize);
+            return ScreenUtility.GetViewBounds(cam.transform.position, cam.orthographicSize);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace UnityEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetViewBounds(this Camera cam, float distance)
         {
-            return ScreenExt.GetViewBounds(cam.transform.position, cam.fieldOfView, distance);
+            return ScreenUtility.GetViewBounds(cam.transform.position, cam.fieldOfView, distance);
         }
 
         /// <summary>

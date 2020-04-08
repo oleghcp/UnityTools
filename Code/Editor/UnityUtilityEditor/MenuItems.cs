@@ -157,7 +157,7 @@ namespace UnityUtilityEditor
         private static void CreateScript()
         {
             if (s_templatePath == null)
-                s_templatePath = Path.Combine(PathExt.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");
+                s_templatePath = Path.Combine(PathUtility.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");
 
             if (!File.Exists(s_templatePath))
             {

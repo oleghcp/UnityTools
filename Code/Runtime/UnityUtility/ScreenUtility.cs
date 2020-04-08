@@ -7,7 +7,7 @@ namespace UnityUtility
     /// <summary>
     /// A set of common math functions.
     /// </summary>
-    public static class ScreenExt
+    public static class ScreenUtility
     {
         /// <summary>
         /// Returns the current screen ratio (height/width).

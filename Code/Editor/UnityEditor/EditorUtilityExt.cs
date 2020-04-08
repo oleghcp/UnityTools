@@ -64,7 +64,7 @@ namespace UnityEditor
 
             yield return null;
 
-            string projectFolderPath = PathExt.GetParentPath(assetsFolderPath);
+            string projectFolderPath = PathUtility.GetParentPath(assetsFolderPath);
             int count = files.Length;
             int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 

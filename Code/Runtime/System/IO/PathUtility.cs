@@ -2,7 +2,7 @@
 
 namespace System.IO
 {
-    public static class PathExt
+    public static class PathUtility
     {
         public static string GetParentPath(string path, int steps = 1)
         {
@@ -52,13 +52,13 @@ namespace System.IO
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetParentPath(this DirectoryInfo self, int steps = 1)
         {
-            return PathExt.GetParentPath(self.FullName, steps);
+            return PathUtility.GetParentPath(self.FullName, steps);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetParentPath(this FileInfo self, int steps = 1)
         {
-            return PathExt.GetParentPath(self.FullName, steps);
+            return PathUtility.GetParentPath(self.FullName, steps);
         }
     }
 }
