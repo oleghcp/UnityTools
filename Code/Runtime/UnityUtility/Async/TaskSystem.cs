@@ -9,7 +9,7 @@ namespace UnityUtility.Async
     /// </summary>
     public static class TaskSystem
     {
-        public const string SYSTEM_NAME = "Async System";
+        public const string SYSTEM_NAME = "Async System (ext.)";
 
         private static TaskFactory s_factory;
 
