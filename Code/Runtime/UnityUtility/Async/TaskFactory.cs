@@ -6,12 +6,6 @@ using UnityUtility.IdGenerating;
 
 namespace UnityUtility.Async
 {
-    internal interface IAsyncSettings
-    {
-        bool CanBeStopped { get; }
-        bool CanBeStoppedGlobally { get; }
-    }
-
     public interface ITaskStopper
     {
         event Action StopAllTasks_Event;
@@ -19,12 +13,6 @@ namespace UnityUtility.Async
 
     internal class TaskFactory
     {
-        private class DefaultSettings : IAsyncSettings
-        {
-            bool IAsyncSettings.CanBeStopped => true;
-            bool IAsyncSettings.CanBeStoppedGlobally => false;
-        }
-
         public event Action StopTasks_Event;
 
         private readonly ObjectPool<RoutineRunner> m_runnersPool;
@@ -33,7 +21,7 @@ namespace UnityUtility.Async
         private readonly bool m_canBeStopped;
         private readonly bool m_canBeStoppedGlobally;
         private readonly bool m_dontDestroyOnLoad;
-        private readonly GameObject m_gameObject;
+        private GameObject m_gameObject;
 
         private ITaskStopper m_stopper;
 
@@ -47,24 +35,27 @@ namespace UnityUtility.Async
             get { return m_canBeStoppedGlobally; }
         }
 
-        public TaskFactory(string gameObjectName, IdGenerator<long> idProvider, bool doNotDestroyOnLoad)
+        public TaskFactory(IAsyncSettings settings, IdGenerator<long> idProvider, bool doNotDestroyOnLoad)
         {
-            IAsyncSettings settings = GetSettings();
-
             m_canBeStopped = settings.CanBeStopped;
             m_canBeStoppedGlobally = settings.CanBeStoppedGlobally;
             m_dontDestroyOnLoad = doNotDestroyOnLoad;
-
-            m_gameObject = new GameObject(gameObjectName);
+            m_idProvider = idProvider;
 
             if (m_dontDestroyOnLoad)
-                m_gameObject.Immortalize();
-
-            m_idProvider = idProvider;
-            m_runnersPool = new ObjectPool<RoutineRunner>(f_create);
-
-            if (!m_dontDestroyOnLoad)
-                SceneManager.sceneUnloaded += _ => m_runnersPool.Clear();
+            {
+                (m_gameObject = new GameObject("Tasks")).Immortalize();
+                m_runnersPool = new ObjectPool<RoutineRunner>(f_create);
+            }
+            else
+            {
+                m_runnersPool = new ObjectPool<RoutineRunner>(f_createLocal);
+                SceneManager.sceneUnloaded += _ =>
+                {
+                    m_runnersPool.Clear();
+                    m_gameObject = null;
+                };
+            }
         }
 
         public void RegisterStopper(ITaskStopper stopper)
@@ -99,18 +90,19 @@ namespace UnityUtility.Async
 
         // -- //
 
-        private static IAsyncSettings GetSettings()
-        {
-            IAsyncSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
-
-            return (settings ?? new DefaultSettings()) as IAsyncSettings;
-        }
-
         private RoutineRunner f_create()
         {
             var taskRunner = m_gameObject.AddComponent<RoutineRunner>();
             taskRunner.SetUp(this);
             return taskRunner;
+        }
+
+        private RoutineRunner f_createLocal()
+        {
+            if (m_gameObject == null)
+                m_gameObject = new GameObject("LocalTasks");
+
+            return f_create();
         }
     }
 }

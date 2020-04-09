@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityUtility.Async;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.Async
 {
     [CustomEditor(typeof(RoutineRunner))]
     internal class RoutineRunnerEditor : Editor

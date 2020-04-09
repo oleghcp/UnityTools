@@ -5,6 +5,12 @@ using UnityUtility.IdGenerating;
 
 namespace UnityUtility.Async
 {
+    internal interface IAsyncSettings
+    {
+        bool CanBeStopped { get; }
+        bool CanBeStoppedGlobally { get; }
+    }
+
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.
     /// </summary>
@@ -12,21 +18,23 @@ namespace UnityUtility.Async
     {
         public const string SYSTEM_NAME = "Async System (ext.)";
 
-        private static TaskFactory s_factory;
-        private static TaskFactory s_factoryLocals;
+        private static TaskFactory s_globals;
+        private static TaskFactory s_locals;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void f_setUp()
         {
+            IAsyncSettings settings = GetSettings();
             LongIdGenerator idProvider = new LongIdGenerator();
-            s_factory = new TaskFactory("Tasks", idProvider, true);
-            s_factoryLocals = new TaskFactory("LocalTasks", idProvider, false);
+
+            s_globals = new TaskFactory(settings, idProvider, true);
+            s_locals = new TaskFactory(settings, idProvider, false);
         }
 
         public static void RegisterStopper(ITaskStopper stopper)
         {
-            s_factory.RegisterStopper(stopper);
-            s_factoryLocals.RegisterStopper(stopper);
+            s_globals.RegisterStopper(stopper);
+            s_locals.RegisterStopper(stopper);
         }
 
         /// <summary>
@@ -34,7 +42,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator run)
         {
-            return s_factory.GetRunner().RunAsync(run);
+            return s_globals.GetRunner().RunAsync(run);
         }
 
         /// <summary>
@@ -42,7 +50,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator run)
         {
-            return s_factoryLocals.GetRunner().RunAsync(run);
+            return s_locals.GetRunner().RunAsync(run);
         }
 
         /// <summary>
@@ -50,7 +58,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true)
         {
-            return s_factory.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
+            return s_globals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
         }
 
         /// <summary>
@@ -58,7 +66,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true)
         {
-            return s_factoryLocals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
+            return s_locals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
         }
 
         /// <summary>
@@ -66,7 +74,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run)
         {
-            return s_factory.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
+            return s_globals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
         }
 
         /// <summary>
@@ -74,7 +82,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFramesLocally(int frames, Action run)
         {
-            return s_factoryLocals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
+            return s_locals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
         }
 
         /// <summary>
@@ -82,7 +90,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run)
         {
-            return s_factory.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
+            return s_globals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
         }
 
         /// <summary>
@@ -90,7 +98,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run)
         {
-            return s_factoryLocals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
+            return s_locals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
         }
 
         /// <summary>
@@ -98,7 +106,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunWhile(Func<bool> condition, Action run)
         {
-            return s_factory.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
+            return s_globals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
         }
 
         /// <summary>
@@ -106,7 +114,25 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunWhileLocally(Func<bool> condition, Action run)
         {
-            return s_factoryLocals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
+            return s_locals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
+        }
+
+        // -- //
+
+        private static IAsyncSettings GetSettings()
+        {
+            AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
+
+            if (settings == null)
+                return new DefaultSettings();
+
+            return settings;
+        }
+
+        private class DefaultSettings : IAsyncSettings
+        {
+            bool IAsyncSettings.CanBeStopped => true;
+            bool IAsyncSettings.CanBeStoppedGlobally => false;
         }
     }
 }
