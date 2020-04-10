@@ -102,17 +102,17 @@ namespace UnityUtility.Async
         }
 
         /// <summary>
-        /// Runs a referenced function each frame while <paramref name="condition"/> is true.
+        /// Repeats a referenced function each frame while <paramref name="condition"/> is true.
         /// </summary>
-        public static TaskInfo RunWhile(Func<bool> condition, Action run)
+        public static TaskInfo Repeat(Func<bool> condition, Action run)
         {
             return s_globals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
         }
 
         /// <summary>
-        /// Runs a referenced function each frame while <paramref name="condition"/> is true (just for current scene).
+        /// Repeats a referenced function each frame while <paramref name="condition"/> is true (just for current scene).
         /// </summary>
-        public static TaskInfo RunWhileLocally(Func<bool> condition, Action run)
+        public static TaskInfo RepeatLocally(Func<bool> condition, Action run)
         {
             return s_locals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
         }
