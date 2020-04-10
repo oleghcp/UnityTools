@@ -11,6 +11,12 @@ namespace UnityUtilityEditor.Async
         private void Awake()
         {
             m_target = target as RoutineRunner;
+            EditorApplication.update += Repaint;
+        }
+
+        private void OnDestroy()
+        {
+            EditorApplication.update -= Repaint;
         }
 
         public override void OnInspectorGUI()
@@ -23,7 +29,6 @@ namespace UnityUtilityEditor.Async
 
             EditorGUILayout.LabelField("Task ID: " + m_target.Id.ToString());
             EditorGUILayout.LabelField("Status: " + (m_target.IsPaused ? "Paused" : "Running"));
-            Repaint();
         }
     }
 }
