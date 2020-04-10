@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityUtility.Collections;
 
 namespace UnityUtility.Async
@@ -9,13 +10,13 @@ namespace UnityUtility.Async
     {
         private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + TaskSystem.SYSTEM_NAME + " settings.";
 
-        private long m_id;
-
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
         private TaskFactory m_owner;
 
         private Action m_update;
+
+        private long m_id;
 
         public bool IsPaused
         {
@@ -45,21 +46,21 @@ namespace UnityUtility.Async
             f_init();
 
             if (m_owner.CanBeStoppedGlobally)
-                m_owner.StopTasks_Event += Stop;
+                m_owner.StopTasks_Event += OnGloballyStoped;
         }
 
         private void OnDestroy()
         {
             ApplicationUtility.OnUpdate_Event -= m_update;
             if (m_owner.CanBeStoppedGlobally)
-                m_owner.StopTasks_Event -= Stop;
+                m_owner.StopTasks_Event -= OnGloballyStoped;
         }
 
         // - - //
 
-        public TaskInfo RunAsync(IEnumerator routine)
+        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token)
         {
-            f_runAsync(routine);
+            f_runAsync(routine, token);
             return new TaskInfo(this);
         }
 
@@ -101,11 +102,6 @@ namespace UnityUtility.Async
                 throw new InvalidOperationException(EXCEPTION_TEXT);
             }
 
-            if (m_id == 0L)
-            {
-                return;
-            }
-
             StopAllCoroutines();
             m_queue.Clear();
             f_onCoroutineEnded();
@@ -120,14 +116,27 @@ namespace UnityUtility.Async
 
         // - - //
 
+        private void OnGloballyStoped()
+        {
+            if (m_id == 0L)
+            {
+                return;
+            }
+
+            Stop();
+        }
+
         private void f_onCoroutineEnded()
         {
-            m_iterator.Reset();
-
             if (m_queue.Count > 0)
+            {
                 f_runAsync(m_queue.Dequeue());
+            }
             else
+            {
+                m_iterator.Reset();
                 m_id = 0L;
+            }
         }
 
         private void f_init()
@@ -138,6 +147,13 @@ namespace UnityUtility.Async
 
         private void f_runAsync(IEnumerator routine)
         {
+            m_iterator.Fill(routine);
+            StartCoroutine(m_iterator);
+        }
+
+        private void f_runAsync(IEnumerator routine, CancellationToken token)
+        {
+            m_iterator.AddToken(token);
             m_iterator.Fill(routine);
             StartCoroutine(m_iterator);
         }

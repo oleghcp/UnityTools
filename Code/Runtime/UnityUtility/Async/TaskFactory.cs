@@ -65,7 +65,7 @@ namespace UnityUtility.Async
                 throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {TaskSystem.SYSTEM_NAME} settings.");
             }
 
-            if (m_stopper == stopper)
+            if (m_stopper != null)
             {
                 throw new InvalidOperationException("Stop object is already set.");
             }

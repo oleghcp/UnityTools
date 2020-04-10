@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityUtility.IdGenerating;
 
@@ -40,81 +41,81 @@ namespace UnityUtility.Async
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>
-        public static TaskInfo StartAsync(IEnumerator run)
+        public static TaskInfo StartAsync(IEnumerator run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(run);
+            return s_globals.GetRunner().RunAsync(run, token);
         }
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine (just for current scene).
         /// </summary>
-        public static TaskInfo StartAsyncLocally(IEnumerator run)
+        public static TaskInfo StartAsyncLocally(IEnumerator run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(run);
+            return s_locals.GetRunner().RunAsync(run, token);
         }
 
         /// <summary>
         /// Runs a referenced function after delay.
         /// </summary>
-        public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true)
+        public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
+            return s_globals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime), token);
         }
 
         /// <summary>
         /// Runs a referenced function after delay (just for current scene).
         /// </summary>
-        public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true)
+        public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime));
+            return s_locals.GetRunner().RunAsync(Script.RunDelayedRoutine(time, run, scaledTime), token);
         }
 
         /// <summary>
         /// Runs a referenced function after specified frames count.
         /// </summary>
-        public static TaskInfo RunAfterFrames(int frames, Action run)
+        public static TaskInfo RunAfterFrames(int frames, Action run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
+            return s_globals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run), token);
         }
 
         /// <summary>
         /// Runs a referenced function after specified frames count (just for current scene).
         /// </summary>
-        public static TaskInfo RunAfterFramesLocally(int frames, Action run)
+        public static TaskInfo RunAfterFramesLocally(int frames, Action run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run));
+            return s_locals.GetRunner().RunAsync(Script.RunAfterFramesRoutine(frames, run), token);
         }
 
         /// <summary>
         /// Runs a referenced function when <paramref name="condition"/> is true.
         /// </summary>
-        public static TaskInfo RunByCondition(Func<bool> condition, Action run)
+        public static TaskInfo RunByCondition(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
+            return s_globals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run), token);
         }
 
         /// <summary>
         /// Runs a referenced function when <paramref name="condition"/> is true (just for current scene).
         /// </summary>
-        public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run)
+        public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run));
+            return s_locals.GetRunner().RunAsync(Script.RunByConditionRoutine(condition, run), token);
         }
 
         /// <summary>
         /// Repeats a referenced function each frame while <paramref name="condition"/> is true.
         /// </summary>
-        public static TaskInfo Repeat(Func<bool> condition, Action run)
+        public static TaskInfo Repeat(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
+            return s_globals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run), token);
         }
 
         /// <summary>
         /// Repeats a referenced function each frame while <paramref name="condition"/> is true (just for current scene).
         /// </summary>
-        public static TaskInfo RepeatLocally(Func<bool> condition, Action run)
+        public static TaskInfo RepeatLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run));
+            return s_locals.GetRunner().RunAsync(Script.RunWhileRoutine(condition, run), token);
         }
 
         // -- //

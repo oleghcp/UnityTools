@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading;
 
 namespace UnityUtility.Async
 {
@@ -8,6 +9,7 @@ namespace UnityUtility.Async
 
         private IEnumerator m_curRoutine;
         private bool m_isPaused;
+        private CancellationToken m_token;
 
         internal bool IsEmpty
         {
@@ -29,6 +31,11 @@ namespace UnityUtility.Async
             m_curRoutine = routine;
         }
 
+        internal void AddToken(in CancellationToken token)
+        {
+            m_token = token;
+        }
+
         internal void Pause(bool value)
         {
             m_isPaused = value;
@@ -38,6 +45,7 @@ namespace UnityUtility.Async
         {
             m_curRoutine = null;
             m_isPaused = false;
+            m_token = default;
         }
 
         object IEnumerator.Current
@@ -47,13 +55,19 @@ namespace UnityUtility.Async
 
         bool IEnumerator.MoveNext()
         {
-            if (m_isPaused) { return true; }
+            if (m_token.IsCancellationRequested)
+            {
+                m_owner.Stop();
+                return false;
+            }
 
-            bool canMove = m_curRoutine.MoveNext();
+            if (m_isPaused || m_curRoutine.MoveNext())
+            {
+                return true;
+            }
 
-            if (!canMove) { m_owner.OnCoroutineEnded(); }
-
-            return canMove;
+            m_owner.OnCoroutineEnded();
+            return false;
         }
     }
 }
