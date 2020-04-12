@@ -6,6 +6,8 @@ namespace UnityUtility.UI
     public abstract class AbstractTabSelector : MonoBehaviour
     {
         [SerializeField]
+        private bool _defaultTab;
+        [SerializeField]
         private GameObject _selected;
         [SerializeField]
         private GameObject _unselected;
@@ -13,6 +15,9 @@ namespace UnityUtility.UI
         private GameObject _content;
         [SerializeField, HideInInspector]
         private TabGroup _group;
+
+        public bool DefaultTab => _defaultTab;
+        public GameObject Content => _content;
 
         private void Awake()
         {
@@ -26,12 +31,6 @@ namespace UnityUtility.UI
 
             if (_group == null)
                 Debug.LogError("TabGroup component is not found.");
-        }
-
-        internal void SetUp(TabGroup group, bool isActive)
-        {
-            _group = group;
-            f_switch(isActive);
         }
 
         internal void OnSelect()
@@ -48,7 +47,7 @@ namespace UnityUtility.UI
 
         protected void OnClick()
         {
-            _group.OnSectorChosen(this);
+            _group.Select(this);
         }
 
         private void f_switch(bool select)
