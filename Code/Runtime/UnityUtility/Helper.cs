@@ -1,10 +1,34 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace UnityUtility
 {
+    public enum MemberCloneOption
+    {
+        Clone,
+        Copy,
+        Ignore
+    }
+
+    public enum CloneOption
+    {
+        Full,
+        AsICloneable,
+        FieldsAsICloneable,
+        AsICloneableOrFieldsAsICloneable
+    }
+
     [AttributeUsage(AttributeTargets.Field)]
-    public sealed class NonClonedAttribute : Attribute { }
+    public sealed class CloneableAttribute : Attribute
+    {
+        public readonly MemberCloneOption Option;
+
+        public CloneableAttribute(MemberCloneOption option)
+        {
+            Option = option;
+        }
+    }
 
     public static class Helper
     {
@@ -26,40 +50,30 @@ namespace UnityUtility
         /// <summary>
         /// Clones any object with public or private default constructor.
         /// </summary>
-        public static object Clone(object sourceObj, bool considerICloneables = false)
+        public static object CloneObject(object sourceObj, CloneOption option = CloneOption.Full)
         {
             if (sourceObj is null)
                 return null;
 
-            if (considerICloneables && sourceObj is ICloneable)
-                return (sourceObj as ICloneable).Clone();
+            if (option == CloneOption.AsICloneable && sourceObj is ICloneable cloneable)
+                return cloneable.Clone();
 
             if (sourceObj is Pointer)
                 return sourceObj;
 
             Type type = sourceObj.GetType();
 
-            if (type.GetTypeCode() != TypeCode.Object)
-                return sourceObj;
-
-            if (sourceObj is Delegate)
-                return (sourceObj as Delegate).Clone();
-
             if (type.IsArray)
             {
                 Array sourceArray = sourceObj as Array;
-                Type elementType = type.GetElementType();
-
-                if (elementType.GetTypeCode() != TypeCode.Object)
-                    return sourceArray.Clone();
-
-                Array destArray = Array.CreateInstance(elementType, sourceArray.Length);
+                Array destArray = Array.CreateInstance(type.GetElementType(), sourceArray.Length);
 
                 for (int i = 0; i < sourceArray.Length; i++)
                 {
-                    object sourceValue = sourceArray.GetValue(i);
+                    var sourceValue = sourceArray.GetValue(i);
                     if (sourceValue == null) { continue; }
-                    destArray.SetValue(Clone(sourceValue, considerICloneables), i);
+
+                    destArray.SetValue(CloneObject(sourceValue, f_convertToFieldOption(option)), i);
                 }
 
                 return destArray;
@@ -69,18 +83,62 @@ namespace UnityUtility
 
             FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-            for (int i = 0; i < fields.Length; i++)
+            for (var i = 0; i < fields.Length; i++)
             {
-                if (Attribute.IsDefined(fields[i], typeof(NonClonedAttribute))) { continue; }
                 object sourceFieldValue = fields[i].GetValue(sourceObj);
-                if (sourceFieldValue == null) { continue; }
-                fields[i].SetValue(destObj, Clone(sourceFieldValue, considerICloneables));
+
+                if (sourceFieldValue == null)
+                    continue;
+
+                CloneableAttribute attribute = Attribute.GetCustomAttribute(fields[i], typeof(CloneableAttribute)) as CloneableAttribute;
+                MemberCloneOption cloneOption = attribute == null ? MemberCloneOption.Clone : attribute.Option;
+
+                if (cloneOption == MemberCloneOption.Ignore)
+                    continue;
+
+                if (cloneOption == MemberCloneOption.Copy)
+                {
+                    fields[i].SetValue(destObj, sourceFieldValue);
+                    continue;
+                }
+
+                bool AsICloneable = option == CloneOption.FieldsAsICloneable || option == CloneOption.AsICloneableOrFieldsAsICloneable;
+
+                if (AsICloneable && sourceFieldValue is ICloneable sourceFieldValueCloneable)
+                {
+                    fields[i].SetValue(destObj, sourceFieldValueCloneable.Clone());
+                    continue;
+                }
+
+                fields[i].SetValue(destObj, CloneObject(sourceFieldValue, f_convertToFieldOption(option)));
             }
 
             return destObj;
         }
 
+        /// <summary>
+        /// Clones any object with public or private default constructor.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T Clone<T>(T sourceObj, CloneOption option = CloneOption.Full)
+        {
+            return (T)CloneObject(sourceObj, option);
+        }
+
         // -- //
+
+        private static CloneOption f_convertToFieldOption(CloneOption option)
+        {
+            switch (option)
+            {
+                case CloneOption.Full:
+                case CloneOption.AsICloneable:
+                    return CloneOption.Full;
+
+                default:
+                    return CloneOption.AsICloneableOrFieldsAsICloneable;
+            }
+        }
 
         internal static string CutAssemblyQualifiedName(string assemblyQualifiedName)
         {
