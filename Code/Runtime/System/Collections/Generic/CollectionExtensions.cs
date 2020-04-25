@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace System.Collections.Generic
 {
@@ -317,6 +316,20 @@ namespace System.Collections.Generic
             return self.Contains(item);
         }
 
+        public static bool Remove<T>(this List<T> self, Predicate<T> match)
+        {
+            for (int i = 0; i < self.Count; i++)
+            {
+                if (match(self[i]))
+                {
+                    self.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Removes the element at the specified index of the lsit and returns that element.
         /// </summary>
@@ -412,6 +425,21 @@ namespace System.Collections.Generic
         {
             foreach (var item in self)
                 action(item.Key, item.Value);
+        }
+
+        public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in KeyValuePair<TKey, TValue> keyValuePair)
+        {
+            self.Add(keyValuePair.Key, keyValuePair.Value);
+        }
+
+        public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in (TKey key, TValue value) pair)
+        {
+            self.Add(pair.key, pair.value);
+        }
+
+        public static (TKey key, TValue value) ToTuple<TKey, TValue>(in this KeyValuePair<TKey, TValue> self)
+        {
+            return (self.Key, self.Value);
         }
     }
 }
