@@ -1,8 +1,8 @@
-﻿using UnityObject = UnityEngine.Object;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using UnityUtility;
 using System.Runtime.CompilerServices;
+using UnityUtility;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine
 {
@@ -17,18 +17,18 @@ namespace UnityEngine
         /// Calculates view bounds of the orthographic camera looking along the Z axis.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Rect GetViewBounds(this Camera cam)
+        public static Rect GetViewBounds(this Camera self)
         {
-            return ScreenUtility.GetViewBounds(cam.transform.position, cam.orthographicSize);
+            return ScreenUtility.GetViewBounds(self.transform.position, self.orthographicSize);
         }
 
         /// <summary>
         /// Calculates view bounds of the perspective camera looking along the Z axis.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Rect GetViewBounds(this Camera cam, float distance)
+        public static Rect GetViewBounds(this Camera self, float distance)
         {
-            return ScreenUtility.GetViewBounds(cam.transform.position, cam.fieldOfView, distance);
+            return ScreenUtility.GetViewBounds(self.transform.position, self.fieldOfView, distance);
         }
 
         /// <summary>
@@ -36,35 +36,35 @@ namespace UnityEngine
         /// </summary>        
         /// <param name="time">Time  for destruction.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Destroy(this UnityObject obj, float time = 0f)
+        public static void Destroy(this UnityObject self, float time = 0f)
         {
-            UnityObject.Destroy(obj, time);
+            UnityObject.Destroy(self, time);
         }
 
         /// <summary>
         /// Instantiates unity object of defined type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T obj) where T : UnityObject
+        public static T Install<T>(this T self) where T : UnityObject
         {
-            return UnityObject.Instantiate(obj);
+            return UnityObject.Instantiate(self);
         }
 
         /// <summary>
         /// Instantiates gameobject as a child of the specified parent.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GameObject Install(this GameObject obj, Transform parent, bool worldPositionStays)
+        public static GameObject Install(this GameObject self, Transform parent, bool worldPositionStays)
         {
-            return UnityObject.Instantiate(obj, parent, worldPositionStays);
+            return UnityObject.Instantiate(self, parent, worldPositionStays);
         }
 
         /// <summary>
         /// Instantiates gameobject as a child with default local position and rotation.
         /// </summary>
-        public static GameObject Install(this GameObject obj, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsGlobal)
+        public static GameObject Install(this GameObject self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsGlobal)
         {
-            GameObject go = UnityObject.Instantiate(obj, parent, false);
+            GameObject go = UnityObject.Instantiate(self, parent, false);
             f_init(go.transform, scaleAction);
             return go;
         }
@@ -73,17 +73,17 @@ namespace UnityEngine
         /// Instantiates gameobject as a child of the specified parent.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T comp, Transform parent, bool worldPositionStays) where T : Component
+        public static T Install<T>(this T self, Transform parent, bool worldPositionStays) where T : Component
         {
-            return UnityObject.Instantiate(comp, parent, worldPositionStays);
+            return UnityObject.Instantiate(self, parent, worldPositionStays);
         }
 
         /// <summary>
         /// Instantiates defined component as a child with default local position and rotation.
         /// </summary>
-        public static T Install<T>(this T comp, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsGlobal) where T : Component
+        public static T Install<T>(this T self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsGlobal) where T : Component
         {
-            T copy = UnityObject.Instantiate(comp, parent, false);
+            T copy = UnityObject.Instantiate(self, parent, false);
             f_init(copy.transform, scaleAction);
             return copy;
         }
@@ -119,16 +119,25 @@ namespace UnityEngine
         /// Instantiates gameobject to the specified position with the specified rotation.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GameObject Install(this GameObject obj, in Vector3 position, in Quaternion rotation)
+        public static GameObject Install(this GameObject self, in Vector3 position)
         {
-            return UnityObject.Instantiate(obj, position, rotation);
+            return UnityObject.Instantiate(self, position, Quaternion.identity);
+        }
+
+        /// <summary>
+        /// Instantiates gameobject to the specified position with the specified rotation.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GameObject Install(this GameObject self, in Vector3 position, in Quaternion rotation)
+        {
+            return UnityObject.Instantiate(self, position, rotation);
         }
 
         /// <summary>
         /// Instantiates gameobject as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static GameObject Install(this GameObject obj, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local = true)
+        public static GameObject Install(this GameObject self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local = true)
         {
             if (local)
             {
@@ -136,23 +145,32 @@ namespace UnityEngine
                 targetRot = parent.rotation * targetRot;
             }
 
-            return UnityObject.Instantiate(obj, targetPos, targetRot, parent);
+            return UnityObject.Instantiate(self, targetPos, targetRot, parent);
         }
 
         /// <summary>
         /// Instantiates defined component to specified position with specified rotation.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T comp, in Vector3 position, in Quaternion rotation) where T : Component
+        public static T Install<T>(this T self, in Vector3 position) where T : Component
         {
-            return UnityObject.Instantiate(comp, position, rotation);
+            return UnityObject.Instantiate(self, position, Quaternion.identity);
+        }
+
+        /// <summary>
+        /// Instantiates defined component to specified position with specified rotation.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T Install<T>(this T self, in Vector3 position, in Quaternion rotation) where T : Component
+        {
+            return UnityObject.Instantiate(self, position, rotation);
         }
 
         /// <summary>
         /// Instantiates gameobject as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static T Install<T>(this T comp, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local = true) where T : Component
+        public static T Install<T>(this T self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local = true) where T : Component
         {
             if (local)
             {
@@ -160,28 +178,28 @@ namespace UnityEngine
                 targetRot = parent.rotation * targetRot;
             }
 
-            return UnityObject.Instantiate(comp, targetPos, targetRot, parent);
+            return UnityObject.Instantiate(self, targetPos, targetRot, parent);
         }
 
         /// <summary>
         /// Returns existing component or adds and returns new one.
         /// </summary>
-        public static T GetOrAddComponent<T>(this GameObject obj) where T : Component
+        public static T GetOrAddComponent<T>(this GameObject self) where T : Component
         {
-            var component = obj.GetComponent<T>();
+            var component = self.GetComponent<T>();
             if (component == null)
-                return obj.AddComponent<T>();
+                return self.AddComponent<T>();
             return component;
         }
 
         /// <summary>
         /// Returns existing component of Type type or adds and returns new one.
         /// </summary>
-        public static Component GetOrAddComponent(this GameObject obj, Type type)
+        public static Component GetOrAddComponent(this GameObject self, Type type)
         {
-            var component = obj.GetComponent(type);
+            var component = self.GetComponent(type);
             if (component == null)
-                return obj.AddComponent(type);
+                return self.AddComponent(type);
             return component;
         }
 
@@ -189,99 +207,99 @@ namespace UnityEngine
         /// Marks unity object as DontDestroyOnLoad.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Immortalize(this UnityObject obj)
+        public static void Immortalize(this UnityObject self)
         {
-            UnityObject.DontDestroyOnLoad(obj);
+            UnityObject.DontDestroyOnLoad(self);
         }
 
         /// <summary>
         /// Makes detached from the parent.
         /// </summary>
-        public static void Free(this Transform t, bool resetScale = false)
+        public static void Free(this Transform self, bool resetScale = false)
         {
-            t.parent = null;
-            if (resetScale) { t.localScale = Vector3.one; }
+            self.parent = null;
+            if (resetScale) { self.localScale = Vector3.one; }
         }
 
         /// <summary>
         /// Makes detached from parent with the specified scale.
         /// </summary>
-        public static void Free(this Transform t, Vector3 scale)
+        public static void Free(this Transform self, Vector3 scale)
         {
-            t.parent = null;
-            t.localScale = scale;
+            self.parent = null;
+            self.localScale = scale;
         }
 
         /// <summary>
         /// Set the parent of the transform with locating to the specified local position.
         /// </summary>
-        public static void SetParent(this Transform t, Transform parent, in Vector3 targetLocalPos)
+        public static void SetParent(this Transform self, Transform parent, in Vector3 targetLocalPos)
         {
-            t.SetParent(parent);
-            t.localPosition = targetLocalPos;
+            self.SetParent(parent);
+            self.localPosition = targetLocalPos;
         }
 
         /// <summary>
         /// Set the parent of the transform with the specified local position and rotation.
         /// </summary>
-        public static void SetParent(this Transform t, Transform parent, in Vector3 targetLocalPos, in Quaternion targetLocalRot)
+        public static void SetParent(this Transform self, Transform parent, in Vector3 targetLocalPos, in Quaternion targetLocalRot)
         {
-            t.SetParent(parent);
-            t.localPosition = targetLocalPos;
-            t.localRotation = targetLocalRot;
+            self.SetParent(parent);
+            self.localPosition = targetLocalPos;
+            self.localRotation = targetLocalRot;
         }
 
-        public static void SetLocalParams(this Transform t, in Vector3 localPos, in Quaternion localRot)
+        public static void SetLocalParams(this Transform self, in Vector3 localPos, in Quaternion localRot)
         {
-            t.localPosition = localPos;
-            t.localRotation = localRot;
+            self.localPosition = localPos;
+            self.localRotation = localRot;
         }
 
-        public static void SetLocalParams(this Transform t, in Vector3 localPos, in Quaternion localRot, in Vector3 localScl)
+        public static void SetLocalParams(this Transform self, in Vector3 localPos, in Quaternion localRot, in Vector3 localScl)
         {
-            t.localPosition = localPos;
-            t.localRotation = localRot;
-            t.localScale = localScl;
+            self.localPosition = localPos;
+            self.localRotation = localRot;
+            self.localScale = localScl;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CopyParams(this Transform target, Transform source)
+        public static void CopyParams(this Transform self, Transform source)
         {
-            target.SetPositionAndRotation(source.position, source.rotation);
+            self.SetPositionAndRotation(source.position, source.rotation);
         }
 
-        public static void CopyLocalParams(this Transform target, Transform source, bool withScale = false)
+        public static void CopyLocalParams(this Transform self, Transform source, bool withScale = false)
         {
-            target.localPosition = source.localPosition;
-            target.localRotation = source.localRotation;
+            self.localPosition = source.localPosition;
+            self.localRotation = source.localRotation;
             if (withScale)
-                target.localScale = source.localScale;
+                self.localScale = source.localScale;
         }
 
         /// <summary>
         /// Returns transform of gameobject as RectTransform if posible. Otherwise returns null.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RectTransform GetRectTransform(this GameObject go)
+        public static RectTransform GetRectTransform(this GameObject self)
         {
-            return go.transform as RectTransform;
+            return self.transform as RectTransform;
         }
 
         /// <summary>
         /// Set the parent of the rectTransform with locating to the specified anchored position.
         /// </summary>
-        public static void SetParent(this RectTransform t, RectTransform parent, in Vector2 targetAnchPos)
+        public static void SetParent(this RectTransform self, RectTransform parent, in Vector2 targetAnchPos)
         {
-            t.SetParent(parent);
-            t.anchoredPosition = targetAnchPos;
+            self.SetParent(parent);
+            self.anchoredPosition = targetAnchPos;
         }
 
         /// <summary>
         /// Returns an ancestor from the transform's hierarchy on the specified hierarchy level.
         /// </summary>
-        public static Transform GetParent(this Transform t, int level)
+        public static Transform GetParent(this Transform self, int level)
         {
-            Transform parent = t;
+            Transform parent = self;
 
             for (int i = 0; i < level; i++)
             {
@@ -295,9 +313,9 @@ namespace UnityEngine
         /// <summary>
         /// Finds an ancestor in the transform's hierarchy satisfying the specified condition.
         /// </summary>
-        public static Transform GetParent(this Transform t, Func<Transform, bool> condition)
+        public static Transform GetParent(this Transform self, Func<Transform, bool> condition)
         {
-            Transform parent = t;
+            Transform parent = self;
 
             while (parent != null && !condition(parent))
             {
@@ -308,17 +326,48 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Returns IEnumerable collection of parents;
+        /// </summary>
+        public static IEnumerable<Transform> EnumerateParents(this Transform self)
+        {
+            for (Transform p = self.parent; p != null; p = p.parent)
+            {
+                yield return p;
+            }
+        }
+
+        /// <summary>
+        /// Returns IEnumerable collection of all children;
+        /// </summary>
+        public static IEnumerable<Transform> EnumerateChildren(this Transform self)
+        {
+            int length = self.childCount;
+
+            for (int i = 0; i < length; i++)
+            {
+                Transform child = self.GetChild(i);
+
+                foreach (var subChild in child.EnumerateChildren())
+                {
+                    yield return subChild;
+                }
+
+                yield return child;
+            }
+        }
+
+        /// <summary>
         /// Returns children of the top level of the hierarchy.
         /// </summary>
-        public static Transform[] GetTopChildren(this Transform t)
+        public static Transform[] GetTopChildren(this Transform self)
         {
-            int count = t.childCount;
+            int count = self.childCount;
 
             Transform[] children = new Transform[count];
 
             for (int i = 0; i < count; i++)
             {
-                children[i] = t.GetChild(i);
+                children[i] = self.GetChild(i);
             }
 
             return children;
@@ -327,25 +376,25 @@ namespace UnityEngine
         /// <summary>
         /// Finds all children.
         /// </summary>
-        public static Transform[] GetAllChildren(this Transform t)
+        public static IList<Transform> GetAllChildren(this Transform self)
         {
             List<Transform> list = new List<Transform>();
 
-            GetAllChildren(t, list);
+            GetAllChildren(self, list);
 
-            return list.ToArray();
+            return list;
         }
 
         /// <summary>
         /// Finds all children.
         /// </summary>
-        public static void GetAllChildren(this Transform t, List<Transform> list)
+        public static void GetAllChildren(this Transform self, List<Transform> list)
         {
-            int length = t.childCount;
+            int length = self.childCount;
 
             for (int i = 0; i < length; i++)
             {
-                Transform ch = t.GetChild(i);
+                Transform ch = self.GetChild(i);
 
                 list.Add(ch);
 
@@ -353,7 +402,7 @@ namespace UnityEngine
             }
         }
 
-        public static T GetComponentInParent<T>(this Transform self, bool includeInactive) where T : Component
+        public static T GetComponentInParent<T>(this Transform self, bool includeInactive)
         {
             if (!includeInactive)
                 return self.GetComponentInParent<T>();
@@ -365,7 +414,7 @@ namespace UnityEngine
                     return component;
             }
 
-            return null;
+            return default;
         }
 
         public static void DestroyChildren(this Transform self)
@@ -378,13 +427,21 @@ namespace UnityEngine
             }
         }
 
+        public static void DetachTopChildren(this Transform self)
+        {
+            foreach (var child in self.GetTopChildren())
+            {
+                child.Free();
+            }
+        }
+
         /// <summary>
         /// Transforms rotation from local space to world space.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion TransformRotation(this Transform t, in Quaternion rotation)
+        public static Quaternion TransformRotation(this Transform self, in Quaternion rotation)
         {
-            return t.rotation * rotation;
+            return self.rotation * rotation;
         }
 
         /// <summary>
@@ -392,10 +449,10 @@ namespace UnityEngine
         /// </summary>        
         /// <param name="translation">Translation vector.</param>
         /// <param name="relativeTo">Translation's relative space (world or self).</param>
-        public static void Move(this RectTransform rt, Vector2 translation, Space relativeTo = default)
+        public static void Move(this RectTransform self, Vector2 translation, Space relativeTo = default)
         {
-            if (relativeTo == Space.World) { rt.anchoredPosition += translation; }
-            else { rt.anchoredPosition += rt.TransformDirection(translation).XY(); }
+            if (relativeTo == Space.World) { self.anchoredPosition += translation; }
+            else { self.anchoredPosition += self.TransformDirection(translation).XY(); }
         }
 
         /// <summary>
@@ -403,138 +460,138 @@ namespace UnityEngine
         /// </summary>
         /// <param name="relativeTo">Translation's relative space (world or self).</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Move(this RectTransform rt, float x, float y, Space relativeTo = default)
+        public static void Move(this RectTransform self, float x, float y, Space relativeTo = default)
         {
-            Move(rt, new Vector2(x, y), relativeTo);
+            Move(self, new Vector2(x, y), relativeTo);
         }
 
-        public static void SetSizeWithCurrentAnchors(this RectTransform rt, in Vector2 size)
+        public static void SetSizeWithCurrentAnchors(this RectTransform self, in Vector2 size)
         {
-            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
-            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
         }
 
-        public static void SetSizeWithCurrentAnchors(this RectTransform rt, in Rect rect)
+        public static void SetSizeWithCurrentAnchors(this RectTransform self, in Rect rect)
         {
             Vector2 size = rect.size;
-            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
-            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
-            rt.pivot = rect.GetPivot();
+            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+            self.pivot = rect.GetPivot();
         }
 
         /// <summary>
         /// Returns the parent of the rectTransform.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RectTransform GetParent(this RectTransform t)
+        public static RectTransform GetParent(this RectTransform self)
         {
-            return t.parent as RectTransform;
+            return self.parent as RectTransform;
         }
 
         /// <summary>
         /// Sets the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
         /// </summary>
-        public static void SetLocalPos(this RectTransform t, in Vector2 localPos)
+        public static void SetLocalPos(this RectTransform self, in Vector2 localPos)
         {
-            Vector2 pivot = t.GetParent().pivot;
-            Vector2 size = t.GetParent().rect.size;
+            Vector2 pivot = self.GetParent().pivot;
+            Vector2 size = self.GetParent().rect.size;
 
             float xOffset = size.x * pivot.x - size.x * 0.5f;
             float yOffset = size.y * pivot.y - size.y * 0.5f;
 
-            t.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
+            self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
         }
 
         /// <summary>
         /// Sets the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
         /// </summary>
-        public static void SetLocalPos(this RectTransform t, in Vector2 localPos, in Vector2 customParentPivot)
+        public static void SetLocalPos(this RectTransform self, in Vector2 localPos, in Vector2 customParentPivot)
         {
-            Vector2 size = t.GetParent().rect.size;
+            Vector2 size = self.GetParent().rect.size;
 
             float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
             float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
 
-            t.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
+            self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
         }
 
         /// <summary>
         /// Returns the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
         /// </summary>
-        public static Vector2 GetLocalPos(this RectTransform t)
+        public static Vector2 GetLocalPos(this RectTransform self)
         {
-            Vector2 pivot = t.GetParent().pivot;
-            Vector2 size = t.GetParent().rect.size;
+            Vector2 pivot = self.GetParent().pivot;
+            Vector2 size = self.GetParent().rect.size;
 
             float xOffset = size.x * pivot.x - size.x * 0.5f;
             float yOffset = size.y * pivot.y - size.y * 0.5f;
 
-            return t.anchoredPosition - new Vector2(xOffset, yOffset);
+            return self.anchoredPosition - new Vector2(xOffset, yOffset);
         }
 
         /// <summary>
         /// Returns the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
         /// </summary>
-        public static Vector2 GetLocalPos(this RectTransform t, in Vector2 customParentPivot)
+        public static Vector2 GetLocalPos(this RectTransform self, in Vector2 customParentPivot)
         {
-            Vector2 size = t.GetParent().rect.size;
+            Vector2 size = self.GetParent().rect.size;
 
             float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
             float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
 
-            return t.anchoredPosition - new Vector2(xOffset, yOffset);
+            return self.anchoredPosition - new Vector2(xOffset, yOffset);
         }
 
         /// <summary>
         /// Creates a sprite.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Sprite ToSprite(this Texture2D tex, in Vector2 pivot, float pixelsPerUnit = 100f, uint extrude = 0, SpriteMeshType meshType = SpriteMeshType.Tight, in Vector4 border = default)
+        public static Sprite ToSprite(this Texture2D self, in Vector2 pivot, float pixelsPerUnit = 100f, uint extrude = 0, SpriteMeshType meshType = SpriteMeshType.Tight, in Vector4 border = default)
         {
-            return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), pivot, pixelsPerUnit, extrude, meshType, border);
+            return Sprite.Create(self, new Rect(0f, 0f, self.width, self.height), pivot, pixelsPerUnit, extrude, meshType, border);
         }
 
         /// <summary>
         /// Creates a sprite with the pivot in the center.
         /// </summary>
-        public static Sprite ToSprite(this Texture2D tex, float pixelsPerUnit = 100f, uint extrude = 0, SpriteMeshType meshType = SpriteMeshType.Tight, in Vector4 border = default)
+        public static Sprite ToSprite(this Texture2D self, float pixelsPerUnit = 100f, uint extrude = 0, SpriteMeshType meshType = SpriteMeshType.Tight, in Vector4 border = default)
         {
-            float x = tex.width;
-            float y = tex.height;
-            return Sprite.Create(tex, new Rect(0f, 0f, x, y), new Vector2(x * 0.5f, y * 0.5f), pixelsPerUnit, extrude, meshType, border);
+            float x = self.width;
+            float y = self.height;
+            return Sprite.Create(self, new Rect(0f, 0f, x, y), new Vector2(x * 0.5f, y * 0.5f), pixelsPerUnit, extrude, meshType, border);
         }
 
         /// <summary>
         /// Returns triangles count of the mesh;
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetTriangleCount(this Mesh mesh)
+        public static int GetTriangleCount(this Mesh self)
         {
-            return mesh.triangles.Length / 3;
+            return self.triangles.Length / 3;
         }
 
         /// <summary>
         /// Returns vertex indices of the triangle of the mesh.
         /// </summary>
-        public static Vector3Int GetTriangleIndices(this Mesh mesh, int triangleNum)
+        public static Vector3Int GetTriangleIndices(this Mesh self, int triangleNum)
         {
             int trIndex = triangleNum * 3;
 
             return new Vector3Int
             {
-                x = mesh.triangles[trIndex],
-                y = mesh.triangles[++trIndex],
-                z = mesh.triangles[++trIndex]
+                x = self.triangles[trIndex],
+                y = self.triangles[++trIndex],
+                z = self.triangles[++trIndex]
             };
         }
 
         /// <summary>
         /// Returns the triangle of the mesh.
         /// </summary>
-        public static Plane GetTriangle(this Mesh mesh, int triangleNum)
+        public static Plane GetTriangle(this Mesh self, int triangleNum)
         {
-            Vector3Int indices = mesh.GetTriangleIndices(triangleNum);
-            Vector3[] vertices = mesh.vertices;
+            Vector3Int indices = self.GetTriangleIndices(triangleNum);
+            Vector3[] vertices = self.vertices;
 
             return new Plane(vertices[indices.x], vertices[indices.y], vertices[indices.z]);
         }
@@ -543,9 +600,9 @@ namespace UnityEngine
         /// Returns true if prefab. For scene objects returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPrefab(this GameObject obj)
+        public static bool IsPrefab(this GameObject self)
         {
-            return !obj.scene.IsValid();
+            return !self.scene.IsValid();
         }
     }
 }
