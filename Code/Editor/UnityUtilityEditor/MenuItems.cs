@@ -161,17 +161,16 @@ namespace UnityUtilityEditor
 
             if (!File.Exists(s_templatePath))
             {
-                string text = @"using UnityObject = UnityEngine.Object;
-
-using System;
+                string text = @"using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityUtility;
+using UnityObject = UnityEngine.Object;
 
 namespace Project
 {
-    public class #SCRIPTNAME# : Script
+    public class #SCRIPTNAME# : MonoBehaviour
     {
 
     }
