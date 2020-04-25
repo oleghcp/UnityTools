@@ -20,7 +20,7 @@ namespace UnityUtility.Scripts
                 if (s_inst == null)
                 {
                     Attribute a = Attribute.GetCustomAttribute(typeof(T), typeof(CreateInstanceAttribute), true);
-                    s_inst = a != null ? (a as CreateInstanceAttribute).Create() as T : CreateInstance<T>();
+                    s_inst = a != null ? (a as CreateInstanceAttribute).Create() as T : ComponentUtility.CreateInstance<T>();
                 }
                 return s_inst;
             }

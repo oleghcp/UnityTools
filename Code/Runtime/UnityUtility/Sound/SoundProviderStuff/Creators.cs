@@ -6,7 +6,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
     {
         public MusObject Create()
         {
-            return Script.CreateInstance<MusObject>();
+            return ComponentUtility.CreateInstance<MusObject>();
         }
     }
 
@@ -14,7 +14,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
     {
         public SndObject Create()
         {
-            return Script.CreateInstance<SndObject>();
+            return ComponentUtility.CreateInstance<SndObject>();
         }
     }
 }

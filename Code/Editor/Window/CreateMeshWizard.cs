@@ -40,7 +40,7 @@ namespace UnityUtilityEditor.Window
                 mesh = CreateMesh();
             }
 
-            MeshFilter mf = Script.CreateInstance<MeshFilter>(GenerateObjectName());
+            MeshFilter mf = ComponentUtility.CreateInstance<MeshFilter>(GenerateObjectName());
             mf.mesh = mesh;
 
             if (AddCollider)
