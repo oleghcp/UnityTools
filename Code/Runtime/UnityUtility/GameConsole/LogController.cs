@@ -6,7 +6,7 @@ using UnityUtility.MathExt;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
-    internal class LogController : UIScript
+    internal class LogController : UiMonoBehaviour
     {
         private readonly Vector2 MIN = new Vector2(5f, 0f);
         private readonly Vector2 MAX = new Vector2(-5f, 0f);

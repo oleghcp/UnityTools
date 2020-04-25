@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace UnityUtility
+﻿namespace UnityEngine
 {
-    public abstract class UIScript : MonoBehaviour
+    public abstract class UiMonoBehaviour : MonoBehaviour
     {
         public RectTransform rectTransform
         {

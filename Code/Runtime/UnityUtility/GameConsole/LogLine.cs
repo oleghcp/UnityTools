@@ -5,7 +5,7 @@ using UnityUtility.Collections;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
-    internal class LogLine : UIScript, Poolable
+    internal class LogLine : UiMonoBehaviour, Poolable
     {
         [SerializeField]
         private Text _text;
