@@ -2,7 +2,7 @@
 
 namespace UnityUtility
 {
-    public abstract class UIScript : Script
+    public abstract class UIScript : MonoBehaviour
     {
         public RectTransform rectTransform
         {

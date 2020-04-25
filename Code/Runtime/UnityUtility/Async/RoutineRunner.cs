@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
 using UnityUtility.Collections;
 
 namespace UnityUtility.Async
 {
-    internal class RoutineRunner : Script, Poolable
+    internal class RoutineRunner : MonoBehaviour, Poolable
     {
         private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + TaskSystem.SYSTEM_NAME + " settings.";
 

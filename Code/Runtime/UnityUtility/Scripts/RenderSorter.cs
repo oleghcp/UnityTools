@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility.Scripts
 {
     [RequireComponent(typeof(Renderer)), DisallowMultipleComponent]
-    public class RenderSorter : Script
+    public class RenderSorter : MonoBehaviour
     {
         [SerializeField, HideInInspector]
         private Renderer _renderer;

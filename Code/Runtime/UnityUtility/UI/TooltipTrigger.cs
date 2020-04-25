@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 namespace UnityUtility.UI
 {
     //Based on http://www.sharkbombs.com/2015/02/10/tooltips-with-the-new-unity-ui-ugui/
-    public class TooltipTrigger : Script, IPointerEnterHandler, IPointerExitHandler
+    public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField, TextArea]
         private string _text;
