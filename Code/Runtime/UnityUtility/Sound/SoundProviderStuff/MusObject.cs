@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 namespace UnityUtility.Sound.SoundProviderStuff
 {
     [DisallowMultipleComponent]
-    public class MusObject : SoundObjectInfo, Poolable
+    public class MusObject : SoundObjectInfo, IPoolable
     {
         [SerializeField]
         private AudioSource _audioSource;
@@ -151,13 +151,13 @@ namespace UnityUtility.Sound.SoundProviderStuff
         }
 
         #region IPoolable
-        void Poolable.Reinit()
+        void IPoolable.Reinit()
         {
             gameObject.SetActive(true);
             f_init();
         }
 
-        void Poolable.CleanUp()
+        void IPoolable.CleanUp()
         {
             gameObject.SetActive(false);
             _audioSource.clip = null;

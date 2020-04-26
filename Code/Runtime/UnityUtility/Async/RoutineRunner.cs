@@ -7,7 +7,7 @@ using UnityUtility.Collections;
 
 namespace UnityUtility.Async
 {
-    internal class RoutineRunner : MonoBehaviour, Poolable
+    internal class RoutineRunner : MonoBehaviour, IPoolable
     {
         private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + TaskSystem.SYSTEM_NAME + " settings.";
 
@@ -160,12 +160,12 @@ namespace UnityUtility.Async
         }
 
         #region IPoolable
-        void Poolable.Reinit()
+        void IPoolable.Reinit()
         {
             f_init();
         }
 
-        void Poolable.CleanUp()
+        void IPoolable.CleanUp()
         {
             ApplicationUtility.OnUpdate_Event -= m_update;
         }

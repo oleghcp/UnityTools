@@ -3,7 +3,7 @@ using static UnityEngine.Random;
 
 namespace UnityUtility.RNGenerators
 {
-    public sealed class UnityRNG : RNG
+    public sealed class UnityRNG : IRng
     {
         public UnityRNG() { }
 

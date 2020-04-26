@@ -31,7 +31,7 @@ namespace UnityUtility.Sound
     {
         private readonly SPreset DEF_SET = new SPreset { Volume = 1f, Pitch = 1f, MinDist = 1f, MaxDist = 500f };
 
-        private static ObjectCreator<SndObject> s_creator;
+        private static IObjectCreator<SndObject> s_creator;
         private static ObjectPool<SndObject> s_pool;
 
         private bool m_locked;
@@ -47,7 +47,7 @@ namespace UnityUtility.Sound
         private Dictionary<SoundKey, SndObject> m_keyedSounds;
         private HashSet<SndObject> m_freeSounds;
 
-        private ClipLoader m_loader;
+        private IClipLoader m_loader;
         private Dictionary<string, SPreset> m_presetList;
 
         public bool Muted
@@ -81,7 +81,7 @@ namespace UnityUtility.Sound
 
         }
 
-        public SoundProvider(ClipLoader loader, SoundsPreset presetList = null)
+        public SoundProvider(IClipLoader loader, SoundsPreset presetList = null)
         {
             m_keyedSounds = new Dictionary<SoundKey, SndObject>();
             m_freeSounds = new HashSet<SndObject>();
@@ -90,7 +90,7 @@ namespace UnityUtility.Sound
             m_presetList = presetList == null ? new Dictionary<string, SPreset>() : presetList.CreateDict();
         }
 
-        public static void OverrideAudioSourceCreator(ObjectCreator<SndObject> newCreator)
+        public static void OverrideAudioSourceCreator(IObjectCreator<SndObject> newCreator)
         {
             s_creator = newCreator;
             s_pool.ChangeCreator(s_creator.Create);
@@ -143,7 +143,7 @@ namespace UnityUtility.Sound
             if (!m_keyedSounds.TryGetValue(key, out SndObject snd))
             {
                 SPreset set = f_getPreset(clip.name);
-                snd = m_keyedSounds.AddNGet(key, s_pool.Get());
+                snd = m_keyedSounds.AddAndGet(key, s_pool.Get());
                 snd.Play(this, sender, clip, set);
             }
             else if (breakCurrent && !snd.IsLooped)
@@ -183,7 +183,7 @@ namespace UnityUtility.Sound
             if (!m_keyedSounds.TryGetValue(key, out SndObject snd))
             {
                 SPreset set = f_getPreset(clip.name);
-                snd = m_keyedSounds.AddNGet(key, s_pool.Get());
+                snd = m_keyedSounds.AddAndGet(key, s_pool.Get());
                 snd.Play3D(this, clip, set, sender);
             }
             else if (breakCurrent && !snd.IsLooped)

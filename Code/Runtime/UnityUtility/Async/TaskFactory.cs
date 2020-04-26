@@ -16,7 +16,7 @@ namespace UnityUtility.Async
         public event Action StopTasks_Event;
 
         private readonly ObjectPool<RoutineRunner> m_runnersPool;
-        private readonly IdGenerator<long> m_idProvider;
+        private readonly IIdGenerator<long> m_idProvider;
 
         private readonly bool m_canBeStopped;
         private readonly bool m_canBeStoppedGlobally;
@@ -35,7 +35,7 @@ namespace UnityUtility.Async
             get { return m_canBeStoppedGlobally; }
         }
 
-        public TaskFactory(IAsyncSettings settings, IdGenerator<long> idProvider, bool doNotDestroyOnLoad)
+        public TaskFactory(IAsyncSettings settings, IIdGenerator<long> idProvider, bool doNotDestroyOnLoad)
         {
             m_canBeStopped = settings.CanBeStopped;
             m_canBeStoppedGlobally = settings.CanBeStoppedGlobally;

@@ -5,7 +5,7 @@ using UnityUtility.Collections;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
-    internal class LogLine : UiMonoBehaviour, Poolable
+    internal class LogLine : UiMonoBehaviour, IPoolable
     {
         [SerializeField]
         private Text _text;
@@ -15,12 +15,12 @@ namespace UnityUtility.GameConsole
             get { return _text; }
         }
 
-        void Poolable.Reinit()
+        void IPoolable.Reinit()
         {
             gameObject.SetActive(true);
         }
 
-        void Poolable.CleanUp()
+        void IPoolable.CleanUp()
         {
             _text.text = string.Empty;
             rectTransform.anchoredPosition = Vector2.zero;

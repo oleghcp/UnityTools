@@ -5,7 +5,7 @@ using UnityUtility.MathExt;
 
 namespace UnityUtility.Scripts
 {
-    public sealed class MonoTimer : MonoBehaviour, Timer
+    public sealed class MonoTimer : MonoBehaviour, ITimer
     {
         #region IEnumerator impelementation
         private class Enumerator : IEnumerator

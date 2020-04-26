@@ -2,7 +2,7 @@
 
 namespace UnityUtility.Sound.SoundProviderStuff
 {
-    public class DynamicMusSourceCreator : ObjectCreator<MusObject>
+    public class DynamicMusSourceCreator : IObjectCreator<MusObject>
     {
         public MusObject Create()
         {
@@ -10,7 +10,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
         }
     }
 
-    public class DynamicSndSourceCreator : ObjectCreator<SndObject>
+    public class DynamicSndSourceCreator : IObjectCreator<SndObject>
     {
         public SndObject Create()
         {

@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace UnityUtility.RNGenerators
 {
-    public class CryptoBytesBasedRNG : RNG
+    public class CryptoBytesBasedRNG : IRng
     {
         private RNGCryptoServiceProvider m_rng;
 

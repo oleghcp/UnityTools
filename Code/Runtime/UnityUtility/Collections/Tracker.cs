@@ -3,16 +3,16 @@ using static UnityUtility.Collections.TrackerNodes;
 
 namespace UnityUtility.Collections
 {
-    public class Tracker : Refreshable
+    public class Tracker : IRefreshable
     {
-        private class EmptyNode : ActiveNode
+        private class EmptyNode : IActiveNode
         {
             public bool Changed => false;
-            void ActiveNode.Check() { }
-            void ActiveNode.Force() { }
+            void IActiveNode.Check() { }
+            void IActiveNode.Force() { }
         }
 
-        private ActiveNode m_runNode;
+        private IActiveNode m_runNode;
 
         public Tracker()
         {
@@ -34,22 +34,22 @@ namespace UnityUtility.Collections
             m_runNode = new EmptyNode();
         }
 
-        public Node AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
+        public INode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
         {
             return m_runNode = new NodeForValueType<T>(m_runNode, getter, onChangedCallback);
         }
 
-        public Node AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
+        public INode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
         {
             return m_runNode = new NodeForRefType<T>(m_runNode, getter, onChangedCallback);
         }
 
-        public Node AddNodeBasedOnPrev(Action onChangedCallback)
+        public INode AddNodeBasedOnPrev(Action onChangedCallback)
         {
             return m_runNode = new DependentNode(m_runNode, onChangedCallback, new[] { m_runNode });
         }
 
-        public Node AddDependentNode(Action onChangedCallback, params Node[] dependencies)
+        public INode AddDependentNode(Action onChangedCallback, params INode[] dependencies)
         {
             return m_runNode = new DependentNode(m_runNode, onChangedCallback, dependencies);
         }

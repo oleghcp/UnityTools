@@ -1,6 +1,6 @@
 ﻿namespace UnityUtility
 {
-    public interface Refreshable
+    public interface IRefreshable
     {
         void Refresh();
     }

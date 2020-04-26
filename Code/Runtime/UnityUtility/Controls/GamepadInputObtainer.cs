@@ -6,7 +6,7 @@ using UnityUtility.MathExt;
 
 namespace UnityUtility.Controls
 {
-    public sealed class GamepadInputObtainer : InputObtainer
+    public sealed class GamepadInputObtainer : IInputObtainer
     {
         private GamepadInputConverter m_converter;
         private Func<GPAxisCode, float, float> m_correctAxis;

@@ -2,7 +2,7 @@
 
 namespace UnityUtility.Sound
 {
-    public interface ClipLoader
+    public interface IClipLoader
     {
         AudioClip LoadClip(string name);
     }

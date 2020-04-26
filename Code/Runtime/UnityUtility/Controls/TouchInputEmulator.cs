@@ -49,7 +49,7 @@ namespace UnityUtility.Controls
         }
     }
 
-    public sealed class TouchInputEmulator : Refreshable
+    public sealed class TouchInputEmulator : IRefreshable
     {
         private ScreenTouch[] m_touches;
         private int m_touchCount;

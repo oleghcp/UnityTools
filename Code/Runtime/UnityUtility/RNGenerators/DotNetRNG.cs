@@ -2,7 +2,7 @@
 
 namespace UnityUtility.RNGenerators
 {
-    public sealed class DotNetRNG : Random, RNG
+    public sealed class DotNetRNG : Random, IRng
     {
         public DotNetRNG() : base() { }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnityUtility.Sound
 {
-    public interface ObjectCreator<T> where T : class, Poolable
+    public interface IObjectCreator<T> where T : class, IPoolable
     {
         T Create();
     }

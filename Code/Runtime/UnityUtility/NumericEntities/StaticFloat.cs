@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace UnityUtility.NumericEntities
 {
-    public sealed class StaticFloat : StaticEntity<float>
+    public sealed class StaticFloat : IStaticEntity<float>
     {
         private float m_min;
         private float m_max;
         private float m_value;
 
-        private HashSet<AbsoluteModifier<float>> m_absMods;
-        private HashSet<RelativeModifier<float>> m_relMods;
+        private HashSet<IAbsoluteModifier<float>> m_absMods;
+        private HashSet<IRelativeModifier<float>> m_relMods;
         private Func<float> m_getValue;
 
         public float PureValue
@@ -38,8 +38,8 @@ namespace UnityUtility.NumericEntities
         {
             Resize(minValue, maxValue);
 
-            m_absMods = new HashSet<AbsoluteModifier<float>>();
-            m_relMods = new HashSet<RelativeModifier<float>>();
+            m_absMods = new HashSet<IAbsoluteModifier<float>>();
+            m_relMods = new HashSet<IRelativeModifier<float>>();
         }
 
         public StaticFloat(float pureValue, float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : this(minValue, maxValue)
@@ -59,22 +59,22 @@ namespace UnityUtility.NumericEntities
             m_getValue = valueDefiner;
         }
 
-        public void AddModifier(AbsoluteModifier<float> modifier)
+        public void AddModifier(IAbsoluteModifier<float> modifier)
         {
             m_absMods.Add(modifier);
         }
 
-        public void AddModifier(RelativeModifier<float> modifier)
+        public void AddModifier(IRelativeModifier<float> modifier)
         {
             m_relMods.Add(modifier);
         }
 
-        public void RemoveModifier(AbsoluteModifier<float> modifier)
+        public void RemoveModifier(IAbsoluteModifier<float> modifier)
         {
             m_absMods.Remove(modifier);
         }
 
-        public void RemoveModifier(RelativeModifier<float> modifier)
+        public void RemoveModifier(IRelativeModifier<float> modifier)
         {
             m_relMods.Remove(modifier);
         }

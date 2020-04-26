@@ -357,7 +357,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Adds an element to the collection and returns that element.
         /// </summary>
-        public static T AddNGet<T>(this ICollection<T> self, T newItem)
+        public static T AddAndGet<T>(this ICollection<T> self, T newItem)
         {
             self.Add(newItem);
             return newItem;
@@ -366,7 +366,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Inserts an element into the list at the specified index and returns that element.
         /// </summary>
-        public static T InsertNGet<T>(this IList<T> self, int index, T newItem)
+        public static T InsertAndGet<T>(this IList<T> self, int index, T newItem)
         {
             self.Insert(index, newItem);
             return newItem;
@@ -384,7 +384,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Adds an element to the dictionary and returns that element.
         /// </summary>
-        public static TValue AddNGet<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue newItem)
+        public static TValue AddAndGet<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue newItem)
         {
             self.Add(key, newItem);
             return newItem;

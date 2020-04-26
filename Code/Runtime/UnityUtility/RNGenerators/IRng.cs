@@ -1,6 +1,6 @@
 ﻿namespace UnityUtility.RNGenerators
 {
-    public interface RNG
+    public interface IRng
     {
         int Next(int minValue, int maxValue);
         int Next(int maxValue);

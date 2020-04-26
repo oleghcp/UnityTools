@@ -4,7 +4,7 @@ namespace UnityUtility.NumericEntities
 {
     public enum ResizeType : byte { NewValue, Increase, Decrease }
 
-    public interface SpendingEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface ISpendingEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T Capacity { get; }
         T CurValue { get; }
@@ -20,7 +20,7 @@ namespace UnityUtility.NumericEntities
         void Resize(T value, ResizeType resizeType = ResizeType.NewValue);
     }
 
-    public interface ForcedEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IForcedEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T CurValue { get; }
         T Threshold { get; }
@@ -34,7 +34,7 @@ namespace UnityUtility.NumericEntities
         void Resize(T value, ResizeType resizeType = ResizeType.NewValue);
     }
 
-    public interface AccumEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IAccumEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T Value { get; }
         bool IsEmpty { get; }
@@ -45,27 +45,27 @@ namespace UnityUtility.NumericEntities
         bool Spend(T value);
     }
 
-    public interface AbsoluteModifier<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IAbsoluteModifier<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T Value { get; }
     }
 
-    public interface RelativeModifier<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IRelativeModifier<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T Multiplier { get; }
     }
 
-    public interface StaticEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IStaticEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T PureValue { get; }
         T MinValue { get; }
         T MaxValue { get; }
         bool Modified { get; }
 
-        void AddModifier(AbsoluteModifier<T> modifier);
-        void AddModifier(RelativeModifier<T> modifier);
-        void RemoveModifier(AbsoluteModifier<T> modifier);
-        void RemoveModifier(RelativeModifier<T> modifier);
+        void AddModifier(IAbsoluteModifier<T> modifier);
+        void AddModifier(IRelativeModifier<T> modifier);
+        void RemoveModifier(IAbsoluteModifier<T> modifier);
+        void RemoveModifier(IRelativeModifier<T> modifier);
         T GetCurValue();
         void Revalue(T value, ResizeType resizeType = ResizeType.NewValue);
         void Resize(T min, T max);

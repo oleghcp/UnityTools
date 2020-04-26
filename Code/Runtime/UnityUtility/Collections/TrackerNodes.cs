@@ -2,14 +2,14 @@
 
 namespace UnityUtility.Collections
 {
-    public interface Node
+    public interface INode
     {
         bool Changed { get; }
     }
 
     internal static class TrackerNodes
     {
-        public interface ActiveNode : Node
+        public interface IActiveNode : INode
         {
             void Check();
             void Force();
@@ -17,13 +17,13 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public abstract class NodeDecorator : ActiveNode
+        public abstract class NodeDecorator : IActiveNode
         {
-            private ActiveNode m_prevNode;
+            private IActiveNode m_prevNode;
 
             public abstract bool Changed { get; }
 
-            public NodeDecorator(ActiveNode prevNode)
+            public NodeDecorator(IActiveNode prevNode)
             {
                 m_prevNode = prevNode;
             }
@@ -56,7 +56,7 @@ namespace UnityUtility.Collections
 
             public override bool Changed => m_changed;
 
-            public NodeForValueType(ActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
+            public NodeForValueType(IActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
             {
                 m_getter = getter;
                 m_onChangedCallback = onChangedCallback;
@@ -93,7 +93,7 @@ namespace UnityUtility.Collections
 
             public override bool Changed => m_changed;
 
-            public NodeForRefType(ActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
+            public NodeForRefType(IActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
             {
                 m_getter = getter;
                 m_onChangedCallback = onChangedCallback;
@@ -122,7 +122,7 @@ namespace UnityUtility.Collections
         public class DependentNode : NodeDecorator
         {
             private Action m_onChangedCallback;
-            private Node[] m_dependencies;
+            private INode[] m_dependencies;
 
             public override bool Changed
             {
@@ -138,7 +138,7 @@ namespace UnityUtility.Collections
                 }
             }
 
-            public DependentNode(ActiveNode prevNode, Action onChangedCallback, Node[] dependencies) : base(prevNode)
+            public DependentNode(IActiveNode prevNode, Action onChangedCallback, INode[] dependencies) : base(prevNode)
             {
                 m_onChangedCallback = onChangedCallback;
                 m_dependencies = dependencies;

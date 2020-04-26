@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UnityUtility.Sound.SoundProviderStuff
 {
-    public sealed class DefaultClipLoader : ClipLoader
+    public sealed class DefaultClipLoader : IClipLoader
     {
         private readonly string PATH;
 

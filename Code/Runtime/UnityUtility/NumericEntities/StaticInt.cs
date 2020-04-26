@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace UnityUtility.NumericEntities
 {
-    public sealed class StaticInt : StaticEntity<int>
+    public sealed class StaticInt : IStaticEntity<int>
     {
         private int m_min;
         private int m_max;
         private int m_value;
 
-        private HashSet<AbsoluteModifier<int>> m_absMods;
-        private HashSet<RelativeModifier<int>> m_relMods;
+        private HashSet<IAbsoluteModifier<int>> m_absMods;
+        private HashSet<IRelativeModifier<int>> m_relMods;
         private Func<int> m_getValue;
 
         public int PureValue
@@ -38,8 +38,8 @@ namespace UnityUtility.NumericEntities
         {
             Resize(minValue, maxValue);
 
-            m_absMods = new HashSet<AbsoluteModifier<int>>();
-            m_relMods = new HashSet<RelativeModifier<int>>();
+            m_absMods = new HashSet<IAbsoluteModifier<int>>();
+            m_relMods = new HashSet<IRelativeModifier<int>>();
         }
 
         public StaticInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
@@ -59,22 +59,22 @@ namespace UnityUtility.NumericEntities
             m_getValue = valueDefiner;
         }
 
-        public void AddModifier(AbsoluteModifier<int> modifier)
+        public void AddModifier(IAbsoluteModifier<int> modifier)
         {
             m_absMods.Add(modifier);
         }
 
-        public void AddModifier(RelativeModifier<int> modifier)
+        public void AddModifier(IRelativeModifier<int> modifier)
         {
             m_relMods.Add(modifier);
         }
 
-        public void RemoveModifier(AbsoluteModifier<int> modifier)
+        public void RemoveModifier(IAbsoluteModifier<int> modifier)
         {
             m_absMods.Remove(modifier);
         }
 
-        public void RemoveModifier(RelativeModifier<int> modifier)
+        public void RemoveModifier(IRelativeModifier<int> modifier)
         {
             m_relMods.Remove(modifier);
         }

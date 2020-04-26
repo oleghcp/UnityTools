@@ -3,7 +3,7 @@ using System.Text;
 
 namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
-    public class BaseKeyGenerator : KeyGenerator
+    public class BaseKeyGenerator : IKeyGenerator
     {
         private const char SEP = '.';
         private string m_keyExt;

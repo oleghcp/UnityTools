@@ -2,7 +2,7 @@
 
 namespace UnityUtility.SaveLoad
 {
-    public interface Saver
+    public interface ISaver
     {
         int Get(string key, int defVal);
         float Get(string key, float defVal);
@@ -24,19 +24,19 @@ namespace UnityUtility.SaveLoad
         void DeleteAll();
     }
 
-    public interface Serializer
+    public interface ISerializer
     {
         string Serialize(object toSerialize);
         object Deserialize(string toDeserialize, Type type);
     }
 
-    public interface BinarySerializer
+    public interface IBinarySerializer
     {
         byte[] Serialize(object toSerialize);
         object Deserialize(byte[] toDeserialize, Type type);
     }
 
-    public interface KeyGenerator
+    public interface IKeyGenerator
     {
         string Generate(Type objectType, string fieldName, string objectID);
     }

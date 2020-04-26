@@ -1,6 +1,6 @@
 ﻿namespace UnityUtility.IdGenerating
 {
-    public class IntIdGenerator : IdGenerator<int>
+    public class IntIdGenerator : IIdGenerator<int>
     {
         private int m_lastId;
 

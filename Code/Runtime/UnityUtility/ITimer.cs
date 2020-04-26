@@ -2,7 +2,7 @@
 
 namespace UnityUtility
 {
-    public interface Timer
+    public interface ITimer
     {
         bool IsRunning { get; }
         float TargetTime { get; }

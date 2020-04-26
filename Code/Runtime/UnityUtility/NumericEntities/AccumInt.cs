@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct AccumInt : AccumEntity<int>, IEquatable<AccumInt>
+    public struct AccumInt : IAccumEntity<int>, IEquatable<AccumInt>
     {
         [SerializeField, HideInInspector]
         private int m_got;

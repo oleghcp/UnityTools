@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct ForcedFloat : ForcedEntity<float>, IEquatable<ForcedFloat>
+    public struct ForcedFloat : IForcedEntity<float>, IEquatable<ForcedFloat>
     {
         [SerializeField, HideInInspector]
         private float m_threshold;

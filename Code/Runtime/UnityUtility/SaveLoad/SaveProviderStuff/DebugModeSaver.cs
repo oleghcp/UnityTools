@@ -6,7 +6,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     /// <summary>
     /// Saves all data to non-encrypted text files. Can be used for debuging and so on.
     /// </summary>
-    public sealed class DebugModeSaver : Saver
+    public sealed class DebugModeSaver : ISaver
     {
         private const string DIR_NAME = "Save/";
 

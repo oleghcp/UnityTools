@@ -1,6 +1,6 @@
 ﻿namespace UnityUtility.Controls
 {
-    public interface InputObtainer : Refreshable
+    public interface IInputObtainer : IRefreshable
     {
         ButtonState GetKeyState(int keyAction);
         float GetAxisValue(int axisAction);

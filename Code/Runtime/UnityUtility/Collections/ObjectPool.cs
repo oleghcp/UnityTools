@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UnityUtility.Collections
 {
-    public interface Poolable
+    public interface IPoolable
     {
         /// <summary>
         /// Called when pool gives an existing object away.
@@ -19,7 +19,7 @@ namespace UnityUtility.Collections
     /// <summary>
     /// Object pool implementation.
     /// </summary>
-    public sealed class ObjectPool<T> where T : class, Poolable
+    public sealed class ObjectPool<T> where T : class, IPoolable
     {
         private Stack<T> m_stack;
         private Func<T> m_createFunc;

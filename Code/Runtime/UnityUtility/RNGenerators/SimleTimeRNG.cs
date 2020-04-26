@@ -2,7 +2,7 @@
 
 namespace UnityUtility.RNGenerators
 {
-    public class SimleTimeRNG : RNG
+    public class SimleTimeRNG : IRng
     {
         private readonly byte MULT;
 

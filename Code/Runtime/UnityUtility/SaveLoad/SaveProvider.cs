@@ -16,13 +16,13 @@ namespace UnityUtility.SaveLoad
     {
         private const BindingFlags MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-        private Saver m_innerSaver;
-        private Serializer m_serializer;
-        private BinarySerializer m_binary;
-        private KeyGenerator m_keyGenerator;
+        private ISaver m_innerSaver;
+        private ISerializer m_serializer;
+        private IBinarySerializer m_binary;
+        private IKeyGenerator m_keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> m_fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
 
-        public Saver Saver
+        public ISaver Saver
         {
             get { return m_innerSaver; }
         }
@@ -40,7 +40,7 @@ namespace UnityUtility.SaveLoad
         /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
         /// <param name="serializer">Object which is used for serializing custom type fields. Default serializer uses UnityEngine.JsonUtility.</param>
         /// <param name="keyGenerator">Object which generates keys for key-value storage.</param>
-        public SaveProvider(Saver saver, Serializer serializer, KeyGenerator keyGenerator)
+        public SaveProvider(ISaver saver, ISerializer serializer, IKeyGenerator keyGenerator)
         {
             m_innerSaver = saver;
             m_serializer = serializer;
@@ -53,7 +53,7 @@ namespace UnityUtility.SaveLoad
         /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
         /// <param name="serializer">Object which is used for binary serializing custom type fields.</param>
         /// <param name="keyGenerator">Object which generates keys for key-value storage.</param>
-        public SaveProvider(Saver saver, BinarySerializer serializer, KeyGenerator keyGenerator)
+        public SaveProvider(ISaver saver, IBinarySerializer serializer, IKeyGenerator keyGenerator)
         {
             m_innerSaver = saver;
             m_binary = serializer;

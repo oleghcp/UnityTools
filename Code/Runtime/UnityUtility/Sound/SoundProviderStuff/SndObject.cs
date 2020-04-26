@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 namespace UnityUtility.Sound.SoundProviderStuff
 {
     [DisallowMultipleComponent]
-    public class SndObject : SoundObjectInfo, Poolable
+    public class SndObject : SoundObjectInfo, IPoolable
     {
         internal object Sender;
 
@@ -171,13 +171,13 @@ namespace UnityUtility.Sound.SoundProviderStuff
         }
 
         #region IPoolable
-        void Poolable.Reinit()
+        void IPoolable.Reinit()
         {
             gameObject.SetActive(true);
             f_init();
         }
 
-        void Poolable.CleanUp()
+        void IPoolable.CleanUp()
         {
             if (Sender != null && Sender is Transform) { transform.Free(); }
             gameObject.SetActive(false);

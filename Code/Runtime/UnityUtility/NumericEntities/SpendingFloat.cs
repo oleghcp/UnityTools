@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct SpendingFloat : SpendingEntity<float>, IEquatable<SpendingFloat>
+    public struct SpendingFloat : ISpendingEntity<float>, IEquatable<SpendingFloat>
     {
         [SerializeField, HideInInspector]
         private float m_capacity;

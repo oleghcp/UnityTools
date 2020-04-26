@@ -1,6 +1,6 @@
 ﻿namespace UnityUtility.IdGenerating
 {
-    public class UlongIdGenerator : IdGenerator<ulong>
+    public class UlongIdGenerator : IIdGenerator<ulong>
     {
         private ulong m_lastId;
 

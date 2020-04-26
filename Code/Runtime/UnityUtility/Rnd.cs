@@ -17,14 +17,14 @@ namespace UnityUtility
     /// </summary>
     public static class Rnd
     {
-        private static RNG s_rng;
+        private static IRng s_rng;
 
         static Rnd()
         {
             s_rng = new UnityRNG();
         }
 
-        public static void OverrideRandomizer(RNG randomizer)
+        public static void OverrideRandomizer(IRng randomizer)
         {
             s_rng = randomizer;
         }

@@ -8,7 +8,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     /// <summary>
     /// Saves and loads data through UnityEngine.PlayerPrefs.
     /// </summary>
-    public sealed class PlayerPrefsSaver : Saver
+    public sealed class PlayerPrefsSaver : ISaver
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ApplyAll()

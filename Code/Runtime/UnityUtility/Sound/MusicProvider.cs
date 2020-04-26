@@ -11,7 +11,7 @@ namespace UnityUtility.Sound
     {
         private readonly MPreset DEF_SET = new MPreset { Volume = 1f, Pitch = 1f, Looped = true, RisingDur = 0.5f };
 
-        private static ObjectCreator<MusObject> s_creator;
+        private static IObjectCreator<MusObject> s_creator;
         private static ObjectPool<MusObject> s_pool;
 
         private bool m_locked;
@@ -26,7 +26,7 @@ namespace UnityUtility.Sound
 
         private Dictionary<string, MusObject> m_music;
 
-        private ClipLoader m_loader;
+        private IClipLoader m_loader;
         private Dictionary<string, MPreset> m_presetList;
 
         public bool Muted
@@ -60,7 +60,7 @@ namespace UnityUtility.Sound
 
         }
 
-        public MusicProvider(ClipLoader loader, MusicPreset presetList = null)
+        public MusicProvider(IClipLoader loader, MusicPreset presetList = null)
         {
             m_music = new Dictionary<string, MusObject>();
 
@@ -68,7 +68,7 @@ namespace UnityUtility.Sound
             m_presetList = presetList == null ? new Dictionary<string, MPreset>() : presetList.CreateDict();
         }
 
-        public static void OverrideAudioSourceCreator(ObjectCreator<MusObject> newCreator)
+        public static void OverrideAudioSourceCreator(IObjectCreator<MusObject> newCreator)
         {
             s_creator = newCreator;
             s_pool.ChangeCreator(s_creator.Create);
@@ -103,7 +103,7 @@ namespace UnityUtility.Sound
                 if (!m_presetList.TryGetValue(musicName, out MPreset set))
                     set = DEF_SET;
 
-                mus = m_music.AddNGet(musicName, s_pool.Get());
+                mus = m_music.AddAndGet(musicName, s_pool.Get());
                 mus.Play(this, m_loader.LoadClip(musicName), set);
             }
             else if (mus.Fading)

@@ -1,6 +1,6 @@
-﻿using M = UnityEngine.Mathf;
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace UnityUtility.MathExt
 {
@@ -48,7 +48,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Approx(this float value, float other)
         {
-            return M.Approximately(value, other);
+            return Mathf.Approximately(value, other);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sign(this float value)
         {
-            return M.Sign(value);
+            return Mathf.Sign(value);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sign(this int value)
         {
-            return (int)M.Sign(value);
+            return (int)Mathf.Sign(value);
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Ratio(this float value, float a, float b)
         {
-            return M.InverseLerp(a, b, value);
+            return Mathf.InverseLerp(a, b, value);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Ratio(this int value, int a, int b)
         {
-            return M.InverseLerp(a, b, value);
+            return Mathf.InverseLerp(a, b, value);
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(this float value, float min, float max)
         {
-            return M.Clamp(value, min, max);
+            return Mathf.Clamp(value, min, max);
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Saturate(this float value)
         {
-            return M.Clamp01(value);
+            return Mathf.Clamp01(value);
         }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Clamp(this int value, int min, int max)
         {
-            return M.Clamp(value, min, max);
+            return Mathf.Clamp(value, min, max);
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Repeat(this float value, float length)
         {
-            return M.Repeat(value, length);
+            return Mathf.Repeat(value, length);
         }
 
         /// <summary>
@@ -357,7 +357,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float PingPong(this float value, float length)
         {
-            return M.PingPong(value, length);
+            return Mathf.PingPong(value, length);
         }
 
         /// <summary>
@@ -375,7 +375,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToDegrees(this float value)
         {
-            return value * M.Rad2Deg;
+            return value * Mathf.Rad2Deg;
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace UnityUtility.MathExt
         /// </summary>
         public static float ToRadians(this float value)
         {
-            return value * M.Deg2Rad;
+            return value * Mathf.Deg2Rad;
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPoT(this int value)
         {
-            return M.IsPowerOfTwo(value);
+            return Mathf.IsPowerOfTwo(value);
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int ToClosestPoT(this int value)
         {
-            return M.ClosestPowerOfTwo(value);
+            return Mathf.ClosestPowerOfTwo(value);
         }
 
         /// <summary>

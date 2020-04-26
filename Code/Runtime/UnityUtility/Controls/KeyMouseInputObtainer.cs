@@ -5,7 +5,7 @@ using System;
 
 namespace UnityUtility.Controls
 {
-    public sealed class KeyMouseInputObtainer : InputObtainer
+    public sealed class KeyMouseInputObtainer : IInputObtainer
     {
         private readonly string[] AX_NAMES = { "Mouse X", "Mouse Y", "Mouse ScrollWheel" };
 
