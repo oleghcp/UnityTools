@@ -4,5 +4,5 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DrawSOFieldsAttribute : PropertyAttribute { }
+    public class DrawObjectFieldsAttribute : PropertyAttribute { }
 }

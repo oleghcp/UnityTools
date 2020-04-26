@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.RNGenerators
+namespace UnityUtility.Rng
 {
     public class SimleTimeRNG : IRng
     {

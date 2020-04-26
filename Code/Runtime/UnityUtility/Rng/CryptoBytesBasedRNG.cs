@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace UnityUtility.RNGenerators
+namespace UnityUtility.Rng
 {
     public class CryptoBytesBasedRNG : IRng
     {

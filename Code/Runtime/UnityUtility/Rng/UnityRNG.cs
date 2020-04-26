@@ -1,7 +1,7 @@
 ﻿using System;
 using static UnityEngine.Random;
 
-namespace UnityUtility.RNGenerators
+namespace UnityUtility.Rng
 {
     public sealed class UnityRNG : IRng
     {

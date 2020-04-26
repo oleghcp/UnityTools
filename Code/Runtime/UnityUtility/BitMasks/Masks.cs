@@ -7,104 +7,104 @@ namespace UnityUtility.BitMasks
 {
     public static class Masks
     {
-        public static int CreateMask(int flag0)
+        public static int CreateMask(int index0)
         {
             int mask = 0;
-            BitMask.AddFlag(ref mask, flag0);
+            BitMask.AddFlag(ref mask, index0);
             return mask;
         }
 
-        public static int CreateMask(int flag0, int flag1)
+        public static int CreateMask(int index0, int index1)
         {
             int mask = 0;
-            BitMask.AddFlag(ref mask, flag0);
-            BitMask.AddFlag(ref mask, flag1);
+            BitMask.AddFlag(ref mask, index0);
+            BitMask.AddFlag(ref mask, index1);
             return mask;
         }
 
-        public static int CreateMask(int flag0, int flag1, int flag2)
+        public static int CreateMask(int index0, int index1, int index2)
         {
             int mask = 0;
-            BitMask.AddFlag(ref mask, flag0);
-            BitMask.AddFlag(ref mask, flag1);
-            BitMask.AddFlag(ref mask, flag2);
+            BitMask.AddFlag(ref mask, index0);
+            BitMask.AddFlag(ref mask, index1);
+            BitMask.AddFlag(ref mask, index2);
             return mask;
         }
 
-        public static int CreateMask(int flag0, int flag1, int flag2, int flag3)
+        public static int CreateMask(int index0, int index1, int index2, int index3)
         {
             int mask = 0;
-            BitMask.AddFlag(ref mask, flag0);
-            BitMask.AddFlag(ref mask, flag1);
-            BitMask.AddFlag(ref mask, flag2);
-            BitMask.AddFlag(ref mask, flag3);
+            BitMask.AddFlag(ref mask, index0);
+            BitMask.AddFlag(ref mask, index1);
+            BitMask.AddFlag(ref mask, index2);
+            BitMask.AddFlag(ref mask, index3);
             return mask;
         }
 
-        public static int CreateMask(params int[] flags)
+        public static int CreateMask(params int[] indices)
         {
             int mask = 0;
-            for (int i = 0; i < flags.Length; i++)
-            { BitMask.AddFlag(ref mask, flags[i]); }
+            for (int i = 0; i < indices.Length; i++)
+            { BitMask.AddFlag(ref mask, indices[i]); }
             return mask;
         }
 
         // -- //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CreateMask<TEnum>(TEnum flag0) where TEnum : Enum
+        public static int CreateMask<TEnum>(TEnum index0) where TEnum : Enum
         {
-            return CreateMask(flag0.ToInteger());
+            return CreateMask(index0.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CreateMask<TEnum>(TEnum flag0, TEnum flag1) where TEnum : Enum
+        public static int CreateMask<TEnum>(TEnum index0, TEnum index1) where TEnum : Enum
         {
-            return CreateMask(flag0.ToInteger(), flag1.ToInteger());
+            return CreateMask(index0.ToInteger(), index1.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CreateMask<TEnum>(TEnum flag0, TEnum flag1, TEnum flag2) where TEnum : Enum
+        public static int CreateMask<TEnum>(TEnum index0, TEnum index1, TEnum index2) where TEnum : Enum
         {
-            return CreateMask(flag0.ToInteger(), flag1.ToInteger(), flag2.ToInteger());
+            return CreateMask(index0.ToInteger(), index1.ToInteger(), index2.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CreateMask<TEnum>(TEnum flag0, TEnum flag1, TEnum flag2, TEnum flag3) where TEnum : Enum
+        public static int CreateMask<TEnum>(TEnum index0, TEnum index1, TEnum index2, TEnum index3) where TEnum : Enum
         {
-            return CreateMask(flag0.ToInteger(), flag1.ToInteger(), flag2.ToInteger(), flag3.ToInteger());
+            return CreateMask(index0.ToInteger(), index1.ToInteger(), index2.ToInteger(), index3.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CreateMask<TEnum>(params TEnum[] flags) where TEnum : Enum
+        public static int CreateMask<TEnum>(params TEnum[] indices) where TEnum : Enum
         {
-            return CreateMask(flags.GetConverted(itm => itm.ToInteger()));
+            return CreateMask(indices.GetConverted(itm => itm.ToInteger()));
         }
 
         // -- //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BitArrayMask CreateArray<TEnum>(TEnum flag0) where TEnum : Enum
+        public static BitArrayMask CreateArray<TEnum>(TEnum index0) where TEnum : Enum
         {
-            return new BitArrayMask(Enum<TEnum>.Count, flag0.ToInteger());
+            return new BitArrayMask(Enum<TEnum>.Count, index0.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BitArrayMask CreateArray<TEnum>(TEnum flag0, TEnum flag1) where TEnum : Enum
+        public static BitArrayMask CreateArray<TEnum>(TEnum index0, TEnum index1) where TEnum : Enum
         {
-            return new BitArrayMask(Enum<TEnum>.Count, flag0.ToInteger(), flag1.ToInteger());
+            return new BitArrayMask(Enum<TEnum>.Count, index0.ToInteger(), index1.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BitArrayMask CreateArray<TEnum>(TEnum flag0, TEnum flag1, TEnum flag2) where TEnum : Enum
+        public static BitArrayMask CreateArray<TEnum>(TEnum index0, TEnum index1, TEnum index2) where TEnum : Enum
         {
-            return new BitArrayMask(Enum<TEnum>.Count, flag0.ToInteger(), flag1.ToInteger(), flag2.ToInteger());
+            return new BitArrayMask(Enum<TEnum>.Count, index0.ToInteger(), index1.ToInteger(), index2.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BitArrayMask CreateArray<TEnum>(TEnum flag0, TEnum flag1, TEnum flag2, TEnum flag3) where TEnum : Enum
+        public static BitArrayMask CreateArray<TEnum>(TEnum index0, TEnum index1, TEnum index2, TEnum index3) where TEnum : Enum
         {
-            return new BitArrayMask(Enum<TEnum>.Count, flag0.ToInteger(), flag1.ToInteger(), flag2.ToInteger(), flag3.ToInteger());
+            return new BitArrayMask(Enum<TEnum>.Count, index0.ToInteger(), index1.ToInteger(), index2.ToInteger(), index3.ToInteger());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

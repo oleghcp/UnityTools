@@ -1,14 +1,12 @@
-﻿using UnityObject = UnityEngine.Object;
-
-using System;
-using UnityEngine;
+﻿using System;
 using UnityEditor;
+using UnityEngine;
 using UnityUtility;
 
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(DrawSOFieldsAttribute))]
-    public class DrawSOFieldsDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(DrawObjectFieldsAttribute))]
+    public class DrawObjectFieldsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

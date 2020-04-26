@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
-using UnityUtility.RNGenerators;
+using UnityUtility.Rng;
 using UnityEngine;
 
 using UR = UnityEngine.Random;

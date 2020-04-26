@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace UnityUtility.RNGenerators
+namespace UnityUtility.Rng
 {
     public class TimeBytesBasedRNG : IRng
     {
