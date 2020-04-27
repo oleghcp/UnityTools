@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility.UI
 {
     [DisallowMultipleComponent]
-    public class TabGroup : MonoBehaviour
+    public class TabGroup : UiMonoBehaviour
     {
         [SerializeField]
         private bool _activateOnAwake = true;

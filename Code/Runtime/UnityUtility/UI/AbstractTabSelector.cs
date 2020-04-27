@@ -3,7 +3,7 @@
 #pragma warning disable CS0649
 namespace UnityUtility.UI
 {
-    public abstract class AbstractTabSelector : MonoBehaviour
+    public abstract class AbstractTabSelector : UiMonoBehaviour
     {
         [SerializeField]
         private bool _defaultTab;
