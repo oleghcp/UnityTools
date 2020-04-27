@@ -21,6 +21,9 @@ namespace UnityUtility.UI
 
         private void Awake()
         {
+            if (_group == null)
+                _group = transform.parent.GetComponentInParent<TabGroup>(true);
+            
             _group.RegSelector(this);
             OnAwake();
         }
@@ -28,9 +31,6 @@ namespace UnityUtility.UI
         private void OnValidate()
         {
             _group = transform.parent.GetComponentInParent<TabGroup>(true);
-
-            if (_group == null)
-                Debug.LogError("TabGroup component is not found.");
         }
 
         internal void OnSelect()
