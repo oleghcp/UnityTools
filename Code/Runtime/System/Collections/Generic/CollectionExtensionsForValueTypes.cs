@@ -2,6 +2,19 @@
 
 namespace System.Collections.Generic
 {
+    public static class ArrayExtensionsForEnums
+    {
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector) where TKey : Enum
+        {
+            Array.Sort(self, (itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
+        }
+    }
+
     public static class CollectionExtensionsForValueTypes
     {
         /// <summary>
