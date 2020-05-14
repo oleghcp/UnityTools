@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
-using UnityUtility.MathExt;
-using System.Collections.Generic;
+using UnityEngine;
 using UnityUtility;
+using UnityUtility.MathExt;
 
 namespace UnityUtilityEditor
 {
-    [CustomEditor(typeof(Transform)), CanEditMultipleObjects]
+    [CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor
     {
         private const string UNDO_NAME = "Transform";
@@ -27,11 +27,17 @@ namespace UnityUtilityEditor
         private SerializedProperty m_posProp;
         private SerializedProperty m_rotProp;
         private SerializedProperty m_sclProp;
-        private bool m_multi;
 
         private void Awake()
         {
             m_target = target as Transform;
+        }
+
+        private void OnEnable()
+        {
+            m_posProp = serializedObject.FindProperty("m_LocalPosition");
+            m_rotProp = serializedObject.FindProperty("m_LocalRotation");
+            m_sclProp = serializedObject.FindProperty("m_LocalScale");
         }
 
         private void OnSceneGUI()
@@ -40,7 +46,7 @@ namespace UnityUtilityEditor
             {
                 Tool curTool = Tools.current;
 
-                Tools.hidden = !m_multi && (curTool == Tool.Move || curTool == Tool.Transform || curTool == Tool.Rect);
+                Tools.hidden = curTool == Tool.Move || curTool == Tool.Transform || curTool == Tool.Rect;
 
                 if (!Tools.hidden)
                     return;
@@ -51,7 +57,6 @@ namespace UnityUtilityEditor
                     return;
                 }
 
-                //if (curTool == Tool.Move)
                 EditorGUI.BeginChangeCheck();
 
                 Vector3 pos = Handles.PositionHandle(m_target.position, Quaternion.identity);
@@ -104,19 +109,7 @@ namespace UnityUtilityEditor
         {
             GUILayout.Space(SPACE);
 
-            bool world = false;
-            m_multi = targets.Length > 1;
-
-            if (m_target.parent == null || m_multi)
-            {
-                GUI.enabled = false;
-                GUILayout.Toolbar(0, s_toolbarNames);
-                GUI.enabled = true;
-            }
-            else
-            {
-                world = s_world = GUILayout.Toolbar(s_world.ToInt(), s_toolbarNames).ToBool();
-            }
+            bool world = s_world = GUILayout.Toolbar(s_world.ToInt(), s_toolbarNames).ToBool();
 
             GUILayout.Space(SPACE);
 
@@ -166,10 +159,6 @@ namespace UnityUtilityEditor
                     return ch;
                 }
 
-                m_posProp = serializedObject.FindProperty("m_LocalPosition");
-                m_rotProp = serializedObject.FindProperty("m_LocalRotation");
-                m_sclProp = serializedObject.FindProperty("m_LocalScale");
-
                 if (drawLine("Pos", m_posProp.vector3Value, out Vector3 pos)) { m_posProp.vector3Value = pos; }
                 if (drawLine("Rot", m_rotProp.quaternionValue.eulerAngles, out Vector3 rot)) { m_rotProp.quaternionValue = rot.ToRotation(); }
                 if (drawLine("Scl", m_sclProp.vector3Value, out Vector3 scl, Vector3.one)) { m_sclProp.vector3Value = scl; }
@@ -180,44 +169,20 @@ namespace UnityUtilityEditor
 
             GUILayout.Space(SPACE);
 
-            if (m_multi)
+            EditorGUILayout.BeginHorizontal();
+            bool gridNewVal = GUILayout.Toggle(s_grid, string.Empty, GUILayout.Width(TOGGLE_WIDTH));
+            if (s_grid != gridNewVal)
             {
-                GUILayout.Label("Grid snapping transfom cannot be multi-edited.");
+                s_grid = gridNewVal;
+                Tools.hidden = gridNewVal;
+                EditorWindow.GetWindow<SceneView>().Repaint();
             }
-            else
-            {
-                EditorGUILayout.BeginHorizontal();
-                bool gridNewVal = GUILayout.Toggle(s_grid, string.Empty, GUILayout.Width(TOGGLE_WIDTH));
-                if (s_grid != gridNewVal)
-                {
-                    s_grid = gridNewVal;
-                    Tools.hidden = gridNewVal;
-                    EditorWindow.GetWindow<SceneView>().Repaint();
-                }
-                EditorGUI.BeginDisabledGroup(!s_grid);
-                s_snapStep = EditorGUILayout.FloatField("Grid Snap Step", s_snapStep);
-                EditorGUI.EndDisabledGroup();
-                EditorGUILayout.EndHorizontal();
-            }
+            EditorGUI.BeginDisabledGroup(!s_grid);
+            s_snapStep = EditorGUILayout.FloatField("Grid Snap Step", s_snapStep);
+            EditorGUI.EndDisabledGroup();
+            EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(SPACE);
         }
-
-        // Menu Items //
-
-        //private const string LOCAL_MENU_NAME = "CONTEXT/Transform/Show Local Values (ext.)";
-        //private const string WORLD_MENU_NAME = "CONTEXT/Transform/Show World Values (ext.)";
-
-        //[MenuItem(LOCAL_MENU_NAME)]
-        //private static void f_showLocal() { s_world = false; }
-
-        //[MenuItem(LOCAL_MENU_NAME, true)]
-        //private static bool f_showLocalValidate() { return s_world; }
-
-        //[MenuItem(WORLD_MENU_NAME)]
-        //private static void f_showWorld() { s_world = true; }
-
-        //[MenuItem(WORLD_MENU_NAME, true)]
-        //private static bool f_showWorldValidate() { return !s_world; }
     }
 }
