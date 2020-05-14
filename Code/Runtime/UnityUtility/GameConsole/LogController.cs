@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 
@@ -8,6 +8,7 @@ namespace UnityUtility.GameConsole
 {
     internal class LogController : UiMonoBehaviour
     {
+        private const float PADDING = 5f;
         private readonly Vector2 MIN = new Vector2(5f, 0f);
         private readonly Vector2 MAX = new Vector2(-5f, 0f);
 
@@ -34,7 +35,7 @@ namespace UnityUtility.GameConsole
             newLine.Text.color = color;
             newLine.Text.text = text;
 
-            Vector2 shift = new Vector2(0f, newLine.Text.preferredHeight);
+            Vector2 shift = new Vector2(0f, newLine.Text.preferredHeight + PADDING);
 
             for (int i = 0; i < m_lines.Count; i++)
             {
@@ -71,7 +72,7 @@ namespace UnityUtility.GameConsole
 
             for (int i = 0; i < m_lines.Count; i++)
             {
-                h += m_lines[i].Text.preferredHeight;
+                h += m_lines[i].Text.preferredHeight + PADDING;
             }
 
             return h;

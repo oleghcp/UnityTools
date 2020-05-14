@@ -1,12 +1,12 @@
 using System;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Text;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityUtility.Scripts;
 
 #pragma warning disable CS0649
@@ -15,7 +15,7 @@ namespace UnityUtility.GameConsole
     public class Terminal : SingleUIScript<Terminal>
     {
         private readonly Color CMD_COLOR = Color.white;
-        private readonly Color UPS_COLOR = new Color(1f, 0.5f, 0f, 1f);
+        private readonly Color CMD_ERROR_COLOR = new Color(1f, 0.5f, 0f, 1f);
 
         public static event Action<bool> Switched_Event;
 
@@ -35,6 +35,8 @@ namespace UnityUtility.GameConsole
 
         private List<string> m_cmdHistory;
         private int m_curHistoryIndex;
+
+        private bool m_showCallStack;
 
         public bool IsOn
         {
@@ -134,6 +136,11 @@ namespace UnityUtility.GameConsole
             _field.OnPointerClick(m_pointerEventData);
         }
 
+        public void ShowCallStackForLogs(bool enable)
+        {
+            m_showCallStack = enable;
+        }
+
         public void GetCmd()
         {
             f_findCmd(string.Empty);
@@ -187,11 +194,11 @@ namespace UnityUtility.GameConsole
                     if (cmdKeysParseError == null)
                         _log.WriteLine(text, CMD_COLOR);
                     else
-                        _log.WriteLine("cmd options error: " + cmdKeysParseError, UPS_COLOR);
+                        _log.WriteLine("cmd options error: " + cmdKeysParseError, CMD_ERROR_COLOR);
                 }
                 else
                 {
-                    _log.WriteLine("unknown: " + command, UPS_COLOR);
+                    _log.WriteLine("unknown: " + command, CMD_ERROR_COLOR);
                 }
 
                 m_cmdHistory.Add(text);
@@ -306,29 +313,24 @@ namespace UnityUtility.GameConsole
                     break;
             }
 
-            if (msg == null) { _log.WriteLine("null", colour); }
-            else { _log.WriteLine(msg.ToString(), colour); }
+            _log.WriteLine(msg, colour);
+
+            if (m_showCallStack)
+                _log.WriteLine(stackTrace, Color.gray);
         }
 
         ////////////
         //Routines//
         ////////////
 
-        IEnumerator Switch(bool on)
+        private IEnumerator Switch(bool on)
         {
-            m_isOn = on;
-
-            _field.gameObject.SetActive(on);
+            _field.gameObject.SetActive(m_isOn = on);
 
             if (on)
-            {
                 _field.text = string.Empty;
-                _field.OnPointerClick(m_pointerEventData);
-            }
             else
-            {
                 m_curHistoryIndex = 0;
-            }
 
             float startPos = rectTransform.anchoredPosition.y;
             float endPos = on ? -360f : 0f;
@@ -338,11 +340,13 @@ namespace UnityUtility.GameConsole
             while (ratio < 1f)
             {
                 ratio += Time.unscaledDeltaTime * 10f;
-
                 rectTransform.anchoredPosition = new Vector2(0f, Mathf.Lerp(startPos, endPos, ratio));
 
                 yield return null;
             }
+
+            if (on)
+                _field.OnPointerClick(m_pointerEventData);
         }
     }
 }
