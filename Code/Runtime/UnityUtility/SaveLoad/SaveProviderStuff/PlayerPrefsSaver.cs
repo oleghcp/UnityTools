@@ -1,7 +1,8 @@
 ﻿using System;
-using UnityUtility.MathExt;
-using UnityEngine;
 using System.Runtime.CompilerServices;
+using UnityEngine;
+using UnityUtility.Async;
+using UnityUtility.MathExt;
 
 namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
@@ -11,34 +12,21 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     public sealed class PlayerPrefsSaver : ISaver
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ApplyAll()
-        {
-            PlayerPrefs.Save();
-        }
-
-        public void ApplyAll(string versionName)
-        {
-            throw new NotImplementedException();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void DeleteAll()
-        {
-            PlayerPrefs.DeleteAll();
-        }
-
-        //--//
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasKey(string key)
         {
             return PlayerPrefs.HasKey(key);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Delete(string key)
+        public void DeleteKey(string key)
         {
             PlayerPrefs.DeleteKey(key);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Clear()
+        {
+            PlayerPrefs.DeleteAll();
         }
 
         //--//
@@ -69,7 +57,8 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
 
         public byte[] Get(string key, byte[] defVal)
         {
-            throw new NotImplementedException();
+            string data = PlayerPrefs.GetString(key);
+            return data.HasUsefulData() ? ByteArrayUtility.FromString(data) : defVal;
         }
 
         //--//
@@ -99,6 +88,34 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
         }
 
         public void Set(string key, byte[] value)
+        {
+            PlayerPrefs.SetString(key, ByteArrayUtility.ToString(value));
+        }
+
+        // -- //
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SaveVersion(string _)
+        {
+            PlayerPrefs.Save();
+        }
+
+        public TaskInfo SaveVersionAsync(string version, int keysPerFrame)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadVersion(string version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteVersion(string version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteProfile()
         {
             throw new NotImplementedException();
         }

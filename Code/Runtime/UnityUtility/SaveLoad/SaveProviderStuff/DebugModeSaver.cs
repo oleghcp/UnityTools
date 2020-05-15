@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using UnityUtility.Async;
+using UnityUtility.MathExt;
 
 namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
@@ -8,31 +12,77 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     /// </summary>
     public sealed class DebugModeSaver : ISaver
     {
-        private const string DIR_NAME = "Save/";
+        private readonly string PROFILE_PATH;
 
-        public DebugModeSaver()
+        private Dictionary<string, string> m_storage = new Dictionary<string, string>();
+
+        public DebugModeSaver(string profileName)
         {
-            f_checkDir();
+            PROFILE_PATH = $"SaveGame/{profileName}/";
+            f_createProfile();
         }
 
-        public void ApplyAll() { }
-
-        public void ApplyAll(string versionName)
+        public void SaveVersion(string version)
         {
-            throw new NotImplementedException();
-        }
+            f_createProfile();
+            f_recreateVersion(version);
 
-        public void DeleteAll()
-        {
-            if (!Directory.Exists(DIR_NAME)) { return; }
-
-            var info = new DirectoryInfo(DIR_NAME);
-            var files = info.GetFiles();
-
-            for (int i = 0; i < files.Length; i++)
+            foreach (var kvp in m_storage)
             {
-                files[i].Delete();
+                File.WriteAllText(kvp.Key, kvp.Value);
             }
+        }
+
+        public TaskInfo SaveVersionAsync(string version, int keysPerFrame)
+        {
+            f_createProfile();
+            f_recreateVersion(version);
+
+            keysPerFrame = keysPerFrame.CutBefore(1);
+
+            IEnumerator wrilteFile()
+            {
+                int count = 0;
+
+                foreach (var kvp in m_storage)
+                {
+                    File.WriteAllText(kvp.Key, kvp.Value);
+
+                    if (++count % keysPerFrame == 0)
+                        yield return null;
+                }
+            }
+
+            return TaskSystem.StartAsync(wrilteFile());
+        }
+
+        public void LoadVersion(string version)
+        {
+            f_createProfile();
+            m_storage.Clear();
+
+            string versionParh = f_getVersionPath(version);
+            if (Directory.Exists(versionParh))
+            {
+                foreach (var filePath in Directory.EnumerateFiles(versionParh))
+                {
+                    m_storage[PathUtility.GetName(filePath)] = File.ReadAllText(filePath);
+                }
+            }
+        }
+
+        public void DeleteVersion(string version)
+        {
+            string versionParh = f_getVersionPath(version);
+            if (Directory.Exists(versionParh))
+                Directory.Delete(versionParh, true);
+        }
+
+        public void DeleteProfile()
+        {
+            m_storage.Clear();
+            if (Directory.Exists(PROFILE_PATH))
+                Directory.Delete(PROFILE_PATH, true);
         }
 
         //--//
@@ -59,88 +109,79 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
 
         public byte[] Get(string key, byte[] defVal)
         {
-            throw new NotImplementedException();
+            return f_get(key, defVal, ByteArrayUtility.FromString);
         }
 
         //--//
 
         public void Set(string key, bool value)
         {
-            f_set(key, value.ToString());
+            m_storage[key] = value.ToString();
         }
 
         public void Set(string key, string value)
         {
-            f_set(key, value);
+            m_storage[key] = value;
         }
 
         public void Set(string key, float value)
         {
-            f_set(key, value.ToString());
+            m_storage[key] = value.ToString();
         }
 
         public void Set(string key, int value)
         {
-            f_set(key, value.ToString());
+            m_storage[key] = value.ToString();
         }
 
         public void Set(string key, byte[] value)
         {
-            throw new NotImplementedException();
+            m_storage[key] = ByteArrayUtility.ToString(value);
         }
 
         // -- //
 
-        public void Delete(string key)
-        {
-            if (File.Exists(key))
-            {
-                File.Delete(DIR_NAME + key);
-            }
-        }
-
         public bool HasKey(string key)
         {
-            return f_hasKey(key);
+            return m_storage.ContainsKey(key);
+        }
+
+        public void DeleteKey(string key)
+        {
+            m_storage.Remove(key);
+        }
+
+        public void Clear()
+        {
+            m_storage.Clear();
         }
 
         //--//
 
-        private void f_checkDir()
+        private void f_createProfile()
         {
-            if (!Directory.Exists(DIR_NAME))
-            {
-                Directory.CreateDirectory(DIR_NAME);
-            }
-        }
-
-        private bool f_hasKey(string key)
-        {
-            f_checkDir();
-            return File.Exists(DIR_NAME + key);
+            Directory.CreateDirectory(PROFILE_PATH);
         }
 
         private T f_get<T>(string key, T defVal, Func<string, T> parse)
         {
-            string data = f_load(key);
-            return data.HasAnyData() ? parse(data) : defVal;
+            m_storage.TryGetValue(key, out string data);
+            return data.HasUsefulData() ? parse(data) : defVal;
         }
 
-        private void f_set(string key, string data)
+        private string f_getVersionPath(string version)
         {
-            f_checkDir();
-
-            File.WriteAllText(DIR_NAME + key, data);
+            return Path.Combine(PROFILE_PATH, version);
         }
 
-        private string f_load(string key)
+        private void f_recreateVersion(string version)
         {
-            if (f_hasKey(key))
-            {
-                return File.ReadAllText(DIR_NAME + key);
-            }
+            string versionPath = f_getVersionPath(version);
 
-            return string.Empty;
-        }        
+            if (Directory.Exists(versionPath))
+                Directory.Delete(versionPath, true);
+
+            Directory.CreateDirectory(version);
+        }
     }
 }

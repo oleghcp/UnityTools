@@ -6,7 +6,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     /// <summary>
     /// A serializer for SaveProvider (UnityEngine.JsonUtility wrapper).
     /// </summary>
-    public sealed class JsonSerializer : ISerializer
+    public sealed class JsonSerializer : ITextSerializer
     {
         public string Serialize(object toSerialize)
         {

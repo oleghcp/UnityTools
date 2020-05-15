@@ -17,10 +17,12 @@ namespace UnityUtility.SaveLoad
         private const BindingFlags MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
         private ISaver m_innerSaver;
-        private ISerializer m_serializer;
-        private IBinarySerializer m_binary;
+        private ITextSerializer m_textSerializer;
+        private IBinarySerializer m_binarySerializer;
         private IKeyGenerator m_keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> m_fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
+
+        private readonly bool m_isBinary;
 
         public ISaver Saver
         {
@@ -30,7 +32,7 @@ namespace UnityUtility.SaveLoad
         public SaveProvider()
         {
             m_innerSaver = new PlayerPrefsSaver();
-            m_serializer = new JsonSerializer();
+            m_textSerializer = new JsonSerializer();
             m_keyGenerator = new BaseKeyGenerator();
         }
 
@@ -40,10 +42,10 @@ namespace UnityUtility.SaveLoad
         /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
         /// <param name="serializer">Object which is used for serializing custom type fields. Default serializer uses UnityEngine.JsonUtility.</param>
         /// <param name="keyGenerator">Object which generates keys for key-value storage.</param>
-        public SaveProvider(ISaver saver, ISerializer serializer, IKeyGenerator keyGenerator)
+        public SaveProvider(ISaver saver, ITextSerializer serializer, IKeyGenerator keyGenerator)
         {
             m_innerSaver = saver;
-            m_serializer = serializer;
+            m_textSerializer = serializer;
             m_keyGenerator = keyGenerator;
         }
 
@@ -56,8 +58,9 @@ namespace UnityUtility.SaveLoad
         public SaveProvider(ISaver saver, IBinarySerializer serializer, IKeyGenerator keyGenerator)
         {
             m_innerSaver = saver;
-            m_binary = serializer;
+            m_binarySerializer = serializer;
             m_keyGenerator = keyGenerator;
+            m_isBinary = true;
         }
 
         ////////////////
@@ -116,7 +119,7 @@ namespace UnityUtility.SaveLoad
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    m_innerSaver.Delete(list[i].Key);
+                    m_innerSaver.DeleteKey(list[i].Key);
                 }
             }
 
@@ -137,7 +140,7 @@ namespace UnityUtility.SaveLoad
 
                     for (int i = 0; i < list.Count; i++)
                     {
-                        m_innerSaver.Delete(list[i].Key);
+                        m_innerSaver.DeleteKey(list[i].Key);
                     }
                 }
             }
@@ -146,67 +149,80 @@ namespace UnityUtility.SaveLoad
         }
 
         /// <summary>
-        /// Collects data from marked by SaveLoadFieldAttribute fields of all registered objects and sets it as key-value data through the saver.
+        /// Saves all registered data.
         /// </summary>
-        public void Collect()
+        public void Save(string version)
         {
-            foreach (var kvp in m_fields)
+            f_collect();
+            m_innerSaver.SaveVersion(version);
+        }
+
+        /// <summary>
+        /// Saves all registered data asynchronously.
+        /// </summary>
+        public TaskInfo SaveAsync(string version, int stepsPerFrame)
+        {
+            IEnumerator CollectAndSave()
             {
-                List<SaveLoadFieldAttribute> aList = kvp.Value;
-                for (int i = 0; i < aList.Count; i++)
-                    f_set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                stepsPerFrame = stepsPerFrame.CutBefore(1);
+
+                int counter = 0;
+
+                foreach (var kvp in m_fields)
+                {
+                    List<SaveLoadFieldAttribute> aList = kvp.Value;
+
+                    for (int i = 0; i < aList.Count; i++)
+                    {
+                        f_set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+
+                        if (++counter >= stepsPerFrame)
+                        {
+                            counter = 0;
+                            yield return null;
+                        }
+                    }
+                }
+
+                TaskInfo saveTask = m_innerSaver.SaveVersionAsync(version, stepsPerFrame);
+
+                while (saveTask.IsAlive)
+                {
+                    yield return null;
+                }
             }
+
+            return TaskSystem.StartAsync(CollectAndSave());
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TaskInfo CollectAsync(int fieldPerFrame = 1)
+        public void Load(string version)
         {
-            return TaskSystem.StartAsync(CollectRoutine(fieldPerFrame));
-        }
-
-        /// <summary>
-        /// Saves the collected data (calls PlayerPrefs.Save() in case of saver based on UnityEngine.PlayerPrefs).
-        /// </summary>
-        public void ApplyAll()
-        {
-            m_innerSaver.ApplyAll();
+            m_innerSaver.LoadVersion(version);
         }
 
         /// <summary>
-        /// Saves the collected data to the specified package.
+        /// Clears current storage.
         /// </summary>
-        public void ApplyAll(string versionName)
+        public void Clear()
         {
-            m_innerSaver.ApplyAll(versionName);
-        }
-
-        /// <summary>
-        /// Deletes the entire collected data from the runtime storage.
-        /// </summary>
-        public void DeleteAll()
-        {
-            m_innerSaver.DeleteAll();
-        }
-
-        /// <summary>
-        /// Calls Collect and ApplyAll functions.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SaveAll()
-        {
-            Collect();
-            ApplyAll();
-        }
-
-        public void SaveAll(string versionName)
-        {
-            Collect();
-            ApplyAll(versionName);
+            m_innerSaver.Clear();
         }
 
         ///////////////
         //Inner funcs//
         ///////////////
+
+        private void f_collect()
+        {
+            foreach (var kvp in m_fields)
+            {
+                List<SaveLoadFieldAttribute> aList = kvp.Value;
+                for (int i = 0; i < aList.Count; i++)
+                {
+                    f_set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                }
+            }
+        }
 
         private void f_set(string key, object value)
         {
@@ -228,10 +244,10 @@ namespace UnityUtility.SaveLoad
             }
             else
             {
-                if (m_binary != null)
-                    m_innerSaver.Set(key, m_binary.Serialize(value));
+                if (m_isBinary)
+                    m_innerSaver.Set(key, m_binarySerializer.Serialize(value));
                 else
-                    m_innerSaver.Set(key, m_serializer.Serialize(value));
+                    m_innerSaver.Set(key, m_textSerializer.Serialize(value));
             }
         }
 
@@ -257,49 +273,22 @@ namespace UnityUtility.SaveLoad
             }
             else
             {
-                if (m_binary != null)
+                if (m_isBinary)
                 {
                     byte[] bytes = m_innerSaver.Get(a.Key, (byte[])null);
 
                     if (bytes != null && bytes.Length > 0)
-                        return m_binary.Deserialize(bytes, type);
+                        return m_binarySerializer.Deserialize(bytes, type);
                 }
                 else
                 {
                     string serStr = m_innerSaver.Get(a.Key, (string)null);
 
                     if (serStr.HasAnyData())
-                        return m_serializer.Deserialize(serStr, type);
+                        return m_textSerializer.Deserialize(serStr, type);
                 }
 
                 return type.IsValueType ? Activator.CreateInstance(type) : null;
-            }
-        }
-
-        ////////////
-        //Routines//
-        ////////////
-
-        IEnumerator CollectRoutine(int fieldPerFrame)
-        {
-            fieldPerFrame = fieldPerFrame.CutBefore(1);
-
-            int counter = 0;
-
-            foreach (var kvp in m_fields)
-            {
-                List<SaveLoadFieldAttribute> aList = kvp.Value;
-
-                for (int i = 0; i < aList.Count; i++)
-                {
-                    f_set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
-
-                    if (++counter >= fieldPerFrame)
-                    {
-                        counter = 0;
-                        yield return null;
-                    }
-                }
             }
         }
     }

@@ -1,8 +1,9 @@
 ﻿using System;
+using UnityUtility.Async;
 
 namespace UnityUtility.SaveLoad
 {
-    public interface ISaver
+    public interface IStorage
     {
         int Get(string key, int defVal);
         float Get(string key, float defVal);
@@ -16,15 +17,21 @@ namespace UnityUtility.SaveLoad
         void Set(string key, string value);
         void Set(string key, byte[] value);
 
-        void Delete(string key);
         bool HasKey(string key);
-
-        void ApplyAll();
-        void ApplyAll(string versionName);
-        void DeleteAll();
+        void DeleteKey(string key);
+        void Clear();
     }
 
-    public interface ISerializer
+    public interface ISaver : IStorage
+    {
+        void SaveVersion(string version);
+        TaskInfo SaveVersionAsync(string version, int keysPerFrame);
+        void LoadVersion(string version);
+        void DeleteVersion(string version);
+        void DeleteProfile();
+    }
+
+    public interface ITextSerializer
     {
         string Serialize(object toSerialize);
         object Deserialize(string toDeserialize, Type type);

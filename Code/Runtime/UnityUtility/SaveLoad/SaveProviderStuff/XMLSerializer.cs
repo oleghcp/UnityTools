@@ -5,7 +5,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     /// <summary>
     /// A serializer for SaveProvider (UU.XmlUtility wrapper).
     /// </summary>
-    public sealed class XMLSerializer : ISerializer
+    public sealed class XMLSerializer : ITextSerializer
     {
         public string Serialize(object toSerialize)
         {
