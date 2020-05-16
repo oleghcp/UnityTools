@@ -1,11 +1,11 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct AccumFloat : IAccumEntity<float>, IEquatable<AccumFloat>
+    public struct AccumFloat : IAccumEntity<float>, IEquatable<AccumFloat>, IMergeable<AccumFloat>
     {
         [SerializeField, HideInInspector]
         private float m_got;
@@ -63,16 +63,22 @@ namespace UnityUtility.NumericEntities
             return false;
         }
 
+        public void Merge(AccumFloat other)
+        {
+            m_got = Math.Max(m_got, other.m_got);
+            m_spent = Math.Max(m_spent, other.m_spent);
+        }
+
         // -- //
 
         public override bool Equals(object obj)
         {
-            return obj is AccumFloat && Equals((AccumFloat)obj);
+            return obj is AccumFloat && this == (AccumFloat)obj;
         }
 
         public bool Equals(AccumFloat other)
         {
-            return m_got == other.m_got && m_spent == other.m_spent;
+            return this == other;
         }
 
         public override int GetHashCode()
@@ -83,6 +89,36 @@ namespace UnityUtility.NumericEntities
         public static implicit operator float(AccumFloat entity)
         {
             return entity.Value;
+        }
+
+        // -- //
+
+        public static bool operator ==(AccumFloat a, AccumFloat b)
+        {
+            return a.m_got == b.m_got && a.m_spent == b.m_spent;
+        }
+
+        public static bool operator !=(AccumFloat a, AccumFloat b)
+        {
+            return !(a == b);
+        }
+
+        public static AccumFloat operator +(AccumFloat value1, float value2)
+        {
+            if (value2 < 0f)
+                throw new ArgumentOutOfRangeException(nameof(value2), "value cannot be less than zero.");
+
+            value1.m_got += value2;
+            return value1;
+        }
+
+        public static AccumFloat operator -(AccumFloat value1, float value2)
+        {
+            if (value2 < 0f)
+                throw new ArgumentOutOfRangeException(nameof(value2), "value cannot be less than zero.");
+
+            value1.m_spent += value2;
+            return value1;
         }
     }
 }

@@ -4,6 +4,11 @@ namespace UnityUtility.NumericEntities
 {
     public enum ResizeType : byte { NewValue, Increase, Decrease }
 
+    public interface IMergeable<T>
+    {
+        void Merge(T other);
+    }
+
     public interface ISpendingEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
     {
         T Capacity { get; }
