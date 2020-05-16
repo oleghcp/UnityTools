@@ -14,8 +14,8 @@ namespace UnityUtility.GameConsole
 {
     public class Terminal : SingleUIScript<Terminal>
     {
-        private readonly Color CMD_COLOR = Color.white;
-        private readonly Color CMD_ERROR_COLOR = new Color(1f, 0.5f, 0f, 1f);
+        private readonly Color CMD_COLOR = Colours.White;
+        private readonly Color CMD_ERROR_COLOR = Colours.Orange;
 
         public static event Action<bool> Switched_Event;
 
@@ -156,6 +156,11 @@ namespace UnityUtility.GameConsole
             _log.WriteLine(txt, color);
         }
 
+        public void WriteLine(string txt, LogType logType)
+        {
+            _log.WriteLine(txt, f_getTextColor(logType));
+        }
+
         public void Clear()
         {
             _log.Clear();
@@ -169,7 +174,7 @@ namespace UnityUtility.GameConsole
         {
             if (m_cmdRun == null)
             {
-                WriteLine("Commands are not set.", Color.red);
+                _log.WriteLine("Commands are not set.", Colours.Red);
                 return;
             }
 
@@ -210,7 +215,7 @@ namespace UnityUtility.GameConsole
         {
             if (m_cmdRun == null)
             {
-                WriteLine("Commands are not set.", Color.red);
+                _log.WriteLine("Commands are not set.", Colours.Red);
                 return;
             }
 
@@ -289,34 +294,32 @@ namespace UnityUtility.GameConsole
             StartCoroutine(Switch(!m_isOn));
         }
 
-        private void DebugLogHandler(string msg, string stackTrace, LogType logType)
+        private Color f_getTextColor(LogType logType)
         {
-            Color colour;
-
             switch (logType)
             {
                 case LogType.Error:
                 case LogType.Exception:
-                    colour = Color.red;
-                    break;
-
                 case LogType.Assert:
-                    colour = Color.green;
-                    break;
+                    return Colours.Red;
 
                 case LogType.Warning:
-                    colour = Color.yellow;
-                    break;
+                    return Colours.Yellow;
+
+                case LogType.Log:
+                    return Colours.Cyan;
 
                 default:
-                    colour = Color.cyan;
-                    break;
+                    throw new UnsupportedValueException(logType);
             }
+        }
 
-            _log.WriteLine(msg, colour);
+        private void DebugLogHandler(string msg, string stackTrace, LogType logType)
+        {
+            _log.WriteLine(msg, f_getTextColor(logType));
 
             if (m_showCallStack)
-                _log.WriteLine(stackTrace, Color.gray);
+                _log.WriteLine(stackTrace, Colours.Silver);
         }
 
         ////////////
