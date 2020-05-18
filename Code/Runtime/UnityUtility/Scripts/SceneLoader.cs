@@ -11,26 +11,27 @@ namespace UnityUtility.Scripts
         bool ConfigurationDone { get; }
     }
 
-    public abstract class SceneLoader<T> : MonoBehaviour where T : Enum
+    public interface ISceneInfo
     {
-        private const string SCENE_LOADER_SCENE_NAME = "SceneLoader";
+        string SceneName { get; }
+    }
 
+    public abstract class SceneLoader<T> : MonoBehaviour where T : ISceneInfo
+    {
         public static event Action Unloaded_Event;
         public static event Action Interim_Event;
         public static event Action Loaded_Event;
 
-        private static T _scene;
+        private static T _sceneInfo;
         private static int _sceneLoaderIndex;
-        private static object _transData;
         private static bool _sceneConfigured;
         private static ISceneConfigurator _sceneConfigurator;
 
-        public static T Scene => _scene;
-        public static object TransData => _transData;
+        public static T SceneInfo => _sceneInfo;
 
         protected static void SetUp()
         {
-            _sceneLoaderIndex = SceneUtility.GetBuildIndexByScenePath(SCENE_LOADER_SCENE_NAME);
+            _sceneLoaderIndex = SceneUtility.GetBuildIndexByScenePath("SceneLoader");
             _sceneConfigured = true;
 
             SceneManager.sceneLoaded += (scene, _) =>
@@ -42,48 +43,45 @@ namespace UnityUtility.Scripts
 
         private void Start()
         {
+            IEnumerator ClearAndLoad()
+            {
+                Unloaded_Event?.Invoke();
+
+                yield return null;
+
+                Interim_Event?.Invoke();
+
+                SceneManager.LoadScene(_sceneInfo.SceneName);
+            }
+
             StartCoroutine(ClearAndLoad());
         }
 
-        private IEnumerator ClearAndLoad()
-        {
-            Unloaded_Event?.Invoke();
-
-            yield return null;
-
-            Interim_Event?.Invoke();
-
-            SceneManager.LoadScene(_scene.GetName());
-        }
-
-        public static void RegSceneConfigurator(ISceneConfigurator configurator)
+        public static void RegisterConfigurator(ISceneConfigurator configurator)
         {
             _sceneConfigurator = configurator;
             _sceneConfigured = false;
 
+            IEnumerator WaitForConfigurator()
+            {
+                while (!_sceneConfigurator.ConfigurationDone)
+                {
+                    yield return null;
+                }
+
+                _sceneConfigurator = null;
+                Loaded_Event?.Invoke();
+            }
+
             TaskSystem.StartAsync(WaitForConfigurator());
         }
 
-        public static void LoadScene(T scene, object transData = null)
+        public static void LoadScene(T sceneInfo)
         {
-            _scene = scene;
-            _transData = transData;
+            _sceneInfo = sceneInfo;
             _sceneConfigured = true;
 
             SceneManager.LoadScene(_sceneLoaderIndex);
-        }
-
-        // -- //
-
-        private static IEnumerator WaitForConfigurator()
-        {
-            while (!_sceneConfigurator.ConfigurationDone)
-            {
-                yield return null;
-            }
-
-            _sceneConfigurator = null;
-            Loaded_Event?.Invoke();
         }
     }
 }
