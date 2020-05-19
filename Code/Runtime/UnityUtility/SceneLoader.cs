@@ -57,14 +57,14 @@ namespace UnityUtility
             StartCoroutine(ClearAndLoad());
         }
 
-        public static void RegisterConfigurator(ISceneConfigurator configurator)
+        public static void WaitForConfigurator(ISceneConfigurator sceneConfigurator)
         {
             if (s_sceneConfigurator != null)
             {
                 throw new InvalidOperationException("Configurator already set for this scene instance.");
             }
 
-            s_sceneConfigurator = configurator;
+            s_sceneConfigurator = sceneConfigurator;
             s_sceneConfigured = false;
 
             IEnumerator WaitForConfigurator()
