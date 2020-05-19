@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtility.Async;
 
-namespace UnityUtility.Scripts
+namespace UnityUtility
 {
     public interface ISceneConfigurator
     {

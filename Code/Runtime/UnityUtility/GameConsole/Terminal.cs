@@ -12,7 +12,7 @@ using UnityUtility.Scripts;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
-    public class Terminal : SingleUIScript<Terminal>
+    public class Terminal : SingleUiBehaviour<Terminal>
     {
         private readonly Color CMD_COLOR = Colours.White;
         private readonly Color CMD_ERROR_COLOR = Colours.Orange;

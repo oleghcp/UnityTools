@@ -18,10 +18,8 @@ namespace UnityUtility.Scripts
             get
             {
                 if (s_inst == null)
-                {
-                    Attribute a = Attribute.GetCustomAttribute(typeof(T), typeof(CreateInstanceAttribute), true);
-                    s_inst = a != null ? (a as CreateInstanceAttribute).Create() as T : ComponentUtility.CreateInstance<T>();
-                }
+                    s_inst = SingletonUtility.CreateInstance(ComponentUtility.CreateInstance<T>);
+
                 return s_inst;
             }
         }

@@ -6,7 +6,7 @@ using UnityUtility.Scripts;
 namespace UnityUtility.UI
 {
     //Based on http://www.sharkbombs.com/2015/02/10/tooltips-with-the-new-unity-ui-ugui/
-    public class TooltipView : SingleUIScript<TooltipView>
+    public class TooltipView : SingleUiBehaviour<TooltipView>
     {
         [SerializeField]
         private Text _tooltipText;

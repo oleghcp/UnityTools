@@ -1,7 +1,7 @@
+#pragma warning disable CS0649
 using UnityEngine;
 
-#pragma warning disable CS0649
-namespace UnityUtility.Scripts
+namespace UnityUtility
 {
     [RequireComponent(typeof(Renderer)), DisallowMultipleComponent]
     public class RenderSorter : MonoBehaviour

@@ -7,7 +7,7 @@ namespace UnityUtility.Scripts
     /// Represents implementation of MonoBehaviour singleton. It has no dynamic creation of an instance.
     /// It should be saved in scene or should be created manually in runtime.
     /// </summary>
-    public abstract class SingleScript<T> : MonoBehaviour, IDisposable where T : SingleScript<T>
+    public abstract class SingleBehaviour<T> : MonoBehaviour, IDisposable where T : SingleBehaviour<T>
     {
         private static T s_inst;
         private static bool s_locked;
