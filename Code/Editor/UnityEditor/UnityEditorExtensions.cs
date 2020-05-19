@@ -30,7 +30,7 @@ namespace UnityEditor
             }
         }
 
-        public static IEnumerable<SerializedProperty> GetArray(this SerializedProperty self)
+        public static IEnumerable<SerializedProperty> EnumerateArrayElements(this SerializedProperty self)
         {
             int len = self.arraySize;
 
