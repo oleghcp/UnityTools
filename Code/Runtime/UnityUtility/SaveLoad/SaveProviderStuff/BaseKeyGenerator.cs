@@ -6,18 +6,12 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     public class BaseKeyGenerator : IKeyGenerator
     {
         private const char SEP = '.';
-        private string m_keyExt;
 
         private StringBuilder m_builder;
 
         public BaseKeyGenerator()
         {
             m_builder = new StringBuilder();
-        }
-
-        public BaseKeyGenerator(string keyExtension) : this()
-        {
-            m_keyExt = keyExtension;
         }
 
         public string Generate(Type objectType, string fieldName, string objectID)
@@ -29,9 +23,6 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
 
             if (objectID.HasUsefulData())
                 m_builder.Append(SEP).Append(objectID);
-
-            if (m_keyExt != null)
-                m_builder.Append(SEP).Append(m_keyExt);
 
             return m_builder.ToString();
         }

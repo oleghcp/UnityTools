@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityUtility.Async;
-using UnityUtility.MathExt;
 
 namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
@@ -24,58 +25,45 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
 
         public void SaveVersion(string version)
         {
-            f_recreateVersion(version);
-            string versionPath = f_getVersionPath(version);
+            f_createProfile();
+            string versionPath = PROFILE_PATH + version;
 
-            foreach (var kvp in m_storage)
+            ArrayWrapper wrapper = new ArrayWrapper
             {
-                string filePath = Path.Combine(versionPath, kvp.Key);
-                File.WriteAllText(filePath, kvp.Value);
-            }
+                Array = m_storage.Select(Container.Create).ToArray()
+            };
+
+            File.WriteAllText(versionPath, JsonUtility.ToJson(wrapper, true));
         }
 
         public TaskInfo SaveVersionAsync(string version, int keysPerFrame)
         {
-            f_recreateVersion(version);
-
-            keysPerFrame = keysPerFrame.CutBefore(1);
-
-            IEnumerator wrilteFile()
-            {
-                int count = 0;
-
-                foreach (var kvp in m_storage)
-                {
-                    File.WriteAllText(kvp.Key, kvp.Value);
-
-                    if (++count % keysPerFrame == 0)
-                        yield return null;
-                }
-            }
-
-            return TaskSystem.StartAsync(wrilteFile());
+            throw new NotImplementedException();
         }
 
         public void LoadVersion(string version)
         {
             f_createProfile();
-            m_storage.Clear();
 
-            string versionParh = f_getVersionPath(version);
-            if (Directory.Exists(versionParh))
+            string versionPath = PROFILE_PATH + version;
+
+            if (!File.Exists(versionPath))
             {
-                foreach (var filePath in Directory.EnumerateFiles(versionParh))
-                {
-                    m_storage[PathUtility.GetName(filePath)] = File.ReadAllText(filePath);
-                }
+                m_storage.Clear();
+                return;
             }
+
+            string json = File.ReadAllText(versionPath);
+            ArrayWrapper wrapper = JsonUtility.FromJson<ArrayWrapper>(json);
+
+            m_storage = wrapper.Array.ToDictionary(item => item.Key, item => item.Value);
         }
 
         public void DeleteVersion(string version)
         {
-            string versionParh = f_getVersionPath(version);
-            if (Directory.Exists(versionParh))
-                Directory.Delete(versionParh, true);
+            string versionPath = PROFILE_PATH + version;
+            if (File.Exists(versionPath))
+                File.Delete(versionPath);
         }
 
         public void DeleteProfile()
@@ -158,6 +146,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
 
         //--//
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void f_createProfile()
         {
             Directory.CreateDirectory(PROFILE_PATH);
@@ -169,19 +158,24 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
             return data.HasUsefulData() ? parse(data) : defVal;
         }
 
-        private string f_getVersionPath(string version)
+        //--//
+
+        [Serializable]
+        private struct Container
         {
-            return Path.Combine(PROFILE_PATH, version);
+            public string Key;
+            public string Value;
+
+            public static Container Create(KeyValuePair<string, string> kvp)
+            {
+                return new Container { Key = kvp.Key, Value = kvp.Value };
+            }
         }
 
-        private void f_recreateVersion(string version)
+        [Serializable]
+        private struct ArrayWrapper
         {
-            string versionPath = f_getVersionPath(version);
-
-            if (Directory.Exists(versionPath))
-                Directory.Delete(versionPath, true);
-
-            Directory.CreateDirectory(versionPath);
+            public Container[] Array;
         }
     }
 }
