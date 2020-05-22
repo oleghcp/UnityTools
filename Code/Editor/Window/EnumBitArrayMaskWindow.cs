@@ -113,7 +113,7 @@ namespace UnityUtilityEditor.Window
             if (length.intValue != names.Length)
                 length.intValue = names.Length;
 
-            int countedSize = BitArrayMask.GetArrayLength(names.Length, 32);
+            int countedSize = BitArrayMask.GetArrayLength(names.Length);
             int realSize = array.arraySize;
 
             if (countedSize > realSize)

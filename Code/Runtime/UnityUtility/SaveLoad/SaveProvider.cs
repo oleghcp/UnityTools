@@ -17,22 +17,17 @@ namespace UnityUtility.SaveLoad
         private const BindingFlags MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
         private ISaver m_innerSaver;
-        private ITextSerializer m_textSerializer;
-        private IBinarySerializer m_binarySerializer;
         private IKeyGenerator m_keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> m_fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
-
-        private readonly bool m_isBinary;
 
         public ISaver Saver
         {
             get { return m_innerSaver; }
         }
 
-        public SaveProvider()
+        public SaveProvider(ISaver saver)
         {
-            m_innerSaver = new PlayerPrefsSaver();
-            m_textSerializer = new JsonSerializer();
+            m_innerSaver = saver;
             m_keyGenerator = new BaseKeyGenerator();
         }
 
@@ -40,27 +35,12 @@ namespace UnityUtility.SaveLoad
         /// Constructor.
         /// </summary>
         /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
-        /// <param name="serializer">Object which is used for serializing custom type fields. Default serializer uses UnityEngine.JsonUtility.</param>
         /// <param name="keyGenerator">Object which generates keys for key-value storage.</param>
-        public SaveProvider(ISaver saver, ITextSerializer serializer, IKeyGenerator keyGenerator)
+        /// 
+        public SaveProvider(ISaver saver, IKeyGenerator keyGenerator)
         {
             m_innerSaver = saver;
-            m_textSerializer = serializer;
             m_keyGenerator = keyGenerator;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
-        /// <param name="serializer">Object which is used for binary serializing custom type fields.</param>
-        /// <param name="keyGenerator">Object which generates keys for key-value storage.</param>
-        public SaveProvider(ISaver saver, IBinarySerializer serializer, IKeyGenerator keyGenerator)
-        {
-            m_innerSaver = saver;
-            m_binarySerializer = serializer;
-            m_keyGenerator = keyGenerator;
-            m_isBinary = true;
         }
 
         ////////////////
@@ -95,18 +75,29 @@ namespace UnityUtility.SaveLoad
 
                 if (a != null)
                 {
-                    if (list == null) { list = new List<SaveLoadFieldAttribute>(); }
+                    if (list == null)
+                        list = new List<SaveLoadFieldAttribute>();
 
                     a.Field = fields[i];
                     a.Key = m_keyGenerator.Generate(t, a.Field.Name, clientId);
 
                     list.Add(a);
 
-                    if (initFields) { a.Field.SetValue(client, f_get(a)); }
+                    if (initFields)
+                    {
+                        object defaultValue = a.DefValue ?? a.Field.FieldType.GetDefaultValue();
+
+                        object value = defaultValue != null ?
+                                       m_innerSaver.Get(a.Key, defaultValue) :
+                                       m_innerSaver.Get(a.Key, a.Field.FieldType);
+
+                        a.Field.SetValue(client, value);
+                    }
                 }
             }
 
-            if (list != null) { m_fields.Add(client, list); }
+            if (list != null)
+                m_fields.Add(client, list);
         }
 
         /// <summary>
@@ -174,7 +165,7 @@ namespace UnityUtility.SaveLoad
 
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        f_set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                        m_innerSaver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
 
                         if (++counter >= stepsPerFrame)
                         {
@@ -219,76 +210,8 @@ namespace UnityUtility.SaveLoad
                 List<SaveLoadFieldAttribute> aList = kvp.Value;
                 for (int i = 0; i < aList.Count; i++)
                 {
-                    f_set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                    m_innerSaver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
                 }
-            }
-        }
-
-        private void f_set(string key, object value)
-        {
-            if (value is int)
-            {
-                m_innerSaver.Set(key, (int)value);
-            }
-            else if (value is float)
-            {
-                m_innerSaver.Set(key, (float)value);
-            }
-            else if (value is bool)
-            {
-                m_innerSaver.Set(key, (bool)value);
-            }
-            else if (value is string)
-            {
-                m_innerSaver.Set(key, (string)value);
-            }
-            else
-            {
-                if (m_isBinary)
-                    m_innerSaver.Set(key, m_binarySerializer.Serialize(value));
-                else
-                    m_innerSaver.Set(key, m_textSerializer.Serialize(value));
-            }
-        }
-
-        private object f_get(SaveLoadFieldAttribute a)
-        {
-            Type type = a.Field.FieldType;
-
-            if (type == typeof(int))
-            {
-                return m_innerSaver.Get(a.Key, (int)a.DefValSimple);
-            }
-            else if (type == typeof(float))
-            {
-                return m_innerSaver.Get(a.Key, (float)a.DefValSimple);
-            }
-            else if (type == typeof(bool))
-            {
-                return m_innerSaver.Get(a.Key, (bool)a.DefValSimple);
-            }
-            else if (type == typeof(string))
-            {
-                return m_innerSaver.Get(a.Key, a.DefValString);
-            }
-            else
-            {
-                if (m_isBinary)
-                {
-                    byte[] bytes = m_innerSaver.Get(a.Key, (byte[])null);
-
-                    if (bytes != null && bytes.Length > 0)
-                        return m_binarySerializer.Deserialize(bytes, type);
-                }
-                else
-                {
-                    string serStr = m_innerSaver.Get(a.Key, (string)null);
-
-                    if (serStr.HasAnyData())
-                        return m_textSerializer.Deserialize(serStr, type);
-                }
-
-                return type.IsValueType ? Activator.CreateInstance(type) : null;
             }
         }
     }

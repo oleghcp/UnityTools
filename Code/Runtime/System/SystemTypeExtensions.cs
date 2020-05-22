@@ -89,6 +89,15 @@ namespace System
         }
 
         /// <summary>
+        /// Gets default value for the specified Type
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static object GetDefaultValue(this Type self)
+        {
+            return Helper.GetDefaultValue(self);
+        }
+
+        /// <summary>
         /// Returns true if type is the specified type or subclass of the specified type;
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityUtility.BitMasks;
 
 namespace UnityUtility.Collections
@@ -10,38 +12,12 @@ namespace UnityUtility.Collections
     [Serializable]
     public sealed class BitArrayMask : IEnumerable<bool>, ICloneable
     {
-        private class BitsIterator : IEnumerable<int>
-        {
-            public BitArrayMask Owner;
-
-            public IEnumerator<int> GetEnumerator()
-            {
-                int ver = Owner.m_version;
-
-                for (int i = 0; i < Owner.m_length; i++)
-                {
-                    if (ver != Owner.m_version)
-                        throw new InvalidOperationException("Collection has been changed.");
-
-                    if (Owner.Get(i))
-                        yield return i;
-                }
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
-
         [SerializeField, HideInInspector]
         private int[] m_array;
         [SerializeField, HideInInspector]
         private int m_length;
 
         private int m_version;
-        [NonSerialized]
-        private BitsIterator m_bits;
 
         internal static string ArrayFieldName
         {
@@ -64,16 +40,12 @@ namespace UnityUtility.Collections
             get { return m_length; }
         }
 
-        public IEnumerable<int> Bits
-        {
-            get { return m_bits ?? (m_bits = new BitsIterator { Owner = this }); }
-        }
-
         public int Version
         {
             get { return m_version; }
         }
 
+        [Preserve]
         private BitArrayMask() { }
 
         public BitArrayMask(int length, bool defaultValue = false)
@@ -81,7 +53,7 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
 
-            m_array = new int[GetArrayLength(length, 32)];
+            m_array = new int[GetArrayLength(length)];
             m_length = length;
             int num = defaultValue ? (-1) : 0;
             for (int i = 0; i < m_array.Length; i++)
@@ -91,50 +63,50 @@ namespace UnityUtility.Collections
         }
 
         #region constructor with flag indices
-        public BitArrayMask(int length, int flag0)
+        public BitArrayMask(int length, int flagIndex0)
         {
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
 
-            m_array = new int[GetArrayLength(length, 32)];
+            m_array = new int[GetArrayLength(length)];
             m_length = length;
-            Set(flag0, true);
+            Set(flagIndex0, true);
         }
 
-        public BitArrayMask(int length, int flag0, int flag1)
+        public BitArrayMask(int length, int flagIndex0, int flagIndex1)
         {
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
 
-            m_array = new int[GetArrayLength(length, 32)];
+            m_array = new int[GetArrayLength(length)];
             m_length = length;
-            Set(flag0, true);
-            Set(flag1, true);
+            Set(flagIndex0, true);
+            Set(flagIndex1, true);
         }
 
-        public BitArrayMask(int length, int flag0, int flag1, int flag2)
+        public BitArrayMask(int length, int flagIndex0, int flagIndex1, int flagIndex2)
         {
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
 
-            m_array = new int[GetArrayLength(length, 32)];
+            m_array = new int[GetArrayLength(length)];
             m_length = length;
-            Set(flag0, true);
-            Set(flag1, true);
-            Set(flag2, true);
+            Set(flagIndex0, true);
+            Set(flagIndex1, true);
+            Set(flagIndex2, true);
         }
 
-        public BitArrayMask(int length, int flag0, int flag1, int flag2, int flag3)
+        public BitArrayMask(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
         {
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
 
-            m_array = new int[GetArrayLength(length, 32)];
+            m_array = new int[GetArrayLength(length)];
             m_length = length;
-            Set(flag0, true);
-            Set(flag1, true);
-            Set(flag2, true);
-            Set(flag3, true);
+            Set(flagIndex0, true);
+            Set(flagIndex1, true);
+            Set(flagIndex2, true);
+            Set(flagIndex3, true);
         }
 
         public BitArrayMask(int length, params int[] indices)
@@ -142,7 +114,7 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
 
-            m_array = new int[GetArrayLength(length, 32)];
+            m_array = new int[GetArrayLength(length)];
             m_length = length;
             for (int i = 0; i < indices.Length; i++)
             {
@@ -151,53 +123,25 @@ namespace UnityUtility.Collections
         }
         #endregion
 
-        public BitArrayMask(byte[] bytes)
-        {
-            if (bytes == null)
-                throw new ArgumentNullException(nameof(bytes));
-
-            if (bytes.Length > 268435455)
-                throw new ArgumentException("Array is too large.", nameof(bytes));
-
-            m_array = new int[GetArrayLength(bytes.Length, 4)];
-            m_length = bytes.Length * 8;
-            int num = 0;
-            int i;
-            for (i = 0; bytes.Length - i >= 4; i += 4)
-            {
-                m_array[num++] = ((bytes[i] & 0xFF) | (bytes[i + 1] & 0xFF) << 8 | (bytes[i + 2] & 0xFF) << 16 | (bytes[i + 3] & 0xFF) << 24);
-            }
-            switch (bytes.Length - i)
-            {
-                case 3:
-                    m_array[num] = (bytes[i + 2] & 0xFF) << 16;
-                    goto case 2;
-                case 2:
-                    m_array[num] |= (bytes[i + 1] & 0xFF) << 8;
-                    goto case 1;
-                case 1:
-                    m_array[num] |= (bytes[i] & 0xFF);
-                    break;
-            }
-        }
-
-        public BitArrayMask(bool[] values)
+        public BitArrayMask(IEnumerable<bool> values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            m_array = new int[GetArrayLength(values.Length, 32)];
-            m_length = values.Length;
-            for (int i = 0; i < values.Length; i++)
+            m_length = values.Count();
+            m_array = new int[GetArrayLength(m_length)];
+
+            int i = 0;
+            foreach (var item in values)
             {
-                if (values[i])
-                {
+                if (item)
                     m_array[i / 32] |= 1 << i % 32;
-                }
+
+                i++;
             }
         }
 
-        public BitArrayMask(int[] values)
+        private BitArrayMask(int[] values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
@@ -215,7 +159,7 @@ namespace UnityUtility.Collections
             if (bits == null)
                 throw new ArgumentNullException("bits");
 
-            int arrayLength = GetArrayLength(bits.m_length, 32);
+            int arrayLength = GetArrayLength(bits.m_length);
             m_array = new int[arrayLength];
             m_length = bits.m_length;
             Array.Copy(bits.m_array, m_array, arrayLength);
@@ -230,7 +174,7 @@ namespace UnityUtility.Collections
             var field = typeof(BitArray).GetField("m_array", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             int[] outerArray = field.GetValue(bits) as int[];
 
-            int arrayLength = GetArrayLength(bits.Length, 32);
+            int arrayLength = GetArrayLength(bits.Length);
             m_array = new int[arrayLength];
             m_length = bits.Length;
             Array.Copy(outerArray, m_array, arrayLength);
@@ -241,7 +185,7 @@ namespace UnityUtility.Collections
             if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value), "Value cannot be negative.");
 
-            int arrayLength = GetArrayLength(value, 32);
+            int arrayLength = GetArrayLength(value);
             if (arrayLength > m_array.Length || arrayLength + 256 < m_array.Length)
             {
                 int[] array = new int[arrayLength];
@@ -250,7 +194,7 @@ namespace UnityUtility.Collections
             }
             if (value > m_length)
             {
-                int num = GetArrayLength(m_length, 32) - 1;
+                int num = GetArrayLength(m_length) - 1;
                 int num2 = m_length % 32;
                 if (num2 > 0)
                 {
@@ -287,7 +231,7 @@ namespace UnityUtility.Collections
         public void SetAll(bool value)
         {
             int num = value ? (-1) : 0;
-            int arrayLength = GetArrayLength(m_length, 32);
+            int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
             {
                 m_array[i] = num;
@@ -303,7 +247,7 @@ namespace UnityUtility.Collections
             if (m_length != value.m_length)
                 throw new ArgumentException("Array lengths are not equal.");
 
-            int arrayLength = GetArrayLength(m_length, 32);
+            int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
             {
                 m_array[i] &= value.m_array[i];
@@ -319,7 +263,7 @@ namespace UnityUtility.Collections
             if (m_length != value.m_length)
                 throw new ArgumentException("Array lengths are not equal.");
 
-            int arrayLength = GetArrayLength(m_length, 32);
+            int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
             {
                 m_array[i] |= value.m_array[i];
@@ -335,7 +279,7 @@ namespace UnityUtility.Collections
             if (m_length != value.m_length)
                 throw new ArgumentException("Array lengths are not equal.");
 
-            int arrayLength = GetArrayLength(m_length, 32);
+            int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
             {
                 m_array[i] ^= value.m_array[i];
@@ -345,7 +289,7 @@ namespace UnityUtility.Collections
 
         public void Not()
         {
-            int arrayLength = GetArrayLength(m_length, 32);
+            int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
             {
                 m_array[i] = ~m_array[i];
@@ -355,7 +299,7 @@ namespace UnityUtility.Collections
 
         public bool Any()
         {
-            int lastElement = GetArrayLength(m_length, 32) - 1;
+            int lastElement = GetArrayLength(m_length) - 1;
 
             if (lastElement < 0)
                 return false;
@@ -371,7 +315,7 @@ namespace UnityUtility.Collections
 
         public bool All()
         {
-            int lastElement = GetArrayLength(m_length, 32) - 1;
+            int lastElement = GetArrayLength(m_length) - 1;
 
             if (lastElement < 0)
                 return false;
@@ -387,7 +331,7 @@ namespace UnityUtility.Collections
 
         public bool IsEmpty()
         {
-            int arrayLength = GetArrayLength(m_length, 32);
+            int arrayLength = GetArrayLength(m_length);
 
             for (int i = 0; i < arrayLength; i++)
             {
@@ -400,7 +344,7 @@ namespace UnityUtility.Collections
 
         public int GetCount()
         {
-            int lastElement = GetArrayLength(m_length, 32) - 1;
+            int lastElement = GetArrayLength(m_length) - 1;
 
             if (lastElement < 0)
                 return 0;
@@ -457,9 +401,9 @@ namespace UnityUtility.Collections
         }
 
 
-        internal static int GetArrayLength(int n, int div)
+        internal static int GetArrayLength(int bitsCount)
         {
-            return n > 0 ? (n - 1) / div + 1 : 0;
+            return bitsCount > 0 ? (bitsCount - 1) / 32 + 1 : 0;
         }
 
         // -- //

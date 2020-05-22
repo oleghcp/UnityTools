@@ -155,5 +155,38 @@ namespace UnityUtility
 
             return null;
         }
+
+        public static object GetDefaultValue(Type type)
+        {
+            switch (type.GetTypeCode())
+            {
+                case TypeCode.Boolean: return default(bool);
+                case TypeCode.Byte: return default(byte);
+                case TypeCode.Char: return default(char);
+                case TypeCode.DateTime: return default(DateTime);
+                case TypeCode.Decimal: return default(decimal);
+                case TypeCode.Double: return default(double);
+                case TypeCode.Int16: return default(short);
+                case TypeCode.Int32: return default(int);
+                case TypeCode.Int64: return default(long);
+                case TypeCode.SByte: return default(sbyte);
+                case TypeCode.Single: return default(float);
+                case TypeCode.UInt16: return default(ushort);
+                case TypeCode.UInt32: return default(uint);
+                case TypeCode.UInt64: return default(ulong);
+
+                case TypeCode.Empty:
+                case TypeCode.DBNull:
+                case TypeCode.String:
+                    return null;
+
+                case TypeCode.Object:
+                    if (type.IsValueType)
+                        return Activator.CreateInstance(type);
+                    return null;
+
+                default: throw new UnsupportedValueException(type.GetTypeCode());
+            }
+        }
     }
 }
