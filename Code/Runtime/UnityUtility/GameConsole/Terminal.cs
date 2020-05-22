@@ -56,7 +56,8 @@ namespace UnityUtility.GameConsole
 
             m_cmdHistory = new List<string>() { string.Empty };
 
-            Application.logMessageReceived += DebugLogHandler;
+            if (Application.isPlaying)
+                Application.logMessageReceived += DebugLogHandler;
         }
 
         protected override void CleanUp()

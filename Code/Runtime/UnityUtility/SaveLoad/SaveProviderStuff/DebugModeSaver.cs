@@ -24,18 +24,18 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
 
         public void SaveVersion(string version)
         {
-            f_createProfile();
             f_recreateVersion(version);
+            string versionPath = f_getVersionPath(version);
 
             foreach (var kvp in m_storage)
             {
-                File.WriteAllText(kvp.Key, kvp.Value);
+                string filePath = Path.Combine(versionPath, kvp.Key);
+                File.WriteAllText(filePath, kvp.Value);
             }
         }
 
         public TaskInfo SaveVersionAsync(string version, int keysPerFrame)
         {
-            f_createProfile();
             f_recreateVersion(version);
 
             keysPerFrame = keysPerFrame.CutBefore(1);
@@ -181,7 +181,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
             if (Directory.Exists(versionPath))
                 Directory.Delete(versionPath, true);
 
-            Directory.CreateDirectory(version);
+            Directory.CreateDirectory(versionPath);
         }
     }
 }
