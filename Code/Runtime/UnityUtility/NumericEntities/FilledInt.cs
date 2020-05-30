@@ -5,16 +5,16 @@ using UnityEngine;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct ForcedInt : IForcedEntity<int>, IEquatable<ForcedInt>
+    public struct FilledInt : IFilledEntity<int>, IEquatable<FilledInt>
     {
         [SerializeField, HideInInspector]
         private int m_threshold;
         [SerializeField, HideInInspector]
-        private int m_expander;
+        private int m_filler;
 
         public int CurValue
         {
-            get { return m_expander.Clamp(0, m_threshold); }
+            get { return m_filler.Clamp(0, m_threshold); }
         }
 
         public int Threshold
@@ -22,49 +22,54 @@ namespace UnityUtility.NumericEntities
             get { return m_threshold; }
         }
 
-        public bool LimitReached
+        public bool FilledFully
         {
-            get { return m_expander >= m_threshold; }
+            get { return m_filler >= m_threshold; }
         }
 
-        public bool Forced
+        public bool IsEmpty
         {
-            get { return m_expander > 0; }
+            get { return m_filler == 0; }
         }
 
         public float Ratio
         {
-            get { return (float)m_expander / m_threshold; }
+            get { return (float)m_filler / m_threshold; }
         }
 
-        public ForcedInt(int threshold)
+        public FilledInt(int threshold)
         {
             if (threshold < 0)
                 throw new ArgumentOutOfRangeException(nameof(threshold), "threshold cannot be less than zero.");
 
             m_threshold = threshold;
-            m_expander = 0;
+            m_filler = 0;
         }
 
-        public void Force(int value)
+        public void Fill(int addValue)
         {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+            if (addValue < 0)
+                throw new ArgumentOutOfRangeException(nameof(addValue), "value cannot be less than zero.");
 
-            m_expander += value.Clamp(0, m_threshold - m_expander);
+            m_filler += addValue.Clamp(0, m_threshold - m_filler);
         }
 
-        public void Restore(int value)
+        public void FillFully()
         {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
-
-            m_expander -= value.Clamp(0, m_expander);
+            m_filler = m_threshold;
         }
 
-        public void RestoreFull()
+        public void Remove(int removeValue)
         {
-            m_expander = 0;
+            if (removeValue < 0)
+                throw new ArgumentOutOfRangeException(nameof(removeValue), "value cannot be less than zero.");
+
+            m_filler -= removeValue.Clamp(0, m_filler);
+        }
+
+        public void RemoveAll()
+        {
+            m_filler = 0;
         }
 
         public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
@@ -76,7 +81,7 @@ namespace UnityUtility.NumericEntities
             {
                 case ResizeType.NewValue:
                     m_threshold = value;
-                    m_expander = m_expander.Clamp(0, m_threshold);
+                    m_filler = m_filler.Clamp(0, m_threshold);
                     break;
 
                 case ResizeType.Increase:
@@ -85,7 +90,7 @@ namespace UnityUtility.NumericEntities
 
                 case ResizeType.Decrease:
                     m_threshold -= value.Clamp(0, m_threshold);
-                    m_expander = m_expander.Clamp(0, m_threshold);
+                    m_filler = m_filler.Clamp(0, m_threshold);
                     break;
 
                 default:
@@ -97,17 +102,17 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is ForcedInt && Equals((ForcedInt)obj);
+            return obj is FilledInt && Equals((FilledInt)obj);
         }
 
-        public bool Equals(ForcedInt other)
+        public bool Equals(FilledInt other)
         {
-            return m_expander == other.m_expander && m_threshold == other.m_threshold;
+            return m_filler == other.m_filler && m_threshold == other.m_threshold;
         }
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(m_expander.GetHashCode(), m_threshold.GetHashCode());
+            return Helper.GetHashCode(m_filler.GetHashCode(), m_threshold.GetHashCode());
         }
     }
 }

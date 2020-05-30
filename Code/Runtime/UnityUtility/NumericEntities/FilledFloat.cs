@@ -5,16 +5,16 @@ using UnityEngine;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct ForcedFloat : IForcedEntity<float>, IEquatable<ForcedFloat>
+    public struct FilledFloat : IFilledEntity<float>, IEquatable<FilledFloat>
     {
         [SerializeField, HideInInspector]
         private float m_threshold;
         [SerializeField, HideInInspector]
-        private float m_expander;
+        private float m_filler;
 
         public float CurValue
         {
-            get { return m_expander.Clamp(0f, m_threshold); }
+            get { return m_filler.Clamp(0f, m_threshold); }
         }
 
         public float Threshold
@@ -22,49 +22,54 @@ namespace UnityUtility.NumericEntities
             get { return m_threshold; }
         }
 
-        public bool LimitReached
+        public bool FilledFully
         {
-            get { return m_expander >= m_threshold; }
+            get { return m_filler >= m_threshold; }
         }
 
-        public bool Forced
+        public bool IsEmpty
         {
-            get { return m_expander > float.Epsilon; }
+            get { return m_filler == 0f; }
         }
 
         public float Ratio
         {
-            get { return m_expander / m_threshold; }
+            get { return m_filler / m_threshold; }
         }
 
-        public ForcedFloat(float threshold)
+        public FilledFloat(float threshold)
         {
             if (threshold < 0f)
                 throw new ArgumentOutOfRangeException(nameof(threshold), "threshold cannot be less than zero.");
 
             m_threshold = threshold;
-            m_expander = 0f;
+            m_filler = 0f;
         }
 
-        public void Force(float value)
+        public void Fill(float addValue)
         {
-            if (value < 0f)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+            if (addValue < 0f)
+                throw new ArgumentOutOfRangeException(nameof(addValue), "value cannot be less than zero.");
 
-            m_expander += value.Clamp(0f, m_threshold - m_expander);
+            m_filler += addValue.Clamp(0f, m_threshold - m_filler);
         }
 
-        public void Restore(float value)
+        public void FillFully()
         {
-            if (value < 0f)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
-
-            m_expander -= value.Clamp(0f, m_expander);
+            m_filler = m_threshold;
         }
 
-        public void RestoreFull()
+        public void Remove(float removeValue)
         {
-            m_expander = 0f;
+            if (removeValue < 0f)
+                throw new ArgumentOutOfRangeException(nameof(removeValue), "value cannot be less than zero.");
+
+            m_filler -= removeValue.Clamp(0f, m_filler);
+        }
+
+        public void RemoveAll()
+        {
+            m_filler = 0f;
         }
 
         public void Resize(float value, ResizeType resizeType = ResizeType.NewValue)
@@ -76,7 +81,7 @@ namespace UnityUtility.NumericEntities
             {
                 case ResizeType.NewValue:
                     m_threshold = value;
-                    m_expander = m_expander.Clamp(0f, m_threshold);
+                    m_filler = m_filler.Clamp(0f, m_threshold);
                     break;
 
                 case ResizeType.Increase:
@@ -85,7 +90,7 @@ namespace UnityUtility.NumericEntities
 
                 case ResizeType.Decrease:
                     m_threshold -= value.Clamp(0f, m_threshold);
-                    m_expander = m_expander.Clamp(0f, m_threshold);
+                    m_filler = m_filler.Clamp(0f, m_threshold);
                     break;
 
                 default:
@@ -97,17 +102,17 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is ForcedFloat && Equals((ForcedFloat)obj);
+            return obj is FilledFloat && Equals((FilledFloat)obj);
         }
 
-        public bool Equals(ForcedFloat other)
+        public bool Equals(FilledFloat other)
         {
-            return m_expander == other.m_expander && m_threshold == other.m_threshold;
+            return m_filler == other.m_filler && m_threshold == other.m_threshold;
         }
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(m_expander.GetHashCode(), m_threshold.GetHashCode());
+            return Helper.GetHashCode(m_filler.GetHashCode(), m_threshold.GetHashCode());
         }
     }
 }

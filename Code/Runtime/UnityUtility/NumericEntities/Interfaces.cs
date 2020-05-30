@@ -9,7 +9,7 @@ namespace UnityUtility.NumericEntities
         void Merge(T other);
     }
 
-    public interface ISpendingEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface ISpendingEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T Capacity { get; }
         T CurValue { get; }
@@ -25,21 +25,22 @@ namespace UnityUtility.NumericEntities
         void Resize(T value, ResizeType resizeType = ResizeType.NewValue);
     }
 
-    public interface IForcedEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IFilledEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T CurValue { get; }
         T Threshold { get; }
-        bool LimitReached { get; }
-        bool Forced { get; }
+        bool FilledFully { get; }
+        bool IsEmpty { get; }
         float Ratio { get; }
 
-        void Force(T value);
-        void Restore(T value);
-        void RestoreFull();
+        void Fill(T addValue);
+        void FillFully();
+        void Remove(T removeValue);
+        void RemoveAll();
         void Resize(T value, ResizeType resizeType = ResizeType.NewValue);
     }
 
-    public interface IAccumEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IAccumEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T Value { get; }
         bool IsEmpty { get; }
@@ -50,17 +51,17 @@ namespace UnityUtility.NumericEntities
         bool Spend(T value);
     }
 
-    public interface IAbsoluteModifier<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IAbsoluteModifier<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T Value { get; }
     }
 
-    public interface IRelativeModifier<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IRelativeModifier<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T Multiplier { get; }
     }
 
-    public interface IStaticEntity<T> where T : struct, IFormattable, IConvertible, IComparable, IComparable<T>, IEquatable<T>
+    public interface IStaticEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T PureValue { get; }
         T MinValue { get; }
