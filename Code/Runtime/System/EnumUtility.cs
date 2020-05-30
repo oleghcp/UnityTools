@@ -8,22 +8,31 @@ namespace System
 
         static Enum()
         {
-            Count = EnumUtility.GetNames<TEnum>().Length;
+            Count = GetNames().Length;
         }
-    }
 
-    public static class EnumUtility
-    {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string[] GetNames<TEnum>() where TEnum : Enum
+        public static string[] GetNames()
         {
             return Enum.GetNames(typeof(TEnum));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TEnum[] GetValues<TEnum>() where TEnum : Enum
+        public static TEnum[] GetValues()
         {
             return Enum.GetValues(typeof(TEnum)) as TEnum[];
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TEnum Parse(string value)
+        {
+            return (TEnum)Enum.Parse(typeof(TEnum), value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TEnum Parse(string value, bool ignoreCase)
+        {
+            return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
         }
     }
 }
