@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using UnityUtility;
 
 namespace System.Collections.Generic
 {
@@ -206,14 +207,13 @@ namespace System.Collections.Generic
         /// <summary>
         /// Shuffles the elements of an entire collection.
         /// </summary>
-        public static void Shuffle<T>(this IList<T> self)
+        public static void Shuffle<T>(this IList<T> self, IRng randomizer)
         {
             int last = self.Count;
 
             while (last > 1)
             {
-                //TODO: make universal randomizer
-                int cur = UnityEngine.Random.Range(0, last--);
+                int cur = randomizer.Next(last--);
 
                 T value = self[cur];
                 self[cur] = self[last];
