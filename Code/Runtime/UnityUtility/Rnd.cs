@@ -350,6 +350,14 @@ namespace UnityUtility
         /// </summary>
         public int RandomEven(int min, int max)
         {
+            if (!min.IsEven())
+            {
+                if (max - min < 2)
+                    throw new InvalidOperationException("The range does not contain even values.");
+
+                min++;
+            }
+
             return m_rng.Next(min, max) & -2;
         }
 
@@ -358,7 +366,19 @@ namespace UnityUtility
         /// </summary>
         public int RandomOdd(int min, int max)
         {
-            return m_rng.Next(min, max - 1) | 1; //TODO: need check for (max - 1).
+            void throwException() => throw new InvalidOperationException("The range does not contain odd values.");
+
+            if (max.IsEven())
+            {
+                if (min == max)
+                    throwException();
+            }
+            else if (max - min < 2)
+            {
+                throwException();
+            }
+
+            return m_rng.Next(min, max) | 1;
         }
 
         /// <summary>
