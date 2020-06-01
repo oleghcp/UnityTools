@@ -2,11 +2,11 @@
 
 namespace UnityUtility.Rng
 {
-    public sealed class DotNetRNG : Random, IRng
+    public sealed class DotNetRng : Random, IRng
     {
-        public DotNetRNG() : base() { }
+        public DotNetRng() : base() { }
 
-        public DotNetRNG(int seed) : base(seed) { }
+        public DotNetRng(int seed) : base(seed) { }
 
         public float NextFloat(float minValue, float maxValue)
         {

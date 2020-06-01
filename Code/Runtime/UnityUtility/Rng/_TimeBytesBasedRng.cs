@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace UnityUtility.Rng
 {
-    public class TimeBytesBasedRNG : IRng
+    public class TimeBytesBasedRng : IRng
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct ByteGenerator
@@ -37,9 +37,9 @@ namespace UnityUtility.Rng
 
         private ByteGenerator m_rng;
 
-        public TimeBytesBasedRNG() : this(Environment.TickCount) { }
+        public TimeBytesBasedRng() : this(Environment.TickCount) { }
 
-        public TimeBytesBasedRNG(int seed)
+        public TimeBytesBasedRng(int seed)
         {
             m_rng = new ByteGenerator(seed);
         }

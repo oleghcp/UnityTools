@@ -212,7 +212,8 @@ namespace System.Collections.Generic
 
             while (last > 1)
             {
-                int cur = UnityUtility.Rnd.Random(last--);
+                //TODO: make universal randomizer
+                int cur = UnityEngine.Random.Range(0, last--);
 
                 T value = self[cur];
                 self[cur] = self[last];

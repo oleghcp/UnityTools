@@ -1,92 +1,106 @@
 ﻿using System;
-using UnityUtility.Collections.Unsafe;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityUtility.Collections;
-using UnityUtility.MathExt;
-using UnityUtility.Rng;
 using UnityEngine;
-
-using UR = UnityEngine.Random;
 using UnityUtility.BitMasks;
+using UnityUtility.Collections;
+using UnityUtility.Collections.Unsafe;
+using UnityUtility.MathExt;
+using Uerng = UnityEngine.Random;
 
 namespace UnityUtility
 {
+    public interface IRng
+    {
+        int Next(int minValue, int maxValue);
+        int Next(int maxValue);
+        float NextFloat(float minValue, float maxValue);
+        double NextDouble();
+        byte NextByte();
+        void NextBytes(byte[] buffer);
+        unsafe void NextBytes(byte* arrayPtr, int length);
+    }
+
     /// <summary>
     /// Class for generating random data.
     /// </summary>
-    public static class Rnd
+    public class Rnd
     {
-        private static IRng s_rng;
+        private IRng m_rng;
 
-        static Rnd()
+        public IRng Rng
         {
-            s_rng = new UnityRNG();
+            get { return m_rng; }
         }
 
-        public static void OverrideRandomizer(IRng randomizer)
+        public Rnd(IRng randomizer)
         {
-            s_rng = randomizer;
+            m_rng = randomizer;
+        }
+
+        public void OverrideRandomizer(IRng randomizer)
+        {
+            m_rng = randomizer;
         }
 
         /// <summary>
         /// Returns a random integer number between min [inclusive] and max [exclusive].
         /// </summary>
-        public static int Random(int min, int max)
+        public int Random(int min, int max)
         {
-            return s_rng.Next(min, max);
+            return m_rng.Next(min, max);
         }
 
         /// <summary>
         /// Returns a random integer number between zero [inclusive] and max [exclusive].
         /// </summary>
-        public static int Random(int max)
+        public int Random(int max)
         {
-            return s_rng.Next(max);
+            return m_rng.Next(max);
         }
 
         /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive].
         /// </summary>
-        public static float Random(float min, float max)
+        public float Random(float min, float max)
         {
-            return s_rng.NextFloat(min, max);
+            return m_rng.NextFloat(min, max);
         }
 
         /// <summary>
         /// Returns a random float number between zero [inclusive] and max [inclusive].
         /// </summary>
-        public static float Random(float max)
+        public float Random(float max)
         {
-            return s_rng.NextFloat(0f, max);
+            return m_rng.NextFloat(0f, max);
         }
 
         /// <summary>
         /// Returns a random float number between -range [inclusive] and range [inclusive].
         /// </summary>
-        public static float Range(float range)
+        public float Range(float range)
         {
-            return s_rng.NextFloat(-range, range);
+            return m_rng.NextFloat(-range, range);
         }
 
         /// <summary>
         /// Returns true with chance from 0f to 1f.
         /// </summary>
-        public static bool Chance(float chance)
+        public bool Chance(float chance)
         {
-            return chance > s_rng.NextDouble();
+            return chance > m_rng.NextDouble();
         }
 
         /// <summary>
         /// Returns true with chance represented by Percent from 0 to 100.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Chance(Percent chance)
+        public bool Chance(Percent chance)
         {
             return Chance(chance.ToRatio());
         }
 
-        //public static int RandomTemp(float[] weights)
+        //public  int RandomTemp(float[] weights)
         //{
         //    float sum = weights.Sum();
         //    float factor = 1f / sum;
@@ -106,9 +120,9 @@ namespace UnityUtility
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
         /// </summary>
-        public static int Random(float[] weights)
+        public int Random(float[] weights)
         {
-            double rnd = s_rng.NextDouble() * weights.Sum();
+            double rnd = m_rng.NextDouble() * weights.Sum();
             double sum = 0d;
 
             for (int i = 0; i < weights.Length; i++)
@@ -125,9 +139,9 @@ namespace UnityUtility
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
         /// </summary>
-        public static unsafe int Random(float* weights, int length)
+        public unsafe int Random(float* weights, int length)
         {
-            double rnd = s_rng.NextDouble() * ArrayUtility.Sum(weights, length);
+            double rnd = m_rng.NextDouble() * ArrayUtility.Sum(weights, length);
             double sum = 0d;
 
             for (int i = 0; i < length; i++)
@@ -144,9 +158,9 @@ namespace UnityUtility
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
         /// </summary>
-        public static int Random(int[] weights)
+        public int Random(int[] weights)
         {
-            int rnd = s_rng.Next(weights.Sum());
+            int rnd = m_rng.Next(weights.Sum());
             int sum = 0;
 
             for (int i = 0; i < weights.Length; i++)
@@ -163,9 +177,9 @@ namespace UnityUtility
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
         /// </summary>
-        public static unsafe int Random(int* weights, int length)
+        public unsafe int Random(int* weights, int length)
         {
-            int rnd = s_rng.Next(ArrayUtility.Sum(weights, length));
+            int rnd = m_rng.Next(ArrayUtility.Sum(weights, length));
             int sum = 0;
 
             for (int i = 0; i < length; i++)
@@ -183,7 +197,7 @@ namespace UnityUtility
         /// Returns a random flag contains in the specified mask.
         /// </summary>
         /// <param name="length">How many flags of 32bit mask should be considered.</param>
-        public static int RandomFlag(int mask, int length)
+        public int RandomFlag(int mask, int length)
         {
             int rn = Random(mask.GetCount(length));
 
@@ -202,7 +216,7 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random flag contains in the specified mask.
         /// </summary>
-        public static int RandomFlag(BitArrayMask mask)
+        public int RandomFlag(BitArrayMask mask)
         {
             int rn = Random(mask.GetCount());
 
@@ -224,37 +238,37 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random integer number between min [inclusive] and max [exclusive] and which is not equal to exclusiveValue.
         /// </summary>
-        public static int Random(int min, int max, int exclusiveValue)
+        public int Random(int min, int max, int exclusiveValue)
         {
             int value;
-            do { value = s_rng.Next(min, max); } while (value == exclusiveValue);
+            do { value = m_rng.Next(min, max); } while (value == exclusiveValue);
             return value;
         }
 
         /// <summary>
         /// Returns a random integer number between min [inclusive] and max [exclusive] and which is satisfies the specified condition.
         /// </summary>
-        public static int Random(int min, int max, Func<int, bool> condition)
+        public int Random(int min, int max, Func<int, bool> condition)
         {
             int value;
-            do { value = s_rng.Next(min, max); } while (!condition(value));
+            do { value = m_rng.Next(min, max); } while (!condition(value));
             return value;
         }
 
         /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive] and which is satisfies the specified condition.
         /// </summary>
-        public static float Random(float min, float max, Func<float, bool> condition)
+        public float Random(float min, float max, Func<float, bool> condition)
         {
             float value;
-            do { value = s_rng.NextFloat(min, max); } while (!condition(value));
+            do { value = m_rng.NextFloat(min, max); } while (!condition(value));
             return value;
         }
 
         /// <summary>
         /// Returns a random flag contains in the specified mask and which is satisfies the specified condition.
         /// </summary>
-        public static int RandomFlag(int mask, int length, Func<int, bool> condition)
+        public int RandomFlag(int mask, int length, Func<int, bool> condition)
         {
             int value;
             do { value = RandomFlag(mask, length); } while (!condition(value));
@@ -264,7 +278,7 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random flag contains in the specified mask and which is satisfies the specified condition.
         /// </summary>
-        public static int RandomFlag(BitArrayMask mask, Func<int, bool> condition)
+        public int RandomFlag(BitArrayMask mask, Func<int, bool> condition)
         {
             int value;
             do { value = RandomFlag(mask); } while (!condition(value));
@@ -275,26 +289,26 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values.
         /// </summary>
-        public static float Descending(float min, float max)
+        public float Descending(float min, float max)
         {
             if (min > max)
                 throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} cannot be more than {nameof(max)}.");
 
             float range = max - min;
-            float rnd = s_rng.NextFloat(0f, 1f);
+            float rnd = m_rng.NextFloat(0f, 1f);
             return rnd * rnd * range + min;
         }
 
         /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to max values.
         /// </summary>
-        public static float Ascending(float min, float max)
+        public float Ascending(float min, float max)
         {
             if (min > max)
                 throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} cannot be more than {nameof(max)}.");
 
             float range = max - min;
-            float rnd = s_rng.NextFloat(0f, 1f);
+            float rnd = m_rng.NextFloat(0f, 1f);
             return rnd.Sqrt() * range + min;
         }
 
@@ -302,7 +316,7 @@ namespace UnityUtility
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values if curvature &gt; 1f or to max values if curvature &lt; 1f.
         /// </summary>
         /// <param name="curvature">Power of the offset dependency (cannot be negative). If the value is 1f the function has no chance offset because of linear dependency.</param>
-        public static float Side(float min, float max, float curvature)
+        public float Side(float min, float max, float curvature)
         {
             if (min > max)
                 throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} cannot be more than {nameof(max)}.");
@@ -311,7 +325,7 @@ namespace UnityUtility
                 throw new ArgumentOutOfRangeException(nameof(curvature), nameof(curvature) + " cannot be negative.");
 
             float range = max - min;
-            float rnd = s_rng.NextFloat(0f, 1f);
+            float rnd = m_rng.NextFloat(0f, 1f);
             return rnd.Pow(curvature) * range + min;
         }
 
@@ -319,11 +333,11 @@ namespace UnityUtility
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min and max values if curvature &gt; 1f or to average values if curvature &lt; 1f.
         /// </summary>
         /// <param name="curvature">Power of the offset dependency (cannot be negative). If the value is 1f the function has no chance offset because of linear dependency.</param>
-        public static float Symmetric(float min, float max, float curvature)
+        public float Symmetric(float min, float max, float curvature)
         {
             float average = (max + min) * 0.5f;
 
-            if (s_rng.Next(0, 2) == 0)
+            if (m_rng.Next(0, 2) == 0)
                 return Side(min, average, curvature);
             else
                 return Side(average, max, 1f / curvature);
@@ -332,50 +346,50 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random even integer number between min [inclusive] and max [exclusive].
         /// </summary>
-        public static int RandomEven(int min, int max)
+        public int RandomEven(int min, int max)
         {
-            return s_rng.Next(min, max) & -2;
+            return m_rng.Next(min, max) & -2;
         }
 
         /// <summary>
         /// Returns a random odd integer number between min [inclusive] and max [exclusive].
         /// </summary>
-        public static int RandomOdd(int min, int max)
+        public int RandomOdd(int min, int max)
         {
-            return s_rng.Next(min, max - 1) | 1; //TODO: need check for (max - 1).
+            return m_rng.Next(min, max - 1) | 1; //TODO: need check for (max - 1).
         }
 
         /// <summary>
         /// Fills a byte array with random values.
         /// </summary>
-        public static void RandomByteArray(byte[] buffer)
+        public void RandomByteArray(byte[] buffer)
         {
-            s_rng.NextBytes(buffer);
+            m_rng.NextBytes(buffer);
         }
 
         /// <summary>
         /// Fills a byte array with random values.
         /// </summary>
-        public static unsafe void RandomByteArray(byte* arrayPtr, int length)
+        public unsafe void RandomByteArray(byte* arrayPtr, int length)
         {
-            s_rng.NextBytes(arrayPtr, length);
+            m_rng.NextBytes(arrayPtr, length);
         }
 
         /// <summary>
         /// Returns a random point inside a circle with radius 1.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetInsideUnitCircle()
+        public Vector2 GetInsideUnitCircle()
         {
-            return UR.insideUnitCircle;
+            return Uerng.insideUnitCircle;
         }
 
         /// <summary>
         /// Returns a random point on the circle line with radius 1.
         /// </summary>
-        public static Vector2 GetOnUnitCircle()
+        public Vector2 GetOnUnitCircle()
         {
-            double angle = s_rng.NextDouble() * Math.PI * 2d;
+            double angle = m_rng.NextDouble() * Math.PI * 2d;
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
@@ -383,39 +397,39 @@ namespace UnityUtility
         /// Returns a random point inside a sphere with radius 1.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetInsideUnitSphere()
+        public Vector3 GetInsideUnitSphere()
         {
-            return UR.insideUnitSphere;
+            return Uerng.insideUnitSphere;
         }
 
         /// <summary>
         /// Returns a random point on the surface of a sphere with radius 1.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetOnUnitSphere()
+        public Vector3 GetOnUnitSphere()
         {
-            return UR.onUnitSphere;
+            return Uerng.onUnitSphere;
         }
 
         /// <summary>
         /// Returns a random rotation.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion GetRandomRot(bool uniformDistribution = false)
+        public Quaternion GetRandomRot(bool uniformDistribution = false)
         {
-            return uniformDistribution ? UR.rotationUniform : UR.rotation;
+            return uniformDistribution ? Uerng.rotationUniform : Uerng.rotation;
         }
 
         /// <summary>
         /// Returns a random color32 with the specified alfa.
         /// </summary>
-        public static Color32 GetRandomColor(byte alfa)
+        public Color32 GetRandomColor(byte alfa)
         {
             Bytes bytes = default;
-            int channel1 = s_rng.Next(3);
+            int channel1 = m_rng.Next(3);
             int channel2 = Random(0, 3, channel1);
             bytes[channel1] = byte.MaxValue;
-            bytes[channel2] = s_rng.NextByte();
+            bytes[channel2] = m_rng.NextByte();
             bytes[3] = alfa;
             return (Color32)bytes;
         }
@@ -423,9 +437,9 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random color32 with random alfa.
         /// </summary>
-        public static Color32 GetRandomColor()
+        public Color32 GetRandomColor()
         {
-            return GetRandomColor(s_rng.NextByte());
+            return GetRandomColor(m_rng.NextByte());
         }
     }
 }

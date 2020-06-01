@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace UnityUtility.Rng
 {
-    public class CryptoBytesBasedRNG : IRng
+    public class CryptoBytesBasedRng : IRng
     {
         private RNGCryptoServiceProvider m_rng;
 
@@ -12,7 +12,7 @@ namespace UnityUtility.Rng
         private byte[] m_bytes2;
         private byte[] m_bytes1;
 
-        public CryptoBytesBasedRNG()
+        public CryptoBytesBasedRng()
         {
             m_rng = new RNGCryptoServiceProvider();
 
@@ -22,7 +22,7 @@ namespace UnityUtility.Rng
             m_bytes1 = new byte[sizeof(byte)];
         }
 
-        ~CryptoBytesBasedRNG()
+        ~CryptoBytesBasedRng()
         {
             m_rng.Dispose();
         }
@@ -54,7 +54,7 @@ namespace UnityUtility.Rng
         public double NextDouble()
         {
             m_rng.GetBytes(m_bytes8);
-            f_convert(m_bytes8, out ulong rn);
+            ulong rn = BitConverter.ToUInt64(m_bytes8, 0);
             rn %= 1000000000000000ul;
             return rn * 0.000000000000001d;
         }
@@ -97,30 +97,15 @@ namespace UnityUtility.Rng
             else if (length <= 65536L)
             {
                 m_rng.GetBytes(m_bytes2);
-                f_convert(m_bytes2, out ushort rn);
+                ushort rn = BitConverter.ToUInt16(m_bytes2, 0);
                 return rn % (int)length + minValue;
             }
             else
             {
                 m_rng.GetBytes(m_bytes4);
-                f_convert(m_bytes4, out uint rn);
+                uint rn = BitConverter.ToUInt32(m_bytes4, 0);
                 return (int)(rn % length + minValue);
             }
-        }
-
-        private static unsafe void f_convert(byte[] data, out ulong value)
-        {
-            fixed (byte* ptr = data) { value = *(ulong*)ptr; }
-        }
-
-        private static unsafe void f_convert(byte[] data, out uint value)
-        {
-            fixed (byte* ptr = data) { value = *(uint*)ptr; }
-        }
-
-        private static unsafe void f_convert(byte[] data, out ushort value)
-        {
-            fixed (byte* ptr = data) { value = *(ushort*)ptr; }
         }
     }
 }
