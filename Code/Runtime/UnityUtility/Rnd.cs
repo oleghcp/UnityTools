@@ -6,7 +6,7 @@ using UnityUtility.BitMasks;
 using UnityUtility.Collections;
 using UnityUtility.Collections.Unsafe;
 using UnityUtility.MathExt;
-using Uerng = UnityEngine.Random;
+using UnityUtility.Rng;
 
 namespace UnityUtility
 {
@@ -28,19 +28,21 @@ namespace UnityUtility
     {
         private IRng m_rng;
 
-        public IRng Rng
+        public IRng Generator
         {
             get { return m_rng; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value), "Value cannot ba null.");
+
+                m_rng = value;
+            }
         }
 
         public Rnd(IRng randomizer)
         {
-            m_rng = randomizer;
-        }
-
-        public void OverrideRandomizer(IRng randomizer)
-        {
-            m_rng = randomizer;
+            Generator = randomizer;
         }
 
         /// <summary>
@@ -381,7 +383,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 GetInsideUnitCircle()
         {
-            return Uerng.insideUnitCircle;
+            return UnityRng.GetInsideUnitCircle();
         }
 
         /// <summary>
@@ -399,7 +401,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 GetInsideUnitSphere()
         {
-            return Uerng.insideUnitSphere;
+            return UnityRng.GetInsideUnitSphere();
         }
 
         /// <summary>
@@ -408,7 +410,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 GetOnUnitSphere()
         {
-            return Uerng.onUnitSphere;
+            return UnityRng.GetOnUnitSphere();
         }
 
         /// <summary>
@@ -417,7 +419,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Quaternion GetRandomRot(bool uniformDistribution = false)
         {
-            return uniformDistribution ? Uerng.rotationUniform : Uerng.rotation;
+            return UnityRng.GetRandomRot(uniformDistribution);
         }
 
         /// <summary>

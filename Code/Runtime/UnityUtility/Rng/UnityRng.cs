@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using Uerng = UnityEngine.Random;
 
 namespace UnityUtility.Rng
@@ -76,6 +77,40 @@ namespace UnityUtility.Rng
                 arrayPtr[i] = (byte)Uerng.Range(0, 256);
             }
             m_state = Uerng.state;
+        }
+
+        // -- //
+
+        public static Vector2 GetInsideUnitCircle()
+        {
+            var prevState = Uerng.state;
+            Vector2 result = Uerng.insideUnitCircle;
+            Uerng.state = prevState;
+            return result;
+        }
+
+        public static Vector3 GetInsideUnitSphere()
+        {
+            var prevState = Uerng.state;
+            Vector3 result = Uerng.insideUnitSphere;
+            Uerng.state = prevState;
+            return result;
+        }
+
+        public static Vector3 GetOnUnitSphere()
+        {
+            var prevState = Uerng.state;
+            Vector3 result = Uerng.onUnitSphere;
+            Uerng.state = prevState;
+            return result;
+        }
+
+        public static Quaternion GetRandomRot(bool uniformDistribution)
+        {
+            var prevState = Uerng.state;
+            Quaternion result = uniformDistribution ? Uerng.rotationUniform : Uerng.rotation;
+            Uerng.state = prevState;
+            return result;
         }
     }
 }
