@@ -6,7 +6,7 @@ using UnityUtility.Controls;
 using UnityUtility.Controls.ControlStuff;
 using UnityUtility.Collections;
 using UnityUtilityEditor.Window;
-using UnityUtility;
+using Tools;
 
 namespace UnityUtilityEditor.Input
 {

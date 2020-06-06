@@ -2,13 +2,13 @@
 using System.Reflection;
 using UnityUtility.Scripts;
 
-namespace UnityUtility
+namespace Tools
 {
     internal static class SingletonUtility
     {
         public static T CreateInstance<T>(Func<T> alteredCreater) where T : class
         {
-            CreateInstanceAttribute attribute = typeof(T).GetCustomAttribute<CreateInstanceAttribute>(true);
+            var attribute = typeof(T).GetCustomAttribute<CreateInstanceAttribute>(true);
             return attribute != null ? attribute.Create() as T : alteredCreater();
         }
     }

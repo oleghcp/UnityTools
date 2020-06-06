@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using UnityUtility;
 
-namespace UnityUtility
+namespace Tools
 {
     public enum MemberCloneOption
     {
@@ -61,14 +62,14 @@ namespace UnityUtility
             if (sourceObj is Pointer)
                 return sourceObj;
 
-            Type type = sourceObj.GetType();
+            var type = sourceObj.GetType();
 
             if (type.IsArray)
             {
-                Array sourceArray = sourceObj as Array;
-                Array destArray = Array.CreateInstance(type.GetElementType(), sourceArray.Length);
+                var sourceArray = sourceObj as Array;
+                var destArray = Array.CreateInstance(type.GetElementType(), sourceArray.Length);
 
-                for (int i = 0; i < sourceArray.Length; i++)
+                for (var i = 0; i < sourceArray.Length; i++)
                 {
                     var sourceValue = sourceArray.GetValue(i);
                     if (sourceValue == null) { continue; }
@@ -79,19 +80,19 @@ namespace UnityUtility
                 return destArray;
             }
 
-            object destObj = Activator.CreateInstance(type, true);
+            var destObj = Activator.CreateInstance(type, true);
 
-            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             for (var i = 0; i < fields.Length; i++)
             {
-                object sourceFieldValue = fields[i].GetValue(sourceObj);
+                var sourceFieldValue = fields[i].GetValue(sourceObj);
 
                 if (sourceFieldValue == null)
                     continue;
 
-                CloneableAttribute attribute = Attribute.GetCustomAttribute(fields[i], typeof(CloneableAttribute)) as CloneableAttribute;
-                MemberCloneOption cloneOption = attribute == null ? MemberCloneOption.Clone : attribute.Option;
+                var attribute = Attribute.GetCustomAttribute(fields[i], typeof(CloneableAttribute)) as CloneableAttribute;
+                var cloneOption = attribute == null ? MemberCloneOption.Clone : attribute.Option;
 
                 if (cloneOption == MemberCloneOption.Ignore)
                     continue;
@@ -102,7 +103,7 @@ namespace UnityUtility
                     continue;
                 }
 
-                bool AsICloneable = option == CloneOption.FieldsAsICloneable || option == CloneOption.AsICloneableOrFieldsAsICloneable;
+                var AsICloneable = option == CloneOption.FieldsAsICloneable || option == CloneOption.AsICloneableOrFieldsAsICloneable;
 
                 if (AsICloneable && sourceFieldValue is ICloneable sourceFieldValueCloneable)
                 {
@@ -144,9 +145,9 @@ namespace UnityUtility
         {
             const char DEVIDER = ',';
 
-            bool first = false;
+            var first = false;
 
-            for (int i = 0; i < assemblyQualifiedName.Length; i++)
+            for (var i = 0; i < assemblyQualifiedName.Length; i++)
             {
                 if (assemblyQualifiedName[i] != DEVIDER) { continue; }
                 if (!first) { first = true; }
@@ -187,6 +188,15 @@ namespace UnityUtility
 
                 default: throw new UnsupportedValueException(type.GetTypeCode());
             }
+        }
+
+        public static int Compare<T>(T a, T b) where T : class, IComparable<T>
+        {
+            if (a != null)
+                return a.CompareTo(b);
+            if (b != null)
+                return -b.CompareTo(a);
+            return 0;
         }
     }
 }

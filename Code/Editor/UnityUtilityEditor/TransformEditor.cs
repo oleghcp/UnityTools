@@ -44,11 +44,11 @@ namespace UnityUtilityEditor
         {
             if (s_grid)
             {
-                Tool curTool = Tools.current;
+                Tool curTool = UnityEditor.Tools.current;
 
-                Tools.hidden = curTool == Tool.Move || curTool == Tool.Transform || curTool == Tool.Rect;
+                UnityEditor.Tools.hidden = curTool == Tool.Move || curTool == Tool.Transform || curTool == Tool.Rect;
 
-                if (!Tools.hidden)
+                if (!UnityEditor.Tools.hidden)
                     return;
 
                 if (curTool == Tool.Transform || curTool == Tool.Rect)
@@ -174,7 +174,7 @@ namespace UnityUtilityEditor
             if (s_grid != gridNewVal)
             {
                 s_grid = gridNewVal;
-                Tools.hidden = gridNewVal;
+                UnityEditor.Tools.hidden = gridNewVal;
                 EditorWindow.GetWindow<SceneView>().Repaint();
             }
             EditorGUI.BeginDisabledGroup(!s_grid);
