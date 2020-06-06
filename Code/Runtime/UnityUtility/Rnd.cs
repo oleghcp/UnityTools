@@ -35,7 +35,7 @@ namespace UnityUtility
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value), "Value cannot ba null.");
+                    throw new ArgumentNullException(nameof(value));
 
                 m_rng = value;
             }
@@ -213,7 +213,7 @@ namespace UnityUtility
                 }
             }
 
-            throw new InvalidOperationException("Mask is empty.");
+            throw Errors.EmptyMask();
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace UnityUtility
                 }
             }
 
-            throw new InvalidOperationException("Mask is empty.");
+            throw Errors.EmptyMask();
         }
 
         #region randoms by condition

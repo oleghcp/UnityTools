@@ -36,7 +36,7 @@ namespace UnityUtility.NumericEntities
         public AccumFloat(float got, float spent)
         {
             if (spent > got)
-                throw new ArgumentOutOfRangeException(nameof(spent), "spent value cannot be greater than got value.");
+                throw Errors.MinMax(nameof(spent), nameof(got));
 
             m_got = got;
             m_spent = spent;

@@ -10,6 +10,11 @@ namespace Tools
             return new InvalidOperationException("Collection is empty.");
         }
 
+        public static InvalidOperationException EmptyMask()
+        {
+            return new InvalidOperationException("Mask is empty.");
+        }
+
         public static InvalidOperationException CollectionChanged()
         {
             return new InvalidOperationException("Collection has been changed.");
@@ -23,6 +28,11 @@ namespace Tools
         public static ArgumentOutOfRangeException ZeroParameter(string paramName)
         {
             return new ArgumentOutOfRangeException(paramName, "The parameter must be greater than zero.");
+        }
+
+        public static ArgumentOutOfRangeException OutOfRange(string paramName, string minName, string maxName)
+        {
+            return new ArgumentOutOfRangeException(paramName, $"The value cannot be out of range between {minName} and {maxName}.");
         }
 
         public static ArgumentException DifferentArrayLengths()

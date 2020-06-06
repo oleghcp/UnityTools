@@ -1,4 +1,5 @@
 ﻿using System;
+using Tools;
 using UnityEngine;
 using Uerng = UnityEngine.Random;
 
@@ -30,7 +31,7 @@ namespace UnityUtility.Rng
         public int Next(int maxValue)
         {
             if (maxValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), nameof(maxValue) + " cannot be negative.");
+                throw Errors.NegativeParameter(nameof(maxValue));
 
             return Next(0, maxValue);
         }
@@ -69,7 +70,7 @@ namespace UnityUtility.Rng
         public unsafe void NextBytes(byte* arrayPtr, int length)
         {
             if (arrayPtr == null)
-                throw new ArgumentNullException(nameof(arrayPtr), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(arrayPtr));
 
             Uerng.state = m_state;
             for (int i = 0; i < length; i++)

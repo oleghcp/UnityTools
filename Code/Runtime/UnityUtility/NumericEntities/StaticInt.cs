@@ -46,7 +46,7 @@ namespace UnityUtility.NumericEntities
         public StaticInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
         {
             if (pureValue < minValue || pureValue > maxValue)
-                throw new ArgumentOutOfRangeException(nameof(pureValue), "pureValue cannot be out of range between minValue and maxValue.");
+                throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));
 
             m_value = pureValue;
             m_getValue = () => m_value;
@@ -91,7 +91,7 @@ namespace UnityUtility.NumericEntities
             {
                 case ResizeType.NewValue:
                     if (value < m_min || value > m_max)
-                        throw new ArgumentOutOfRangeException(nameof(value), "pureValue cannot be out of range between MinValue and MaxValue.");
+                        throw Errors.OutOfRange(nameof(value), nameof(MinValue), nameof(MaxValue));
                     m_value = value;
                     break;
 
