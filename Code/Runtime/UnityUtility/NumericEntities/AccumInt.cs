@@ -35,7 +35,7 @@ namespace UnityUtility.NumericEntities
         public AccumInt(int got, int spent)
         {
             if (spent > got)
-                throw new ArgumentOutOfRangeException(nameof(spent), "spent value cannot be more than got value.");
+                throw new ArgumentOutOfRangeException(nameof(spent), "spent value cannot be greater than got value.");
 
             m_got = got;
             m_spent = spent;
@@ -44,7 +44,7 @@ namespace UnityUtility.NumericEntities
         public void Add(int addValue)
         {
             if (addValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(addValue), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(addValue));
 
             checked { m_got += addValue; }
         }
@@ -52,7 +52,7 @@ namespace UnityUtility.NumericEntities
         public bool Spend(int spendValue)
         {
             if (spendValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(spendValue), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(spendValue));
 
             if (spendValue <= Value)
             {
@@ -106,7 +106,7 @@ namespace UnityUtility.NumericEntities
         public static AccumInt operator +(AccumInt value1, int value2)
         {
             if (value2 < 0)
-                throw new ArgumentOutOfRangeException(nameof(value2), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(value2));
 
             checked { value1.m_got += value2; }
             return value1;
@@ -115,7 +115,7 @@ namespace UnityUtility.NumericEntities
         public static AccumInt operator -(AccumInt value1, int value2)
         {
             if (value2 < 0)
-                throw new ArgumentOutOfRangeException(nameof(value2), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(value2));
 
             checked { value1.m_spent += value2; }
             return value1;

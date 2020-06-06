@@ -51,7 +51,7 @@ namespace UnityUtility.NumericEntities
         public SpendingInt(int capacity)
         {
             if (capacity < 0)
-                throw new ArgumentOutOfRangeException(nameof(capacity), "capacity cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(capacity));
 
             m_curValue = m_capacity = capacity;
         }
@@ -59,7 +59,7 @@ namespace UnityUtility.NumericEntities
         public void Spend(int value)
         {
             if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(value));
 
             m_curValue -= value;
         }
@@ -67,7 +67,7 @@ namespace UnityUtility.NumericEntities
         public void Restore(int value)
         {
             if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(value));
 
             m_curValue = (CurValue + value).CutAfter(m_capacity);
         }
@@ -80,7 +80,7 @@ namespace UnityUtility.NumericEntities
         public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
         {
             if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(value));
 
             switch (resizeType)
             {
@@ -108,7 +108,7 @@ namespace UnityUtility.NumericEntities
 
         public override string ToString()
         {
-            return $"{CurValue.ToString()}/{Capacity.ToString()}";
+            return $"{CurValue}/{Capacity}";
         }
 
         public override bool Equals(object obj)

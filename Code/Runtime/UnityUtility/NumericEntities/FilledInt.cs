@@ -41,7 +41,7 @@ namespace UnityUtility.NumericEntities
         public FilledInt(int threshold)
         {
             if (threshold < 0)
-                throw new ArgumentOutOfRangeException(nameof(threshold), "threshold cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(threshold));
 
             m_threshold = threshold;
             m_filler = 0;
@@ -50,7 +50,7 @@ namespace UnityUtility.NumericEntities
         public void Fill(int addValue)
         {
             if (addValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(addValue), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(addValue));
 
             m_filler += addValue.Clamp(0, m_threshold - m_filler);
         }
@@ -63,7 +63,7 @@ namespace UnityUtility.NumericEntities
         public void Remove(int removeValue)
         {
             if (removeValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(removeValue), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(removeValue));
 
             m_filler -= removeValue.Clamp(0, m_filler);
         }
@@ -76,7 +76,7 @@ namespace UnityUtility.NumericEntities
         public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
         {
             if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+                throw Errors.NegativeParameter(nameof(value));
 
             switch (resizeType)
             {

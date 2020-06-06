@@ -17,7 +17,7 @@ namespace Tools
 
         public static ArgumentOutOfRangeException NegativeParameter(string nameOfLength)
         {
-            return new ArgumentOutOfRangeException(nameOfLength, $"{nameOfLength} cannot be negative.");
+            return new ArgumentOutOfRangeException(nameOfLength, "The value cannot be negative.");
         }
 
         public static ArgumentOutOfRangeException ZeroParameter(string paramName)

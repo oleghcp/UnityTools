@@ -1,6 +1,7 @@
 ﻿using UnityUtility.MathExt;
 using System;
 using System.Collections.Generic;
+using Tools;
 
 namespace UnityUtility.NumericEntities
 {
@@ -96,13 +97,13 @@ namespace UnityUtility.NumericEntities
 
                 case ResizeType.Increase:
                     if (value < 0f)
-                        throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+                        throw Errors.NegativeParameter(nameof(value));
                     m_value += value.Clamp(0f, m_max);
                     break;
 
                 case ResizeType.Decrease:
                     if (value < 0f)
-                        throw new ArgumentOutOfRangeException(nameof(value), "value cannot be less than zero.");
+                        throw Errors.NegativeParameter(nameof(value));
                     m_value -= value.Clamp(0f, m_value - m_min);
                     break;
 
@@ -114,7 +115,7 @@ namespace UnityUtility.NumericEntities
         public void Resize(float minValue, float maxValue)
         {
             if (minValue > maxValue)
-                throw new ArgumentOutOfRangeException(nameof(minValue), "minValue cannot be more than maxValue.");
+                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             m_min = minValue;
             m_max = maxValue;
