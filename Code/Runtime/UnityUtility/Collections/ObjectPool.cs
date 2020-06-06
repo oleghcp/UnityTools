@@ -31,7 +31,7 @@ namespace UnityUtility.Collections
         public ObjectPool(Func<T> creator)
         {
             if (creator == null)
-                throw new ArgumentNullException(nameof(creator), "Delegate is null.");
+                throw new ArgumentNullException(nameof(creator));
 
             m_stack = new Stack<T>();
             m_createFunc = creator;
@@ -43,7 +43,7 @@ namespace UnityUtility.Collections
         public void ChangeCreator(Func<T> creator)
         {
             if (creator == null)
-                throw new ArgumentNullException(nameof(creator), "Delegate is null.");
+                throw new ArgumentNullException(nameof(creator));
 
             m_createFunc = creator;
         }

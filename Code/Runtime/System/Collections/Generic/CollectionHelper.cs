@@ -7,10 +7,10 @@ namespace System.Collections.Generic
         public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
         {
             if (collection == null)
-                throw Errors.ArgumentNull(nameof(collection));
+                throw new ArgumentNullException(nameof(collection));
 
             if (keySelector == null)
-                throw Errors.ArgumentNull(nameof(keySelector));
+                throw new ArgumentNullException(nameof(keySelector));
 
             int index = -1;
             TKey minKey = default;
@@ -50,10 +50,10 @@ namespace System.Collections.Generic
         public static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
         {
             if (collection == null)
-                throw Errors.ArgumentNull(nameof(collection));
+                throw new ArgumentNullException(nameof(collection));
 
             if (keySelector == null)
-                throw Errors.ArgumentNull(nameof(keySelector));
+                throw new ArgumentNullException(nameof(keySelector));
 
             int index = -1;
             TKey maxKey = default;
@@ -96,10 +96,10 @@ namespace System.Collections.Generic
         public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
         {
             if (collection == null)
-                throw Errors.ArgumentNull(nameof(collection));
+                throw new ArgumentNullException(nameof(collection));
 
             if (keySelector == null)
-                throw Errors.ArgumentNull(nameof(keySelector));
+                throw new ArgumentNullException(nameof(keySelector));
 
             int index = -1;
             TKey minKey = default;
@@ -139,10 +139,10 @@ namespace System.Collections.Generic
         public static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
         {
             if (collection == null)
-                throw Errors.ArgumentNull(nameof(collection));
+                throw new ArgumentNullException(nameof(collection));
 
             if (keySelector == null)
-                throw Errors.ArgumentNull(nameof(keySelector));
+                throw new ArgumentNullException(nameof(keySelector));
 
             int index = -1;
             TKey maxKey = default;

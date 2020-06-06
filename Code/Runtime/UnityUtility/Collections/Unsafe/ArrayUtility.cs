@@ -1,4 +1,5 @@
 ﻿using System;
+using Tools;
 
 namespace UnityUtility.Collections.Unsafe
 {
@@ -7,7 +8,7 @@ namespace UnityUtility.Collections.Unsafe
         public static unsafe T[] ToArray<T>(T* array, int length) where T : unmanaged
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(array));
 
             T[] newArray = new T[length];
 
@@ -22,7 +23,7 @@ namespace UnityUtility.Collections.Unsafe
         public static unsafe void Sort<T>(T* array, int length) where T : unmanaged, IComparable<T>
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(array));
 
             ArrayHelper.QuickSort(array, 0, length - 1);
         }
@@ -30,7 +31,7 @@ namespace UnityUtility.Collections.Unsafe
         public static unsafe int Sum(int* array, int length)
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(array));
 
             int sum = 0;
 
@@ -45,7 +46,7 @@ namespace UnityUtility.Collections.Unsafe
         public static unsafe float Sum(float* array, int length)
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(array));
 
             float sum = 0;
 
@@ -60,10 +61,10 @@ namespace UnityUtility.Collections.Unsafe
         public static unsafe T Min<T>(T* array, int length) where T : unmanaged, IComparable<T>
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(array));
 
             if (length <= 0)
-                throw new InvalidOperationException("Array is empty.");
+                throw Errors.NoElements();
 
             T num = *array;
 
@@ -79,10 +80,10 @@ namespace UnityUtility.Collections.Unsafe
         public static unsafe T Max<T>(T* array, int length) where T : unmanaged, IComparable<T>
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(array));
 
             if (length <= 0)
-                throw new InvalidOperationException("Array is empty.");
+                throw Errors.NoElements();
 
             T num = *array;
 

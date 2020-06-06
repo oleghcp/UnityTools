@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using Tools;
 using UnityUtility;
 
 namespace System.Collections.Generic
@@ -44,7 +45,7 @@ namespace System.Collections.Generic
         public static T GetLast<T>(this IList<T> self)
         {
             if (self.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
+                throw Errors.NoElements();
 
             return self[self.Count - 1];
         }
@@ -55,7 +56,7 @@ namespace System.Collections.Generic
         public static ref T GetLast<T>(this T[] self)
         {
             if (self.Length == 0)
-                throw new InvalidOperationException("Collection is empty.");
+                throw Errors.NoElements();
 
             return ref self[self.Length - 1];
         }
@@ -347,7 +348,7 @@ namespace System.Collections.Generic
         public static T Pop<T>(this IList<T> self)
         {
             if (self.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
+                throw Errors.NoElements();
 
             int index = self.Count - 1;
             T item = self[index];

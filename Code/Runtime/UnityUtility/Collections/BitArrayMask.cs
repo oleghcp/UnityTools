@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Tools;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityUtility.BitMasks;
@@ -51,7 +52,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(int length, bool defaultValue = false)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+                throw Errors.NegativeParameter(nameof(length));
 
             m_array = new int[GetArrayLength(length)];
             m_length = length;
@@ -66,7 +67,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(int length, int flagIndex0)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+                throw Errors.NegativeParameter(nameof(length));
 
             m_array = new int[GetArrayLength(length)];
             m_length = length;
@@ -76,7 +77,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(int length, int flagIndex0, int flagIndex1)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+                throw Errors.NegativeParameter(nameof(length));
 
             m_array = new int[GetArrayLength(length)];
             m_length = length;
@@ -87,7 +88,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(int length, int flagIndex0, int flagIndex1, int flagIndex2)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+                throw Errors.NegativeParameter(nameof(length));
 
             m_array = new int[GetArrayLength(length)];
             m_length = length;
@@ -99,7 +100,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+                throw Errors.NegativeParameter(nameof(length));
 
             m_array = new int[GetArrayLength(length)];
             m_length = length;
@@ -112,7 +113,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(int length, params int[] indices)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+                throw Errors.NegativeParameter(nameof(length));
 
             m_array = new int[GetArrayLength(length)];
             m_length = length;
@@ -157,7 +158,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(BitArrayMask bits)
         {
             if (bits == null)
-                throw new ArgumentNullException("bits");
+                throw new ArgumentNullException(nameof(bits));
 
             int arrayLength = GetArrayLength(bits.m_length);
             m_array = new int[arrayLength];
@@ -169,7 +170,7 @@ namespace UnityUtility.Collections
         public BitArrayMask(BitArray bits)
         {
             if (bits == null)
-                throw new ArgumentNullException("bits");
+                throw new ArgumentNullException(nameof(bits));
 
             var field = typeof(BitArray).GetField("m_array", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             int[] outerArray = field.GetValue(bits) as int[];
@@ -245,7 +246,7 @@ namespace UnityUtility.Collections
                 throw new ArgumentNullException(nameof(value));
 
             if (m_length != value.m_length)
-                throw new ArgumentException("Array lengths are not equal.");
+                throw Errors.DifferentArrayLengths();
 
             int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
@@ -261,7 +262,7 @@ namespace UnityUtility.Collections
                 throw new ArgumentNullException(nameof(value));
 
             if (m_length != value.m_length)
-                throw new ArgumentException("Array lengths are not equal.");
+                throw Errors.DifferentArrayLengths();
 
             int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
@@ -274,10 +275,10 @@ namespace UnityUtility.Collections
         public void Xor(BitArrayMask value)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if (m_length != value.m_length)
-                throw new ArgumentException("Array lengths are not equal.");
+                throw Errors.DifferentArrayLengths();
 
             int arrayLength = GetArrayLength(m_length);
             for (int i = 0; i < arrayLength; i++)
@@ -428,7 +429,7 @@ namespace UnityUtility.Collections
             for (int i = 0; i < m_length; i++)
             {
                 if (ver != m_version)
-                    throw new InvalidOperationException("Collection has been changed.");
+                    throw Errors.CollectionChanged();
 
                 yield return Get(i);
             }

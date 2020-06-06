@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using Tools;
 
 namespace UnityUtility.Rng
 {
@@ -30,7 +31,7 @@ namespace UnityUtility.Rng
         public int Next(int minValue, int maxValue)
         {
             if (minValue > maxValue)
-                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} cannot be more than {nameof(maxValue)}.");
+                Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return f_next(minValue, maxValue);
         }
@@ -38,7 +39,7 @@ namespace UnityUtility.Rng
         public int Next(int maxValue)
         {
             if (maxValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), nameof(maxValue) + " cannot be negative.");
+                throw Errors.NegativeParameter(nameof(maxValue));
 
             return f_next(0, maxValue);
         }
@@ -46,7 +47,7 @@ namespace UnityUtility.Rng
         public float NextFloat(float minValue, float maxValue)
         {
             if (minValue > maxValue)
-                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} cannot be more than {nameof(maxValue)}.");
+                Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return (float)(NextDouble() * ((double)maxValue - minValue) + minValue);
         }
@@ -73,7 +74,7 @@ namespace UnityUtility.Rng
         public unsafe void NextBytes(byte* arrayPtr, int length)
         {
             if (arrayPtr == null)
-                throw new ArgumentNullException(nameof(arrayPtr), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(arrayPtr));
 
             for (int i = 0; i < length; i++)
             {

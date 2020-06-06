@@ -5,6 +5,7 @@ using UnityUtility.Scripts;
 using System;
 using UnityUtility.MathExt;
 using System.Runtime.CompilerServices;
+using Tools;
 
 namespace UnityUtility.Sound.SoundProviderStuff
 {
@@ -210,7 +211,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
         IEnumerator FadeAndStop(float time)
         {
             if (time < 0f)
-                throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative.");
+                throw Errors.NegativeTime(nameof(time));
 
             float startVal = m_volume;
             float curTime = 0f;

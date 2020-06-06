@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tools;
 using UnityEngine;
 
 namespace UnityUtility
@@ -35,7 +36,7 @@ namespace UnityUtility
         public Bezier2(Vector2 orig, Vector2 dest, int helpPoints)
         {
             if (helpPoints < 1)
-                throw new ArgumentOutOfRangeException(nameof(helpPoints), "The parameter must be more than zero.");
+                throw Errors.ZeroParameter(nameof(helpPoints));
 
             m_points = new Vector2[helpPoints + 2];
             m_points[0] = orig;

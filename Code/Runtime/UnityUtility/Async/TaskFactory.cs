@@ -67,7 +67,7 @@ namespace UnityUtility.Async
 
             if (m_stopper != null)
             {
-                throw new InvalidOperationException("Stop object is already set.");
+                throw new InvalidOperationException("Stoping object is already set.");
             }
 
             (m_stopper = stopper).StopAllTasks_Event += () => StopTasks_Event?.Invoke();

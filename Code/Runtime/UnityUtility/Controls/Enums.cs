@@ -75,22 +75,20 @@ namespace UnityUtility.Controls
             {
                 case InputType.KeyMouse: return (int)KeyCode.None;
                 case InputType.Gamepad: return (int)GPKeyCode.None;
+                default: throw new UnsupportedValueException(type);
             }
-
-            throw new InvalidOperationException($"Unsupported type: {type.GetName()}.");
         }
 
         public static int GetAxisDefVal(int inputType)
         {
             InputType type = (InputType)inputType;
 
-            switch (type)
+            switch ((InputType)inputType)
             {
                 case InputType.KeyMouse: return (int)KMAxisCode.None;
                 case InputType.Gamepad: return (int)GPAxisCode.None;
+                default: throw new UnsupportedValueException(type);
             }
-
-            throw new InvalidOperationException($"Unsupported type: {type.GetName()}.");
         }
     }
 }

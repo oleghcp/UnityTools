@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Tools;
 using UnityEngine;
 using UnityUtility.BitMasks;
 using UnityUtility.Collections;
@@ -294,7 +295,7 @@ namespace UnityUtility
         public float Descending(float min, float max)
         {
             if (min > max)
-                throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} cannot be more than {nameof(max)}.");
+                throw Errors.MinMax(nameof(min), nameof(max));
 
             float range = max - min;
             float rnd = m_rng.NextFloat(0f, 1f);
@@ -307,7 +308,7 @@ namespace UnityUtility
         public float Ascending(float min, float max)
         {
             if (min > max)
-                throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} cannot be more than {nameof(max)}.");
+                throw Errors.MinMax(nameof(min), nameof(max));
 
             float range = max - min;
             float rnd = m_rng.NextFloat(0f, 1f);
@@ -321,10 +322,10 @@ namespace UnityUtility
         public float Side(float min, float max, float curvature)
         {
             if (min > max)
-                throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} cannot be more than {nameof(max)}.");
+                throw Errors.MinMax(nameof(min), nameof(max));
 
             if (curvature < 0f)
-                throw new ArgumentOutOfRangeException(nameof(curvature), nameof(curvature) + " cannot be negative.");
+                throw Errors.NegativeParameter(nameof(curvature));
 
             float range = max - min;
             float rnd = m_rng.NextFloat(0f, 1f);
@@ -353,7 +354,7 @@ namespace UnityUtility
             if (!min.IsEven())
             {
                 if (max - min < 2)
-                    throw new InvalidOperationException("The range does not contain even values.");
+                    throw Errors.RangeDoesNotContain("even");
 
                 min++;
             }
@@ -366,16 +367,14 @@ namespace UnityUtility
         /// </summary>
         public int RandomOdd(int min, int max)
         {
-            void throwException() => throw new InvalidOperationException("The range does not contain odd values.");
-
             if (max.IsEven())
             {
                 if (min == max)
-                    throwException();
+                    throw Errors.RangeDoesNotContain("odd");
             }
             else if (max - min < 2)
             {
-                throwException();
+                throw Errors.RangeDoesNotContain("odd");
             }
 
             return m_rng.Next(min, max) | 1;

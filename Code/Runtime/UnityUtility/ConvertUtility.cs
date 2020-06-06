@@ -1,4 +1,5 @@
 ﻿using System;
+using Tools;
 
 namespace UnityUtility
 {
@@ -19,7 +20,7 @@ namespace UnityUtility
             const int BITS_IN_LONG = 64;
 
             if (radix < 2 || radix > SYMBOLS.Length)
-                throw new ArgumentException($"The radix must be >= 2 and <= {SYMBOLS.Length}");
+                throw Errors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
 
             if (decimalNumber == 0)
                 return "0";
@@ -55,7 +56,7 @@ namespace UnityUtility
         public static long ParseStringCustomRadixToDecimal(string number, int radix)
         {
             if (radix < 2 || radix > SYMBOLS.Length)
-                throw new ArgumentException($"The radix must be >= 2 and <= {SYMBOLS.Length}");
+                throw Errors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
 
             if (number.IsNullOrEmpty())
                 return 0;

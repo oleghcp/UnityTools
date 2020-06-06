@@ -1,4 +1,5 @@
 ﻿using System;
+using Tools;
 
 namespace UnityUtility.Rng
 {
@@ -11,7 +12,7 @@ namespace UnityUtility.Rng
         public float NextFloat(float minValue, float maxValue)
         {
             if (minValue > maxValue)
-                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} cannot be more than {nameof(maxValue)}.");
+                Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return (float)(Sample() * ((double)maxValue - minValue) + minValue);
         }
@@ -24,7 +25,7 @@ namespace UnityUtility.Rng
         public unsafe void NextBytes(byte* arrayPtr, int length)
         {
             if (arrayPtr == null)
-                throw new ArgumentNullException(nameof(arrayPtr), "Pointer cannot be null.");
+                throw new ArgumentNullException(nameof(arrayPtr));
 
             for (int i = 0; i < length; i++)
             {

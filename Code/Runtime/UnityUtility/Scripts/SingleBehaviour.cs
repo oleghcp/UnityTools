@@ -1,4 +1,5 @@
 ﻿using System;
+using Tools;
 using UnityEngine;
 
 namespace UnityUtility.Scripts
@@ -66,7 +67,7 @@ namespace UnityUtility.Scripts
         public void Dispose()
         {
             if (gameObject.IsPrefab())
-                throw new InvalidOperationException("Non-editable objects cannot be disposed. Probably it is a prefab reference.");
+                throw Errors.DisposingNonEditable();
 
             hideFlags = HideFlags.None;
             gameObject.Destroy();

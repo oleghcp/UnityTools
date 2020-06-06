@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Tools;
 using UnityEngine;
 using UnityUtility.Collections;
 
@@ -9,8 +10,6 @@ namespace UnityUtility.Async
 {
     internal class RoutineRunner : MonoBehaviour, IPoolable
     {
-        private const string EXCEPTION_TEXT = "Task cannot be stopped. Check " + TaskSystem.SYSTEM_NAME + " settings.";
-
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
         private TaskFactory m_owner;
@@ -88,9 +87,7 @@ namespace UnityUtility.Async
         public void SkipCurrent()
         {
             if (!m_owner.CanBeStopped)
-            {
-                throw new InvalidOperationException(EXCEPTION_TEXT);
-            }
+                Errors.CannotStopTask();
 
             StopAllCoroutines();
             f_onCoroutineEnded();
@@ -99,9 +96,7 @@ namespace UnityUtility.Async
         public void Stop()
         {
             if (!m_owner.CanBeStopped)
-            {
-                throw new InvalidOperationException(EXCEPTION_TEXT);
-            }
+                Errors.CannotStopTask();
 
             StopAllCoroutines();
             m_queue.Clear();

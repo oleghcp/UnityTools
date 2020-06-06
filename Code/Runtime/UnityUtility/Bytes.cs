@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using UnityUtility.Collections;
+using Tools;
 using UnityEngine;
 
 namespace UnityUtility
@@ -34,14 +34,14 @@ namespace UnityUtility
             get
             {
                 if (index < 0 || index > SIZE - 1)
-                    throw new IndexOutOfRangeException("The index is out of range.");
+                    throw Errors.IndexOutOfRange();
 
                 return f_get(m_field, index);
             }
             set
             {
                 if (index < 0 || index > SIZE - 1)
-                    throw new IndexOutOfRangeException("The index is out of range.");
+                    throw Errors.IndexOutOfRange();
 
                 unsafe
                 {
