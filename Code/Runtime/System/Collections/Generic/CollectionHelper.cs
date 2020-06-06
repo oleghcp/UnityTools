@@ -1,106 +1,182 @@
-﻿namespace System.Collections.Generic
+﻿using Tools;
+
+namespace System.Collections.Generic
 {
-    internal static class CollectionHelper
+    internal static class CollectionHelperForValueType
     {
-        public static int ValueMin<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
+        public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
         {
-            int index = 0;
-            result = collection[index];
-            TKey min = keySelector(result);
+            if (collection == null)
+                throw Errors.ArgumentNull(nameof(collection));
 
-            int count = collection.Count;
+            if (keySelector == null)
+                throw Errors.ArgumentNull(nameof(keySelector));
 
-            for (int i = 1; i < count; i++)
+            int index = -1;
+            TKey minKey = default;
+            result = default;
+
+            bool nonFirstIteration = false;
+
+            int i = 0;
+            foreach (var item in collection)
             {
-                TKey key = keySelector(collection[i]);
-
-                if (key.CompareTo(min) < 0)
+                if (nonFirstIteration)
                 {
-                    min = key;
-                    result = collection[i];
-                    index = i;
+                    TKey key = keySelector(item);
+
+                    if (key.CompareTo(minKey) < 0)
+                    {
+                        minKey = key;
+                        result = item;
+                        index = i;
+                    }
                 }
+                else
+                {
+                    minKey = keySelector(item);
+                    nonFirstIteration = true;
+                }
+
+                ++i;
             }
 
-            return index;
+            if (nonFirstIteration)
+                return index;
+
+            throw Errors.NoElements();
         }
 
-        public static int ValueMax<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
+        public static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
         {
-            int index = 0;
-            result = collection[index];
-            TKey max = keySelector(result);
+            if (collection == null)
+                throw Errors.ArgumentNull(nameof(collection));
 
-            int count = collection.Count;
+            if (keySelector == null)
+                throw Errors.ArgumentNull(nameof(keySelector));
 
-            for (int i = 1; i < count; i++)
+            int index = -1;
+            TKey maxKey = default;
+            result = default;
+
+            bool nonFirstIteration = false;
+
+            int i = 0;
+            foreach (var item in collection)
             {
-                TKey key = keySelector(collection[i]);
-
-                if (key.CompareTo(max) > 0)
+                if (nonFirstIteration)
                 {
-                    max = key;
-                    result = collection[i];
-                    index = i;
+                    TKey key = keySelector(item);
+
+                    if (key.CompareTo(maxKey) > 0)
+                    {
+                        maxKey = key;
+                        result = item;
+                        index = i;
+                    }
                 }
+                else
+                {
+                    maxKey = keySelector(item);
+                    nonFirstIteration = true;
+                }
+
+                ++i;
             }
 
-            return index;
+            if (nonFirstIteration)
+                return index;
+
+            throw Errors.NoElements();
         }
+    }
 
-        public static int RefMin<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
+    internal static class CollectionHelperForRefType
+    {
+        public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
         {
-            int index = 0;
-            result = collection[index];
-            TKey min = keySelector(result);
+            if (collection == null)
+                throw Errors.ArgumentNull(nameof(collection));
 
-            int count = collection.Count;
+            if (keySelector == null)
+                throw Errors.ArgumentNull(nameof(keySelector));
 
-            for (int i = 1; i < count; i++)
+            int index = -1;
+            TKey minKey = default;
+            result = default;
+
+            bool nonFirstIteration = false;
+
+            int i = 0;
+            foreach (var item in collection)
             {
-                TKey key = keySelector(collection[i]);
-
-                if (Compare(key, min) < 0)
+                if (nonFirstIteration)
                 {
-                    min = key;
-                    result = collection[i];
-                    index = i;
+                    TKey key = keySelector(item);
+
+                    if (Helper.Compare(key, minKey) < 0)
+                    {
+                        minKey = key;
+                        result = item;
+                        index = i;
+                    }
                 }
+                else
+                {
+                    minKey = keySelector(item);
+                    nonFirstIteration = true;
+                }
+
+                ++i;
             }
 
-            return index;
+            if (nonFirstIteration)
+                return index;
+
+            throw Errors.NoElements();
         }
 
-        public static int RefMax<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
+        public static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : class, IComparable<TKey>
         {
-            int index = 0;
-            result = collection[index];
-            TKey max = keySelector(result);
+            if (collection == null)
+                throw Errors.ArgumentNull(nameof(collection));
 
-            int count = collection.Count;
+            if (keySelector == null)
+                throw Errors.ArgumentNull(nameof(keySelector));
 
-            for (int i = 1; i < count; i++)
+            int index = -1;
+            TKey maxKey = default;
+            result = default;
+
+            bool nonFirstIteration = false;
+
+            int i = 0;
+            foreach (var item in collection)
             {
-                TKey key = keySelector(collection[i]);
-
-                if (Compare(key, max) > 0)
+                if (nonFirstIteration)
                 {
-                    max = key;
-                    result = collection[i];
-                    index = i;
+                    TKey key = keySelector(item);
+
+                    if (Helper.Compare(key, maxKey) > 0)
+                    {
+                        maxKey = key;
+                        result = item;
+                        index = i;
+                    }
                 }
+                else
+                {
+                    maxKey = keySelector(item);
+                    nonFirstIteration = true;
+                }
+
+                ++i;
             }
 
-            return index;
-        }
+            if (nonFirstIteration)
+                return index;
 
-        public static int Compare<T>(T a, T b) where T : class, IComparable<T>
-        {
-            if (a != null)
-                return a.CompareTo(b);
-            if (b != null)
-                return -b.CompareTo(a);
-            return 0;
+            throw Errors.NoElements();
         }
     }
 }

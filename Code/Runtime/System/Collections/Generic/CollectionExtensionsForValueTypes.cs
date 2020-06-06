@@ -22,10 +22,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            if (self.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            return CollectionHelper.ValueMin(self, selector, out _);
+            return CollectionHelperForValueType.Min(self, selector, out _);
         }
 
         /// <summary>
@@ -33,33 +30,24 @@ namespace System.Collections.Generic
         /// </summary>
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            if (self.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            return CollectionHelper.ValueMax(self, selector, out _);
+            return CollectionHelperForValueType.Max(self, selector, out _);
         }
 
         /// <summary>
         /// Returns an element with the minimum parameter value.
         /// </summary>
-        public static TSource GetWithMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
+        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            if (self.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            CollectionHelper.ValueMin(self, selector, out TSource res);
+            CollectionHelperForValueType.Min(self, selector, out TSource res);
             return res;
         }
 
         /// <summary>
         /// Returns an element with the maximum parameter value.
         /// </summary>
-        public static TSource GetWithMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
+        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            if (self.Count == 0)
-                throw new InvalidOperationException("Collection is empty.");
-
-            CollectionHelper.ValueMax(self, selector, out TSource res);
+            CollectionHelperForValueType.Max(self, selector, out TSource res);
             return res;
         }
 
