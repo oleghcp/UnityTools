@@ -9,25 +9,32 @@ using UnityUtility.SaveLoad.SaveProviderStuff;
 
 namespace UnityUtility.SaveLoad
 {
+    public enum UnregOption
+    {
+        None,
+        SaveObjecState,
+        DeleteObjecState,
+    }
+
     /// <summary>
     /// Keeps, saves and loads game data.
     /// </summary>
     public sealed class SaveProvider
     {
-        private const BindingFlags MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        private const BindingFlags FIELD_MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-        private ISaver m_innerSaver;
+        private ISaver m_saver;
         private IKeyGenerator m_keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> m_fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
 
         public ISaver Saver
         {
-            get { return m_innerSaver; }
+            get { return m_saver; }
         }
 
         public SaveProvider(ISaver saver)
         {
-            m_innerSaver = saver;
+            m_saver = saver;
             m_keyGenerator = new BaseKeyGenerator();
         }
 
@@ -39,7 +46,7 @@ namespace UnityUtility.SaveLoad
         /// 
         public SaveProvider(ISaver saver, IKeyGenerator keyGenerator)
         {
-            m_innerSaver = saver;
+            m_saver = saver;
             m_keyGenerator = keyGenerator;
         }
 
@@ -65,7 +72,7 @@ namespace UnityUtility.SaveLoad
         public void RegMember(object client, string clientId, bool initFields = true)
         {
             Type t = client.GetType();
-            FieldInfo[] fields = t.GetFields(MASK);
+            FieldInfo[] fields = t.GetFields(FIELD_MASK);
 
             List<SaveLoadFieldAttribute> list = null;
 
@@ -88,8 +95,8 @@ namespace UnityUtility.SaveLoad
                         object defaultValue = a.DefValue ?? a.Field.FieldType.GetDefaultValue();
 
                         object value = defaultValue != null ?
-                                       m_innerSaver.Get(a.Key, defaultValue) :
-                                       m_innerSaver.Get(a.Key, a.Field.FieldType);
+                                       m_saver.Get(a.Key, defaultValue) :
+                                       m_saver.Get(a.Key, a.Field.FieldType);
 
                         a.Field.SetValue(client, value);
                     }
@@ -104,35 +111,42 @@ namespace UnityUtility.SaveLoad
         /// Unregisters the registered object.
         /// </summary>        
         /// <param name="deleteSaves">Removes key-value data of the object from the storage if true. You should call ApplyAll Function to save changes.</param>
-        public void UnregMember(object client, bool deleteSaves = false)
+        public void UnregMember(object client, UnregOption option = UnregOption.None)
         {
-            if (deleteSaves && m_fields.TryGetValue(client, out var list))
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    m_innerSaver.DeleteKey(list[i].Key);
-                }
-            }
+            List<SaveLoadFieldAttribute> aList = m_fields.PullOut(client);
 
-            m_fields.Remove(client);
+            if (option == UnregOption.None || aList == null)
+                return;
+
+            foreach (var attribute in aList)
+            {
+                if (option == UnregOption.SaveObjecState)
+                    m_saver.Set(attribute.Key, attribute.Field.GetValue(client));
+                else if (option == UnregOption.DeleteObjecState)
+                    m_saver.DeleteKey(attribute.Key);
+            }
         }
 
         /// <summary>
         /// Unregisters all registered objects.
         /// </summary>        
         /// <param name="deleteSaves">Removes key-value data of the objects from the storage if true. You should call ApplyAll Function to save changes.</param>
-        public void UnregAllMembers(bool deleteSaves = false)
+        public void UnregAllMembers(UnregOption option = UnregOption.None)
         {
-            if (deleteSaves)
+            if (option == UnregOption.DeleteObjecState)
             {
                 foreach (var kvp in m_fields)
                 {
-                    List<SaveLoadFieldAttribute> list = kvp.Value;
-
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        m_innerSaver.DeleteKey(list[i].Key);
-                    }
+                    foreach (var attribute in kvp.Value)
+                        m_saver.DeleteKey(attribute.Key);
+                }
+            }
+            else if (option == UnregOption.SaveObjecState)
+            {
+                foreach (var kvp in m_fields)
+                {
+                    foreach (var attribute in kvp.Value)
+                        m_saver.Set(attribute.Key, attribute.Field.GetValue(kvp.Key));
                 }
             }
 
@@ -145,7 +159,7 @@ namespace UnityUtility.SaveLoad
         public void Save(string version)
         {
             f_collect();
-            m_innerSaver.SaveVersion(version);
+            m_saver.SaveVersion(version);
         }
 
         /// <summary>
@@ -165,7 +179,7 @@ namespace UnityUtility.SaveLoad
 
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        m_innerSaver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                        m_saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
 
                         if (++counter >= stepsPerFrame)
                         {
@@ -175,7 +189,7 @@ namespace UnityUtility.SaveLoad
                     }
                 }
 
-                TaskInfo saveTask = m_innerSaver.SaveVersionAsync(version, stepsPerFrame);
+                TaskInfo saveTask = m_saver.SaveVersionAsync(version, stepsPerFrame);
 
                 while (saveTask.IsAlive)
                 {
@@ -188,7 +202,7 @@ namespace UnityUtility.SaveLoad
 
         public void Load(string version)
         {
-            m_innerSaver.LoadVersion(version);
+            m_saver.LoadVersion(version);
         }
 
         /// <summary>
@@ -196,7 +210,7 @@ namespace UnityUtility.SaveLoad
         /// </summary>
         public void Clear()
         {
-            m_innerSaver.Clear();
+            m_saver.Clear();
         }
 
         ///////////////
@@ -210,7 +224,7 @@ namespace UnityUtility.SaveLoad
                 List<SaveLoadFieldAttribute> aList = kvp.Value;
                 for (int i = 0; i < aList.Count; i++)
                 {
-                    m_innerSaver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                    m_saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
                 }
             }
         }
