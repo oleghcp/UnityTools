@@ -6,8 +6,7 @@ namespace UnityUtility.SaveLoad
     public interface ISaver
     {
         void Set(string key, object value);
-        object Get(string key, object defaltValue);
-        object Get(string key, Type type);
+        object Get(string key, object defaltValue, Type type);
 
         bool HasKey(string key);
         void DeleteKey(string key);
