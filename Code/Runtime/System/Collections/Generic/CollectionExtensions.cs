@@ -208,18 +208,10 @@ namespace System.Collections.Generic
         /// <summary>
         /// Shuffles the elements of an entire collection.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this IList<T> self, IRng generator)
         {
-            int last = self.Count;
-
-            while (last > 1)
-            {
-                int cur = generator.Next(last--);
-
-                T value = self[cur];
-                self[cur] = self[last];
-                self[last] = value;
-            }
+            CollectionHelper.Shuffle(self, generator);
         }
 
         /// <summary>

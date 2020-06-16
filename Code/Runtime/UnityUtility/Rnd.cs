@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Tools;
@@ -461,6 +462,14 @@ namespace UnityUtility
         public Color32 GetRandomColor()
         {
             return GetRandomColor(m_rng.NextByte());
+        }
+
+        /// <summary>
+        /// Shuffles the elements of an entire collection.
+        /// </summary>
+        public void Shuffle<T>(IList<T> collection)
+        {
+            CollectionHelper.Shuffle(collection, m_rng);
         }
     }
 }

@@ -1,7 +1,25 @@
 ﻿using Tools;
+using UnityUtility;
 
 namespace System.Collections.Generic
 {
+    internal static class CollectionHelper
+    {
+        public static void Shuffle<T>(IList<T> collection, IRng generator)
+        {
+            int last = collection.Count;
+
+            while (last > 1)
+            {
+                int cur = generator.Next(last--);
+
+                T value = collection[cur];
+                collection[cur] = collection[last];
+                collection[last] = value;
+            }
+        }
+    }
+
     internal static class CollectionHelperForValueType
     {
         public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result) where TKey : struct, IComparable<TKey>
