@@ -339,7 +339,7 @@ namespace UnityEngine
         /// <summary>
         /// Returns IEnumerable collection of all children;
         /// </summary>
-        public static IEnumerable<Transform> EnumerateChildren(this Transform self)
+        public static IEnumerable<Transform> EnumerateChildren(this Transform self, bool recursive = true)
         {
             int length = self.childCount;
 
@@ -347,9 +347,10 @@ namespace UnityEngine
             {
                 Transform child = self.GetChild(i);
 
-                foreach (var subChild in child.EnumerateChildren())
+                if (recursive)
                 {
-                    yield return subChild;
+                    foreach (var subChild in child.EnumerateChildren())
+                        yield return subChild;
                 }
 
                 yield return child;
