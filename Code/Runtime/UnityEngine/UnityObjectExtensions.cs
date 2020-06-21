@@ -33,12 +33,21 @@ namespace UnityEngine
 
         /// <summary>
         /// Destroys the unity object.
-        /// </summary>        
+        /// </summary>
         /// <param name="time">Time  for destruction.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Destroy(this UnityObject self, float time = 0f)
+        public static void Destroy(this UnityObject self, float time)
         {
             UnityObject.Destroy(self, time);
+        }
+
+        /// <summary>
+        /// Destroys the unity object.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Destroy(this UnityObject self)
+        {
+            UnityObject.Destroy(self, 0f);
         }
 
         /// <summary>
