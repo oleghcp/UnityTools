@@ -30,7 +30,7 @@ namespace System.Collections.Generic
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            int index = -1;
+            int index = 0;
             TKey minKey = default;
             result = default;
 
@@ -73,7 +73,7 @@ namespace System.Collections.Generic
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            int index = -1;
+            int index = 0;
             TKey maxKey = default;
             result = default;
 
@@ -119,7 +119,7 @@ namespace System.Collections.Generic
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            int index = -1;
+            int index = 0;
             TKey minKey = default;
             result = default;
 
@@ -162,7 +162,7 @@ namespace System.Collections.Generic
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            int index = -1;
+            int index = 0;
             TKey maxKey = default;
             result = default;
 
