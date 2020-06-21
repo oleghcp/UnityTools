@@ -53,6 +53,7 @@ namespace System.Collections.Generic
                 else
                 {
                     minKey = keySelector(item);
+                    result = item;
                     nonFirstIteration = true;
                 }
 
@@ -96,6 +97,7 @@ namespace System.Collections.Generic
                 else
                 {
                     maxKey = keySelector(item);
+                    result = item;
                     nonFirstIteration = true;
                 }
 
@@ -142,6 +144,7 @@ namespace System.Collections.Generic
                 else
                 {
                     minKey = keySelector(item);
+                    result = item;
                     nonFirstIteration = true;
                 }
 
@@ -185,6 +188,7 @@ namespace System.Collections.Generic
                 else
                 {
                     maxKey = keySelector(item);
+                    result = item;
                     nonFirstIteration = true;
                 }
 
