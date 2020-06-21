@@ -79,6 +79,12 @@ namespace System.Collections.Generic
             return self != null && self.Count > 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
+        {
+            return new HashSet<T>(self);
+        }
+
         /// <summary>
         /// Indicates whether the specified collection is null or it's length equals zero.
         /// </summary>    
