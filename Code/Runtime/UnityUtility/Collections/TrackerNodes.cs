@@ -2,14 +2,21 @@
 
 namespace UnityUtility.Collections
 {
-    public interface INode
+    public interface ITrackerNode
     {
         bool Changed { get; }
     }
 
+    public abstract class CustomTrackerNode
+    {
+        public abstract bool Changed { get; }
+        public abstract void Check();
+        public abstract void Force();
+    }
+
     internal static class TrackerNodes
     {
-        public interface IActiveNode : INode
+        public interface IActiveNode : ITrackerNode
         {
             void Check();
             void Force();
@@ -17,36 +24,7 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public abstract class NodeDecorator : IActiveNode
-        {
-            private IActiveNode m_prevNode;
-
-            public abstract bool Changed { get; }
-
-            public NodeDecorator(IActiveNode prevNode)
-            {
-                m_prevNode = prevNode;
-            }
-
-            public void Check()
-            {
-                m_prevNode.Check();
-                InnerCheck();
-            }
-
-            public void Force()
-            {
-                m_prevNode.Force();
-                InnerForce();
-            }
-
-            protected abstract void InnerCheck();
-            protected abstract void InnerForce();
-        }
-
-        // -- //
-
-        public class NodeForValueType<T> : NodeDecorator where T : struct, IEquatable<T>
+        public class NodeForValueType<T> : IActiveNode where T : struct, IEquatable<T>
         {
             private Func<T> m_getter;
             private Action m_onChangedCallback;
@@ -54,15 +32,15 @@ namespace UnityUtility.Collections
             private T m_cache;
             private bool m_changed;
 
-            public override bool Changed => m_changed;
+            public bool Changed => m_changed;
 
-            public NodeForValueType(IActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
+            public NodeForValueType(Func<T> getter, Action onChangedCallback)
             {
                 m_getter = getter;
                 m_onChangedCallback = onChangedCallback;
             }
 
-            protected override void InnerCheck()
+            public void Check()
             {
                 T tmp = m_getter();
 
@@ -73,7 +51,7 @@ namespace UnityUtility.Collections
                 }
             }
 
-            protected override void InnerForce()
+            public void Force()
             {
                 m_cache = m_getter();
                 m_onChangedCallback?.Invoke();
@@ -82,7 +60,7 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public class NodeForRefType<T> : NodeDecorator where T : class
+        public class NodeForRefType<T> : IActiveNode where T : class
         {
             private Func<T> m_getter;
             private Action m_onChangedCallback;
@@ -91,15 +69,15 @@ namespace UnityUtility.Collections
 
             private bool m_changed;
 
-            public override bool Changed => m_changed;
+            public bool Changed => m_changed;
 
-            public NodeForRefType(IActiveNode prevNode, Func<T> getter, Action onChangedCallback) : base(prevNode)
+            public NodeForRefType(Func<T> getter, Action onChangedCallback)
             {
                 m_getter = getter;
                 m_onChangedCallback = onChangedCallback;
             }
 
-            protected override void InnerCheck()
+            public void Check()
             {
                 T tmp = m_getter();
 
@@ -110,7 +88,7 @@ namespace UnityUtility.Collections
                 }
             }
 
-            protected override void InnerForce()
+            public void Force()
             {
                 m_cachedObject = m_getter();
                 m_onChangedCallback?.Invoke();
@@ -119,12 +97,12 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public class DependentNode : NodeDecorator
+        public class DependentNode : IActiveNode
         {
             private Action m_onChangedCallback;
-            private INode[] m_dependencies;
+            private ITrackerNode[] m_dependencies;
 
-            public override bool Changed
+            public bool Changed
             {
                 get
                 {
@@ -138,21 +116,45 @@ namespace UnityUtility.Collections
                 }
             }
 
-            public DependentNode(IActiveNode prevNode, Action onChangedCallback, INode[] dependencies) : base(prevNode)
+            public DependentNode(Action onChangedCallback, ITrackerNode[] dependencies)
             {
                 m_onChangedCallback = onChangedCallback;
                 m_dependencies = dependencies;
             }
 
-            protected override void InnerCheck()
+            public void Check()
             {
                 if (Changed)
                     m_onChangedCallback();
             }
 
-            protected override void InnerForce()
+            public void Force()
             {
                 m_onChangedCallback();
+            }
+        }
+
+        // -- //
+
+        public class CustomNodeWrapper : IActiveNode
+        {
+            private CustomTrackerNode _node;
+
+            public bool Changed => _node.Changed;
+
+            public CustomNodeWrapper(CustomTrackerNode node)
+            {
+                _node = node;
+            }
+
+            public void Check()
+            {
+                _node.Check();
+            }
+
+            public void Force()
+            {
+                _node.Force();
             }
         }
     }

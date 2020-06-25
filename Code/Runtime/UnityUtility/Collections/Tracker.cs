@@ -1,57 +1,60 @@
 ﻿using System;
+using System.Collections.Generic;
 using static UnityUtility.Collections.TrackerNodes;
 
 namespace UnityUtility.Collections
 {
     public class Tracker : IRefreshable
     {
-        private class EmptyNode : IActiveNode
-        {
-            public bool Changed => false;
-            void IActiveNode.Check() { }
-            void IActiveNode.Force() { }
-        }
-
-        private IActiveNode m_runNode;
-
-        public Tracker()
-        {
-            m_runNode = new EmptyNode();
-        }
+        private List<IActiveNode> m_nodes = new List<IActiveNode>();
 
         public void Refresh()
         {
-            m_runNode.Check();
+            for (int i = 0; i < m_nodes.Count; i++)
+            {
+                m_nodes[i].Check();
+            }
         }
 
         public void Force()
         {
-            m_runNode.Force();
+            for (int i = 0; i < m_nodes.Count; i++)
+            {
+                m_nodes[i].Force();
+            }
         }
 
         public void Clear()
         {
-            m_runNode = new EmptyNode();
+            m_nodes.Clear();
         }
 
-        public INode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
+        public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
         {
-            return m_runNode = new NodeForValueType<T>(m_runNode, getter, onChangedCallback);
+            return m_nodes.AddAndGet(new NodeForValueType<T>(getter, onChangedCallback));
         }
 
-        public INode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
+        public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
         {
-            return m_runNode = new NodeForRefType<T>(m_runNode, getter, onChangedCallback);
+            return m_nodes.AddAndGet(new NodeForRefType<T>(getter, onChangedCallback));
         }
 
-        public INode AddNodeBasedOnPrev(Action onChangedCallback)
+        public ITrackerNode AddNodeBasedOnPrev(Action onChangedCallback)
         {
-            return m_runNode = new DependentNode(m_runNode, onChangedCallback, new[] { m_runNode });
+            if (m_nodes.Count == 0)
+                throw new InvalidOperationException("Tracker does not contain nodes.");
+
+            return m_nodes.AddAndGet(new DependentNode(onChangedCallback, new[] { m_nodes.GetLast() }));
         }
 
-        public INode AddDependentNode(Action onChangedCallback, params INode[] dependencies)
+        public ITrackerNode AddDependentNode(Action onChangedCallback, params ITrackerNode[] dependencies)
         {
-            return m_runNode = new DependentNode(m_runNode, onChangedCallback, dependencies);
+            return m_nodes.AddAndGet(new DependentNode(onChangedCallback, dependencies));
+        }
+
+        public ITrackerNode AddCustomNode(CustomTrackerNode node)
+        {
+            return m_nodes.AddAndGet(new CustomNodeWrapper(node));
         }
     }
 }
