@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Tools;
 
@@ -67,6 +68,12 @@ namespace UnityUtility.Rng
                 Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return (float)(NextDouble() * ((double)maxValue - minValue) + minValue);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float NextFloat(float maxValue)
+        {
+            return NextFloat(0f, maxValue);
         }
 
         public unsafe double NextDouble()

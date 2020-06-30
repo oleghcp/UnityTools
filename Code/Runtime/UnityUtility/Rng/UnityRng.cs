@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Tools;
 using UnityEngine;
 using Uerng = UnityEngine.Random;
@@ -9,10 +10,7 @@ namespace UnityUtility.Rng
     {
         private Uerng.State m_state;
 
-        public UnityRng() : this(Environment.TickCount)
-        {
-
-        }
+        public UnityRng() : this(Environment.TickCount) { }
 
         public UnityRng(int seed)
         {
@@ -44,6 +42,12 @@ namespace UnityUtility.Rng
             return value;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float NextFloat(float maxValue)
+        {
+            return NextFloat(0f, maxValue);
+        }
+
         public double NextDouble()
         {
             Uerng.state = m_state;
@@ -52,6 +56,7 @@ namespace UnityUtility.Rng
             return value / int.MaxValue;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte NextByte()
         {
             return (byte)Next(0, 256);
@@ -112,6 +117,6 @@ namespace UnityUtility.Rng
             Quaternion result = uniformDistribution ? Uerng.rotationUniform : Uerng.rotation;
             Uerng.state = prevState;
             return result;
-        }
+        }        
     }
 }

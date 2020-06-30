@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Tools;
 
 namespace UnityUtility.Rng
@@ -17,6 +18,13 @@ namespace UnityUtility.Rng
             return (float)(Sample() * ((double)maxValue - minValue) + minValue);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float NextFloat(float maxValue)
+        {
+            return NextFloat(0f, maxValue);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte NextByte()
         {
             return (byte)Next(256);
