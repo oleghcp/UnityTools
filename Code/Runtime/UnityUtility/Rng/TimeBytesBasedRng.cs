@@ -62,7 +62,7 @@ namespace UnityUtility.Rng
             return f_next(0, maxValue);
         }
 
-        public float NextFloat(float minValue, float maxValue)
+        public float Next(float minValue, float maxValue)
         {
             if (minValue > maxValue)
                 Errors.MinMax(nameof(minValue), nameof(maxValue));
@@ -71,9 +71,9 @@ namespace UnityUtility.Rng
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float NextFloat(float maxValue)
+        public float Next(float maxValue)
         {
-            return NextFloat(0f, maxValue);
+            return Next(0f, maxValue);
         }
 
         public unsafe double NextDouble()

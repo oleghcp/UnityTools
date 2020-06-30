@@ -10,7 +10,7 @@ namespace UnityUtility.Rng
 
         public DotNetRng(int seed) : base(seed) { }
 
-        public float NextFloat(float minValue, float maxValue)
+        public float Next(float minValue, float maxValue)
         {
             if (minValue > maxValue)
                 Errors.MinMax(nameof(minValue), nameof(maxValue));
@@ -19,15 +19,15 @@ namespace UnityUtility.Rng
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float NextFloat(float maxValue)
+        public float Next(float maxValue)
         {
-            return NextFloat(0f, maxValue);
+            return Next(0f, maxValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte NextByte()
         {
-            return (byte)Next(256);
+            return (byte)base.Next(256);
         }
 
         public unsafe void NextBytes(byte* arrayPtr, int length)
@@ -37,7 +37,7 @@ namespace UnityUtility.Rng
 
             for (int i = 0; i < length; i++)
             {
-                arrayPtr[i] = (byte)Next(256);
+                arrayPtr[i] = (byte)base.Next(256);
             }
         }
     }

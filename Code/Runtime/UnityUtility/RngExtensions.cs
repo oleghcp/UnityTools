@@ -16,8 +16,8 @@ namespace UnityUtility
     {
         int Next(int minValue, int maxValue);
         int Next(int maxValue);
-        float NextFloat(float minValue, float maxValue);
-        float NextFloat(float maxValue);
+        float Next(float minValue, float maxValue);
+        float Next(float maxValue);
         double NextDouble();
         byte NextByte();
         void NextBytes(byte[] buffer);
@@ -35,7 +35,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Range(this IRng self, float range)
         {
-            return self.NextFloat(-range, range);
+            return self.Next(-range, range);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace UnityUtility
         public static float Random(this IRng self, float min, float max, Func<float, bool> condition)
         {
             float value;
-            do { value = self.NextFloat(min, max); } while (!condition(value));
+            do { value = self.Next(min, max); } while (!condition(value));
             return value;
         }
 
@@ -251,7 +251,7 @@ namespace UnityUtility
                 throw Errors.MinMax(nameof(min), nameof(max));
 
             float range = max - min;
-            float rnd = self.NextFloat(0f, 1f);
+            float rnd = self.Next(0f, 1f);
             return rnd * rnd * range + min;
         }
 
@@ -264,7 +264,7 @@ namespace UnityUtility
                 throw Errors.MinMax(nameof(min), nameof(max));
 
             float range = max - min;
-            float rnd = self.NextFloat(0f, 1f);
+            float rnd = self.Next(0f, 1f);
             return rnd.Sqrt() * range + min;
         }
 
@@ -281,7 +281,7 @@ namespace UnityUtility
                 throw Errors.NegativeParameter(nameof(curvature));
 
             float range = max - min;
-            float rnd = self.NextFloat(0f, 1f);
+            float rnd = self.Next(0f, 1f);
             return rnd.Pow(curvature) * range + min;
         }
 
@@ -402,7 +402,7 @@ namespace UnityUtility
         public static Color32 GetRandomColor(this IRng self, byte alfa)
         {
             Bytes bytes = default;
-            int channel1 = self.Next(3);
+            int channel1 = self.Next(0, 3);
             int channel2 = self.Random(0, 3, channel1);
             bytes[channel1] = byte.MaxValue;
             bytes[channel2] = self.NextByte();

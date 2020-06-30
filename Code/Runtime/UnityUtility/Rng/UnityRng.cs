@@ -34,7 +34,7 @@ namespace UnityUtility.Rng
             return Next(0, maxValue);
         }
 
-        public float NextFloat(float minValue, float maxValue)
+        public float Next(float minValue, float maxValue)
         {
             Uerng.state = m_state;
             float value = Uerng.Range(minValue, maxValue);
@@ -43,9 +43,9 @@ namespace UnityUtility.Rng
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float NextFloat(float maxValue)
+        public float Next(float maxValue)
         {
-            return NextFloat(0f, maxValue);
+            return Next(0f, maxValue);
         }
 
         public double NextDouble()
