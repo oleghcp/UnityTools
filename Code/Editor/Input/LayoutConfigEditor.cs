@@ -1,12 +1,13 @@
 ﻿using System;
-using UnityEngine;
 using System.Linq;
+using System.Reflection;
+using Tools;
 using UnityEditor;
+using UnityEngine;
+using UnityUtility.Collections;
 using UnityUtility.Controls;
 using UnityUtility.Controls.ControlStuff;
-using UnityUtility.Collections;
 using UnityUtilityEditor.Window;
-using Tools;
 
 namespace UnityUtilityEditor.Input
 {
@@ -182,8 +183,8 @@ namespace UnityUtilityEditor.Input
             if (selector == null)
             {
                 selector = new TypeSelector();
-                var ass = EditorUtilityExt.GetAssemblies();
-                selector.Types = EditorUtilityExt.GetTypes(ass, type => type.IsSubclassOf(typeof(Enum)));
+                Assembly[] assemblies = EditorUtilityExt.GetAssemblies();
+                selector.Types = EditorUtilityExt.GetTypes(assemblies, type => type.IsSubclassOf(typeof(Enum)));
                 if (selector.Types.Length > 0)
                 {
                     selector.Types = selector.Types.OrderBy(itm => itm.FullName).ToArray();

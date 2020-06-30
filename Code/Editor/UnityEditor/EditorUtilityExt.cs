@@ -1,13 +1,12 @@
-﻿using UnityObject = UnityEngine.Object;
-
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.IO;
 using UnityEngine;
 using UnityUtility.MathExt;
-using System.Collections;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
 {
@@ -110,9 +109,9 @@ namespace UnityEditor
 
         public static Assembly[] GetAssemblies()
         {
-            var files = Directory.GetFiles(@"Library\ScriptAssemblies\", "*.dll", SearchOption.AllDirectories);
-
-            return files.Select(file => Assembly.LoadFrom(file)).ToArray();
+            return Directory.GetFiles(@"Library\ScriptAssemblies\", "*.dll", SearchOption.AllDirectories)
+                            .Select(file => Assembly.LoadFrom(file))
+                            .ToArray();
         }
 
         public static Type[] GetTypes(Assembly[] assemblies, Func<Type, bool> selector)
