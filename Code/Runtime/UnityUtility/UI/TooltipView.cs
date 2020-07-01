@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityUtility.Scripts;
+using UnityUtility.SingleScripts;
 
 #pragma warning disable CS0649
 namespace UnityUtility.UI

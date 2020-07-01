@@ -2,7 +2,7 @@
 using Tools;
 using UnityEngine;
 
-namespace UnityUtility.Scripts
+namespace UnityUtility.SingleScripts
 {
     /// <summary>
     /// Represents implementation of MonoBehaviour singleton. It has no dynamic creation of an instance.

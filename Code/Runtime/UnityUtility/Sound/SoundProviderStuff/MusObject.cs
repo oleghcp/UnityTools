@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityUtility.Collections;
 using System;
-using UnityUtility.Scripts;
+using UnityUtility.SingleScripts;
 using UnityUtility.MathExt;
 using System.Runtime.CompilerServices;
 using Tools;

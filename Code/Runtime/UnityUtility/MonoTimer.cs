@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityUtility.MathExt;
 
-namespace UnityUtility.Scripts
+namespace UnityUtility
 {
     public sealed class MonoTimer : MonoBehaviour, ITimer
     {

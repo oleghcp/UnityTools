@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using UnityUtility.Scripts;
+using UnityUtility.SingleScripts;
 
 namespace Tools
 {

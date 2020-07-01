@@ -1,7 +1,7 @@
 ﻿using Tools;
 using UnityEngine;
 
-namespace UnityUtility.Scripts
+namespace UnityUtility.SingleScripts
 {
     /// <summary>
     /// Represents implementation of ScriptableObject singleton with lazy initialization.
