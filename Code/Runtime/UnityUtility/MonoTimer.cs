@@ -14,7 +14,7 @@ namespace UnityUtility
             public bool IsRunning;
             public bool GlobalScale = true;
             public float WaitTime = 1f;
-            public float CurTime = 1f;
+            public float CurrentTime = 1f;
             public float TimeScale = 1f;
 
             //IEnumerator//
@@ -28,14 +28,14 @@ namespace UnityUtility
             {
                 if (IsRunning)
                 {
-                    if (CurTime >= WaitTime)
+                    if (CurrentTime >= WaitTime)
                     {
                         IsRunning = false;
                         Callback?.Invoke();
                     }
                     else
                     {
-                        CurTime += (GlobalScale ? Time.deltaTime : Time.unscaledDeltaTime) * TimeScale;
+                        CurrentTime += (GlobalScale ? Time.deltaTime : Time.unscaledDeltaTime) * TimeScale;
                     }
                 }
 
@@ -44,89 +44,89 @@ namespace UnityUtility
 
             public void Reset()
             {
-                CurTime = 0f;
+                CurrentTime = 0f;
             }
         }
         #endregion
 
-        private Enumerator mEnumerator = new Enumerator();
+        private Enumerator m_routine = new Enumerator();
 
         public bool IsRunning
         {
-            get { return mEnumerator.IsRunning; }
+            get { return m_routine.IsRunning; }
         }
 
         public float TargetTime
         {
-            get { return mEnumerator.WaitTime; }
+            get { return m_routine.WaitTime; }
         }
 
-        public float CurTime
+        public float CurrentTime
         {
-            get { return mEnumerator.CurTime.CutAfter(mEnumerator.WaitTime); }
+            get { return m_routine.CurrentTime.CutAfter(m_routine.WaitTime); }
         }
 
         public float Progress
         {
-            get { return CurTime / TargetTime; }
+            get { return CurrentTime / TargetTime; }
         }
 
         public float TimeScale
         {
-            get { return mEnumerator.TimeScale; }
-            set { mEnumerator.TimeScale = value; }
+            get { return m_routine.TimeScale; }
+            set { m_routine.TimeScale = value; }
         }
 
         public bool ConsiderGlobalTimeScale
         {
-            get { return mEnumerator.GlobalScale; }
-            set { mEnumerator.GlobalScale = value; }
+            get { return m_routine.GlobalScale; }
+            set { m_routine.GlobalScale = value; }
         }
 
         public void Prolong(float addTime)
         {
-            mEnumerator.WaitTime += addTime;
+            m_routine.WaitTime += addTime;
         }
 
         public void InitCallback(Action callback)
         {
-            mEnumerator.Callback = callback;
+            m_routine.Callback = callback;
         }
 
         public void StartCountdown(float time, Action callback)
         {
             InitCallback(callback);
 
-            fStart(time);
+            f_start(time);
         }
 
         public void StartCountdown(float time, float timeScale = 1f)
         {
-            mEnumerator.TimeScale = 1f;
-            fStart(time);
+            m_routine.TimeScale = timeScale;
+            f_start(time);
         }
 
         public void StopCountdown()
         {
             StopAllCoroutines();
-            mEnumerator.IsRunning = false;
+            m_routine.IsRunning = false;
         }
 
         // -- //
 
-        private void fStart(float time)
+        private void f_start(float time)
         {
-            mEnumerator.Reset();
-            mEnumerator.WaitTime = time;
+            m_routine.Reset();
+            m_routine.WaitTime = time;
 
             if (time > 0f)
             {
-                mEnumerator.IsRunning = true;
-                StartCoroutine(mEnumerator);
+                m_routine.IsRunning = true;
+                StartCoroutine(m_routine);
             }
             else
             {
-                mEnumerator.Callback();
+                m_routine.Callback();
             }
         }
     }
