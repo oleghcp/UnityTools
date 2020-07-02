@@ -1,62 +1,52 @@
-﻿using UnityUtility.MathExt;
+﻿using System;
+using UnityUtility.MathExt;
 
 namespace UnityUtility
 {
+    [Serializable]
     public struct TimeCounter
     {
-        private float m_timeInterval;
-        private float m_curTime;
-
-        public float TimeInterval
-        {
-            get { return m_timeInterval; }
-            set { m_timeInterval = value; }
-        }
-
-        public float CurTime
-        {
-            get { return m_curTime; }
-            set { m_curTime = value; }
-        }
+        public float TimeInterval;
+        public float CurrentTime;
 
         public float Shortage
         {
-            get { return (m_timeInterval - m_curTime).CutBefore(0f); }
+            get { return (TimeInterval - CurrentTime).CutBefore(0f); }
         }
 
-        public TimeCounter(float timeInterval, bool initStartTime)
+        public TimeCounter(float timeInterval, bool initStartTime = false)
         {
-            m_timeInterval = timeInterval;
-            m_curTime = initStartTime ? timeInterval : 0f;
+            TimeInterval = timeInterval;
+            CurrentTime = initStartTime ? timeInterval : 0f;
         }
 
         public bool HardChek(float deltaTime)
         {
-            if (m_curTime >= m_timeInterval)
+            if (CurrentTime >= TimeInterval)
             {
-                m_curTime = 0f;
+                CurrentTime = 0f;
                 return true;
             }
 
-            m_curTime += deltaTime;
+            CurrentTime += deltaTime;
             return false;
         }
 
         public bool SmoothChek(float deltaTime)
         {
-            if (m_curTime >= m_timeInterval)
+            if (CurrentTime >= TimeInterval)
             {
-                m_curTime -= m_timeInterval;
+                CurrentTime -= TimeInterval;
                 return true;
             }
 
-            m_curTime += deltaTime;
+            CurrentTime += deltaTime;
             return false;
         }
 
         public void Reset(bool toZero = false)
         {
-            m_curTime = toZero ? 0f : m_timeInterval;
+            CurrentTime = toZero ? 0f : TimeInterval;
         }
     }
 }

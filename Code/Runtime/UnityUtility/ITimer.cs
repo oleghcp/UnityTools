@@ -6,7 +6,7 @@ namespace UnityUtility
     {
         bool IsRunning { get; }
         float TargetTime { get; }
-        float CurTime { get; }
+        float CurrentTime { get; }
         float Progress { get; }
         float TimeScale { get; set; }
 
