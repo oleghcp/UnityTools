@@ -8,6 +8,11 @@ namespace UnityUtility
     {
         public float TimeInterval;
         public float CurrentTime;
+        
+        public float Ratio
+        {
+            get { return CurrentTime / TimeInterval; }
+        }
 
         public float Shortage
         {
