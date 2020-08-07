@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Tools;
 using UnityUtility;
 using UnityObject = UnityEngine.Object;
 
@@ -613,6 +614,48 @@ namespace UnityEngine
         public static bool IsPrefab(this GameObject self)
         {
             return !self.scene.IsValid();
+        }
+
+        /// <summary>
+        /// Increases sibling index by one.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void IncreaseSiblingIndex(this Transform self)
+        {
+            self.SetSiblingIndex(self.GetSiblingIndex() + 1);
+        }
+
+        /// <summary>
+        /// Decreases sibling index by one.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DecreaseSiblingIndex(this Transform self)
+        {
+            self.SetSiblingIndex(self.GetSiblingIndex() - 1);
+        }
+
+        /// <summary>
+        /// Increases sibling index by the specified value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void IncreaseSiblingIndex(this Transform self, int value)
+        {
+            if (value < 0)
+                throw Errors.NegativeParameter(nameof(value));
+
+            self.SetSiblingIndex(self.GetSiblingIndex() + value);
+        }
+
+        /// <summary>
+        /// Decreases sibling index by the specified value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DecreaseSiblingIndex(this Transform self, int value)
+        {
+            if (value < 0)
+                throw Errors.NegativeParameter(nameof(value));
+
+            self.SetSiblingIndex(self.GetSiblingIndex() - value);
         }
     }
 }
