@@ -3,7 +3,7 @@ using UnityUtility.Async;
 
 namespace Tools
 {
-    public static class Errors
+    internal static class Errors
     {
         public static InvalidOperationException NoElements()
         {
@@ -20,9 +20,9 @@ namespace Tools
             return new InvalidOperationException("Collection has been changed.");
         }
 
-        public static ArgumentOutOfRangeException NegativeParameter(string nameOfLength)
+        public static ArgumentOutOfRangeException NegativeParameter(string paramName)
         {
-            return new ArgumentOutOfRangeException(nameOfLength, "The value cannot be negative.");
+            return new ArgumentOutOfRangeException(paramName, "The value cannot be negative.");
         }
 
         public static ArgumentOutOfRangeException ZeroParameter(string paramName)
