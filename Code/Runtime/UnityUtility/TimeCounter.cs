@@ -8,10 +8,11 @@ namespace UnityUtility
     {
         public float TimeInterval;
         public float CurrentTime;
-        
+
         public float Ratio
         {
             get { return CurrentTime / TimeInterval; }
+            set { CurrentTime = TimeInterval * value.Clamp(0f, 1f); }
         }
 
         public float Shortage

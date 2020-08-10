@@ -438,14 +438,6 @@ namespace UnityEngine
             }
         }
 
-        public static void DetachTopChildren(this Transform self)
-        {
-            foreach (var child in self.GetTopChildren())
-            {
-                child.Free();
-            }
-        }
-
         /// <summary>
         /// Transforms rotation from local space to world space.
         /// </summary>
