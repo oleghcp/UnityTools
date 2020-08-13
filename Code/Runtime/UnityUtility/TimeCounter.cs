@@ -26,27 +26,29 @@ namespace UnityUtility
             CurrentTime = initStartTime ? timeInterval : 0f;
         }
 
-        public bool HardChek(float deltaTime)
+        public bool HardCheck(float deltaTime)
         {
+            CurrentTime += deltaTime;
+
             if (CurrentTime >= TimeInterval)
             {
                 CurrentTime = 0f;
                 return true;
             }
 
-            CurrentTime += deltaTime;
             return false;
         }
 
-        public bool SmoothChek(float deltaTime)
+        public bool SmoothCheck(float deltaTime)
         {
+            CurrentTime += deltaTime;
+
             if (CurrentTime >= TimeInterval)
             {
                 CurrentTime -= TimeInterval;
                 return true;
             }
 
-            CurrentTime += deltaTime;
             return false;
         }
 
