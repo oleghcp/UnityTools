@@ -12,7 +12,7 @@ namespace UnityEngine
         /// <summary>
         /// Description of scale transformation.
         /// </summary>
-        public enum ScaleAction { ResetToOne, KeepAsLocal, KeepAsGlobal }
+        public enum ScaleAction { ResetToOne, KeepAsLocal, KeepAsWorld }
 
         /// <summary>
         /// Calculates view bounds of the orthographic camera looking along the Z axis.
@@ -72,7 +72,7 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates gameobject as a child with default local position and rotation.
         /// </summary>
-        public static GameObject Install(this GameObject self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsGlobal)
+        public static GameObject Install(this GameObject self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsWorld)
         {
             GameObject go = UnityObject.Instantiate(self, parent, false);
             f_init(go.transform, scaleAction);
@@ -91,7 +91,7 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates defined component as a child with default local position and rotation.
         /// </summary>
-        public static T Install<T>(this T self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsGlobal) where T : Component
+        public static T Install<T>(this T self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsWorld) where T : Component
         {
             T copy = UnityObject.Instantiate(self, parent, false);
             f_init(copy.transform, scaleAction);
@@ -114,14 +114,10 @@ namespace UnityEngine
                     break;
             }
 
-            if (t is RectTransform)
-            {
-                (t as RectTransform).anchoredPosition = Vector2.zero;
-            }
+            if (t is RectTransform rt)
+                rt.anchoredPosition = Vector2.zero;
             else
-            {
                 t.localPosition = Vector3.zero;
-            }
         }
         #endregion
 
@@ -491,59 +487,59 @@ namespace UnityEngine
             return self.parent as RectTransform;
         }
 
-        /// <summary>
-        /// Sets the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
-        /// </summary>
-        public static void SetLocalPos(this RectTransform self, in Vector2 localPos)
-        {
-            Vector2 pivot = self.GetParent().pivot;
-            Vector2 size = self.GetParent().rect.size;
+        ///// <summary>
+        ///// Sets the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
+        ///// </summary>
+        //public static void SetLocalPos(this RectTransform self, in Vector2 localPos)
+        //{
+        //    Vector2 pivot = self.GetParent().pivot;
+        //    Vector2 size = self.GetParent().rect.size;
 
-            float xOffset = size.x * pivot.x - size.x * 0.5f;
-            float yOffset = size.y * pivot.y - size.y * 0.5f;
+        //    float xOffset = size.x * pivot.x - size.x * 0.5f;
+        //    float yOffset = size.y * pivot.y - size.y * 0.5f;
 
-            self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
-        }
+        //    self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
+        //}
 
-        /// <summary>
-        /// Sets the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
-        /// </summary>
-        public static void SetLocalPos(this RectTransform self, in Vector2 localPos, in Vector2 customParentPivot)
-        {
-            Vector2 size = self.GetParent().rect.size;
+        ///// <summary>
+        ///// Sets the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
+        ///// </summary>
+        //public static void SetLocalPos(this RectTransform self, in Vector2 localPos, in Vector2 customParentPivot)
+        //{
+        //    Vector2 size = self.GetParent().rect.size;
 
-            float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
-            float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
+        //    float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
+        //    float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
 
-            self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
-        }
+        //    self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
+        //}
 
-        /// <summary>
-        /// Returns the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
-        /// </summary>
-        public static Vector2 GetLocalPos(this RectTransform self)
-        {
-            Vector2 pivot = self.GetParent().pivot;
-            Vector2 size = self.GetParent().rect.size;
+        ///// <summary>
+        ///// Returns the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
+        ///// </summary>
+        //public static Vector2 GetLocalPos(this RectTransform self)
+        //{
+        //    Vector2 pivot = self.GetParent().pivot;
+        //    Vector2 size = self.GetParent().rect.size;
 
-            float xOffset = size.x * pivot.x - size.x * 0.5f;
-            float yOffset = size.y * pivot.y - size.y * 0.5f;
+        //    float xOffset = size.x * pivot.x - size.x * 0.5f;
+        //    float yOffset = size.y * pivot.y - size.y * 0.5f;
 
-            return self.anchoredPosition - new Vector2(xOffset, yOffset);
-        }
+        //    return self.anchoredPosition - new Vector2(xOffset, yOffset);
+        //}
 
-        /// <summary>
-        /// Returns the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
-        /// </summary>
-        public static Vector2 GetLocalPos(this RectTransform self, in Vector2 customParentPivot)
-        {
-            Vector2 size = self.GetParent().rect.size;
+        ///// <summary>
+        ///// Returns the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
+        ///// </summary>
+        //public static Vector2 GetLocalPos(this RectTransform self, in Vector2 customParentPivot)
+        //{
+        //    Vector2 size = self.GetParent().rect.size;
 
-            float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
-            float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
+        //    float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
+        //    float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
 
-            return self.anchoredPosition - new Vector2(xOffset, yOffset);
-        }
+        //    return self.anchoredPosition - new Vector2(xOffset, yOffset);
+        //}
 
         /// <summary>
         /// Creates a sprite.
@@ -576,16 +572,16 @@ namespace UnityEngine
         /// <summary>
         /// Returns vertex indices of the triangle of the mesh.
         /// </summary>
-        public static Vector3Int GetTriangleIndices(this Mesh self, int triangleNum)
+        public static (int i0, int i1, int i2) GetTriangleIndices(this Mesh self, int triangleNum)
         {
             int trIndex = triangleNum * 3;
 
-            return new Vector3Int
-            {
-                x = self.triangles[trIndex],
-                y = self.triangles[++trIndex],
-                z = self.triangles[++trIndex]
-            };
+            return
+            (
+                self.triangles[trIndex],
+                self.triangles[++trIndex],
+                self.triangles[++trIndex]
+            );
         }
 
         /// <summary>
@@ -593,10 +589,10 @@ namespace UnityEngine
         /// </summary>
         public static Plane GetTriangle(this Mesh self, int triangleNum)
         {
-            Vector3Int indices = self.GetTriangleIndices(triangleNum);
+            (int i0, int i1, int i2) = self.GetTriangleIndices(triangleNum);
             Vector3[] vertices = self.vertices;
 
-            return new Plane(vertices[indices.x], vertices[indices.y], vertices[indices.z]);
+            return new Plane(vertices[i0], vertices[i1], vertices[i2]);
         }
 
         /// <summary>
