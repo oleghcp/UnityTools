@@ -437,9 +437,43 @@ namespace System.Collections.Generic
             self.Add(pair.key, pair.value);
         }
 
+        public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key)
+        {
+            self.TryGetValue(key, out TValue value);
+            return value;
+        }
+
         public static (TKey key, TValue value) ToTuple<TKey, TValue>(in this KeyValuePair<TKey, TValue> self)
         {
             return (self.Key, self.Value);
+        }
+
+        public static bool TryPeek<T>(this Stack<T> self, out T item)
+        {
+            bool canPeek = self.Count > 0;
+            item = canPeek ? self.Peek() : default;
+            return canPeek;
+        }
+
+        public static bool TryPop<T>(this Stack<T> self, out T item)
+        {
+            bool canPop = self.Count > 0;
+            item = canPop ? self.Pop() : default;
+            return canPop;
+        }
+
+        public static bool TryPeek<T>(this Queue<T> self, out T item)
+        {
+            bool canPeek = self.Count > 0;
+            item = canPeek ? self.Peek() : default;
+            return canPeek;
+        }
+
+        public static bool TryDequeue<T>(this Queue<T> self, out T item)
+        {
+            bool canDequeue = self.Count > 0;
+            item = canDequeue ? self.Dequeue() : default;
+            return canDequeue;
         }
     }
 }
