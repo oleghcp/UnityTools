@@ -197,9 +197,9 @@ namespace UnityUtility.SaveLoad
             return TaskSystem.StartAsync(CollectAndSave());
         }
 
-        public void Load(string version)
+        public bool Load(string version)
         {
-            m_saver.LoadVersion(version);
+            return m_saver.LoadVersion(version);
         }
 
         /// <summary>
