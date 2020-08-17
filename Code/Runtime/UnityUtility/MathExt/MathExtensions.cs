@@ -381,6 +381,7 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Transfers the value from degrees to radians.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToRadians(this float value)
         {
             return value * Mathf.Deg2Rad;
