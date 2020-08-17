@@ -76,6 +76,7 @@ namespace UnityUtility
                 return true;
             }
 
+            m_currentValue = newValue;
             return false;
         }
 
@@ -95,6 +96,7 @@ namespace UnityUtility
                 return true;
             }
 
+            m_currentValue = newValue;
             return false;
         }
     }
