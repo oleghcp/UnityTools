@@ -487,6 +487,17 @@ namespace UnityEngine
             return self.parent as RectTransform;
         }
 
+        public static void SetAnchor(this RectTransform self, TextAnchor anchor, bool setPivot = false)
+        {
+            Vector2 vector = RectUtility.GetAnchorParams(anchor);
+
+            self.anchorMin = vector;
+            self.anchorMax = vector;
+
+            if (setPivot)
+                self.pivot = vector;
+        }
+
         ///// <summary>
         ///// Sets the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
         ///// </summary>
