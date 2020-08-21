@@ -32,11 +32,13 @@ namespace UnityUtility.NumericEntities
         bool FilledFully { get; }
         bool IsEmpty { get; }
         float Ratio { get; }
+        T Excess { get; }
 
         void Fill(T addValue);
         void FillFully();
         void Remove(T removeValue);
         void RemoveAll();
+        void RemoveTillExcess();
         void Resize(T value, ResizeType resizeType = ResizeType.NewValue);
     }
 

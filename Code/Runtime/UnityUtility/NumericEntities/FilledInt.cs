@@ -35,7 +35,12 @@ namespace UnityUtility.NumericEntities
 
         public float Ratio
         {
-            get { return (float)m_filler / m_threshold; }
+            get { return (float)m_filler.CutAfter(m_threshold) / m_threshold; }
+        }
+
+        public int Excess
+        {
+            get { return (m_filler - m_threshold).CutBefore(0); }
         }
 
         public FilledInt(int threshold)
@@ -52,12 +57,13 @@ namespace UnityUtility.NumericEntities
             if (addValue < 0)
                 throw Errors.NegativeParameter(nameof(addValue));
 
-            m_filler += addValue.Clamp(0, m_threshold - m_filler);
+            m_filler += addValue;
         }
 
         public void FillFully()
         {
-            m_filler = m_threshold;
+            if (m_filler < m_threshold)
+                m_filler = m_threshold;
         }
 
         public void Remove(int removeValue)
@@ -65,12 +71,17 @@ namespace UnityUtility.NumericEntities
             if (removeValue < 0)
                 throw Errors.NegativeParameter(nameof(removeValue));
 
-            m_filler -= removeValue.Clamp(0, m_filler);
+            m_filler -= removeValue.CutAfter(m_filler);
         }
 
         public void RemoveAll()
         {
             m_filler = 0;
+        }
+
+        public void RemoveTillExcess()
+        {
+            m_filler = Excess;
         }
 
         public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
@@ -103,7 +114,7 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is FilledInt && Equals((FilledInt)obj);
+            return obj is FilledInt other && Equals(other);
         }
 
         public bool Equals(FilledInt other)
