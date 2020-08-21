@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Tools;
 using UnityUtility;
@@ -21,7 +22,7 @@ namespace System
 
         public static string Cut(this StringBuilder self)
         {
-            var value = self.ToString();
+            string value = self.ToString();
             self.Clear();
             return value;
         }
@@ -105,6 +106,17 @@ namespace System
         public static bool Is(this Type self, Type familyType)
         {
             return self.IsSubclassOf(familyType) || self == familyType;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] AsArray<T>(this T self)
+        {
+            return new[] { self };
+        }
+
+        public static IEnumerable<T> AsEnumerable<T>(this T self)
+        {
+            yield return self;
         }
     }
 }
