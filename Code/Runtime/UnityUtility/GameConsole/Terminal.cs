@@ -12,6 +12,12 @@ using UnityUtility.SingleScripts;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
+    public struct TerminalOptions
+    {
+        public bool ShowCallStackForLogs;
+        public bool AddSpaceAfterName;
+    }
+
     public class Terminal : SingleUiBehaviour<Terminal>
     {
         private readonly Color CMD_COLOR = Colours.White;
@@ -36,7 +42,7 @@ namespace UnityUtility.GameConsole
         private List<string> m_cmdHistory;
         private int m_curHistoryIndex;
 
-        private bool m_showCallStack;
+        private TerminalOptions m_options;
 
         public bool IsOn
         {
@@ -106,13 +112,37 @@ namespace UnityUtility.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
+        public static void CreateTerminal()
+        {
+            Resources.Load<GameObject>("TerminalCanvas")
+                     .Install()
+                     .Immortalize();
+        }
+
+        /// <summary>
+        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Commands are just functions of the view:
+        /// public string commandname(string[] options).
+        /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
+        /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands)
         {
-            GameObject newCanvas = Resources.Load<GameObject>("TerminalCanvas").Install();
-            newCanvas.Immortalize();
-            Terminal terminal = newCanvas.GetComponentInChildren<Terminal>();
-            terminal.SetCommands(commands);
+            CreateTerminal();
+            I.SetCommands(commands);
+        }
+
+        /// <summary>
+        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Commands are just functions of the view:
+        /// public string commandname(string[] options).
+        /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
+        /// </summary>
+        /// <param name="commands">An object which contans command functions.</param>
+        public static void CreateTerminal(object commands, in TerminalOptions options)
+        {
+            CreateTerminal(commands);
+            I.SetOptions(options);
         }
 
         /// <summary>
@@ -127,19 +157,9 @@ namespace UnityUtility.GameConsole
             m_commands = funcs.ToDictionary(itm => itm.Name, itm => itm);
         }
 
-        public void OnDone(string msg)
+        public void SetOptions(in TerminalOptions options)
         {
-            if (!m_isOn) { return; }
-
-            f_enterCmd(_field.text);
-
-            _field.text = string.Empty;
-            _field.OnPointerClick(m_pointerEventData);
-        }
-
-        public void ShowCallStackForLogs(bool enable)
-        {
-            m_showCallStack = enable;
+            m_options = options;
         }
 
         public void GetCmd()
@@ -165,6 +185,16 @@ namespace UnityUtility.GameConsole
         public void Clear()
         {
             _log.Clear();
+        }
+
+        public void OnDone(string msg)
+        {
+            if (!m_isOn) { return; }
+
+            f_enterCmd(_field.text);
+
+            _field.text = string.Empty;
+            _field.OnPointerClick(m_pointerEventData);
         }
 
         ///////////////
@@ -230,7 +260,7 @@ namespace UnityUtility.GameConsole
             }
             else if (cmds.Length == 1)
             {
-                _field.text = cmds[0];
+                _field.text = m_options.AddSpaceAfterName ? cmds[0] + " " : cmds[0];
                 _field.caretPosition = _field.text.Length;
             }
             else
@@ -319,7 +349,7 @@ namespace UnityUtility.GameConsole
         {
             _log.WriteLine(msg, f_getTextColor(logType));
 
-            if (m_showCallStack)
+            if (m_options.ShowCallStackForLogs)
                 _log.WriteLine(stackTrace, Colours.Silver);
         }
 
