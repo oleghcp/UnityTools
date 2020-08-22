@@ -16,8 +16,9 @@ namespace UnityUtility
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void f_initialize()
         {
-            var script = ComponentUtility.CreateInstance<ApplicationUtility>();
-            script.gameObject.Immortalize();
+            ComponentUtility.CreateInstance<ApplicationUtility>()
+                            .gameObject
+                            .Immortalize();
         }
 
         private void Update()
