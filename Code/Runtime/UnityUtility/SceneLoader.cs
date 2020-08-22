@@ -18,7 +18,7 @@ namespace UnityUtility
 
     public abstract class SceneLoader<T> : MonoBehaviour where T : ISceneInfo
     {
-        public static event Action Unloaded_Event;
+        public static event Action Unload_Event;
         public static event Action Interim_Event;
         public static event Action Loaded_Event;
 
@@ -43,18 +43,8 @@ namespace UnityUtility
 
         private void Start()
         {
-            IEnumerator ClearAndLoad()
-            {
-                Unloaded_Event?.Invoke();
-
-                yield return null;
-
-                Interim_Event?.Invoke();
-
-                SceneManager.LoadScene(s_sceneInfo.SceneName);
-            }
-
-            StartCoroutine(ClearAndLoad());
+            Interim_Event?.Invoke();
+            SceneManager.LoadScene(s_sceneInfo.SceneName);
         }
 
         public static void WaitForConfigurator(ISceneConfigurator sceneConfigurator)
@@ -83,6 +73,8 @@ namespace UnityUtility
 
         public static void LoadScene(T sceneInfo)
         {
+            Unload_Event?.Invoke();
+
             s_sceneInfo = sceneInfo;
             s_sceneConfigured = true;
 
