@@ -65,10 +65,10 @@ namespace UnityUtility
             if (deltaValue < 0f)
                 Errors.NegativeParameter(nameof(deltaValue));
 
-            return HardCheck(m_currentValue + deltaValue);
+            return HardCheckValue(m_currentValue + deltaValue);
         }
 
-        public bool HardCheck(float newValue)
+        public bool HardCheckValue(float newValue)
         {
             if (newValue >= m_interval)
             {
@@ -85,10 +85,10 @@ namespace UnityUtility
             if (deltaValue < 0f)
                 Errors.NegativeParameter(nameof(deltaValue));
 
-            return SmoothCheck(m_currentValue + deltaValue);
+            return SmoothCheckValue(m_currentValue + deltaValue);
         }
 
-        public bool SmoothCheck(float newValue)
+        public bool SmoothCheckValue(float newValue)
         {
             if (newValue >= m_interval)
             {
