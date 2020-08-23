@@ -1,19 +1,24 @@
-﻿namespace UnityUtility.IdGenerating
+﻿using System;
+using UnityEngine;
+
+namespace UnityUtility.IdGenerating
 {
+    [Serializable]
     public class NegativeLongIdGenerator : IIdGenerator<long>
     {
+        [SerializeField, HideInInspector]
         private long m_lastId;
+
+        public long LastID
+        {
+            get { return m_lastId; }
+        }
 
         public NegativeLongIdGenerator() { }
 
         public NegativeLongIdGenerator(long startId)
         {
             m_lastId = startId;
-        }
-
-        public long LastID
-        {
-            get { return m_lastId; }
         }
 
         public long GetNewId()
