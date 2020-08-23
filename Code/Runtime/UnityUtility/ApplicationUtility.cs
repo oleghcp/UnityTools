@@ -5,9 +5,9 @@ namespace UnityUtility
 {
     public class ApplicationUtility : MonoBehaviour
     {
-        public static Action<bool> OnApplicationPause_Event;
-        public static Action<bool> OnApplicationFocus_Event;
-        public static Action OnApplicationQuitEvent;
+        public static event Action<bool> OnApplicationPause_Event;
+        public static event Action<bool> OnApplicationFocus_Event;
+        public static event Action OnApplicationQuitEvent;
 
         public static event Action OnUpdate_Event;
         public static event Action<float> OnTick_Event;
@@ -56,5 +56,20 @@ namespace UnityUtility
         {
             OnApplicationQuitEvent?.Invoke();
         }
+
+#if UNITY_EDITOR
+        private void OnDestroy()
+        {
+            OnApplicationPause_Event = null;
+            OnApplicationFocus_Event = null;
+            OnApplicationQuitEvent = null;
+            OnUpdate_Event = null;
+            OnTick_Event = null;
+            OnLateUpdate_Event = null;
+            OnLateTick_Event = null;
+            OnFixedUpdate_Event = null;
+            OnFixedTick_Event = null;
+        }
+#endif
     }
 }
