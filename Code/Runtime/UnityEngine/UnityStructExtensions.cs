@@ -6,19 +6,19 @@ namespace UnityEngine
 {
     public static class UnityStructExtensions
     {
-        public static Vector3 AlterX(this Vector3 value, float x = 0f)
+        public static Vector3 AlterX(this Vector3 value, float x)
         {
             value.x = x;
             return value;
         }
 
-        public static Vector3 AlterY(this Vector3 value, float y = 0f)
+        public static Vector3 AlterY(this Vector3 value, float y)
         {
             value.y = y;
             return value;
         }
 
-        public static Vector3 AlterZ(this Vector3 value, float z = 0f)
+        public static Vector3 AlterZ(this Vector3 value, float z)
         {
             value.z = z;
             return value;
@@ -84,19 +84,19 @@ namespace UnityEngine
 
         //--//
 
-        public static Vector3Int AlterX(this Vector3Int value, int x = 0)
+        public static Vector3Int AlterX(this Vector3Int value, int x)
         {
             value.x = x;
             return value;
         }
 
-        public static Vector3Int AlterY(this Vector3Int value, int y = 0)
+        public static Vector3Int AlterY(this Vector3Int value, int y)
         {
             value.y = y;
             return value;
         }
 
-        public static Vector3Int AlterZ(this Vector3Int value, int z = 0)
+        public static Vector3Int AlterZ(this Vector3Int value, int z)
         {
             value.z = z;
             return value;
@@ -419,6 +419,32 @@ namespace UnityEngine
         public static bool HasLayer(this LayerMask mask, string layer)
         {
             return (mask & 1 << LayerMask.NameToLayer(layer)) != 0;
+        }
+
+        // -- //
+
+        public static Color AlterR(this Color color, float r)
+        {
+            color.r = r;
+            return color;
+        }
+
+        public static Color AlterG(this Color color, float g)
+        {
+            color.g = g;
+            return color;
+        }
+
+        public static Color AlterB(this Color color, float b)
+        {
+            color.b = b;
+            return color;
+        }
+
+        public static Color AlterA(this Color color, float a)
+        {
+            color.a = a;
+            return color;
         }
     }
 }
