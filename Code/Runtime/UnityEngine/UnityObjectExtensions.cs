@@ -383,7 +383,7 @@ namespace UnityEngine
         /// <summary>
         /// Finds all children.
         /// </summary>
-        public static IList<Transform> GetAllChildren(this Transform self)
+        public static IReadOnlyList<Transform> GetAllChildren(this Transform self)
         {
             List<Transform> list = new List<Transform>();
 
