@@ -81,6 +81,14 @@ namespace UnityUtility.Collections
             m_stack.Push(obj);
         }
 
+        public void Release(IEnumerable<T> range)
+        {
+            foreach (var item in range)
+            {
+                Release(item);
+            }
+        }
+
         /// <summary>
         /// Clears object pool.
         /// </summary>
