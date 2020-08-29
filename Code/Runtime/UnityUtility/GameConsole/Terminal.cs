@@ -8,14 +8,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityUtility.SingleScripts;
+using static UnityEngine.RectTransform;
 
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
-    public struct TerminalOptions
+    public class TerminalOptions
     {
-        public bool ShowCallStackForLogs;
-        public bool AddSpaceAfterName;
+        /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
+        public float TargetHeight = 0.75f;
+        public bool ShowCallStackForLogs = true;
+        public bool AddSpaceAfterName = true;
     }
 
     public class Terminal : SingleUiBehaviour<Terminal>
@@ -114,9 +117,8 @@ namespace UnityUtility.GameConsole
         /// </summary>
         public static void CreateTerminal()
         {
-            Resources.Load<GameObject>("TerminalCanvas")
-                     .Install()
-                     .Immortalize();
+            f_CreateTerminal();
+            I.SetOptions(new TerminalOptions());
         }
 
         /// <summary>
@@ -128,7 +130,8 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands)
         {
-            CreateTerminal();
+            f_CreateTerminal();
+            I.SetOptions(new TerminalOptions());
             I.SetCommands(commands);
         }
 
@@ -139,9 +142,10 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands, in TerminalOptions options)
+        public static void CreateTerminal(object commands, TerminalOptions options)
         {
-            CreateTerminal(commands);
+            f_CreateTerminal();
+            I.SetCommands(commands);
             I.SetOptions(options);
         }
 
@@ -157,7 +161,7 @@ namespace UnityUtility.GameConsole
             m_commands = funcs.ToDictionary(itm => itm.Name, itm => itm);
         }
 
-        public void SetOptions(in TerminalOptions options)
+        public void SetOptions(TerminalOptions options)
         {
             m_options = options;
         }
@@ -353,12 +357,21 @@ namespace UnityUtility.GameConsole
                 _log.WriteLine(stackTrace, Colours.Silver);
         }
 
+        private static void f_CreateTerminal()
+        {
+            Resources.Load<GameObject>("TerminalCanvas")
+                     .Install()
+                     .Immortalize();
+        }
+
         ////////////
         //Routines//
         ////////////
 
         private IEnumerator Switch(bool on)
         {
+            float targetHeight = 720f * m_options.TargetHeight;
+
             _field.gameObject.SetActive(m_isOn = on);
 
             if (on)
@@ -366,15 +379,15 @@ namespace UnityUtility.GameConsole
             else
                 m_curHistoryIndex = 0;
 
-            float startPos = rectTransform.anchoredPosition.y;
-            float endPos = on ? -360f : 0f;
+            float hStart = on ? 0f : targetHeight;
+            float hEnd = on ? targetHeight : 0f;
 
             float ratio = 0f;
 
             while (ratio < 1f)
             {
                 ratio += Time.unscaledDeltaTime * 10f;
-                rectTransform.anchoredPosition = new Vector2(0f, Mathf.Lerp(startPos, endPos, ratio));
+                rectTransform.SetSizeWithCurrentAnchors(Axis.Vertical, Mathf.Lerp(hStart, hEnd, ratio));
 
                 yield return null;
             }

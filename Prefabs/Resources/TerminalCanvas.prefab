@@ -68,7 +68,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8614577478796120198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
@@ -165,7 +165,7 @@ PrefabInstance:
     - target: {fileID: 224171043971914064, guid: 815c78b1b62e3614f91deed8a67c9eb9,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 360
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224171043971914064, guid: 815c78b1b62e3614f91deed8a67c9eb9,
         type: 3}
@@ -195,12 +195,12 @@ PrefabInstance:
     - target: {fileID: 224171043971914064, guid: 815c78b1b62e3614f91deed8a67c9eb9,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224703594526540612, guid: 815c78b1b62e3614f91deed8a67c9eb9,
+    - target: {fileID: 224419118938208002, guid: 815c78b1b62e3614f91deed8a67c9eb9,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 10.650024
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 815c78b1b62e3614f91deed8a67c9eb9, type: 3}
