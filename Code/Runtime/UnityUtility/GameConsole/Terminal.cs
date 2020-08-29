@@ -17,6 +17,7 @@ namespace UnityUtility.GameConsole
     {
         /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
         public float TargetHeight = 0.75f;
+        public int LinesLimit = 100;
         public bool AddSpaceAfterName = true;
         public bool ShowDebugLogs = true;
         public bool ShowCallStackForLogs = true;
@@ -53,12 +54,19 @@ namespace UnityUtility.GameConsole
             get { return m_isOn; }
         }
 
+        public TerminalOptions Options
+        {
+            get { return m_options; }
+        }
+
         ///////////////
         //Unity funcs//
         ///////////////
 
         protected override void Construct()
         {
+            _log.SetUp(this);
+
             m_pointerEventData = new PointerEventData(EventSystem.current);
             m_stringBuilder = new StringBuilder();
 

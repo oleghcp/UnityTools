@@ -18,6 +18,13 @@ namespace UnityUtility.GameConsole
             gameObject.SetActive(true);
         }
 
+        public LogLine Reuse()
+        {
+            gameObject.SetActive(false);
+            transform.SetAsLastSibling();
+            return this;
+        }
+
         void IPoolable.Reinit()
         {
             transform.SetAsLastSibling();

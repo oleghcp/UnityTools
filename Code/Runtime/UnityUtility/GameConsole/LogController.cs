@@ -15,6 +15,7 @@ namespace UnityUtility.GameConsole
         [SerializeField]
         private RectTransform _root;
 
+        private Terminal m_terminal;
         private ObjectPool<LogLine> m_pool;
         private List<LogLine> m_lines;
 
@@ -24,10 +25,14 @@ namespace UnityUtility.GameConsole
             m_lines = new List<LogLine>();
         }
 
+        public void SetUp(Terminal terminal)
+        {
+            m_terminal = terminal;
+        }
+
         public void WriteLine(string text, Color color)
         {
-            m_lines.AddAndGet(m_pool.Get())
-                   .SetText(text, color);
+            f_getLine().SetText(text, color);
         }
 
         public void Clear()
@@ -51,6 +56,16 @@ namespace UnityUtility.GameConsole
             newLine.gameObject.SetActive(true);
 
             return newLine;
+        }
+
+        private LogLine f_getLine()
+        {
+            if (_root.childCount < m_terminal.Options.LinesLimit)
+                return m_lines.AddAndGet(m_pool.Get());
+
+            return _root.GetChild(0)
+                        .GetComponent<LogLine>()
+                        .Reuse();
         }
     }
 }
