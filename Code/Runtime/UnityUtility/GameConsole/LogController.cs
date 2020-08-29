@@ -9,8 +9,6 @@ namespace UnityUtility.GameConsole
     internal class LogController : UiMonoBehaviour
     {
         private const float PADDING = 5f;
-        private readonly Vector2 MIN = new Vector2(5f, 0f);
-        private readonly Vector2 MAX = new Vector2(-5f, 0f);
 
         [SerializeField]
         private LogLine _prefab;
@@ -81,8 +79,6 @@ namespace UnityUtility.GameConsole
         private LogLine f_createLine()
         {
             LogLine newLine = _prefab.Install(_root);
-            newLine.rectTransform.offsetMin = MIN;
-            newLine.rectTransform.offsetMax = MAX;
             newLine.gameObject.SetActive(true);
 
             return newLine;

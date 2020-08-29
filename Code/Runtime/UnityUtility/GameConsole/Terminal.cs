@@ -17,8 +17,9 @@ namespace UnityUtility.GameConsole
     {
         /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
         public float TargetHeight = 0.75f;
-        public bool ShowCallStackForLogs = true;
         public bool AddSpaceAfterName = true;
+        public bool ShowDebugLogs = true;
+        public bool ShowCallStackForLogs = true;
     }
 
     public class Terminal : SingleUiBehaviour<Terminal>
@@ -351,10 +352,13 @@ namespace UnityUtility.GameConsole
 
         private void DebugLogHandler(string msg, string stackTrace, LogType logType)
         {
-            _log.WriteLine(msg, f_getTextColor(logType));
+            if (m_options.ShowDebugLogs)
+            {
+                _log.WriteLine(msg, f_getTextColor(logType));
 
-            if (m_options.ShowCallStackForLogs)
-                _log.WriteLine(stackTrace, Colours.Silver);
+                if (m_options.ShowCallStackForLogs)
+                    _log.WriteLine(stackTrace, Colours.Silver);
+            }
         }
 
         private static void f_CreateTerminal()
