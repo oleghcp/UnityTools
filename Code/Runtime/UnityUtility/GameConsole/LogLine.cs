@@ -10,21 +10,23 @@ namespace UnityUtility.GameConsole
         [SerializeField]
         private Text _text;
 
-        public Text Text
+        public void SetText(string text, Color color)
         {
-            get { return _text; }
+            _text.text = text;
+            _text.color = color;
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);
+            gameObject.SetActive(true);
         }
 
         void IPoolable.Reinit()
         {
-            gameObject.SetActive(true);
+            transform.SetAsLastSibling();
         }
 
         void IPoolable.CleanUp()
         {
-            _text.text = string.Empty;
-            rectTransform.anchoredPosition = Vector2.zero;
             gameObject.SetActive(false);
+            _text.text = string.Empty;
         }
     }
 }
