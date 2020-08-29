@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UnityUtility
 {
-    public class Bezier3
+    public sealed class Bezier3
     {
         private Vector3[] m_points;
         private Vector3[] m_tmp;

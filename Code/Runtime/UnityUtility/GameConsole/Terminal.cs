@@ -23,7 +23,7 @@ namespace UnityUtility.GameConsole
         public bool ShowCallStackForLogs = true;
     }
 
-    public class Terminal : SingleUiBehaviour<Terminal>
+    public sealed class Terminal : SingleUiBehaviour<Terminal>
     {
         private readonly Color CMD_COLOR = Colours.White;
         private readonly Color CMD_ERROR_COLOR = Colours.Orange;
@@ -74,13 +74,16 @@ namespace UnityUtility.GameConsole
 
             m_cmdHistory = new List<string>() { string.Empty };
 
+#if UNITY_EDITOR
             if (Application.isPlaying)
+#endif
                 Application.logMessageReceived += DebugLogHandler;
         }
 
         protected override void CleanUp()
         {
 #if UNITY_EDITOR
+            Switched_Event = null;
             Application.logMessageReceived -= DebugLogHandler;
 #endif
         }

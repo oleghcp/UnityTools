@@ -4,7 +4,7 @@ namespace UnityUtility
 {
     public static class RectUtility
     {
-        public static Vector2 GetAnchorParams(TextAnchor anchor)
+        public static Vector2 GetAnchor(TextAnchor anchor)
         {
             switch (anchor)
             {

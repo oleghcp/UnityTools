@@ -6,7 +6,7 @@ namespace Project.Util
     [ExecuteInEditMode]
     [RequireComponent(typeof(Camera))]
     [DisallowMultipleComponent]
-    public class CameraScaler : MonoBehaviour
+    public sealed class CameraScaler : MonoBehaviour
     {
         [SerializeField, HideInInspector]
         private Camera _camera;

@@ -489,7 +489,7 @@ namespace UnityEngine
 
         public static void SetAnchor(this RectTransform self, TextAnchor anchor, bool setPivot = false)
         {
-            Vector2 vector = RectUtility.GetAnchorParams(anchor);
+            Vector2 vector = RectUtility.GetAnchor(anchor);
 
             self.anchorMin = vector;
             self.anchorMax = vector;
@@ -500,7 +500,7 @@ namespace UnityEngine
 
         public static void SetPivot(this RectTransform self, TextAnchor anchor)
         {
-            Vector2 vector = RectUtility.GetAnchorParams(anchor);
+            Vector2 vector = RectUtility.GetAnchor(anchor);
             self.pivot = vector;
         }
 

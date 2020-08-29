@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UnityUtility
 {
-    public class ApplicationUtility : MonoBehaviour
+    public sealed class ApplicationUtility : MonoBehaviour
     {
         public static event Action<bool> OnApplicationPause_Event;
         public static event Action<bool> OnApplicationFocus_Event;

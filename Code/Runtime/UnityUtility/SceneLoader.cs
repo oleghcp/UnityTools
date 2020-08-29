@@ -38,6 +38,16 @@ namespace UnityUtility
                     Loaded_Event?.Invoke();
                 }
             };
+
+#if UNITY_EDITOR
+            ApplicationUtility.OnApplicationQuitEvent += delegate
+            {
+                BeginUnload_Event = null;
+                Unloaded_Event = null;
+                Interim_Event = null;
+                Loaded_Event = null;
+            };
+#endif
         }
 
         private void Start()
