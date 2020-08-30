@@ -7,7 +7,7 @@ namespace UnityUtility
     {
         public static event Action<bool> OnApplicationPause_Event;
         public static event Action<bool> OnApplicationFocus_Event;
-        public static event Action OnApplicationQuitEvent;
+        public static event Action OnApplicationQuit_Event;
 
         public static event Action OnUpdate_Event;
         public static event Action<float> OnTick_Event;
@@ -54,7 +54,7 @@ namespace UnityUtility
 
         private void OnApplicationQuit()
         {
-            OnApplicationQuitEvent?.Invoke();
+            OnApplicationQuit_Event?.Invoke();
         }
 
 #if UNITY_EDITOR
@@ -62,7 +62,7 @@ namespace UnityUtility
         {
             OnApplicationPause_Event = null;
             OnApplicationFocus_Event = null;
-            OnApplicationQuitEvent = null;
+            OnApplicationQuit_Event = null;
             OnUpdate_Event = null;
             OnTick_Event = null;
             OnLateUpdate_Event = null;

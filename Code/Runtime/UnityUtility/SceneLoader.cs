@@ -40,7 +40,7 @@ namespace UnityUtility
             };
 
 #if UNITY_EDITOR
-            ApplicationUtility.OnApplicationQuitEvent += delegate
+            ApplicationUtility.OnApplicationQuit_Event += delegate
             {
                 BeginUnload_Event = null;
                 Unloaded_Event = null;
