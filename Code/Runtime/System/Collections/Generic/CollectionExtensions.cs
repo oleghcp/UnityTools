@@ -450,30 +450,50 @@ namespace System.Collections.Generic
 
         public static bool TryPeek<T>(this Stack<T> self, out T item)
         {
-            bool canPeek = self.Count > 0;
-            item = canPeek ? self.Peek() : default;
-            return canPeek;
+            if (self.Count > 0)
+            {
+                item = self.Peek();
+                return true;
+            }
+
+            item = default;
+            return false;
         }
 
         public static bool TryPop<T>(this Stack<T> self, out T item)
         {
-            bool canPop = self.Count > 0;
-            item = canPop ? self.Pop() : default;
-            return canPop;
+            if (self.Count > 0)
+            {
+                item = self.Pop();
+                return true;
+            }
+
+            item = default;
+            return false;
         }
 
         public static bool TryPeek<T>(this Queue<T> self, out T item)
         {
-            bool canPeek = self.Count > 0;
-            item = canPeek ? self.Peek() : default;
-            return canPeek;
+            if (self.Count > 0)
+            {
+                item = self.Peek();
+                return true;
+            }
+
+            item = default;
+            return false;
         }
 
         public static bool TryDequeue<T>(this Queue<T> self, out T item)
         {
-            bool canDequeue = self.Count > 0;
-            item = canDequeue ? self.Dequeue() : default;
-            return canDequeue;
+            if (self.Count > 0)
+            {
+                item = self.Dequeue();
+                return true;
+            }
+
+            item = default;
+            return false;
         }
     }
 }
