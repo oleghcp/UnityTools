@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityUtility;
 
-namespace Project.Util
+namespace UnityUtility
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Camera))]
@@ -25,7 +24,7 @@ namespace Project.Util
 
         private void Update()
         {
-            var newRatio = ScreenUtility.GetCurrentRatio();
+            float newRatio = ScreenUtility.GetCurrentRatio();
 
             if (newRatio < _targetRatio)
             {
