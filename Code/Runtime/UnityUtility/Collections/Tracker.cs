@@ -31,12 +31,22 @@ namespace UnityUtility.Collections
 
         public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
         {
-            return m_nodes.Place(new NodeForValueType<T>(getter, onChangedCallback));
+            return m_nodes.Place(new NodeForValueType<T>(getter, onChangedCallback, null));
+        }
+
+        public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action<T> onChangedCallback = null) where T : struct, IEquatable<T>
+        {
+            return m_nodes.Place(new NodeForValueType<T>(getter, null, onChangedCallback));
         }
 
         public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
         {
-            return m_nodes.Place(new NodeForRefType<T>(getter, onChangedCallback));
+            return m_nodes.Place(new NodeForRefType<T>(getter, onChangedCallback, null));
+        }
+
+        public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action<T> onChangedCallback = null) where T : class
+        {
+            return m_nodes.Place(new NodeForRefType<T>(getter, null, onChangedCallback));
         }
 
         public ITrackerNode AddNodeBasedOnPrev(Action onChangedCallback)

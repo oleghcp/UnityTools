@@ -27,17 +27,18 @@ namespace UnityUtility.Collections
         public class NodeForValueType<T> : IActiveNode where T : struct, IEquatable<T>
         {
             private Func<T> m_getter;
-            private Action m_onChangedCallback;
-
+            private Action m_onChangedCallback1;
+            private Action<T> m_onChangedCallback2;
             private T m_cache;
             private bool m_changed;
 
             public bool Changed => m_changed;
 
-            public NodeForValueType(Func<T> getter, Action onChangedCallback)
+            public NodeForValueType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
             {
                 m_getter = getter;
-                m_onChangedCallback = onChangedCallback;
+                m_onChangedCallback1 = onChangedCallback1;
+                m_onChangedCallback2 = onChangedCallback2;
             }
 
             public void Check()
@@ -47,14 +48,16 @@ namespace UnityUtility.Collections
                 if (m_changed = !m_cache.Equals(tmp))
                 {
                     m_cache = tmp;
-                    m_onChangedCallback?.Invoke();
+                    m_onChangedCallback1?.Invoke();
+                    m_onChangedCallback2?.Invoke(m_cache);
                 }
             }
 
             public void Force()
             {
                 m_cache = m_getter();
-                m_onChangedCallback?.Invoke();
+                m_onChangedCallback1?.Invoke();
+                m_onChangedCallback2?.Invoke(m_cache);
             }
         }
 
@@ -63,7 +66,8 @@ namespace UnityUtility.Collections
         public class NodeForRefType<T> : IActiveNode where T : class
         {
             private Func<T> m_getter;
-            private Action m_onChangedCallback;
+            private Action m_onChangedCallback1;
+            private Action<T> m_onChangedCallback2;
 
             private T m_cachedObject;
 
@@ -71,10 +75,11 @@ namespace UnityUtility.Collections
 
             public bool Changed => m_changed;
 
-            public NodeForRefType(Func<T> getter, Action onChangedCallback)
+            public NodeForRefType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
             {
                 m_getter = getter;
-                m_onChangedCallback = onChangedCallback;
+                m_onChangedCallback1 = onChangedCallback1;
+                m_onChangedCallback2 = onChangedCallback2;
             }
 
             public void Check()
@@ -84,14 +89,16 @@ namespace UnityUtility.Collections
                 if (m_changed = m_cachedObject != tmp)
                 {
                     m_cachedObject = tmp;
-                    m_onChangedCallback?.Invoke();
+                    m_onChangedCallback1?.Invoke();
+                    m_onChangedCallback2?.Invoke(m_cachedObject);
                 }
             }
 
             public void Force()
             {
                 m_cachedObject = m_getter();
-                m_onChangedCallback?.Invoke();
+                m_onChangedCallback1?.Invoke();
+                m_onChangedCallback2?.Invoke(m_cachedObject);
             }
         }
 
@@ -138,23 +145,23 @@ namespace UnityUtility.Collections
 
         public class CustomNodeWrapper : IActiveNode
         {
-            private CustomTrackerNode _node;
+            private CustomTrackerNode m_node;
 
-            public bool Changed => _node.Changed;
+            public bool Changed => m_node.Changed;
 
             public CustomNodeWrapper(CustomTrackerNode node)
             {
-                _node = node;
+                m_node = node;
             }
 
             public void Check()
             {
-                _node.Check();
+                m_node.Check();
             }
 
             public void Force()
             {
-                _node.Force();
+                m_node.Force();
             }
         }
     }
