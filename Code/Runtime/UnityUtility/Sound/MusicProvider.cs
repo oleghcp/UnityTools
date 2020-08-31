@@ -103,7 +103,7 @@ namespace UnityUtility.Sound
                 if (!m_presetList.TryGetValue(musicName, out MPreset set))
                     set = DEF_SET;
 
-                mus = m_music.AddAndGet(musicName, s_pool.Get());
+                mus = m_music.Place(musicName, s_pool.Get());
                 mus.Play(this, m_loader.LoadClip(musicName), set);
             }
             else if (mus.Fading)

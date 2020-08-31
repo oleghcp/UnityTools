@@ -308,12 +308,23 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Returns whether the list contains the specified item.
+        /// Returns whether array contains the specified item.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<T>(this IList<T> self, T item)
+        public static bool Contains<T>(this T[] self, T item)
         {
-            return self.Contains(item);
+            return (self as IList).Contains(item);
+        }
+
+        public static bool Contains<T>(this IEnumerable<T> self, Predicate<T> match)
+        {
+            foreach (var item in self)
+            {
+                if (match(item))
+                    return true;
+            }
+
+            return false;
         }
 
         public static bool Remove<T>(this List<T> self, Predicate<T> match)
@@ -357,7 +368,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Adds an element to the collection and returns that element.
         /// </summary>
-        public static T AddAndGet<T>(this ICollection<T> self, T newItem)
+        public static T Place<T>(this ICollection<T> self, T newItem)
         {
             self.Add(newItem);
             return newItem;
@@ -366,25 +377,16 @@ namespace System.Collections.Generic
         /// <summary>
         /// Inserts an element into the list at the specified index and returns that element.
         /// </summary>
-        public static T InsertAndGet<T>(this IList<T> self, int index, T newItem)
+        public static T Push<T>(this IList<T> self, int index, T newItem)
         {
             self.Insert(index, newItem);
             return newItem;
         }
 
         /// <summary>
-        /// Returns a copy of the list;
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static List<T> GetCopy<T>(this ICollection<T> self)
-        {
-            return new List<T>(self);
-        }
-
-        /// <summary>
         /// Adds an element to the dictionary and returns that element.
         /// </summary>
-        public static TValue AddAndGet<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue newItem)
+        public static TValue Place<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue newItem)
         {
             self.Add(key, newItem);
             return newItem;

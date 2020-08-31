@@ -31,12 +31,12 @@ namespace UnityUtility.Collections
 
         public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
         {
-            return m_nodes.AddAndGet(new NodeForValueType<T>(getter, onChangedCallback));
+            return m_nodes.Place(new NodeForValueType<T>(getter, onChangedCallback));
         }
 
         public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
         {
-            return m_nodes.AddAndGet(new NodeForRefType<T>(getter, onChangedCallback));
+            return m_nodes.Place(new NodeForRefType<T>(getter, onChangedCallback));
         }
 
         public ITrackerNode AddNodeBasedOnPrev(Action onChangedCallback)
@@ -44,17 +44,17 @@ namespace UnityUtility.Collections
             if (m_nodes.Count == 0)
                 throw new InvalidOperationException("Tracker does not contain nodes.");
 
-            return m_nodes.AddAndGet(new DependentNode(onChangedCallback, new[] { m_nodes.GetLast() }));
+            return m_nodes.Place(new DependentNode(onChangedCallback, new[] { m_nodes.GetLast() }));
         }
 
         public ITrackerNode AddDependentNode(Action onChangedCallback, params ITrackerNode[] dependencies)
         {
-            return m_nodes.AddAndGet(new DependentNode(onChangedCallback, dependencies));
+            return m_nodes.Place(new DependentNode(onChangedCallback, dependencies));
         }
 
         public ITrackerNode AddCustomNode(CustomTrackerNode node)
         {
-            return m_nodes.AddAndGet(new CustomNodeWrapper(node));
+            return m_nodes.Place(new CustomNodeWrapper(node));
         }
     }
 }

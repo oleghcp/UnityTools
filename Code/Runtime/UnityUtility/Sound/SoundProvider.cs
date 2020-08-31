@@ -144,7 +144,7 @@ namespace UnityUtility.Sound
             if (!m_keyedSounds.TryGetValue(key, out SndObject snd))
             {
                 SPreset set = f_getPreset(clip.name);
-                snd = m_keyedSounds.AddAndGet(key, s_pool.Get());
+                snd = m_keyedSounds.Place(key, s_pool.Get());
                 snd.Play(this, sender, clip, set);
             }
             else if (breakCurrent && !snd.IsLooped)
@@ -184,7 +184,7 @@ namespace UnityUtility.Sound
             if (!m_keyedSounds.TryGetValue(key, out SndObject snd))
             {
                 SPreset set = f_getPreset(clip.name);
-                snd = m_keyedSounds.AddAndGet(key, s_pool.Get());
+                snd = m_keyedSounds.Place(key, s_pool.Get());
                 snd.Play3D(this, clip, set, sender);
             }
             else if (breakCurrent && !snd.IsLooped)

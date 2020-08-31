@@ -61,7 +61,7 @@ namespace UnityUtility.GameConsole
         private LogLine f_getLine()
         {
             if (_root.childCount < m_terminal.Options.LinesLimit)
-                return m_lines.AddAndGet(m_pool.Get());
+                return m_lines.Place(m_pool.Get());
 
             return _root.GetChild(0)
                         .GetComponent<LogLine>()
