@@ -74,5 +74,10 @@ namespace Tools
         {
             return new ArgumentOutOfRangeException(paramName, $"The radix must be >= 2 and <= {symbolsLength}");
         }
+
+        public static InvalidOperationException EmptyTraker()
+        {
+            return new InvalidOperationException("Tracker does not yet contain nodes.");
+        }
     }
 }

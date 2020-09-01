@@ -14,6 +14,11 @@ namespace UnityUtility.Collections
         public abstract void Force();
     }
 
+    public abstract class CustomTrackerNode<T> : CustomTrackerNode
+    {
+        public abstract T Value { get; }
+    }
+
     internal static class TrackerNodes
     {
         public interface IActiveNode : ITrackerNode
@@ -22,9 +27,14 @@ namespace UnityUtility.Collections
             void Force();
         }
 
+        public interface IValueKeeper<T>
+        {
+            T Value { get; }
+        }
+
         // -- //
 
-        public class NodeForValueType<T> : IActiveNode where T : struct, IEquatable<T>
+        public class NodeForValueType<T> : IActiveNode, IValueKeeper<T> where T : struct, IEquatable<T>
         {
             private Func<T> m_getter;
             private Action m_onChangedCallback1;
@@ -33,6 +43,7 @@ namespace UnityUtility.Collections
             private bool m_changed;
 
             public bool Changed => m_changed;
+            public T Value => m_cache;
 
             public NodeForValueType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
             {
@@ -63,17 +74,16 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public class NodeForRefType<T> : IActiveNode where T : class
+        public class NodeForRefType<T> : IActiveNode, IValueKeeper<T> where T : class
         {
             private Func<T> m_getter;
             private Action m_onChangedCallback1;
             private Action<T> m_onChangedCallback2;
-
             private T m_cachedObject;
-
             private bool m_changed;
 
             public bool Changed => m_changed;
+            public T Value => m_cachedObject;
 
             public NodeForRefType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
             {
@@ -104,15 +114,19 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public class MultiDependentNode : IActiveNode
+        public class DependentNode : IActiveNode
         {
             private Action m_onChangedCallback;
+            private ITrackerNode m_previousNode;
             private ITrackerNode[] m_dependencies;
 
             public bool Changed
             {
                 get
                 {
+                    if (m_previousNode != null)
+                        return m_previousNode.Changed;
+
                     for (int i = 0; i < m_dependencies.Length; i++)
                     {
                         if (m_dependencies[i].Changed)
@@ -123,9 +137,10 @@ namespace UnityUtility.Collections
                 }
             }
 
-            public MultiDependentNode(Action onChangedCallback, ITrackerNode[] dependencies)
+            public DependentNode(Action onChangedCallback, ITrackerNode previousNode, ITrackerNode[] dependencies)
             {
                 m_onChangedCallback = onChangedCallback;
+                m_previousNode = previousNode;
                 m_dependencies = dependencies;
             }
 
@@ -141,15 +156,22 @@ namespace UnityUtility.Collections
             }
         }
 
-        public class DependentNode : IActiveNode
+        public class DependentNodeWithValue<T> : IActiveNode, IValueKeeper<T>
         {
-            private Action m_onChangedCallback;
+            private Action<T> m_onChangedCallback;
             private ITrackerNode m_previousNode;
+            private IValueKeeper<T> m_valueNode;
 
             public bool Changed => m_previousNode.Changed;
+            public T Value => m_valueNode.Value;
 
-            public DependentNode(Action onChangedCallback, ITrackerNode previousNode)
+            public DependentNodeWithValue(Action<T> onChangedCallback, ITrackerNode previousNode)
             {
+                if (previousNode is IValueKeeper<T> valueNode)
+                    m_valueNode = valueNode;
+                else
+                    throw new InvalidOperationException($"Previous node does not cache value or value is not {typeof(T)}.");
+
                 m_onChangedCallback = onChangedCallback;
                 m_previousNode = previousNode;
             }
@@ -157,12 +179,12 @@ namespace UnityUtility.Collections
             public void Check()
             {
                 if (Changed)
-                    m_onChangedCallback();
+                    m_onChangedCallback(m_valueNode.Value);
             }
 
             public void Force()
             {
-                m_onChangedCallback();
+                m_onChangedCallback(m_valueNode.Value);
             }
         }
 
@@ -170,7 +192,7 @@ namespace UnityUtility.Collections
 
         public class CustomNodeWrapper : IActiveNode
         {
-            private CustomTrackerNode m_node;
+            protected CustomTrackerNode m_node;
 
             public bool Changed => m_node.Changed;
 
@@ -187,6 +209,16 @@ namespace UnityUtility.Collections
             public void Force()
             {
                 m_node.Force();
+            }
+        }        
+
+        public class CustomNodeWrapper<T> : CustomNodeWrapper, IValueKeeper<T>
+        {
+            public T Value => (m_node as CustomTrackerNode<T>).Value;
+
+            public CustomNodeWrapper(CustomTrackerNode<T> node) : base(node)
+            {
+
             }
         }
     }
