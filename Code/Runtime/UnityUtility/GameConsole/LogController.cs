@@ -30,9 +30,9 @@ namespace UnityUtility.GameConsole
             m_terminal = terminal;
         }
 
-        public void WriteLine(string text, Color color)
+        public void WriteLine(Color color, string text, string info = null)
         {
-            f_getLine().SetText(text, color);
+            f_getLine().SetText(text, info, color);
         }
 
         public void Clear()

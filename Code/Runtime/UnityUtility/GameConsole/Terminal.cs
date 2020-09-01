@@ -20,7 +20,6 @@ namespace UnityUtility.GameConsole
         public int LinesLimit = 100;
         public bool AddSpaceAfterName = true;
         public bool ShowDebugLogs = true;
-        public bool ShowCallStackForLogs = true;
     }
 
     public sealed class Terminal : SingleUiBehaviour<Terminal>
@@ -77,14 +76,14 @@ namespace UnityUtility.GameConsole
 #if UNITY_EDITOR
             if (Application.isPlaying)
 #endif
-                Application.logMessageReceived += DebugLogHandler;
+                Application.logMessageReceived += OnDebugLogMessageReceived;
         }
 
         protected override void CleanUp()
         {
 #if UNITY_EDITOR
             Switched_Event = null;
-            Application.logMessageReceived -= DebugLogHandler;
+            Application.logMessageReceived -= OnDebugLogMessageReceived;
 #endif
         }
 
@@ -114,6 +113,13 @@ namespace UnityUtility.GameConsole
 
                 float axis = Input.GetAxis("Mouse ScrollWheel");
                 if (axis != 0) { _log.Scroll(axis); }
+
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    f_enterCmd(_field.text);
+                    _field.text = string.Empty;
+                    _field.OnPointerClick(m_pointerEventData);
+                }
             }
         }
 
@@ -190,12 +196,12 @@ namespace UnityUtility.GameConsole
 
         public void WriteLine(string txt, Color color)
         {
-            _log.WriteLine(txt, color);
+            _log.WriteLine(color, txt);
         }
 
         public void WriteLine(string txt, LogType logType)
         {
-            _log.WriteLine(txt, f_getTextColor(logType));
+            _log.WriteLine(f_getTextColor(logType), txt);
         }
 
         public void Clear()
@@ -203,13 +209,8 @@ namespace UnityUtility.GameConsole
             _log.Clear();
         }
 
-        public void OnDone(string msg)
+        public void OnDone(string _)
         {
-            if (!m_isOn) { return; }
-
-            f_enterCmd(_field.text);
-
-            _field.text = string.Empty;
             _field.OnPointerClick(m_pointerEventData);
         }
 
@@ -219,11 +220,8 @@ namespace UnityUtility.GameConsole
 
         private void f_enterCmd(string text)
         {
-            if (m_cmdRun == null)
-            {
-                _log.WriteLine("Commands are not set.", Colours.Red);
+            if (f_noCommands())
                 return;
-            }
 
             if (text.HasUsefulData())
             {
@@ -244,13 +242,13 @@ namespace UnityUtility.GameConsole
                     m_invokeParams[0] = null;
 
                     if (cmdKeysParseError == null)
-                        _log.WriteLine(text, CMD_COLOR);
+                        _log.WriteLine(CMD_COLOR, text);
                     else
-                        _log.WriteLine("cmd options error: " + cmdKeysParseError, CMD_ERROR_COLOR);
+                        _log.WriteLine(CMD_ERROR_COLOR, "cmd options error: " + cmdKeysParseError);
                 }
                 else
                 {
-                    _log.WriteLine("unknown: " + command, CMD_ERROR_COLOR);
+                    _log.WriteLine(CMD_ERROR_COLOR, "unknown: " + command);
                 }
 
                 m_cmdHistory.Add(text);
@@ -260,11 +258,8 @@ namespace UnityUtility.GameConsole
 
         private void f_findCmd(string text)
         {
-            if (m_cmdRun == null)
-            {
-                _log.WriteLine("Commands are not set.", Colours.Red);
+            if (f_noCommands())
                 return;
-            }
 
             text = text.ToLower();
 
@@ -289,7 +284,7 @@ namespace UnityUtility.GameConsole
                 string line = m_stringBuilder.ToString();
                 m_stringBuilder.Clear();
 
-                _log.WriteLine(line, CMD_COLOR);
+                _log.WriteLine(CMD_COLOR, line);
                 _field.text = text + f_getCommon(cmds, text.Length);
                 _field.caretPosition = _field.text.Length;
             }
@@ -361,14 +356,11 @@ namespace UnityUtility.GameConsole
             }
         }
 
-        private void DebugLogHandler(string msg, string stackTrace, LogType logType)
+        private void OnDebugLogMessageReceived(string msg, string stackTrace, LogType logType)
         {
             if (m_options.ShowDebugLogs)
             {
-                _log.WriteLine(msg, f_getTextColor(logType));
-
-                if (m_options.ShowCallStackForLogs)
-                    _log.WriteLine(stackTrace, Colours.Silver);
+                _log.WriteLine(f_getTextColor(logType), msg, stackTrace);
             }
         }
 
@@ -377,6 +369,17 @@ namespace UnityUtility.GameConsole
             Resources.Load<GameObject>("TerminalCanvas")
                      .Install()
                      .Immortalize();
+        }
+
+        private bool f_noCommands()
+        {
+            if (m_cmdRun == null)
+            {
+                _log.WriteLine(f_getTextColor(LogType.Error), "Commands are not set.");
+                return true;
+            }
+
+            return false;
         }
 
         ////////////
