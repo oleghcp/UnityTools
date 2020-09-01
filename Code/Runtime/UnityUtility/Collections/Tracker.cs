@@ -29,22 +29,32 @@ namespace UnityUtility.Collections
             m_nodes.Clear();
         }
 
-        public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback = null) where T : struct, IEquatable<T>
+        public ITrackerNode AddNodeForValueType<T>(Func<T> getter) where T : struct, IEquatable<T>
+        {
+            return m_nodes.Place(new NodeForValueType<T>(getter, null, null));
+        }
+
+        public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action onChangedCallback) where T : struct, IEquatable<T>
         {
             return m_nodes.Place(new NodeForValueType<T>(getter, onChangedCallback, null));
         }
 
-        public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action<T> onChangedCallback = null) where T : struct, IEquatable<T>
+        public ITrackerNode AddNodeForValueType<T>(Func<T> getter, Action<T> onChangedCallback) where T : struct, IEquatable<T>
         {
             return m_nodes.Place(new NodeForValueType<T>(getter, null, onChangedCallback));
         }
 
-        public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback = null) where T : class
+        public ITrackerNode AddNodeForRefType<T>(Func<T> getter) where T : class
+        {
+            return m_nodes.Place(new NodeForRefType<T>(getter, null, null));
+        }
+
+        public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action onChangedCallback) where T : class
         {
             return m_nodes.Place(new NodeForRefType<T>(getter, onChangedCallback, null));
         }
 
-        public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action<T> onChangedCallback = null) where T : class
+        public ITrackerNode AddNodeForRefType<T>(Func<T> getter, Action<T> onChangedCallback) where T : class
         {
             return m_nodes.Place(new NodeForRefType<T>(getter, null, onChangedCallback));
         }
@@ -54,12 +64,12 @@ namespace UnityUtility.Collections
             if (m_nodes.Count == 0)
                 throw new InvalidOperationException("Tracker does not contain nodes.");
 
-            return m_nodes.Place(new DependentNode(onChangedCallback, new[] { m_nodes.GetLast() }));
+            return m_nodes.Place(new DependentNode(onChangedCallback, m_nodes.GetLast()));
         }
 
         public ITrackerNode AddDependentNode(Action onChangedCallback, params ITrackerNode[] dependencies)
         {
-            return m_nodes.Place(new DependentNode(onChangedCallback, dependencies));
+            return m_nodes.Place(new MultiDependentNode(onChangedCallback, dependencies));
         }
 
         public ITrackerNode AddCustomNode(CustomTrackerNode node)

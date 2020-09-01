@@ -104,7 +104,7 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public class DependentNode : IActiveNode
+        public class MultiDependentNode : IActiveNode
         {
             private Action m_onChangedCallback;
             private ITrackerNode[] m_dependencies;
@@ -123,10 +123,35 @@ namespace UnityUtility.Collections
                 }
             }
 
-            public DependentNode(Action onChangedCallback, ITrackerNode[] dependencies)
+            public MultiDependentNode(Action onChangedCallback, ITrackerNode[] dependencies)
             {
                 m_onChangedCallback = onChangedCallback;
                 m_dependencies = dependencies;
+            }
+
+            public void Check()
+            {
+                if (Changed)
+                    m_onChangedCallback();
+            }
+
+            public void Force()
+            {
+                m_onChangedCallback();
+            }
+        }
+
+        public class DependentNode : IActiveNode
+        {
+            private Action m_onChangedCallback;
+            private ITrackerNode m_previousNode;
+
+            public bool Changed => m_previousNode.Changed;
+
+            public DependentNode(Action onChangedCallback, ITrackerNode previousNode)
+            {
+                m_onChangedCallback = onChangedCallback;
+                m_previousNode = previousNode;
             }
 
             public void Check()
