@@ -10,11 +10,6 @@ namespace UnityEngine
     public static class UnityObjectExtensions
     {
         /// <summary>
-        /// Description of scale transformation.
-        /// </summary>
-        public enum ScaleAction { ResetToOne, KeepAsLocal, KeepAsWorld }
-
-        /// <summary>
         /// Calculates view bounds of the orthographic camera looking along the Z axis.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -72,11 +67,9 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates gameobject as a child with default local position and rotation.
         /// </summary>
-        public static GameObject Install(this GameObject self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsWorld)
+        public static GameObject Install(this GameObject self, Transform parent)
         {
-            GameObject go = UnityObject.Instantiate(self, parent, false);
-            f_init(go.transform, scaleAction);
-            return go;
+            return UnityObject.Instantiate(self, parent, false);
         }
 
         /// <summary>
@@ -91,35 +84,10 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates defined component as a child with default local position and rotation.
         /// </summary>
-        public static T Install<T>(this T self, Transform parent, ScaleAction scaleAction = ScaleAction.KeepAsWorld) where T : Component
+        public static T Install<T>(this T self, Transform parent) where T : Component
         {
-            T copy = UnityObject.Instantiate(self, parent, false);
-            f_init(copy.transform, scaleAction);
-            return copy;
+            return UnityObject.Instantiate(self, parent, false);
         }
-
-        #region Install help func
-        private static void f_init(Transform t, ScaleAction scaleAction)
-        {
-            t.localRotation = Quaternion.identity;
-
-            switch (scaleAction)
-            {
-                case ScaleAction.ResetToOne:
-                    t.localScale = Vector3.one;
-                    break;
-
-                case ScaleAction.KeepAsLocal:
-                    t.localScale = t.lossyScale;
-                    break;
-            }
-
-            if (t is RectTransform rt)
-                rt.anchoredPosition = Vector2.zero;
-            else
-                t.localPosition = Vector3.zero;
-        }
-        #endregion
 
         /// <summary>
         /// Instantiates gameobject to the specified position with the specified rotation.
