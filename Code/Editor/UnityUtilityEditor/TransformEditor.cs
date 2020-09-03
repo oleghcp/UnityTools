@@ -44,11 +44,11 @@ namespace UnityUtilityEditor
         {
             if (s_grid)
             {
-                Tool curTool = UnityEditor.Tools.current;
+                Tool curTool = Tools.current;
 
-                UnityEditor.Tools.hidden = curTool == Tool.Move || curTool == Tool.Transform || curTool == Tool.Rect;
+                Tools.hidden = curTool == Tool.Move || curTool == Tool.Transform || curTool == Tool.Rect;
 
-                if (!UnityEditor.Tools.hidden)
+                if (!Tools.hidden)
                     return;
 
                 if (curTool == Tool.Transform || curTool == Tool.Rect)
@@ -107,13 +107,21 @@ namespace UnityUtilityEditor
 
         public override void OnInspectorGUI()
         {
+            bool hasParent = m_target.parent;
+
+            if (!hasParent)
+                s_world = false;
+
             GUILayout.Space(SPACE);
 
-            bool world = s_world = GUILayout.Toolbar(s_world.ToInt(), s_toolbarNames).ToBool();
+            GUI.enabled = hasParent;
+            s_world = GUILayout.Toolbar(s_world.ToInt(), s_toolbarNames)
+                               .ToBool();
+            GUI.enabled = true;
 
             GUILayout.Space(SPACE);
 
-            if (world)
+            if (s_world)
             {
                 bool drawLine(string label, in Vector3 curValue, out Vector3 newValue, bool locked = false)
                 {
@@ -174,8 +182,9 @@ namespace UnityUtilityEditor
             if (s_grid != gridNewVal)
             {
                 s_grid = gridNewVal;
-                UnityEditor.Tools.hidden = gridNewVal;
-                EditorWindow.GetWindow<SceneView>().Repaint();
+                Tools.hidden = gridNewVal;
+                EditorWindow.GetWindow<SceneView>()
+                            .Repaint();
             }
             EditorGUI.BeginDisabledGroup(!s_grid);
             s_snapStep = EditorGUILayout.FloatField("Grid Snap Step", s_snapStep);

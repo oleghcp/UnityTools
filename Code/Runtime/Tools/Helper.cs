@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityUtility;
 
-namespace Tools
+namespace UnityUtilityTools
 {
     public enum MemberCloneOption
     {

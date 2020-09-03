@@ -2,7 +2,7 @@
 using System.Reflection;
 using UnityUtility.SingleScripts;
 
-namespace Tools
+namespace UnityUtilityTools
 {
     internal static class SingletonUtility
     {

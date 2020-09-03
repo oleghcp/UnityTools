@@ -6,7 +6,7 @@ using UnityUtility.Collections;
 using UnityUtility.MathExt;
 using UnityUtility.SaveLoad;
 using System.Runtime.CompilerServices;
-using Tools;
+using UnityUtilityTools;
 
 namespace UnityUtility.Sound
 {

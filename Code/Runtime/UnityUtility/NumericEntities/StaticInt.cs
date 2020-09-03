@@ -1,7 +1,7 @@
 ﻿using UnityUtility.MathExt;
 using System;
 using System.Collections.Generic;
-using Tools;
+using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
 {

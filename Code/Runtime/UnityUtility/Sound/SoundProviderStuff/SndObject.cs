@@ -5,7 +5,7 @@ using UnityUtility.SingleScripts;
 using System;
 using UnityUtility.MathExt;
 using System.Runtime.CompilerServices;
-using Tools;
+using UnityUtilityTools;
 
 namespace UnityUtility.Sound.SoundProviderStuff
 {

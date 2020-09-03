@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityUtility.Async;
 
-namespace Tools
+namespace UnityUtilityTools
 {
     internal static class Errors
     {
