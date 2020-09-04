@@ -1,4 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using UnityUtility.MathExt;
+using UnityUtilityTools;
 
 namespace System.IO
 {
@@ -35,30 +37,30 @@ namespace System.IO
 
         public static string GetParentPath(string path, int steps = 1)
         {
+            if (steps < 0)
+                throw Errors.NegativeParameter(nameof(path));
+
             string parent = path;
             int maxLength = path.Length;
 
             for (int i = 0; i < steps; i++)
             {
                 bool terminator = true;
-                for (int j = maxLength - 1; j >= 0; j--)
-                {
-                    if (f_isSeparator(parent[j]))
-                    {
-                        if (terminator)
-                            continue;
 
-                        maxLength = j;
+                int j = maxLength - 1;
+                while (j >= 0)
+                {
+                    if (f_isSeparator(parent[j]) && !terminator)
                         break;
-                    }
-                    else
-                    {
-                        terminator = false;
-                    }
+
+                    terminator = false;
+                    j--;
                 }
+
+                maxLength = j;
             }
 
-            return parent.Substring(0, maxLength);
+            return parent.Substring(0, maxLength.CutBefore(0));
         }
 
         private static bool f_isSeparator(char ch)
