@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.IO;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(TextAsset))]
     internal class TextAssetEditor : Editor

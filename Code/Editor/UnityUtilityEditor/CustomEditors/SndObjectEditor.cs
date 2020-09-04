@@ -1,7 +1,7 @@
 ﻿using UnityUtility.Sound.SoundProviderStuff;
 using UnityEditor;
 
-namespace UnityUtilityEditor.SoundEditors
+namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(SndObject))]
     internal class SndObjectEditor : SoundObjectEditor { }

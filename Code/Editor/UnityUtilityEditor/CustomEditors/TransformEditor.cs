@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor

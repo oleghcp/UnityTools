@@ -8,9 +8,9 @@ namespace UnityUtilityEditor
 {
     internal static class EditorScriptUtility
     {
-        internal const string CATEGORY = "UnityUtility";
+        public const string CATEGORY = "UnityUtility";
 
-        internal static bool DrawCenterButton(string text, float w, float h)
+        public static bool DrawCenterButton(string text, float w, float h)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space();
@@ -21,7 +21,7 @@ namespace UnityUtilityEditor
             return pressed;
         }
 
-        internal static void DrawCenterLabel(string text, float w)
+        public static void DrawCenterLabel(string text, float w)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space();
@@ -30,7 +30,7 @@ namespace UnityUtilityEditor
             EditorGUILayout.EndHorizontal();
         }
 
-        internal static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
+        public static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
         {
             EditorGUI.LabelField(position, label);
             EditorGUI.LabelField(EditorGUI.PrefixLabel(position, label), message);
@@ -38,7 +38,7 @@ namespace UnityUtilityEditor
 
         //The function was taken here: https://gist.github.com/bzgeb
         //God save this guy
-        internal static UnityObject[] DrawDropArea(string text, float h)
+        public static UnityObject[] DrawDropArea(string text, float h)
         {
             Event curEvent = Event.current;
             Rect dropArea = GUILayoutUtility.GetRect(0f, h, GUILayout.ExpandWidth(true));
@@ -63,7 +63,7 @@ namespace UnityUtilityEditor
             return null;
         }
 
-        internal static bool EqualizeSize(SerializedProperty arrayProp, int targetSize, object defVal)
+        public static bool EqualizeSize(SerializedProperty arrayProp, int targetSize, object defVal)
         {
             bool changed = false;
 
@@ -103,7 +103,7 @@ namespace UnityUtilityEditor
             }
         }
 
-        internal static void MoveToggles(BitArrayMask bits, int length, bool up)
+        public static void MoveToggles(BitArrayMask bits, int length, bool up)
         {
             if (up)
             {
@@ -121,7 +121,7 @@ namespace UnityUtilityEditor
             }
         }
 
-        internal static void MoveElements(SerializedProperty arrayProp, BitArrayMask bits, bool up, object defVal)
+        public static void MoveElements(SerializedProperty arrayProp, BitArrayMask bits, bool up, object defVal)
         {
             int length = arrayProp.arraySize;
 

@@ -2,7 +2,7 @@
 using UnityUtility.Async;
 
 #if UNITY_2018_3_OR_NEWER
-namespace UnityUtilityEditor.Async
+namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(AsyncSystemSettings))]
     internal class AsyncSystemSettingsEditor : Editor

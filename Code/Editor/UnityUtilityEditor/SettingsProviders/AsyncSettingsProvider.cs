@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityUtility.Async;
 
 #if UNITY_2018_3_OR_NEWER
-namespace UnityUtilityEditor.Async
+namespace UnityUtilityEditor.SettingsProviders
 {
-    internal static class AsyncSettingsIMGUIRegister
+    internal static class AsyncSettingsProvider
     {
         private static GUIContent s_labelForStopField;
         private static GUIContent s_labelForGlobalStopField;
@@ -35,10 +35,10 @@ namespace UnityUtilityEditor.Async
 
         private static void f_drawGui(string searchContext)
         {
-            var settings = AsyncSystemSettings.GetSerializedObject();
+            SerializedObject settings = AsyncSystemSettings.GetSerializedObject();
 
-            var canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
-            var canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
+            SerializedProperty canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
+            SerializedProperty canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
 
             canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(s_labelForStopField, canBeStoppedProperty.boolValue);
 

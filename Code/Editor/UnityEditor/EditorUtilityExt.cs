@@ -141,5 +141,20 @@ namespace UnityEditor
             AssetDatabase.AddObjectToAsset(so, rootObject);
             AssetDatabase.SaveAssets();
         }
+
+        public static (string AssemblyName, string ClassName) SplitSerializedPropertyTypename(string typename)
+        {
+            if (typename.IsNullOrEmpty())
+                return (string.Empty, string.Empty);
+
+            string[] typeSplitString = typename.Split(' ');
+            return (typeSplitString[0], typeSplitString[1]);
+        }
+
+        public static Type GetTypeFromSerializedPropertyTypename(string typename)
+        {
+            var (assemblyName, className) = SplitSerializedPropertyTypename(typename);
+            return Type.GetType($"{className}, {assemblyName}");
+        }
     }
 }

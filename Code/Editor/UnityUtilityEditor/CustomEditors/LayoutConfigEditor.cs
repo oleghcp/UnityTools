@@ -9,7 +9,7 @@ using UnityUtility.Controls;
 using UnityUtility.Controls.ControlStuff;
 using UnityUtilityEditor.Window;
 
-namespace UnityUtilityEditor.Input
+namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor
