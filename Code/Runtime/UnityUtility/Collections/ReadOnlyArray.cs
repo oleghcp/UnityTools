@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-#pragma warning disable CS0659, CS0661, IDE0016
 namespace UnityUtility.Collections
 {
-    public struct ReadOnlyArray<T> : IEnumerable<T>, IEquatable<ReadOnlyArray<T>>, IList<T>, IList
+    public struct ReadOnlyArray<T> : IList<T>, IReadOnlyList<T>, IEquatable<ReadOnlyArray<T>>
     {
         private IList<T> m_list;
 
@@ -44,9 +43,14 @@ namespace UnityUtility.Collections
             return m_list.IndexOf(item);
         }
 
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            m_list.CopyTo(array, arrayIndex);
+        }
+
         public T GetLast()
         {
-            return m_list[m_list.Count - 1];
+            return m_list.GetLast();
         }
 
         public ReadOnlyCollection<T> ToCollection()
@@ -59,119 +63,46 @@ namespace UnityUtility.Collections
             return m_list.ToArray();
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public IEnumerator<T> GetEnumerator()
         {
-            m_list.CopyTo(array, arrayIndex);
+            return m_list.GetEnumerator();
         }
 
-        // -- //
-
-        #region IList
-        object IList.this[int index]
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            get { return m_list[index]; }
-            set { throw new NotImplementedException(); }
+            return m_list.GetEnumerator();
         }
 
+        #region Not Supported
         T IList<T>.this[int index]
         {
             get { return m_list[index]; }
-            set { throw new NotImplementedException(); }
-        }
-
-        bool IList.IsFixedSize
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         void IList<T>.Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         void IList<T>.RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         void ICollection<T>.Add(T item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         void ICollection<T>.Clear()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         bool ICollection<T>.Remove(T item)
         {
-            throw new NotImplementedException();
-        }
-
-        int IList.Add(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IList.Insert(int index, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IList.Remove(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IList.Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IList.RemoveAt(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IList.Contains(object value)
-        {
-            return value is T && m_list.Contains((T)value);
-        }
-
-        int IList.IndexOf(object value)
-        {
-            if (value is T)
-                return m_list.IndexOf((T)value);
-
-            return -1;
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            ICollection collection = m_list as ICollection;
-
-            if (m_list != null)
-            {
-                collection.CopyTo(array, index);
-            }
-            else
-            {
-                for (int i = index; i < m_list.Count; i++)
-                {
-                    array.SetValue(m_list[i], i);
-                }
-            }
+            throw new NotSupportedException();
         }
         #endregion
 
@@ -179,7 +110,7 @@ namespace UnityUtility.Collections
 
         public override bool Equals(object obj)
         {
-            return obj is ReadOnlyArray<T> && this == (ReadOnlyArray<T>)obj;
+            return obj is ReadOnlyArray<T> array && this == array;
         }
 
         public bool Equals(ReadOnlyArray<T> other)
@@ -190,16 +121,6 @@ namespace UnityUtility.Collections
         public override int GetHashCode()
         {
             return m_list.GetHashCode();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return m_list.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return m_list.GetEnumerator();
         }
 
         // -- //

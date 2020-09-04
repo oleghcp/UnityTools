@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
-using UnityUtilityTools;
 using UnityUtility;
+using UnityUtilityTools;
 
 namespace System.Collections.Generic
 {
@@ -13,7 +13,7 @@ namespace System.Collections.Generic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<T>(this T[] self, T item)
         {
-            return Array.IndexOf(self, item);
+            return (self as IList<T>).IndexOf(item);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace System.Collections.Generic
         public static T[] GetCopy<T>(this T[] self)
         {
             T[] copy = new T[self.Length];
-            Array.Copy(self, copy, self.Length);
+            self.CopyTo(copy, 0);
             return copy;
         }
 
