@@ -158,7 +158,7 @@ namespace UnityUtility
 
             for (int i = 0; i < length; i++)
             {
-                if (BitMask.ContainsFlag(mask, i))
+                if (BitMask.HasFlag(mask, i))
                 {
                     if (rn-- == 0)
                         return i;

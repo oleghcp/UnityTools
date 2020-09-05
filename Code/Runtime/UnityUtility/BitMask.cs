@@ -44,7 +44,7 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ContainsFlag(int mask, int index)
+        public static bool HasFlag(int mask, int index)
         {
             return (mask & 1 << index) != 0;
         }
@@ -113,7 +113,7 @@ namespace UnityUtility
         {
             for (int i = 0; i < SIZE; i++)
             {
-                if (ContainsFlag(otherMask, i) && !ContainsFlag(mask, i))
+                if (HasFlag(otherMask, i) && !HasFlag(mask, i))
                     return false;
             }
 
@@ -124,7 +124,7 @@ namespace UnityUtility
         {
             for (int i = 0; i < SIZE; i++)
             {
-                if (ContainsFlag(otherMask, i) && ContainsFlag(mask, i))
+                if (HasFlag(otherMask, i) && HasFlag(mask, i))
                     return true;
             }
 
@@ -141,7 +141,7 @@ namespace UnityUtility
 
             for (int i = 0; i < length; i++)
             {
-                if (!ContainsFlag(mask, i))
+                if (!HasFlag(mask, i))
                     return false;
             }
             return true;
@@ -157,7 +157,7 @@ namespace UnityUtility
 
             for (int i = 0; i < length; i++)
             {
-                if (ContainsFlag(mask, i))
+                if (HasFlag(mask, i))
                     return true;
             }
             return false;
@@ -174,7 +174,7 @@ namespace UnityUtility
             int count = 0;
             for (int i = 0; i < length; i++)
             {
-                if (ContainsFlag(mask, i))
+                if (HasFlag(mask, i))
                     count++;
             }
             return count;

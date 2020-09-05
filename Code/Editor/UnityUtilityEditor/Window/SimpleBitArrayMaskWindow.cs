@@ -74,7 +74,7 @@ namespace UnityUtilityEditor.Window
 
                 for (int j = 0; j < len; j++)
                 {
-                    bool hasFlag = BitMask.ContainsFlag(mask, j);
+                    bool hasFlag = BitMask.HasFlag(mask, j);
                     BitMask.SetFlag(ref mask, j, EditorGUILayout.Toggle((BitMask.SIZE * i + j).ToString(), hasFlag));
                 }
                 length -= BitMask.SIZE;

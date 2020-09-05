@@ -7,8 +7,8 @@ using UnityUtilityEditor.Window;
 
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(BitMaskEnumFlagsAttribute))]
-    internal class BitMaskEnumFlagsDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(DrawBitMaskAttribute))]
+    internal class DrawBitMaskDrawer : PropertyDrawer
     {
         private class Data
         {
@@ -27,12 +27,12 @@ namespace UnityUtilityEditor.Drawers
                 if (drawer.fieldInfo.FieldType == typeof(BitArrayMask))
                 {
                     m_label = new GUIContent(property.displayName);
-                    values = Enum.GetValues((drawer.attribute as BitMaskEnumFlagsAttribute).EnumType);
+                    values = Enum.GetValues((drawer.attribute as DrawBitMaskAttribute).EnumType);
                     m_array = true;
                 }
                 else if (drawer.fieldInfo.FieldType.GetTypeCode() == TypeCode.Int32)
                 {
-                    values = Enum.GetValues((drawer.attribute as BitMaskEnumFlagsAttribute).EnumType);
+                    values = Enum.GetValues((drawer.attribute as DrawBitMaskAttribute).EnumType);
 
                     if (values.Length > BitMask.SIZE)
                     {

@@ -65,7 +65,7 @@ namespace UnityUtilityEditor.Window
                         prop = m_array.GetArrayElementAtIndex(index);
                         mask = prop.intValue;
                     }
-                    bool hasFlag = BitMask.ContainsFlag(mask, i % BitMask.SIZE);
+                    bool hasFlag = BitMask.HasFlag(mask, i % BitMask.SIZE);
                     BitMask.SetFlag(ref mask, i % BitMask.SIZE, EditorGUILayout.Toggle(m_names[i], hasFlag));
                 }
             }
