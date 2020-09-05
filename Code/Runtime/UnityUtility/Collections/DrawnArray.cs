@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+#if UNITY_2020_1_OR_NEWER
 namespace UnityUtility.Collections
 {
     [Serializable]
@@ -37,6 +39,7 @@ namespace UnityUtility.Collections
             get { return true; }
         }
 
+        [Preserve]
         private DrawnArray() { }
 
         public DrawnArray(int length)
@@ -97,3 +100,4 @@ namespace UnityUtility.Collections
         }
     }
 }
+#endif
