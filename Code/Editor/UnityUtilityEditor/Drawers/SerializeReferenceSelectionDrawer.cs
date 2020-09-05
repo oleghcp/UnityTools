@@ -69,6 +69,9 @@ namespace UnityUtilityEditor.Drawers
 
                 foreach (Type type in TypeCache.GetTypesDerivedFrom(fieldType))
                 {
+                    if (type.IsAbstract || type.IsInterface)
+                        continue;
+
                     string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
                     string entryName = $"{type}  ( {assemblyName} )";
                     context.AddItem(new GUIContent(entryName), false, initByInstance, type);
