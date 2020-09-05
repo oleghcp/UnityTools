@@ -49,12 +49,12 @@ namespace UnityUtility.Collections
 
         public int IndexOf(T item)
         {
-            return m_array.IndexOf(item);
+            return (m_array as IList<T>).IndexOf(item);
         }
 
         public bool Contains(T item)
         {
-            return m_array.Contains(item);
+            return (m_array as IList<T>).Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)

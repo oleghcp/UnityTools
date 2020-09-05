@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 using UnityObject = UnityEngine.Object;
@@ -74,22 +75,9 @@ namespace UnityEditor
                 progress.Progress = (i + 1f) / count;
 
                 string filePath = files[i];
-                string extension = Path.GetExtension(filePath);
 
-                bool invalid = extension != ".prefab" &&
-                               extension != ".unity" &&
-                               extension != ".asset" &&
-                               extension != ".mat" &&
-                               extension != ".preset" &&
-                               extension != ".anim" &&
-                               extension != ".controller" &&
-                               extension != ".spriteatlas" &&
-                               !extension.Contains("override");
-
-                if (invalid)
-                {
+                if (invalidExtension(Path.GetExtension(filePath)))
                     continue;
-                }
 
                 string text = File.ReadAllText(filePath);
 
@@ -104,6 +92,19 @@ namespace UnityEditor
                 {
                     yield return null;
                 }
+            }
+
+            bool invalidExtension(string extension)
+            {
+                return extension != ".prefab" &&
+                       extension != ".unity" &&
+                       extension != ".asset" &&
+                       extension != ".mat" &&
+                       extension != ".preset" &&
+                       extension != ".anim" &&
+                       extension != ".controller" &&
+                       extension != ".spriteatlas" &&
+                       !extension.Contains("override");
             }
         }
 
@@ -157,9 +158,14 @@ namespace UnityEditor
             return Type.GetType($"{className}, {assemblyName}");
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
         {
-            float lineHeight = EditorGUIUtility.singleLineHeight;
+            return GetLinePosition(basePosition, lineIndex, EditorGUIUtility.singleLineHeight);
+        }
+
+        public static Rect GetLinePosition(in Rect basePosition, int lineIndex, float lineHeight)
+        {
             float lineSpace = EditorGUIUtility.standardVerticalSpacing;
 
             float xPos = basePosition.xMin;
