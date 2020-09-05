@@ -77,14 +77,14 @@ namespace UnityEditor
                 string extension = Path.GetExtension(filePath);
 
                 bool invalid = extension != ".prefab" &&
-                              extension != ".unity" &&
-                              extension != ".asset" &&
-                              extension != ".mat" &&
-                              extension != ".preset" &&
-                              extension != ".anim" &&
-                              extension != ".controller" &&
-                              extension != ".spriteatlas" &&
-                              !extension.Contains("override");
+                               extension != ".unity" &&
+                               extension != ".asset" &&
+                               extension != ".mat" &&
+                               extension != ".preset" &&
+                               extension != ".anim" &&
+                               extension != ".controller" &&
+                               extension != ".spriteatlas" &&
+                               !extension.Contains("override");
 
                 if (invalid)
                 {
@@ -155,6 +155,17 @@ namespace UnityEditor
         {
             var (assemblyName, className) = SplitSerializedPropertyTypename(typename);
             return Type.GetType($"{className}, {assemblyName}");
+        }
+
+        public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
+        {
+            float lineHeight = EditorGUIUtility.singleLineHeight;
+            float lineSpace = EditorGUIUtility.standardVerticalSpacing;
+
+            float xPos = basePosition.xMin;
+            float yPos = basePosition.yMin + (lineHeight + lineSpace) * lineIndex;
+
+            return new Rect(xPos, yPos, basePosition.width, lineHeight);
         }
     }
 }

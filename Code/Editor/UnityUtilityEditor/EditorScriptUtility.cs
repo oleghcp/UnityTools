@@ -8,7 +8,7 @@ namespace UnityUtilityEditor
 {
     internal static class EditorScriptUtility
     {
-        public const string CATEGORY = "UnityUtility";
+        public const string CATEGORY = nameof(UnityUtility);
 
         public static bool DrawCenterButton(string text, float w, float h)
         {
