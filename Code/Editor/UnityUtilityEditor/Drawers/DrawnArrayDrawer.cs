@@ -3,7 +3,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityUtility.Collections;
 
-#if UNITY_EDITOR && UNITY_2020_1_OR_NEWER
+#if UNITY_2020_1_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DrawnArray<>))]
@@ -12,9 +12,12 @@ namespace UnityUtilityEditor.Drawers
         private const string PROP_NAME = "m_array";
 
         private ReorderableList m_list;
+        private GUIContent m_label;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            m_label = label;
+
             if (m_list == null)
             {
                 SerializedProperty arrayProperty = property.FindPropertyRelative(PROP_NAME);
@@ -25,7 +28,11 @@ namespace UnityUtilityEditor.Drawers
                     return;
                 }
 
-                m_list = f_createReorderableList(arrayProperty, label);
+                m_list = f_createReorderableList(arrayProperty);
+            }
+            else
+            {
+                m_list.serializedProperty = property.FindPropertyRelative(PROP_NAME);
             }
 
             m_list.DoList(position);
@@ -39,11 +46,11 @@ namespace UnityUtilityEditor.Drawers
             return m_list.GetHeight();
         }
 
-        private ReorderableList f_createReorderableList(SerializedProperty property, GUIContent label)
+        private ReorderableList f_createReorderableList(SerializedProperty property)
         {
             ReorderableList reordList = new ReorderableList(property.serializedObject, property);
 
-            reordList.drawHeaderCallback += rect => EditorGUI.LabelField(rect, label);
+            reordList.drawHeaderCallback += rect => EditorGUI.LabelField(rect, m_label);
             reordList.drawElementCallback += f_onDrawElement;
             reordList.elementHeightCallback += f_onElementHeight;
 
@@ -52,18 +59,22 @@ namespace UnityUtilityEditor.Drawers
 
         private float f_onElementHeight(int index)
         {
-            return EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            SerializedProperty elementProperty = m_list.serializedProperty.GetArrayElementAtIndex(index);
+            return EditorGUI.GetPropertyHeight(elementProperty) + EditorGUIUtility.standardVerticalSpacing;
         }
 
         private void f_onDrawElement(Rect position, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty listProperty = m_list.serializedProperty;
-            SerializedProperty elementProperty = listProperty.GetArrayElementAtIndex(index);
+            SerializedProperty elementProperty = m_list.serializedProperty.GetArrayElementAtIndex(index);
 
+            const float shift = 10f;
+
+            position.width -= shift;
             position.height = EditorGUIUtility.singleLineHeight;
+            position.x += shift;
             position.y += EditorGUIUtility.standardVerticalSpacing * 0.5f;
 
-            EditorGUI.PropertyField(position, elementProperty);
+            EditorGUI.PropertyField(position, elementProperty, true);
         }
     }
 }
