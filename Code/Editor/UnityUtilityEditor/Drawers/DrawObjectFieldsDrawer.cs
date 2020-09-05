@@ -16,7 +16,7 @@ namespace UnityUtilityEditor.Drawers
 
             if (!canDraw)
             {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use DrawSOFields with ScriptableObject.");
+                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use DrawObjectFieldsAttribute only with ScriptableObject.");
                 return;
             }
 
@@ -44,7 +44,7 @@ namespace UnityUtilityEditor.Drawers
                 SerializedProperty iterator = serObject.GetIterator();
 
                 Rect rect = position;
-                rect.y += EditorGUIUtility.singleLineHeight;
+                rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
                 EditorGUI.indentLevel++;
 
@@ -54,8 +54,7 @@ namespace UnityUtilityEditor.Drawers
                         continue;
 
                     EditorGUI.PropertyField(rect, iterator, true);
-                    float shift = EditorGUI.GetPropertyHeight(iterator);
-                    rect.y += shift;
+                    rect.y += EditorGUI.GetPropertyHeight(iterator) + EditorGUIUtility.standardVerticalSpacing;
                 }
 
                 EditorGUI.indentLevel--;
@@ -67,21 +66,19 @@ namespace UnityUtilityEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.objectReferenceValue != null && property.isExpanded)
+            if (property.objectReferenceValue == null || !property.isExpanded)
+                return EditorGUIUtility.singleLineHeight;
+
+            SerializedObject serObject = new SerializedObject(property.objectReferenceValue);
+            SerializedProperty iterator = serObject.GetIterator();
+            float height = 0;
+
+            for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
             {
-                SerializedObject serObject = new SerializedObject(property.objectReferenceValue);
-                SerializedProperty iterator = serObject.GetIterator();
-                float height = 0;
-
-                for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
-                {
-                    height += EditorGUI.GetPropertyHeight(iterator);
-                }
-
-                return height;
+                height += EditorGUI.GetPropertyHeight(iterator) + EditorGUIUtility.standardVerticalSpacing;
             }
 
-            return EditorGUIUtility.singleLineHeight;
+            return height;
         }
     }
 }
