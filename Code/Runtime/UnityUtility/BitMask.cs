@@ -46,7 +46,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasFlag(int mask, int index)
         {
-            return (mask & 1 << index) != 0;
+            return (mask & (1 << index)) != 0;
         }
 
         public static void SetFlag(ref int mask, int index, bool flagValue)
