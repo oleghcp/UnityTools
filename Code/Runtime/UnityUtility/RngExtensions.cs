@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityUtilityTools;
 using UnityEngine;
-using UnityUtility.BitMasks;
 using UnityUtility.Collections;
 using UnityUtility.Collections.Unsafe;
 using UnityUtility.MathExt;
 using UnityUtility.Rng;
+using UnityUtilityTools;
 
 namespace UnityUtility
 {
@@ -155,11 +154,11 @@ namespace UnityUtility
         /// <param name="length">How many flags of 32bit mask should be considered.</param>
         public static int RandomFlag(this IRng self, int mask, int length)
         {
-            int rn = self.Next(mask.GetCount(length));
+            int rn = self.Next(BitMask.GetCount(mask, length));
 
             for (int i = 0; i < length; i++)
             {
-                if (mask.ContainsFlag(i))
+                if (BitMask.ContainsFlag(mask, i))
                 {
                     if (rn-- == 0)
                         return i;

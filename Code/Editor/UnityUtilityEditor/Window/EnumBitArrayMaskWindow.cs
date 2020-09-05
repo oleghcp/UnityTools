@@ -1,9 +1,9 @@
 ﻿using System;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtilityEditor.Drawers;
-using UnityUtility.BitMasks;
 
 namespace UnityUtilityEditor.Window
 {
@@ -58,14 +58,15 @@ namespace UnityUtilityEditor.Window
             {
                 if (m_names[i] != null)
                 {
-                    if (index != i / 32)
+                    if (index != i / BitMask.SIZE)
                     {
                         prop.intValue = mask;
-                        index = i / 32;
+                        index = i / BitMask.SIZE;
                         prop = m_array.GetArrayElementAtIndex(index);
                         mask = prop.intValue;
                     }
-                    mask.SetFlag(i % 32, EditorGUILayout.Toggle(m_names[i], mask.ContainsFlag(i % 32)));
+                    bool hasFlag = BitMask.ContainsFlag(mask, i % BitMask.SIZE);
+                    BitMask.SetFlag(ref mask, i % BitMask.SIZE, EditorGUILayout.Toggle(m_names[i], hasFlag));
                 }
             }
             prop.intValue = mask;

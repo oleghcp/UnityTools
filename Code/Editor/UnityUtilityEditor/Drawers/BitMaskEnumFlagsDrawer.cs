@@ -1,10 +1,9 @@
 ﻿using System;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtilityEditor.Window;
-using UnityUtility;
-using UnityUtility.BitMasks;
 
 namespace UnityUtilityEditor.Drawers
 {

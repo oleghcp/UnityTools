@@ -1,10 +1,9 @@
-﻿using System;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.MathExt;
-using UnityEditor;
+using UnityUtility;
 using UnityUtility.Collections;
+using UnityUtility.MathExt;
 using UnityUtilityEditor.Drawers;
-using UnityUtility.BitMasks;
 
 namespace UnityUtilityEditor.Window
 {
@@ -59,25 +58,26 @@ namespace UnityUtilityEditor.Window
             int length = m_length.intValue;
             for (int i = 0; i < size; i++)
             {
-                int len = length > 32 ? 32 : length;
+                int len = length > BitMask.SIZE ? BitMask.SIZE : length;
 
                 var prop = m_array.GetArrayElementAtIndex(i);
                 int mask = prop.intValue;
 
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("All", GUILayout.Width(60f)))
-                    mask.AddAll(len);
+                    BitMask.AddAll(ref mask, len);
                 if (GUILayout.Button("None", GUILayout.Width(60f)))
-                    mask.Clear();
+                    BitMask.Clear(ref mask);
 
                 EditorGUILayout.LabelField(mask.ToString(), GUILayout.Width(120f));
                 EditorGUILayout.EndHorizontal();
 
                 for (int j = 0; j < len; j++)
                 {
-                    mask.SetFlag(j, EditorGUILayout.Toggle((32 * i + j).ToString(), mask.ContainsFlag(j)));
+                    bool hasFlag = BitMask.ContainsFlag(mask, j);
+                    BitMask.SetFlag(ref mask, j, EditorGUILayout.Toggle((BitMask.SIZE * i + j).ToString(), hasFlag));
                 }
-                length -= 32;
+                length -= BitMask.SIZE;
 
                 prop.intValue = mask;
             }

@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityUtilityTools;
 using UnityEngine;
 using UnityEngine.Scripting;
-using UnityUtility.BitMasks;
+using UnityUtilityTools;
 
 namespace UnityUtility.Collections
 {
@@ -311,7 +310,7 @@ namespace UnityUtility.Collections
                     return true;
             }
 
-            return m_array[lastElement].AnyFor(f_getAppendixLength());
+            return BitMask.AnyFor(m_array[lastElement], f_getAppendixLength());
         }
 
         public bool All()
@@ -327,7 +326,7 @@ namespace UnityUtility.Collections
                     return false;
             }
 
-            return m_array[lastElement].AllFor(f_getAppendixLength());
+            return BitMask.AllFor(m_array[lastElement], f_getAppendixLength());
         }
 
         public bool IsEmpty()
@@ -350,7 +349,7 @@ namespace UnityUtility.Collections
             if (lastElement < 0)
                 return 0;
 
-            int count = m_array[lastElement].GetCount(f_getAppendixLength());
+            int count = BitMask.GetCount(m_array[lastElement], f_getAppendixLength());
 
             for (int i = 0; i < lastElement; i++)
             {

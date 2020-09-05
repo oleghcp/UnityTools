@@ -187,5 +187,45 @@ namespace UnityUtility
             mask = ((((mask >> 4) + mask) & 0x0F0F0F0F) * 0x01010101) >> 24;
             return mask;
         }
+
+        // -- //
+
+        public static int CreateMask(int index0)
+        {
+            int mask = 0;
+            AddFlag(ref mask, index0);
+            return mask;
+        }
+
+        public static int CreateMask(int index0, int index1)
+        {
+            int mask = CreateMask(index0);
+            AddFlag(ref mask, index1);
+            return mask;
+        }
+
+        public static int CreateMask(int index0, int index1, int index2)
+        {
+            int mask = CreateMask(index0, index1);
+            AddFlag(ref mask, index2);
+            return mask;
+        }
+
+        public static int CreateMask(int index0, int index1, int index2, int index3)
+        {
+            int mask = CreateMask(index0, index1, index2);
+            AddFlag(ref mask, index3);
+            return mask;
+        }
+
+        public static int CreateMask(params int[] indices)
+        {
+            int mask = 0;
+            for (int i = 0; i < indices.Length; i++)
+            {
+                AddFlag(ref mask, indices[i]);
+            }
+            return mask;
+        }
     }
 }
