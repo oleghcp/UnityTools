@@ -46,15 +46,6 @@ namespace UnityUtility
             return chance > self.NextDouble();
         }
 
-        /// <summary>
-        /// Returns true with chance represented by Percent from 0 to 100.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Chance(this IRng self, Percent chance)
-        {
-            return chance.ToRatio() > self.NextDouble();
-        }
-
         //public static  int RandomTemp(float[] weights)
         //{
         //    float sum = weights.Sum();

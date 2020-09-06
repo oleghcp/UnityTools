@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using UnityUtilityTools;
 using UnityEngine;
+using UnityUtilityTools;
 
 namespace UnityUtility
 {
@@ -149,8 +149,6 @@ namespace UnityUtility
 
         public static explicit operator bool(Bytes bytes) { return bytes.m_field != 0; }
 
-        public static explicit operator Percent(Bytes bytes) { return new Percent(bytes.m_floatField); }
-
         public static explicit operator LayerMask(Bytes bytes) { return bytes.m_field; }
 
         public static unsafe explicit operator Color32(Bytes bytes)
@@ -173,8 +171,6 @@ namespace UnityUtility
         public static implicit operator Bytes(ushort val) { return new Bytes { m_field = val }; }
 
         public static implicit operator Bytes(bool val) { return new Bytes { m_field = val ? 1 : 0 }; }
-
-        public static implicit operator Bytes(Percent val) { return new Bytes { m_floatField = val.ToRatio() }; }
 
         public static implicit operator Bytes(LayerMask val) { return new Bytes { m_field = val }; }
 
