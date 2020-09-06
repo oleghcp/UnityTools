@@ -1,8 +1,7 @@
 {
     "name": "UnityUtilityEditor",
     "references": [
-        "UnityUtility",
-        "Unity.EditorCoroutines.Editor"
+        "UnityUtility"
     ],
     "includePlatforms": [
         "Editor"
