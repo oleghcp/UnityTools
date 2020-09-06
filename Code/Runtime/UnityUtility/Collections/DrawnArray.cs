@@ -8,30 +8,68 @@ using UnityEngine.Scripting;
 namespace UnityUtility.Collections
 {
     [Serializable]
-    public class DrawnArray<T> : IList<T>, IReadOnlyList<T>
+    public sealed class ReorderableArray<T> : DrawnArray<T>
     {
         [SerializeField]
         private T[] m_array;
 
+        protected override T[] Items
+        {
+            get { return m_array; }
+        }
+
+        [Preserve]
+        private ReorderableArray() { }
+
+        public ReorderableArray(int length)
+        {
+            m_array = new T[length];
+        }
+    }
+
+    [Serializable]
+    public sealed class ReorderableRefArray<T> : DrawnArray<T> where T : class
+    {
+        [SerializeReference, SerializeReferenceSelection]
+        private T[] m_array;
+
+        protected override T[] Items
+        {
+            get { return m_array; }
+        }
+
+        [Preserve]
+        private ReorderableRefArray() { }
+
+        public ReorderableRefArray(int length)
+        {
+            m_array = new T[length];
+        }
+    }
+
+    public abstract class DrawnArray<T> : IList<T>, IReadOnlyList<T>
+    {
+        protected abstract T[] Items { get; }
+
         public int Count
         {
-            get { return m_array.Length; }
+            get { return Items.Length; }
         }
 
         public ref T this[int index]
         {
-            get { return ref m_array[index]; }
+            get { return ref Items[index]; }
         }
 
         T IReadOnlyList<T>.this[int index]
         {
-            get { return m_array[index]; }
+            get { return Items[index]; }
         }
 
         T IList<T>.this[int index]
         {
-            get { return m_array[index]; }
-            set { m_array[index] = value; }
+            get { return Items[index]; }
+            set { Items[index] = value; }
         }
 
         public bool IsReadOnly
@@ -39,27 +77,19 @@ namespace UnityUtility.Collections
             get { return true; }
         }
 
-        [Preserve]
-        private DrawnArray() { }
-
-        public DrawnArray(int length)
-        {
-            m_array = new T[length];
-        }
-
         public int IndexOf(T item)
         {
-            return (m_array as IList<T>).IndexOf(item);
+            return (Items as IList<T>).IndexOf(item);
         }
 
         public bool Contains(T item)
         {
-            return (m_array as IList<T>).Contains(item);
+            return (Items as IList<T>).Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            m_array.CopyTo(array, arrayIndex);
+            Items.CopyTo(array, arrayIndex);
         }
 
         #region Not Supported
@@ -91,12 +121,12 @@ namespace UnityUtility.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            return (m_array as IList<T>).GetEnumerator();
+            return (Items as IList<T>).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_array.GetEnumerator();
+            return Items.GetEnumerator();
         }
     }
 }

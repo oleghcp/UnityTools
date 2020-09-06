@@ -6,18 +6,17 @@ using UnityUtility.Collections;
 #if UNITY_2020_1_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(DrawnArray<>))]
+    [CustomPropertyDrawer(typeof(ReorderableArray<>))]
+    [CustomPropertyDrawer(typeof(ReorderableRefArray<>))]
     public class DrawnArrayDrawer : PropertyDrawer
     {
         private const string PROP_NAME = "m_array";
 
         private ReorderableList m_list;
-        private GUIContent m_label;
+        private string m_label;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            m_label = label;
-
             if (m_list == null)
             {
                 SerializedProperty arrayProperty = property.FindPropertyRelative(PROP_NAME);
@@ -28,11 +27,8 @@ namespace UnityUtilityEditor.Drawers
                     return;
                 }
 
+                m_label = label.text;
                 m_list = f_createReorderableList(arrayProperty);
-            }
-            else
-            {
-                m_list.serializedProperty = property.FindPropertyRelative(PROP_NAME);
             }
 
             m_list.DoList(position);

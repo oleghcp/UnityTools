@@ -11,6 +11,12 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            if (fieldInfo.FieldType.IsValueType)
+            {
+                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use SerializeReferenceSelectionAttribute only with reference types.");
+                return;
+            }
+
             EditorGUI.BeginProperty(position, label, property);
             f_drawSelectionButton(position, property);
             EditorGUI.PropertyField(position, property, true);
