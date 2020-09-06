@@ -10,17 +10,16 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Rect rect = EditorGUI.PrefixLabel(position, label);
-
             if (fieldInfo.FieldType.GetTypeCode() != TypeCode.String)
             {
-                EditorGUI.LabelField(rect, "Use Identifier with String.");
+                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use Identifier with String.");
                 return;
             }
 
             if (property.stringValue.IsNullOrWhiteSpace())
                 property.stringValue = Guid.NewGuid().ToString();
 
+            Rect rect = EditorGUI.PrefixLabel(position, label);
             EditorGUI.LabelField(rect, property.stringValue);
         }
     }

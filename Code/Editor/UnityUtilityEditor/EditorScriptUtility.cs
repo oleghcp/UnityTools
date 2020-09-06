@@ -32,8 +32,8 @@ namespace UnityUtilityEditor
 
         public static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
         {
-            EditorGUI.LabelField(position, label);
-            EditorGUI.LabelField(EditorGUI.PrefixLabel(position, label), message);
+            Rect rect = EditorGUI.PrefixLabel(position, label);
+            EditorGUI.LabelField(rect, message);
         }
 
         //The function was taken here: https://gist.github.com/bzgeb
