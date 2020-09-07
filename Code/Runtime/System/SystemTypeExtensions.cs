@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using UnityUtilityTools;
 using UnityUtility;
+using UnityUtilityTools;
 
 namespace System
 {
@@ -43,6 +43,14 @@ namespace System
         public static int ToInteger(this Enum self)
         {
             return Convert.ToInt32(self);
+        }
+
+        public static char LastChar(this string self)
+        {
+            if (self.Length == 0)
+                throw Errors.NoElements();
+
+            return self[self.Length - 1];
         }
 
         /// <summary>

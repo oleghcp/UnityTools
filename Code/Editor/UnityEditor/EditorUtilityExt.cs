@@ -146,7 +146,7 @@ namespace UnityEditor
         public static (string AssemblyName, string ClassName) SplitSerializedPropertyTypename(string typename)
         {
             if (typename.IsNullOrEmpty())
-                return (string.Empty, string.Empty);
+                return (null, null);
 
             string[] typeSplitString = typename.Split(' ');
             return (typeSplitString[0], typeSplitString[1]);

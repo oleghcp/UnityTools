@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -28,7 +29,7 @@ namespace UnityUtilityEditor.Drawers
             return EditorGUI.GetPropertyHeight(property, true);
         }
 
-        private static void f_drawSelectionButton(Rect position, SerializedProperty property)
+        private void f_drawSelectionButton(Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 
@@ -43,10 +44,10 @@ namespace UnityUtilityEditor.Drawers
 
             var (assemblyName, className) = EditorUtilityExt.SplitSerializedPropertyTypename(property.managedReferenceFullTypename);
 
-            if (className.IsNullOrEmpty())
-                className = "Null (Assign)";
+            string shortName = className.IsNullOrEmpty() ? "Null" : PathUtility.GetName(className, '.');
+            string toolTip = className.IsNullOrEmpty() ? "Not assigned" : $"{className}  ({assemblyName})";
 
-            if (GUI.Button(buttonPosition, new GUIContent(className, $"{className}  ( {assemblyName} )")))
+            if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
             {
                 f_showContextMenu(property);
             }
@@ -79,7 +80,7 @@ namespace UnityUtilityEditor.Drawers
                         continue;
 
                     string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
-                    string entryName = $"{type}  ( {assemblyName} )";
+                    string entryName = $"{type}  ({assemblyName})";
                     context.AddItem(new GUIContent(entryName), false, initByInstance, type);
                 }
 
