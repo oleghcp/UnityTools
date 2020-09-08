@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityUtilityTools;
 using UnityUtility;
+using UnityUtilityTools;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine
@@ -399,6 +399,24 @@ namespace UnityEngine
             for (int i = 0; i < length; i++)
             {
                 self.GetChild(i).gameObject.Destroy();
+            }
+        }
+
+        public static void DestroyChildren(this Transform self, Predicate<Transform> predicate)
+        {
+            foreach (Transform child in self)
+            {
+                if (predicate(child))
+                    child.gameObject.Destroy();
+            }
+        }
+
+        public static void DetachChildren(this Transform self, Predicate<Transform> predicate)
+        {
+            foreach (Transform child in self)
+            {
+                if (predicate(child))
+                    child.SetParent(null);
             }
         }
 
