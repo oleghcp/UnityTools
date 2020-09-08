@@ -6,12 +6,7 @@ namespace UnityUtility
 {
     public static class UnityObjectUtility
     {
-        private static readonly Func<UnityObject, bool> s_isNativeObjectAlive;
-
-        static UnityObjectUtility()
-        {
-            s_isNativeObjectAlive = f_createDelegate<Func<UnityObject, bool>>(typeof(UnityObject), "IsNativeObjectAlive");
-        }
+        private static readonly Func<UnityObject, bool> s_isNativeObjectAlive = f_createDelegate<Func<UnityObject, bool>>(typeof(UnityObject), "IsNativeObjectAlive");
 
         public static bool IsNullOrDead(object obj)
         {
