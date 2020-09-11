@@ -1,9 +1,8 @@
-﻿using UnityObject = UnityEngine.Object;
-using System;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
-using UnityUtility.MathExt;
-using UnityUtility.Sound;
+using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.CustomEditors
 {
@@ -58,9 +57,9 @@ namespace UnityUtilityEditor.CustomEditors
 
             GUILayout.Space(5f);
 
-            var objects = EditorScriptUtility.DrawDropArea("Drag and drop your audio clips here.", 50f);
+            UnityObject[] objects = GUIExt.DropArea("Drag and drop your audio clips here.", 50f);
 
-            if (objects != null)
+            if (objects.HasAnyData())
             {
                 f_addObjects(objects);
 

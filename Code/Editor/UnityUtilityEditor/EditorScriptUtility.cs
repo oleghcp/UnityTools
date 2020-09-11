@@ -1,7 +1,5 @@
-﻿using UnityObject = UnityEngine.Object;
-
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using UnityUtility.Collections;
 
 namespace UnityUtilityEditor
@@ -34,33 +32,6 @@ namespace UnityUtilityEditor
         {
             Rect rect = EditorGUI.PrefixLabel(position, label);
             EditorGUI.LabelField(rect, message);
-        }
-
-        //The function was taken here: https://gist.github.com/bzgeb
-        //God save this guy
-        public static UnityObject[] DrawDropArea(string text, float h)
-        {
-            Event curEvent = Event.current;
-            Rect dropArea = GUILayoutUtility.GetRect(0f, h, GUILayout.ExpandWidth(true));
-            GUI.Box(dropArea, text);
-
-            switch (curEvent.type)
-            {
-                case EventType.DragUpdated:
-                case EventType.DragPerform:
-                    if (dropArea.Contains(curEvent.mousePosition))
-                    {
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-                        if (curEvent.type == EventType.DragPerform)
-                        {
-                            DragAndDrop.AcceptDrag();
-                            return DragAndDrop.objectReferences;
-                        }
-                    }
-                    break;
-            }
-
-            return null;
         }
 
         public static bool EqualizeSize(SerializedProperty arrayProp, int targetSize, object defVal)
