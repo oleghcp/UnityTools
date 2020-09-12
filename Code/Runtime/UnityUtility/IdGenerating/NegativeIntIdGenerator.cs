@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UnityUtility.IdGenerating
 {
@@ -14,6 +15,7 @@ namespace UnityUtility.IdGenerating
             get { return m_lastId; }
         }
 
+        [Preserve]
         public NegativeIntIdGenerator() { }
 
         public NegativeIntIdGenerator(int startId)

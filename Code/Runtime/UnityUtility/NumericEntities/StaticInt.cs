@@ -1,10 +1,12 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
+using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
 {
+    [Serializable]
     public sealed class StaticInt : IStaticEntity<int>
     {
         private int m_min;
@@ -34,6 +36,9 @@ namespace UnityUtility.NumericEntities
         {
             get { return m_absMods.Count > 0 && m_relMods.Count > 0; }
         }
+
+        [Preserve]
+        private StaticInt() { }
 
         private StaticInt(int minValue, int maxValue)
         {

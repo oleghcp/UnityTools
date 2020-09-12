@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
 {
+    [Serializable]
     public sealed class StaticFloat : IStaticEntity<float>
     {
         private float m_min;
@@ -34,6 +36,9 @@ namespace UnityUtility.NumericEntities
         {
             get { return m_absMods.Count > 0 && m_relMods.Count > 0; }
         }
+
+        [Preserve]
+        private StaticFloat() { }
 
         private StaticFloat(float minValue, float maxValue)
         {
