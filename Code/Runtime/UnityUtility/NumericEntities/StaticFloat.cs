@@ -1,6 +1,6 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
@@ -98,13 +98,13 @@ namespace UnityUtility.NumericEntities
                 case ResizeType.Increase:
                     if (value < 0f)
                         throw Errors.NegativeParameter(nameof(value));
-                    m_value += value.Clamp(0f, m_max);
+                    m_value += value.CutAfter(m_max);
                     break;
 
                 case ResizeType.Decrease:
                     if (value < 0f)
                         throw Errors.NegativeParameter(nameof(value));
-                    m_value -= value.Clamp(0f, m_value - m_min);
+                    m_value -= value.CutAfter(m_value - m_min);
                     break;
 
                 default:

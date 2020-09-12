@@ -1,6 +1,6 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using UnityEngine;
+using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
@@ -93,7 +93,6 @@ namespace UnityUtility.NumericEntities
             {
                 case ResizeType.NewValue:
                     m_threshold = value;
-                    m_filler = m_filler.Clamp(0, m_threshold);
                     break;
 
                 case ResizeType.Increase:
@@ -102,7 +101,6 @@ namespace UnityUtility.NumericEntities
 
                 case ResizeType.Decrease:
                     m_threshold -= value.Clamp(0, m_threshold);
-                    m_filler = m_filler.Clamp(0, m_threshold);
                     break;
 
                 default:

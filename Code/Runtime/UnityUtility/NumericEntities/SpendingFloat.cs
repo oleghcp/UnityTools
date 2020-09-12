@@ -1,6 +1,6 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using UnityEngine;
+using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
@@ -86,17 +86,16 @@ namespace UnityUtility.NumericEntities
             {
                 case ResizeType.NewValue:
                     m_capacity = value;
-                    m_curValue = m_curValue.Clamp(0f, m_capacity);
+                    m_curValue = m_curValue.CutAfter(m_capacity);
                     break;
 
                 case ResizeType.Increase:
                     m_capacity += value;
-                    m_curValue = (CurValue + value).CutAfter(m_capacity);
                     break;
 
                 case ResizeType.Decrease:
-                    m_capacity -= value.Clamp(0f, m_capacity);
-                    m_curValue = m_curValue.Clamp(0f, m_capacity);
+                    m_capacity -= value.CutAfter(m_capacity);
+                    m_curValue = m_curValue.CutAfter(m_capacity);
                     break;
 
                 default:

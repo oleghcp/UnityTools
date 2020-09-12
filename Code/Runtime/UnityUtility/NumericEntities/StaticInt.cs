@@ -96,15 +96,15 @@ namespace UnityUtility.NumericEntities
                     break;
 
                 case ResizeType.Increase:
-                    if (value < 0)
+                    if (value < 0f)
                         throw Errors.NegativeParameter(nameof(value));
-                    m_value += value.Clamp(0, m_max);
+                    m_value += value.CutAfter(m_max);
                     break;
 
                 case ResizeType.Decrease:
-                    if (value < 0)
+                    if (value < 0f)
                         throw Errors.NegativeParameter(nameof(value));
-                    m_value -= value.Clamp(0, m_value - m_min);
+                    m_value -= value.CutAfter(m_value - m_min);
                     break;
 
                 default:
