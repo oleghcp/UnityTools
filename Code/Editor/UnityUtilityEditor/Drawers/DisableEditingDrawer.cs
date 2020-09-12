@@ -16,7 +16,7 @@ namespace UnityUtilityEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUI.GetPropertyHeight(property, true) + EditorGUIUtility.standardVerticalSpacing;
+            return EditorGUI.GetPropertyHeight(property, true);
         }
     }
 }

@@ -217,7 +217,7 @@ namespace System.Collections.Generic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this IList<T> self, IRng generator)
         {
-            CollectionHelper.Shuffle(self, generator);
+            CollectionUtility.Shuffle(self, generator);
         }
 
         /// <summary>

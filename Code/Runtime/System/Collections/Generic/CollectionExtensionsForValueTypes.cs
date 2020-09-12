@@ -2,19 +2,6 @@
 
 namespace System.Collections.Generic
 {
-    public static class ArrayExtensionsForEnums
-    {
-        /// <summary>
-        /// Sorts by selected key.
-        /// </summary>
-        /// <param name="keySelector">Reference to selecting function.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector) where TKey : Enum
-        {
-            Array.Sort(self, (itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
-        }
-    }
-
     public static class CollectionExtensionsForValueTypes
     {
         /// <summary>
@@ -22,7 +9,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            return CollectionHelperForValueType.Min(self, selector, out _);
+            return CollectionUtility.ValueTypes.Min(self, selector, out _);
         }
 
         /// <summary>
@@ -30,7 +17,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            return CollectionHelperForValueType.Max(self, selector, out _);
+            return CollectionUtility.ValueTypes.Max(self, selector, out _);
         }
 
         /// <summary>
@@ -38,7 +25,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            CollectionHelperForValueType.Min(self, selector, out TSource res);
+            CollectionUtility.ValueTypes.Min(self, selector, out TSource res);
             return res;
         }
 
@@ -47,7 +34,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            CollectionHelperForValueType.Max(self, selector, out TSource res);
+            CollectionUtility.ValueTypes.Max(self, selector, out TSource res);
             return res;
         }
 
@@ -69,6 +56,49 @@ namespace System.Collections.Generic
         public static void Sort<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector) where TKey : struct, IComparable<TKey>
         {
             self.Sort((itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>                
+        /// <param name="keySelector">Reference to selecting function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector) where TKey : struct, IComparable<TKey>
+        {
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, (itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
+        }
+    }
+
+    public static class ArrayExtensionsForEnums
+    {
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector) where TKey : Enum
+        {
+            Array.Sort(self, (itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>                
+        /// <param name="keySelector">Reference to selecting function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector) where TKey : Enum
+        {
+            self.Sort((itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>                
+        /// <param name="keySelector">Reference to selecting function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector) where TKey : Enum
+        {
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, (itm1, itm2) => keySelector(itm1).CompareTo(keySelector(itm2)));
         }
     }
 }

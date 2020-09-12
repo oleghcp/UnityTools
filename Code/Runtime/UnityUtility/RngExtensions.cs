@@ -415,7 +415,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this IRng self, IList<T> collection)
         {
-            CollectionHelper.Shuffle(collection, self);
+            CollectionUtility.Shuffle(collection, self);
         }
     }
 }
