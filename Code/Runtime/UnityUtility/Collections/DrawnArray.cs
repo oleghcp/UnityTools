@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 #if UNITY_2020_1_OR_NEWER
 namespace UnityUtility.Collections
@@ -17,9 +16,6 @@ namespace UnityUtility.Collections
         {
             get { return m_array; }
         }
-
-        [Preserve]
-        private ReorderableArray() { }
 
         public ReorderableArray(int length)
         {
@@ -38,15 +34,13 @@ namespace UnityUtility.Collections
             get { return m_array; }
         }
 
-        [Preserve]
-        private ReorderableRefArray() { }
-
         public ReorderableRefArray(int length)
         {
             m_array = new T[length];
         }
     }
 
+    [Serializable]
     public abstract class DrawnArray<T> : IList<T>, IReadOnlyList<T>
     {
         protected abstract T[] Items { get; }
