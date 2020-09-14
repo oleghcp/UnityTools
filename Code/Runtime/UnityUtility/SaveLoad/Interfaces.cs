@@ -9,7 +9,8 @@ namespace UnityUtility.SaveLoad
         bool ProfiledCreated { get; }
 
         void Set(string key, object value);
-        object Get(string key, object defaltValue, Type type);
+        object Get(string key, object defaltValue);
+        object Get(string key, Type type);
 
         bool HasKey(string key);
         void DeleteKey(string key);

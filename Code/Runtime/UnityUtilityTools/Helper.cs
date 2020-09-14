@@ -176,14 +176,14 @@ namespace UnityUtilityTools
                 case TypeCode.UInt32: return default(uint);
                 case TypeCode.UInt64: return default(ulong);
 
-                case TypeCode.Empty:
-                case TypeCode.DBNull:
-                case TypeCode.String:
-                    return null;
-
                 case TypeCode.Object:
                     if (type.IsValueType)
                         return Activator.CreateInstance(type);
+                    return null;
+
+                case TypeCode.Empty:
+                case TypeCode.DBNull:
+                case TypeCode.String:
                     return null;
 
                 default: throw new UnsupportedValueException(type.GetTypeCode());

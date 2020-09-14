@@ -92,8 +92,8 @@ namespace UnityUtility.SaveLoad
 
                     if (initFields)
                     {
-                        object defaultValue = a.DefValue ?? a.Field.FieldType.GetDefaultValue();
-                        object value = m_saver.Get(a.Key, defaultValue, a.Field.FieldType);
+                        object value = a.DefValue != null ? m_saver.Get(a.Key, a.DefValue)
+                                                          : m_saver.Get(a.Key, a.Field.FieldType);
 
                         a.Field.SetValue(client, value);
                     }
