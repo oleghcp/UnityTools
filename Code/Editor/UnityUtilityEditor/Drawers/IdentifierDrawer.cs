@@ -19,6 +19,12 @@ namespace UnityUtilityEditor.Drawers
             if (property.stringValue.IsNullOrWhiteSpace())
                 property.stringValue = Guid.NewGuid().ToString();
 
+            if ((attribute as IdentifierAttribute).Editable)
+            {
+                EditorGUI.PropertyField(position, property);
+                return;
+            }
+
             Rect rect = EditorGUI.PrefixLabel(position, label);
             EditorGUI.LabelField(rect, property.stringValue);
         }
