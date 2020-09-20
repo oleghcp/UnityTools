@@ -4,6 +4,7 @@ using UnityUtilityTools;
 
 namespace UnityUtility.Rng
 {
+    [Serializable]
     public sealed class DotNetRng : Random, IRng
     {
         public DotNetRng() : base() { }

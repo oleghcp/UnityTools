@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.Collections.Unsafe;
 using UnityUtility.MathExt;
-using UnityUtility.Rng;
 using UnityUtilityTools;
 
 namespace UnityUtility
@@ -347,7 +346,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetInsideUnitCircle(this IRng _)
         {
-            return UnityRng.GetInsideUnitCircle();
+            return UnityEngine.Random.insideUnitCircle;
         }
 
         /// <summary>
@@ -365,7 +364,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 GetInsideUnitSphere(this IRng _)
         {
-            return UnityRng.GetInsideUnitSphere();
+            return UnityEngine.Random.insideUnitSphere;
         }
 
         /// <summary>
@@ -374,7 +373,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 GetOnUnitSphere(this IRng _)
         {
-            return UnityRng.GetOnUnitSphere();
+            return UnityEngine.Random.onUnitSphere;
         }
 
         /// <summary>
@@ -383,7 +382,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion GetRandomRot(this IRng _, bool uniformDistribution = false)
         {
-            return UnityRng.GetRandomRot(uniformDistribution);
+            return uniformDistribution ? UnityEngine.Random.rotationUniform : UnityEngine.Random.rotation;
         }
 
         /// <summary>

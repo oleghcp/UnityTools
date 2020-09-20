@@ -5,8 +5,10 @@ using UnityUtilityTools;
 
 namespace UnityUtility.Rng
 {
+    [Serializable]
     public class TimeBytesBasedRng : IRng
     {
+        [Serializable]
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct ByteGenerator
         {
