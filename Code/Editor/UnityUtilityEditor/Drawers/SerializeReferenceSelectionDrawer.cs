@@ -39,20 +39,23 @@ namespace UnityUtilityEditor.Drawers
             buttonPosition.height = EditorGUIUtility.singleLineHeight;
 
             int storedIndent = EditorGUI.indentLevel;
+            Color storedColor = GUI.color;
             EditorGUI.indentLevel = 0;
-            Color storedColor = GUI.backgroundColor;
 
             var (assemblyName, className) = EditorUtilityExt.SplitSerializedPropertyTypename(property.managedReferenceFullTypename);
 
-            string shortName = className.IsNullOrEmpty() ? "Null" : PathUtility.GetName(className, '.');
-            string toolTip = className.IsNullOrEmpty() ? "Not assigned" : $"{className}  ({assemblyName})";
+            bool isNull = className.IsNullOrEmpty();
+
+            string shortName = isNull ? "Null" : PathUtility.GetName(className, '.');
+            string toolTip = isNull ? "Not assigned" : $"{className}  ({assemblyName})";
+
+            if (isNull)
+                GUI.color = Colours.Cyan;
 
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
-            {
                 f_showContextMenu(property);
-            }
 
-            GUI.backgroundColor = storedColor;
+            GUI.color = storedColor;
             EditorGUI.indentLevel = storedIndent;
         }
 
