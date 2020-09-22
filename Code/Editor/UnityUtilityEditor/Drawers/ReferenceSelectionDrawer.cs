@@ -77,14 +77,21 @@ namespace UnityUtilityEditor.Drawers
                     return;
                 }
 
+                addMenuItem(fieldType);
+
                 foreach (Type type in TypeCache.GetTypesDerivedFrom(fieldType))
                 {
-                    if (type.IsAbstract || type.IsInterface)
-                        continue;
+                    addMenuItem(type);
+                }
 
-                    string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
-                    string entryName = $"{type}  ({assemblyName})";
-                    context.AddItem(new GUIContent(entryName), false, initByInstance, type);
+                void addMenuItem(Type type)
+                {
+                    if (!type.IsAbstract && !type.IsInterface)
+                    {
+                        string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
+                        string entryName = $"{type}  ({assemblyName})";
+                        context.AddItem(new GUIContent(entryName), false, initByInstance, type);
+                    }
                 }
 
                 void initByNull()
