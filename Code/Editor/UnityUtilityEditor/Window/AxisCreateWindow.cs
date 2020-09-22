@@ -1,9 +1,9 @@
-﻿using UnityObject = UnityEngine.Object;
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityUtility.Controls.ControlStuff;
+﻿using System.Collections.Generic;
 using System.Text;
+using UnityEditor;
+using UnityEngine;
+using UnityUtility.Controls.ControlStuff;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window
 {

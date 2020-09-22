@@ -1,5 +1,5 @@
-﻿using UnityUtility.Controls.ControlStuff;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityUtility.Controls.ControlStuff;
 
 #pragma warning disable CS0169, CS0649
 namespace UnityUtility.Controls
@@ -26,6 +26,15 @@ namespace UnityUtility.Controls
         {
             get { return InputType; }
         }
+
+#if UNITY_EDITOR
+        internal static string KeyEnumTypeFieldName => nameof(_keyEnumType);
+        internal static string AxisEnumTypeFieldName => nameof(_axisEnumType);
+        internal static string InputTypeFieldName => nameof(InputType);
+        internal static string KeyIndicesFieldName => nameof(KeyIndices);
+        internal static string AxisIndicesFieldName => nameof(AxisIndices);
+        internal static string KeyAxesFieldName => nameof(KeyAxes);
+#endif
 
         public BindLayout ToBindLayout()
         {

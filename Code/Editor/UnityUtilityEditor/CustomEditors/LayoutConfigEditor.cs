@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using UnityUtilityTools;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
@@ -69,16 +68,16 @@ namespace UnityUtilityEditor.CustomEditors
 
         private void Awake()
         {
-            m_keyEnumTypeVal = new TypeValue("_keyEnumType");
-            m_axisEnumTypeVal = new TypeValue("_axisEnumType");
+            m_keyEnumTypeVal = new TypeValue(LayoutConfig.KeyEnumTypeFieldName);
+            m_axisEnumTypeVal = new TypeValue(LayoutConfig.AxisEnumTypeFieldName);
 
             f_initTypeValue(m_keyEnumTypeVal);
             f_initTypeValue(m_axisEnumTypeVal);
 
-            m_inputType = serializedObject.FindProperty("InputType");
+            m_inputType = serializedObject.FindProperty(LayoutConfig.InputTypeFieldName);
 
-            m_keyIndices = serializedObject.FindProperty("KeyIndices");
-            m_axisIndices = serializedObject.FindProperty("AxisIndices");
+            m_keyIndices = serializedObject.FindProperty(LayoutConfig.KeyIndicesFieldName);
+            m_axisIndices = serializedObject.FindProperty(LayoutConfig.AxisIndicesFieldName);
         }
 
         public override void OnInspectorGUI()
@@ -200,7 +199,7 @@ namespace UnityUtilityEditor.CustomEditors
                 if (EditorScriptUtility.DrawCenterButton("Apply", 100f, 30f))
                 {
                     typeValue.SetValue(selector.Types[selector.Selected]);
-                    string typeName = Helper.CutAssemblyQualifiedName(typeValue.EnumType.AssemblyQualifiedName);
+                    string typeName = typeValue.EnumType.GetTypeName();
                     serializedObject.FindProperty(typeValue.PropName).stringValue = typeName;
                     selector = null;
                 }

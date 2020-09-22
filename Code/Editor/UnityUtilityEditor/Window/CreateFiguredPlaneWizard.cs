@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 using UnityUtility.MathExt;
 
 namespace UnityUtilityEditor.Window

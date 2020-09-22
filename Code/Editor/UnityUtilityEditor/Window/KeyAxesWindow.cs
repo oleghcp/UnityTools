@@ -1,9 +1,7 @@
 ﻿using System;
-using UnityEngine;
-using UnityUtility.MathExt;
 using UnityEditor;
-using UnityUtility.Collections;
-using UnityUtilityEditor.Drawers;
+using UnityEngine;
+using UnityUtility.Controls;
 
 namespace UnityUtilityEditor.Window
 {
@@ -25,11 +23,11 @@ namespace UnityUtilityEditor.Window
             maxSize = new Vector2(200f, 100f);
         }
 
-        public void SetUp(object param, Type keyFuncsEnum)
+        public void SetUp(SerializedObject param, Type keyFuncsEnum)
         {
-            m_serializedObject = param as SerializedObject;
+            m_serializedObject = param;
 
-            var prop = m_serializedObject.FindProperty("KeyAxes");
+            var prop = m_serializedObject.FindProperty(LayoutConfig.KeyAxesFieldName);
             m_directs = new[]
             {
                 prop.FindPropertyRelative("Up"),

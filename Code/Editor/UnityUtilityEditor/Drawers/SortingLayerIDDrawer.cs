@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityUtility;
 using UnityEditor;
+using UnityEngine;
+using UnityUtility;
 using UnityUtility.MathExt;
 
 namespace UnityUtilityEditor.Drawers

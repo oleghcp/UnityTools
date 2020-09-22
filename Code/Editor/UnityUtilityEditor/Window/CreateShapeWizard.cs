@@ -1,6 +1,6 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 #pragma warning disable CS0649
 namespace UnityUtilityEditor.Window

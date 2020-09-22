@@ -1,9 +1,8 @@
-﻿using UnityObject = UnityEngine.Object;
-using System;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 using UnityUtility.MathExt;
 using UnityUtility.Sound;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.CustomEditors
 {

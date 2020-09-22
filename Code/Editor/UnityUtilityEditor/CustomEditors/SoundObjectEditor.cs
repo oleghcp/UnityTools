@@ -1,7 +1,7 @@
-﻿using UnityUtility.Sound.SoundProviderStuff;
-using System;
+﻿using System;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.Sound.SoundProviderStuff;
 
 namespace UnityUtilityEditor.CustomEditors
 {

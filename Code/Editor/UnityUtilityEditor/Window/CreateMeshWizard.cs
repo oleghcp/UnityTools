@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
 using UnityEditor;
-using System.IO;
+using UnityEngine;
 using UnityUtility;
 
 #pragma warning disable CS0649

@@ -90,7 +90,7 @@ namespace System
         }
 
         /// <summary>
-        /// Gets the underlying type code of the specified Type
+        /// Returns the underlying type code of the specified Type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TypeCode GetTypeCode(this Type self)
@@ -99,7 +99,16 @@ namespace System
         }
 
         /// <summary>
-        /// Gets default value for the specified Type
+        /// Returns simplified assembly qualified name.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string GetTypeName(this Type self)
+        {
+            return Helper.CutAssemblyQualifiedName(self.AssemblyQualifiedName);
+        }
+
+        /// <summary>
+        /// Returns default value for the specified Type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static object GetDefaultValue(this Type self)
@@ -108,7 +117,7 @@ namespace System
         }
 
         /// <summary>
-        /// Returns true if type is the specified type or subclass of the specified type;
+        /// Returns true if type is the specified type or subclass of the specified type.
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Is(this Type self, Type familyType)
