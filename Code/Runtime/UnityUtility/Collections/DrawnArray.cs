@@ -26,7 +26,7 @@ namespace UnityUtility.Collections
     [Serializable]
     public sealed class ReorderableRefArray<T> : DrawnArray<T> where T : class
     {
-        [SerializeReference, SerializeReferenceSelection]
+        [SerializeReference, ReferenceSelection]
         private T[] m_array;
 
         protected override T[] Items

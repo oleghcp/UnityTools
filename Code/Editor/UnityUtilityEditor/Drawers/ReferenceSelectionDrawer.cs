@@ -7,14 +7,14 @@ using UnityUtility;
 namespace UnityUtilityEditor.Drawers
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
-    [CustomPropertyDrawer(typeof(SerializeReferenceSelectionAttribute))]
-    public class SerializeReferenceSelectionDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]
+    public class ReferenceSelectionDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (fieldInfo.FieldType.IsValueType)
             {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use SerializeReferenceSelectionAttribute only with reference types.");
+                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use ReferenceSelection only with reference types.");
                 return;
             }
 
