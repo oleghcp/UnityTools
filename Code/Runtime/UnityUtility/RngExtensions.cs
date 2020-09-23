@@ -45,35 +45,20 @@ namespace UnityUtility
             return chance > self.NextDouble();
         }
 
-        //public static  int RandomTemp(float[] weights)
-        //{
-        //    float sum = weights.Sum();
-        //    float factor = 1f / sum;
-
-        //    for (int i = 0; i < weights.Length; i++)
-        //    {
-        //        if (Chance(weights[i] * factor))
-        //            return i;
-
-        //        sum -= weights[i];
-        //        factor = 1f / sum;
-        //    }
-
-        //    return -1;
-        //}
-
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
+        /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
-        public static int Random(this IRng self, float[] weights)
+        public static int Random(this IRng self, IList<float> weights, float weightOfNone = 0f)
         {
-            double rnd = self.NextDouble() * weights.Sum();
-            double sum = 0d;
+            float target = self.Next(weights.Sum() + weightOfNone);
+            int startIndex = self.Next(weights.Count);
+            int count = weights.Count + startIndex;
+            float sum = 0f;
 
-            for (int i = 0; i < weights.Length; i++)
+            for (int i = startIndex; i < count; i++)
             {
-                if (weights[i] + sum > rnd)
-                    return i;
+                if (weights[i] + sum >= target)
+                    return i % weights.Count;
 
                 sum += weights[i];
             }
@@ -82,17 +67,19 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
+        /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
-        public static unsafe int Random(this IRng self, float* weights, int length)
+        public static unsafe int Random(this IRng self, float* weights, int length, float weightOfNone = 0f)
         {
-            double rnd = self.NextDouble() * ArrayUtility.Sum(weights, length);
-            double sum = 0d;
+            float target = self.Next(ArrayUtility.Sum(weights, length) + weightOfNone);
+            int startIndex = self.Next(length);
+            int count = length + startIndex;
+            float sum = 0f;
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < count; i++)
             {
-                if (weights[i] + sum > rnd)
-                    return i;
+                if (weights[i] + sum >= target)
+                    return i % length;
 
                 sum += weights[i];
             }
@@ -101,17 +88,19 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
+        /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
-        public static int Random(this IRng self, int[] weights)
+        public static int Random(this IRng self, IList<int> weights, int weightOfNone = 0)
         {
-            int rnd = self.Next(weights.Sum());
+            int target = self.Next(weights.Sum() + weightOfNone);
+            int startIndex = self.Next(weights.Count);
+            int count = weights.Count + startIndex;
             int sum = 0;
 
-            for (int i = 0; i < weights.Length; i++)
+            for (int i = startIndex; i < count; i++)
             {
-                if (weights[i] + sum > rnd)
-                    return i;
+                if (weights[i] + sum > target)
+                    return i % weights.Count;
 
                 sum += weights[i];
             }
@@ -120,17 +109,19 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 for none of the elements (if all weights are zero). Each element cannot be less than 0f.
+        /// Returns random index of an array contains chance weights.
         /// </summary>
-        public static unsafe int Random(this IRng self, int* weights, int length)
+        public static unsafe int Random(this IRng self, int* weights, int length, int weightOfNone = 0)
         {
-            int rnd = self.Next(ArrayUtility.Sum(weights, length));
+            int target = self.Next(ArrayUtility.Sum(weights, length) + weightOfNone);
+            int startIndex = self.Next(length);
+            int count = length + startIndex;
             int sum = 0;
 
-            for (int i = 0; i < length; i++)
+            for (int i = startIndex; i < count; i++)
             {
-                if (weights[i] + sum > rnd)
-                    return i;
+                if (weights[i] + sum > target)
+                    return i % length;
 
                 sum += weights[i];
             }
