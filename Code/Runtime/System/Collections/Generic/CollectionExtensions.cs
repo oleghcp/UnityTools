@@ -79,12 +79,6 @@ namespace System.Collections.Generic
             return self != null && self.Count > 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
-        {
-            return new HashSet<T>(self);
-        }
-
         /// <summary>
         /// Indicates whether the specified collection is null or it's length equals zero.
         /// </summary>    
@@ -96,6 +90,9 @@ namespace System.Collections.Generic
             if (self is ICollection<T> collection)
                 return collection.Count == 0;
 
+            if (self is IReadOnlyCollection<T> readOnlyColl)
+                return readOnlyColl.Count == 0;
+
             return !self.GetEnumerator().MoveNext();
         }
 
@@ -106,6 +103,12 @@ namespace System.Collections.Generic
         public static bool HasAnyData<T>(this IEnumerable<T> self)
         {
             return !self.IsNullOrEmpty();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
+        {
+            return new HashSet<T>(self);
         }
 
         /// <summary>
