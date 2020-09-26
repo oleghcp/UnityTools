@@ -57,10 +57,12 @@ namespace UnityUtility
 
             for (int i = startIndex; i < count; i++)
             {
-                if (weights[i] + sum >= target)
-                    return i % weights.Count;
+                int index = i % weights.Count;
 
-                sum += weights[i];
+                if (weights[index] + sum >= target)
+                    return index;
+
+                sum += weights[index];
             }
 
             return -1;
@@ -78,10 +80,12 @@ namespace UnityUtility
 
             for (int i = 0; i < count; i++)
             {
-                if (weights[i] + sum >= target)
-                    return i % length;
+                int index = i % length;
 
-                sum += weights[i];
+                if (weights[index] + sum >= target)
+                    return index;
+
+                sum += weights[index];
             }
 
             return -1;
@@ -99,10 +103,12 @@ namespace UnityUtility
 
             for (int i = startIndex; i < count; i++)
             {
-                if (weights[i] + sum > target)
-                    return i % weights.Count;
+                int index = i % weights.Count;
 
-                sum += weights[i];
+                if (weights[index] + sum > target)
+                    return index;
+
+                sum += weights[index];
             }
 
             return -1;
@@ -120,10 +126,12 @@ namespace UnityUtility
 
             for (int i = startIndex; i < count; i++)
             {
-                if (weights[i] + sum > target)
-                    return i % length;
+                int index = i % length;
 
-                sum += weights[i];
+                if (weights[index] + sum > target)
+                    return index;
+
+                sum += weights[index];
             }
 
             return -1;
