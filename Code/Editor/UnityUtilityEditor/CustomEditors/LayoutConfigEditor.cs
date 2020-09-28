@@ -13,44 +13,8 @@ namespace UnityUtilityEditor.CustomEditors
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor
     {
-        private class TypeSelector
-        {
-            public Type[] Types;
-            public string[] TypeNames;
-            public int Selected;
-        }
-
-        private class TypeValue
-        {
-            public Type EnumType;
-            public string PropName;
-            public string[] EnumNames;
-            public BitArrayMask Toggles;
-            public bool AllToggles;
-
-            public bool IsEmpty
-            {
-                get { return EnumType == null; }
-            }
-
-            public TypeValue(string propName)
-            {
-                PropName = propName;
-            }
-
-            public void SetValue(Type type)
-            {
-                EnumType = type;
-                if (EnumType != null)
-                {
-                    EnumNames = Enum.GetNames(EnumType);
-                    Toggles = new BitArrayMask(EnumNames.Length);
-                }
-            }
-        }
-
-        private const float ACTION_WIDTH = 100f;
-        private const float CODE_WIDTH = 120f;
+        private const float COLUMN_WIDTH = 150f;
+        private const float TOGGLE_WIDTH = 20f;
 
         private TypeSelector m_keyEnumTypeSel;
         private TypeSelector m_axisEnumTypeSel;
@@ -215,11 +179,11 @@ namespace UnityUtilityEditor.CustomEditors
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(ACTION_WIDTH));
-            EditorGUILayout.LabelField("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(CODE_WIDTH), GUILayout.MinWidth(10f));
+            EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+            EditorGUILayout.LabelField("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
 
             bool all = m_keyEnumTypeVal.Toggles.All();
-            m_keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(20f));
+            m_keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(TOGGLE_WIDTH));
             if (m_keyEnumTypeVal.AllToggles != all)
                 m_keyEnumTypeVal.Toggles.SetAll(m_keyEnumTypeVal.AllToggles);
 
@@ -230,15 +194,15 @@ namespace UnityUtilityEditor.CustomEditors
             {
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(m_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(100f));
+                EditorGUILayout.LabelField(m_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
                 SerializedProperty keyIndexItem = m_keyIndices.GetArrayElementAtIndex(i);
 
                 if (f_isKeyMouse())
-                    keyIndexItem.intValue = (int)(KMKeyCode)EditorGUILayout.EnumPopup((KMKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(CODE_WIDTH));
+                    keyIndexItem.intValue = (int)(KMKeyCode)EditorGUILayout.EnumPopup((KMKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
                 else
-                    keyIndexItem.intValue = (int)(GPKeyCode)EditorGUILayout.EnumPopup((GPKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(CODE_WIDTH));
+                    keyIndexItem.intValue = (int)(GPKeyCode)EditorGUILayout.EnumPopup((GPKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
 
-                m_keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(20f));
+                m_keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(TOGGLE_WIDTH));
 
                 EditorGUILayout.EndHorizontal();
             }
@@ -264,11 +228,11 @@ namespace UnityUtilityEditor.CustomEditors
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(ACTION_WIDTH));
-            EditorGUILayout.LabelField("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(CODE_WIDTH), GUILayout.MinWidth(10f));
+            EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+            EditorGUILayout.LabelField("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
 
             bool all = m_axisEnumTypeVal.Toggles.All();
-            m_axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(20f));
+            m_axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(TOGGLE_WIDTH));
             if (m_axisEnumTypeVal.AllToggles != all)
                 m_axisEnumTypeVal.Toggles.SetAll(m_axisEnumTypeVal.AllToggles);
 
@@ -280,15 +244,15 @@ namespace UnityUtilityEditor.CustomEditors
             {
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(m_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(100f));
+                EditorGUILayout.LabelField(m_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
                 SerializedProperty axisIndexItem = m_axisIndices.GetArrayElementAtIndex(i);
 
                 if (f_isKeyMouse())
-                    axisIndexItem.intValue = (int)(KMAxisCode)EditorGUILayout.EnumPopup((KMAxisCode)axisIndexItem.intValue, GUILayout.MaxWidth(CODE_WIDTH));
+                    axisIndexItem.intValue = (int)(KMAxisCode)EditorGUILayout.EnumPopup((KMAxisCode)axisIndexItem.intValue);
                 else
-                    axisIndexItem.intValue = (int)(GPAxisCode)EditorGUILayout.EnumPopup((GPAxisCode)axisIndexItem.intValue, GUILayout.MaxWidth(CODE_WIDTH));
+                    axisIndexItem.intValue = (int)(GPAxisCode)EditorGUILayout.EnumPopup((GPAxisCode)axisIndexItem.intValue);
 
-                m_axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(20f));
+                m_axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(TOGGLE_WIDTH));
 
                 EditorGUILayout.EndHorizontal();
             }
@@ -384,6 +348,42 @@ namespace UnityUtilityEditor.CustomEditors
             int targetSize = m_axisEnumTypeVal.EnumNames.Length;
             int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
             return EditorScriptUtility.EqualizeSize(m_axisIndices, targetSize, defVal);
+        }
+
+        private class TypeSelector
+        {
+            public Type[] Types;
+            public string[] TypeNames;
+            public int Selected;
+        }
+
+        private class TypeValue
+        {
+            public Type EnumType;
+            public string PropName;
+            public string[] EnumNames;
+            public BitArrayMask Toggles;
+            public bool AllToggles;
+
+            public bool IsEmpty
+            {
+                get { return EnumType == null; }
+            }
+
+            public TypeValue(string propName)
+            {
+                PropName = propName;
+            }
+
+            public void SetValue(Type type)
+            {
+                EnumType = type;
+                if (EnumType != null)
+                {
+                    EnumNames = Enum.GetNames(EnumType);
+                    Toggles = new BitArrayMask(EnumNames.Length);
+                }
+            }
         }
     }
 }
