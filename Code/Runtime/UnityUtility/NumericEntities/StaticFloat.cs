@@ -151,7 +151,7 @@ namespace UnityUtility.NumericEntities
 
             foreach (var item in m_relMods)
             {
-                sum += value * item.Multiplier;
+                sum += value * item.Value;
             }
 
             return sum;

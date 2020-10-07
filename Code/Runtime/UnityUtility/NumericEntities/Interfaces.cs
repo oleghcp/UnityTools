@@ -60,7 +60,7 @@ namespace UnityUtility.NumericEntities
 
     public interface IRelativeModifier<T> where T : struct, IComparable<T>, IEquatable<T>
     {
-        T Multiplier { get; }
+        T Value { get; }
     }
 
     public interface IStaticEntity<T> where T : struct, IComparable<T>, IEquatable<T>
