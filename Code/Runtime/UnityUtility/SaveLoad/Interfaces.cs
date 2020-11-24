@@ -11,6 +11,7 @@ namespace UnityUtility.SaveLoad
         void Set(string key, object value);
         object Get(string key, object defaltValue);
         object Get(string key, Type type);
+        T Get<T>(string key);
 
         bool HasKey(string key);
         void DeleteKey(string key);
