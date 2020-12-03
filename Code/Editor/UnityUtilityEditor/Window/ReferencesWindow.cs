@@ -10,6 +10,7 @@ namespace UnityUtilityEditor.Window
     {
         private UnityObject m_target;
         private UnityObject[] m_objects;
+        private Vector2 _scrollPosition;
 
         public static void Create(string targetObjectGuid, List<object> referingObjectGuids)
         {
@@ -17,6 +18,7 @@ namespace UnityUtilityEditor.Window
 
             window.m_target = EditorUtilityExt.LoadAssetByGuid(targetObjectGuid);
             window.m_objects = referingObjectGuids.Select(itm => EditorUtilityExt.LoadAssetByGuid(itm.ToString())).ToArray();
+            window.minSize = new Vector2(250f, 200f);
         }
 
         private void OnGUI()
@@ -28,19 +30,23 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.LabelField("References for", GUILayout.MaxWidth(100f));
 
             GUI.enabled = false;
-
             EditorGUILayout.ObjectField(m_target, typeof(UnityObject), false);
+            GUI.enabled = true;
 
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space(5f);
 
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+            GUI.enabled = false;
             for (int i = 0; i < m_objects.Length; i++)
             {
                 EditorGUILayout.ObjectField(m_objects[i], typeof(UnityObject), false);
             }
-
             GUI.enabled = true;
+
+            EditorGUILayout.EndScrollView();
         }
     }
 }

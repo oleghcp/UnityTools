@@ -15,6 +15,8 @@ namespace UnityUtilityEditor
         {
             removeEmptyFolders(Application.dataPath);
 
+            Debug.Log("Done");
+
             void removeEmptyFolders(string path)
             {
                 IEnumerable<string> directories = Directory.EnumerateDirectories(path);
@@ -77,7 +79,7 @@ namespace UnityUtilityEditor
             ScriptableWizard.DisplayWizard("Create Shape", typeof(CreateShapeWizard));
         }
 
-        [MenuItem(EditorScriptUtility.CATEGORY + "/Assets/Create Scriptable Object")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Create Scriptable Object")]
         private static void GetScriptableObjectWindow()
         {
             EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");
@@ -152,14 +154,12 @@ namespace UnityUtilityEditor
         }
 
 #if UNITY_2019_1_OR_NEWER
-        private static string s_templatePath;
         [MenuItem("Assets/Create/C# Script (ext.)", priority = 81)]
         private static void CreateScript()
         {
-            if (s_templatePath == null)
-                s_templatePath = Path.Combine(PathUtility.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");
+            string templatePath = Path.Combine(PathUtility.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");
 
-            if (!File.Exists(s_templatePath))
+            if (!File.Exists(templatePath))
             {
                 string text = @"using System;
 using UnityEngine;
@@ -176,10 +176,10 @@ namespace Project
     }
 }
 ";
-                File.WriteAllText(s_templatePath, text);
+                File.WriteAllText(templatePath, text);
             }
 
-            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(s_templatePath, "MyClass.cs");
+            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyClass.cs");
         }
 #endif
     }
