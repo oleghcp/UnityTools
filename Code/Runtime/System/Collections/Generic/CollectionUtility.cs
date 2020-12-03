@@ -19,6 +19,20 @@ namespace System.Collections.Generic
             }
         }
 
+        public static void Shuffle<T>(IList<T> collection)
+        {
+            int last = collection.Count;
+
+            while (last > 1)
+            {
+                int cur = UnityEngine.Random.Range(0, last--);
+
+                T value = collection[cur];
+                collection[cur] = collection[last];
+                collection[last] = value;
+            }
+        }
+
         public static void QuickSort<T>(IList<T> array, int left, int right, Comparison<T> comparison)
         {
             int i = left, j = right;

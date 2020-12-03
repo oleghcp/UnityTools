@@ -224,6 +224,15 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
+        /// Shuffles the elements of an entire collection.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Shuffle<T>(this IList<T> self)
+        {
+            CollectionUtility.Shuffle(self);
+        }
+
+        /// <summary>
         /// Finds specified element.
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
