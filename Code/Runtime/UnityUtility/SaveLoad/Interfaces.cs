@@ -6,7 +6,7 @@ namespace UnityUtility.SaveLoad
     public interface ISaver
     {
         bool StorageLoaded { get; }
-        bool ProfiledCreated { get; }
+        bool ProfileCreated { get; }
 
         void Set(string key, object value);
         object Get(string key, object defaltValue);
