@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace UnityUtility
@@ -238,6 +239,18 @@ namespace UnityUtility
                 AddFlag(ref mask, indices[i]);
             }
             return mask;
+        }
+
+        public static IEnumerable<int> EnumerateIndices(int mask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            for (int i = 0; i < length; i++)
+            {
+                if (HasFlag(mask, i))
+                    yield return i;
+            }
         }
     }
 }
