@@ -44,7 +44,7 @@ namespace UnityUtilityEditor.Drawers
                 }
                 else
                 {
-                    m_error = "Use BitMaskEnumFlags with Int32 or BitArrayMask.";
+                    m_error = "Use DrawBitMask with Int32 or BitArrayMask.";
                     return;
                 }
 
