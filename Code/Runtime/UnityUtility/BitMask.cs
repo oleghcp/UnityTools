@@ -56,21 +56,21 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddFlags(ref int mask, int otherMask)
+        public static void AddFlags(ref int destinationMask, int sourceMask)
         {
-            mask |= otherMask;
+            destinationMask |= sourceMask;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RemoveFlags(ref int mask, int otherMask)
+        public static void RemoveFlags(ref int destinationMask, int sourceMask)
         {
-            mask ^= mask & otherMask;
+            destinationMask ^= destinationMask & sourceMask;
         }
 
-        public static void SetFlags(ref int mask, int otherMask, bool flagValue)
+        public static void SetFlags(ref int destinationMask, int sourceMask, bool flagValue)
         {
-            if (flagValue) { AddFlags(ref mask, otherMask); }
-            else { RemoveFlags(ref mask, otherMask); }
+            if (flagValue) { AddFlags(ref destinationMask, sourceMask); }
+            else { RemoveFlags(ref destinationMask, sourceMask); }
         }
 
         public static void AddAll(ref int mask, int length = SIZE)
@@ -109,22 +109,31 @@ namespace UnityUtility
             mask = ~mask;
         }
 
-        public static bool AllOf(int mask, int otherMask)
+        public static bool Equals(int mask1, int mask2, int length = SIZE)
         {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+                return mask1 == mask2;
+
             for (int i = 0; i < SIZE; i++)
             {
-                if (HasFlag(otherMask, i) && !HasFlag(mask, i))
+                if (HasFlag(mask2, i) && !HasFlag(mask1, i))
                     return false;
             }
 
             return true;
         }
 
-        public static bool AnyOf(int mask, int otherMask)
+        public static bool Intersect(int mask1, int mask2, int length = SIZE)
         {
-            for (int i = 0; i < SIZE; i++)
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            for (int i = 0; i < length; i++)
             {
-                if (HasFlag(otherMask, i) && HasFlag(mask, i))
+                if (HasFlag(mask2, i) && HasFlag(mask1, i))
                     return true;
             }
 
