@@ -131,6 +131,9 @@ namespace UnityUtility
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
+            if (length == SIZE)
+                return (mask1 & mask2) != 0;
+
             for (int i = 0; i < length; i++)
             {
                 if (HasFlag(mask2, i) && HasFlag(mask1, i))
