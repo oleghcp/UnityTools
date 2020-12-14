@@ -396,6 +396,24 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
+        /// Inserts an element into the list at the specified index. Expands the list if the index is out of bounds.
+        /// </summary>
+        public static void ForceInsert<T>(this List<T> self, int index, T newItem)
+        {
+            while (index > self.Count) { self.Add(default); }
+            self.Insert(index, newItem);
+        }
+
+        /// <summary>
+        /// Inserts an element into the list at the specified index and returns that element. Expands the list if the index is out of bounds.
+        /// </summary>
+        public static T ForcePush<T>(this List<T> self, int index, T newItem)
+        {
+            self.ForceInsert(index, newItem);
+            return newItem;
+        }
+
+        /// <summary>
         /// Adds an element to the dictionary and returns that element.
         /// </summary>
         public static TValue Place<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue newItem)
