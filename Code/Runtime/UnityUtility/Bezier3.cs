@@ -18,7 +18,7 @@ namespace UnityUtility
 
         public Vector3 Dest
         {
-            get { return m_points.GetLast(); }
+            get { return m_points.FromEnd(0); }
             set { m_points[m_points.Length - 1] = value; }
         }
 
@@ -66,7 +66,7 @@ namespace UnityUtility
         {
             m_points = new Vector3[helpPoints.Length + 2];
             m_points[0] = orig;
-            m_points.GetLast() = dest;
+            m_points.FromEnd(0) = dest;
             helpPoints.CopyTo(m_points, 1);
             m_tmp = new Vector3[m_points.Length];
         }

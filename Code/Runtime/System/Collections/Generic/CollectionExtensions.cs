@@ -40,28 +40,6 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the element at the last index.
-        /// </summary>
-        public static T GetLast<T>(this IList<T> self)
-        {
-            if (self.Count == 0)
-                throw Errors.NoElements();
-
-            return self[self.Count - 1];
-        }
-
-        /// <summary>
-        /// Returns the element at the last index.
-        /// </summary>
-        public static ref T GetLast<T>(this T[] self)
-        {
-            if (self.Length == 0)
-                throw Errors.NoElements();
-
-            return ref self[self.Length - 1];
-        }
-
-        /// <summary>
         /// Indicates whether the specified collection is null or it's length equals zero.
         /// </summary>        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -148,9 +126,27 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
+        /// Returns the element at the specified index from the end of a collection.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T FromEnd<T>(this IList<T> self, int reverseIndex)
+        {
+            return self[self.Count - (reverseIndex + 1)];
+        }
+
+        /// <summary>
+        /// Returns the element at the specified index from the end of a collection.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref T FromEnd<T>(this T[] self, int reverseIndex)
+        {
+            return ref self[self.Length - (reverseIndex + 1)];
+        }
+
+        /// <summary>
         /// Returns a subarray of the specified length starting from the specified index.
         /// </summary>
-        public static T[] GetSubArray<T>(this List<T> self, int startIndex, int length)
+        public static T[] GetSubArray<T>(this IList<T> self, int startIndex, int length)
         {
             T[] subArray = new T[length];
             for (int i = 0; i < length; i++) { subArray[i] = self[i + startIndex]; }
@@ -161,7 +157,7 @@ namespace System.Collections.Generic
         /// Returns a subarray starting from the specified index.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] GetSubArray<T>(this List<T> self, int startIndex)
+        public static T[] GetSubArray<T>(this IList<T> self, int startIndex)
         {
             return GetSubArray(self, startIndex, self.Count - startIndex);
         }
@@ -183,6 +179,38 @@ namespace System.Collections.Generic
         public static T[] GetSubArray<T>(this T[] self, int startIndex)
         {
             return GetSubArray(self, startIndex, self.Length - startIndex);
+        }
+
+        /// <summary>
+        /// Enumerates collection from the specified index.
+        /// </summary>
+        public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex, int length = int.MaxValue)
+        {
+            if (startIndex >= self.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "Index was out of range.");
+
+            int count = startIndex + Math.Min(length, self.Count - startIndex);
+
+            for (int i = startIndex; i < count; i++)
+            {
+                yield return self[i];
+            }
+        }
+
+        /// <summary>
+        /// Enumerates collection from the specified index from the end.
+        /// </summary>
+        public static IEnumerable<T> EnumerateBack<T>(this IList<T> self, int startIndex, int length = int.MaxValue)
+        {
+            if (startIndex >= self.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "Index was out of range.");
+
+            int count = startIndex + Math.Min(length, self.Count - startIndex);
+
+            for (int i = startIndex; i < count; i++)
+            {
+                yield return self.FromEnd(i);
+            }
         }
 
         /// <summary>
@@ -302,7 +330,7 @@ namespace System.Collections.Generic
         /// Sets elements of the array to their default value.
         /// </summary>
         /// <param name="index">The starting index of the range of elements to clear.</param>
-		/// <param name="length">The number of elements to clear.</param>
+        /// <param name="length">The number of elements to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Clear<T>(this T[] self, int index, int length)
         {
@@ -339,7 +367,7 @@ namespace System.Collections.Generic
             return false;
         }
 
-        public static bool Remove<T>(this List<T> self, Predicate<T> match)
+        public static bool Remove<T>(this IList<T> self, Predicate<T> match)
         {
             for (int i = 0; i < self.Count; i++)
             {
@@ -398,7 +426,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Inserts an element into the list at the specified index. Expands the list if the index is out of bounds.
         /// </summary>
-        public static void ForceInsert<T>(this List<T> self, int index, T newItem)
+        public static void ForceInsert<T>(this IList<T> self, int index, T newItem)
         {
             while (index > self.Count) { self.Add(default); }
             self.Insert(index, newItem);
@@ -407,7 +435,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Inserts an element into the list at the specified index and returns that element. Expands the list if the index is out of bounds.
         /// </summary>
-        public static T ForcePush<T>(this List<T> self, int index, T newItem)
+        public static T ForcePush<T>(this IList<T> self, int index, T newItem)
         {
             self.ForceInsert(index, newItem);
             return newItem;
