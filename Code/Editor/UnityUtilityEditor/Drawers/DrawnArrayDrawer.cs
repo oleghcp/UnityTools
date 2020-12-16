@@ -1,9 +1,9 @@
-﻿using UnityEditor;
+﻿#if UNITY_2020_1_OR_NEWER && !UNITY_2020_2_OR_NEWER
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityUtility.Collections;
 
-#if UNITY_2020_1_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(ReorderableArray<>))]

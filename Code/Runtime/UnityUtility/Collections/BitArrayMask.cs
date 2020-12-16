@@ -10,7 +10,7 @@ namespace UnityUtility.Collections
 {
     //Based on System.Collections.BitArray
     [Serializable]
-    public sealed class BitArrayMask : IEnumerable<bool>, ICloneable
+    public sealed class BitArrayMask : ICloneable, IReadOnlyList<bool>
     {
         [SerializeField, HideInInspector]
         private int[] m_array;
@@ -43,6 +43,11 @@ namespace UnityUtility.Collections
         public int Version
         {
             get { return m_version; }
+        }
+
+        int IReadOnlyCollection<bool>.Count
+        {
+            get { return m_length; }
         }
 
         [Preserve]

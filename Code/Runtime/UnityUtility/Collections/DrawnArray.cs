@@ -6,6 +6,9 @@ using UnityEngine;
 #if UNITY_2020_1_OR_NEWER
 namespace UnityUtility.Collections
 {
+#if UNITY_2020_2_OR_NEWER
+    [Obsolete("ReorderableArray is deprecated. Use ordinary array instead.")]
+#endif
     [Serializable]
     public sealed class ReorderableArray<T> : DrawnArray<T>
     {
@@ -23,6 +26,9 @@ namespace UnityUtility.Collections
         }
     }
 
+#if UNITY_2020_2_OR_NEWER
+    [Obsolete("ReorderableRefArray is deprecated. Use ordinary array instead.")]
+#endif
     [Serializable]
     public sealed class ReorderableRefArray<T> : DrawnArray<T> where T : class
     {
@@ -40,6 +46,9 @@ namespace UnityUtility.Collections
         }
     }
 
+#if UNITY_2020_2_OR_NEWER
+    [Obsolete("DrawnArray is deprecated. Use ordinary array instead.")]
+#endif
     [Serializable]
     public abstract class DrawnArray<T> : IList<T>, IReadOnlyList<T>
     {
