@@ -153,8 +153,14 @@ namespace UnityUtilityEditor
             }
         }
 
+#if UNITY_2020_2_OR_NEWER
+        private const int CREATE_CS_SCRIPT_PRIORITY = 80;
+#elif UNITY_2019_1_OR_NEWER
+        private const int CREATE_CS_SCRIPT_PRIORITY = 81;
+#endif
+
 #if UNITY_2019_1_OR_NEWER
-        [MenuItem("Assets/Create/C# Script (ext.)", priority = 81)]
+        [MenuItem("Assets/Create/C# Script (ext.)", priority = CREATE_CS_SCRIPT_PRIORITY)]
         private static void CreateScript()
         {
             string templatePath = Path.Combine(PathUtility.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");
