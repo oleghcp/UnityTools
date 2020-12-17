@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Text;
 using UnityUtility;
 using UnityUtilityTools;
@@ -123,17 +122,6 @@ namespace System
         public static bool Is(this Type self, Type familyType)
         {
             return self.IsSubclassOf(familyType) || self == familyType;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] AsArray<T>(this T self)
-        {
-            return new[] { self };
-        }
-
-        public static IEnumerable<T> AsEnumerable<T>(this T self)
-        {
-            yield return self;
         }
     }
 }
