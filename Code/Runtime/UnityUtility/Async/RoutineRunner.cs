@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using UnityUtilityTools;
 using UnityEngine;
 using UnityUtility.Collections;
+using UnityUtilityTools;
 
 namespace UnityUtility.Async
 {
@@ -87,7 +87,7 @@ namespace UnityUtility.Async
         public void SkipCurrent()
         {
             if (!m_owner.CanBeStopped)
-                Errors.CannotStopTask();
+                throw Errors.CannotStopTask();
 
             StopAllCoroutines();
             f_onCoroutineEnded();
@@ -96,7 +96,7 @@ namespace UnityUtility.Async
         public void Stop()
         {
             if (!m_owner.CanBeStopped)
-                Errors.CannotStopTask();
+                throw Errors.CannotStopTask();
 
             StopAllCoroutines();
             m_queue.Clear();

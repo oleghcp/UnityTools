@@ -51,7 +51,7 @@ namespace UnityUtility.Rng
         public unsafe int Next(int minValue, int maxValue)
         {
             if (minValue > maxValue)
-                Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return f_next(minValue, maxValue);
         }
@@ -67,7 +67,7 @@ namespace UnityUtility.Rng
         public float Next(float minValue, float maxValue)
         {
             if (minValue > maxValue)
-                Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return (float)(NextDouble() * ((double)maxValue - minValue) + minValue);
         }

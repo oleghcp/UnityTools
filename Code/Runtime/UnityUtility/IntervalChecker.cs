@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtilityTools;
 using UnityEngine;
 using UnityUtility.MathExt;
+using UnityUtilityTools;
 
 namespace UnityUtility
 {
@@ -63,7 +63,7 @@ namespace UnityUtility
         public bool HardCheckDelta(float deltaValue)
         {
             if (deltaValue < 0f)
-                Errors.NegativeParameter(nameof(deltaValue));
+                throw Errors.NegativeParameter(nameof(deltaValue));
 
             return HardCheckValue(m_currentValue + deltaValue);
         }
@@ -83,7 +83,7 @@ namespace UnityUtility
         public bool SmoothCheckDelta(float deltaValue)
         {
             if (deltaValue < 0f)
-                Errors.NegativeParameter(nameof(deltaValue));
+                throw Errors.NegativeParameter(nameof(deltaValue));
 
             return SmoothCheckValue(m_currentValue + deltaValue);
         }

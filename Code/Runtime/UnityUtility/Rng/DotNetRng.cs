@@ -14,7 +14,7 @@ namespace UnityUtility.Rng
         public float Next(float minValue, float maxValue)
         {
             if (minValue > maxValue)
-                Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
             return (float)(Sample() * ((double)maxValue - minValue) + minValue);
         }
