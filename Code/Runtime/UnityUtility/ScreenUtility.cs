@@ -91,7 +91,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetViewBounds(Vector2 camPos, float fov, float distance)
         {
-            return GetViewBounds(camPos, distance * (float)Math.Tan(fov * 0.5f));
+            return GetViewBounds(camPos, distance * MathF.Tan(fov * 0.5f));
         }
     }
 }

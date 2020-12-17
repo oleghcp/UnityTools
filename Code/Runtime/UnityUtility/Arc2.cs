@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using static System.Math;
+using static System.MathF;
 
 namespace UnityUtility
 {
@@ -37,7 +37,7 @@ namespace UnityUtility
             get
             {
                 float angle = StartAngle.ToRadians();
-                return new Vector2((float)Cos(angle), (float)Sin(angle));
+                return new Vector2(Cos(angle), Sin(angle));
             }
             set { StartAngle = f_dirToAngle(value); }
         }
@@ -86,16 +86,16 @@ namespace UnityUtility
         internal static Vector2 GetArcPos(float startAngle, float startSpeed, float gravity, float time)
         {
             float angle = startAngle.ToRadians();
-            float x = startSpeed * time * (float)Cos(angle);
-            float y = (startSpeed * (float)Sin(angle) - gravity * time * 0.5f) * time;
+            float x = startSpeed * time * Cos(angle);
+            float y = (startSpeed * Sin(angle) - gravity * time * 0.5f) * time;
             return new Vector2(x, y);
         }
 
         internal static Vector2 GetArcPos(float startAngle, float startSpeed, float gravity, float wind, float time)
         {
             float angle = startAngle.ToRadians();
-            float x = (startSpeed * (float)Cos(angle) + wind * time * 0.5f) * time;
-            float y = (startSpeed * (float)Sin(angle) - gravity * time * 0.5f) * time;
+            float x = (startSpeed * Cos(angle) + wind * time * 0.5f) * time;
+            float y = (startSpeed * Sin(angle) - gravity * time * 0.5f) * time;
             return new Vector2(x, y);
         }
 

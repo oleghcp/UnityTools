@@ -53,7 +53,7 @@ namespace UnityUtilityEditor.Window
             {
                 float angle = (360f / Vertices * i).ToRadians();
 
-                vertices[i] = new Vector3((float)Math.Sin(angle), (float)Math.Cos(angle)) * Radius;
+                vertices[i] = new Vector3(MathF.Sin(angle), MathF.Cos(angle)) * Radius;
             }
 
             if (Orientation == Finding.ZX)
@@ -93,7 +93,7 @@ namespace UnityUtilityEditor.Window
             for (int i = 0; i < Vertices; i++)
             {
                 float angle = (360f / Vertices * i).ToRadians();
-                uv[i] = new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle)) * 0.5f + shift;
+                uv[i] = new Vector2(MathF.Sin(angle), MathF.Cos(angle)) * 0.5f + shift;
             }
 
             return uv;

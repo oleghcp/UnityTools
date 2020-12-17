@@ -74,11 +74,11 @@ namespace UnityUtilityEditor.Window
                 {
                     float angle = (360f / Edges * i).ToRadians();
 
-                    vertices[i] = new Vector3((float)Math.Sin(-angle), 0f, (float)Math.Cos(-angle)) * BottomRadius - heightVector * Pivot;
+                    vertices[i] = new Vector3(MathF.Sin(-angle), 0f, MathF.Cos(-angle)) * BottomRadius - heightVector * Pivot;
 
                     vertices[i + Edges] = heightVector * (1f - Pivot);
 
-                    Vector3 vertPos = new Vector3((float)Math.Sin(angle), 0f, (float)Math.Cos(angle)) * BottomRadius - heightVector * Pivot;
+                    Vector3 vertPos = new Vector3(MathF.Sin(angle), 0f, MathF.Cos(angle)) * BottomRadius - heightVector * Pivot;
                     vertices[i + Edges * 2] = vertPos;
                     vertices[i + Edges * 3] = vertPos;
                 }
@@ -93,15 +93,15 @@ namespace UnityUtilityEditor.Window
                 {
                     float angle = (360f / Edges * i).ToRadians();
 
-                    Vector3 vertexPos = new Vector3((float)Math.Sin(angle), 0f, (float)Math.Cos(angle)) * TopRadius + heightVector * (1f - Pivot);
+                    Vector3 vertexPos = new Vector3(MathF.Sin(angle), 0f, MathF.Cos(angle)) * TopRadius + heightVector * (1f - Pivot);
 
                     vertices[i] = vertexPos;
                     vertices[i + Edges * 2] = vertexPos;
                     vertices[i + Edges * 3] = vertexPos;
 
-                    vertices[i + Edges] = new Vector3((float)Math.Sin(-angle), 0f, (float)Math.Cos(-angle)) * BottomRadius - heightVector * Pivot;
+                    vertices[i + Edges] = new Vector3(MathF.Sin(-angle), 0f, MathF.Cos(-angle)) * BottomRadius - heightVector * Pivot;
 
-                    vertexPos = new Vector3((float)Math.Sin(angle), 0f, (float)Math.Cos(angle)) * BottomRadius - heightVector * Pivot;
+                    vertexPos = new Vector3(MathF.Sin(angle), 0f, MathF.Cos(angle)) * BottomRadius - heightVector * Pivot;
 
                     vertices[i + Edges * 4] = vertexPos;
                     vertices[i + Edges * 5] = vertexPos;
@@ -171,7 +171,7 @@ namespace UnityUtilityEditor.Window
                 for (int i = 0; i < Edges; i++)
                 {
                     float angle = (360f / Edges * i).ToRadians();
-                    Vector2 pos = new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle)) * 0.5f + shift;
+                    Vector2 pos = new Vector2(MathF.Sin(angle), MathF.Cos(angle)) * 0.5f + shift;
                     uv[i] = pos;
                     uv[i + Edges] = pos;
 
@@ -200,7 +200,7 @@ namespace UnityUtilityEditor.Window
                 for (int i = 0; i < Edges; i++)
                 {
                     float angle = (360f / Edges * i).ToRadians();
-                    Vector2 pos = new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle)) * 0.5f + shift;
+                    Vector2 pos = new Vector2(MathF.Sin(angle), MathF.Cos(angle)) * 0.5f + shift;
                     uv[i] = pos;
                     uv[i + Edges] = pos;
 

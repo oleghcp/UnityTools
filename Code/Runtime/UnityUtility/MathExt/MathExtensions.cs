@@ -148,7 +148,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Ceil(this float value)
         {
-            return (int)Math.Ceiling(value);
+            return (int)MathF.Ceiling(value);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Floor(this float value)
         {
-            return (int)Math.Floor(value);
+            return (int)MathF.Floor(value);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Truncate(this float value)
         {
-            return (float)Math.Truncate(value);
+            return MathF.Truncate(value);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Pow(this float value, float pow)
         {
-            return (float)Math.Pow(value, pow);
+            return MathF.Pow(value, pow);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Pow(this int value, float pow)
         {
-            return (float)Math.Pow(value, pow);
+            return MathF.Pow(value, pow);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sqrt(this float value)
         {
-            return (float)Math.Sqrt(value);
+            return MathF.Sqrt(value);
         }
 
         /// <summary>
@@ -229,8 +229,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cbrt(this float value)
         {
-            //return MathF.Cbrt(value);
-            return (float)Math.Pow(value, 1d / 3d);
+            return MathF.Cbrt(value);
         }
 
         /// <summary>
@@ -239,7 +238,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sqrt(this int value)
         {
-            return (float)Math.Sqrt(value);
+            return MathF.Sqrt(value);
         }
 
         /// <summary>
@@ -248,8 +247,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cbrt(this int value)
         {
-            //return MathF.Cbrt(value);
-            return (float)Math.Pow(value, 1d / 3d);
+            return MathF.Cbrt(value);
         }
 
         /// <summary>
