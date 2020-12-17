@@ -399,10 +399,7 @@ namespace System.Collections.Generic
             if (self.Count == 0)
                 throw Errors.NoElements();
 
-            int index = self.Count - 1;
-            T item = self[index];
-            self.RemoveAt(index);
-            return item;
+            return self.PullOut(self.Count - 1);
         }
 
         /// <summary>
