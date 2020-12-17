@@ -33,6 +33,13 @@ namespace UnityUtilityTools
 
     public static class Helper
     {
+        //The copy of internal System.Numerics.Hashing.HashHelpers
+        public static int Combine(int hc1, int hc2)
+        {
+            uint rol5 = ((uint)hc1 << 5) | ((uint)hc1 >> 27);
+            return ((int)rol5 + hc1) ^ hc2;
+        }
+
         public static int GetHashCode(int hc0, int hc1)
         {
             return hc0 ^ hc1 << 2;
