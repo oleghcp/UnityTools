@@ -23,12 +23,15 @@ namespace UnityUtility
         /// Converts position form screen space to a position in UI canvas coordinates with origin at the left bottom corner.
         /// <param name="canvasHeight">Canvas rectTransform height.</param>
         /// </summary>
-        public static Vector2 ScreenToUI(Vector2 screenPos, float canvasHeight)
+        public static Vector2 ScreenToUI(in Vector2 screenPos, float canvasHeight)
         {
-            float canvasWidth = canvasHeight / GetCurrentRatio();
-            float x = canvasWidth * (screenPos.x / Screen.width);
-            float y = canvasHeight * (screenPos.y / Screen.height);
-            return new Vector2(x, y);
+            float canvasWidth = canvasHeight * Screen.width / Screen.height;
+
+            return new Vector2
+            {
+                x = canvasWidth * (screenPos.x / Screen.width),
+                y = canvasHeight * (screenPos.y / Screen.height),
+            };
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace UnityUtility
         /// </summary>
         /// <param name="canvasHeight">Canvas rectTransform height.</param>
         /// <param name="camera">A camera which is used to converting.</param>
-        public static Vector2 WorldToUI(Vector3 worldPos, float canvasHeight, Camera camera)
+        public static Vector2 WorldToUI(in Vector3 worldPos, float canvasHeight, Camera camera)
         {
             Vector2 screenPos = camera.WorldToScreenPoint(worldPos);
             return ScreenToUI(screenPos, canvasHeight);

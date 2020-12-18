@@ -18,7 +18,7 @@ namespace UnityUtilityEditor.Window
         private void Update()
         {
             Edges = Edges.CutBefore(3);
-            Pivot = Pivot.Saturate();
+            Pivot = Pivot.Clamp01();
             TopRadius = TopRadius.CutBefore(0f);
             BottomRadius = BottomRadius.CutBefore(TopRadius);
             Height = Height.CutBefore(0f);

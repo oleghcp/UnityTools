@@ -99,7 +99,7 @@ namespace UnityUtility.Sound
 
         public void SetVolume(float value)
         {
-            m_volume = value.Saturate();
+            m_volume = value.Clamp01();
 
             foreach (var kvp in m_keyedSounds) { kvp.Value.UpdVolume(); }
             foreach (var snd in m_freeSounds) { snd.UpdVolume(); }

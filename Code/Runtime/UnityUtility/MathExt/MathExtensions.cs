@@ -299,7 +299,7 @@ namespace UnityUtility.MathExt
         /// Clamps the value between 0 and 1.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Saturate(this float value)
+        public static float Clamp01(this float value)
         {
             return Mathf.Clamp01(value);
         }

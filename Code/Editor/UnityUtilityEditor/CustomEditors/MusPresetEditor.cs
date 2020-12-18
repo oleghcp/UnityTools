@@ -45,7 +45,7 @@ namespace UnityUtilityEditor.CustomEditors
             EditorGUILayout.BeginHorizontal();
             {
                 name.stringValue = EditorGUILayout.TextField(name.stringValue, GUILayout.Width(100f));
-                volume.floatValue = EditorGUILayout.FloatField(volume.floatValue, GUILayout.Width(40f)).Saturate();
+                volume.floatValue = EditorGUILayout.FloatField(volume.floatValue, GUILayout.Width(40f)).Clamp01();
                 GUILayout.Space(10f);
                 loop.boolValue = EditorGUILayout.Toggle(loop.boolValue, GUILayout.Width(25f));
                 pitch.floatValue = EditorGUILayout.FloatField(pitch.floatValue, GUILayout.Width(40f)).Clamp(0f, 3f);

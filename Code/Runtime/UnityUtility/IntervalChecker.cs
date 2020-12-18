@@ -34,7 +34,7 @@ namespace UnityUtility
         public float Ratio
         {
             get { return m_currentValue / m_interval; }
-            set { m_currentValue = m_interval * value.Saturate(); }
+            set { m_currentValue = m_interval * value.Clamp01(); }
         }
 
         public float Shortage

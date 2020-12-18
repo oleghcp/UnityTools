@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityUtilityTools;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityUtility
 {
@@ -73,6 +74,7 @@ namespace UnityUtility
 
         public Vector3 Evaluate(float ratio)
         {
+            ratio = ratio.Clamp01();
             Array.Copy(m_points, m_tmp, m_points.Length);
 
             int counter = m_points.Length - 1;
@@ -82,7 +84,7 @@ namespace UnityUtility
             {
                 for (int j = 0; j < counter; j++)
                 {
-                    m_tmp[j] = Vector3.Lerp(m_tmp[j], m_tmp[j + 1], ratio);
+                    m_tmp[j] = Vector3.LerpUnclamped(m_tmp[j], m_tmp[j + 1], ratio);
                 }
 
                 counter--;
@@ -93,9 +95,10 @@ namespace UnityUtility
 
         public static Vector3 Evaluate(Vector3 orig, Vector3 dest, Vector3 helpPoint, float ratio)
         {
-            Vector3 p1 = Vector3.Lerp(orig, helpPoint, ratio);
-            Vector3 p2 = Vector3.Lerp(helpPoint, dest, ratio);
-            return Vector3.Lerp(p1, p2, ratio);
+            ratio = ratio.Clamp01();
+            Vector3 p1 = Vector3.LerpUnclamped(orig, helpPoint, ratio);
+            Vector3 p2 = Vector3.LerpUnclamped(helpPoint, dest, ratio);
+            return Vector3.LerpUnclamped(p1, p2, ratio);
         }
     }
 }
