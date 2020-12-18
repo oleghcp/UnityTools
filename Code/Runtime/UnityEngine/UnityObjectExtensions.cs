@@ -10,24 +10,6 @@ namespace UnityEngine
     public static class UnityObjectExtensions
     {
         /// <summary>
-        /// Calculates view bounds of the orthographic camera looking along the Z axis.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Rect GetViewBounds(this Camera self)
-        {
-            return ScreenUtility.GetViewBounds(self.transform.position, self.orthographicSize);
-        }
-
-        /// <summary>
-        /// Calculates view bounds of the perspective camera looking along the Z axis.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Rect GetViewBounds(this Camera self, float distance)
-        {
-            return ScreenUtility.GetViewBounds(self.transform.position, self.fieldOfView, distance);
-        }
-
-        /// <summary>
         /// Destroys the unity object.
         /// </summary>
         /// <param name="time">Time  for destruction.</param>
@@ -489,60 +471,6 @@ namespace UnityEngine
             Vector2 vector = RectUtility.GetAnchor(anchor);
             self.pivot = vector;
         }
-
-        ///// <summary>
-        ///// Sets the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
-        ///// </summary>
-        //public static void SetLocalPos(this RectTransform self, in Vector2 localPos)
-        //{
-        //    Vector2 pivot = self.GetParent().pivot;
-        //    Vector2 size = self.GetParent().rect.size;
-
-        //    float xOffset = size.x * pivot.x - size.x * 0.5f;
-        //    float yOffset = size.y * pivot.y - size.y * 0.5f;
-
-        //    self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
-        //}
-
-        ///// <summary>
-        ///// Sets the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
-        ///// </summary>
-        //public static void SetLocalPos(this RectTransform self, in Vector2 localPos, in Vector2 customParentPivot)
-        //{
-        //    Vector2 size = self.GetParent().rect.size;
-
-        //    float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
-        //    float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
-
-        //    self.anchoredPosition = localPos + new Vector2(xOffset, yOffset);
-        //}
-
-        ///// <summary>
-        ///// Returns the position of this RectTransform pivot relative to the anchor reference and its parent pivot.
-        ///// </summary>
-        //public static Vector2 GetLocalPos(this RectTransform self)
-        //{
-        //    Vector2 pivot = self.GetParent().pivot;
-        //    Vector2 size = self.GetParent().rect.size;
-
-        //    float xOffset = size.x * pivot.x - size.x * 0.5f;
-        //    float yOffset = size.y * pivot.y - size.y * 0.5f;
-
-        //    return self.anchoredPosition - new Vector2(xOffset, yOffset);
-        //}
-
-        ///// <summary>
-        ///// Returns the position of this RectTransform pivot relative to the anchor reference and custom parent pivot.
-        ///// </summary>
-        //public static Vector2 GetLocalPos(this RectTransform self, in Vector2 customParentPivot)
-        //{
-        //    Vector2 size = self.GetParent().rect.size;
-
-        //    float xOffset = size.x * customParentPivot.x - size.x * 0.5f;
-        //    float yOffset = size.y * customParentPivot.y - size.y * 0.5f;
-
-        //    return self.anchoredPosition - new Vector2(xOffset, yOffset);
-        //}
 
         /// <summary>
         /// Creates a sprite.

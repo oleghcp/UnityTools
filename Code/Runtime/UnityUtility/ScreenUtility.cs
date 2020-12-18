@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityUtility
 {
@@ -16,15 +17,6 @@ namespace UnityUtility
         public static float GetCurrentRatio()
         {
             return (float)Screen.height / Screen.width;
-        }
-
-        /// <summary>
-        /// Returns scale of current screen ratio relatively to the default ratio.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetRatioScale(float defaultRatio)
-        {
-            return defaultRatio / GetCurrentRatio();
         }
 
         /// <summary>
@@ -53,45 +45,47 @@ namespace UnityUtility
         /// <summary>
         /// Returns factor for converting screen path to world path.
         /// </summary>
-        /// <param name="camSize">Camera orthographic size.</param>
+        /// <param name="cameraOrthographicSize">Camera orthographic size.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetTouchScreenFactor(float camSize)
+        public static float GetPathScreenFactor(float cameraOrthographicSize)
         {
-            return camSize * 2f / Screen.height;
+            return cameraOrthographicSize * 2f / Screen.height;
         }
 
         /// <summary>
-        /// Returns distances from camera center to vertical and horizontal sides.
+        /// Returns factor for converting screen path to world path.
         /// </summary>
-        /// <param name="camSize">Camera orthographic size.</param>
+        /// <param name="distance">Distance from the camera along forward axis.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetViewRadius(float camSize)
+        public static float GetPathScreenFactor(float verticalFieldOfView, float distance)
         {
-            return new Vector2(camSize / GetCurrentRatio(), camSize);
+            return GetPathScreenFactor(distance * Tan(verticalFieldOfView));
         }
 
         /// <summary>
-        /// Calculates view bounds of the orthographic camera looking along the Z axis.
+        /// Returns distances from orthographic camera center to vertical and horizontal sides.
         /// </summary>
-        /// <param name="camPos">Position of camera in XY-plane.</param>
-        /// <param name="camSize">Camera orthographic size.</param>
-        public static Rect GetViewBounds(Vector2 camPos, float camSize)
+        /// <param name="cameraOrthographicSize">Camera orthographic size.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetCameraViewRadius(float cameraOrthographicSize)
         {
-            Vector2 radius = GetViewRadius(camSize);
-
-            return Rect.MinMaxRect(camPos.x - radius.x, camPos.y - radius.y, camPos.x + radius.x, camPos.y + radius.y);
+            return new Vector2(cameraOrthographicSize * Screen.width / Screen.height, cameraOrthographicSize);
         }
 
         /// <summary>
-        /// Calculates view bounds of the perspective camera looking along the Z axis.
+        /// Returns distances from point lying on perspective camera forward axis to vertical and horizontal sides.
         /// </summary>
-        /// <param name="camPos">Position of camera in XY-plane.</param>
-        /// <param name="fov">Field of view.</param>
-        /// <param name="distance">Distance from the camera along Z axis.</param>
+        /// <param name="distance">Distance from the camera along forward axis.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Rect GetViewBounds(Vector2 camPos, float fov, float distance)
+        public static Vector2 GetCameraViewRadius(float verticalFieldOfView, float distance)
         {
-            return GetViewBounds(camPos, distance * MathF.Tan(fov * 0.5f));
+            return GetCameraViewRadius(distance * Tan(verticalFieldOfView));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static float Tan(float verticalFieldOfView)
+        {
+            return MathF.Tan((verticalFieldOfView * 0.5f).ToRadians());
         }
     }
 }
