@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityUtility;
-using UnityUtilityTools;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine
@@ -333,7 +332,7 @@ namespace UnityEngine
         /// <summary>
         /// Finds all children.
         /// </summary>
-        public static IReadOnlyList<Transform> GetAllChildren(this Transform self)
+        public static List<Transform> GetAllChildren(this Transform self)
         {
             List<Transform> list = new List<Transform>();
 
@@ -554,27 +553,12 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Increases sibling index by the specified value.
+        /// Increases or decreases sibling index by the specified value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IncreaseSiblingIndex(this Transform self, int value)
+        public static void MoveSiblingIndex(this Transform self, int moveValue)
         {
-            if (value < 0)
-                throw Errors.NegativeParameter(nameof(value));
-
-            self.SetSiblingIndex(self.GetSiblingIndex() + value);
-        }
-
-        /// <summary>
-        /// Decreases sibling index by the specified value.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void DecreaseSiblingIndex(this Transform self, int value)
-        {
-            if (value < 0)
-                throw Errors.NegativeParameter(nameof(value));
-
-            self.SetSiblingIndex(self.GetSiblingIndex() - value);
+            self.SetSiblingIndex(self.GetSiblingIndex() + moveValue);
         }
     }
 }
