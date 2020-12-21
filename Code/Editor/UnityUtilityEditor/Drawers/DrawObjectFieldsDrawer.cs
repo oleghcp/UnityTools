@@ -16,7 +16,7 @@ namespace UnityUtilityEditor.Drawers
 
             if (!canDraw)
             {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use DrawObjectFieldsAttribute only with ScriptableObject.");
+                EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
                 return;
             }
 

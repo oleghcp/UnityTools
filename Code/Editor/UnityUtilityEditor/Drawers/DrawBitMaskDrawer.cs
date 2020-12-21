@@ -44,7 +44,7 @@ namespace UnityUtilityEditor.Drawers
                 }
                 else
                 {
-                    m_error = "Use DrawBitMask with Int32 or BitArrayMask.";
+                    m_error = $"Use {nameof(DrawBitMaskAttribute)} with Int32 or BitArrayMask.";
                     return;
                 }
 

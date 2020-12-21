@@ -1,7 +1,7 @@
-﻿using Assets.Code.Runtime.UnityUtility;
-using System;
+﻿using System;
 using System.Collections;
 using System.Threading;
+using Assets.Code.Runtime.UnityUtility;
 using UnityEngine;
 using UnityUtility.IdGenerating;
 
@@ -26,7 +26,7 @@ namespace UnityUtility.Async
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void f_setUp()
         {
-            IAsyncSettings settings = GetSettings();
+            IAsyncSettings settings = f_getSettings();
             LongIdGenerator idProvider = new LongIdGenerator();
 
             s_globals = new TaskFactory(settings, idProvider, true);
@@ -121,14 +121,11 @@ namespace UnityUtility.Async
 
         // -- //
 
-        private static IAsyncSettings GetSettings()
+        private static IAsyncSettings f_getSettings()
         {
             AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
-
-            if (settings == null)
-                return new DefaultSettings();
-
-            return settings;
+            return settings == null ? new DefaultSettings()
+                                    : settings as IAsyncSettings;
         }
 
         private class DefaultSettings : IAsyncSettings

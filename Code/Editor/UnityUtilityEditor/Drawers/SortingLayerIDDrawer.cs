@@ -19,7 +19,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 if (property.propertyType != SerializedPropertyType.Integer)
                 {
-                    EditorScriptUtility.DrawWrongTypeMessage(position, label, "Use SortingLayerID with int.");
+                    EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(SortingLayerIDAttribute)} with int.");
                     return;
                 }
 
