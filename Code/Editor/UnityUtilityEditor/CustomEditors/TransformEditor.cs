@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
 using UnityUtility.MathExt;
+
+#if !UNITY_2019_3_OR_NEWER
+using System.Collections.Generic;
+using UnityUtility; 
+#endif
 
 namespace UnityUtilityEditor.CustomEditors
 {
@@ -13,20 +16,23 @@ namespace UnityUtilityEditor.CustomEditors
         private const float SPACE = 5f;
         private const float BTN_WIDTH = 35f;
         private const float LABEL_WIDTH = 35f;
-        private const float TOGGLE_WIDTH = 15f;
 
         private static string[] s_toolbarNames = new string[] { "Local", "World" };
-        private static Vector3[] s_axes = { Vector3.forward, Vector3.right, Vector3.up };
 
         private static bool s_world;
-        private static bool s_grid;
-        private static float s_snapStep = 1f;
 
         private Transform m_target;
-        private Handles m_h;
         private SerializedProperty m_posProp;
         private SerializedProperty m_rotProp;
         private SerializedProperty m_sclProp;
+
+#if !UNITY_2019_3_OR_NEWER
+        private const float TOGGLE_WIDTH = 15f;
+        private static bool s_grid;
+        private static float s_snapStep = 1f;
+        private static Vector3[] s_axes = { Vector3.forward, Vector3.right, Vector3.up };
+        private Handles m_h;
+#endif
 
         private void Awake()
         {
@@ -40,6 +46,7 @@ namespace UnityUtilityEditor.CustomEditors
             m_sclProp = serializedObject.FindProperty("m_LocalScale");
         }
 
+#if !UNITY_2019_3_OR_NEWER
         private void OnSceneGUI()
         {
             if (s_grid)
@@ -104,6 +111,7 @@ namespace UnityUtilityEditor.CustomEditors
                 }
             }
         }
+#endif
 
         public override void OnInspectorGUI()
         {
@@ -177,6 +185,7 @@ namespace UnityUtilityEditor.CustomEditors
 
             GUILayout.Space(SPACE);
 
+#if !UNITY_2019_3_OR_NEWER
             EditorGUILayout.BeginHorizontal();
             bool gridNewVal = GUILayout.Toggle(s_grid, string.Empty, GUILayout.Width(TOGGLE_WIDTH));
             if (s_grid != gridNewVal)
@@ -192,6 +201,7 @@ namespace UnityUtilityEditor.CustomEditors
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(SPACE);
+#endif
         }
     }
 }
