@@ -64,12 +64,18 @@ namespace UnityUtility.NumericEntities
             m_curValue -= value;
         }
 
+        public void RemoveExcess()
+        {
+            if (m_curValue < 0)
+                m_curValue = 0;
+        }
+
         public void Restore(int value)
         {
             if (value < 0)
                 throw Errors.NegativeParameter(nameof(value));
 
-            m_curValue = (CurValue + value).CutAfter(m_capacity);
+            m_curValue = (m_curValue + value).CutAfter(m_capacity);
         }
 
         public void RestoreFull()

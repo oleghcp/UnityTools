@@ -20,6 +20,7 @@ namespace UnityUtility.NumericEntities
         bool IsEmpty { get; }
 
         void Spend(T value);
+        void RemoveExcess();
         void Restore(T value);
         void RestoreFull();
         void Resize(T value, ResizeType resizeType = ResizeType.NewValue);
