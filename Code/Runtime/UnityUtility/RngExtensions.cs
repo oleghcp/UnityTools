@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Collections;
-using UnityUtility.Collections.Unsafe;
 using UnityUtility.MathExt;
 using UnityUtilityTools;
 
@@ -68,19 +67,20 @@ namespace UnityUtility
             return -1;
         }
 
+#if UNITY_2020_2_OR_NEWER
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
-        public static unsafe int Random(this IRng self, float* weights, int length, float weightOfNone = 0f)
+        public static unsafe int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
         {
-            float target = self.Next(ArrayUtility.Sum(weights, length) + weightOfNone);
-            int startIndex = self.Next(length);
-            int count = length + startIndex;
+            float target = self.Next(weights.Sum() + weightOfNone);
+            int startIndex = self.Next(weights.Length);
+            int count = weights.Length + startIndex;
             float sum = 0f;
 
             for (int i = 0; i < count; i++)
             {
-                int index = i % length;
+                int index = i % weights.Length;
 
                 if (weights[index] + sum >= target)
                     return index;
@@ -90,6 +90,7 @@ namespace UnityUtility
 
             return -1;
         }
+#endif
 
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
@@ -114,19 +115,20 @@ namespace UnityUtility
             return -1;
         }
 
+#if UNITY_2020_2_OR_NEWER
         /// <summary>
         /// Returns random index of an array contains chance weights.
         /// </summary>
-        public static unsafe int Random(this IRng self, int* weights, int length, int weightOfNone = 0)
+        public static unsafe int Random(this IRng self, Span<int> weights, int weightOfNone = 0)
         {
-            int target = self.Next(ArrayUtility.Sum(weights, length) + weightOfNone);
-            int startIndex = self.Next(length);
-            int count = length + startIndex;
+            int target = self.Next(weights.Sum() + weightOfNone);
+            int startIndex = self.Next(weights.Length);
+            int count = weights.Length + startIndex;
             int sum = 0;
 
             for (int i = startIndex; i < count; i++)
             {
-                int index = i % length;
+                int index = i % weights.Length;
 
                 if (weights[index] + sum > target)
                     return index;
@@ -136,6 +138,7 @@ namespace UnityUtility
 
             return -1;
         }
+#endif
 
         /// <summary>
         /// Returns a random flag contains in the specified mask.
