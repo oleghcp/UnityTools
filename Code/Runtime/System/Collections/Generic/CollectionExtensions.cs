@@ -261,15 +261,6 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Finds specified element.
-        /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Find<T>(this T[] self, T item)
-        {
-            return Array.Find(self, itm => itm.Equals(item));
-        }
-
-        /// <summary>
         /// Finds an element by condition.
         /// </summary>        
         /// <param name="match">Reference to matching function.</param>
