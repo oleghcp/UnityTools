@@ -1,6 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
 using UnityUtility.MathExt;
-using UnityEngine;
 using static System.Math;
 
 namespace UnityUtility
@@ -13,10 +12,10 @@ namespace UnityUtility
         /// <param name="i">Row.</param>
         /// <param name="j">Column.</param>
         /// <param name="rotations">Defines a rotation angle by multiplying by 90 degrees. If the value is positive returns rotated clockwise.</param>
-        public static /*unsafe*/ (int, int) RotateCellPos(int i, int j, int rotations)
+        public static (int, int) RotateCellPos(int i, int j, int rotations)
         {
-            //int* sinPtr = stackalloc[] { 0, 1, 0, -1 };
-            //int* cosPtr = stackalloc[] { 1, 0, -1, 0 };
+            //Span<int> sinPtr = stackalloc[] { 0, 1, 0, -1 };
+            //Span<int> cosPtr = stackalloc[] { 1, 0, -1, 0 };
 
             //rotations = rotations.Repeat(4);
 

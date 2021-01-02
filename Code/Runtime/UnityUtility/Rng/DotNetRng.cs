@@ -31,14 +31,11 @@ namespace UnityUtility.Rng
             return (byte)base.Next(256);
         }
 
-        public unsafe void NextBytes(byte* arrayPtr, int length)
+        public void NextBytes(Span<byte> buffer)
         {
-            if (arrayPtr == null)
-                throw new ArgumentNullException(nameof(arrayPtr));
-
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < buffer.Length; i++)
             {
-                arrayPtr[i] = (byte)base.Next(256);
+                buffer[i] = (byte)base.Next(256);
             }
         }
     }

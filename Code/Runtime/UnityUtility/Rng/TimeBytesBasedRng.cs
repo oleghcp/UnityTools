@@ -48,7 +48,7 @@ namespace UnityUtility.Rng
             m_rng = new ByteGenerator(seed);
         }
 
-        public unsafe int Next(int minValue, int maxValue)
+        public int Next(int minValue, int maxValue)
         {
             if (minValue > maxValue)
                 throw Errors.MinMax(nameof(minValue), nameof(maxValue));
@@ -80,9 +80,9 @@ namespace UnityUtility.Rng
 
         public unsafe double NextDouble()
         {
-            byte* bytes = stackalloc byte[8];
-            f_bytes(bytes, 8);
-            ulong rn = *(ulong*)bytes;
+            Span<byte> bytes = stackalloc byte[8];
+            NextBytes(bytes);
+            ulong rn = *(ulong*)bytes.Ptr;
             rn %= 1000000000000000ul;
             return rn * 0.000000000000001d;
         }
@@ -100,21 +100,11 @@ namespace UnityUtility.Rng
             }
         }
 
-        public unsafe void NextBytes(byte* arrayPtr, int length)
+        public void NextBytes(Span<byte> buffer)
         {
-            if (arrayPtr == null)
-                throw new ArgumentNullException(nameof(arrayPtr));
-
-            f_bytes(arrayPtr, length);
-        }
-
-        // -- //
-
-        private unsafe void f_bytes(byte* arrayPtr, int length)
-        {
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < buffer.Length; i++)
             {
-                arrayPtr[i] = m_rng.RandomByte();
+                buffer[i] = m_rng.RandomByte();
             }
         }
 
@@ -129,16 +119,16 @@ namespace UnityUtility.Rng
             }
             else if (length <= 65536L)
             {
-                byte* bytes = stackalloc byte[2];
-                f_bytes(bytes, 2);
-                ushort rn = *(ushort*)bytes;
+                Span<byte> bytes = stackalloc byte[2];
+                NextBytes(bytes);
+                ushort rn = *(ushort*)bytes.Ptr;
                 return rn % (int)length + minValue;
             }
             else
             {
-                byte* bytes = stackalloc byte[4];
-                f_bytes(bytes, 4);
-                uint rn = *(uint*)bytes;
+                Span<byte> bytes = stackalloc byte[4];
+                NextBytes(bytes);
+                uint rn = *(uint*)bytes.Ptr;
                 return (int)(rn % length + minValue);
             }
         }

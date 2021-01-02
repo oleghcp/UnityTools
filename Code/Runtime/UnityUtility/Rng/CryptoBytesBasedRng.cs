@@ -78,15 +78,12 @@ namespace UnityUtility.Rng
             m_rng.GetBytes(buffer);
         }
 
-        public unsafe void NextBytes(byte* arrayPtr, int length)
+        public void NextBytes(Span<byte> buffer)
         {
-            if (arrayPtr == null)
-                throw new ArgumentNullException(nameof(arrayPtr));
-
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < buffer.Length; i++)
             {
                 m_rng.GetBytes(m_bytes1);
-                arrayPtr[i] = m_bytes1[0];
+                buffer[i] = m_bytes1[0];
             }
         }
 

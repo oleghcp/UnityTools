@@ -2,9 +2,10 @@
 // Analogue of real System.Span`1 from .net core library. //
 ////////////////////////////////////////////////////////////
 
-#if UNITY_2020_2_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using UnityUtilityTools;
 
 namespace System
 {
@@ -17,7 +18,16 @@ namespace System
         public bool IsEmpty => _length == 0;
         public int Length => _length;
 
-        internal T* Ptr => _ptr;
+        internal T* Ptr
+        {
+            get
+            {
+                if (_ptr == null)
+                    throw new NullReferenceException("Span pointer is null.");
+
+                return _ptr;
+            }
+        }
 
         public ref T this[int index]
         {
@@ -26,6 +36,9 @@ namespace System
                 if (index < 0 || index >= _length)
                     throw new IndexOutOfRangeException();
 
+                if (_ptr == null)
+                    throw new NullReferenceException("Span pointer is null.");
+
                 return ref _ptr[index];
             }
         }
@@ -33,10 +46,10 @@ namespace System
         public Span(void* ptr, int length)
         {
             if (ptr == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Pointer cannot be null.");
 
             if (length < 0)
-                throw new ArgumentOutOfRangeException();
+                throw Errors.NegativeParameter(nameof(length));
 
             _ptr = (T*)ptr;
             _length = length;

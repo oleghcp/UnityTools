@@ -18,7 +18,7 @@ namespace UnityUtility
         double NextDouble();
         byte NextByte();
         void NextBytes(byte[] buffer);
-        unsafe void NextBytes(byte* arrayPtr, int length);
+        void NextBytes(Span<byte> buffer);
     }
 
     /// <summary>
@@ -337,9 +337,9 @@ namespace UnityUtility
         /// Fills a byte array with random values.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void RandomByteArray(this IRng self, byte* arrayPtr, int length)
+        public static void RandomByteArray(this IRng self, Span<byte> buffer)
         {
-            self.NextBytes(arrayPtr, length);
+            self.NextBytes(buffer);
         }
 
         /// <summary>

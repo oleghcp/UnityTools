@@ -36,7 +36,7 @@ namespace UnityUtility.Controls.ControlStuff
             return builder.ToString();
         }
 
-        internal static unsafe void GetRawKeyCodes(GamepadType type, KeyCode* array)
+        internal static void GetRawKeyCodes(GamepadType type, Span<KeyCode> array)
         {
             switch (type)
             {
@@ -139,7 +139,7 @@ namespace UnityUtility.Controls.ControlStuff
             }
         }
 
-        internal static unsafe void GetRawAxisCodes(GamepadType type, int* array)
+        internal static void GetRawAxisCodes(GamepadType type, Span<int> array)
         {
             switch (type)
             {
@@ -216,11 +216,11 @@ namespace UnityUtility.Controls.ControlStuff
             return KMKeyCode.None;
         }
 
-        public static unsafe GPKeyCode GetPressedKey(GamepadType type)
+        public static GPKeyCode GetPressedKey(GamepadType type)
         {
             if (Input.anyKeyDown)
             {
-                KeyCode* codes = stackalloc KeyCode[InputEnum.GPKeyCodeCount];
+                Span<KeyCode> codes = stackalloc KeyCode[InputEnum.GPKeyCodeCount];
                 GetRawKeyCodes(type, codes);
 
                 for (int i = 0; i < InputEnum.GPKeyCodeCount; i++)

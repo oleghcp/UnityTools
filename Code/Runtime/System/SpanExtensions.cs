@@ -1,4 +1,4 @@
-#if UNITY_2020_2_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityUtility;
@@ -7,14 +7,14 @@ namespace System
 {
     public static class SpanExtensions
     {
-        public static unsafe T[] ToArray<T>(this in Span<T> self) where T : unmanaged
+        public static T[] ToArray<T>(this in Span<T> self) where T : unmanaged
         {
             if (self == null)
                 throw new ArgumentNullException();
 
-            var newArray = new T[self.Length];
+            T[] newArray = new T[self.Length];
 
-            for (var i = 0; i < self.Length; i++)
+            for (int i = 0; i < self.Length; i++)
             {
                 newArray[i] = self[i];
             }
@@ -59,13 +59,13 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void Sort<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
-            UnsafeArrayUtility.Sort(self.Ptr, self.Length);
+            UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void Sort<T>(this in Span<T> self, Comparison<T> comparer) where T : unmanaged
         {
-            UnsafeArrayUtility.Sort(self.Ptr, self.Length, comparer);
+            UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1, comparer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -80,7 +80,6 @@ namespace System
             UnsafeArrayUtility.Shuffle(self.Ptr, self.Length);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Find<T>(this in Span<T> self, Predicate<T> match) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
@@ -120,16 +119,28 @@ namespace System
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int Sum(this in Span<int> self)
+        public static int Sum(this in Span<int> self)
         {
-            return UnsafeArrayUtility.Sum(self.Ptr, self.Length);
+            int sum = 0;
+
+            for (int i = 0; i < self.Length; i++)
+            {
+                sum += self[i];
+            }
+
+            return sum;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe float Sum(this in Span<float> self)
+        public static float Sum(this in Span<float> self)
         {
-            return UnsafeArrayUtility.Sum(self.Ptr, self.Length);
+            float sum = 0;
+
+            for (int i = 0; i < self.Length; i++)
+            {
+                sum += self[i];
+            }
+
+            return sum;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,14 +155,23 @@ namespace System
             return UnsafeArrayUtility.Max(self.Ptr, self.Length);
         }
 
-        public static unsafe void Reverse<T>(this in Span<T> self) where T : unmanaged
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Reverse<T>(this in Span<T> self) where T : unmanaged
         {
-            UnsafeArrayUtility.Reverse(self.Ptr, 0, self.Length);
+            Reverse(self, 0, self.Length);
         }
 
-        public static unsafe void Reverse<T>(this in Span<T> self, int startIndex, int length) where T : unmanaged
+        public static void Reverse<T>(this in Span<T> self, int startIndex, int length) where T : unmanaged
         {
-            UnsafeArrayUtility.Reverse(self.Ptr, startIndex, length);
+            int backIndex = startIndex + length - 1;
+            length /= 2;
+
+            for (int i = 0; i < length; i++)
+            {
+                T tmp = self[startIndex + i];
+                self[startIndex + i] = self[backIndex - i];
+                self[backIndex - i] = tmp;
+            }
         }
     }
 }
