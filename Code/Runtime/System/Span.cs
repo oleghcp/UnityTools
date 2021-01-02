@@ -17,7 +17,7 @@ namespace System
         public bool IsEmpty => _length == 0;
         public int Length => _length;
 
-        internal unsafe T* Ptr => _ptr;
+        internal T* Ptr => _ptr;
 
         public ref T this[int index]
         {

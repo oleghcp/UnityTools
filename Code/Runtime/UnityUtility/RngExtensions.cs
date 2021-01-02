@@ -71,7 +71,7 @@ namespace UnityUtility
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
-        public static unsafe int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
+        public static int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
         {
             float target = self.Next(weights.Sum() + weightOfNone);
             int startIndex = self.Next(weights.Length);
@@ -119,7 +119,7 @@ namespace UnityUtility
         /// <summary>
         /// Returns random index of an array contains chance weights.
         /// </summary>
-        public static unsafe int Random(this IRng self, Span<int> weights, int weightOfNone = 0)
+        public static int Random(this IRng self, Span<int> weights, int weightOfNone = 0)
         {
             int target = self.Next(weights.Sum() + weightOfNone);
             int startIndex = self.Next(weights.Length);
