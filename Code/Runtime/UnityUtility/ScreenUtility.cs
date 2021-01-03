@@ -11,15 +11,6 @@ namespace UnityUtility
     public static class ScreenUtility
     {
         /// <summary>
-        /// Returns the current screen ratio (height/width).
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetCurrentRatio()
-        {
-            return (float)Screen.height / Screen.width;
-        }
-
-        /// <summary>
         /// Converts position form screen space to a position in UI canvas coordinates with origin at the left bottom corner.
         /// <param name="canvasHeight">Canvas rectTransform height.</param>
         /// </summary>
@@ -62,7 +53,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetPathScreenFactor(float verticalFieldOfView, float distance)
         {
-            return GetPathScreenFactor(distance * Tan(verticalFieldOfView));
+            return GetPathScreenFactor(distance * f_tan(verticalFieldOfView));
         }
 
         /// <summary>
@@ -82,11 +73,11 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetCameraViewRadius(float verticalFieldOfView, float distance)
         {
-            return GetCameraViewRadius(distance * Tan(verticalFieldOfView));
+            return GetCameraViewRadius(distance * f_tan(verticalFieldOfView));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float Tan(float verticalFieldOfView)
+        private static float f_tan(float verticalFieldOfView)
         {
             return MathF.Tan((verticalFieldOfView * 0.5f).ToRadians());
         }

@@ -452,7 +452,7 @@ namespace UnityUtility.MathExt
         /// Casts integer value to float.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ToFloat(this int value)
+        public static float ToFloat(this int value)
         {
             return value;
         }

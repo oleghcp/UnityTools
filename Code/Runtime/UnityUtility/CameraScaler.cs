@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace UnityUtility
 {
@@ -19,12 +20,12 @@ namespace UnityUtility
 
         private void Awake()
         {
-            Initialize();
+            f_initialize();
         }
 
         private void Update()
         {
-            float newRatio = ScreenUtility.GetCurrentRatio();
+            float newRatio = f_getCurrentRatio();
 
             if (newRatio < _targetRatio)
             {
@@ -44,18 +45,24 @@ namespace UnityUtility
         private void OnValidate()
         {
             _camera = GetComponent<Camera>();
-            Initialize();
+            f_initialize();
         }
 
-        private void Initialize()
+        private void f_initialize()
         {
             _targetRatio = _targetHeight / _targetWidth;
-            _aspectRatio = ScreenUtility.GetCurrentRatio();
+            _aspectRatio = f_getCurrentRatio();
             if (_aspectRatio < _targetRatio)
                 _camera.orthographicSize = _targetHeight;
             else
                 _camera.orthographicSize = _targetWidth * _aspectRatio;
 
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static float f_getCurrentRatio()
+        {
+            return (float)Screen.height / Screen.width;
         }
     }
 }
