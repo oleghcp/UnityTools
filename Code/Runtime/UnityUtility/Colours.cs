@@ -53,6 +53,12 @@ namespace UnityUtility
             get => Color.blue;
         }
 
+        public static Color Sky
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => new Color(0.2f, 0.5f, 1f, 1f);
+        }
+
         public static Color Lime
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
