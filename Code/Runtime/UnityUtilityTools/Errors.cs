@@ -27,7 +27,17 @@ namespace UnityUtilityTools
 
         public static ArgumentOutOfRangeException ZeroParameter(string paramName)
         {
-            return new ArgumentOutOfRangeException(paramName, "The parameter must be greater than zero.");
+            return new ArgumentOutOfRangeException(paramName, "Argument must be greater than zero.");
+        }
+
+        public static ArgumentNullException NullParameter(string paramName)
+        {
+            return new ArgumentNullException(paramName, "Argument cannot be null.");
+        }
+
+        public static ArgumentException InvalidArrayArgument(string paramName)
+        {
+            return new ArgumentException(paramName, "Array argument cannot be null or empty.");
         }
 
         public static ArgumentOutOfRangeException OutOfRange(string paramName, string minName, string maxName)

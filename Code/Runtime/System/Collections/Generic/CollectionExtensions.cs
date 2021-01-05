@@ -214,13 +214,40 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Returns a copy of the array;
+        /// Returns a copy of the array.
         /// </summary>
         public static T[] GetCopy<T>(this T[] self)
         {
             T[] copy = new T[self.Length];
             self.CopyTo(copy, 0);
             return copy;
+        }
+
+        /// <summary>
+        /// Copies all the elements of the current collection to the specified Span`1.
+        /// </summary>
+        public static void CopyTo<T>(this IList<T> self, Span<T> target) where T : unmanaged
+        {
+            int length = Math.Min(self.Count, target.Length);
+            for (int i = 0; i < length; i++)
+            {
+                target[i] = self[i];
+            }
+        }
+
+        /// <summary>
+        /// Copies all the elements of the current collection to the specified Span`1.
+        /// </summary>
+        public static void CopyTo<T>(this IList<T> self, Span<T> target, int index) where T : unmanaged
+        {
+            if (index < 0 || index >= self.Count)
+                throw Errors.IndexOutOfRange();
+
+            int length = Math.Min(self.Count - index, target.Length);
+            for (int i = 0; i < length; i++)
+            {
+                target[i] = self[i + index];
+            }
         }
 
         /// <summary>

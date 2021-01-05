@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtilityTools;
 using UnityEngine;
 using UnityUtility.MathExt;
+using UnityUtilityTools;
 
 namespace UnityUtility
 {
     public sealed class Bezier2
     {
         private Vector2[] m_points;
-        private Vector2[] m_tmp;
 
         public Vector2 Origin
         {
@@ -42,41 +41,40 @@ namespace UnityUtility
             m_points = new Vector2[helpPoints + 2];
             m_points[0] = orig;
             m_points[m_points.Length - 1] = dest;
-            m_tmp = new Vector2[m_points.Length];
         }
 
         public Bezier2(Vector2 orig, Vector2 dest, Vector2 helpPoint)
         {
             m_points = new[] { orig, helpPoint, dest };
-            m_tmp = new Vector2[m_points.Length];
         }
 
         public Bezier2(Vector2 orig, Vector2 dest, Vector2 helpPoint0, Vector2 helpPoint1)
         {
             m_points = new[] { orig, helpPoint0, helpPoint1, dest };
-            m_tmp = new Vector2[m_points.Length];
         }
 
         public Bezier2(Vector2 orig, Vector2 dest, Vector2 helpPoint0, Vector2 helpPoint1, Vector2 helpPoint2)
         {
             m_points = new[] { orig, helpPoint0, helpPoint1, helpPoint2, dest };
-            m_tmp = new Vector2[m_points.Length];
         }
 
         public Bezier2(Vector2 orig, Vector2 dest, params Vector2[] helpPoints)
         {
+            if (helpPoints.IsNullOrEmpty())
+                throw Errors.InvalidArrayArgument(nameof(helpPoints));
+
             m_points = new Vector2[helpPoints.Length + 2];
             m_points[0] = orig;
             m_points.FromEnd(0) = dest;
             helpPoints.CopyTo(m_points, 1);
-            m_tmp = new Vector2[m_points.Length];
         }
 
         public Vector2 Evaluate(float ratio)
         {
-            ratio = ratio.Clamp01();
-            Array.Copy(m_points, m_tmp, m_points.Length);
+            Span<Vector2> tmp = stackalloc Vector2[m_points.Length];
+            m_points.CopyTo(tmp);
 
+            ratio = ratio.Clamp01();
             int counter = m_points.Length - 1;
             int times = counter;
 
@@ -84,13 +82,13 @@ namespace UnityUtility
             {
                 for (int j = 0; j < counter; j++)
                 {
-                    m_tmp[j] = Vector2.LerpUnclamped(m_tmp[j], m_tmp[j + 1], ratio);
+                    tmp[j] = Vector2.LerpUnclamped(tmp[j], tmp[j + 1], ratio);
                 }
 
                 counter--;
             }
 
-            return m_tmp[0];
+            return tmp[0];
         }
 
         public static Vector2 Evaluate(Vector2 orig, Vector2 dest, Vector2 helpPoint, float ratio)
