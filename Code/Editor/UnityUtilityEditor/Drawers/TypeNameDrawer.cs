@@ -13,24 +13,20 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (fieldInfo.FieldType.GetTypeCode() != TypeCode.String)
+            if (EditorScriptUtility.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.String)
             {
                 EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(TypeNameAttribute)} only with strings.");
                 return;
             }
 
-            if (GetAttribute().TargetType.IsValueType)
-            {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, "Base type cannot be value type.");
-                return;
-            }
-
             if (property.stringValue.IsNullOrWhiteSpace())
-                property.stringValue = GetAttribute().TargetType.GetTypeName();
+                property.stringValue = f_GetAttribute().TargetType.GetTypeName();
 
             EditorGUI.LabelField(position, label);
             f_drawSelectionButton(position, property);
         }
+
+
 
         private void f_drawSelectionButton(Rect position, SerializedProperty property)
         {
@@ -50,7 +46,7 @@ namespace UnityUtilityEditor.Drawers
             string shortName = savedType.IsAbstract ? $"Type name of {savedType.Name} (Abstract)" : "Type name of " + savedType.Name;
             string toolTip = savedType.GetTypeName();
 
-            if (GetAttribute().TargetType == savedType)
+            if (f_GetAttribute().TargetType == savedType)
                 GUI.color = Colours.Yellow;
 
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
@@ -70,7 +66,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 context.AddItem(new GUIContent("Base"), false, initByBase);
 
-                foreach (Type type in TypeCache.GetTypesDerivedFrom(GetAttribute().TargetType))
+                foreach (Type type in TypeCache.GetTypesDerivedFrom(f_GetAttribute().TargetType))
                 {
                     string entryName = type.GetTypeName();
                     context.AddItem(new GUIContent(entryName), false, initByInstance, entryName);
@@ -78,17 +74,17 @@ namespace UnityUtilityEditor.Drawers
 
                 void initByBase()
                 {
-                    AssignField(property, GetAttribute().TargetType.GetTypeName());
+                    f_assignField(property, f_GetAttribute().TargetType.GetTypeName());
                 }
 
                 void initByInstance(object typeName)
                 {
-                    AssignField(property, (string)typeName);
+                    f_assignField(property, (string)typeName);
                 }
             }
         }
 
-        private static void AssignField(SerializedProperty property, string newValue)
+        private static void f_assignField(SerializedProperty property, string newValue)
         {
             property.serializedObject.Update();
             property.stringValue = newValue;
@@ -96,7 +92,7 @@ namespace UnityUtilityEditor.Drawers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private TypeNameAttribute GetAttribute()
+        private TypeNameAttribute f_GetAttribute()
         {
             return attribute as TypeNameAttribute;
         }

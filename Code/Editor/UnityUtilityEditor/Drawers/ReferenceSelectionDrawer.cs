@@ -12,15 +12,15 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (fieldInfo.FieldType.IsValueType)
+            if (EditorScriptUtility.GetFieldType(fieldInfo).IsValueType)
             {
                 EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(ReferenceSelectionAttribute)} only with reference types.");
                 return;
             }
 
-            EditorGUI.BeginProperty(position, label, property);
+            label = EditorGUI.BeginProperty(position, label, property);
             f_drawSelectionButton(position, property);
-            EditorGUI.PropertyField(position, property, true);
+            EditorGUI.PropertyField(position, property, label, true);
             EditorGUI.EndProperty();
         }
 
@@ -96,17 +96,17 @@ namespace UnityUtilityEditor.Drawers
 
                 void initByNull()
                 {
-                    AssignField(property, null);
+                    f_assignField(property, null);
                 }
 
                 void initByInstance(object typeAsObject)
                 {
-                    AssignField(property, Activator.CreateInstance((Type)typeAsObject));
+                    f_assignField(property, Activator.CreateInstance((Type)typeAsObject));
                 }
             }
         }
 
-        private static void AssignField(SerializedProperty property, object newValue)
+        private static void f_assignField(SerializedProperty property, object newValue)
         {
             property.serializedObject.Update();
             property.managedReferenceValue = newValue;

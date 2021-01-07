@@ -22,15 +22,16 @@ namespace UnityUtilityEditor.Drawers
 
             public Data(SerializedProperty property, PropertyDrawer drawer)
             {
+                Type type = EditorScriptUtility.GetFieldType(drawer.fieldInfo);
                 Array values;
 
-                if (drawer.fieldInfo.FieldType == typeof(BitArrayMask))
+                if (type == typeof(BitArrayMask))
                 {
                     m_label = new GUIContent(property.displayName);
                     values = Enum.GetValues((drawer.attribute as DrawBitMaskAttribute).EnumType);
                     m_array = true;
                 }
-                else if (drawer.fieldInfo.FieldType.GetTypeCode() == TypeCode.Int32)
+                else if (type.GetTypeCode() == TypeCode.Int32)
                 {
                     values = Enum.GetValues((drawer.attribute as DrawBitMaskAttribute).EnumType);
 

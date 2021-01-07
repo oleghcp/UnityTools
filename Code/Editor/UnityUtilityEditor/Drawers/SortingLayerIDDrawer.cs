@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (m_layers == null)
             {
-                if (property.propertyType != SerializedPropertyType.Integer)
+                if (EditorScriptUtility.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.Int32)
                 {
                     EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(SortingLayerIDAttribute)} with int.");
                     return;

@@ -10,11 +10,7 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Type type = fieldInfo.FieldType;
-            Type soType = typeof(ScriptableObject);
-            bool canDraw = type.Is(soType) || (type.IsArray && type.GetElementType().Is(soType));
-
-            if (!canDraw)
+            if (!EditorScriptUtility.GetFieldType(fieldInfo).Is(typeof(ScriptableObject)))
             {
                 EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
                 return;
@@ -26,7 +22,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 Rect foldPos = position;
 
-                if (type.IsArray)
+                if (fieldInfo.FieldType.IsArray)
                     foldPos.x += 16f;
 
                 foldPos.width -= EditorGUI.PrefixLabel(position, label).width;

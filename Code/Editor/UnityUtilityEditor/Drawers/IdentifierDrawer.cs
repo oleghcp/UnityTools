@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (fieldInfo.FieldType.GetTypeCode() != TypeCode.String)
+            if (EditorScriptUtility.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.String)
             {
                 EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(IdentifierAttribute)} with String.");
                 return;

@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
 
@@ -7,6 +9,12 @@ namespace UnityUtilityEditor
     internal static class EditorScriptUtility
     {
         public const string CATEGORY = nameof(UnityUtility);
+
+        public static Type GetFieldType(FieldInfo fieldInfo)
+        {
+            return fieldInfo.FieldType.IsArray ? fieldInfo.FieldType.GetElementType()
+                                               : fieldInfo.FieldType;
+        }
 
         public static bool DrawCenterButton(string text, float w, float h)
         {

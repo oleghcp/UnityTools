@@ -13,12 +13,14 @@ namespace UnityUtilityEditor.Drawers
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            Type type = EditorScriptUtility.GetFieldType(fieldInfo);
+
             DiapasonAttribute a = attribute as DiapasonAttribute;
 
             SerializedProperty min = property.FindPropertyRelative("x");
             SerializedProperty max = property.FindPropertyRelative("y");
 
-            if (fieldInfo.FieldType.Is(typeof(Vector2)))
+            if (type.Is(typeof(Vector2)))
             {
                 var array = new[] { min.floatValue, max.floatValue };
                 position = EditorGUI.PrefixLabel(position, label);
@@ -28,7 +30,7 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-            if (fieldInfo.FieldType.Is(typeof(Vector2Int)))
+            if (type.Is(typeof(Vector2Int)))
             {
                 var array = new[] { min.intValue, max.intValue };
                 position = EditorGUI.PrefixLabel(position, label);
