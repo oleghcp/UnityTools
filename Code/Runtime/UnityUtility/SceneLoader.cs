@@ -20,16 +20,23 @@ namespace UnityUtility
         public static event Action Loaded_Event;
 
         private static T s_sceneInfo;
-        private static int s_sceneLoaderIndex;
+        private static int s_sceneLoaderIndex = -1;
         private static ILoadDependency s_configurator;
 
         public static T SceneInfo => s_sceneInfo;
 
         protected static void SetUp(string transitionalSceneName = "SceneLoader")
         {
+            if (s_sceneLoaderIndex >= 0)
+                return;
+
             s_sceneLoaderIndex = SceneUtility.GetBuildIndexByScenePath(transitionalSceneName);
 
-            SceneManager.sceneUnloaded += scene => Unloaded_Event?.Invoke();
+            SceneManager.sceneUnloaded += scene =>
+            {
+                if (scene.buildIndex != s_sceneLoaderIndex)
+                    Unloaded_Event?.Invoke();
+            };
 
             SceneManager.sceneLoaded += (scene, _) =>
             {
