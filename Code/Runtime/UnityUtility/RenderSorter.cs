@@ -8,9 +8,5 @@ namespace UnityUtility
     {
         [SerializeField, HideInInspector]
         private Renderer _renderer;
-        [SerializeField, SortingLayerID]
-        private int _sortingLayer;
-        [SerializeField]
-        private int _sortingOrder;
     }
 }
