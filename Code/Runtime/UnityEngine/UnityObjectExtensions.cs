@@ -560,5 +560,17 @@ namespace UnityEngine
         {
             self.SetSiblingIndex(self.GetSiblingIndex() + moveValue);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetOrthographicSize(this Camera self)
+        {
+            return ScreenUtility.GetCameraViewRadius(self.orthographicSize);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetPerspectiveSize(this Camera self, float distance)
+        {
+            return ScreenUtility.GetCameraViewRadius(self.fieldOfView, distance);
+        }
     }
 }
