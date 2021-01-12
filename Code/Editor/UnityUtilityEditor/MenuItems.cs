@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityUtilityEditor.Window;
-using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
 {
@@ -190,21 +188,5 @@ namespace Project
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyClass.cs");
         }
 #endif
-
-        [OnOpenAsset]
-        private static bool OpenScriptableObjectClass(int instanceID, int _)
-        {
-            UnityObject obj = EditorUtility.InstanceIDToObject(instanceID);
-
-            if (obj is ScriptableObject)
-            {
-                SerializedObject serializedObject = new SerializedObject(obj);
-                SerializedProperty prop = serializedObject.FindProperty("m_Script");
-                string filePath = AssetDatabase.GetAssetPath(prop.objectReferenceValue);
-                System.Diagnostics.Process.Start("devenv", "/edit " + filePath);
-            }
-
-            return false;
-        }
     }
 }
