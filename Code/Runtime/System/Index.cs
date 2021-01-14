@@ -105,21 +105,30 @@ namespace System
         }
 
         /// <summary>Indicates whether the current Index object is equal to another object of the same type.</summary>
-        /// <param name="value">An object to compare with this object</param>
-        public override bool Equals(object value)
+        /// <param name="other">An object to compare with this object</param>
+        public override bool Equals(object other)
         {
-            return value != null && value is Index && _value == ((Index)value)._value;
+            return other is Index index && Equals(index);
         }
 
         /// <summary>Indicates whether the current Index object is equal to another Index object.</summary>
         /// <param name="other">An object to compare with this object</param>
-        public bool Equals(Index other) => _value == other._value;
+        public bool Equals(Index other)
+        {
+            return _value == other._value;
+        }
 
         /// <summary>Returns the hash code for this instance.</summary>
-        public override int GetHashCode() => _value;
+        public override int GetHashCode()
+        {
+            return _value;
+        }
 
         /// <summary>Converts integer number to an Index.</summary>
-        public static implicit operator Index(int value) => FromStart(value);
+        public static implicit operator Index(int value)
+        {
+            return FromStart(value);
+        }
 
         /// <summary>Converts the value of the current Index object to its equivalent string representation.</summary>
         public override string ToString()
