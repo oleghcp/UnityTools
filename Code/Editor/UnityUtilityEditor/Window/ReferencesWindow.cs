@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Window
 
         public static void Create(string targetObjectGuid, List<object> referingObjectGuids)
         {
-            ReferencesWindow window = GetWindow<ReferencesWindow>("References");
+            ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
             window.m_target = EditorUtilityExt.LoadAssetByGuid(targetObjectGuid);
             window.m_objects = referingObjectGuids.Select(itm => EditorUtilityExt.LoadAssetByGuid(itm.ToString())).ToArray();
