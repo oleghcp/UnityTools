@@ -95,12 +95,9 @@ namespace UnityUtility.NumericEntities
                     m_curValue = m_curValue.CutAfter(m_capacity);
                     break;
 
-                case ResizeType.Increase:
-                    m_capacity += value;
-                    break;
-
-                case ResizeType.Decrease:
-                    m_capacity -= value.CutAfter(m_capacity);
+                case ResizeType.Delta:
+                    int newValue = m_capacity += value;
+                    m_capacity = newValue.CutBefore(0);
                     m_curValue = m_curValue.CutAfter(m_capacity);
                     break;
 

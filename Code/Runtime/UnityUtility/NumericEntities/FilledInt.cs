@@ -95,12 +95,8 @@ namespace UnityUtility.NumericEntities
                     m_threshold = value;
                     break;
 
-                case ResizeType.Increase:
-                    m_threshold += value;
-                    break;
-
-                case ResizeType.Decrease:
-                    m_threshold -= value.Clamp(0, m_threshold);
+                case ResizeType.Delta:
+                    m_threshold = (m_threshold + value).CutBefore(0);
                     break;
 
                 default:

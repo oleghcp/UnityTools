@@ -1,6 +1,6 @@
-﻿using UnityUtility.MathExt;
-using System;
+﻿using System;
 using UnityEngine;
+using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
@@ -95,12 +95,8 @@ namespace UnityUtility.NumericEntities
                     m_threshold = value;
                     break;
 
-                case ResizeType.Increase:
-                    m_threshold += value;
-                    break;
-
-                case ResizeType.Decrease:
-                    m_threshold -= value.Clamp(0f, m_threshold);
+                case ResizeType.Delta:
+                    m_threshold = (m_threshold + value).CutBefore(0f);
                     break;
 
                 default:
