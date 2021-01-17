@@ -86,12 +86,11 @@ namespace UnityUtility.NumericEntities
 
         public void Resize(float value, ResizeType resizeType = ResizeType.NewValue)
         {
-            if (value < 0f)
-                throw Errors.NegativeParameter(nameof(value));
-
             switch (resizeType)
             {
                 case ResizeType.NewValue:
+                    if (value < 0f)
+                        throw Errors.NegativeParameter(nameof(value));
                     m_threshold = value;
                     break;
 
