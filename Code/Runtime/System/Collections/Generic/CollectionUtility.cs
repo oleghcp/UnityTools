@@ -33,6 +33,18 @@ namespace System.Collections.Generic
             }
         }
 
+        public static T GetRandomItem<T>(IList<T> collection, IRng generator)
+        {
+            int index = generator.Next(collection.Count);
+            return collection[index];
+        }
+
+        public static T GetRandomItem<T>(IList<T> collection)
+        {
+            int index = UnityEngine.Random.Range(0, collection.Count);
+            return collection[index];
+        }
+
         public static void QuickSort<T>(IList<T> array, int left, int right, Comparison<T> comparison)
         {
             int i = left, j = right;

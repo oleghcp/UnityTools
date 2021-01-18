@@ -287,6 +287,18 @@ namespace System.Collections.Generic
             CollectionUtility.Shuffle(self);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetRandom<T>(this IList<T> self, IRng generator)
+        {
+            return CollectionUtility.GetRandomItem(self, generator);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetRandom<T>(this IList<T> self)
+        {
+            return CollectionUtility.GetRandomItem(self);
+        }
+
         /// <summary>
         /// Finds an element by condition.
         /// </summary>        
