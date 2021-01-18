@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -13,8 +12,6 @@ namespace UnityUtility.Async
         private RoutineIterator m_iterator;
         private Queue<IEnumerator> m_queue;
         private TaskFactory m_owner;
-
-        private Action m_update;
 
         private long m_id;
 
@@ -32,12 +29,6 @@ namespace UnityUtility.Async
         {
             m_iterator = new RoutineIterator(this);
             m_queue = new Queue<IEnumerator>();
-
-            m_update = () =>
-            {
-                if (m_iterator.IsEmpty && m_queue.Count == 0)
-                    m_owner.Release(this);
-            };
         }
 
         public void SetUp(TaskFactory owner)
@@ -51,7 +42,6 @@ namespace UnityUtility.Async
 
         private void OnDestroy()
         {
-            ApplicationUtility.OnUpdate_Event -= m_update;
             if (m_owner.CanBeStoppedGlobally)
                 m_owner.StopTasks_Event -= OnGloballyStoped;
         }
@@ -115,9 +105,7 @@ namespace UnityUtility.Async
         private void OnGloballyStoped()
         {
             if (m_id == 0L)
-            {
                 return;
-            }
 
             Stop();
         }
@@ -130,15 +118,13 @@ namespace UnityUtility.Async
             }
             else
             {
-                m_iterator.Reset();
-                m_id = 0L;
+                m_owner.Release(this);
             }
         }
 
         private void f_init()
         {
-            m_id = m_owner.GetNewId();
-            ApplicationUtility.OnUpdate_Event += m_update;
+            m_id = m_owner.IdProvider.GetNewId();
         }
 
         private void f_runAsync(IEnumerator routine)
@@ -162,7 +148,8 @@ namespace UnityUtility.Async
 
         void IPoolable.CleanUp()
         {
-            ApplicationUtility.OnUpdate_Event -= m_update;
+            m_iterator.Reset();
+            m_id = 0L;
         }
         #endregion
     }

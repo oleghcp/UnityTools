@@ -35,6 +35,11 @@ namespace UnityUtility.Async
             get { return m_canBeStoppedGlobally; }
         }
 
+        public IIdGenerator<long> IdProvider
+        {
+            get { return m_idProvider; }
+        }
+
         public TaskFactory(IAsyncSettings settings, IIdGenerator<long> idProvider, bool doNotDestroyOnLoad)
         {
             m_canBeStopped = settings.CanBeStopped;
@@ -61,21 +66,12 @@ namespace UnityUtility.Async
         public void RegisterStopper(ITaskStopper stopper)
         {
             if (!m_canBeStoppedGlobally)
-            {
                 throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {TaskSystem.SYSTEM_NAME} settings.");
-            }
 
             if (m_stopper != null)
-            {
                 throw new InvalidOperationException("Stoping object is already set.");
-            }
 
             (m_stopper = stopper).StopAllTasks_Event += () => StopTasks_Event?.Invoke();
-        }
-
-        public long GetNewId()
-        {
-            return m_idProvider.GetNewId();
         }
 
         public void Release(RoutineRunner runner)
