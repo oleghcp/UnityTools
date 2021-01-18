@@ -9,6 +9,7 @@ namespace UnityUtility.Async
 
         private IEnumerator m_curRoutine;
         private bool m_isPaused;
+        private bool m_isStopped;
         private CancellationToken m_token;
 
         internal bool IsEmpty
@@ -41,10 +42,16 @@ namespace UnityUtility.Async
             m_isPaused = value;
         }
 
+        internal void Stop()
+        {
+            m_isStopped = true;
+        }
+
         public void Reset()
         {
             m_curRoutine = null;
             m_isPaused = false;
+            m_isStopped = false;
             m_token = default;
         }
 
@@ -55,9 +62,15 @@ namespace UnityUtility.Async
 
         bool IEnumerator.MoveNext()
         {
+            if (m_isStopped)
+            {
+                m_owner.OnCoroutineInterrupted(false);
+                return false;
+            }
+
             if (m_token.IsCancellationRequested)
             {
-                m_owner.Stop();
+                m_owner.OnCoroutineInterrupted(true);
                 return false;
             }
 

@@ -34,7 +34,7 @@ namespace UnityUtility.Async
         public void SetUp(TaskFactory owner)
         {
             m_owner = owner;
-            f_init();
+            m_id = m_owner.IdProvider.GetNewId();
 
             if (m_owner.CanBeStoppedGlobally)
                 m_owner.StopTasks_Event += OnGloballyStoped;
@@ -50,7 +50,8 @@ namespace UnityUtility.Async
 
         public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token)
         {
-            f_runAsync(routine, token);
+            m_iterator.AddToken(token);
+            f_runAsync(routine);
             return new TaskInfo(this);
         }
 
@@ -68,63 +69,48 @@ namespace UnityUtility.Async
         {
             m_queue.Enqueue(routine);
 
-            if (m_iterator.IsEmpty && m_queue.Count > 0)
-            {
+            if (m_iterator.IsEmpty)
                 f_runAsync(m_queue.Dequeue());
-            }
         }
 
         public void SkipCurrent()
         {
-            if (!m_owner.CanBeStopped)
-                throw Errors.CannotStopTask();
-
-            StopAllCoroutines();
-            f_onCoroutineEnded();
+            m_iterator.Stop();
         }
 
         public void Stop()
         {
-            if (!m_owner.CanBeStopped)
-                throw Errors.CannotStopTask();
-
-            StopAllCoroutines();
             m_queue.Clear();
-            f_onCoroutineEnded();
+            m_iterator.Stop();
         }
 
         // - - //
 
         public void OnCoroutineEnded()
         {
-            f_onCoroutineEnded();
+            if (m_queue.Count > 0)
+                f_runAsync(m_queue.Dequeue());
+            else
+                m_owner.Release(this);
+        }
+
+        public void OnCoroutineInterrupted(bool byToken)
+        {
+            if (!m_owner.CanBeStopped)
+                throw Errors.CannotStopTask();
+
+            if (byToken)
+                m_queue.Clear();
+
+            OnCoroutineEnded();
         }
 
         // - - //
 
         private void OnGloballyStoped()
         {
-            if (m_id == 0L)
-                return;
-
-            Stop();
-        }
-
-        private void f_onCoroutineEnded()
-        {
-            if (m_queue.Count > 0)
-            {
-                f_runAsync(m_queue.Dequeue());
-            }
-            else
-            {
-                m_owner.Release(this);
-            }
-        }
-
-        private void f_init()
-        {
-            m_id = m_owner.IdProvider.GetNewId();
+            if (m_id != 0L)
+                Stop();
         }
 
         private void f_runAsync(IEnumerator routine)
@@ -133,23 +119,16 @@ namespace UnityUtility.Async
             StartCoroutine(m_iterator);
         }
 
-        private void f_runAsync(IEnumerator routine, CancellationToken token)
-        {
-            m_iterator.AddToken(token);
-            m_iterator.Fill(routine);
-            StartCoroutine(m_iterator);
-        }
-
         #region IPoolable
         void IPoolable.Reinit()
         {
-            f_init();
+            m_id = m_owner.IdProvider.GetNewId();
         }
 
         void IPoolable.CleanUp()
         {
-            m_iterator.Reset();
             m_id = 0L;
+            m_iterator.Reset();
         }
         #endregion
     }
