@@ -12,7 +12,7 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static (int min, int max) ToMinMaxTuple(this in Vector2Int self)
+        public static (int from, int before) ToMinMaxTuple(this in Vector2Int self)
         {
             return (self.x, self.y);
         }
