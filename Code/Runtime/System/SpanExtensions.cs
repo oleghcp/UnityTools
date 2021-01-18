@@ -59,12 +59,18 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void Sort<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
+            if (self.IsEmpty)
+                return;
+
             UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void Sort<T>(this in Span<T> self, Comparison<T> comparer) where T : unmanaged
         {
+            if (self.IsEmpty)
+                return;
+
             UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1, comparer);
         }
 

@@ -18,16 +18,7 @@ namespace System
         public bool IsEmpty => _length == 0;
         public int Length => _length;
 
-        internal T* Ptr
-        {
-            get
-            {
-                if (_ptr == null)
-                    throw new NullReferenceException("Span pointer is null.");
-
-                return _ptr;
-            }
-        }
+        internal T* Ptr => _ptr;
 
         public ref T this[int index]
         {
@@ -45,14 +36,11 @@ namespace System
 
         public Span(void* ptr, int length)
         {
-            if (ptr == null)
-                throw new ArgumentNullException("Pointer cannot be null.");
-
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
 
             _ptr = (T*)ptr;
-            _length = length;
+            _length = ptr == null ? 0 : length;
         }
 
         public void Clear()
