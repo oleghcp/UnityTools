@@ -59,6 +59,61 @@ namespace System
             }
         }
 
+        public void CopyTo(Span<T> destination)
+        {
+            if (_length > destination.Length)
+                throw new ArgumentException("Destination too short.");
+
+            for (int i = 0; i < _length; i++)
+            {
+                destination[i] = _ptr[i];
+            }
+        }
+
+        public bool TryCopyTo(Span<T> destination)
+        {
+            if ((uint)_length <= (uint)destination.Length)
+            {
+                for (int i = 0; i < _length; i++)
+                {
+                    destination[i] = _ptr[i];
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public T[] ToArray()
+        {
+            T[] newArray = new T[_length];
+
+            for (int i = 0; i < _length; i++)
+            {
+                newArray[i] = _ptr[i];
+            }
+
+            return newArray;
+        }
+
+        public Span<T> Slice(int startIndex, int length)
+        {
+            if (startIndex < 0 || startIndex >= _length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + length > _length)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            return new Span<T>(_ptr + startIndex, length);
+        }
+
+        public Span<T> Slice(int startIndex)
+        {
+            if (startIndex < 0 || startIndex >= _length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            return new Span<T>(_ptr + startIndex, _length - startIndex);
+        }
+
         #region Regular stuff
         public Enumerator GetEnumerator()
         {

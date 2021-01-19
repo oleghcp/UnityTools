@@ -7,21 +7,6 @@ namespace System
 {
     public static class SpanExtensions
     {
-        public static T[] ToArray<T>(this in Span<T> self) where T : unmanaged
-        {
-            if (self == null)
-                throw new ArgumentNullException();
-
-            T[] newArray = new T[self.Length];
-
-            for (int i = 0; i < self.Length; i++)
-            {
-                newArray[i] = self[i];
-            }
-
-            return newArray;
-        }
-
         public static List<T> ToList<T>(this in Span<T> self) where T : unmanaged
         {
             List<T> dest = new List<T>(self.Length * 2);
