@@ -39,25 +39,25 @@ namespace System.Collections.Generic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMinRef<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector) where TKey : class, IComparable<TKey>
         {
-            return CollectionUtility.RefTypes.Min(collection, selector, out _);
+            return CollectionUtility.Min(collection, selector, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMaxRef<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector) where TKey : class, IComparable<TKey>
         {
-            return CollectionUtility.RefTypes.Max(collection, selector, out _);
+            return CollectionUtility.Max(collection, selector, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMinValue<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            return CollectionUtility.ValueTypes.Min(collection, selector, out _);
+            return CollectionUtility.Min(collection, selector, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMaxValue<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
-            return CollectionUtility.ValueTypes.Max(collection, selector, out _);
+            return CollectionUtility.Max(collection, selector, out _);
         }
 
         public static T GetRandomItem<T>(IReadOnlyList<T> collection, IRng generator)

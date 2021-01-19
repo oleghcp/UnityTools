@@ -196,14 +196,5 @@ namespace UnityUtilityTools
                 default: throw new UnsupportedValueException(type.GetTypeCode());
             }
         }
-
-        public static int Compare<T>(T a, T b) where T : class, IComparable<T>
-        {
-            if (a != null)
-                return a.CompareTo(b);
-            if (b != null)
-                return -b.CompareTo(a);
-            return 0;
-        }
     }
 }

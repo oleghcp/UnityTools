@@ -8,6 +8,56 @@ namespace System.Collections.Generic
     public static class CollectionExtensions
     {
         /// <summary>
+        /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
+        /// </summary>        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<T>(this T[] self) where T : IComparable<T>
+        {
+            Array.Sort(self);
+        }
+
+        /// <summary>
+        /// Sorts by comparison.
+        /// </summary>
+        /// <param name="comparer">Reference to comparing function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<T>(this T[] self, Comparison<T> comparer)
+        {
+            Array.Sort(self, comparer);
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>                
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
+        {
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            Array.Sort(self, (itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>                
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void Sort<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector)
+        {
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            self.Sort((itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>                
+        /// <param name="keySelector">Reference to selecting function.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
+        {
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, (itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
+        }
+
+        /// <summary>
         /// Returns an index of the first entrance of the specified element or -1 if the element is not found.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,6 +87,42 @@ namespace System.Collections.Generic
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the minimum parameter value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector)
+        {
+            return CollectionUtility.Min(self, selector, out _);
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the maximum parameter value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector)
+        {
+            return CollectionUtility.Max(self, selector, out _);
+        }
+
+        /// <summary>
+        /// Returns an element with the minimum parameter value.
+        /// </summary>
+        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector)
+        {
+            CollectionUtility.Min(self, selector, out TSource res);
+            return res;
+        }
+
+        /// <summary>
+        /// Returns an element with the maximum parameter value.
+        /// </summary>
+        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector)
+        {
+            CollectionUtility.Max(self, selector, out TSource res);
+            return res;
         }
 
         /// <summary>
@@ -248,25 +334,6 @@ namespace System.Collections.Generic
             {
                 target[i] = self[i + index];
             }
-        }
-
-        /// <summary>
-        /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
-        /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Sort<T>(this T[] self) where T : IComparable<T>
-        {
-            Array.Sort(self);
-        }
-
-        /// <summary>
-        /// Sorts by comparison.
-        /// </summary>
-        /// <param name="comparer">Reference to comparing function.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Sort<T>(this T[] self, Comparison<T> comparer)
-        {
-            Array.Sort(self, comparer);
         }
 
         /// <summary>
