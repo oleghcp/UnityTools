@@ -7,6 +7,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of an element with the minimum parameter value.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
             return CollectionUtility.ValueTypes.Min(self, selector, out _);
@@ -15,6 +16,7 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of an element with the maximum parameter value.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector) where TKey : struct, IComparable<TKey>
         {
             return CollectionUtility.ValueTypes.Max(self, selector, out _);

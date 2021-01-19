@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using UnityUtility;
 
 namespace System.Collections.Generic
@@ -6,6 +7,11 @@ namespace System.Collections.Generic
     public static class ReadOnlyCollections
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOf<T>(ReadOnlyCollection<T> collection, T item)
+        {
+            return collection.IndexOf(item);
+        }
+
         public static int IndexOf<T>(IReadOnlyList<T> collection, T item)
         {
             EqualityComparer<T> comparer = EqualityComparer<T>.Default;
@@ -65,7 +71,5 @@ namespace System.Collections.Generic
             int index = UnityEngine.Random.Range(0, collection.Count);
             return collection[index];
         }
-
-
     }
 }
