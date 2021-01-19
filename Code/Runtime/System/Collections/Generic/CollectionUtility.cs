@@ -1,12 +1,71 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using UnityUtility;
 using UnityUtilityTools;
 
 namespace System.Collections.Generic
 {
-    internal static class CollectionUtility
+    public static class CollectionUtility
     {
-        public static void Shuffle<T>(IList<T> collection, IRng generator)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOf<T>(ReadOnlyCollection<T> collection, T item)
+        {
+            return collection.IndexOf(item);
+        }
+
+        public static int IndexOf<T>(IReadOnlyList<T> collection, T item)
+        {
+            EqualityComparer<T> comparer = EqualityComparer<T>.Default;
+
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (comparer.Equals(collection[i], item))
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public static int IndexOf<T>(IReadOnlyList<T> collection, Predicate<T> condition)
+        {
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (condition(collection[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfMin<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector)
+        {
+            return Min(collection, selector, out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfMax<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector)
+        {
+            return Max(collection, selector, out _);
+        }
+
+        public static T GetRandomItem<T>(IReadOnlyList<T> collection, IRng generator)
+        {
+            int index = generator.Next(collection.Count);
+            return collection[index];
+        }
+
+        public static T GetRandomItem<T>(IReadOnlyList<T> collection)
+        {
+            int index = UnityEngine.Random.Range(0, collection.Count);
+            return collection[index];
+        }
+
+        ///////////////
+        // Internals //
+        ///////////////
+
+        internal static void Shuffle<T>(IList<T> collection, IRng generator)
         {
             int last = collection.Count;
 
@@ -20,7 +79,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public static void Shuffle<T>(IList<T> collection)
+        internal static void Shuffle<T>(IList<T> collection)
         {
             int last = collection.Count;
 
@@ -34,25 +93,25 @@ namespace System.Collections.Generic
             }
         }
 
-        public static T GetRandomItem<T>(IList<T> collection, IRng generator)
+        internal static T GetRandomItem<T>(IList<T> collection, IRng generator)
         {
             int index = generator.Next(collection.Count);
             return collection[index];
         }
 
-        public static T GetRandomItem<T>(IList<T> collection)
+        internal static T GetRandomItem<T>(IList<T> collection)
         {
             int index = UnityEngine.Random.Range(0, collection.Count);
             return collection[index];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void QuickSort<T>(IList<T> array, int left, int right, Comparer<T> comparer)
+        internal static void QuickSort<T>(IList<T> array, int left, int right, Comparer<T> comparer)
         {
             QuickSort(array, left, right, comparer.Compare);
         }
 
-        public static void QuickSort<T>(IList<T> array, int left, int right, Comparison<T> comparison)
+        internal static void QuickSort<T>(IList<T> array, int left, int right, Comparison<T> comparison)
         {
             int i = left, j = right;
             T pivot = array[(left + right) / 2];
@@ -80,7 +139,7 @@ namespace System.Collections.Generic
                 QuickSort(array, i, right, comparison);
         }
 
-        public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
+        internal static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
         {
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));
@@ -126,7 +185,7 @@ namespace System.Collections.Generic
             throw Errors.NoElements();
         }
 
-        public static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
+        internal static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
         {
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));
