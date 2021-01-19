@@ -106,7 +106,7 @@ namespace System.Collections.Generic
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void QuickSort<T>(IList<T> array, int left, int right, Comparer<T> comparer)
+        internal static void QuickSort<T>(IList<T> array, int left, int right, IComparer<T> comparer)
         {
             QuickSort(array, left, right, comparer.Compare);
         }
