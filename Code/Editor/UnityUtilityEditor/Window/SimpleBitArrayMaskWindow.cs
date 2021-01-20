@@ -93,7 +93,7 @@ namespace UnityUtilityEditor.Window
 
         private void f_checkArray()
         {
-            int len = BitArrayMask.GetArrayLength(m_length.intValue);
+            int len = BitArrayMask.GetArraySize(m_length.intValue);
             int size = m_array.arraySize;
 
             if (len > size)
