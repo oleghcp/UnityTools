@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityUtilityTools;
@@ -37,6 +38,7 @@ namespace UnityUtility.Collections
         public int Length
         {
             get { return m_length; }
+            set { f_setLength(value); }
         }
 
         public int Version
@@ -168,17 +170,16 @@ namespace UnityUtility.Collections
             }
         }
 
-        private BitArrayMask(int[] values)
+        private BitArrayMask(ICollection<int> values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            if (values.Length > 67108863)
+            if (values.Count > 67108863)
                 throw new ArgumentException("Array is too large.", nameof(values));
 
-            m_array = new int[values.Length];
-            m_length = values.Length * BitMask.SIZE;
-            Array.Copy(values, m_array, values.Length);
+            m_length = values.Count * BitMask.SIZE;
+            m_array = values.ToArray();
         }
 
         public BitArrayMask(BitArrayMask bits)
@@ -191,33 +192,6 @@ namespace UnityUtility.Collections
             m_length = bits.m_length;
             Array.Copy(bits.m_array, m_array, arrayLength);
             m_version = bits.m_version;
-        }
-
-        public void SetLength(int value)
-        {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "Value cannot be negative.");
-
-            int newArraySize = GetArraySize(value);
-
-            if (newArraySize > m_array.Length || newArraySize + 256 < m_array.Length)
-            {
-                Array.Resize(ref m_array, newArraySize);
-            }
-
-            if (value > m_length)
-            {
-                int num = GetArraySize(m_length) - 1;
-                int num2 = m_length % BitMask.SIZE;
-                if (num2 > 0)
-                {
-                    m_array[num] &= (1 << num2) - 1;
-                }
-                Array.Clear(m_array, num + 1, newArraySize - num - 1);
-            }
-
-            m_length = value;
-            m_version++;
         }
 
         public bool Get(int index)
@@ -414,10 +388,36 @@ namespace UnityUtility.Collections
             };
         }
 
-
         internal static int GetArraySize(int bitsCount)
         {
             return bitsCount > 0 ? (bitsCount - 1) / BitMask.SIZE + 1 : 0;
+        }
+
+        private void f_setLength(int value)
+        {
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value), "Value cannot be negative.");
+
+            int newArraySize = GetArraySize(value);
+
+            if (newArraySize > m_array.Length || newArraySize + 256 < m_array.Length)
+            {
+                Array.Resize(ref m_array, newArraySize);
+            }
+
+            if (value > m_length)
+            {
+                int num = GetArraySize(m_length) - 1;
+                int num2 = m_length % BitMask.SIZE;
+                if (num2 > 0)
+                {
+                    m_array[num] &= (1 << num2) - 1;
+                }
+                Array.Clear(m_array, num + 1, newArraySize - num - 1);
+            }
+
+            m_length = value;
+            m_version++;
         }
 
         // -- //
