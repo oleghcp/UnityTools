@@ -375,15 +375,27 @@ namespace System.Collections.Generic
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T GetRandom<T>(this IList<T> self, IRng generator)
+        public static T GetRandomItem<T>(this IList<T> self, IRng generator)
         {
             return CollectionUtility.GetRandomItem(self, generator);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T GetRandom<T>(this IList<T> self)
+        public static T GetRandomItem<T>(this IList<T> self)
         {
             return CollectionUtility.GetRandomItem(self);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T PullOutRandomItem<T>(this IList<T> self, IRng generator)
+        {
+            return CollectionUtility.PullOutRandomItem(self, generator);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T PullOutRandomItem<T>(this IList<T> self)
+        {
+            return CollectionUtility.PullOutRandomItem(self);
         }
 
         /// <summary>

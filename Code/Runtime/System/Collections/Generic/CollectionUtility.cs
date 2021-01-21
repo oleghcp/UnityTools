@@ -105,6 +105,18 @@ namespace System.Collections.Generic
             return collection[index];
         }
 
+        internal static T PullOutRandomItem<T>(IList<T> collection, IRng generator)
+        {
+            int index = generator.Next(collection.Count);
+            return collection.PullOut(index);
+        }
+
+        internal static T PullOutRandomItem<T>(IList<T> collection)
+        {
+            int index = UnityEngine.Random.Range(0, collection.Count);
+            return collection.PullOut(index);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void QuickSort<T>(IList<T> array, int left, int right, IComparer<T> comparer)
         {
