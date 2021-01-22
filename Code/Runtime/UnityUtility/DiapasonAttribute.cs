@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace UnityUtility
 {
+    [AttributeUsage(AttributeTargets.Field)]
     public class DiapasonAttribute : PropertyAttribute
     {
         public float MinValue { get; }

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.Code.Runtime.UnityUtility
+namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class TypeNameAttribute : PropertyAttribute
