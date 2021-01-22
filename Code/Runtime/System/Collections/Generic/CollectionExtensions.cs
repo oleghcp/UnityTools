@@ -409,6 +409,15 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
+        /// Performs the specified action on each element of the specified array.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void ForEach<T>(this T[] self, Action<T> action)
+        {
+            Array.ForEach(self, action);
+        }
+
+        /// <summary>
         /// Performs the specified action on each element of the System.Collections.Generic.IList`1.
         /// </summary>
         public static void ForEach<T>(this IList<T> self, Action<T> action)
