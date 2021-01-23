@@ -7,6 +7,18 @@ namespace UnityEditor
 {
     public static class UnityEditorExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ManagedReferenceValueIsNull(this SerializedProperty self)
+        {
+            return self.managedReferenceFullTypename.IsNullOrEmpty();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static (string AssemblyName, string ClassName) GetManagedReferenceTypeName(this SerializedProperty self)
+        {
+            return EditorUtilityExt.SplitSerializedPropertyTypename(self.managedReferenceFullTypename);
+        }
+
         public static void SortArray<T>(this SerializedProperty self, Func<SerializedProperty, T> selector)
         {
             Comparer<T> defComp = Comparer<T>.Default;

@@ -42,12 +42,22 @@ namespace UnityUtilityEditor.Drawers
             Color storedColor = GUI.color;
             EditorGUI.indentLevel = 0;
 
-            var (assemblyName, className) = EditorUtilityExt.SplitSerializedPropertyTypename(property.managedReferenceFullTypename);
+            bool isNull = property.ManagedReferenceValueIsNull();
 
-            bool isNull = className.IsNullOrEmpty();
+            string shortName;
+            string toolTip;
 
-            string shortName = isNull ? "Null" : PathUtility.GetName(className, '.');
-            string toolTip = isNull ? "Not assigned" : $"{className}  ({assemblyName})";
+            if (isNull)
+            {
+                shortName = "Null";
+                toolTip = "Not assigned";
+            }
+            else
+            {
+                var (assemblyName, className) = property.GetManagedReferenceTypeName();
+                shortName = PathUtility.GetName(className, '.');
+                toolTip = $"{className}  ({assemblyName})";
+            }
 
             if (isNull)
                 GUI.color = Colours.Cyan;
