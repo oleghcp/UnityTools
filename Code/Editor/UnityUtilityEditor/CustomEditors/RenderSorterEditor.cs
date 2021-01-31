@@ -5,25 +5,26 @@ using static UnityUtilityEditor.Drawers.SortingLayerIDDrawer;
 
 namespace UnityUtilityEditor.CustomEditors
 {
-    [CustomEditor(typeof(RenderSorter)), CanEditMultipleObjects]
+    [CustomEditor(typeof(RenderSorter))]
     internal class RenderSorterEditor : Editor
     {
-        private RenderSorter m_target;
         private Renderer m_renderer;
         private DrawTool m_drawer;
+        private SerializedObject m_serializedObject;
 
         private void Awake()
         {
-            m_target = target as RenderSorter;
+            SerializedProperty rendererProp = serializedObject.FindProperty("_renderer");
+            m_renderer = rendererProp.objectReferenceValue as Renderer;
+            m_serializedObject = new SerializedObject(m_renderer);
             m_drawer = new DrawTool();
 
-            SerializedProperty renderer = serializedObject.FindProperty("_renderer");
-            m_renderer = renderer.objectReferenceValue as Renderer;
+            RenderSorter sorter = target as RenderSorter;
 
-            if (m_renderer == null || m_renderer.gameObject != m_target.gameObject)
+            if (m_renderer == null || m_renderer.gameObject != sorter.gameObject)
             {
-                renderer.objectReferenceValue = m_renderer = m_target.GetComponent<Renderer>();
-                serializedObject.ApplyModifiedProperties();
+                rendererProp.objectReferenceValue = m_renderer = sorter.GetComponent<Renderer>();
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
 
@@ -35,7 +36,10 @@ namespace UnityUtilityEditor.CustomEditors
             m_renderer.sortingOrder = EditorGUILayout.IntField("Sorting Order", m_renderer.sortingOrder);
 
             if (EditorGUI.EndChangeCheck())
-                serializedObject.ApplyModifiedProperties();
+            {
+                Undo.RegisterCompleteObjectUndo(m_renderer, "Renderer sorting");
+                m_serializedObject.ApplyModifiedProperties();
+            }
         }
     }
 }
