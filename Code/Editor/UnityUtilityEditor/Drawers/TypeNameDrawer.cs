@@ -42,11 +42,29 @@ namespace UnityUtilityEditor.Drawers
 
             Type savedType = Type.GetType(property.stringValue);
 
-            string shortName = savedType.IsAbstract ? $"Type name of {savedType.Name} (Abstract)" : "Type name of " + savedType.Name;
-            string toolTip = savedType.GetTypeName();
+            string shortName;
+            string toolTip;
 
-            if (f_GetAttribute().TargetType == savedType)
-                GUI.color = Colours.Yellow;
+            if (savedType == null)
+            {
+                shortName = "Unknown";
+                toolTip = "TypeName is broken";
+                GUI.color = Colours.Red;
+            }
+            else if (savedType.IsAbstract)
+            {
+                shortName = $"Type name of {savedType.Name} (Abstract)";
+                toolTip = savedType.GetTypeName();
+                GUI.color = Colours.Orange;
+            }
+            else
+            {
+                shortName = "Type name of " + savedType.Name;
+                toolTip = savedType.GetTypeName();
+
+                if (f_GetAttribute().TargetType == savedType)
+                    GUI.color = Colours.Yellow;
+            }
 
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
                 f_showContextMenu(property);
