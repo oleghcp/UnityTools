@@ -13,6 +13,8 @@ namespace UnityEditor
 {
     public static class EditorUtilityExt
     {
+        private static MethodInfo s_clearFunc;
+
         public class SearchProgress
         {
             public List<object> FoundObjects = new List<object>();
@@ -125,6 +127,17 @@ namespace UnityEditor
             }
 
             return types.Where(selector).ToArray();
+        }
+
+        public static void ClearConsoleWindow()
+        {
+            if (s_clearFunc == null)
+            {
+                Assembly assembly = Assembly.GetAssembly(typeof(Editor));
+                Type type = assembly.GetType("UnityEditor.LogEntries");
+                s_clearFunc = type.GetMethod("Clear");
+            }
+            s_clearFunc.Invoke(null, null);
         }
 
         public static void CreateScriptableObjectAsset(string objectName, string fileName = null)
