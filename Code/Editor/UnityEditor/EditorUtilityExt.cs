@@ -106,6 +106,7 @@ namespace UnityEditor
                        extension != ".anim" &&
                        extension != ".controller" &&
                        extension != ".spriteatlas" &&
+                       extension != ".scenetemplate" &&
                        !extension.Contains("override");
             }
         }
