@@ -6,7 +6,7 @@ namespace UnityUtilityEditor.Window
 {
     internal class AboutWindow : EditorWindow
     {
-        private const string m_CR = "(C) Oleg Pulkin";
+        private string m_cr;
         private string m_descr;
 
         private void Awake()
@@ -16,8 +16,11 @@ namespace UnityUtilityEditor.Window
 
             Assembly assembly = Assembly.Load(nameof(UnityUtility)) ?? Assembly.GetExecutingAssembly();
 
-            object[] descriptionAttribute = assembly.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-            m_descr = (descriptionAttribute[0] as AssemblyDescriptionAttribute).Description;
+            var descriptionAttribute = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>();
+            m_descr = descriptionAttribute.Description;
+
+            var copyrightAttribute = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>();
+            m_cr = copyrightAttribute.Copyright;
         }
 
         private void OnGUI()
@@ -25,7 +28,7 @@ namespace UnityUtilityEditor.Window
             GUILayout.Space(10f);
 
             EditorScriptUtility.DrawCenterLabel(m_descr, 235f);
-            EditorScriptUtility.DrawCenterLabel(m_CR, 140f);
+            EditorScriptUtility.DrawCenterLabel(m_cr, 140f);
         }
     }
 }
