@@ -137,9 +137,7 @@ namespace UnityUtilityEditor.Window
 
         private void f_addAxis(int axNum, int padNum, StringBuilder builder)
         {
-            m_axesArray.InsertArrayElementAtIndex(m_axesArray.arraySize);
-
-            SerializedProperty axis = m_axesArray.GetArrayElementAtIndex(m_axesArray.arraySize - 1);
+            SerializedProperty axis = m_axesArray.PlaceArrayElement();
 
             axis.FindPropertyRelative("m_Name").stringValue = InputUnility.AxisName(axNum, padNum, builder);
             axis.FindPropertyRelative("dead").floatValue = 0.1f;

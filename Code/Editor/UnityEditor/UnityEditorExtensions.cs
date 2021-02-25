@@ -52,6 +52,24 @@ namespace UnityEditor
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void AddArrayElement(this SerializedProperty self)
+        {
+            self.InsertArrayElementAtIndex(self.arraySize);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SerializedProperty PlaceArrayElement(this SerializedProperty self)
+        {
+            return self.PushArrayElementAtIndex(self.arraySize);
+        }
+
+        public static SerializedProperty PushArrayElementAtIndex(this SerializedProperty self, int index)
+        {
+            self.InsertArrayElementAtIndex(index);
+            return self.GetArrayElementAtIndex(index);
+        }
+
         public static void SetBytesValue(this SerializedProperty self, Bytes value)
         {
             using (var inner = self.FindPropertyRelative(Bytes.SerFieldName))

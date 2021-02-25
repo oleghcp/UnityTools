@@ -121,9 +121,8 @@ namespace UnityUtilityEditor.Window
             {
                 for (int i = 0; i < countedSize - realSize; i++)
                 {
-                    int index = array.arraySize;
-                    array.InsertArrayElementAtIndex(array.arraySize);
-                    array.GetArrayElementAtIndex(index).intValue = 0;
+                    array.PlaceArrayElement()
+                         .intValue = 0;
                 }
             }
             else if (countedSize < realSize)

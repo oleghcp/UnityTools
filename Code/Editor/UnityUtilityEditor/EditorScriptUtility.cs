@@ -48,8 +48,7 @@ namespace UnityUtilityEditor
 
             while (arrayProp.arraySize < targetSize)
             {
-                arrayProp.InsertArrayElementAtIndex(arrayProp.arraySize);
-                f_initProp(arrayProp.GetArrayElementAtIndex(arrayProp.arraySize - 1), defVal);
+                f_initProp(arrayProp.PlaceArrayElement(), defVal);
 
                 changed = true;
             }

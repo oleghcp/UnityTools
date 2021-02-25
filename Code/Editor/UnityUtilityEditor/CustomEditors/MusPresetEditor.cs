@@ -70,9 +70,7 @@ namespace UnityUtilityEditor.CustomEditors
 
         protected override void AddObject(SerializedProperty nodes, UnityObject obj)
         {
-            nodes.InsertArrayElementAtIndex(nodes.arraySize);
-
-            SerializedProperty node = nodes.GetArrayElementAtIndex(nodes.arraySize - 1);
+            SerializedProperty node = nodes.PlaceArrayElement();
 
             node.FindPropertyRelative(MusicPreset.NameProp).stringValue = obj != null ? obj.name : string.Empty;
 

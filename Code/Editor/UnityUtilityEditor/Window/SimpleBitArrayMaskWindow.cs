@@ -100,9 +100,8 @@ namespace UnityUtilityEditor.Window
             {
                 for (int i = 0; i < len - size; i++)
                 {
-                    int index = m_array.arraySize;
-                    m_array.InsertArrayElementAtIndex(m_array.arraySize);
-                    m_array.GetArrayElementAtIndex(index).intValue = 0;
+                    m_array.PlaceArrayElement()
+                           .intValue = 0;
                 }
             }
             else if (len < size)
