@@ -7,16 +7,27 @@ namespace UnityEditor
 {
     public static class UnityEditorExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ManagedReferenceValueIsNull(this SerializedProperty self)
+        public static IEnumerable<SerializedProperty> EnumerateArrayElements(this SerializedProperty self)
         {
-            return self.managedReferenceFullTypename.IsNullOrEmpty();
+            int len = self.arraySize;
+
+            for (int i = 0; i < len; i++)
+            {
+                yield return self.GetArrayElementAtIndex(i);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static (string AssemblyName, string ClassName) GetManagedReferenceTypeName(this SerializedProperty self)
+        public static int GetArrayIndexOf(this SerializedProperty self, Predicate<SerializedProperty> condition)
         {
-            return EditorUtilityExt.SplitSerializedPropertyTypename(self.managedReferenceFullTypename);
+            int count = self.arraySize;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (condition(self.GetArrayElementAtIndex(i)))
+                    return i;
+            }
+
+            return -1;
         }
 
         public static void SortArray<T>(this SerializedProperty self, Func<SerializedProperty, T> selector)
@@ -42,16 +53,6 @@ namespace UnityEditor
             }
         }
 
-        public static IEnumerable<SerializedProperty> EnumerateArrayElements(this SerializedProperty self)
-        {
-            int len = self.arraySize;
-
-            for (int i = 0; i < len; i++)
-            {
-                yield return self.GetArrayElementAtIndex(i);
-            }
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void AddArrayElement(this SerializedProperty self)
         {
@@ -70,9 +71,21 @@ namespace UnityEditor
             return self.GetArrayElementAtIndex(index);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ManagedReferenceValueIsNull(this SerializedProperty self)
+        {
+            return self.managedReferenceFullTypename.IsNullOrEmpty();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static (string AssemblyName, string ClassName) GetManagedReferenceTypeName(this SerializedProperty self)
+        {
+            return EditorUtilityExt.SplitSerializedPropertyTypename(self.managedReferenceFullTypename);
+        }
+
         public static void SetBytesValue(this SerializedProperty self, Bytes value)
         {
-            using (var inner = self.FindPropertyRelative(Bytes.SerFieldName))
+            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.SerFieldName))
             {
                 inner.intValue = (int)value;
             }
@@ -92,14 +105,8 @@ namespace UnityEditor
 
         public static bool Disposed(this SerializedObject self)
         {
-            try
-            {
-                bool check = self.isEditingMultipleObjects;
-            }
-            catch (Exception)
-            {
-                return true;
-            }
+            try { bool check = self.isEditingMultipleObjects; }
+            catch (Exception) { return true; }
 
             return false;
         }
