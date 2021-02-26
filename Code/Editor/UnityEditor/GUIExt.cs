@@ -5,7 +5,7 @@ namespace UnityEditor
 {
     public static class GUIExt
     {
-        //The functions was taken here: https://gist.github.com/bzgeb
+        //The functions was taken from here: https://gist.github.com/bzgeb
         //God save this guy
         public static UnityObject[] DropArea(string text, float height)
         {

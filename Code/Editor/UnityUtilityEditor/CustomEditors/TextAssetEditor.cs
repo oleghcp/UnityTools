@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
 using UnityEditor;
-using System.IO;
+using UnityEngine;
 
 namespace UnityUtilityEditor.CustomEditors
 {
@@ -13,13 +13,11 @@ namespace UnityUtilityEditor.CustomEditors
         private string m_text;
         private bool m_cut;
 
-        private void Awake()
+        private void OnEnable()
         {
             m_path = AssetDatabase.GetAssetPath(target);
 
             m_isBinary = Path.GetExtension(m_path) == ".bytes";
-
-            //Font.CreateDynamicFontFromOSFont();
 
             if (!m_isBinary)
                 f_loadText();
@@ -50,30 +48,32 @@ namespace UnityUtilityEditor.CustomEditors
             }
             else
             {
-                GUILayout.Space(5f);
-
                 GUI.enabled = true;
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.Space();
-                if (GUILayout.Button("Apply"))
-                {
-                    File.WriteAllText(m_path, m_text);
-                    AssetDatabase.Refresh();
-                }
-
-                GUILayout.Space(10f);
-
-                if (GUILayout.Button("Discard"))
-                {
-                    GUIUtility.keyboardControl = 0;
-                    f_loadText();
-                }
-                EditorGUILayout.Space();
-                EditorGUILayout.EndHorizontal();
-
-                GUILayout.Space(5f);
 
                 m_text = EditorGUILayout.TextArea(m_text);
+
+                GUILayout.Space(5f);
+
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.Space();
+
+                    if (GUILayout.Button("Apply"))
+                    {
+                        File.WriteAllText(m_path, m_text);
+                        AssetDatabase.Refresh();
+                    }
+
+                    GUILayout.Space(10f);
+
+                    if (GUILayout.Button("Discard"))
+                    {
+                        GUIUtility.keyboardControl = 0;
+                        f_loadText();
+                    }
+
+                    EditorGUILayout.Space();
+                }
             }
         }
 

@@ -11,9 +11,8 @@ namespace UnityUtilityEditor.CustomEditors
         private SerializedProperty m_nodes;
 
         private Vector2 m_scrollPos;
-        private bool m_sure;
 
-        private void Awake()
+        private void OnEnable()
         {
             m_nodes = serializedObject.FindProperty("m_nodes");
         }
@@ -22,12 +21,9 @@ namespace UnityUtilityEditor.CustomEditors
         {
             int length = m_nodes.arraySize;
 
-            m_scrollPos = GUILayout.BeginScrollView(m_scrollPos, false, false, GUILayout.MinHeight(10f), GUILayout.MaxHeight((length + 1) * 23f));
+            using (var scope = new EditorGUILayout.ScrollViewScope(m_scrollPos, false, false, GUILayout.MaxHeight((length + 1) * 23f + 5f)))
             {
-                if (length > 0)
-                {
-                    DrawTableHeader();
-                }
+                DrawTableHeader();
 
                 GUILayout.Space(5f);
 
@@ -38,22 +34,26 @@ namespace UnityUtilityEditor.CustomEditors
 
                     GUILayout.Space(3f);
                 }
+
+                m_scrollPos = scope.scrollPosition;
             }
-            GUILayout.EndScrollView();
 
             GUILayout.Space(5f);
 
-            EditorGUILayout.BeginHorizontal();
+            using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Add"))
+                GUILayout.FlexibleSpace();
+
+                if (GUILayout.Button("Add", GUILayout.MinWidth(100f)))
                     AddObject(m_nodes, null);
 
-                GUILayout.Space(5f);
+                GUILayout.Space(10f);
 
-                if (GUILayout.Button("Sort"))
+                if (GUILayout.Button("Sort", GUILayout.MinWidth(100f)))
                     f_sort();
+
+                GUILayout.FlexibleSpace();
             }
-            EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(5f);
 
@@ -74,21 +74,19 @@ namespace UnityUtilityEditor.CustomEditors
 
             if (m_nodes.arraySize > 0)
             {
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("Clear List") && m_sure)
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    m_sure = false;
-                    m_nodes.ClearArray();
+                    GUILayout.FlexibleSpace();
+
+                    const string description = "Are you sure you want to clear List?";
+                    if (GUILayout.Button("Clear List", GUILayout.MinWidth(100f)) &&
+                        EditorUtility.DisplayDialog("Clear List?", description, "Yes", "No"))
+                        m_nodes.ClearArray();
                 }
-                EditorGUILayout.LabelField("I'm sure:", GUILayout.MaxWidth(55f));
-                m_sure = EditorGUILayout.Toggle(m_sure, GUILayout.MaxWidth(20f));
-                EditorGUILayout.EndHorizontal();
             }
 
             if (GUI.changed)
-            {
                 serializedObject.ApplyModifiedProperties();
-            }
         }
 
         // -- //
@@ -122,18 +120,6 @@ namespace UnityUtilityEditor.CustomEditors
             }
 
             m_nodes.SortArray(prop => prop.FindPropertyRelative("Name").stringValue);
-
-            //i = 0;
-            //while (i < m_nodes.arraySize - 1)
-            //{
-            //    SerializedProperty a = m_nodes.GetArrayElementAtIndex(i).FindPropertyRelative("Name");
-            //    SerializedProperty b = m_nodes.GetArrayElementAtIndex(i + 1).FindPropertyRelative("Name");
-
-            //    if (a.stringValue == b.stringValue)
-            //        m_nodes.DeleteArrayElementAtIndex(i + 1);
-            //    else
-            //        i++;
-            //}
         }
     }
 }
