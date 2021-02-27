@@ -130,6 +130,12 @@ namespace UnityEditor
             return types.Where(selector).ToArray();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SaveProject()
+        {
+            EditorApplication.ExecuteMenuItem("File/Save Project");
+        }
+
         public static void ClearConsoleWindow()
         {
             if (s_clearFunc == null)
