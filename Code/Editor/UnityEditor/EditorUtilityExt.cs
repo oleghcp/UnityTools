@@ -13,7 +13,8 @@ namespace UnityEditor
 {
     public static class EditorUtilityExt
     {
-        public const string SCRIPT_FIELD_NAME = "m_Script";
+        public const string SCRIPT_FIELD = "m_Script";
+        public const string ASSET_NAME_FIELD = "m_Name";
 
         private static MethodInfo s_clearFunc;
 

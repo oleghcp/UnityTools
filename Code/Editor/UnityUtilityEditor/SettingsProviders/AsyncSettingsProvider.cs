@@ -35,25 +35,28 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private static void f_drawGui(string searchContext)
         {
-            SerializedObject settings = AsyncSystemSettings.GetSerializedObject();
-
-            SerializedProperty canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
-            SerializedProperty canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
-
-            canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(s_labelForStopField, canBeStoppedProperty.boolValue);
-
-            GUI.enabled = canBeStoppedProperty.boolValue;
-
-            canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(s_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
-
-            if (canBeStoppedGloballyProperty.boolValue)
+            using (SerializedObject settings = new SerializedObject(AsyncSystemSettings.GetOrCreateSettings()))
             {
-                EditorGUILayout.HelpBox("Are you sure? Stopping all tasks globally is a dangerous practice.", MessageType.Warning);
+                SerializedProperty canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
+                SerializedProperty canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
+
+                canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(s_labelForStopField, canBeStoppedProperty.boolValue);
+
+                GUI.enabled = canBeStoppedProperty.boolValue;
+
+                canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(s_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
+
+                if (canBeStoppedGloballyProperty.boolValue)
+                {
+                    EditorGUILayout.HelpBox("Are you sure? Stopping all tasks globally is a dangerous practice.", MessageType.Warning);
+                }
+
+                GUI.enabled = true;
+
+                settings.ApplyModifiedProperties();
+                canBeStoppedProperty.Dispose();
+                canBeStoppedGloballyProperty.Dispose();
             }
-
-            GUI.enabled = true;
-
-            settings.ApplyModifiedProperties();
         }
     }
 }

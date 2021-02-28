@@ -33,11 +33,6 @@ namespace UnityUtility.Async
             }
             return settings;
         }
-
-        public static SerializedObject GetSerializedObject()
-        {
-            return new SerializedObject(GetOrCreateSettings());
-        }
 #endif
     }
 }
