@@ -13,6 +13,8 @@ namespace UnityEditor
 {
     public static class EditorUtilityExt
     {
+        public const string SCRIPT_FIELD_NAME = "m_Script";
+
         private static MethodInfo s_clearFunc;
 
         public class SearchProgress

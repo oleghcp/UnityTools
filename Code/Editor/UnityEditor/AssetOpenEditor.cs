@@ -15,7 +15,7 @@ namespace UnityEditor
             if (obj is ScriptableObject)
             {
                 SerializedObject serializedObject = new SerializedObject(obj);
-                SerializedProperty prop = serializedObject.FindProperty("m_Script");
+                SerializedProperty prop = serializedObject.FindProperty(EditorUtilityExt.SCRIPT_FIELD_NAME);
                 string filePath = AssetDatabase.GetAssetPath(prop.objectReferenceValue);
                 System.Diagnostics.Process.Start("devenv", "/edit " + filePath);
                 return true;

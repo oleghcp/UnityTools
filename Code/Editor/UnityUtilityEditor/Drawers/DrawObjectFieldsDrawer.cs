@@ -46,7 +46,7 @@ namespace UnityUtilityEditor.Drawers
 
                 for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
                 {
-                    if (iterator.propertyPath == "m_Script")
+                    if (iterator.propertyPath == EditorUtilityExt.SCRIPT_FIELD_NAME)
                         continue;
 
                     EditorGUI.PropertyField(rect, iterator, true);

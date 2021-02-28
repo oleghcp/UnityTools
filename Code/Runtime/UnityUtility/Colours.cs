@@ -107,12 +107,6 @@ namespace UnityUtility
             get => new Color(0.5f, 0f, 0.5f, 1f);
         }
 
-        public static Color Magneta
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => new Color(1f, 0f, 1f, 1f);
-        }
-
         public static Color Silver
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
