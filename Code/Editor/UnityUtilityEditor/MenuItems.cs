@@ -61,25 +61,25 @@ namespace UnityUtilityEditor
             EditorWindow.GetWindow(typeof(AxisCreateWindow), true, "Gamepad Axes");
         }
 
-        [MenuItem(EditorScriptUtility.CATEGORY + "/GameObjects/Create Rect Plane")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Objects/Meshes/Create Rect Plane")]
         private static void GetCreateRectPlaneWizard()
         {
             ScriptableWizard.DisplayWizard("Create Rect Plane", typeof(CreateRectPlaneWizard));
         }
 
-        [MenuItem(EditorScriptUtility.CATEGORY + "/GameObjects/Create Figured Plane")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Objects/Meshes/Create Figured Plane")]
         private static void GetCreateFiguredPlaneWizard()
         {
             ScriptableWizard.DisplayWizard("Create Figured Plane", typeof(CreateFiguredPlaneWizard));
         }
 
-        [MenuItem(EditorScriptUtility.CATEGORY + "/GameObjects/Create Shape")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Objects/Meshes/Create Shape")]
         private static void GetCreateShapeWizard()
         {
             ScriptableWizard.DisplayWizard("Create Shape", typeof(CreateShapeWizard));
         }
 
-        [MenuItem(EditorScriptUtility.CATEGORY + "/Create Scriptable Object")]
+        [MenuItem(EditorScriptUtility.CATEGORY + "/Objects/Create Scriptable Object")]
         private static void GetScriptableObjectWindow()
         {
             EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");

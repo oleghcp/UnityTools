@@ -494,31 +494,6 @@ namespace System.Collections.Generic
             return (self as IList).Contains(item);
         }
 
-        public static bool Contains<T>(this IEnumerable<T> self, Predicate<T> match)
-        {
-            foreach (var item in self)
-            {
-                if (match(item))
-                    return true;
-            }
-
-            return false;
-        }
-
-        public static bool Remove<T>(this IList<T> self, Predicate<T> match)
-        {
-            for (int i = 0; i < self.Count; i++)
-            {
-                if (match(self[i]))
-                {
-                    self.RemoveAt(i);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Removes the element at the specified index of the lsit and returns that element.
         /// </summary>
