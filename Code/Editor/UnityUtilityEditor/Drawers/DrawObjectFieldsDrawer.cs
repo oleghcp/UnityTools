@@ -38,27 +38,13 @@ namespace UnityUtilityEditor.Drawers
 
             if (property.isExpanded)
             {
+                Rect rect = position;
+                rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
                 using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
                 {
-                    using (SerializedProperty iterator = serObject.GetIterator())
-                    {
-                        Rect rect = position;
-                        rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-
-                        EditorGUI.indentLevel++;
-
-                        for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
-                        {
-                            if (iterator.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
-                                continue;
-
-                            EditorGUI.PropertyField(rect, iterator, true);
-                            rect.y += EditorGUI.GetPropertyHeight(iterator) + EditorGUIUtility.standardVerticalSpacing;
-                        }
-
-                        EditorGUI.indentLevel--;
-                        serObject.ApplyModifiedProperties();
-                    }
+                    GUIExt.DrawObjectFields(rect, serObject, prop => prop.propertyPath == EditorUtilityExt.SCRIPT_FIELD);
+                    serObject.ApplyModifiedProperties();
                 }
             }
 
@@ -70,19 +56,10 @@ namespace UnityUtilityEditor.Drawers
             if (property.objectReferenceValue == null || !property.isExpanded)
                 return EditorGUIUtility.singleLineHeight;
 
-            float height = 0;
-
             using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
             {
-                SerializedProperty iterator = serObject.GetIterator();
-                for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
-                {
-                    height += EditorGUI.GetPropertyHeight(iterator) + EditorGUIUtility.standardVerticalSpacing;
-                }
-                iterator.Dispose();
+                return EditorGUIUtilityExt.GetDrawHeight(serObject);
             }
-
-            return height;
         }
     }
 }

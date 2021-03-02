@@ -180,43 +180,5 @@ namespace UnityEditor
             var (assemblyName, className) = SplitSerializedPropertyTypename(typename);
             return Type.GetType($"{className}, {assemblyName}");
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
-        {
-            return GetLinePosition(basePosition, lineIndex, EditorGUIUtility.singleLineHeight);
-        }
-
-        public static Rect GetLinePosition(in Rect basePosition, int lineIndex, float lineHeight)
-        {
-            float lineSpace = EditorGUIUtility.standardVerticalSpacing;
-
-            float xPos = basePosition.xMin;
-            float yPos = basePosition.yMin + (lineHeight + lineSpace) * lineIndex;
-
-            return new Rect(xPos, yPos, basePosition.width, lineHeight);
-        }
-
-        public static Rect GetLinePosition(in Rect basePosition, int line, int column, int columnCount)
-        {
-            float lineSpace = EditorGUIUtility.standardVerticalSpacing;
-
-            float lineHeight = EditorGUIUtility.singleLineHeight;
-            float lineWidth = basePosition.width;
-
-            if (columnCount > 1)
-            {
-                lineWidth -= lineSpace * (columnCount - 1);
-                lineWidth /= columnCount;
-            }
-
-            float yPos = basePosition.yMin + (lineHeight + lineSpace) * line;
-            float xPos = basePosition.xMin;
-
-            if (columnCount > 1)
-                xPos += (lineWidth + lineSpace) * column;
-
-            return new Rect(xPos, yPos, lineWidth, lineHeight);
-        }
     }
 }

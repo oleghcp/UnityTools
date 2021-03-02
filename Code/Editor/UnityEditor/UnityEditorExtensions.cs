@@ -23,8 +23,11 @@ namespace UnityEditor
 
             for (int i = 0; i < count; i++)
             {
-                if (condition(self.GetArrayElementAtIndex(i)))
-                    return i;
+                using (var element = self.GetArrayElementAtIndex(i))
+                {
+                    if (condition(element))
+                        return i;
+                }
             }
 
             return -1;
@@ -93,14 +96,10 @@ namespace UnityEditor
 
         public static Bytes GetBytesValue(this SerializedProperty self)
         {
-            Bytes value = default;
-
             using (var inner = self.FindPropertyRelative(Bytes.SerFieldName))
             {
-                value = inner.intValue;
+                return inner.intValue;
             }
-
-            return value;
         }
 
         public static bool Disposed(this SerializedObject self)

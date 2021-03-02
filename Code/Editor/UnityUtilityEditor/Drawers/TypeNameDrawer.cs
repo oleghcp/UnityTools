@@ -37,7 +37,6 @@ namespace UnityUtilityEditor.Drawers
             buttonPosition.height = EditorGUIUtility.singleLineHeight;
 
             int storedIndent = EditorGUI.indentLevel;
-            Color storedColor = GUI.color;
             EditorGUI.indentLevel = 0;
 
             Type savedType = Type.GetType(property.stringValue);
@@ -69,7 +68,7 @@ namespace UnityUtilityEditor.Drawers
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
                 f_showContextMenu(property);
 
-            GUI.color = storedColor;
+            GUI.color = Colours.White;
             EditorGUI.indentLevel = storedIndent;
         }
 

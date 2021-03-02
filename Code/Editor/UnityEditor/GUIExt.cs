@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -35,6 +36,39 @@ namespace UnityEditor
             }
 
             return null;
+        }
+
+        public static void DrawObjectFields(SerializedObject serializedObject, Predicate<SerializedProperty> ignoreCondition = null)
+        {
+            using (SerializedProperty iterator = serializedObject.GetIterator())
+            {
+                for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
+                {
+                    if (ignoreCondition != null && ignoreCondition(iterator))
+                        continue;
+
+                    EditorGUILayout.PropertyField(iterator, true);
+                }
+            }
+        }
+
+        public static void DrawObjectFields(Rect startLinePsition, SerializedObject serializedObject, Predicate<SerializedProperty> ignoreCondition = null)
+        {
+            using (SerializedProperty iterator = serializedObject.GetIterator())
+            {
+                EditorGUI.indentLevel++;
+
+                for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
+                {
+                    if (ignoreCondition != null && ignoreCondition(iterator))
+                        continue;
+
+                    EditorGUI.PropertyField(startLinePsition, iterator, true);
+                    startLinePsition.y += EditorGUI.GetPropertyHeight(iterator) + EditorGUIUtility.standardVerticalSpacing;
+                }
+
+                EditorGUI.indentLevel--;
+            }
         }
     }
 }
