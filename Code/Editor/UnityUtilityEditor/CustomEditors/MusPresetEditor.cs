@@ -57,7 +57,7 @@ namespace UnityUtilityEditor.CustomEditors
                 intensity.floatValue = EditorGUILayout.FloatField(intensity.floatValue, GUILayout.Width(40f)).CutBefore(0f);
                 GUI.enabled = true;
                 GUILayout.Space(5f);
-                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(20f)))
+                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth)))
                 {
                     nodes.DeleteArrayElementAtIndex(index);
                     needBreak = true;

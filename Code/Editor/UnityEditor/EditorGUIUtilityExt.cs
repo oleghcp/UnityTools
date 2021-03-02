@@ -6,6 +6,12 @@ namespace UnityEditor
 {
     public static class EditorGUIUtilityExt
     {
+        public static float SmallButtonWidth
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => EditorGUIUtility.singleLineHeight + 2f;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
         {

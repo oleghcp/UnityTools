@@ -14,7 +14,6 @@ namespace UnityUtilityEditor.CustomEditors
     internal class LayoutConfigEditor : Editor
     {
         private const float COLUMN_WIDTH = 150f;
-        private const float TOGGLE_WIDTH = 20f;
 
         private TypeSelector m_keyEnumTypeSel;
         private TypeSelector m_axisEnumTypeSel;
@@ -183,7 +182,7 @@ namespace UnityUtilityEditor.CustomEditors
             EditorGUILayout.LabelField("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
 
             bool all = m_keyEnumTypeVal.Toggles.All();
-            m_keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(TOGGLE_WIDTH));
+            m_keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
             if (m_keyEnumTypeVal.AllToggles != all)
                 m_keyEnumTypeVal.Toggles.SetAll(m_keyEnumTypeVal.AllToggles);
 
@@ -202,7 +201,7 @@ namespace UnityUtilityEditor.CustomEditors
                 else
                     keyIndexItem.intValue = (int)(GPKeyCode)EditorGUILayout.EnumPopup((GPKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
 
-                m_keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(TOGGLE_WIDTH));
+                m_keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
 
                 EditorGUILayout.EndHorizontal();
             }
@@ -232,7 +231,7 @@ namespace UnityUtilityEditor.CustomEditors
             EditorGUILayout.LabelField("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
 
             bool all = m_axisEnumTypeVal.Toggles.All();
-            m_axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(TOGGLE_WIDTH));
+            m_axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
             if (m_axisEnumTypeVal.AllToggles != all)
                 m_axisEnumTypeVal.Toggles.SetAll(m_axisEnumTypeVal.AllToggles);
 
@@ -252,7 +251,7 @@ namespace UnityUtilityEditor.CustomEditors
                 else
                     axisIndexItem.intValue = (int)(GPAxisCode)EditorGUILayout.EnumPopup((GPAxisCode)axisIndexItem.intValue);
 
-                m_axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(TOGGLE_WIDTH));
+                m_axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
 
                 EditorGUILayout.EndHorizontal();
             }

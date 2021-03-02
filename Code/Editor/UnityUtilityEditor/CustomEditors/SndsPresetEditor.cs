@@ -48,7 +48,7 @@ namespace UnityUtilityEditor.CustomEditors
                 minDist.floatValue = EditorGUILayout.FloatField(minDist.floatValue, GUILayout.Width(40f)).Clamp(0f, maxDist.floatValue - 1f);
                 maxDist.floatValue = EditorGUILayout.FloatField(maxDist.floatValue, GUILayout.Width(40f)).CutBefore(minDist.floatValue + 1f);
                 GUILayout.Space(5f);
-                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(20f)))
+                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth)))
                 {
                     nodes.DeleteArrayElementAtIndex(index);
                     needBreak = true;

@@ -94,7 +94,7 @@ namespace UnityUtilityEditor.Window
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(10f);
-            m_keepOpened = EditorGUILayout.Toggle(m_keepOpened, GUILayout.MaxWidth(20f));
+            m_keepOpened = EditorGUILayout.Toggle(m_keepOpened, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
             EditorGUILayout.LabelField("Keep opened");
             EditorGUILayout.EndHorizontal();
         }
