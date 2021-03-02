@@ -17,23 +17,7 @@ namespace UnityEditor
             }
         }
 
-        public static int GetArrayIndexOf(this SerializedProperty self, Predicate<SerializedProperty> condition)
-        {
-            int count = self.arraySize;
-
-            for (int i = 0; i < count; i++)
-            {
-                using (SerializedProperty element = self.GetArrayElementAtIndex(i))
-                {
-                    if (condition(element))
-                        return i;
-                }
-            }
-
-            return -1;
-        }
-
-        public static SerializedProperty Find(this SerializedProperty self, Predicate<SerializedProperty> condition)
+        public static int GetArrayElement(this SerializedProperty self, out SerializedProperty result, Predicate<SerializedProperty> condition)
         {
             int count = self.arraySize;
 
@@ -42,12 +26,16 @@ namespace UnityEditor
                 SerializedProperty element = self.GetArrayElementAtIndex(i);
 
                 if (condition(element))
-                    return element;
+                {
+                    result = element;
+                    return i;
+                }
 
                 element.Dispose();
             }
 
-            return null;
+            result = null;
+            return -1;
         }
 
         public static void SortArray<T>(this SerializedProperty self, Func<SerializedProperty, T> selector)
