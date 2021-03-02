@@ -23,7 +23,7 @@ namespace UnityEditor
 
             for (int i = 0; i < count; i++)
             {
-                using (var element = self.GetArrayElementAtIndex(i))
+                using (SerializedProperty element = self.GetArrayElementAtIndex(i))
                 {
                     if (condition(element))
                         return i;
@@ -31,6 +31,23 @@ namespace UnityEditor
             }
 
             return -1;
+        }
+
+        public static SerializedProperty Find(this SerializedProperty self, Predicate<SerializedProperty> condition)
+        {
+            int count = self.arraySize;
+
+            for (int i = 0; i < count; i++)
+            {
+                SerializedProperty element = self.GetArrayElementAtIndex(i);
+
+                if (condition(element))
+                    return element;
+
+                element.Dispose();
+            }
+
+            return null;
         }
 
         public static void SortArray<T>(this SerializedProperty self, Func<SerializedProperty, T> selector)
@@ -96,7 +113,7 @@ namespace UnityEditor
 
         public static Bytes GetBytesValue(this SerializedProperty self)
         {
-            using (var inner = self.FindPropertyRelative(Bytes.SerFieldName))
+            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.SerFieldName))
             {
                 return inner.intValue;
             }
