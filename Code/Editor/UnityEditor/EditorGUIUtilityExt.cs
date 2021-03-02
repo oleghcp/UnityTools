@@ -12,6 +12,12 @@ namespace UnityEditor
             get => EditorGUIUtility.singleLineHeight + 2f;
         }
 
+        public static float StandardHorizontalSpacing
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => EditorGUIUtility.standardVerticalSpacing + 1f;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
         {
