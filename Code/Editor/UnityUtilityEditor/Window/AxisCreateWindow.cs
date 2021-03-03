@@ -23,7 +23,7 @@ namespace UnityUtilityEditor.Window
             minSize = new Vector2(300f, 300f);
             maxSize = new Vector2(300f, 1500f);
 
-            UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>("ProjectSettings/InputManager.asset");
+            UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>($"ProjectSettings/InputManager{EditorUtilityExt.ASSET_EXTENSION}");
             m_inputManager = new SerializedObject(asset);
             m_axesArray = f_getAxes();
             m_names = new List<string>();
@@ -86,7 +86,7 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            if (EditorScriptUtility.DrawCenterButton("Remove gamepad axes", 100f, 30f))
+            if (GUIExt.DrawCenterButton("Remove gamepad axes", 100f, 30f))
             {
                 int i = 0;
 

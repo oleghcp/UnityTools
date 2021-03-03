@@ -1,6 +1,4 @@
-﻿using System.IO;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnityUtility.Async
 {
@@ -15,24 +13,8 @@ namespace UnityUtility.Async
         public bool CanBeStoppedGlobally => _canBeStopped && _canBeStoppedGlobally;
 
 #if UNITY_EDITOR
-        private static readonly string SETTINGS_PATH = $"Assets/{nameof(Resources)}/{nameof(AsyncSystemSettings)}.asset";
-
         public static string CanBeStoppedName => nameof(_canBeStopped);
         public static string CanBeStoppedGloballyName => nameof(_canBeStoppedGlobally);
-
-        public static AsyncSystemSettings GetOrCreateSettings()
-        {
-            var settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(SETTINGS_PATH);
-            if (settings == null)
-            {
-                string path = Path.Combine(Application.dataPath, nameof(Resources));
-                Directory.CreateDirectory(path);
-                settings = CreateInstance<AsyncSystemSettings>();
-                AssetDatabase.CreateAsset(settings, SETTINGS_PATH);
-                AssetDatabase.SaveAssets();
-            }
-            return settings;
-        }
 #endif
     }
 }

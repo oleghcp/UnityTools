@@ -15,6 +15,8 @@ namespace UnityEditor
     {
         public const string SCRIPT_FIELD = "m_Script";
         public const string ASSET_NAME_FIELD = "m_Name";
+        public const string ASSET_EXTENSION = ".asset";
+        public const string ASSET_FOLDER = "Assets/";
 
         private static MethodInfo s_clearFunc;
 
@@ -101,9 +103,9 @@ namespace UnityEditor
 
             bool invalidExtension(string extension)
             {
-                return extension != ".prefab" &&
+                return extension != ASSET_EXTENSION &&
+                       extension != ".prefab" &&
                        extension != ".unity" &&
-                       extension != ".asset" &&
                        extension != ".mat" &&
                        extension != ".preset" &&
                        extension != ".anim" &&
@@ -150,20 +152,26 @@ namespace UnityEditor
             s_clearFunc.Invoke(null, null);
         }
 
-        public static void CreateScriptableObjectAsset(string objectName, string fileName = null)
+        public static void CreateScriptableObjectAsset(Type type, string assetName = null)
         {
-            ScriptableObject so = ScriptableObject.CreateInstance(objectName);
-            string name = string.Concat("Assets/", fileName.HasUsefulData() ? fileName : objectName, ".asset");
+            ScriptableObject so = ScriptableObject.CreateInstance(type);
+            string name = GetAssetName(type, assetName);
             AssetDatabase.CreateAsset(so, name);
             AssetDatabase.SaveAssets();
         }
 
-        public static void CreateScriptableObjectAsset(string objectName, UnityObject rootObject)
+        public static void CreateScriptableObjectAsset(Type type, UnityObject rootObject, string assetName = null)
         {
-            ScriptableObject so = ScriptableObject.CreateInstance(objectName);
-            so.name = objectName;
+            ScriptableObject so = ScriptableObject.CreateInstance(type);
+            so.name = GetAssetName(type, assetName);
             AssetDatabase.AddObjectToAsset(so, rootObject);
             AssetDatabase.SaveAssets();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string GetAssetName(Type type, string path)
+        {
+            return path.IsNullOrWhiteSpace() ? $"{ASSET_FOLDER}{type.Name}{ASSET_EXTENSION}" : path;
         }
 
         public static (string AssemblyName, string ClassName) SplitSerializedPropertyTypename(string typename)
@@ -179,6 +187,12 @@ namespace UnityEditor
         {
             var (assemblyName, className) = SplitSerializedPropertyTypename(typename);
             return Type.GetType($"{className}, {assemblyName}");
+        }
+
+        public static Type GetFieldType(FieldInfo fieldInfo)
+        {
+            return fieldInfo.FieldType.IsArray ? fieldInfo.FieldType.GetElementType()
+                                               : fieldInfo.FieldType;
         }
     }
 }

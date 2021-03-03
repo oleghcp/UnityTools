@@ -6,6 +6,27 @@ namespace UnityEditor
 {
     public static class GUIExt
     {
+        internal static bool DrawCenterButton(string text, float w, float h)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.Space();
+                bool pressed = GUILayout.Button(text, GUILayout.MinWidth(w), GUILayout.MaxHeight(h));
+                EditorGUILayout.Space();
+                return pressed;
+            }
+        }
+
+        internal static void DrawCenterLabel(string text, float w)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField(text, EditorStyles.boldLabel, GUILayout.Width(w));
+                EditorGUILayout.Space();
+            }
+        }
+
         //The functions was taken from here: https://gist.github.com/bzgeb
         //God save this guy
         public static UnityObject[] DropArea(string text, float height)

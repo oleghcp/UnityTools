@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
 
@@ -8,34 +6,6 @@ namespace UnityUtilityEditor
 {
     internal static class EditorScriptUtility
     {
-        public const string CATEGORY = nameof(UnityUtility);
-
-        public static Type GetFieldType(FieldInfo fieldInfo)
-        {
-            return fieldInfo.FieldType.IsArray ? fieldInfo.FieldType.GetElementType()
-                                               : fieldInfo.FieldType;
-        }
-
-        public static bool DrawCenterButton(string text, float w, float h)
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space();
-            bool pressed = GUILayout.Button(text, GUILayout.MinWidth(w), GUILayout.MaxHeight(h));
-            EditorGUILayout.Space();
-            EditorGUILayout.EndHorizontal();
-
-            return pressed;
-        }
-
-        public static void DrawCenterLabel(string text, float w)
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(text, EditorStyles.boldLabel, GUILayout.Width(w));
-            EditorGUILayout.Space();
-            EditorGUILayout.EndHorizontal();
-        }
-
         public static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
         {
             Rect rect = EditorGUI.PrefixLabel(position, label);

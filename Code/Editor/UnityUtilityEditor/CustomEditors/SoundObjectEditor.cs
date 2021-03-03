@@ -31,7 +31,7 @@ namespace UnityUtilityEditor.CustomEditors
                 EditorGUILayout.Slider(audioSource.time, 0f, audioSource.clip.length);
                 GUI.enabled = true;
 
-                if (EditorScriptUtility.DrawCenterButton("Stop", 30f, 150f))
+                if (GUIExt.DrawCenterButton("Stop", 30f, 150f))
                     m_target.Stop();
 
                 GUILayout.Space(10f);

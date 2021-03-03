@@ -126,15 +126,15 @@ namespace UnityUtilityEditor.CustomEditors
         private void f_drawTypeChoice()
         {
             GUILayout.Space(10f);
-            EditorScriptUtility.DrawCenterLabel("Choose control type:", 150f);
+            GUIExt.DrawCenterLabel("Choose control type:", 150f);
             GUILayout.Space(5f);
 
-            if (EditorScriptUtility.DrawCenterButton("Keyboard and Mouse", 150f, 30f))
+            if (GUIExt.DrawCenterButton("Keyboard and Mouse", 150f, 30f))
                 m_inputType.enumValueIndex = (int)InputType.KeyMouse;
 
             GUILayout.Space(5f);
 
-            if (EditorScriptUtility.DrawCenterButton("Gamepad", 150f, 30f))
+            if (GUIExt.DrawCenterButton("Gamepad", 150f, 30f))
                 m_inputType.enumValueIndex = (int)InputType.Gamepad;
         }
 
@@ -159,7 +159,7 @@ namespace UnityUtilityEditor.CustomEditors
             {
                 selector.Selected = EditorGUILayout.Popup(selector.Selected, selector.TypeNames);
                 GUILayout.Space(5f);
-                if (EditorScriptUtility.DrawCenterButton("Apply", 100f, 30f))
+                if (GUIExt.DrawCenterButton("Apply", 100f, 30f))
                 {
                     typeValue.SetValue(selector.Types[selector.Selected]);
                     string typeName = typeValue.EnumType.GetTypeName();

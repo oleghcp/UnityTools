@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Drawers
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Type type = EditorScriptUtility.GetFieldType(fieldInfo);
+            Type type = EditorUtilityExt.GetFieldType(fieldInfo);
 
             DiapasonAttribute a = attribute as DiapasonAttribute;
 

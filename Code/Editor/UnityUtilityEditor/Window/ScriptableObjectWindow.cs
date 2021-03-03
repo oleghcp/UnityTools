@@ -20,8 +20,7 @@ namespace UnityUtilityEditor.Window
 
         private void Awake()
         {
-            minSize = new Vector2(300f, 160f);
-            maxSize = new Vector2(300f, 160f);
+            maxSize = minSize = new Vector2(400f, 145f);
 
             bool select(Type type)
             {
@@ -40,7 +39,7 @@ namespace UnityUtilityEditor.Window
 
                 if (types.HasAnyData())
                 {
-                    m_types[assembly.GetName().Name] = types.Select(itm => itm.Name)
+                    m_types[assembly.GetName().Name] = types.Select(itm => itm.FullName)
                                                             .ToArray();
                 }
             }
@@ -58,45 +57,49 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Assembly:", EditorStyles.boldLabel, GUILayout.MinWidth(10f));
-            m_assemblyIndex = EditorGUILayout.Popup(m_assemblyIndex, m_assemblies);
-            EditorGUILayout.EndHorizontal();
+            m_assemblyIndex = EditorGUILayout.Popup("Assembly:", m_assemblyIndex, m_assemblies);
 
             GUILayout.Space(10f);
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("ScriptableObject:", EditorStyles.boldLabel, GUILayout.MinWidth(10f));
             m_typeIndex = Math.Min(m_typeIndex, m_types[m_assemblies[m_assemblyIndex]].Length - 1);
-            m_typeIndex = EditorGUILayout.Popup(m_typeIndex, m_types[m_assemblies[m_assemblyIndex]]);
-            EditorGUILayout.EndHorizontal();
+            m_typeIndex = EditorGUILayout.Popup("ScriptableObject:", m_typeIndex, m_types[m_assemblies[m_assemblyIndex]]);
 
             EditorGUILayout.Space();
 
-            m_targetRoot = EditorGUILayout.ObjectField("Root Asset", m_targetRoot, typeof(UnityObject), false);
+            m_targetRoot = EditorGUILayout.ObjectField("Parrent Asset", m_targetRoot, typeof(UnityObject), false);
 
-            EditorGUILayout.Space();
+            EditorGUILayout.Space(20f);
 
-            if (EditorScriptUtility.DrawCenterButton("Create", 50f, 30f))
+            using (new EditorGUILayout.HorizontalScope())
             {
-                string type = m_types[m_assemblies[m_assemblyIndex]][m_typeIndex];
+                GUILayout.Space(10f);
 
-                if (m_targetRoot == null)
-                    EditorUtilityExt.CreateScriptableObjectAsset(type);
-                else
-                    EditorUtilityExt.CreateScriptableObjectAsset(type, m_targetRoot);
+                m_keepOpened = EditorGUILayout.Toggle(m_keepOpened, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                EditorGUILayout.LabelField("Keep opened");
 
-                if (!m_keepOpened)
-                    Close();
+                GUILayout.FlexibleSpace();
+
+                if (GUILayout.Button("Create", GUILayout.Width(100f), GUILayout.Height(30f)))
+                {
+                    string assemblyName = m_assemblies[m_assemblyIndex];
+                    string typeName = m_types[assemblyName][m_typeIndex];
+                    Type type = Type.GetType($"{typeName}, {assemblyName}");
+
+                    string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
+                    path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
+
+                    if (path.HasUsefulData())
+                    {
+                        if (m_targetRoot == null)
+                            EditorUtilityExt.CreateScriptableObjectAsset(type, path);
+                        else
+                            EditorUtilityExt.CreateScriptableObjectAsset(type, m_targetRoot, path);
+
+                        if (!m_keepOpened)
+                            Close();
+                    }
+                }
             }
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Space(10f);
-            m_keepOpened = EditorGUILayout.Toggle(m_keepOpened, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
-            EditorGUILayout.LabelField("Keep opened");
-            EditorGUILayout.EndHorizontal();
         }
     }
 }

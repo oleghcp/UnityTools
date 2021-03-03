@@ -14,12 +14,10 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         public AudioClip LoadClip(string name)
         {
-            var res = Resources.Load<AudioClip>(PATH + name);
+            AudioClip res = Resources.Load<AudioClip>(PATH + name);
 
             if (res == null)
-            {
-                throw new InvalidDataException(string.Concat("There is no any AudioClip asset with the name: ", PATH, name));
-            }
+                throw new InvalidDataException($"There is no any AudioClip asset with the name: {PATH}{name}");
 
             return res;
         }

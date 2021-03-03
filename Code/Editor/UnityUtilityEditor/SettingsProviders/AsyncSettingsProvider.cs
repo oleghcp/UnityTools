@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Async;
@@ -35,7 +36,7 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private static void f_drawGui(string searchContext)
         {
-            using (SerializedObject settings = new SerializedObject(AsyncSystemSettings.GetOrCreateSettings()))
+            using (SerializedObject settings = new SerializedObject(GetOrCreateSettings()))
             {
                 SerializedProperty canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
                 SerializedProperty canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
@@ -57,6 +58,22 @@ namespace UnityUtilityEditor.SettingsProviders
                 canBeStoppedProperty.Dispose();
                 canBeStoppedGloballyProperty.Dispose();
             }
+        }
+
+        private static AsyncSystemSettings GetOrCreateSettings()
+        {
+            string settingsPath = $"{EditorUtilityExt.ASSET_FOLDER}{nameof(Resources)}/{nameof(AsyncSystemSettings)}{EditorUtilityExt.ASSET_EXTENSION}";
+
+            var settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(settingsPath);
+            if (settings == null)
+            {
+                string path = Path.Combine(Application.dataPath, nameof(Resources));
+                Directory.CreateDirectory(path);
+                settings = ScriptableObject.CreateInstance<AsyncSystemSettings>();
+                AssetDatabase.CreateAsset(settings, settingsPath);
+                AssetDatabase.SaveAssets();
+            }
+            return settings;
         }
     }
 }

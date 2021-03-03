@@ -22,7 +22,7 @@ namespace UnityUtilityEditor.Drawers
 
             public Data(SerializedProperty property, PropertyDrawer drawer)
             {
-                Type type = EditorScriptUtility.GetFieldType(drawer.fieldInfo);
+                Type type = EditorUtilityExt.GetFieldType(drawer.fieldInfo);
                 Array values;
 
                 if (type == typeof(BitArrayMask))
