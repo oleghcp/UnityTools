@@ -146,7 +146,7 @@ namespace UnityUtility.MathExt
         /// Returns the smallest integer greater to or equal to the value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Ceil(this float value)
+        public static int Ceiling(this float value)
         {
             return (int)MathF.Ceiling(value);
         }
