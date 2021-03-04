@@ -85,12 +85,6 @@ namespace UnityEditor
             return self.managedReferenceFullTypename.IsNullOrEmpty();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static (string AssemblyName, string ClassName) GetManagedReferenceTypeName(this SerializedProperty self)
-        {
-            return EditorUtilityExt.SplitSerializedPropertyTypename(self.managedReferenceFullTypename);
-        }
-
         public static void SetBytesValue(this SerializedProperty self, Bytes value)
         {
             using (SerializedProperty inner = self.FindPropertyRelative(Bytes.SerFieldName))

@@ -1,7 +1,7 @@
-﻿using UnityUtility.Collections;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.Window;
+using UnityUtility.Collections;
+using UnityUtilityEditor.Window.BitArrays;
 
 namespace UnityUtilityEditor.Drawers
 {

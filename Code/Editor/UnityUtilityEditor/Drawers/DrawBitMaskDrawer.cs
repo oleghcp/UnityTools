@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Collections;
-using UnityUtilityEditor.Window;
+using UnityUtilityEditor.Window.BitArrays;
 
 namespace UnityUtilityEditor.Drawers
 {

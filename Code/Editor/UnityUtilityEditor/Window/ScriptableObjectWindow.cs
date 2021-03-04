@@ -85,11 +85,12 @@ namespace UnityUtilityEditor.Window
                     string typeName = m_types[assemblyName][m_typeIndex];
                     Type type = Type.GetType($"{typeName}, {assemblyName}");
 
-                    string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
-                    path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
+                    string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");                    
 
                     if (path.HasUsefulData())
                     {
+                        path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
+
                         if (m_targetRoot == null)
                             EditorUtilityExt.CreateScriptableObjectAsset(type, path);
                         else

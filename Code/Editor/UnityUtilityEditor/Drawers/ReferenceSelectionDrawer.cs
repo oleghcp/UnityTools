@@ -53,7 +53,7 @@ namespace UnityUtilityEditor.Drawers
             }
             else
             {
-                var (assemblyName, className) = property.GetManagedReferenceTypeName();
+                var (assemblyName, className) = EditorUtilityExt.SplitSerializedPropertyTypename(property.managedReferenceFullTypename);
                 shortName = PathUtility.GetName(className, '.');
                 toolTip = $"{className}  ({assemblyName})";
             }

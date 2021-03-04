@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace UnityUtilityEditor.Window
+namespace UnityUtilityEditor.Window.ShapeWizards
 {
     internal class CreateRectPlaneWizard : CreateMeshWizard
     {

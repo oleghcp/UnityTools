@@ -5,7 +5,7 @@ using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtilityEditor.Drawers;
 
-namespace UnityUtilityEditor.Window
+namespace UnityUtilityEditor.Window.BitArrays
 {
     internal class EnumBitArrayMaskWindow : BitArrayMaskWindow
     {

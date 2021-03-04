@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityUtility.Controls;
 using UnityUtility.Sound;
 using UnityUtilityEditor.Window;
+using UnityUtilityEditor.Window.ShapeWizards;
 
 namespace UnityUtilityEditor
 {
@@ -89,7 +90,7 @@ namespace UnityUtilityEditor
 
         // ------------- //
 
-        [MenuItem(nameof(UnityUtility) + "/About", priority = 50)]
+        [MenuItem(nameof(UnityUtility) + "/About", false, 1)]
         private static void GetAboutWindow()
         {
             EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
@@ -97,7 +98,7 @@ namespace UnityUtilityEditor
 
         // ------------- //
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Find References In Project (ext.)", priority = 25)]
+        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Find References In Project (ext.)", false, 25)]
         private static void FindReferences()
         {
             string targetGuid = Selection.assetGUIDs[0];
@@ -144,7 +145,7 @@ namespace UnityUtilityEditor
             return Selection.assetGUIDs.Length == 1;
         }
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Show Guid (ext.)", priority = 20)]
+        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Show Guid (ext.)", false, 20)]
         private static void ShowGUID()
         {
             string[] guids = Selection.assetGUIDs;
@@ -162,7 +163,7 @@ namespace UnityUtilityEditor
 #endif
 
 #if UNITY_2019_1_OR_NEWER
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/C# Script (ext.)", priority = CREATE_CS_SCRIPT_PRIORITY)]
+        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/C# Script (ext.)", false, CREATE_CS_SCRIPT_PRIORITY)]
         private static void CreateScript()
         {
             string templatePath = Path.Combine(PathUtility.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");

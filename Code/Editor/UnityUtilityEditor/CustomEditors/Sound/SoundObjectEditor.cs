@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility.Sound.SoundProviderStuff;
 
-namespace UnityUtilityEditor.CustomEditors
+namespace UnityUtilityEditor.CustomEditors.Sound
 {
     internal abstract class SoundObjectEditor : Editor
     {
