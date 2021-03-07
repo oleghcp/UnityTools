@@ -104,7 +104,7 @@ namespace UnityUtilityEditor.Drawers
         {
             property.serializedObject.Update();
             property.stringValue = newValue;
-            property.serializedObject.ApplyModifiedPropertiesWithoutUndo(); // undo is bugged
+            property.serializedObject.ApplyModifiedProperties();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -120,7 +120,7 @@ namespace UnityUtilityEditor.Drawers
         {
             property.serializedObject.Update();
             property.managedReferenceValue = newValue;
-            property.serializedObject.ApplyModifiedPropertiesWithoutUndo(); // undo is bugged
+            property.serializedObject.ApplyModifiedProperties();
         }
     }
 }
