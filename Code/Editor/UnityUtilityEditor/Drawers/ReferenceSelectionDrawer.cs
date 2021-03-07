@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 
+#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
@@ -123,3 +124,4 @@ namespace UnityUtilityEditor.Drawers
         }
     }
 }
+#endif

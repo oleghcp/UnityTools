@@ -161,10 +161,10 @@ namespace UnityUtilityEditor
             }
         }
 
-#if UNITY_2019_1_OR_NEWER        
+#if UNITY_2019_1_OR_NEWER
         public static void CreateScript()
         {
-            string templatePath = Path.Combine(PathUtility.GetParentPath(Application.dataPath), "C#ScriptTemplate.cs.txt");
+            string templatePath = "C#ScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {

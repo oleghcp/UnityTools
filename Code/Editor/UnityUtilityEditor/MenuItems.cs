@@ -7,6 +7,26 @@ namespace UnityUtilityEditor
 {
     internal static class MenuItems
     {
+#if UNITY_2019_3_OR_NEWER
+        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Node C# Script")]
+        private static void CreateNodeScript()
+        {
+            GraphAssetMenuUtility.CreateNodeScript();
+        }
+
+        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Transition C# Script")]
+        private static void CreateTransitionScript()
+        {
+            GraphAssetMenuUtility.CreateTransitionScript();
+        }
+
+        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Graph C# Script")]
+        private static void CreateGraphScript()
+        {
+            GraphAssetMenuUtility.CreateGraphScript();
+        }
+#endif
+
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]
         private static void RemoveEmptyFolders()
         {
