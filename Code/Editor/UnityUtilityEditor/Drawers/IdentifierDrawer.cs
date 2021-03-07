@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (EditorUtilityExt.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.String)
             {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(IdentifierAttribute)} with String.");
+                GUIExt.DrawWrongTypeMessage(position, label, $"Use {nameof(IdentifierAttribute)} with String.");
                 return;
             }
 

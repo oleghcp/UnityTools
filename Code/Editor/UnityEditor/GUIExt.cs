@@ -6,6 +6,12 @@ namespace UnityEditor
 {
     public static class GUIExt
     {
+        internal static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
+        {
+            Rect rect = EditorGUI.PrefixLabel(position, label);
+            EditorGUI.LabelField(rect, message);
+        }
+
         internal static bool DrawCenterButton(string text, float w, float h)
         {
             using (new EditorGUILayout.HorizontalScope())

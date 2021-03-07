@@ -1,17 +1,10 @@
 ﻿using UnityEditor;
-using UnityEngine;
 using UnityUtility.Collections;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.CustomEditors.InputLayouts
 {
-    internal static class EditorScriptUtility
+    internal class LayoutEditorUtility
     {
-        public static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
-        {
-            Rect rect = EditorGUI.PrefixLabel(position, label);
-            EditorGUI.LabelField(rect, message);
-        }
-
         public static bool EqualizeSize(SerializedProperty arrayProp, int targetSize, object defVal)
         {
             bool changed = false;

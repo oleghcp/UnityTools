@@ -52,15 +52,6 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
-        /// Compares two small floating point values if they are similar.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Nearly(this float value, float other)
-        {
-            return Math.Abs(value - other) <= float.Epsilon;
-        }
-
-        /// <summary>
         /// Counts digits amount.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

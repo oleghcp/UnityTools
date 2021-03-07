@@ -8,7 +8,7 @@ using UnityUtility.Controls;
 using UnityUtility.Controls.ControlStuff;
 using UnityUtilityEditor.Window;
 
-namespace UnityUtilityEditor.CustomEditors
+namespace UnityUtilityEditor.CustomEditors.InputLayouts
 {
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor
@@ -266,15 +266,15 @@ namespace UnityUtilityEditor.CustomEditors
             if (GUILayout.Button("Move Up", GUILayout.MaxWidth(150f)))
             {
                 int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
-                EditorScriptUtility.MoveElements(m_keyIndices, m_keyEnumTypeVal.Toggles, true, defVal);
-                EditorScriptUtility.MoveToggles(m_keyEnumTypeVal.Toggles, m_keyIndices.arraySize, true);
+                LayoutEditorUtility.MoveElements(m_keyIndices, m_keyEnumTypeVal.Toggles, true, defVal);
+                LayoutEditorUtility.MoveToggles(m_keyEnumTypeVal.Toggles, m_keyIndices.arraySize, true);
             }
 
             if (GUILayout.Button("Move Down", GUILayout.MaxWidth(150f)))
             {
                 int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
-                EditorScriptUtility.MoveElements(m_keyIndices, m_keyEnumTypeVal.Toggles, false, defVal);
-                EditorScriptUtility.MoveToggles(m_keyEnumTypeVal.Toggles, m_keyIndices.arraySize, false);
+                LayoutEditorUtility.MoveElements(m_keyIndices, m_keyEnumTypeVal.Toggles, false, defVal);
+                LayoutEditorUtility.MoveToggles(m_keyEnumTypeVal.Toggles, m_keyIndices.arraySize, false);
             }
 
             GUILayout.Space(10f);
@@ -303,15 +303,15 @@ namespace UnityUtilityEditor.CustomEditors
             if (GUILayout.Button("Move Up", GUILayout.MaxWidth(150f)))
             {
                 int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
-                EditorScriptUtility.MoveElements(m_axisIndices, m_axisEnumTypeVal.Toggles, true, defVal);
-                EditorScriptUtility.MoveToggles(m_axisEnumTypeVal.Toggles, m_axisIndices.arraySize, true);
+                LayoutEditorUtility.MoveElements(m_axisIndices, m_axisEnumTypeVal.Toggles, true, defVal);
+                LayoutEditorUtility.MoveToggles(m_axisEnumTypeVal.Toggles, m_axisIndices.arraySize, true);
             }
 
             if (GUILayout.Button("Move Down", GUILayout.MaxWidth(150f)))
             {
                 int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
-                EditorScriptUtility.MoveElements(m_axisIndices, m_axisEnumTypeVal.Toggles, false, defVal);
-                EditorScriptUtility.MoveToggles(m_axisEnumTypeVal.Toggles, m_axisIndices.arraySize, false);
+                LayoutEditorUtility.MoveElements(m_axisIndices, m_axisEnumTypeVal.Toggles, false, defVal);
+                LayoutEditorUtility.MoveToggles(m_axisEnumTypeVal.Toggles, m_axisIndices.arraySize, false);
             }
 
             GUILayout.Space(10f);
@@ -339,14 +339,14 @@ namespace UnityUtilityEditor.CustomEditors
             int targetSize = m_keyEnumTypeVal.EnumNames.Length;
 
             int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
-            return EditorScriptUtility.EqualizeSize(m_keyIndices, targetSize, defVal);
+            return LayoutEditorUtility.EqualizeSize(m_keyIndices, targetSize, defVal);
         }
 
         private bool f_chekAxes()
         {
             int targetSize = m_axisEnumTypeVal.EnumNames.Length;
             int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
-            return EditorScriptUtility.EqualizeSize(m_axisIndices, targetSize, defVal);
+            return LayoutEditorUtility.EqualizeSize(m_axisIndices, targetSize, defVal);
         }
 
         private class TypeSelector

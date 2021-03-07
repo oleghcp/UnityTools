@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtilityTools;
 using UnityEngine;
 using UnityUtility.MathExt;
+using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
 {
@@ -20,7 +20,7 @@ namespace UnityUtility.NumericEntities
 
         public bool IsEmpty
         {
-            get { return m_got.Nearly(m_spent); }
+            get { return m_got.Approx(m_spent); }
         }
 
         public float Got

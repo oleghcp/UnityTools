@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (EditorUtilityExt.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.String)
             {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(TypeNameAttribute)} only with strings.");
+                GUIExt.DrawWrongTypeMessage(position, label, $"Use {nameof(TypeNameAttribute)} only with strings.");
                 return;
             }
 

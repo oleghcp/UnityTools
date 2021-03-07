@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (!EditorUtilityExt.GetFieldType(fieldInfo).Is(typeof(ScriptableObject)))
             {
-                EditorScriptUtility.DrawWrongTypeMessage(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
+                GUIExt.DrawWrongTypeMessage(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
                 return;
             }
 
