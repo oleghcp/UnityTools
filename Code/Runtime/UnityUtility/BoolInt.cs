@@ -24,19 +24,19 @@ namespace UnityUtility
         public void AddValue(bool value)
         {
             if (value)
-                f_increment();
+                Increment();
             else
-                f_decrement();
+                Decrement();
         }
 
         public void AddTrue()
         {
-            f_increment();
+            Increment();
         }
 
-        public void False()
+        public void AddFalse()
         {
-            f_decrement();
+            Decrement();
         }
 
         public void Reset()
@@ -45,13 +45,13 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void f_increment()
+        private void Increment()
         {
             checked { _value++; }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void f_decrement()
+        private void Decrement()
         {
             checked { _value--; }
         }

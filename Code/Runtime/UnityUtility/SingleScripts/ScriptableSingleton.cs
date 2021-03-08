@@ -1,5 +1,4 @@
-﻿using UnityUtilityTools;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnityUtility.SingleScripts
 {
@@ -8,7 +7,7 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
     {
-        private static T s_inst;
+        private static T _inst;
 
         /// <summary>
         /// Static instance of ScriptableSingleton`1.
@@ -17,10 +16,10 @@ namespace UnityUtility.SingleScripts
         {
             get
             {
-                if (s_inst == null)
-                    s_inst = SingletonUtility.CreateInstance(CreateInstance<T>);
+                if (_inst == null)
+                    _inst = SingletonUtility.CreateInstance(CreateInstance<T>);
 
-                return s_inst;
+                return _inst;
             }
         }
 
@@ -29,7 +28,7 @@ namespace UnityUtility.SingleScripts
         /// </summary>
         public static bool Exists
         {
-            get { return s_inst != null; }
+            get { return _inst != null; }
         }
     }
 }

@@ -6,10 +6,10 @@ namespace UnityUtility.Controls.ControlStuff
 {
     internal class GamepadInputConverter
     {
-        internal readonly KeyCode[] KeyCodes;
-        internal readonly string[] AxisNames;
+        public readonly KeyCode[] KeyCodes;
+        public readonly string[] AxisNames;
 
-        internal GamepadInputConverter(GamepadType type, int padNum)
+        public GamepadInputConverter(GamepadType type, int padNum)
         {
             padNum++;
             StringBuilder builder = new StringBuilder();

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using UnityUtility.SingleScripts;
 
-namespace UnityUtilityTools
+namespace UnityUtility.SingleScripts
 {
     internal static class SingletonUtility
     {

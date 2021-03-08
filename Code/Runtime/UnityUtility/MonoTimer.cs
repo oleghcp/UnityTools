@@ -49,21 +49,21 @@ namespace UnityUtility
         }
         #endregion
 
-        private Enumerator m_routine = new Enumerator();
+        private Enumerator _routine = new Enumerator();
 
         public bool IsRunning
         {
-            get { return m_routine.IsRunning; }
+            get { return _routine.IsRunning; }
         }
 
         public float TargetTime
         {
-            get { return m_routine.WaitTime; }
+            get { return _routine.WaitTime; }
         }
 
         public float CurrentTime
         {
-            get { return m_routine.CurrentTime.CutAfter(m_routine.WaitTime); }
+            get { return _routine.CurrentTime.CutAfter(_routine.WaitTime); }
         }
 
         public float Progress
@@ -73,60 +73,60 @@ namespace UnityUtility
 
         public float TimeScale
         {
-            get { return m_routine.TimeScale; }
-            set { m_routine.TimeScale = value; }
+            get { return _routine.TimeScale; }
+            set { _routine.TimeScale = value; }
         }
 
         public bool ConsiderGlobalTimeScale
         {
-            get { return m_routine.GlobalScale; }
-            set { m_routine.GlobalScale = value; }
+            get { return _routine.GlobalScale; }
+            set { _routine.GlobalScale = value; }
         }
 
         public void Prolong(float addTime)
         {
-            m_routine.WaitTime += addTime;
+            _routine.WaitTime += addTime;
         }
 
         public void InitCallback(Action callback)
         {
-            m_routine.Callback = callback;
+            _routine.Callback = callback;
         }
 
         public void StartCountdown(float time, Action callback)
         {
             InitCallback(callback);
 
-            f_start(time);
+            StartInternal(time);
         }
 
         public void StartCountdown(float time, float timeScale = 1f)
         {
-            m_routine.TimeScale = timeScale;
-            f_start(time);
+            _routine.TimeScale = timeScale;
+            StartInternal(time);
         }
 
         public void StopCountdown()
         {
             StopAllCoroutines();
-            m_routine.IsRunning = false;
+            _routine.IsRunning = false;
         }
 
         // -- //
 
-        private void f_start(float time)
+        private void StartInternal(float time)
         {
-            m_routine.Reset();
-            m_routine.WaitTime = time;
+            _routine.Reset();
+            _routine.WaitTime = time;
 
             if (time > 0f)
             {
-                m_routine.IsRunning = true;
-                StartCoroutine(m_routine);
+                _routine.IsRunning = true;
+                StartCoroutine(_routine);
             }
             else
             {
-                m_routine.Callback();
+                _routine.Callback();
             }
         }
     }

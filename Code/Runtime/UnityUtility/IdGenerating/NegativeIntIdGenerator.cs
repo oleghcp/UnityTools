@@ -1,31 +1,18 @@
 ﻿using System;
-using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace UnityUtility.IdGenerating
 {
     [Serializable]
-    public class NegativeIntIdGenerator : IIdGenerator<int>
+    public class NegativeIntIdGenerator : IdGenerator<int>
     {
-        [SerializeField, HideInInspector]
-        private int m_lastId;
-
-        public int LastID
-        {
-            get { return m_lastId; }
-        }
-
         [Preserve]
-        public NegativeIntIdGenerator() { }
+        public NegativeIntIdGenerator() : base(0) { }
+        public NegativeIntIdGenerator(int startId) : base(startId) { }
 
-        public NegativeIntIdGenerator(int startId)
+        public override int GetNewId()
         {
-            m_lastId = startId;
-        }
-
-        public int GetNewId()
-        {
-            return --m_lastId;
+            return --_lastId;
         }
     }
 }

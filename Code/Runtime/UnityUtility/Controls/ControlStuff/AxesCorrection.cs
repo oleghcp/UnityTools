@@ -4,22 +4,22 @@ namespace UnityUtility.Controls.ControlStuff
 {
     internal static class AxesCorrection
     {
-        internal static Func<GPAxisCode, float, float> GetAxisCorrectionFunc(GamepadType gamepad)
+        public static Func<GPAxisCode, float, float> GetAxisCorrectionFunc(GamepadType gamepad)
         {
             switch (gamepad)
             {
                 case GamepadType.XBoxWin:
-                    return f_posRangeAxis;
+                    return PosRangeAxis;
 
                 case GamepadType.DualShockWin:
-                    return f_fullRangeAxis;
+                    return FullRangeAxis;
 
                 case GamepadType.XBoxAndroid:
                 case GamepadType.DualShockAndroid:
-                    return f_fullRangeAxisInvertCross;
+                    return FullRangeAxisInvertCross;
 
                 case GamepadType.GoogleAndroid:
-                    return f_posRangeAxisInvertCross;
+                    return PosRangeAxisInvertCross;
 
                 default: throw new UnsupportedValueException(gamepad);
             }
@@ -27,7 +27,7 @@ namespace UnityUtility.Controls.ControlStuff
 
         // - Functions - //
 
-        private static float f_posRangeAxis(GPAxisCode axisCode, float value)
+        private static float PosRangeAxis(GPAxisCode axisCode, float value)
         {
             switch (axisCode)
             {
@@ -40,7 +40,7 @@ namespace UnityUtility.Controls.ControlStuff
             }
         }
 
-        private static float f_posRangeAxisInvertCross(GPAxisCode axisCode, float value)
+        private static float PosRangeAxisInvertCross(GPAxisCode axisCode, float value)
         {
             switch (axisCode)
             {
@@ -54,7 +54,7 @@ namespace UnityUtility.Controls.ControlStuff
             }
         }
 
-        private static float f_fullRangeAxis(GPAxisCode axisCode, float value)
+        private static float FullRangeAxis(GPAxisCode axisCode, float value)
         {
             switch (axisCode)
             {
@@ -71,7 +71,7 @@ namespace UnityUtility.Controls.ControlStuff
             }
         }
 
-        private static float f_fullRangeAxisInvertCross(GPAxisCode axisCode, float value)
+        private static float FullRangeAxisInvertCross(GPAxisCode axisCode, float value)
         {
             switch (axisCode)
             {

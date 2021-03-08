@@ -26,8 +26,8 @@ namespace UnityUtilityEditor.CustomEditors.Sound
         {
             SerializedProperty node = nodes.GetArrayElementAtIndex(index);
 
-            SerializedProperty name = node.FindPropertyRelative(SoundsPreset.NameProp);
-            SerializedProperty stats = node.FindPropertyRelative(SoundsPreset.StatsProp);
+            SerializedProperty name = node.FindPropertyRelative(SoundsPreset.NamePropName);
+            SerializedProperty stats = node.FindPropertyRelative(SoundsPreset.StatsPropName);
 
             SerializedProperty volume = stats.FindPropertyRelative(nameof(SPreset.Volume));
             SerializedProperty loop = stats.FindPropertyRelative(nameof(SPreset.Looped));
@@ -62,9 +62,9 @@ namespace UnityUtilityEditor.CustomEditors.Sound
         {
             SerializedProperty node = nodes.PlaceArrayElement();
 
-            node.FindPropertyRelative(SoundsPreset.NameProp).stringValue = obj != null ? obj.name : string.Empty;
+            node.FindPropertyRelative(SoundsPreset.NamePropName).stringValue = obj != null ? obj.name : string.Empty;
 
-            SerializedProperty stats = node.FindPropertyRelative(SoundsPreset.StatsProp);
+            SerializedProperty stats = node.FindPropertyRelative(SoundsPreset.StatsPropName);
 
             stats.FindPropertyRelative(nameof(SPreset.Looped)).boolValue = false;
             stats.FindPropertyRelative(nameof(SPreset.Volume)).floatValue = 1f;

@@ -83,7 +83,7 @@ namespace UnityUtility.NumericEntities
 
         public float GetCurValue()
         {
-            return (m_getValue() + f_getAbsSum() + f_getRelSum()).Clamp(m_min, m_max);
+            return (m_getValue() + GetAbsSum() + GetRelSum()).Clamp(m_min, m_max);
         }
 
         public void Revalue(float value, ResizeType resizeType = ResizeType.NewValue)
@@ -118,7 +118,7 @@ namespace UnityUtility.NumericEntities
 
         //--//
 
-        private float f_getAbsSum()
+        private float GetAbsSum()
         {
             if (m_absMods.Count == 0)
                 return 0f;
@@ -133,7 +133,7 @@ namespace UnityUtility.NumericEntities
             return sum;
         }
 
-        private float f_getRelSum()
+        private float GetRelSum()
         {
             if (m_relMods.Count == 0)
                 return 0f;

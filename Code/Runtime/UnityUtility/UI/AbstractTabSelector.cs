@@ -35,12 +35,12 @@ namespace UnityUtility.UI
 
         internal void OnSelect()
         {
-            f_switch(true);
+            Switch(true);
         }
 
         internal void OnDeselect()
         {
-            f_switch(false);
+            Switch(false);
         }
 
         protected virtual void OnAwake() { }
@@ -50,7 +50,7 @@ namespace UnityUtility.UI
             _group.Select(this);
         }
 
-        private void f_switch(bool select)
+        private void Switch(bool select)
         {
             _content.SetActive(select);
             _selected.SetActive(select);

@@ -11,11 +11,11 @@ namespace UnityUtility
     /// </summary>
     public static class XmlUtility
     {
-        private static readonly XmlSerializerNamespaces NAMESPACES;
+        private static readonly XmlSerializerNamespaces _namespaces;
 
         static XmlUtility()
         {
-            NAMESPACES = new XmlSerializerNamespaces(new[] { new XmlQualifiedName() });
+            _namespaces = new XmlSerializerNamespaces(new[] { new XmlQualifiedName() });
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace UnityUtility
             using (StringWriter writer = new StringWriter())
             {
                 XmlSerializer serializer = new XmlSerializer(toSerialize.GetType());
-                serializer.Serialize(writer, toSerialize, NAMESPACES);
+                serializer.Serialize(writer, toSerialize, _namespaces);
                 str = writer.ToString();
             }
 

@@ -1,31 +1,18 @@
 ﻿using System;
-using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace UnityUtility.IdGenerating
 {
     [Serializable]
-    public class UlongIdGenerator : IIdGenerator<ulong>
+    public class UlongIdGenerator : IdGenerator<ulong>
     {
-        [SerializeField, HideInInspector]
-        private ulong m_lastId;
-
-        public ulong LastID
-        {
-            get { return m_lastId; }
-        }
-
         [Preserve]
-        public UlongIdGenerator() { }
+        public UlongIdGenerator() : base(0) { }
+        public UlongIdGenerator(ulong startId) : base(startId) { }
 
-        public UlongIdGenerator(ulong startId)
+        public override ulong GetNewId()
         {
-            m_lastId = startId;
-        }
-
-        public ulong GetNewId()
-        {
-            return ++m_lastId;
+            return ++_lastId;
         }
     }
 }

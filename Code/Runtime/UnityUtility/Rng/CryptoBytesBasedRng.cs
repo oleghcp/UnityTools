@@ -7,26 +7,26 @@ namespace UnityUtility.Rng
 {
     public class CryptoBytesBasedRng : IRng
     {
-        private RNGCryptoServiceProvider m_rng;
+        private RNGCryptoServiceProvider _rng;
 
-        private byte[] m_bytes8;
-        private byte[] m_bytes4;
-        private byte[] m_bytes2;
-        private byte[] m_bytes1;
+        private byte[] _bytes8;
+        private byte[] _bytes4;
+        private byte[] _bytes2;
+        private byte[] _bytes1;
 
         public CryptoBytesBasedRng()
         {
-            m_rng = new RNGCryptoServiceProvider();
+            _rng = new RNGCryptoServiceProvider();
 
-            m_bytes8 = new byte[sizeof(ulong)];
-            m_bytes4 = new byte[sizeof(uint)];
-            m_bytes2 = new byte[sizeof(ushort)];
-            m_bytes1 = new byte[sizeof(byte)];
+            _bytes8 = new byte[sizeof(ulong)];
+            _bytes4 = new byte[sizeof(uint)];
+            _bytes2 = new byte[sizeof(ushort)];
+            _bytes1 = new byte[sizeof(byte)];
         }
 
         ~CryptoBytesBasedRng()
         {
-            m_rng.Dispose();
+            _rng.Dispose();
         }
 
         public int Next(int minValue, int maxValue)
@@ -34,7 +34,7 @@ namespace UnityUtility.Rng
             if (minValue > maxValue)
                 throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
-            return f_next(minValue, maxValue);
+            return NextInternal(minValue, maxValue);
         }
 
         public int Next(int maxValue)
@@ -42,7 +42,7 @@ namespace UnityUtility.Rng
             if (maxValue < 0)
                 throw Errors.NegativeParameter(nameof(maxValue));
 
-            return f_next(0, maxValue);
+            return NextInternal(0, maxValue);
         }
 
         public float Next(float minValue, float maxValue)
@@ -61,54 +61,54 @@ namespace UnityUtility.Rng
 
         public double NextDouble()
         {
-            m_rng.GetBytes(m_bytes8);
-            ulong rn = BitConverter.ToUInt64(m_bytes8, 0);
+            _rng.GetBytes(_bytes8);
+            ulong rn = BitConverter.ToUInt64(_bytes8, 0);
             rn %= 1000000000000000ul;
             return rn * 0.000000000000001d;
         }
 
         public byte NextByte()
         {
-            m_rng.GetBytes(m_bytes1);
-            return m_bytes1[0];
+            _rng.GetBytes(_bytes1);
+            return _bytes1[0];
         }
 
         public void NextBytes(byte[] buffer)
         {
-            m_rng.GetBytes(buffer);
+            _rng.GetBytes(buffer);
         }
 
         public void NextBytes(Span<byte> buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                m_rng.GetBytes(m_bytes1);
-                buffer[i] = m_bytes1[0];
+                _rng.GetBytes(_bytes1);
+                buffer[i] = _bytes1[0];
             }
         }
 
         // -- //
 
-        private int f_next(int minValue, int maxValue)
+        private int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
 
             if (length <= 256L)
             {
-                m_rng.GetBytes(m_bytes1);
-                byte rn = m_bytes1[0];
+                _rng.GetBytes(_bytes1);
+                byte rn = _bytes1[0];
                 return rn % (int)length + minValue;
             }
             else if (length <= 65536L)
             {
-                m_rng.GetBytes(m_bytes2);
-                ushort rn = BitConverter.ToUInt16(m_bytes2, 0);
+                _rng.GetBytes(_bytes2);
+                ushort rn = BitConverter.ToUInt16(_bytes2, 0);
                 return rn % (int)length + minValue;
             }
             else
             {
-                m_rng.GetBytes(m_bytes4);
-                uint rn = BitConverter.ToUInt32(m_bytes4, 0);
+                _rng.GetBytes(_bytes4);
+                uint rn = BitConverter.ToUInt32(_bytes4, 0);
                 return (int)(rn % length + minValue);
             }
         }

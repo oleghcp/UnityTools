@@ -1,6 +1,4 @@
-﻿using UnityUtility.Collections;
-
-namespace UnityUtility.Sound.SoundProviderStuff
+﻿namespace UnityUtility.Sound.SoundProviderStuff
 {
     public class DynamicMusSourceCreator : IObjectCreator<MusObject>
     {

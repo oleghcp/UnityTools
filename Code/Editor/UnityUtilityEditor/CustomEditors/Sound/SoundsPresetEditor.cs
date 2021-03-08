@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
         private void OnEnable()
         {
-            _nodes = serializedObject.FindProperty("m_nodes");
+            _nodes = serializedObject.FindProperty("_nodes");
         }
 
         public override void OnInspectorGUI()

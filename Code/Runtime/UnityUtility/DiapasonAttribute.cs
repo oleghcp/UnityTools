@@ -6,7 +6,7 @@ namespace UnityUtility
     [AttributeUsage(AttributeTargets.Field)]
     public class DiapasonAttribute : PropertyAttribute
     {
-        public float MinValue { get; }
+        internal float MinValue { get; }
 
         public DiapasonAttribute() { }
 

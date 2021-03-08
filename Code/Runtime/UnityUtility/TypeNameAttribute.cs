@@ -6,7 +6,7 @@ namespace UnityUtility
     [AttributeUsage(AttributeTargets.Field)]
     public class TypeNameAttribute : PropertyAttribute
     {
-        public Type TargetType { get; }
+        internal Type TargetType { get; }
 
         public TypeNameAttribute(Type baseType)
         {

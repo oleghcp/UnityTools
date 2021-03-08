@@ -17,12 +17,12 @@ namespace UnityUtility
 
         private void Awake()
         {
-            f_initialize();
+            Initialize();
         }
 
         private void Update()
         {
-            float newRatio = f_getCurrentRatio();
+            float newRatio = GetCurrentRatio();
 
             if (_aspectRatio != newRatio)
             {
@@ -33,19 +33,19 @@ namespace UnityUtility
 
         private void OnValidate()
         {
-            f_initialize();
+            Initialize();
         }
 
-        private void f_initialize()
+        private void Initialize()
         {
             _camera = GetComponent<Camera>();
-            _aspectRatio = f_getCurrentRatio();
+            _aspectRatio = GetCurrentRatio();
             _camera.orthographicSize = _horizontalSize * _aspectRatio;
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float f_getCurrentRatio()
+        private static float GetCurrentRatio()
         {
             return (float)Screen.height / Screen.width;
         }

@@ -1,27 +1,25 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+using UnityEngine;
 using UnityUtility.Collections;
-using System;
-using UnityUtility.SingleScripts;
 using UnityUtility.MathExt;
-using System.Runtime.CompilerServices;
 using UnityUtilityTools;
 
 namespace UnityUtility.Sound.SoundProviderStuff
 {
     [DisallowMultipleComponent]
-    public class MusObject : SoundObjectInfo, IPoolable
+    public sealed class MusObject : SoundObjectInfo, IPoolable
     {
         [SerializeField]
         private AudioSource _audioSource;
 
-        private float m_volume;
-        private float m_pitch;
-        private MusicProvider m_provider;
-        private Action m_update;
-        private MPreset m_preset;
+        private float _volume;
+        private float _pitch;
+        private MusicProvider _provider;
+        private Action _update;
+        private MPreset _preset;
 
-        private bool m_fading;
+        private bool _fading;
 
         internal override string ClipName
         {
@@ -35,7 +33,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         internal bool Fading
         {
-            get { return m_fading; }
+            get { return _fading; }
         }
 
         ///////////////
@@ -52,13 +50,13 @@ namespace UnityUtility.Sound.SoundProviderStuff
                 _audioSource.playOnAwake = false;
             }
 
-            m_update = () =>
+            _update = () =>
             {
                 if (_audioSource.isPlaying || _audioSource.time != 0f) { return; }
                 Stop();
             };
 
-            f_init();
+            ApplicationUtility.OnUpdate_Event += _update;
         }
 
         ////////////////
@@ -67,27 +65,27 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         internal void Play(MusicProvider provider, AudioClip clip, MPreset preset)
         {
-            m_provider = provider;
+            _provider = provider;
             _audioSource.clip = clip;
-            m_preset = preset;
+            _preset = preset;
 
-            f_play();
+            PlayInternal();
         }
 
         internal void Restart()
         {
             StopAllCoroutines();
             _audioSource.Stop();
-            m_fading = false;
+            _fading = false;
 
-            f_play();
+            PlayInternal();
         }
 
         internal override void Stop()
         {
             StopAllCoroutines();
             _audioSource.Stop();
-            m_provider.ReleaseMusic(this);
+            _provider.ReleaseMusic(this);
         }
 
         internal void StopFading(float time)
@@ -103,12 +101,12 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         internal void UpdVolume()
         {
-            _audioSource.volume = m_volume * m_provider.Volume;
+            _audioSource.volume = _volume * _provider.Volume;
         }
 
         internal void UpdPitch()
         {
-            _audioSource.pitch = m_pitch * m_provider.Pitch;
+            _audioSource.pitch = _pitch * _provider.Pitch;
         }
 
         internal void Pause()
@@ -125,45 +123,40 @@ namespace UnityUtility.Sound.SoundProviderStuff
         //Inner Funcs//
         ///////////////
 
-        private void f_init()
+        private void PlayInternal()
         {
-            ApplicationUtility.OnUpdate_Event += m_update;
-        }
+            _audioSource.loop = _preset.Looped;
+            _audioSource.time = _preset.StartTime;
+            _pitch = _preset.Pitch;
 
-        private void f_play()
-        {
-            _audioSource.loop = m_preset.Looped;
-            _audioSource.time = m_preset.StartTime;
-            m_pitch = m_preset.Pitch;
-
-            if (m_preset.Rising)
+            if (_preset.Rising)
             {
-                m_volume = 0f;
+                _volume = 0f;
                 StartCoroutine(Rise());
             }
             else
             {
-                m_volume = m_preset.Volume;
+                _volume = _preset.Volume;
                 UpdVolume();
             }
 
             UpdPitch();
-            _audioSource.PlayDelayed(m_preset.StartDelay);
+            _audioSource.PlayDelayed(_preset.StartDelay);
         }
 
         #region IPoolable
         void IPoolable.Reinit()
         {
             gameObject.SetActive(true);
-            f_init();
+            ApplicationUtility.OnUpdate_Event += _update;
         }
 
         void IPoolable.CleanUp()
         {
             gameObject.SetActive(false);
             _audioSource.clip = null;
-            m_fading = false;
-            ApplicationUtility.OnUpdate_Event -= m_update;
+            _fading = false;
+            ApplicationUtility.OnUpdate_Event -= _update;
         }
         #endregion
 
@@ -171,16 +164,16 @@ namespace UnityUtility.Sound.SoundProviderStuff
         //Routines//
         ////////////
 
-        IEnumerator Rise()
+        private IEnumerator Rise()
         {
             UpdVolume();
             float curTime = 0f;
 
-            while (curTime < m_preset.StartDelay)
+            while (curTime < _preset.StartDelay)
             {
                 yield return null;
 
-                if (m_provider.Paused) { continue; }
+                if (_provider.Paused) { continue; }
 
                 curTime += Time.unscaledDeltaTime * _audioSource.pitch.Abs();
             }
@@ -192,23 +185,23 @@ namespace UnityUtility.Sound.SoundProviderStuff
             {
                 yield return null;
 
-                if (m_provider.Paused) { continue; }
+                if (_provider.Paused) { continue; }
 
-                curTime += Time.unscaledDeltaTime * m_provider.Pitch.Abs();
-                ratio = curTime / m_preset.RisingDur;
-                m_volume = Mathf.Lerp(0f, m_preset.Volume, curTime);
+                curTime += Time.unscaledDeltaTime * _provider.Pitch.Abs();
+                ratio = curTime / _preset.RisingDur;
+                _volume = Mathf.Lerp(0f, _preset.Volume, curTime);
                 UpdVolume();
 
             } while (ratio < 1f);
         }
 
-        IEnumerator FadeAndStop(float time)
+        private IEnumerator FadeAndStop(float time)
         {
             if (time < 0f)
                 throw Errors.NegativeTime(nameof(time));
 
-            m_fading = true;
-            float startVal = m_volume;
+            _fading = true;
+            float startVal = _volume;
             float curTime = 0f;
             float ratio = 0f;
 
@@ -216,17 +209,17 @@ namespace UnityUtility.Sound.SoundProviderStuff
             {
                 yield return null;
 
-                if (m_provider.Paused) { continue; }
+                if (_provider.Paused) { continue; }
 
-                curTime += Time.unscaledDeltaTime * m_provider.Pitch.Abs();
+                curTime += Time.unscaledDeltaTime * _provider.Pitch.Abs();
                 ratio = curTime / time;
-                m_volume = Mathf.Lerp(startVal, 0f, ratio);
+                _volume = Mathf.Lerp(startVal, 0f, ratio);
                 UpdVolume();
 
             } while (ratio < 1f);
 
             _audioSource.Stop();
-            m_provider.ReleaseMusic(this);
+            _provider.ReleaseMusic(this);
         }
     }
 }

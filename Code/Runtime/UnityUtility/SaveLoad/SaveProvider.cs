@@ -23,19 +23,19 @@ namespace UnityUtility.SaveLoad
     {
         private const BindingFlags FIELD_MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-        private ISaver m_saver;
-        private IKeyGenerator m_keyGenerator;
-        private Dictionary<object, List<SaveLoadFieldAttribute>> m_fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
+        private ISaver _saver;
+        private IKeyGenerator _keyGenerator;
+        private Dictionary<object, List<SaveLoadFieldAttribute>> _fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
 
         public ISaver Saver
         {
-            get { return m_saver; }
+            get { return _saver; }
         }
 
         public SaveProvider(ISaver saver)
         {
-            m_saver = saver;
-            m_keyGenerator = new BaseKeyGenerator();
+            _saver = saver;
+            _keyGenerator = new BaseKeyGenerator();
         }
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace UnityUtility.SaveLoad
         /// 
         public SaveProvider(ISaver saver, IKeyGenerator keyGenerator)
         {
-            m_saver = saver;
-            m_keyGenerator = keyGenerator;
+            _saver = saver;
+            _keyGenerator = keyGenerator;
         }
 
         ////////////////
@@ -86,14 +86,14 @@ namespace UnityUtility.SaveLoad
                         list = new List<SaveLoadFieldAttribute>();
 
                     a.Field = fields[i];
-                    a.Key = m_keyGenerator.Generate(t, a.Field.Name, clientId);
+                    a.Key = _keyGenerator.Generate(t, a.Field.Name, clientId);
 
                     list.Add(a);
 
                     if (initFields)
                     {
-                        object value = a.DefValue != null ? m_saver.Get(a.Key, a.DefValue)
-                                                          : m_saver.Get(a.Key, a.Field.FieldType);
+                        object value = a.DefValue != null ? _saver.Get(a.Key, a.DefValue)
+                                                          : _saver.Get(a.Key, a.Field.FieldType);
 
                         a.Field.SetValue(client, value);
                     }
@@ -101,7 +101,7 @@ namespace UnityUtility.SaveLoad
             }
 
             if (list != null)
-                m_fields.Add(client, list);
+                _fields.Add(client, list);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace UnityUtility.SaveLoad
         /// <param name="deleteSaves">Removes key-value data of the object from the storage if true. You should call ApplyAll Function to save changes.</param>
         public void UnregMember(object client, UnregOption option = UnregOption.None)
         {
-            List<SaveLoadFieldAttribute> aList = m_fields.PullOut(client);
+            List<SaveLoadFieldAttribute> aList = _fields.PullOut(client);
 
             if (option == UnregOption.None || aList == null)
                 return;
@@ -118,9 +118,9 @@ namespace UnityUtility.SaveLoad
             foreach (var attribute in aList)
             {
                 if (option == UnregOption.SaveObjecState)
-                    m_saver.Set(attribute.Key, attribute.Field.GetValue(client));
+                    _saver.Set(attribute.Key, attribute.Field.GetValue(client));
                 else if (option == UnregOption.DeleteObjecState)
-                    m_saver.DeleteKey(attribute.Key);
+                    _saver.DeleteKey(attribute.Key);
             }
         }
 
@@ -132,22 +132,22 @@ namespace UnityUtility.SaveLoad
         {
             if (option == UnregOption.DeleteObjecState)
             {
-                foreach (var kvp in m_fields)
+                foreach (var kvp in _fields)
                 {
                     foreach (var attribute in kvp.Value)
-                        m_saver.DeleteKey(attribute.Key);
+                        _saver.DeleteKey(attribute.Key);
                 }
             }
             else if (option == UnregOption.SaveObjecState)
             {
-                foreach (var kvp in m_fields)
+                foreach (var kvp in _fields)
                 {
                     foreach (var attribute in kvp.Value)
-                        m_saver.Set(attribute.Key, attribute.Field.GetValue(kvp.Key));
+                        _saver.Set(attribute.Key, attribute.Field.GetValue(kvp.Key));
                 }
             }
 
-            m_fields.Clear();
+            _fields.Clear();
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace UnityUtility.SaveLoad
         /// </summary>
         public void Save(string version)
         {
-            f_collect();
-            m_saver.SaveVersion(version);
+            Collect();
+            _saver.SaveVersion(version);
         }
 
         /// <summary>
@@ -170,13 +170,13 @@ namespace UnityUtility.SaveLoad
 
                 int counter = 0;
 
-                foreach (var kvp in m_fields)
+                foreach (var kvp in _fields)
                 {
                     List<SaveLoadFieldAttribute> aList = kvp.Value;
 
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        m_saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                        _saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
 
                         if (++counter >= stepsPerFrame)
                         {
@@ -186,7 +186,7 @@ namespace UnityUtility.SaveLoad
                     }
                 }
 
-                TaskInfo saveTask = m_saver.SaveVersionAsync(version, stepsPerFrame);
+                TaskInfo saveTask = _saver.SaveVersionAsync(version, stepsPerFrame);
 
                 while (saveTask.IsAlive)
                 {
@@ -199,7 +199,7 @@ namespace UnityUtility.SaveLoad
 
         public bool Load(string version)
         {
-            return m_saver.LoadVersion(version);
+            return _saver.LoadVersion(version);
         }
 
         /// <summary>
@@ -207,21 +207,21 @@ namespace UnityUtility.SaveLoad
         /// </summary>
         public void Clear()
         {
-            m_saver.Clear();
+            _saver.Clear();
         }
 
         ///////////////
         //Inner funcs//
         ///////////////
 
-        private void f_collect()
+        private void Collect()
         {
-            foreach (var kvp in m_fields)
+            foreach (var kvp in _fields)
             {
                 List<SaveLoadFieldAttribute> aList = kvp.Value;
                 for (int i = 0; i < aList.Count; i++)
                 {
-                    m_saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                    _saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
                 }
             }
         }

@@ -8,44 +8,13 @@ namespace UnityUtility.Rng
     [Serializable]
     public class TimeBytesBasedRng : IRng
     {
-        [Serializable]
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct ByteGenerator
-        {
-            private readonly byte MULT;
-
-            private uint m_seed;
-            private uint m_ticks;
-
-            public ByteGenerator(int seed)
-            {
-                MULT = (byte)((uint)seed % 8 + 2);
-                m_seed = (uint)seed;
-                m_ticks = 0;
-            }
-
-            public byte RandomByte()
-            {
-                uint newTicks = (uint)Environment.TickCount;
-
-                if (m_ticks < newTicks)
-                    m_ticks = newTicks;
-                else
-                    m_ticks++;
-
-                m_seed = MULT * m_seed + m_ticks;
-
-                return (byte)(m_seed % 256);
-            }
-        }
-
-        private ByteGenerator m_rng;
+        private ByteGenerator _rng;
 
         public TimeBytesBasedRng() : this(Environment.TickCount) { }
 
         public TimeBytesBasedRng(int seed)
         {
-            m_rng = new ByteGenerator(seed);
+            _rng = new ByteGenerator(seed);
         }
 
         public int Next(int minValue, int maxValue)
@@ -53,7 +22,7 @@ namespace UnityUtility.Rng
             if (minValue > maxValue)
                 throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
-            return f_next(minValue, maxValue);
+            return NextInternal(minValue, maxValue);
         }
 
         public int Next(int maxValue)
@@ -61,7 +30,7 @@ namespace UnityUtility.Rng
             if (maxValue < 0)
                 throw Errors.NegativeParameter(nameof(maxValue));
 
-            return f_next(0, maxValue);
+            return NextInternal(0, maxValue);
         }
 
         public float Next(float minValue, float maxValue)
@@ -89,14 +58,14 @@ namespace UnityUtility.Rng
 
         public byte NextByte()
         {
-            return m_rng.RandomByte();
+            return _rng.RandomByte();
         }
 
         public void NextBytes(byte[] buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                buffer[i] = m_rng.RandomByte();
+                buffer[i] = _rng.RandomByte();
             }
         }
 
@@ -104,17 +73,17 @@ namespace UnityUtility.Rng
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                buffer[i] = m_rng.RandomByte();
+                buffer[i] = _rng.RandomByte();
             }
         }
 
-        private unsafe int f_next(int minValue, int maxValue)
+        private unsafe int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
 
             if (length <= 256L)
             {
-                byte rn = m_rng.RandomByte();
+                byte rn = _rng.RandomByte();
                 return rn % (int)length + minValue;
             }
             else if (length <= 65536L)
@@ -130,6 +99,37 @@ namespace UnityUtility.Rng
                 NextBytes(bytes);
                 uint rn = *(uint*)bytes.Ptr;
                 return (int)(rn % length + minValue);
+            }
+        }
+
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct ByteGenerator
+        {
+            private readonly byte MULT;
+
+            private uint _seed;
+            private uint _ticks;
+
+            public ByteGenerator(int seed)
+            {
+                MULT = (byte)((uint)seed % 8 + 2);
+                _seed = (uint)seed;
+                _ticks = 0;
+            }
+
+            public byte RandomByte()
+            {
+                uint newTicks = (uint)Environment.TickCount;
+
+                if (_ticks < newTicks)
+                    _ticks = newTicks;
+                else
+                    _ticks++;
+
+                _seed = MULT * _seed + _ticks;
+
+                return (byte)(_seed % 256);
             }
         }
     }

@@ -51,22 +51,22 @@ namespace UnityUtility.Controls
 
     public sealed class TouchInputEmulator : IRefreshable
     {
-        private ScreenTouch[] m_touches;
-        private int m_touchCount;
+        private ScreenTouch[] _touches;
+        private int _touchCount;
 
         public ScreenTouch[] Touches
         {
-            get { return m_touches; }
+            get { return _touches; }
         }
 
         public int TouchCount
         {
-            get { return m_touchCount; }
+            get { return _touchCount; }
         }
 
         public TouchInputEmulator()
         {
-            m_touches = new[]
+            _touches = new[]
             {
                 new ScreenTouch
                 {
@@ -84,19 +84,19 @@ namespace UnityUtility.Controls
 
         public void ResetTouch()
         {
-            ref ScreenTouch touch = ref m_touches[0];
+            ref ScreenTouch touch = ref _touches[0];
 
-            touch.DeltaTime = Time.time - m_touches[0].LastTime;
+            touch.DeltaTime = Time.time - _touches[0].LastTime;
             touch.LastTime = Time.time;
             touch.Phase = TouchPhase.Canceled;
 
-            m_touchCount = 0;
+            _touchCount = 0;
         }
 
         public void Refresh()
         {
             Vector2 curMousePos = Input.mousePosition;
-            ref ScreenTouch touch = ref m_touches[0];
+            ref ScreenTouch touch = ref _touches[0];
 
             switch (touch.Phase)
             {
@@ -111,7 +111,7 @@ namespace UnityUtility.Controls
                         touch.LastTime = Time.time;
                         touch.TapCount = 0;
                         touch.Phase = TouchPhase.Began;
-                        m_touchCount = 1;
+                        _touchCount = 1;
                     }
                     break;
 
@@ -170,7 +170,7 @@ namespace UnityUtility.Controls
                     touch.DeltaTime = Time.time - touch.LastTime;
                     touch.LastTime = Time.time;
                     touch.Phase = TouchPhase.Canceled;
-                    m_touchCount = 0;
+                    _touchCount = 0;
                     break;
             }
         }

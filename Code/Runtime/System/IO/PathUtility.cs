@@ -8,30 +8,30 @@ namespace System.IO
     {
         public static string GetName(string path)
         {
-            return f_getName(path, f_isSeparator);
+            return GetName(path, IsSeparator);
         }
 
         public static string GetName(string path, char separator)
         {
-            return f_getName(path, ch => ch == separator);
+            return GetName(path, ch => ch == separator);
         }
 
         public static string GetParentPath(string path, int steps = 1)
         {
-            return f_getParentPath(path, steps, f_isSeparator);
+            return GetParentPath(path, steps, IsSeparator);
         }
 
         public static string GetParentPath(string path, char separator, int steps = 1)
         {
-            return f_getParentPath(path, steps, ch => ch == separator);
+            return GetParentPath(path, steps, ch => ch == separator);
         }
 
-        private static bool f_isSeparator(char ch)
+        private static bool IsSeparator(char ch)
         {
             return ch == Path.DirectorySeparatorChar || ch == Path.AltDirectorySeparatorChar;
         }
 
-        private static string f_getName(string path, Predicate<char> separatorCheck)
+        private static string GetName(string path, Predicate<char> separatorCheck)
         {
             int separatorIndex = -1;
             bool terminator = true;
@@ -60,7 +60,7 @@ namespace System.IO
             return path.Substring(startIndex, length);
         }
 
-        private static string f_getParentPath(string path, int steps, Predicate<char> separatorCheck)
+        private static string GetParentPath(string path, int steps, Predicate<char> separatorCheck)
         {
             if (steps < 0)
                 throw Errors.NegativeParameter(nameof(path));

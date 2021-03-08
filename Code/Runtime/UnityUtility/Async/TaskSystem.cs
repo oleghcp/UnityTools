@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using Assets.Code.Runtime.UnityUtility;
 using UnityEngine;
 using UnityUtility.IdGenerating;
 
@@ -20,23 +19,30 @@ namespace UnityUtility.Async
     {
         public const string SYSTEM_NAME = "Async System (ext.)";
 
-        private static TaskFactory s_globals;
-        private static TaskFactory s_locals;
+        private static TaskFactory _globals;
+        private static TaskFactory _locals;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void f_setUp()
+        private static void SetUp()
         {
-            IAsyncSettings settings = f_getSettings();
+            IAsyncSettings settings = getSettings();
             LongIdGenerator idProvider = new LongIdGenerator();
 
-            s_globals = new TaskFactory(settings, idProvider, true);
-            s_locals = new TaskFactory(settings, idProvider, false);
+            _globals = new TaskFactory(settings, idProvider, true);
+            _locals = new TaskFactory(settings, idProvider, false);
+
+            IAsyncSettings getSettings()
+            {
+                AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
+                return settings == null ? new DefaultSettings()
+                                        : settings as IAsyncSettings;
+            }
         }
 
         public static void RegisterStopper(ITaskStopper stopper)
         {
-            s_globals.RegisterStopper(stopper);
-            s_locals.RegisterStopper(stopper);
+            _globals.RegisterStopper(stopper);
+            _locals.RegisterStopper(stopper);
         }
 
         /// <summary>
@@ -44,7 +50,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(run, token);
+            return _globals.GetRunner().RunAsync(run, token);
         }
 
         /// <summary>
@@ -52,7 +58,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(run, token);
+            return _locals.GetRunner().RunAsync(run, token);
         }
 
         /// <summary>
@@ -60,7 +66,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
+            return _globals.GetRunner().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
         }
 
         /// <summary>
@@ -68,7 +74,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
+            return _locals.GetRunner().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
         }
 
         /// <summary>
@@ -76,7 +82,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
+            return _globals.GetRunner().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
         }
 
         /// <summary>
@@ -84,7 +90,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFramesLocally(int frames, Action run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
+            return _locals.GetRunner().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
         }
 
         /// <summary>
@@ -92,7 +98,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
+            return _globals.GetRunner().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
         }
 
         /// <summary>
@@ -100,7 +106,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
+            return _locals.GetRunner().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
         }
 
         /// <summary>
@@ -108,7 +114,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo Repeat(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_globals.GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
+            return _globals.GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
         }
 
         /// <summary>
@@ -116,16 +122,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RepeatLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return s_locals.GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
-        }
-
-        // -- //
-
-        private static IAsyncSettings f_getSettings()
-        {
-            AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
-            return settings == null ? new DefaultSettings()
-                                    : settings as IAsyncSettings;
+            return _locals.GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
         }
 
         private class DefaultSettings : IAsyncSettings

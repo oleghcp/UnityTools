@@ -34,28 +34,28 @@ namespace UnityUtility.GameConsole
         [SerializeField]
         private LogController _log;
 
-        private bool m_isOn;
-        private PointerEventData m_pointerEventData;
-        private StringBuilder m_stringBuilder;
+        private bool _isOn;
+        private PointerEventData _pointerEventData;
+        private StringBuilder _stringBuilder;
 
-        private object m_cmdRun;
-        private Dictionary<string, MethodInfo> m_commands;
+        private object _cmdRun;
+        private Dictionary<string, MethodInfo> _commands;
 
-        private string[][] m_invokeParams;
+        private string[][] _invokeParams;
 
-        private List<string> m_cmdHistory;
-        private int m_curHistoryIndex;
+        private List<string> _cmdHistory;
+        private int _curHistoryIndex;
 
-        private TerminalOptions m_options;
+        private TerminalOptions _options;
 
         public bool IsOn
         {
-            get { return m_isOn; }
+            get { return _isOn; }
         }
 
         public TerminalOptions Options
         {
-            get { return m_options; }
+            get { return _options; }
         }
 
         ///////////////
@@ -66,12 +66,12 @@ namespace UnityUtility.GameConsole
         {
             _log.SetUp(this);
 
-            m_pointerEventData = new PointerEventData(EventSystem.current);
-            m_stringBuilder = new StringBuilder();
+            _pointerEventData = new PointerEventData(EventSystem.current);
+            _stringBuilder = new StringBuilder();
 
-            m_invokeParams = new string[1][];
+            _invokeParams = new string[1][];
 
-            m_cmdHistory = new List<string>() { string.Empty };
+            _cmdHistory = new List<string>() { string.Empty };
 
 #if UNITY_EDITOR
             if (Application.isPlaying)
@@ -91,24 +91,24 @@ namespace UnityUtility.GameConsole
         {
             if (Input.GetKeyDown(KeyCode.BackQuote))
             {
-                f_switch();
-                Switched_Event?.Invoke(m_isOn);
+                SwitchInternal();
+                Switched_Event?.Invoke(_isOn);
             }
 
-            if (m_isOn)
+            if (_isOn)
             {
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {
-                    f_findCmd(_field.text);
+                    FindCmd(_field.text);
                 }
 
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    f_switchHistoryLine(true);
+                    SwitchHistoryLine(true);
                 }
                 else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    f_switchHistoryLine(false);
+                    SwitchHistoryLine(false);
                 }
 
                 float axis = Input.GetAxis("Mouse ScrollWheel");
@@ -116,9 +116,9 @@ namespace UnityUtility.GameConsole
 
                 if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
-                    f_enterCmd(_field.text);
+                    EnterCmd(_field.text);
                     _field.text = string.Empty;
-                    _field.OnPointerClick(m_pointerEventData);
+                    _field.OnPointerClick(_pointerEventData);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace UnityUtility.GameConsole
         /// </summary>
         public static void CreateTerminal()
         {
-            f_CreateTerminal();
+            CreateTerminalInternal();
             I.SetOptions(new TerminalOptions());
         }
 
@@ -148,7 +148,7 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands)
         {
-            f_CreateTerminal();
+            CreateTerminalInternal();
             I.SetOptions(new TerminalOptions());
             I.SetCommands(commands);
         }
@@ -162,7 +162,7 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands, TerminalOptions options)
         {
-            f_CreateTerminal();
+            CreateTerminalInternal();
             I.SetCommands(commands);
             I.SetOptions(options);
         }
@@ -173,25 +173,25 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public void SetCommands(object commands)
         {
-            m_cmdRun = commands;
-            Type t = m_cmdRun.GetType();
+            _cmdRun = commands;
+            Type t = _cmdRun.GetType();
             MethodInfo[] funcs = t.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-            m_commands = funcs.ToDictionary(itm => itm.Name, itm => itm);
+            _commands = funcs.ToDictionary(itm => itm.Name, itm => itm);
         }
 
         public void SetOptions(TerminalOptions options)
         {
-            m_options = options;
+            _options = options;
         }
 
         public void GetCmd()
         {
-            f_findCmd(string.Empty);
+            FindCmd(string.Empty);
         }
 
         public void Switch()
         {
-            f_switch();
+            SwitchInternal();
         }
 
         public void WriteLine(string txt, Color color)
@@ -201,7 +201,7 @@ namespace UnityUtility.GameConsole
 
         public void WriteLine(string txt, LogType logType)
         {
-            _log.WriteLine(f_getTextColor(logType), txt);
+            _log.WriteLine(GetTextColor(logType), txt);
         }
 
         public void Clear()
@@ -211,16 +211,16 @@ namespace UnityUtility.GameConsole
 
         public void OnDone(string _)
         {
-            _field.OnPointerClick(m_pointerEventData);
+            _field.OnPointerClick(_pointerEventData);
         }
 
         ///////////////
         //Inner funcs//
         ///////////////
 
-        private void f_enterCmd(string text)
+        private void EnterCmd(string text)
         {
-            if (f_noCommands())
+            if (NoCommands())
                 return;
 
             if (text.HasUsefulData())
@@ -230,16 +230,16 @@ namespace UnityUtility.GameConsole
                 string[] words = text.Split(' ');
                 string command = words[0];
 
-                if (m_commands.TryGetValue(command, out MethodInfo method))
+                if (_commands.TryGetValue(command, out MethodInfo method))
                 {
                     if (words.Length > 1)
                     {
-                        m_invokeParams[0] = new string[words.Length - 1];
-                        Array.Copy(words, 1, m_invokeParams[0], 0, m_invokeParams[0].Length);
+                        _invokeParams[0] = new string[words.Length - 1];
+                        Array.Copy(words, 1, _invokeParams[0], 0, _invokeParams[0].Length);
                     }
 
-                    object cmdKeysParseError = method.Invoke(m_cmdRun, m_invokeParams);
-                    m_invokeParams[0] = null;
+                    object cmdKeysParseError = method.Invoke(_cmdRun, _invokeParams);
+                    _invokeParams[0] = null;
 
                     if (cmdKeysParseError == null)
                         _log.WriteLine(CMD_COLOR, text);
@@ -251,19 +251,19 @@ namespace UnityUtility.GameConsole
                     _log.WriteLine(CMD_ERROR_COLOR, "unknown: " + command);
                 }
 
-                m_cmdHistory.Add(text);
-                m_curHistoryIndex = 0;
+                _cmdHistory.Add(text);
+                _curHistoryIndex = 0;
             }
         }
 
-        private void f_findCmd(string text)
+        private void FindCmd(string text)
         {
-            if (f_noCommands())
+            if (NoCommands())
                 return;
 
             text = text.ToLower();
 
-            string[] cmds = m_commands.Keys.Where(itm => itm.IndexOf(text) == 0).OrderBy(itm => itm).ToArray();
+            string[] cmds = _commands.Keys.Where(itm => itm.IndexOf(text) == 0).OrderBy(itm => itm).ToArray();
 
             if (cmds.Length == 0)
             {
@@ -271,72 +271,72 @@ namespace UnityUtility.GameConsole
             }
             else if (cmds.Length == 1)
             {
-                _field.text = m_options.AddSpaceAfterName ? cmds[0] + " " : cmds[0];
+                _field.text = _options.AddSpaceAfterName ? cmds[0] + " " : cmds[0];
                 _field.caretPosition = _field.text.Length;
             }
             else
             {
                 for (int i = 0; i < cmds.Length; i++)
                 {
-                    m_stringBuilder.Append(cmds[i]).Append("   ");
+                    _stringBuilder.Append(cmds[i]).Append("   ");
                 }
 
-                string line = m_stringBuilder.ToString();
-                m_stringBuilder.Clear();
+                string line = _stringBuilder.ToString();
+                _stringBuilder.Clear();
 
                 _log.WriteLine(CMD_COLOR, line);
-                _field.text = text + f_getCommon(cmds, text.Length);
+                _field.text = text + getCommon(cmds, text.Length);
                 _field.caretPosition = _field.text.Length;
             }
-        }
 
-        private string f_getCommon(string[] strings, int startIndex = 0)
-        {
-            string baseStr = strings[0];
-
-            int characters = 0;
-
-            for (int j = startIndex; j < baseStr.Length; j++)
+            string getCommon(string[] strings, int startIndex = 0)
             {
-                for (int i = 1; i < strings.Length; i++)
+                string baseStr = strings[0];
+
+                int characters = 0;
+
+                for (int j = startIndex; j < baseStr.Length; j++)
                 {
-                    if (baseStr[j] != strings[i][j])
+                    for (int i = 1; i < strings.Length; i++)
                     {
-                        return baseStr.Substring(startIndex, characters);
+                        if (baseStr[j] != strings[i][j])
+                        {
+                            return baseStr.Substring(startIndex, characters);
+                        }
                     }
+
+                    characters++;
                 }
 
-                characters++;
+                return baseStr.Substring(startIndex, characters);
             }
+        }        
 
-            return baseStr.Substring(startIndex, characters);
-        }
-
-        private void f_switchHistoryLine(bool back)
+        private void SwitchHistoryLine(bool back)
         {
-            if (m_cmdHistory.Count == 0) { return; }
+            if (_cmdHistory.Count == 0) { return; }
 
             if (back)
             {
-                m_curHistoryIndex = m_curHistoryIndex - 1;
-                if (m_curHistoryIndex < 0) { m_curHistoryIndex = m_cmdHistory.Count - 1; }
+                _curHistoryIndex = _curHistoryIndex - 1;
+                if (_curHistoryIndex < 0) { _curHistoryIndex = _cmdHistory.Count - 1; }
             }
             else
             {
-                m_curHistoryIndex = (m_curHistoryIndex + 1) % m_cmdHistory.Count;
+                _curHistoryIndex = (_curHistoryIndex + 1) % _cmdHistory.Count;
             }
 
-            _field.text = m_cmdHistory[m_curHistoryIndex];
+            _field.text = _cmdHistory[_curHistoryIndex];
             _field.caretPosition = _field.text.Length;
         }
 
-        private void f_switch()
+        private void SwitchInternal()
         {
             StopAllCoroutines();
-            StartCoroutine(Switch(!m_isOn));
+            StartCoroutine(Switch(!_isOn));
         }
 
-        private Color f_getTextColor(LogType logType)
+        private Color GetTextColor(LogType logType)
         {
             switch (logType)
             {
@@ -358,24 +358,24 @@ namespace UnityUtility.GameConsole
 
         private void OnDebugLogMessageReceived(string msg, string stackTrace, LogType logType)
         {
-            if (m_options.ShowDebugLogs)
+            if (_options.ShowDebugLogs)
             {
-                _log.WriteLine(f_getTextColor(logType), msg, stackTrace);
+                _log.WriteLine(GetTextColor(logType), msg, stackTrace);
             }
         }
 
-        private static void f_CreateTerminal()
+        private static void CreateTerminalInternal()
         {
             Resources.Load<GameObject>("TerminalCanvas")
                      .Install()
                      .Immortalize();
         }
 
-        private bool f_noCommands()
+        private bool NoCommands()
         {
-            if (m_cmdRun == null)
+            if (_cmdRun == null)
             {
-                _log.WriteLine(f_getTextColor(LogType.Error), "Commands are not set.");
+                _log.WriteLine(GetTextColor(LogType.Error), "Commands are not set.");
                 return true;
             }
 
@@ -388,14 +388,14 @@ namespace UnityUtility.GameConsole
 
         private IEnumerator Switch(bool on)
         {
-            float targetHeight = 720f * m_options.TargetHeight;
+            float targetHeight = 720f * _options.TargetHeight;
 
-            _field.gameObject.SetActive(m_isOn = on);
+            _field.gameObject.SetActive(_isOn = on);
 
             if (on)
                 _field.text = string.Empty;
             else
-                m_curHistoryIndex = 0;
+                _curHistoryIndex = 0;
 
             float hStart = on ? 0f : targetHeight;
             float hEnd = on ? targetHeight : 0f;
@@ -411,7 +411,7 @@ namespace UnityUtility.GameConsole
             }
 
             if (on)
-                _field.OnPointerClick(m_pointerEventData);
+                _field.OnPointerClick(_pointerEventData);
         }
     }
 }

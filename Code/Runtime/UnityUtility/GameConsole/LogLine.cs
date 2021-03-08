@@ -14,13 +14,13 @@ namespace UnityUtility.GameConsole
         [SerializeField]
         private InfoPanel _infoPanel;
 
-        private string m_info;
+        private string _info;
 
         public void SetText(string text, string info, Color color)
         {
             _text.text = text;
             _text.color = color;
-            m_info = info;
+            _info = info;
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);
             gameObject.SetActive(true);
         }
@@ -41,13 +41,13 @@ namespace UnityUtility.GameConsole
         {
             gameObject.SetActive(false);
             _text.text = string.Empty;
-            m_info = null;
+            _info = null;
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            if (m_info.HasUsefulData())
-                _infoPanel.Show(m_info);
+            if (_info.HasUsefulData())
+                _infoPanel.Show(_info);
         }
     }
 }

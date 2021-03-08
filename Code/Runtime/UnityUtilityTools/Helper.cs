@@ -69,37 +69,37 @@ namespace UnityUtilityTools
             if (sourceObj is Pointer)
                 return sourceObj;
 
-            var type = sourceObj.GetType();
+            Type type = sourceObj.GetType();
 
             if (type.IsArray)
             {
-                var sourceArray = sourceObj as Array;
-                var destArray = Array.CreateInstance(type.GetElementType(), sourceArray.Length);
+                Array sourceArray = sourceObj as Array;
+                Array destArray = Array.CreateInstance(type.GetElementType(), sourceArray.Length);
 
-                for (var i = 0; i < sourceArray.Length; i++)
+                for (int i = 0; i < sourceArray.Length; i++)
                 {
-                    var sourceValue = sourceArray.GetValue(i);
+                    object sourceValue = sourceArray.GetValue(i);
                     if (sourceValue == null) { continue; }
 
-                    destArray.SetValue(CloneObject(sourceValue, f_convertToFieldOption(option)), i);
+                    destArray.SetValue(CloneObject(sourceValue, ConvertToFieldOption(option)), i);
                 }
 
                 return destArray;
             }
 
-            var destObj = Activator.CreateInstance(type, true);
+            object destObj = Activator.CreateInstance(type, true);
 
-            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-            for (var i = 0; i < fields.Length; i++)
+            for (int i = 0; i < fields.Length; i++)
             {
-                var sourceFieldValue = fields[i].GetValue(sourceObj);
+                object sourceFieldValue = fields[i].GetValue(sourceObj);
 
                 if (sourceFieldValue == null)
                     continue;
 
-                var attribute = Attribute.GetCustomAttribute(fields[i], typeof(CloneableAttribute)) as CloneableAttribute;
-                var cloneOption = attribute == null ? MemberCloneOption.Clone : attribute.Option;
+                CloneableAttribute attribute = Attribute.GetCustomAttribute(fields[i], typeof(CloneableAttribute)) as CloneableAttribute;
+                MemberCloneOption cloneOption = attribute == null ? MemberCloneOption.Clone : attribute.Option;
 
                 if (cloneOption == MemberCloneOption.Ignore)
                     continue;
@@ -110,15 +110,15 @@ namespace UnityUtilityTools
                     continue;
                 }
 
-                var AsICloneable = option == CloneOption.FieldsAsICloneable || option == CloneOption.AsICloneableOrFieldsAsICloneable;
+                bool asICloneable = option == CloneOption.FieldsAsICloneable || option == CloneOption.AsICloneableOrFieldsAsICloneable;
 
-                if (AsICloneable && sourceFieldValue is ICloneable sourceFieldValueCloneable)
+                if (asICloneable && sourceFieldValue is ICloneable sourceFieldValueCloneable)
                 {
                     fields[i].SetValue(destObj, sourceFieldValueCloneable.Clone());
                     continue;
                 }
 
-                fields[i].SetValue(destObj, CloneObject(sourceFieldValue, f_convertToFieldOption(option)));
+                fields[i].SetValue(destObj, CloneObject(sourceFieldValue, ConvertToFieldOption(option)));
             }
 
             return destObj;
@@ -135,7 +135,7 @@ namespace UnityUtilityTools
 
         // -- //
 
-        private static CloneOption f_convertToFieldOption(CloneOption option)
+        private static CloneOption ConvertToFieldOption(CloneOption option)
         {
             switch (option)
             {
@@ -152,9 +152,9 @@ namespace UnityUtilityTools
         {
             const char DEVIDER = ',';
 
-            var first = false;
+            bool first = false;
 
-            for (var i = 0; i < assemblyQualifiedName.Length; i++)
+            for (int i = 0; i < assemblyQualifiedName.Length; i++)
             {
                 if (assemblyQualifiedName[i] != DEVIDER) { continue; }
                 if (!first) { first = true; }

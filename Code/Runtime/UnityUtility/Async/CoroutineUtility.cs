@@ -2,11 +2,11 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Assets.Code.Runtime.UnityUtility
+namespace UnityUtility.Async
 {
     internal static class CoroutineUtility
     {
-        internal static IEnumerator RunDelayedRoutine(float time, Action run, bool scaledTime)
+        public static IEnumerator RunDelayedRoutine(float time, Action run, bool scaledTime)
         {
             while (time > 0f)
             {
@@ -17,14 +17,14 @@ namespace Assets.Code.Runtime.UnityUtility
             run();
         }
 
-        internal static IEnumerator RunByConditionRoutine(Func<bool> condition, Action run)
+        public static IEnumerator RunByConditionRoutine(Func<bool> condition, Action run)
         {
             while (!condition()) { yield return null; }
 
             run();
         }
 
-        internal static IEnumerator RunAfterFramesRoutine(int frames, Action run)
+        public static IEnumerator RunAfterFramesRoutine(int frames, Action run)
         {
             while (frames > 0)
             {
@@ -35,7 +35,7 @@ namespace Assets.Code.Runtime.UnityUtility
             run();
         }
 
-        internal static IEnumerator RunWhileRoutine(Func<bool> condition, Action run)
+        public static IEnumerator RunWhileRoutine(Func<bool> condition, Action run)
         {
             while (condition())
             {

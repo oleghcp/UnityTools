@@ -10,8 +10,8 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class SingleBehaviour<T> : MonoBehaviour, IDisposable where T : SingleBehaviour<T>
     {
-        private static T s_inst;
-        private static bool s_locked;
+        private static T _inst;
+        private static bool _locked;
 
         /// <summary>
         /// Static instance of SingleScript`1.
@@ -20,18 +20,18 @@ namespace UnityUtility.SingleScripts
         {
             get
             {
-                if (s_inst == null)
+                if (_inst == null)
                 {
-                    if (s_locked)
+                    if (_locked)
                         throw new InvalidOperationException($"The instance of {typeof(T).Name} is being configured. Avoid recursive calls.");
 
-                    if ((s_inst = FindObjectOfType<T>()) == null)
+                    if ((_inst = FindObjectOfType<T>()) == null)
                         throw new ObjectNotFoundException($"There is no any instance of {typeof(T).Name}.");
 
-                    s_inst.Construct();
+                    _inst.Construct();
                 }
 
-                return s_inst;
+                return _inst;
             }
         }
 
@@ -40,26 +40,26 @@ namespace UnityUtility.SingleScripts
         /// </summary>
         public static bool Exists
         {
-            get { return s_inst != null; }
+            get { return _inst != null; }
         }
 
         // Unity Callbacks //
 
         private void Awake()
         {
-            if (s_inst == null)
+            if (_inst == null)
             {
-                s_locked = true;
+                _locked = true;
                 Construct();
-                s_inst = this as T;
-                s_locked = false;
+                _inst = this as T;
+                _locked = false;
             }
         }
 
         private void OnDestroy()
         {
-            if (s_inst != null)
-                f_dispose();
+            if (_inst != null)
+                DisposeInternal();
         }
 
         // -- //
@@ -71,14 +71,14 @@ namespace UnityUtility.SingleScripts
 
             hideFlags = HideFlags.None;
             gameObject.Destroy();
-            f_dispose();
+            DisposeInternal();
         }
 
         // -- //
 
-        private void f_dispose()
+        private void DisposeInternal()
         {
-            s_inst = null;
+            _inst = null;
             CleanUp();
         }
 

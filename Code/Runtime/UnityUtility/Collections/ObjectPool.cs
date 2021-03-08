@@ -21,8 +21,8 @@ namespace UnityUtility.Collections
     /// </summary>
     public sealed class ObjectPool<T> where T : class, IPoolable
     {
-        private Stack<T> m_stack;
-        private Func<T> m_createFunc;
+        private Stack<T> _stack;
+        private Func<T> _createFunc;
 
         /// <summary>
         /// Constructor
@@ -33,8 +33,8 @@ namespace UnityUtility.Collections
             if (creator == null)
                 throw new ArgumentNullException(nameof(creator));
 
-            m_stack = new Stack<T>();
-            m_createFunc = creator;
+            _stack = new Stack<T>();
+            _createFunc = creator;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace UnityUtility.Collections
             if (creator == null)
                 throw new ArgumentNullException(nameof(creator));
 
-            m_createFunc = creator;
+            _createFunc = creator;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace UnityUtility.Collections
         {
             for (int i = 0; i < preCount; i++)
             {
-                Release(m_createFunc());
+                Release(_createFunc());
             }
         }
 
@@ -65,9 +65,9 @@ namespace UnityUtility.Collections
         /// </summary>
         public T Get()
         {
-            if (m_stack.Count == 0) { return m_createFunc(); }
+            if (_stack.Count == 0) { return _createFunc(); }
 
-            T obj = m_stack.Pop();
+            T obj = _stack.Pop();
             obj.Reinit();
             return obj;
         }
@@ -78,7 +78,7 @@ namespace UnityUtility.Collections
         public void Release(T obj)
         {
             obj.CleanUp();
-            m_stack.Push(obj);
+            _stack.Push(obj);
         }
 
         public void Release(IEnumerable<T> range)
@@ -94,7 +94,7 @@ namespace UnityUtility.Collections
         /// </summary>
         public void Clear()
         {
-            m_stack.Clear();
+            _stack.Clear();
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace UnityUtility.Collections
         /// </summary>
         public void Clear(Action<T> disposer)
         {
-            while (m_stack.Count > 0)
+            while (_stack.Count > 0)
             {
-                disposer(m_stack.Pop());
+                disposer(_stack.Pop());
             }
         }
     }

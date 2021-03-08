@@ -6,31 +6,33 @@ using UnityUtilityTools;
 
 namespace UnityUtility
 {
+    [Serializable]
     public sealed class Bezier3
     {
-        private Vector3[] m_points;
+        [SerializeField, HideInInspector]
+        private Vector3[] _points;
 
         public Vector3 Origin
         {
-            get { return m_points[0]; }
-            set { m_points[0] = value; }
+            get { return _points[0]; }
+            set { _points[0] = value; }
         }
 
         public Vector3 Dest
         {
-            get { return m_points.FromEnd(0); }
-            set { m_points[m_points.Length - 1] = value; }
+            get { return _points.FromEnd(0); }
+            set { _points[_points.Length - 1] = value; }
         }
 
         public Vector3 this[int index]
         {
-            get { return m_points[index + 1]; }
-            set { m_points[index + 1] = value; }
+            get { return _points[index + 1]; }
+            set { _points[index + 1] = value; }
         }
 
         public int Count
         {
-            get { return m_points.Length - 2; }
+            get { return _points.Length - 2; }
         }
 
         public Bezier3(Vector3 orig, Vector3 dest, int helpPoints)
@@ -38,24 +40,24 @@ namespace UnityUtility
             if (helpPoints < 1)
                 throw Errors.ZeroParameter(nameof(helpPoints));
 
-            m_points = new Vector3[helpPoints + 2];
-            m_points[0] = orig;
-            m_points[m_points.Length - 1] = dest;
+            _points = new Vector3[helpPoints + 2];
+            _points[0] = orig;
+            _points[_points.Length - 1] = dest;
         }
 
         public Bezier3(Vector3 orig, Vector3 dest, Vector3 helpPoint)
         {
-            m_points = new[] { orig, helpPoint, dest };
+            _points = new[] { orig, helpPoint, dest };
         }
 
         public Bezier3(Vector3 orig, Vector3 dest, Vector3 helpPoint0, Vector3 helpPoint1)
         {
-            m_points = new[] { orig, helpPoint0, helpPoint1, dest };
+            _points = new[] { orig, helpPoint0, helpPoint1, dest };
         }
 
         public Bezier3(Vector3 orig, Vector3 dest, Vector3 helpPoint0, Vector3 helpPoint1, Vector3 helpPoint2)
         {
-            m_points = new[] { orig, helpPoint0, helpPoint1, helpPoint2, dest };
+            _points = new[] { orig, helpPoint0, helpPoint1, helpPoint2, dest };
         }
 
         public Bezier3(Vector3 orig, Vector3 dest, params Vector3[] helpPoints)
@@ -63,19 +65,19 @@ namespace UnityUtility
             if (helpPoints.IsNullOrEmpty())
                 throw Errors.InvalidArrayArgument(nameof(helpPoints));
 
-            m_points = new Vector3[helpPoints.Length + 2];
-            m_points[0] = orig;
-            m_points.FromEnd(0) = dest;
-            helpPoints.CopyTo(m_points, 1);
+            _points = new Vector3[helpPoints.Length + 2];
+            _points[0] = orig;
+            _points.FromEnd(0) = dest;
+            helpPoints.CopyTo(_points, 1);
         }
 
         public Vector3 Evaluate(float ratio)
         {
-            Span<Vector3> tmp = stackalloc Vector3[m_points.Length];
-            m_points.CopyTo(tmp);
+            Span<Vector3> tmp = stackalloc Vector3[_points.Length];
+            _points.CopyTo(tmp);
 
             ratio = ratio.Clamp01();
-            int counter = m_points.Length - 1;
+            int counter = _points.Length - 1;
             int times = counter;
 
             for (int i = 0; i < times; i++)

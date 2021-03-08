@@ -15,9 +15,9 @@ namespace UnityUtility
         public const int SIZE = sizeof(int);
 
         [FieldOffset(0), SerializeField, HideInInspector]
-        private int m_field;
+        private int _field;
         [FieldOffset(0), NonSerialized]
-        private float m_floatField;
+        private float _floatField;
 
         public int Size
         {
@@ -26,7 +26,7 @@ namespace UnityUtility
 
         internal static string SerFieldName
         {
-            get { return nameof(m_field); }
+            get { return nameof(_field); }
         }
 
         public byte this[int index]
@@ -36,7 +36,7 @@ namespace UnityUtility
                 if (index < 0 || index > SIZE - 1)
                     throw Errors.IndexOutOfRange();
 
-                return f_get(m_field, index);
+                return GetByteByIndex(_field, index);
             }
             set
             {
@@ -45,35 +45,35 @@ namespace UnityUtility
 
                 unsafe
                 {
-                    int val = m_field;
+                    int val = _field;
                     ((byte*)&val)[index] = value;
-                    m_field = val;
+                    _field = val;
                 }
             }
         }
 
         public Bytes(int bytes)
         {
-            m_floatField = 0f;
-            m_field = bytes;
+            _floatField = 0f;
+            _field = bytes;
         }
 
         public unsafe Bytes(byte b0, byte b1, byte b2, byte b3)
         {
-            m_floatField = 0f;
+            _floatField = 0f;
             byte* ptr = stackalloc[] { b0, b1, b2, b3 };
-            m_field = *(int*)ptr;
+            _field = *(int*)ptr;
         }
 
         public byte[] GetBytes()
         {
-            return BitConverter.GetBytes(m_field);
+            return BitConverter.GetBytes(_field);
         }
 
         // -- //        
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe byte f_get(int field, int index)
+        private static unsafe byte GetByteByIndex(int field, int index)
         {
             return ((byte*)&field)[index];
         }
@@ -83,7 +83,7 @@ namespace UnityUtility
         #region regular stuff
         public override int GetHashCode()
         {
-            return m_field;
+            return _field;
         }
 
         public override bool Equals(object obj)
@@ -98,7 +98,7 @@ namespace UnityUtility
 
         public override unsafe string ToString()
         {
-            int val = m_field;
+            int val = _field;
             byte* ptr = (byte*)&val;
 
             StringBuilder sb = new StringBuilder();
@@ -113,7 +113,7 @@ namespace UnityUtility
         {
             for (int i = 0; i < SIZE; i++)
             {
-                yield return f_get(m_field, i);
+                yield return GetByteByIndex(_field, i);
             }
         }
 
@@ -127,52 +127,52 @@ namespace UnityUtility
 
         public static bool operator ==(Bytes a, Bytes b)
         {
-            return a.m_field == b.m_field;
+            return a._field == b._field;
         }
 
         public static bool operator !=(Bytes a, Bytes b)
         {
-            return a.m_field != b.m_field;
+            return a._field != b._field;
         }
 
         // -- //
 
-        public static explicit operator float(Bytes bytes) { return bytes.m_floatField; }
+        public static explicit operator float(Bytes bytes) { return bytes._floatField; }
 
-        public static explicit operator int(Bytes bytes) { return bytes.m_field; }
+        public static explicit operator int(Bytes bytes) { return bytes._field; }
 
-        public static explicit operator uint(Bytes bytes) { return (uint)bytes.m_field; }
+        public static explicit operator uint(Bytes bytes) { return (uint)bytes._field; }
 
-        public static explicit operator short(Bytes bytes) { return (short)bytes.m_field; }
+        public static explicit operator short(Bytes bytes) { return (short)bytes._field; }
 
-        public static explicit operator ushort(Bytes bytes) { return (ushort)bytes.m_field; }
+        public static explicit operator ushort(Bytes bytes) { return (ushort)bytes._field; }
 
-        public static explicit operator bool(Bytes bytes) { return bytes.m_field != 0; }
+        public static explicit operator bool(Bytes bytes) { return bytes._field != 0; }
 
-        public static explicit operator LayerMask(Bytes bytes) { return bytes.m_field; }
+        public static explicit operator LayerMask(Bytes bytes) { return bytes._field; }
 
         public static unsafe explicit operator Color32(Bytes bytes)
         {
-            int val = bytes.m_field;
+            int val = bytes._field;
             byte* ptr = (byte*)&val;
             return new Color32(ptr[0], ptr[1], ptr[2], ptr[3]);
         }
 
         // -- //
 
-        public static implicit operator Bytes(float val) { return new Bytes { m_floatField = val }; }
+        public static implicit operator Bytes(float val) { return new Bytes { _floatField = val }; }
 
-        public static implicit operator Bytes(int val) { return new Bytes { m_field = val }; }
+        public static implicit operator Bytes(int val) { return new Bytes { _field = val }; }
 
-        public static implicit operator Bytes(uint val) { return new Bytes { m_field = (int)val }; }
+        public static implicit operator Bytes(uint val) { return new Bytes { _field = (int)val }; }
 
-        public static implicit operator Bytes(short val) { return new Bytes { m_field = val }; }
+        public static implicit operator Bytes(short val) { return new Bytes { _field = val }; }
 
-        public static implicit operator Bytes(ushort val) { return new Bytes { m_field = val }; }
+        public static implicit operator Bytes(ushort val) { return new Bytes { _field = val }; }
 
-        public static implicit operator Bytes(bool val) { return new Bytes { m_field = val ? 1 : 0 }; }
+        public static implicit operator Bytes(bool val) { return new Bytes { _field = val ? 1 : 0 }; }
 
-        public static implicit operator Bytes(LayerMask val) { return new Bytes { m_field = val }; }
+        public static implicit operator Bytes(LayerMask val) { return new Bytes { _field = val }; }
 
         public static implicit operator Bytes(Color32 val) { return new Bytes(val.r, val.g, val.b, val.a); }
     }

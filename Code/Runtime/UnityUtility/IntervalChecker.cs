@@ -9,37 +9,37 @@ namespace UnityUtility
     public struct IntervalChecker
     {
         [SerializeField]
-        private float m_interval;
+        private float _interval;
         [SerializeField]
-        private float m_currentValue;
+        private float _currentValue;
 
         public float Interval
         {
-            get { return m_interval; }
+            get { return _interval; }
             set
             {
                 if (value <= 0f)
                     throw Errors.ZeroParameter(nameof(value));
 
-                m_interval = value;
+                _interval = value;
             }
         }
 
         public float CurrentValue
         {
-            get { return m_currentValue; }
-            set { m_currentValue = value.CutAfter(m_interval); }
+            get { return _currentValue; }
+            set { _currentValue = value.CutAfter(_interval); }
         }
 
         public float Ratio
         {
-            get { return m_currentValue / m_interval; }
-            set { m_currentValue = m_interval * value.Clamp01(); }
+            get { return _currentValue / _interval; }
+            set { _currentValue = _interval * value.Clamp01(); }
         }
 
         public float Shortage
         {
-            get { return (m_interval - m_currentValue).CutBefore(0f); }
+            get { return (_interval - _currentValue).CutBefore(0f); }
         }
 
         public IntervalChecker(float interval)
@@ -47,8 +47,8 @@ namespace UnityUtility
             if (interval <= 0f)
                 throw Errors.ZeroParameter(nameof(interval));
 
-            m_interval = interval;
-            m_currentValue = 0f;
+            _interval = interval;
+            _currentValue = 0f;
         }
 
         public IntervalChecker(float interval, float startValue)
@@ -56,8 +56,8 @@ namespace UnityUtility
             if (interval <= 0f)
                 throw Errors.ZeroParameter(nameof(interval));
 
-            m_interval = interval;
-            m_currentValue = startValue.CutAfter(interval);
+            _interval = interval;
+            _currentValue = startValue.CutAfter(interval);
         }
 
         public bool HardCheckDelta(float deltaValue)
@@ -65,18 +65,18 @@ namespace UnityUtility
             if (deltaValue < 0f)
                 throw Errors.NegativeParameter(nameof(deltaValue));
 
-            return HardCheckValue(m_currentValue + deltaValue);
+            return HardCheckValue(_currentValue + deltaValue);
         }
 
         public bool HardCheckValue(float newValue)
         {
-            if (newValue >= m_interval)
+            if (newValue >= _interval)
             {
-                m_currentValue = 0f;
+                _currentValue = 0f;
                 return true;
             }
 
-            m_currentValue = newValue;
+            _currentValue = newValue;
             return false;
         }
 
@@ -85,18 +85,18 @@ namespace UnityUtility
             if (deltaValue < 0f)
                 throw Errors.NegativeParameter(nameof(deltaValue));
 
-            return SmoothCheckValue(m_currentValue + deltaValue);
+            return SmoothCheckValue(_currentValue + deltaValue);
         }
 
         public bool SmoothCheckValue(float newValue)
         {
-            if (newValue >= m_interval)
+            if (newValue >= _interval)
             {
-                m_currentValue = newValue - m_interval;
+                _currentValue = newValue - _interval;
                 return true;
             }
 
-            m_currentValue = newValue;
+            _currentValue = newValue;
             return false;
         }
     }

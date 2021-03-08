@@ -1,58 +1,57 @@
-using System;
 using System.Collections.Generic;
-using UnityUtility.Sound.SoundProviderStuff;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 using UnityUtility.SaveLoad;
+using UnityUtility.Sound.SoundProviderStuff;
 
 namespace UnityUtility.Sound
 {
     public class MusicProvider
     {
-        private readonly MPreset DEF_SET = new MPreset { Volume = 1f, Pitch = 1f, Looped = true, RisingDur = 0.5f };
+        private readonly MPreset _defaultPreset = new MPreset { Volume = 1f, Pitch = 1f, Looped = true, RisingDur = 0.5f };
 
-        private static IObjectCreator<MusObject> s_creator;
-        private static ObjectPool<MusObject> s_pool;
+        private static IObjectCreator<MusObject> _creator;
+        private static ObjectPool<MusObject> _pool;
 
-        private bool m_locked;
+        private bool _locked;
 
         [SaveLoadField]
-        private bool m_isMuted;
+        private bool _isMuted;
         [SaveLoadField(1f)]
-        private float m_volume = 1f;
+        private float _volume = 1f;
 
-        private float m_pitch = 1f;
-        private bool m_paused;
+        private float _pitch = 1f;
+        private bool _paused;
 
-        private Dictionary<string, MusObject> m_music;
+        private Dictionary<string, MusObject> _music;
 
-        private IClipLoader m_loader;
-        private Dictionary<string, MPreset> m_presetList;
+        private IClipLoader _loader;
+        private Dictionary<string, MPreset> _presetList;
 
         public bool Muted
         {
-            get { return m_isMuted; }
+            get { return _isMuted; }
         }
 
         public float Volume
         {
-            get { return m_volume; }
+            get { return _volume; }
         }
 
         public float Pitch
         {
-            get { return m_pitch; }
+            get { return _pitch; }
         }
 
         public bool Paused
         {
-            get { return m_paused; }
+            get { return _paused; }
         }
 
         static MusicProvider()
         {
-            s_creator = new DynamicMusSourceCreator();
-            s_pool = new ObjectPool<MusObject>(s_creator.Create);
+            _creator = new DynamicMusSourceCreator();
+            _pool = new ObjectPool<MusObject>(_creator.Create);
         }
 
         public MusicProvider(MusicPreset presetList = null) : this(new DefaultClipLoader("Music/"), presetList)
@@ -62,23 +61,23 @@ namespace UnityUtility.Sound
 
         public MusicProvider(IClipLoader loader, MusicPreset presetList = null)
         {
-            m_music = new Dictionary<string, MusObject>();
+            _music = new Dictionary<string, MusObject>();
 
-            m_loader = loader;
-            m_presetList = presetList == null ? new Dictionary<string, MPreset>() : presetList.CreateDict();
+            _loader = loader;
+            _presetList = presetList == null ? new Dictionary<string, MPreset>() : presetList.CreateDict();
         }
 
         public static void OverrideAudioSourceCreator(IObjectCreator<MusObject> newCreator)
         {
-            s_creator = newCreator;
-            s_pool.ChangeCreator(s_creator.Create);
+            _creator = newCreator;
+            _pool.ChangeCreator(_creator.Create);
         }
 
         public void SetVolume(float value)
         {
-            m_volume = value.Clamp01();
+            _volume = value.Clamp01();
 
-            foreach (var kvp in m_music)
+            foreach (var kvp in _music)
             {
                 kvp.Value.UpdVolume();
             }
@@ -86,9 +85,9 @@ namespace UnityUtility.Sound
 
         public void SetPitch(float value)
         {
-            m_pitch = value;
+            _pitch = value;
 
-            foreach (var kvp in m_music)
+            foreach (var kvp in _music)
             {
                 kvp.Value.UpdPitch();
             }
@@ -96,15 +95,15 @@ namespace UnityUtility.Sound
 
         public void Play(string musicName)
         {
-            if (m_paused) { return; }
+            if (_paused) { return; }
 
-            if (!m_music.TryGetValue(musicName, out MusObject mus))
+            if (!_music.TryGetValue(musicName, out MusObject mus))
             {
-                if (!m_presetList.TryGetValue(musicName, out MPreset set))
-                    set = DEF_SET;
+                if (!_presetList.TryGetValue(musicName, out MPreset set))
+                    set = _defaultPreset;
 
-                mus = m_music.Place(musicName, s_pool.Get());
-                mus.Play(this, m_loader.LoadClip(musicName), set);
+                mus = _music.Place(musicName, _pool.Get());
+                mus.Play(this, _loader.LoadClip(musicName), set);
             }
             else if (mus.Fading)
             {
@@ -114,7 +113,7 @@ namespace UnityUtility.Sound
 
         public void Stop(string musicName)
         {
-            if (m_music.TryGetValue(musicName, out MusObject mus))
+            if (_music.TryGetValue(musicName, out MusObject mus))
             {
                 mus.Stop();
             }
@@ -122,7 +121,7 @@ namespace UnityUtility.Sound
 
         public void StopFading(string musicName, float time = 1f)
         {
-            if (m_music.TryGetValue(musicName, out MusObject mus))
+            if (_music.TryGetValue(musicName, out MusObject mus))
             {
                 mus.StopFading(time);
             }
@@ -130,21 +129,21 @@ namespace UnityUtility.Sound
 
         public void StopAll()
         {
-            m_locked = true;
+            _locked = true;
 
-            foreach (var kvp in m_music)
+            foreach (var kvp in _music)
             {
                 kvp.Value.Stop();
             }
 
-            m_music.Clear();
+            _music.Clear();
 
-            m_locked = false;
+            _locked = false;
         }
 
         public void StopAllFading(float time = 1f)
         {
-            foreach (var kvp in m_music)
+            foreach (var kvp in _music)
             {
                 kvp.Value.StopFading(time);
             }
@@ -152,32 +151,32 @@ namespace UnityUtility.Sound
 
         public void Pause(bool on)
         {
-            if (m_paused == on) { return; }
+            if (_paused == on) { return; }
 
-            if (m_paused = on)
-                foreach (var kvp in m_music) { kvp.Value.Pause(); }
+            if (_paused = on)
+                foreach (var kvp in _music) { kvp.Value.Pause(); }
             else
-                foreach (var kvp in m_music) { kvp.Value.UnPause(); }
+                foreach (var kvp in _music) { kvp.Value.UnPause(); }
         }
 
         public void MuteAll(bool value)
         {
-            if (m_isMuted != value)
+            if (_isMuted != value)
             {
-                m_isMuted = value;
+                _isMuted = value;
 
-                foreach (var kvp in m_music) { kvp.Value.Mute(value); }
+                foreach (var kvp in _music) { kvp.Value.Mute(value); }
             }
         }
 
         internal void ReleaseMusic(MusObject mus)
         {
-            if (!m_locked)
+            if (!_locked)
             {
-                m_music.Remove(mus.ClipName);
+                _music.Remove(mus.ClipName);
             }
 
-            s_pool.Release(mus);
+            _pool.Release(mus);
         }
     }
 }

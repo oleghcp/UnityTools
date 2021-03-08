@@ -6,7 +6,7 @@ namespace UnityUtility
     [AttributeUsage(AttributeTargets.Field)]
     public class DrawBitMaskAttribute : PropertyAttribute
     {
-        internal readonly Type EnumType;
+        internal Type EnumType { get; }
 
         public DrawBitMaskAttribute(Type enumType)
         {

@@ -7,24 +7,24 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
     {
         private const char SEP = '.';
 
-        private StringBuilder m_builder;
+        private StringBuilder _builder;
 
         public BaseKeyGenerator()
         {
-            m_builder = new StringBuilder();
+            _builder = new StringBuilder();
         }
 
         public string Generate(Type objectType, string fieldName, string objectID)
         {
-            m_builder.Clear()
+            _builder.Clear()
                      .Append(objectType.FullName)
                      .Append(SEP)
                      .Append(fieldName);
 
             if (objectID.HasUsefulData())
-                m_builder.Append(SEP).Append(objectID);
+                _builder.Append(SEP).Append(objectID);
 
-            return m_builder.ToString();
+            return _builder.ToString();
         }
     }
 }

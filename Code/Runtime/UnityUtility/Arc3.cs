@@ -1,10 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace UnityUtility
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable]
     public struct Arc3
     {
         /// <summary>
@@ -37,8 +39,8 @@ namespace UnityUtility
         /// </summary>
         public Vector3 StartDir
         {
-            get { return f_angleToDir(HorAngle, VertAngle); }
-            set { f_dirToAngle(value, out HorAngle, out VertAngle); }
+            get { return AngleToDir(HorAngle, VertAngle); }
+            set { DirToAngle(value, out HorAngle, out VertAngle); }
         }
 
         /// <summary>
@@ -46,10 +48,10 @@ namespace UnityUtility
         /// </summary>
         public Vector3 StartVector
         {
-            get { return f_angleToDir(HorAngle, VertAngle) * StartSpeed; }
+            get { return AngleToDir(HorAngle, VertAngle) * StartSpeed; }
             set
             {
-                f_dirToAngle(value, out HorAngle, out VertAngle);
+                DirToAngle(value, out HorAngle, out VertAngle);
                 StartSpeed = value.magnitude;
             }
         }
@@ -65,7 +67,7 @@ namespace UnityUtility
 
         public Arc3(Vector3 dir, float startSpeed, float gravity, in Vector3 startPos = default)
         {
-            f_dirToAngle(dir, out HorAngle, out VertAngle);
+            DirToAngle(dir, out HorAngle, out VertAngle);
             StartSpeed = startSpeed;
             Gravity = gravity;
             StartPos = startPos;
@@ -80,12 +82,12 @@ namespace UnityUtility
         // -- //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Vector3 f_angleToDir(float hor, float vert)
+        private static Vector3 AngleToDir(float hor, float vert)
         {
             return Vector3.right.GetRotated(0f, hor, vert);
         }
 
-        private static void f_dirToAngle(Vector3 dir, out float hor, out float vert)
+        private static void DirToAngle(Vector3 dir, out float hor, out float vert)
         {
             Vector2 startDir2D = dir.XZ().normalized;
 

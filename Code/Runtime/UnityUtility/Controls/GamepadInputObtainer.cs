@@ -3,35 +3,36 @@ using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
 using System.Collections.Generic;
 using UnityUtility.MathExt;
+using System.Runtime.CompilerServices;
 
 namespace UnityUtility.Controls
 {
     public sealed class GamepadInputObtainer : IInputObtainer
     {
-        private GamepadInputConverter m_converter;
-        private Func<GPAxisCode, float, float> m_correctAxis;
+        private GamepadInputConverter _converter;
+        private Func<GPAxisCode, float, float> _correctAxis;
 
-        private BindLayout m_curLayout;
+        private BindLayout _curLayout;
 
-        private ButtonState[] m_buttonStates;
-        private float[] m_axisStates;
+        private ButtonState[] _buttonStates;
+        private float[] _axisStates;
 
         public BindLayout CurLayout
         {
-            get { return m_curLayout; }
+            get { return _curLayout; }
         }
 
         public GamepadInputObtainer(GamepadType type, int num, BindLayout bindLayout)
         {
-            f_throw(bindLayout);
+            CheckAndThrow(bindLayout);
 
-            m_curLayout = bindLayout;
+            _curLayout = bindLayout;
 
-            m_correctAxis = AxesCorrection.GetAxisCorrectionFunc(type);
-            m_converter = new GamepadInputConverter(type, num);
+            _correctAxis = AxesCorrection.GetAxisCorrectionFunc(type);
+            _converter = new GamepadInputConverter(type, num);
 
-            m_buttonStates = new ButtonState[InputEnum.GPKeyCodeCount];
-            m_axisStates = new float[InputEnum.GPAxisCodeCount];
+            _buttonStates = new ButtonState[InputEnum.GPKeyCodeCount];
+            _axisStates = new float[InputEnum.GPAxisCodeCount];
         }
 
         public GamepadInputObtainer(GamepadType type, int num, LayoutConfig config) : this(type, num, config.ToBindLayout()) { }
@@ -41,17 +42,17 @@ namespace UnityUtility.Controls
         public void ChangeType(GamepadType type, int num)
         {
             Reset();
-            m_correctAxis = AxesCorrection.GetAxisCorrectionFunc(type);
-            m_converter = new GamepadInputConverter(type, num);
+            _correctAxis = AxesCorrection.GetAxisCorrectionFunc(type);
+            _converter = new GamepadInputConverter(type, num);
         }
 
         public void ChangeLayout(BindLayout bindLayout)
         {
-            f_throw(bindLayout);
+            CheckAndThrow(bindLayout);
 
             Reset();
-            m_curLayout.RemoveTmpButton();
-            m_curLayout = bindLayout;
+            _curLayout.RemoveTmpButton();
+            _curLayout = bindLayout;
         }
 
         public void ChangeLayout(LayoutConfig config)
@@ -61,8 +62,8 @@ namespace UnityUtility.Controls
 
         public ButtonState GetKeyState(int keyAction)
         {
-            int key = m_curLayout.Keys[keyAction];
-            return key >= 0 ? m_buttonStates[key] : ButtonState.None;
+            int key = _curLayout.Keys[keyAction];
+            return key >= 0 ? _buttonStates[key] : ButtonState.None;
         }
 
         public ButtonInfo GetButtonInfo(int keyAction)
@@ -70,97 +71,98 @@ namespace UnityUtility.Controls
             return new ButtonInfo
             {
                 Function = keyAction,
-                KeyCode = m_curLayout.Keys[keyAction]
+                KeyCode = _curLayout.Keys[keyAction]
             };
         }
 
         public void AddTmpButton(ButtonInfo info)
         {
-            m_curLayout.AddTmpButton(info.Function, info.KeyCode);
+            _curLayout.AddTmpButton(info.Function, info.KeyCode);
         }
 
         public float GetAxisValue(int axisAction)
         {
-            int axis = m_curLayout.Axes[axisAction];
-            return axis >= 0 ? m_axisStates[axis] : 0f;
+            int axis = _curLayout.Axes[axisAction];
+            return axis >= 0 ? _axisStates[axis] : 0f;
         }
 
         public void Refresh()
         {
-            f_updAxisStates();
-            f_updAxisBtnStates();
-            f_updBtnStates();
+            UpdAxisStates();
+            UpdAxisBtnStates();
+            UpdBtnStates();
         }
 
         public void Reset()
         {
-            m_buttonStates.Clear();
-            m_axisStates.Clear();
+            _buttonStates.Clear();
+            _axisStates.Clear();
         }
 
         // - Inner Funcs - //
 
-        private static void f_throw(BindLayout bindLayout)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void CheckAndThrow(BindLayout bindLayout)
         {
             if (bindLayout.InputType != InputType.Gamepad)
                 throw new ArgumentException("Given layout is not for gamepad input type.");
         }
 
-        private void f_updAxisStates()
+        private void UpdAxisStates()
         {
             float axisValue;
 
             for (int i = 0; i < InputEnum.GPAxisCodeCount; i++)
             {
-                axisValue = Input.GetAxisRaw(m_converter.AxisNames[i]);
-                m_axisStates[i] = m_correctAxis((GPAxisCode)i, axisValue);
+                axisValue = Input.GetAxisRaw(_converter.AxisNames[i]);
+                _axisStates[i] = _correctAxis((GPAxisCode)i, axisValue);
             }
         }
 
-        private void f_updBtnStates()
+        private void UpdBtnStates()
         {
             KeyCode keyCode;
 
             for (int i = 0; i < InputEnum.GPKeyCodeCount; i++)
             {
-                keyCode = m_converter.KeyCodes[i];
+                keyCode = _converter.KeyCodes[i];
 
                 if (keyCode != KeyCode.None)
                 {
-                    if (Input.GetKeyDown(keyCode)) { m_buttonStates[i] = ButtonState.Down; }
-                    else if (Input.GetKey(keyCode)) { m_buttonStates[i] = ButtonState.Stay; }
-                    else if (Input.GetKeyUp(keyCode)) { m_buttonStates[i] = ButtonState.Up; }
-                    else { m_buttonStates[i] = ButtonState.None; }
+                    if (Input.GetKeyDown(keyCode)) { _buttonStates[i] = ButtonState.Down; }
+                    else if (Input.GetKey(keyCode)) { _buttonStates[i] = ButtonState.Stay; }
+                    else if (Input.GetKeyUp(keyCode)) { _buttonStates[i] = ButtonState.Up; }
+                    else { _buttonStates[i] = ButtonState.None; }
                 }
             }
         }
 
-        private void f_updAxisBtnStates()
+        private void UpdAxisBtnStates()
         {
             for (int i = 0; i < 4; i++)
             {
-                float value = i.IsEven() ? -m_axisStates[i / 2] : m_axisStates[i / 2];
-                f_checkAxisBtnState(value, i);
+                float value = i.IsEven() ? -_axisStates[i / 2] : _axisStates[i / 2];
+                CheckAxisBtnState(value, i);
             }
 
             for (int i = 0; i < 2; i++)
             {
-                float value = m_axisStates[i + (int)GPAxisCode.LeftTrgr];
-                f_checkAxisBtnState(value, i + (int)GPKeyCode.LeftTrgr);
+                float value = _axisStates[i + (int)GPAxisCode.LeftTrgr];
+                CheckAxisBtnState(value, i + (int)GPKeyCode.LeftTrgr);
             }
         }
 
-        private void f_checkAxisBtnState(float axisValue, int btnCode)
+        private void CheckAxisBtnState(float axisValue, int btnCode)
         {
             if (axisValue > 0f)
             {
-                bool prev = m_buttonStates[btnCode] == ButtonState.Up || m_buttonStates[btnCode] == ButtonState.None;
-                m_buttonStates[btnCode] = prev ? ButtonState.Down : ButtonState.Stay;
+                bool prev = _buttonStates[btnCode] == ButtonState.Up || _buttonStates[btnCode] == ButtonState.None;
+                _buttonStates[btnCode] = prev ? ButtonState.Down : ButtonState.Stay;
             }
             else
             {
-                bool prev = m_buttonStates[btnCode] == ButtonState.Down || m_buttonStates[btnCode] == ButtonState.Stay;
-                m_buttonStates[btnCode] = prev ? ButtonState.Up : ButtonState.None;
+                bool prev = _buttonStates[btnCode] == ButtonState.Down || _buttonStates[btnCode] == ButtonState.Stay;
+                _buttonStates[btnCode] = prev ? ButtonState.Up : ButtonState.None;
             }
         }
     }

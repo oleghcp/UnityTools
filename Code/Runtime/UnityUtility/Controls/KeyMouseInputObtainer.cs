@@ -2,41 +2,42 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityUtility.Controls.ControlStuff;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace UnityUtility.Controls
 {
     public sealed class KeyMouseInputObtainer : IInputObtainer
     {
-        private readonly string[] AX_NAMES = { "Mouse X", "Mouse Y", "Mouse ScrollWheel" };
+        private readonly string[] _axesNames = { "Mouse X", "Mouse Y", "Mouse ScrollWheel" };
 
-        private ButtonState[] m_buttonStates;
-        private float[] m_axisStates;
+        private ButtonState[] _buttonStates;
+        private float[] _axisStates;
 
-        private BindLayout m_curLayout;
+        private BindLayout _curLayout;
 
         public BindLayout CurLayout
         {
-            get { return m_curLayout; }
+            get { return _curLayout; }
         }
 
         public KeyMouseInputObtainer(BindLayout bindLayout)
         {
-            f_throw(bindLayout);
+            CheckAndThrow(bindLayout);
 
-            m_curLayout = bindLayout;
-            m_buttonStates = new ButtonState[bindLayout.Keys.Length];
-            m_axisStates = new float[InputEnum.KMAxisCodeCount];
+            _curLayout = bindLayout;
+            _buttonStates = new ButtonState[bindLayout.Keys.Length];
+            _axisStates = new float[InputEnum.KMAxisCodeCount];
         }
 
         public KeyMouseInputObtainer(LayoutConfig config) : this(config.ToBindLayout()) { }
 
         public void ChangeLayout(BindLayout bindLayout)
         {
-            f_throw(bindLayout);
+            CheckAndThrow(bindLayout);
 
             Reset();
-            m_curLayout.RemoveTmpButton();
-            m_curLayout = bindLayout;
+            _curLayout.RemoveTmpButton();
+            _curLayout = bindLayout;
         }
 
         public void ChangeLayout(LayoutConfig config)
@@ -46,7 +47,7 @@ namespace UnityUtility.Controls
 
         public ButtonState GetKeyState(int keyAction)
         {
-            return m_buttonStates[keyAction];
+            return _buttonStates[keyAction];
         }
 
         public ButtonInfo GetButtonInfo(int keyAction)
@@ -54,92 +55,93 @@ namespace UnityUtility.Controls
             return new ButtonInfo
             {
                 Function = keyAction,
-                KeyCode = m_curLayout.Keys[keyAction]
+                KeyCode = _curLayout.Keys[keyAction]
             };
         }
 
         public void AddTmpButton(ButtonInfo info)
         {
-            m_curLayout.AddTmpButton(info.Function, info.KeyCode);
+            _curLayout.AddTmpButton(info.Function, info.KeyCode);
         }
 
         public float GetAxisValue(int axisAction)
         {
-            int axis = m_curLayout.Axes[axisAction];
-            return axis >= 0 ? m_axisStates[axis] : 0f;
+            int axis = _curLayout.Axes[axisAction];
+            return axis >= 0 ? _axisStates[axis] : 0f;
         }
 
         public void Refresh()
         {
-            f_updAxisStates();
-            f_updateBtnStates();
-            f_updateKeyAxes();
+            UpdateAxisStates();
+            UpdateBtnStates();
+            UpdateKeyAxes();
         }
 
         public void Reset()
         {
-            m_buttonStates.Clear();
-            m_axisStates.Clear();
+            _buttonStates.Clear();
+            _axisStates.Clear();
         }
 
         // -- //
 
-        private static void f_throw(BindLayout bindLayout)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void CheckAndThrow(BindLayout bindLayout)
         {
             if (bindLayout.InputType != InputType.KeyMouse)
                 throw new ArgumentException("Given layout is not for keyboard+mouse input type.");
         }
 
-        private void f_updAxisStates()
+        private void UpdateAxisStates()
         {
             for (int i = 0; i < 3; i++)
             {
-                m_axisStates[i] = Input.GetAxis(AX_NAMES[i]);
+                _axisStates[i] = Input.GetAxis(_axesNames[i]);
             }
         }
 
-        private void f_updateBtnStates()
+        private void UpdateBtnStates()
         {
             KeyCode keyCode;
-            for (int i = 0; i < m_buttonStates.Length; i++)
+            for (int i = 0; i < _buttonStates.Length; i++)
             {
-                keyCode = (KeyCode)m_curLayout.Keys[i];
+                keyCode = (KeyCode)_curLayout.Keys[i];
 
                 if (keyCode < KeyCode.JoystickButton0)
                 {
-                    if (Input.GetKeyDown(keyCode)) { m_buttonStates[i] = ButtonState.Down; }
-                    else if (Input.GetKey(keyCode)) { m_buttonStates[i] = ButtonState.Stay; }
-                    else if (Input.GetKeyUp(keyCode)) { m_buttonStates[i] = ButtonState.Up; }
-                    else { m_buttonStates[i] = ButtonState.None; }
+                    if (Input.GetKeyDown(keyCode)) { _buttonStates[i] = ButtonState.Down; }
+                    else if (Input.GetKey(keyCode)) { _buttonStates[i] = ButtonState.Stay; }
+                    else if (Input.GetKeyUp(keyCode)) { _buttonStates[i] = ButtonState.Up; }
+                    else { _buttonStates[i] = ButtonState.None; }
                 }
                 else
                 {
-                    float val = m_axisStates[(int)KMAxisCode.Wheel];
+                    float val = _axisStates[(int)KMAxisCode.Wheel];
                     bool condition = keyCode == KeyCode.JoystickButton0 ? val > 0f : val < 0f;
-                    m_buttonStates[i] = condition ? ButtonState.Down : ButtonState.None;
+                    _buttonStates[i] = condition ? ButtonState.Down : ButtonState.None;
                 }
             }
         }
 
-        private void f_updateKeyAxes()
+        private void UpdateKeyAxes()
         {
             Vector2 cross = new Vector2();
 
-            KeyAxes keyAxes = m_curLayout.KeyAxes;
+            KeyAxes keyAxes = _curLayout.KeyAxes;
 
-            if (Input.GetKey((KeyCode)m_curLayout.Keys[keyAxes.Left]))
+            if (Input.GetKey((KeyCode)_curLayout.Keys[keyAxes.Left]))
                 --cross.x;
-            if (Input.GetKey((KeyCode)m_curLayout.Keys[keyAxes.Right]))
+            if (Input.GetKey((KeyCode)_curLayout.Keys[keyAxes.Right]))
                 ++cross.x;
-            if (Input.GetKey((KeyCode)m_curLayout.Keys[keyAxes.Down]))
+            if (Input.GetKey((KeyCode)_curLayout.Keys[keyAxes.Down]))
                 --cross.y;
-            if (Input.GetKey((KeyCode)m_curLayout.Keys[keyAxes.Up]))
+            if (Input.GetKey((KeyCode)_curLayout.Keys[keyAxes.Up]))
                 ++cross.y;
 
             cross.Normalize();
 
-            m_axisStates[(int)KMAxisCode.Horizontal] = cross.x;
-            m_axisStates[(int)KMAxisCode.Vertical] = cross.y;
+            _axisStates[(int)KMAxisCode.Horizontal] = cross.x;
+            _axisStates[(int)KMAxisCode.Vertical] = cross.y;
         }
     }
 }

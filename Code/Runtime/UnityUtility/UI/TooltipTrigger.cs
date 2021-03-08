@@ -13,7 +13,7 @@ namespace UnityUtility.UI
         [SerializeField]
         private Vector2 _anchoredPosition;
 
-        private bool m_hovered;
+        private bool _hovered;
 
         public string Text
         {
@@ -35,25 +35,25 @@ namespace UnityUtility.UI
 
         public void Refresh()
         {
-            if (m_hovered)
+            if (_hovered)
                 TooltipView.I.Refresh(_text);
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
-            m_hovered = true;
+            _hovered = true;
             TooltipView.I.ShowTooltip(_text, _customPosition ? _anchoredPosition : eventData.position, _customPosition);
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
-            m_hovered = false;
+            _hovered = false;
             TooltipView.I.HideTooltip();
         }
 
         private void OnDisable()
         {
-            if (m_hovered)
+            if (_hovered)
                 TooltipView.I.HideTooltip();
         }
     }

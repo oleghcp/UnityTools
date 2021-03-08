@@ -40,7 +40,7 @@ namespace UnityUtility.Controls
         [SerializeField]
         internal InputType InputType;
 
-        private List<int> m_tmpButtons;
+        private List<int> _tmpButtons;
 
         /// <summary>
         /// Constructor for gamepad layout.
@@ -75,24 +75,24 @@ namespace UnityUtility.Controls
         {
             if (Keys[func] == (int)KeyCode.None)
             {
-                if (m_tmpButtons == null)
-                    m_tmpButtons = new List<int>();
+                if (_tmpButtons == null)
+                    _tmpButtons = new List<int>();
 
-                m_tmpButtons.Add(func);
+                _tmpButtons.Add(func);
                 Keys[func] = keyCode;
             }
         }
 
         internal void RemoveTmpButton()
         {
-            if (m_tmpButtons != null && m_tmpButtons.Count > 0)
+            if (_tmpButtons != null && _tmpButtons.Count > 0)
             {
-                for (int i = 0; i < m_tmpButtons.Count; i++)
+                for (int i = 0; i < _tmpButtons.Count; i++)
                 {
-                    Keys[m_tmpButtons[i]] = (int)KeyCode.None;
+                    Keys[_tmpButtons[i]] = (int)KeyCode.None;
                 }
 
-                m_tmpButtons.Clear();
+                _tmpButtons.Clear();
             }
         }
     }

@@ -17,7 +17,7 @@ namespace UnityUtility
         public static event Action<float> OnFixedTick_Event;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void f_initialize()
+        private static void Initialize()
         {
             ComponentUtility.CreateInstance<ApplicationUtility>()
                             .gameObject

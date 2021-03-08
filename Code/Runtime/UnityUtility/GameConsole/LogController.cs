@@ -15,30 +15,30 @@ namespace UnityUtility.GameConsole
         [SerializeField]
         private RectTransform _root;
 
-        private Terminal m_terminal;
-        private ObjectPool<LogLine> m_pool;
-        private List<LogLine> m_lines;
+        private Terminal _terminal;
+        private ObjectPool<LogLine> _pool;
+        private List<LogLine> _lines;
 
         private void Awake()
         {
-            m_pool = new ObjectPool<LogLine>(f_createLine);
-            m_lines = new List<LogLine>();
+            _pool = new ObjectPool<LogLine>(CreateLine);
+            _lines = new List<LogLine>();
         }
 
         public void SetUp(Terminal terminal)
         {
-            m_terminal = terminal;
+            _terminal = terminal;
         }
 
         public void WriteLine(Color color, string text, string info = null)
         {
-            f_getLine().SetText(text, info, color);
+            GetLine().SetText(text, info, color);
         }
 
         public void Clear()
         {
-            m_pool.Release(m_lines);
-            m_lines.Clear();
+            _pool.Release(_lines);
+            _lines.Clear();
         }
 
         public void Scroll(float dir)
@@ -50,7 +50,7 @@ namespace UnityUtility.GameConsole
             _border.SetActive(newPos.y < 0f);
         }
 
-        private LogLine f_createLine()
+        private LogLine CreateLine()
         {
             LogLine newLine = _prefab.Install(_root);
             newLine.gameObject.SetActive(true);
@@ -58,10 +58,10 @@ namespace UnityUtility.GameConsole
             return newLine;
         }
 
-        private LogLine f_getLine()
+        private LogLine GetLine()
         {
-            if (_root.childCount < m_terminal.Options.LinesLimit)
-                return m_lines.Place(m_pool.Get());
+            if (_root.childCount < _terminal.Options.LinesLimit)
+                return _lines.Place(_pool.Get());
 
             return _root.GetChild(0)
                         .GetComponent<LogLine>()

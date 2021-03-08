@@ -1,12 +1,14 @@
-﻿using UnityUtility.MathExt;
+﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityUtility.MathExt;
 using static System.MathF;
 
 namespace UnityUtility
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable]
     public struct Arc2
     {
         /// <summary>
@@ -39,7 +41,7 @@ namespace UnityUtility
                 float angle = StartAngle.ToRadians();
                 return new Vector2(Cos(angle), Sin(angle));
             }
-            set { StartAngle = f_dirToAngle(value); }
+            set { StartAngle = DirToAngle(value); }
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace UnityUtility
             get { return StartDir * StartSpeed; }
             set
             {
-                StartAngle = f_dirToAngle(value);
+                StartAngle = DirToAngle(value);
                 StartSpeed = value.magnitude;
             }
         }
@@ -65,7 +67,7 @@ namespace UnityUtility
 
         public Arc2(Vector2 dir, float startSpeed, float gravity, Vector2 startPos = default)
         {
-            StartAngle = f_dirToAngle(dir);
+            StartAngle = DirToAngle(dir);
             StartSpeed = startSpeed;
             Gravity = gravity;
             StartPos = startPos;
@@ -102,7 +104,7 @@ namespace UnityUtility
         // -- //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float f_dirToAngle(Vector2 dir)
+        private static float DirToAngle(Vector2 dir)
         {
             float angle = Vector3.Angle(Vector2.right, dir);
             return dir.y >= 0f ? angle : -angle;

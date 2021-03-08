@@ -9,7 +9,7 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSingleton<T>
     {
-        private static T s_inst;
+        private static T _inst;
 
         /// <summary>
         /// Static instance of MonoSingleton`1.
@@ -18,10 +18,10 @@ namespace UnityUtility.SingleScripts
         {
             get
             {
-                if (s_inst == null)
-                    s_inst = SingletonUtility.CreateInstance(ComponentUtility.CreateInstance<T>);
+                if (_inst == null)
+                    _inst = SingletonUtility.CreateInstance(ComponentUtility.CreateInstance<T>);
 
-                return s_inst;
+                return _inst;
             }
         }
 
@@ -30,7 +30,7 @@ namespace UnityUtility.SingleScripts
         /// </summary>
         public static bool Exists
         {
-            get { return s_inst != null; }
+            get { return _inst != null; }
         }
 
         public void Dispose()
@@ -40,18 +40,18 @@ namespace UnityUtility.SingleScripts
 
             hideFlags = HideFlags.None;
             gameObject.Destroy();
-            f_dispose();
+            DisposeInternal();
         }
 
         private void OnDestroy()
         {
-            if (s_inst != null)
-                f_dispose();
+            if (_inst != null)
+                DisposeInternal();
         }
 
-        private void f_dispose()
+        private void DisposeInternal()
         {
-            s_inst = null;
+            _inst = null;
             CleanUp();
         }
 

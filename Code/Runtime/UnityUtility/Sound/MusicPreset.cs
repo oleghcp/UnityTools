@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 #pragma warning disable CS0649
 namespace UnityUtility.Sound
@@ -8,20 +8,13 @@ namespace UnityUtility.Sound
     [Serializable]
     internal class MPreset
     {
-        [SerializeField]
-        internal bool Looped;
-        [SerializeField]
-        internal bool Rising;
-        [SerializeField]
-        internal float Volume;
-        [SerializeField]
-        internal float Pitch;
-        [SerializeField]
-        internal float StartDelay;
-        [SerializeField]
-        internal float StartTime;
-        [SerializeField]
-        internal float RisingDur;
+        public bool Looped;
+        public bool Rising;
+        public float Volume;
+        public float Pitch;
+        public float StartDelay;
+        public float StartTime;
+        public float RisingDur;
     }
 
     [CreateAssetMenu(menuName = "Sound (ext.)/Music Preset", fileName = "MusicPreset")]
@@ -30,34 +23,25 @@ namespace UnityUtility.Sound
         [Serializable]
         private struct Node
         {
-            [SerializeField]
-            internal string Name;
-            [SerializeField]
-            internal MPreset Stats;
+            public string Name;
+            public MPreset Stats;
         }
 
         [SerializeField]
-        private Node[] m_nodes;
+        private Node[] _nodes;
 
-        internal static string NameProp
-        {
-            get { return nameof(Node.Name); }
-        }
-
-        internal static string StatsProp
-        {
-            get { return nameof(Node.Stats); }
-        }
+        internal static string NameProp => nameof(Node.Name);
+        internal static string StatsProp => nameof(Node.Stats);
 
         internal Dictionary<string, MPreset> CreateDict()
         {
-            var dict = new Dictionary<string, MPreset>(m_nodes.Length);
+            var dict = new Dictionary<string, MPreset>(_nodes.Length);
 
-            for (int i = 0; i < m_nodes.Length; i++)
+            for (int i = 0; i < _nodes.Length; i++)
             {
-                if (m_nodes[i].Name.HasAnyData())
+                if (_nodes[i].Name.HasAnyData())
                 {
-                    dict.Add(m_nodes[i].Name, m_nodes[i].Stats);
+                    dict.Add(_nodes[i].Name, _nodes[i].Stats);
                 }
             }
 

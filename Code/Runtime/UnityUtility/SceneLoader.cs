@@ -19,28 +19,28 @@ namespace UnityUtility
         public static event Action Interim_Event;
         public static event Action Loaded_Event;
 
-        private static T s_sceneInfo;
-        private static int s_sceneLoaderIndex = -1;
-        private static ILoadDependency s_configurator;
+        private static T _sceneInfo;
+        private static int _sceneLoaderIndex = -1;
+        private static ILoadDependency _configurator;
 
-        public static T SceneInfo => s_sceneInfo;
+        public static T SceneInfo => _sceneInfo;
 
         protected static void SetUp(string transitionalSceneName = "SceneLoader")
         {
-            if (s_sceneLoaderIndex >= 0)
+            if (_sceneLoaderIndex >= 0)
                 return;
 
-            s_sceneLoaderIndex = SceneUtility.GetBuildIndexByScenePath(transitionalSceneName);
+            _sceneLoaderIndex = SceneUtility.GetBuildIndexByScenePath(transitionalSceneName);
 
             SceneManager.sceneUnloaded += scene =>
             {
-                if (scene.buildIndex != s_sceneLoaderIndex)
+                if (scene.buildIndex != _sceneLoaderIndex)
                     Unloaded_Event?.Invoke();
             };
 
             SceneManager.sceneLoaded += (scene, _) =>
             {
-                if (s_configurator == null && scene.buildIndex != s_sceneLoaderIndex)
+                if (_configurator == null && scene.buildIndex != _sceneLoaderIndex)
                 {
                     Loaded_Event?.Invoke();
                 }
@@ -60,7 +60,7 @@ namespace UnityUtility
         private void Start()
         {
             Interim_Event?.Invoke();
-            SceneManager.LoadScene(s_sceneInfo.SceneName);
+            SceneManager.LoadScene(_sceneInfo.SceneName);
         }
 
         /// <summary>
@@ -68,21 +68,21 @@ namespace UnityUtility
         /// </summary>
         public static void WaitForConfigurator(ILoadDependency sceneConfigurator)
         {
-            if (s_configurator != null)
+            if (_configurator != null)
             {
                 throw new InvalidOperationException("Configurator already set for this scene instance.");
             }
 
-            s_configurator = sceneConfigurator;
+            _configurator = sceneConfigurator;
 
             IEnumerator WaitForConfigurator()
             {
-                while (!s_configurator.Done)
+                while (!_configurator.Done)
                 {
                     yield return null;
                 }
 
-                s_configurator = null;
+                _configurator = null;
                 Loaded_Event?.Invoke();
             }
 
@@ -93,9 +93,9 @@ namespace UnityUtility
         {
             BeginUnload_Event?.Invoke();
 
-            s_sceneInfo = sceneInfo;
+            _sceneInfo = sceneInfo;
 
-            SceneManager.LoadScene(s_sceneLoaderIndex);
+            SceneManager.LoadScene(_sceneLoaderIndex);
         }
     }
 }

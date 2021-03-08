@@ -53,7 +53,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetPathScreenFactor(float verticalFieldOfView, float distance)
         {
-            return GetPathScreenFactor(distance * f_tan(verticalFieldOfView));
+            return GetPathScreenFactor(distance * MathTan(verticalFieldOfView));
         }
 
         /// <summary>
@@ -73,11 +73,11 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetCameraViewRadius(float verticalFieldOfView, float distance)
         {
-            return GetCameraViewRadius(distance * f_tan(verticalFieldOfView));
+            return GetCameraViewRadius(distance * MathTan(verticalFieldOfView));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float f_tan(float verticalFieldOfView)
+        private static float MathTan(float verticalFieldOfView)
         {
             return MathF.Tan((verticalFieldOfView * 0.5f).ToRadians());
         }

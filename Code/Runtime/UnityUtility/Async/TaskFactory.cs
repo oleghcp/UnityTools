@@ -15,90 +15,89 @@ namespace UnityUtility.Async
     {
         public event Action StopTasks_Event;
 
-        private readonly ObjectPool<RoutineRunner> m_runnersPool;
-        private readonly IIdGenerator<long> m_idProvider;
+        private readonly ObjectPool<RoutineRunner> _runnersPool;
+        private readonly IIdGenerator<long> _idProvider;
+        private ITaskStopper _stopper;
+        private GameObject _gameObject;
 
-        private readonly bool m_canBeStopped;
-        private readonly bool m_canBeStoppedGlobally;
-        private readonly bool m_dontDestroyOnLoad;
-        private GameObject m_gameObject;
-
-        private ITaskStopper m_stopper;
+        private readonly bool _canBeStopped;
+        private readonly bool _canBeStoppedGlobally;
+        private readonly bool _dontDestroyOnLoad;
 
         public bool CanBeStopped
         {
-            get { return m_canBeStopped; }
+            get { return _canBeStopped; }
         }
 
         public bool CanBeStoppedGlobally
         {
-            get { return m_canBeStoppedGlobally; }
+            get { return _canBeStoppedGlobally; }
         }
 
         public IIdGenerator<long> IdProvider
         {
-            get { return m_idProvider; }
+            get { return _idProvider; }
         }
 
         public TaskFactory(IAsyncSettings settings, IIdGenerator<long> idProvider, bool doNotDestroyOnLoad)
         {
-            m_canBeStopped = settings.CanBeStopped;
-            m_canBeStoppedGlobally = settings.CanBeStoppedGlobally;
-            m_dontDestroyOnLoad = doNotDestroyOnLoad;
-            m_idProvider = idProvider;
+            _canBeStopped = settings.CanBeStopped;
+            _canBeStoppedGlobally = settings.CanBeStoppedGlobally;
+            _dontDestroyOnLoad = doNotDestroyOnLoad;
+            _idProvider = idProvider;
 
-            if (m_dontDestroyOnLoad)
+            if (_dontDestroyOnLoad)
             {
-                (m_gameObject = new GameObject("Tasks")).Immortalize();
-                m_runnersPool = new ObjectPool<RoutineRunner>(f_create);
+                (_gameObject = new GameObject("Tasks")).Immortalize();
+                _runnersPool = new ObjectPool<RoutineRunner>(Create);
             }
             else
             {
-                m_runnersPool = new ObjectPool<RoutineRunner>(f_createLocal);
+                _runnersPool = new ObjectPool<RoutineRunner>(CreateLocal);
                 SceneManager.sceneUnloaded += _ =>
                 {
-                    m_runnersPool.Clear();
-                    m_gameObject = null;
+                    _runnersPool.Clear();
+                    _gameObject = null;
                 };
             }
         }
 
         public void RegisterStopper(ITaskStopper stopper)
         {
-            if (!m_canBeStoppedGlobally)
+            if (!_canBeStoppedGlobally)
                 throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {TaskSystem.SYSTEM_NAME} settings.");
 
-            if (m_stopper != null)
+            if (_stopper != null)
                 throw new InvalidOperationException("Stoping object is already set.");
 
-            (m_stopper = stopper).StopAllTasks_Event += () => StopTasks_Event?.Invoke();
+            (_stopper = stopper).StopAllTasks_Event += () => StopTasks_Event?.Invoke();
         }
 
         public void Release(RoutineRunner runner)
         {
-            m_runnersPool.Release(runner);
+            _runnersPool.Release(runner);
         }
 
         public RoutineRunner GetRunner()
         {
-            return m_runnersPool.Get();
+            return _runnersPool.Get();
         }
 
         // -- //
 
-        private RoutineRunner f_create()
+        private RoutineRunner Create()
         {
-            var taskRunner = m_gameObject.AddComponent<RoutineRunner>();
+            var taskRunner = _gameObject.AddComponent<RoutineRunner>();
             taskRunner.SetUp(this);
             return taskRunner;
         }
 
-        private RoutineRunner f_createLocal()
+        private RoutineRunner CreateLocal()
         {
-            if (m_gameObject == null)
-                m_gameObject = new GameObject("LocalTasks");
+            if (_gameObject == null)
+                _gameObject = new GameObject("LocalTasks");
 
-            return f_create();
+            return Create();
         }
     }
 }
