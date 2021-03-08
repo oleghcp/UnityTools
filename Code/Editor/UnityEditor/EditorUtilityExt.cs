@@ -15,6 +15,7 @@ namespace UnityEditor
         public const string ASSET_NAME_FIELD = "m_Name";
         public const string ASSET_EXTENSION = ".asset";
         public const string ASSET_FOLDER = "Assets/";
+        internal const string TEMPLATES_FOLDER = "Templates/";
 
         private static MethodInfo _clearFunc;
 

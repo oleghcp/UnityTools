@@ -44,15 +44,15 @@ namespace UnityUtility.NodeBased
         }
 
 #if UNITY_EDITOR
-        public Type GetNodeType() => typeof(TNode);
-        public Type GetTransitionType() => typeof(TTransition);
+        internal Type GetNodeType() => typeof(TNode);
+        internal Type GetTransitionType() => typeof(TTransition);
 
-        public static string GetNodeTypeMethodName => nameof(GetNodeType);
-        public static string GetTransitionTypeMethodName => nameof(GetTransitionType);
+        internal static string GetNodeTypeMethodName => nameof(GetNodeType);
+        internal static string GetTransitionTypeMethodName => nameof(GetTransitionType);
 #endif
     }
 
-    public struct TransitionsInfo<TNode, TTransition> where TNode : Node where TTransition : Transition<TNode>, new()
+    public struct TransitionsInfo<TNode, TTransition> : IEnumerable<TTransition> where TNode : Node where TTransition : Transition<TNode>, new()
     {
         private TNode _node;
 
@@ -63,6 +63,16 @@ namespace UnityUtility.NodeBased
         internal TransitionsInfo(TNode node)
         {
             _node = node;
+        }
+
+        IEnumerator<TTransition> IEnumerable<TTransition>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public Enumerator GetEnumerator()

@@ -30,26 +30,29 @@ namespace UnityUtilityEditor.CustomEditors.NodeBased
         {
             Graph graph = target.Owner;
 
-            ArrayUtility.Remove(ref graph.Nodes, target);
-            if (graph.Nodes.Length == 0)
+            if (graph != null)
             {
-                graph.LastId = 0;
-                graph.CameraPosition = default;
-            }
-            EditorUtility.SetDirty(graph);
-
-            foreach (Node node in target.Owner.Nodes)
-            {
-                int index = node.Next.IndexOf(item => item.Node == target);
-
-                if (index >= 0)
+                ArrayUtility.Remove(ref graph.Nodes, target);
+                if (graph.Nodes.Length == 0)
                 {
-                    ArrayUtility.RemoveAt(ref node.Next, index);
-                    EditorUtility.SetDirty(node);
+                    graph.LastId = 0;
+                    graph.CameraPosition = default;
                 }
-            }
+                EditorUtility.SetDirty(graph);
 
-            EditorUtilityExt.SaveProject();
+                foreach (Node node in target.Owner.Nodes)
+                {
+                    int index = node.Next.IndexOf(item => item.Node == target);
+
+                    if (index >= 0)
+                    {
+                        ArrayUtility.RemoveAt(ref node.Next, index);
+                        EditorUtility.SetDirty(node);
+                    }
+                }
+
+                EditorUtilityExt.SaveProject();
+            }
 
             DestroyImmediate(target, true);
             AssetDatabase.SaveAssets();

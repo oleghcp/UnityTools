@@ -164,7 +164,7 @@ namespace UnityUtilityEditor
 #if UNITY_2019_1_OR_NEWER
         public static void CreateScript()
         {
-            string templatePath = "C#ScriptTemplate.cs.txt";
+            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#ScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -183,6 +183,7 @@ namespace Project
     }
 }
 ";
+                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 

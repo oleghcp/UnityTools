@@ -9,7 +9,7 @@ namespace UnityUtilityEditor
     {
         public static void CreateNodeScript()
         {
-            string templatePath = "C#NodeScriptTemplate.cs.txt";
+            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#NodeScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -23,6 +23,7 @@ namespace Project
     }
 }
 ";
+                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 
@@ -31,7 +32,7 @@ namespace Project
 
         public static void CreateTransitionScript()
         {
-            string templatePath = "C#TransitionScriptTemplate.cs.txt";
+            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#TransitionScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -45,6 +46,7 @@ namespace Project
     }
 }
 ";
+                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 
@@ -53,7 +55,7 @@ namespace Project
 
         public static void CreateGraphScript()
         {
-            string templatePath = "C#GraphScriptTemplate.cs.txt";
+            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#GraphScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -62,13 +64,14 @@ using UnityEngine;
 
 namespace Project
 {" +
-    "\n    [CreateAssetMenu(menuName = \"Graph (ext.)/Graph\", fileName = \"MyGraph\")]\n" +
+    "\n    [CreateAssetMenu(menuName = \"Graph (ext.)/#SCRIPTNAME#\", fileName = \"#SCRIPTNAME#\")]\n" +
     @"    public class #SCRIPTNAME# : Graph</*your node type*/, /*your transition type*/>
     {
 
     }
 }
 ";
+                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 
