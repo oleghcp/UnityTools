@@ -9,43 +9,43 @@ namespace UnityUtilityEditor.SettingsProviders
 {
     internal static class AsyncSettingsProvider
     {
-        private static GUIContent s_labelForStopField;
-        private static GUIContent s_labelForGlobalStopField;
-        private static GUIContent s_labelForDestoryField;
+        private static GUIContent _labelForStopField;
+        private static GUIContent _labelForGlobalStopField;
+        private static GUIContent _labelForDestoryField;
 
         [SettingsProvider]
         public static SettingsProvider CreateMyCustomSettingsProvider()
         {
             string typeName = nameof(TaskInfo);
 
-            s_labelForStopField = new GUIContent("Allow stop tasks",
+            _labelForStopField = new GUIContent("Allow stop tasks",
                 $"Option for providing possibility to stop each task manually using {typeName}.{nameof(TaskInfo.Stop)}() or {typeName}.{nameof(TaskInfo.SkipCurrent)}()");
 
-            s_labelForGlobalStopField = new GUIContent("Allow stop all tasks",
+            _labelForGlobalStopField = new GUIContent("Allow stop all tasks",
                 "Option for providing possibility to stop all tasks globally by registering object with global stopping event.");
 
-            s_labelForDestoryField = new GUIContent("Don't destroy on load",
+            _labelForDestoryField = new GUIContent("Don't destroy on load",
                 "Whether task runners should be destroyed when scene is unloaded.");
 
             return new SettingsProvider("Project/" + TaskSystem.SYSTEM_NAME, SettingsScope.Project)
             {
-                guiHandler = f_drawGui,
+                guiHandler = DrawGui,
                 keywords = new HashSet<string> { "Async", "Async System", "Stop", "Destroy" },
             };
         }
 
-        private static void f_drawGui(string searchContext)
+        private static void DrawGui(string searchContext)
         {
             using (SerializedObject settings = new SerializedObject(GetOrCreateSettings()))
             {
                 SerializedProperty canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
                 SerializedProperty canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
 
-                canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(s_labelForStopField, canBeStoppedProperty.boolValue);
+                canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(_labelForStopField, canBeStoppedProperty.boolValue);
 
                 GUI.enabled = canBeStoppedProperty.boolValue;
 
-                canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(s_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
+                canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
 
                 if (canBeStoppedGloballyProperty.boolValue)
                 {

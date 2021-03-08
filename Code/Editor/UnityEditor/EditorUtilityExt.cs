@@ -16,7 +16,7 @@ namespace UnityEditor
         public const string ASSET_EXTENSION = ".asset";
         public const string ASSET_FOLDER = "Assets/";
 
-        private static MethodInfo s_clearFunc;
+        private static MethodInfo _clearFunc;
 
         public static UnityObject LoadAssetByGuid(string guid)
         {
@@ -51,13 +51,13 @@ namespace UnityEditor
 
         public static void ClearConsoleWindow()
         {
-            if (s_clearFunc == null)
+            if (_clearFunc == null)
             {
                 Assembly assembly = Assembly.GetAssembly(typeof(Editor));
                 Type type = assembly.GetType("UnityEditor.LogEntries");
-                s_clearFunc = type.GetMethod("Clear");
+                _clearFunc = type.GetMethod("Clear");
             }
-            s_clearFunc.Invoke(null, null);
+            _clearFunc.Invoke(null, null);
         }
 
         public static void CreateScriptableObjectAsset(Type type, string assetName = null)

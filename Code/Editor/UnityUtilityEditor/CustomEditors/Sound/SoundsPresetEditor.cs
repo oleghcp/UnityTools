@@ -8,20 +8,20 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 {
     internal abstract class SoundsPresetEditor : Editor
     {
-        private SerializedProperty m_nodes;
+        private SerializedProperty _nodes;
 
-        private Vector2 m_scrollPos;
+        private Vector2 _scrollPos;
 
         private void OnEnable()
         {
-            m_nodes = serializedObject.FindProperty("m_nodes");
+            _nodes = serializedObject.FindProperty("m_nodes");
         }
 
         public override void OnInspectorGUI()
         {
-            int length = m_nodes.arraySize;
+            int length = _nodes.arraySize;
 
-            using (var scope = new EditorGUILayout.ScrollViewScope(m_scrollPos, false, false, GUILayout.MaxHeight((length + 1) * 23f + 5f)))
+            using (var scope = new EditorGUILayout.ScrollViewScope(_scrollPos, false, false, GUILayout.MaxHeight((length + 1) * 23f + 5f)))
             {
                 DrawTableHeader();
 
@@ -29,13 +29,13 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
                 for (int i = 0; i < length; i++)
                 {
-                    if (DrawTableRow(m_nodes, i))
+                    if (DrawTableRow(_nodes, i))
                         break;
 
                     GUILayout.Space(3f);
                 }
 
-                m_scrollPos = scope.scrollPosition;
+                _scrollPos = scope.scrollPosition;
             }
 
             GUILayout.Space(5f);
@@ -45,12 +45,12 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Add", GUILayout.MinWidth(100f)))
-                    AddObject(m_nodes, null);
+                    AddObject(_nodes, null);
 
                 GUILayout.Space(10f);
 
                 if (GUILayout.Button("Sort", GUILayout.MinWidth(100f)))
-                    f_sort();
+                    Sort();
 
                 GUILayout.FlexibleSpace();
             }
@@ -61,9 +61,9 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
             if (objects.HasAnyData())
             {
-                f_addObjects(objects);
+                AddObjects(objects);
 
-                f_sort();
+                Sort();
 
                 serializedObject.ApplyModifiedProperties();
 
@@ -72,7 +72,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
             GUILayout.Space(5f);
 
-            if (m_nodes.arraySize > 0)
+            if (_nodes.arraySize > 0)
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -81,7 +81,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                     const string description = "Are you sure you want to clear List?";
                     if (GUILayout.Button("Clear List", GUILayout.MinWidth(100f)) &&
                         EditorUtility.DisplayDialog("Clear List?", description, "Yes", "No"))
-                        m_nodes.ClearArray();
+                        _nodes.ClearArray();
                 }
             }
 
@@ -97,29 +97,29 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
         // -- //
 
-        private void f_addObjects(UnityObject[] objects)
+        private void AddObjects(UnityObject[] objects)
         {
             for (int i = 0; i < objects.Length; i++)
             {
                 if (objects[i] is AudioClip)
-                    AddObject(m_nodes, objects[i]);
+                    AddObject(_nodes, objects[i]);
             }
         }
 
-        private void f_sort()
+        private void Sort()
         {
             int i = 0;
-            while (i < m_nodes.arraySize)
+            while (i < _nodes.arraySize)
             {
-                SerializedProperty name = m_nodes.GetArrayElementAtIndex(i).FindPropertyRelative("Name");
+                SerializedProperty name = _nodes.GetArrayElementAtIndex(i).FindPropertyRelative("Name");
 
                 if (name.stringValue.HasAnyData())
                     i++;
                 else
-                    m_nodes.DeleteArrayElementAtIndex(i);
+                    _nodes.DeleteArrayElementAtIndex(i);
             }
 
-            m_nodes.SortArray(prop => prop.FindPropertyRelative("Name").stringValue);
+            _nodes.SortArray(prop => prop.FindPropertyRelative("Name").stringValue);
         }
     }
 }

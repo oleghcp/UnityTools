@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.MathExt;
 
@@ -43,9 +44,9 @@ namespace UnityUtilityEditor.Window.ShapeWizards
 
         protected override Mesh CreateMesh()
         {
-            var newVertices = f_getVertices();
-            var newTriangles = f_getTriangles(newVertices.Length);
-            var newUV = f_getUV(newVertices.Length);
+            var newVertices = GetVertices();
+            var newTriangles = GetTriangles(newVertices.Length);
+            var newUV = GetUvCoords(newVertices.Length);
 
             Mesh mesh = new Mesh
             {
@@ -54,13 +55,13 @@ namespace UnityUtilityEditor.Window.ShapeWizards
                 uv = newUV
             };
 
-            if (Smooth) { mesh.normals = f_getNormals(newVertices); }
+            if (Smooth) { mesh.normals = GetNormals(newVertices); }
             else { mesh.RecalculateNormals(); }
 
             return mesh;
         }
 
-        private Vector3[] f_getVertices()
+        private Vector3[] GetVertices()
         {
             Vector3[] vertices;
 
@@ -83,7 +84,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
                     vertices[i + Edges * 3] = vertPos;
                 }
 
-                vertices[vertices.Length - 1] = -heightVector * Pivot;
+                vertices.FromEnd(0) = -heightVector * Pivot;
             }
             else
             {
@@ -107,14 +108,14 @@ namespace UnityUtilityEditor.Window.ShapeWizards
                     vertices[i + Edges * 5] = vertexPos;
                 }
 
-                vertices[vertices.Length - 2] = heightVector * (1f - Pivot);
-                vertices[vertices.Length - 1] = -heightVector * Pivot;
+                vertices.FromEnd(1) = heightVector * (1f - Pivot);
+                vertices.FromEnd(0) = -heightVector * Pivot;
             }
 
             return vertices;
         }
 
-        private int[] f_getTriangles(int vertices)
+        private int[] GetTriangles(int vertices)
         {
             int[] triangles;
 
@@ -158,7 +159,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
             return triangles;
         }
 
-        private Vector2[] f_getUV(int vertices)
+        private Vector2[] GetUvCoords(int vertices)
         {
             Vector2[] uv = new Vector2[vertices];
 
@@ -166,7 +167,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
 
             if (TopRadius.Approx(0f))
             {
-                uv[uv.Length - 1] = shift;
+                uv.FromEnd(0) = shift;
 
                 for (int i = 0; i < Edges; i++)
                 {
@@ -194,8 +195,8 @@ namespace UnityUtilityEditor.Window.ShapeWizards
             }
             else
             {
-                uv[uv.Length - 2] = shift;
-                uv[uv.Length - 1] = shift;
+                uv.FromEnd(1) = shift;
+                uv.FromEnd(0) = shift;
 
                 for (int i = 0; i < Edges; i++)
                 {
@@ -227,7 +228,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
             return uv;
         }
 
-        private Vector3[] f_getNormals(Vector3[] vertices)
+        private Vector3[] GetNormals(Vector3[] vertices)
         {
             int len = vertices.Length;
             Vector3[] normals = new Vector3[len];

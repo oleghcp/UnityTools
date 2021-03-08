@@ -4,13 +4,10 @@ using UnityUtility.Async;
 namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(RoutineRunner))]
-    internal class RoutineRunnerEditor : Editor
+    internal class RoutineRunnerEditor : Editor<RoutineRunner>
     {
-        private RoutineRunner m_target;
-
         private void Awake()
         {
-            m_target = target as RoutineRunner;
             EditorApplication.update += Repaint;
         }
 
@@ -21,14 +18,14 @@ namespace UnityUtilityEditor.CustomEditors
 
         public override void OnInspectorGUI()
         {
-            if (m_target.Id == 0L)
+            if (target.Id == 0L)
             {
                 EditorGUILayout.HelpBox("Inactive", MessageType.Info);
                 return;
             }
 
-            EditorGUILayout.LabelField("Task ID: " + m_target.Id.ToString());
-            EditorGUILayout.LabelField("Status: " + (m_target.IsPaused ? "Paused" : "Running"));
+            EditorGUILayout.LabelField("Task ID: " + target.Id.ToString());
+            EditorGUILayout.LabelField("Status: " + (target.IsPaused ? "Paused" : "Running"));
         }
     }
 }

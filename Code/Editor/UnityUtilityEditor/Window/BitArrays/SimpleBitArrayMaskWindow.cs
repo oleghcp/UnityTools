@@ -9,18 +9,18 @@ namespace UnityUtilityEditor.Window.BitArrays
 {
     internal class SimpleBitArrayMaskWindow : BitArrayMaskWindow
     {
-        private SerializedObject m_serializedObject;
-        private SerializedProperty m_length;
-        private SerializedProperty m_array;
+        private SerializedObject _serializedObject;
+        private SerializedProperty _length;
+        private SerializedProperty _array;
 
-        private Vector2 m_scrollPos;
+        private Vector2 _scrollPos;
 
         public override void SetUp(object param)
         {
             SerializedProperty property = param as SerializedProperty;
-            m_serializedObject = property.serializedObject;
-            m_length = property.FindPropertyRelative(BitArrayMask.LengthFieldName);
-            m_array = property.FindPropertyRelative(BitArrayMask.ArrayFieldName);
+            _serializedObject = property.serializedObject;
+            _length = property.FindPropertyRelative(BitArrayMask.LengthFieldName);
+            _array = property.FindPropertyRelative(BitArrayMask.ArrayFieldName);
         }
 
         private void Awake()
@@ -31,13 +31,13 @@ namespace UnityUtilityEditor.Window.BitArrays
 
         private void Update()
         {
-            if (m_serializedObject.Disposed())
+            if (_serializedObject.Disposed())
                 Close();
         }
 
         private void OnGUI()
         {
-            if (m_serializedObject.Disposed())
+            if (_serializedObject.Disposed())
             {
                 Close();
                 return;
@@ -45,22 +45,22 @@ namespace UnityUtilityEditor.Window.BitArrays
 
             GUILayout.Space(10f);
 
-            m_length.intValue = EditorGUILayout.IntField("Length", m_length.intValue).CutBefore(0);
-            f_checkArray();
+            _length.intValue = EditorGUILayout.IntField("Length", _length.intValue).CutBefore(0);
+            CheckArray();
 
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(10f);
             EditorGUILayout.BeginVertical();
-            m_scrollPos.y = GUILayout.BeginScrollView(m_scrollPos, false, false).y;
-            int size = m_array.arraySize;
-            int length = m_length.intValue;
+            _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, false, false).y;
+            int size = _array.arraySize;
+            int length = _length.intValue;
             for (int i = 0; i < size; i++)
             {
                 int len = length > BitMask.SIZE ? BitMask.SIZE : length;
 
-                var prop = m_array.GetArrayElementAtIndex(i);
+                var prop = _array.GetArrayElementAtIndex(i);
                 int mask = prop.intValue;
 
                 EditorGUILayout.BeginHorizontal();
@@ -88,19 +88,19 @@ namespace UnityUtilityEditor.Window.BitArrays
             GUILayout.Space(10f);
 
             if (GUI.changed)
-                m_serializedObject.ApplyModifiedProperties();
+                _serializedObject.ApplyModifiedProperties();
         }
 
-        private void f_checkArray()
+        private void CheckArray()
         {
-            int len = BitArrayMask.GetArraySize(m_length.intValue);
-            int size = m_array.arraySize;
+            int len = BitArrayMask.GetArraySize(_length.intValue);
+            int size = _array.arraySize;
 
             if (len > size)
             {
                 for (int i = 0; i < len - size; i++)
                 {
-                    m_array.PlaceArrayElement()
+                    _array.PlaceArrayElement()
                            .intValue = 0;
                 }
             }
@@ -108,7 +108,7 @@ namespace UnityUtilityEditor.Window.BitArrays
             {
                 for (int i = 0; i < size - len; i++)
                 {
-                    m_array.DeleteArrayElementAtIndex(m_array.arraySize - 1);
+                    _array.DeleteArrayElementAtIndex(_array.arraySize - 1);
                 }
             }
         }

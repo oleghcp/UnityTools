@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -8,7 +7,7 @@ namespace UnityUtilityEditor.Drawers
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(TypeNameAttribute))]
-    public class TypeNameDrawer : PropertyDrawer
+    public class TypeNameDrawer : AttributeDrawer<TypeNameAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -19,15 +18,13 @@ namespace UnityUtilityEditor.Drawers
             }
 
             if (property.stringValue.IsNullOrWhiteSpace())
-                property.stringValue = f_GetAttribute().TargetType.GetTypeName();
+                property.stringValue = attribute.TargetType.GetTypeName();
 
             EditorGUI.LabelField(position, label);
-            f_drawSelectionButton(position, property);
+            DrawSelectionButton(position, property);
         }
 
-
-
-        private void f_drawSelectionButton(Rect position, SerializedProperty property)
+        private void DrawSelectionButton(Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 
@@ -61,7 +58,7 @@ namespace UnityUtilityEditor.Drawers
                 shortName = "Type name of " + savedType.Name;
                 toolTip = savedType.GetTypeName();
 
-                if (f_GetAttribute().TargetType == savedType)
+                if (attribute.TargetType == savedType)
                     GUI.color = Colours.Yellow;
             }
 
@@ -75,42 +72,33 @@ namespace UnityUtilityEditor.Drawers
         private void f_showContextMenu(SerializedProperty property)
         {
             GenericMenu context = new GenericMenu();
-            fillContextMenu();
+
+            context.AddItem(new GUIContent("Base"), false, initByBase);
+
+            foreach (Type type in TypeCache.GetTypesDerivedFrom(attribute.TargetType))
+            {
+                string entryName = type.GetTypeName();
+                context.AddItem(new GUIContent(entryName), false, initByInstance, entryName);
+            }
+
             context.ShowAsContext();
 
-            void fillContextMenu()
+            void initByBase()
             {
-                context.AddItem(new GUIContent("Base"), false, initByBase);
+                AssignField(property, attribute.TargetType.GetTypeName());
+            }
 
-                foreach (Type type in TypeCache.GetTypesDerivedFrom(f_GetAttribute().TargetType))
-                {
-                    string entryName = type.GetTypeName();
-                    context.AddItem(new GUIContent(entryName), false, initByInstance, entryName);
-                }
-
-                void initByBase()
-                {
-                    f_assignField(property, f_GetAttribute().TargetType.GetTypeName());
-                }
-
-                void initByInstance(object typeName)
-                {
-                    f_assignField(property, (string)typeName);
-                }
+            void initByInstance(object typeName)
+            {
+                AssignField(property, (string)typeName);
             }
         }
 
-        private static void f_assignField(SerializedProperty property, string newValue)
+        private static void AssignField(SerializedProperty property, string newValue)
         {
             property.serializedObject.Update();
             property.stringValue = newValue;
             property.serializedObject.ApplyModifiedProperties();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private TypeNameAttribute f_GetAttribute()
-        {
-            return attribute as TypeNameAttribute;
         }
     }
 }

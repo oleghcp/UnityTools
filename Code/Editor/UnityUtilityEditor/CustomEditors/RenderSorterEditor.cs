@@ -6,24 +6,22 @@ using static UnityUtilityEditor.Drawers.SortingLayerIDDrawer;
 namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(RenderSorter))]
-    internal class RenderSorterEditor : Editor
+    internal class RenderSorterEditor : Editor<RenderSorter>
     {
-        private Renderer m_renderer;
-        private DrawTool m_drawer;
-        private SerializedObject m_serializedObject;
+        private Renderer _renderer;
+        private DrawTool _drawer;
+        private SerializedObject _serializedObject;
 
         private void Awake()
         {
             SerializedProperty rendererProp = serializedObject.FindProperty("_renderer");
-            m_renderer = rendererProp.objectReferenceValue as Renderer;
-            m_serializedObject = new SerializedObject(m_renderer);
-            m_drawer = new DrawTool();
+            _renderer = rendererProp.objectReferenceValue as Renderer;
+            _serializedObject = new SerializedObject(_renderer);
+            _drawer = new DrawTool();
 
-            RenderSorter sorter = target as RenderSorter;
-
-            if (m_renderer == null || m_renderer.gameObject != sorter.gameObject)
+            if (_renderer == null || _renderer.gameObject != target.gameObject)
             {
-                rendererProp.objectReferenceValue = m_renderer = sorter.GetComponent<Renderer>();
+                rendererProp.objectReferenceValue = _renderer = target.GetComponent<Renderer>();
                 serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
@@ -32,13 +30,13 @@ namespace UnityUtilityEditor.CustomEditors
         {
             EditorGUI.BeginChangeCheck();
 
-            m_renderer.sortingLayerID = m_drawer.Draw("Sorting Layer", m_renderer.sortingLayerID);
-            m_renderer.sortingOrder = EditorGUILayout.IntField("Sorting Order", m_renderer.sortingOrder);
+            _renderer.sortingLayerID = _drawer.Draw("Sorting Layer", _renderer.sortingLayerID);
+            _renderer.sortingOrder = EditorGUILayout.IntField("Sorting Order", _renderer.sortingOrder);
 
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RegisterCompleteObjectUndo(m_renderer, "Renderer sorting");
-                m_serializedObject.ApplyModifiedProperties();
+                Undo.RegisterCompleteObjectUndo(_renderer, "Renderer sorting");
+                _serializedObject.ApplyModifiedProperties();
             }
         }
     }

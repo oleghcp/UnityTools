@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
 
             while (arrayProp.arraySize < targetSize)
             {
-                f_initProp(arrayProp.PlaceArrayElement(), defVal);
+                InitProperty(arrayProp.PlaceArrayElement(), defVal);
 
                 changed = true;
             }
@@ -26,7 +26,67 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             return changed;
         }
 
-        private static void f_initProp(SerializedProperty property, object value)
+        public static void MoveToggles(BitArrayMask bits, int length, bool up)
+        {
+            if (up)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    ToggleIteration(bits, -1, i, i > 0);
+                }
+            }
+            else
+            {
+                for (int i = length - 1; i >= 0; i--)
+                {
+                    ToggleIteration(bits, 1, i, i < length - 1);
+                }
+            }
+        }
+
+        public static void MoveElements(SerializedProperty arrayProp, BitArrayMask bits, bool up, object defVal)
+        {
+            int length = arrayProp.arraySize;
+
+            if (up)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    ElementIteration(arrayProp, bits, defVal, -1, i, i > 0);
+                }
+            }
+            else
+            {
+                for (int i = length - 1; i >= 0; i--)
+                {
+                    ElementIteration(arrayProp, bits, defVal, 1, i, i < length - 1);
+                }
+            }
+        }
+
+        private static void ToggleIteration(BitArrayMask bits, int offset, int i, bool condition)
+        {
+            if (bits.Get(i))
+            {
+                bits.Set(i, false);
+
+                if (condition)
+                    bits.Set(i + offset, true);
+            }
+        }
+
+        private static void ElementIteration(SerializedProperty arrayProp, BitArrayMask bits, object defVal, int offset, int i, bool condition)
+        {
+            if (bits.Get(i))
+            {
+                if (condition)
+                    arrayProp.MoveArrayElement(i, i + offset);
+                else
+                    InitProperty(arrayProp.GetArrayElementAtIndex(i), defVal);
+            }
+        }
+
+        private static void InitProperty(SerializedProperty property, object value)
         {
             switch (property.propertyType)
             {
@@ -41,66 +101,6 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
                 case SerializedPropertyType.Enum:
                     property.enumValueIndex = (int)value;
                     break;
-            }
-        }
-
-        public static void MoveToggles(BitArrayMask bits, int length, bool up)
-        {
-            if (up)
-            {
-                for (int i = 0; i < length; i++)
-                {
-                    f_toggleIteration(bits, -1, i, i > 0);
-                }
-            }
-            else
-            {
-                for (int i = length - 1; i >= 0; i--)
-                {
-                    f_toggleIteration(bits, 1, i, i < length - 1);
-                }
-            }
-        }
-
-        public static void MoveElements(SerializedProperty arrayProp, BitArrayMask bits, bool up, object defVal)
-        {
-            int length = arrayProp.arraySize;
-
-            if (up)
-            {
-                for (int i = 0; i < length; i++)
-                {
-                    f_elementIteration(arrayProp, bits, defVal, -1, i, i > 0);
-                }
-            }
-            else
-            {
-                for (int i = length - 1; i >= 0; i--)
-                {
-                    f_elementIteration(arrayProp, bits, defVal, 1, i, i < length - 1);
-                }
-            }
-        }
-
-        private static void f_toggleIteration(BitArrayMask bits, int offset, int i, bool condition)
-        {
-            if (bits.Get(i))
-            {
-                bits.Set(i, false);
-
-                if (condition)
-                    bits.Set(i + offset, true);
-            }
-        }
-
-        private static void f_elementIteration(SerializedProperty arrayProp, BitArrayMask bits, object defVal, int offset, int i, bool condition)
-        {
-            if (bits.Get(i))
-            {
-                if (condition)
-                    arrayProp.MoveArrayElement(i, i + offset);
-                else
-                    f_initProp(arrayProp.GetArrayElementAtIndex(i), defVal);
             }
         }
     }

@@ -7,10 +7,10 @@ namespace UnityUtilityEditor.Window
 {
     internal class KeyAxesWindow : EditorWindow
     {
-        private SerializedObject m_serializedObject;
+        private SerializedObject _serializedObject;
 
-        private SerializedProperty[] m_directs;
-        private string[] m_names;
+        private SerializedProperty[] _directs;
+        private string[] _names;
 
         public static KeyAxesWindow Create()
         {
@@ -25,10 +25,10 @@ namespace UnityUtilityEditor.Window
 
         public void SetUp(SerializedObject param, Type keyFuncsEnum)
         {
-            m_serializedObject = param;
+            _serializedObject = param;
 
-            var prop = m_serializedObject.FindProperty(LayoutConfig.KeyAxesFieldName);
-            m_directs = new[]
+            var prop = _serializedObject.FindProperty(LayoutConfig.KeyAxesFieldName);
+            _directs = new[]
             {
                 prop.FindPropertyRelative("Up"),
                 prop.FindPropertyRelative("Down"),
@@ -36,18 +36,18 @@ namespace UnityUtilityEditor.Window
                 prop.FindPropertyRelative("Right")
             };
 
-            m_names = Enum.GetNames(keyFuncsEnum);
+            _names = Enum.GetNames(keyFuncsEnum);
         }
 
         private void Update()
         {
-            if (m_serializedObject.Disposed())
+            if (_serializedObject.Disposed())
                 Close();
         }
 
         private void OnGUI()
         {
-            if (m_serializedObject.Disposed())
+            if (_serializedObject.Disposed())
             {
                 Close();
                 return;
@@ -55,18 +55,18 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            for (int i = 0; i < m_directs.Length; i++)
+            for (int i = 0; i < _directs.Length; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(m_directs[i].displayName, GUILayout.MaxWidth(100f));
-                m_directs[i].intValue = EditorGUILayout.Popup(m_directs[i].intValue, m_names);
+                EditorGUILayout.LabelField(_directs[i].displayName, GUILayout.MaxWidth(100f));
+                _directs[i].intValue = EditorGUILayout.Popup(_directs[i].intValue, _names);
                 EditorGUILayout.EndHorizontal();
             }
 
             GUILayout.Space(10f);
 
             if (GUI.changed)
-                m_serializedObject.ApplyModifiedProperties();
+                _serializedObject.ApplyModifiedProperties();
         }
     }
 }

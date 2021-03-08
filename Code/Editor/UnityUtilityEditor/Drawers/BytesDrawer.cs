@@ -8,35 +8,35 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(Bytes))]
     internal class BytesDrawer : PropertyDrawer
     {
-        private bool m_inited;
-        private GUIContent[] m_labels;
-        private int[] m_values;
+        private bool _inited;
+        private GUIContent[] _labels;
+        private int[] _values;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (!m_inited)
+            if (!_inited)
             {
                 var lbl = new GUIContent();
-                m_labels = new GUIContent[Bytes.SIZE];
+                _labels = new GUIContent[Bytes.SIZE];
                 for (int i = 0; i < Bytes.SIZE; i++)
-                    m_labels[i] = lbl;
+                    _labels[i] = lbl;
 
-                m_values = new int[Bytes.SIZE];
+                _values = new int[Bytes.SIZE];
 
-                m_inited = true;
+                _inited = true;
             }
 
             SerializedProperty field = property.FindPropertyRelative(Bytes.SerFieldName);
             Bytes value = field.intValue;
 
             for (int i = 0; i < Bytes.SIZE; i++)
-                m_values[i] = value[i];
+                _values[i] = value[i];
 
             Rect rect = EditorGUI.PrefixLabel(position, label);
-            EditorGUI.MultiIntField(rect, m_labels, m_values);
+            EditorGUI.MultiIntField(rect, _labels, _values);
 
             for (int i = 0; i < Bytes.SIZE; i++)
-                value[i] = (byte)m_values[i].Clamp(0, byte.MaxValue);
+                value[i] = (byte)_values[i].Clamp(0, byte.MaxValue);
 
             field.intValue = (int)value;
         }

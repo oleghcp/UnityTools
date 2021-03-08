@@ -7,48 +7,48 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 {
     internal abstract class SoundObjectEditor : Editor
     {
-        private SoundObjectInfo m_target;
-        private string m_length;
+        private SoundObjectInfo _target;
+        private string _lengthInfo;
 
         private void Awake()
         {
-            m_target = target as SoundObjectInfo;
+            _target = target as SoundObjectInfo;
         }
 
         public override void OnInspectorGUI()
         {
-            AudioSource audioSource = m_target.AudioSource;
+            AudioSource audioSource = _target.AudioSource;
 
             if (audioSource != null && (audioSource.isPlaying || audioSource.time != 0f))
             {
-                f_checkLen();
+                InitLengthInfo();
 
                 GUILayout.Space(10f);
-                EditorGUILayout.LabelField(m_target.ClipName);
-                EditorGUILayout.LabelField(m_length);
+                EditorGUILayout.LabelField(_target.ClipName);
+                EditorGUILayout.LabelField(_lengthInfo);
 
                 GUI.enabled = false;
                 EditorGUILayout.Slider(audioSource.time, 0f, audioSource.clip.length);
                 GUI.enabled = true;
 
                 if (GUIExt.DrawCenterButton("Stop", 30f, 150f))
-                    m_target.Stop();
+                    _target.Stop();
 
                 GUILayout.Space(10f);
             }
             else
             {
-                m_length = null;
+                _lengthInfo = null;
             }
         }
 
-        private void f_checkLen()
+        private void InitLengthInfo()
         {
-            if (m_length == null)
+            if (_lengthInfo == null)
             {
-                AudioClip clip = m_target.AudioSource.clip;
+                AudioClip clip = _target.AudioSource.clip;
                 if (clip != null)
-                    m_length = "Length: " + TimeSpan.FromSeconds(clip.length).ToString(@"hh\:mm\:ss\:fff");
+                    _lengthInfo = "Length: " + TimeSpan.FromSeconds(clip.length).ToString(@"hh\:mm\:ss\:fff");
             }
         }
     }

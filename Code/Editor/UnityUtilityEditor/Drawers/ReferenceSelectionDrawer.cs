@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.Drawers
             }
 
             label = EditorGUI.BeginProperty(position, label, property);
-            f_drawSelectionButton(position, property);
+            DrawSelectionButton(position, property);
             EditorGUI.PropertyField(position, property, label, true);
             EditorGUI.EndProperty();
         }
@@ -30,7 +30,7 @@ namespace UnityUtilityEditor.Drawers
             return EditorGUI.GetPropertyHeight(property, true);
         }
 
-        private void f_drawSelectionButton(Rect position, SerializedProperty property)
+        private void DrawSelectionButton(Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 
@@ -63,60 +63,47 @@ namespace UnityUtilityEditor.Drawers
                 GUI.color = Colours.Cyan;
 
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
-                f_showContextMenu(property);
+                ShowContextMenu(property);
 
             GUI.color = Colours.White;
             EditorGUI.indentLevel = storedIndent;
         }
 
-        private static void f_showContextMenu(SerializedProperty property)
+        private static void ShowContextMenu(SerializedProperty property)
         {
             GenericMenu context = new GenericMenu();
-            fillContextMenu();
+
+            context.AddItem(new GUIContent("Null"), false, () => AssignField(property, null));
+
+            Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
+
+            if (fieldType == null)
+            {
+                Debug.LogError("Can not get type from typename.");
+                return;
+            }
+
+            addMenuItem(fieldType);
+
+            foreach (Type type in TypeCache.GetTypesDerivedFrom(fieldType))
+            {
+                addMenuItem(type);
+            }
+
             context.ShowAsContext();
 
-            void fillContextMenu()
+            void addMenuItem(Type type)
             {
-                context.AddItem(new GUIContent("Null"), false, initByNull);
-
-                Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
-
-                if (fieldType == null)
+                if (!type.IsAbstract && !type.IsInterface)
                 {
-                    Debug.LogError("Can not get type from typename.");
-                    return;
-                }
-
-                addMenuItem(fieldType);
-
-                foreach (Type type in TypeCache.GetTypesDerivedFrom(fieldType))
-                {
-                    addMenuItem(type);
-                }
-
-                void addMenuItem(Type type)
-                {
-                    if (!type.IsAbstract && !type.IsInterface)
-                    {
-                        string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
-                        string entryName = $"{type}  ({assemblyName})";
-                        context.AddItem(new GUIContent(entryName), false, initByInstance, type);
-                    }
-                }
-
-                void initByNull()
-                {
-                    f_assignField(property, null);
-                }
-
-                void initByInstance(object typeAsObject)
-                {
-                    f_assignField(property, Activator.CreateInstance((Type)typeAsObject));
+                    string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
+                    string entryName = $"{type}  ({assemblyName})";
+                    context.AddItem(new GUIContent(entryName), false, () => AssignField(property, Activator.CreateInstance(type)));
                 }
             }
         }
 
-        private static void f_assignField(SerializedProperty property, object newValue)
+        private static void AssignField(SerializedProperty property, object newValue)
         {
             property.serializedObject.Update();
             property.managedReferenceValue = newValue;

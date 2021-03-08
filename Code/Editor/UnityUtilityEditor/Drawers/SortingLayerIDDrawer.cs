@@ -12,12 +12,12 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(SortingLayerIDAttribute))]
     internal class SortingLayerIDDrawer : PropertyDrawer
     {
-        private string[] m_names;
-        private DrawTool m_tool;
+        private string[] _names;
+        private DrawTool _tool;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (m_tool == null)
+            if (_tool == null)
             {
                 if (EditorUtilityExt.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.Int32)
                 {
@@ -25,10 +25,10 @@ namespace UnityUtilityEditor.Drawers
                     return;
                 }
 
-                m_tool = new DrawTool();
+                _tool = new DrawTool();
             }
 
-            property.intValue = m_tool.Draw(position, property.displayName, property.intValue);
+            property.intValue = _tool.Draw(position, property.displayName, property.intValue);
         }
 
         public class DrawTool

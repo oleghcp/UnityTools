@@ -9,14 +9,14 @@ namespace UnityUtilityEditor.Window
 {
     internal class AxisCreateWindow : EditorWindow
     {
-        private SerializedObject m_inputManager;
-        private SerializedProperty m_axesArray;
-        private List<string> m_names;
+        private SerializedObject _inputManager;
+        private SerializedProperty _axesArray;
+        private List<string> _names;
 
-        private Vector2 m_scrollPos;
+        private Vector2 _scrollPos;
 
-        private int m_pads = 2;
-        private int m_axes = 15;
+        private int _pads = 2;
+        private int _axes = 15;
 
         private void Awake()
         {
@@ -24,10 +24,10 @@ namespace UnityUtilityEditor.Window
             maxSize = new Vector2(300f, 1500f);
 
             UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>($"ProjectSettings/InputManager{EditorUtilityExt.ASSET_EXTENSION}");
-            m_inputManager = new SerializedObject(asset);
-            m_axesArray = f_getAxes();
-            m_names = new List<string>();
-            f_refreshAxes();
+            _inputManager = new SerializedObject(asset);
+            _axesArray = GetAxes();
+            _names = new List<string>();
+            RefreshAxes();
         }
 
         private void OnGUI()
@@ -35,10 +35,10 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical();
-            m_scrollPos.y = GUILayout.BeginScrollView(m_scrollPos, false, false).y;
-            for (int i = 0; i < m_names.Count; i++)
+            _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, false, false).y;
+            for (int i = 0; i < _names.Count; i++)
             {
-                EditorGUILayout.LabelField(m_names[i], GUILayout.MaxWidth(150f), GUILayout.MinWidth(10f));
+                EditorGUILayout.LabelField(_names[i], GUILayout.MaxWidth(150f), GUILayout.MinWidth(10f));
             }
             GUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
@@ -55,12 +55,12 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Gamepads amount:", GUILayout.MaxWidth(150f), GUILayout.MinWidth(10f));
-            m_pads = EditorGUILayout.IntField(m_pads, GUILayout.Width(30f));
+            _pads = EditorGUILayout.IntField(_pads, GUILayout.Width(30f));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Axes amount:", GUILayout.MaxWidth(150f), GUILayout.MinWidth(10f));
-            m_axes = EditorGUILayout.IntField(m_axes, GUILayout.Width(30f));
+            _axes = EditorGUILayout.IntField(_axes, GUILayout.Width(30f));
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
 
@@ -69,15 +69,15 @@ namespace UnityUtilityEditor.Window
             {
                 StringBuilder builder = new StringBuilder();
 
-                for (int pad = 0; pad < m_pads; pad++)
+                for (int pad = 0; pad < _pads; pad++)
                 {
-                    for (int axis = 0; axis < m_axes; axis++)
+                    for (int axis = 0; axis < _axes; axis++)
                     {
-                        f_addAxis(axis + 1, pad + 1, builder);
+                        AddAxis(axis + 1, pad + 1, builder);
                     }
                 }
-                f_refreshAxes();
-                f_saveInputManager();
+                RefreshAxes();
+                SaveInputManager();
             }
 
             EditorGUILayout.Space();
@@ -90,9 +90,9 @@ namespace UnityUtilityEditor.Window
             {
                 int i = 0;
 
-                while (i < m_axesArray.arraySize)
+                while (i < _axesArray.arraySize)
                 {
-                    SerializedProperty axis = m_axesArray.GetArrayElementAtIndex(i);
+                    SerializedProperty axis = _axesArray.GetArrayElementAtIndex(i);
 
                     if (axis.FindPropertyRelative("type").enumValueIndex != 2)
                     {
@@ -105,11 +105,11 @@ namespace UnityUtilityEditor.Window
                     bool propVal = name[0] - (char)num == '@' && name[1] == ':' && int.TryParse(name[2].ToString(), out _);
 
                     if (!propVal) { i++; }
-                    else { m_axesArray.DeleteArrayElementAtIndex(i); }
+                    else { _axesArray.DeleteArrayElementAtIndex(i); }
                 }
 
-                f_refreshAxes();
-                f_saveInputManager();
+                RefreshAxes();
+                SaveInputManager();
             }
 
             GUILayout.Space(10f);
@@ -117,27 +117,27 @@ namespace UnityUtilityEditor.Window
 
         // -- //
 
-        private SerializedProperty f_getAxes()
+        private SerializedProperty GetAxes()
         {
-            return m_inputManager.FindProperty("m_Axes");
+            return _inputManager.FindProperty("m_Axes");
         }
 
-        private void f_refreshAxes()
+        private void RefreshAxes()
         {
-            m_names.Clear();
+            _names.Clear();
 
             SerializedProperty axis;
 
-            for (int i = 0; i < m_axesArray.arraySize; i++)
+            for (int i = 0; i < _axesArray.arraySize; i++)
             {
-                axis = m_axesArray.GetArrayElementAtIndex(i);
-                m_names.Add(axis.FindPropertyRelative("m_Name").stringValue);
+                axis = _axesArray.GetArrayElementAtIndex(i);
+                _names.Add(axis.FindPropertyRelative("m_Name").stringValue);
             }
         }
 
-        private void f_addAxis(int axNum, int padNum, StringBuilder builder)
+        private void AddAxis(int axNum, int padNum, StringBuilder builder)
         {
-            SerializedProperty axis = m_axesArray.PlaceArrayElement();
+            SerializedProperty axis = _axesArray.PlaceArrayElement();
 
             axis.FindPropertyRelative("m_Name").stringValue = InputUnility.AxisName(axNum, padNum, builder);
             axis.FindPropertyRelative("dead").floatValue = 0.1f;
@@ -147,9 +147,9 @@ namespace UnityUtilityEditor.Window
             axis.FindPropertyRelative("joyNum").enumValueIndex = padNum;
         }
 
-        private void f_saveInputManager()
+        private void SaveInputManager()
         {
-            m_inputManager.ApplyModifiedProperties();
+            _inputManager.ApplyModifiedProperties();
             AssetDatabase.SaveAssets();
         }
     }

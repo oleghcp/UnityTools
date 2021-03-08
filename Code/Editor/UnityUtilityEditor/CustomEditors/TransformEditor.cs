@@ -10,46 +10,40 @@ using UnityUtility;
 namespace UnityUtilityEditor.CustomEditors
 {
     [CustomEditor(typeof(Transform))]
-    internal class TransformEditor : Editor
+    internal class TransformEditor : Editor<Transform>
     {
         private const string UNDO_NAME = "Transform";
         private const float SPACE = 5f;
         private const float BTN_WIDTH = 35f;
         private const float LABEL_WIDTH = 35f;
 
-        private static string[] s_toolbarNames = new string[] { "Local", "World" };
+        private static readonly string[] _toolbarNames = new string[] { "Local", "World" };
 
-        private static bool s_world;
+        private static bool _world;
 
-        private Transform m_target;
-        private SerializedProperty m_posProp;
-        private SerializedProperty m_rotProp;
-        private SerializedProperty m_sclProp;
+        private SerializedProperty _posProp;
+        private SerializedProperty _rotProp;
+        private SerializedProperty _sclProp;
 
 #if !UNITY_2019_3_OR_NEWER
         private const float TOGGLE_WIDTH = 15f;
-        private static bool s_grid;
-        private static float s_snapStep = 1f;
-        private static Vector3[] s_axes = { Vector3.forward, Vector3.right, Vector3.up };
-        private Handles m_h;
+        private static bool _grid;
+        private static float _snapStep = 1f;
+        private readonly static Vector3[] s_axes = { Vector3.forward, Vector3.right, Vector3.up };
+        private Handles _handles;
 #endif
-
-        private void Awake()
-        {
-            m_target = target as Transform;
-        }
 
         private void OnEnable()
         {
-            m_posProp = serializedObject.FindProperty("m_LocalPosition");
-            m_rotProp = serializedObject.FindProperty("m_LocalRotation");
-            m_sclProp = serializedObject.FindProperty("m_LocalScale");
+            _posProp = serializedObject.FindProperty("m_LocalPosition");
+            _rotProp = serializedObject.FindProperty("m_LocalRotation");
+            _sclProp = serializedObject.FindProperty("m_LocalScale");
         }
 
 #if !UNITY_2019_3_OR_NEWER
         private void OnSceneGUI()
         {
-            if (s_grid)
+            if (_grid)
             {
                 Tool curTool = Tools.current;
 
@@ -60,36 +54,36 @@ namespace UnityUtilityEditor.CustomEditors
 
                 if (curTool == Tool.Transform || curTool == Tool.Rect)
                 {
-                    Handles.Label(m_target.position, "Not allowed\nfor grid\nsnapping.");
+                    Handles.Label(target.position, "Not allowed\nfor grid\nsnapping.");
                     return;
                 }
 
                 EditorGUI.BeginChangeCheck();
 
-                Vector3 pos = Handles.PositionHandle(m_target.position, Quaternion.identity);
+                Vector3 pos = Handles.PositionHandle(target.position, Quaternion.identity);
 
-                pos.x = pos.x.Round(s_snapStep);
-                pos.y = pos.y.Round(s_snapStep);
-                pos.z = pos.z.Round(s_snapStep);
+                pos.x = pos.x.Round(_snapStep);
+                pos.y = pos.y.Round(_snapStep);
+                pos.z = pos.z.Round(_snapStep);
 
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Undo.RecordObject(m_target, UNDO_NAME);
+                    Undo.RecordObject(target, UNDO_NAME);
 
-                    m_target.position = pos;
+                    target.position = pos;
                 }
 
                 const int SIZE = 7;
 
-                Vector3 n = -(m_h ?? (m_h = new Handles())).currentCamera.transform.forward;
+                Vector3 n = -(_handles ?? (_handles = new Handles())).currentCamera.transform.forward;
                 const float CIRCLE_SIZE = 0.03f;
 
                 int index = s_axes.IndexOfMax(itm => (Vector3.Angle(itm, n) - 90).Abs());
 
                 Vector3 nodePos(int i, int j)
                 {
-                    float snapStepI = s_snapStep * (i - SIZE / 2);
-                    float snapStepJ = s_snapStep * (j - SIZE / 2);
+                    float snapStepI = _snapStep * (i - SIZE / 2);
+                    float snapStepJ = _snapStep * (j - SIZE / 2);
 
                     switch (index)
                     {
@@ -115,21 +109,21 @@ namespace UnityUtilityEditor.CustomEditors
 
         public override void OnInspectorGUI()
         {
-            bool hasParent = m_target.parent;
+            bool hasParent = target.parent;
 
             if (!hasParent)
-                s_world = false;
+                _world = false;
 
             GUILayout.Space(SPACE);
 
             GUI.enabled = hasParent;
-            s_world = GUILayout.Toolbar(s_world.ToInt(), s_toolbarNames)
+            _world = GUILayout.Toolbar(_world.ToInt(), _toolbarNames)
                                .ToBool();
             GUI.enabled = true;
 
             GUILayout.Space(SPACE);
 
-            if (s_world)
+            if (_world)
             {
                 bool drawLine(string label, in Vector3 curValue, out Vector3 newValue, bool locked = false)
                 {
@@ -149,15 +143,15 @@ namespace UnityUtilityEditor.CustomEditors
                         EditorGUI.BeginChangeCheck();
                         newValue = EditorGUILayout.Vector3Field(GUIContent.none, curValue);
                         if (changed = EditorGUI.EndChangeCheck())
-                            Undo.RecordObject(m_target, UNDO_NAME);
+                            Undo.RecordObject(target, UNDO_NAME);
                     }
                     EditorGUILayout.EndHorizontal();
                     return changed;
                 }
 
-                if (drawLine("[Pos]", m_target.position, out Vector3 pos)) { m_target.position = pos; }
-                if (drawLine("[Rot]", m_target.eulerAngles, out Vector3 rot)) { m_target.eulerAngles = rot; }
-                drawLine("[Scl]", m_target.lossyScale, out _, true);
+                if (drawLine("[Pos]", target.position, out Vector3 pos)) { target.position = pos; }
+                if (drawLine("[Rot]", target.eulerAngles, out Vector3 rot)) { target.eulerAngles = rot; }
+                drawLine("[Scl]", target.lossyScale, out _, true);
             }
             else
             {
@@ -175,9 +169,9 @@ namespace UnityUtilityEditor.CustomEditors
                     return ch;
                 }
 
-                if (drawLine("Pos", m_posProp.vector3Value, out Vector3 pos)) { m_posProp.vector3Value = pos; }
-                if (drawLine("Rot", m_rotProp.quaternionValue.eulerAngles, out Vector3 rot)) { m_rotProp.quaternionValue = rot.ToRotation(); }
-                if (drawLine("Scl", m_sclProp.vector3Value, out Vector3 scl, Vector3.one)) { m_sclProp.vector3Value = scl; }
+                if (drawLine("Pos", _posProp.vector3Value, out Vector3 pos)) { _posProp.vector3Value = pos; }
+                if (drawLine("Rot", _rotProp.quaternionValue.eulerAngles, out Vector3 rot)) { _rotProp.quaternionValue = rot.ToRotation(); }
+                if (drawLine("Scl", _sclProp.vector3Value, out Vector3 scl, Vector3.one)) { _sclProp.vector3Value = scl; }
 
                 if (changed)
                     serializedObject.ApplyModifiedProperties();
@@ -187,16 +181,16 @@ namespace UnityUtilityEditor.CustomEditors
 
 #if !UNITY_2019_3_OR_NEWER
             EditorGUILayout.BeginHorizontal();
-            bool gridNewVal = GUILayout.Toggle(s_grid, string.Empty, GUILayout.Width(TOGGLE_WIDTH));
-            if (s_grid != gridNewVal)
+            bool gridNewVal = GUILayout.Toggle(_grid, string.Empty, GUILayout.Width(TOGGLE_WIDTH));
+            if (_grid != gridNewVal)
             {
-                s_grid = gridNewVal;
+                _grid = gridNewVal;
                 Tools.hidden = gridNewVal;
                 EditorWindow.GetWindow<SceneView>()
                             .Repaint();
             }
-            EditorGUI.BeginDisabledGroup(!s_grid);
-            s_snapStep = EditorGUILayout.FloatField("Grid Snap Step", s_snapStep);
+            EditorGUI.BeginDisabledGroup(!_grid);
+            _snapStep = EditorGUILayout.FloatField("Grid Snap Step", _snapStep);
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
 

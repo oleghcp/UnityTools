@@ -6,7 +6,7 @@ using UnityUtility;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(IdentifierAttribute))]
-    public class IdentifierDrawer : PropertyDrawer
+    public class IdentifierDrawer : AttributeDrawer<IdentifierAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -19,7 +19,7 @@ namespace UnityUtilityEditor.Drawers
             if (property.stringValue.IsNullOrWhiteSpace())
                 property.stringValue = Guid.NewGuid().ToString();
 
-            if ((attribute as IdentifierAttribute).Editable)
+            if (attribute.Editable)
             {
                 EditorGUI.PropertyField(position, property);
                 return;

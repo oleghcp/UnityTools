@@ -6,8 +6,8 @@ namespace UnityUtilityEditor.Window
 {
     internal class AboutWindow : EditorWindow
     {
-        private string m_cr;
-        private string m_descr;
+        private string _copyright;
+        private string _description;
 
         private void Awake()
         {
@@ -17,18 +17,18 @@ namespace UnityUtilityEditor.Window
             Assembly assembly = Assembly.Load(nameof(UnityUtility)) ?? Assembly.GetExecutingAssembly();
 
             var descriptionAttribute = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>();
-            m_descr = descriptionAttribute.Description;
+            _description = descriptionAttribute.Description;
 
             var copyrightAttribute = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>();
-            m_cr = copyrightAttribute.Copyright;
+            _copyright = copyrightAttribute.Copyright;
         }
 
         private void OnGUI()
         {
             GUILayout.Space(10f);
 
-            GUIExt.DrawCenterLabel(m_descr, 235f);
-            GUIExt.DrawCenterLabel(m_cr, 140f);
+            GUIExt.DrawCenterLabel(_description, 235f);
+            GUIExt.DrawCenterLabel(_copyright, 140f);
         }
     }
 }

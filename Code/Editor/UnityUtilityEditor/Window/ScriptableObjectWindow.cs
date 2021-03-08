@@ -9,14 +9,14 @@ namespace UnityUtilityEditor.Window
 {
     internal class ScriptableObjectWindow : EditorWindow
     {
-        private static bool m_keepOpened;
-        private UnityObject m_targetRoot;
+        private static bool _keepOpened;
+        private UnityObject _targetRoot;
 
-        private string[] m_assemblies;
+        private string[] _assemblies;
         private Dictionary<string, string[]> m_types;
 
-        private int m_assemblyIndex;
-        private int m_typeIndex;
+        private static int _assemblyIndex;
+        private int _typeIndex;
 
         private void Awake()
         {
@@ -44,12 +44,12 @@ namespace UnityUtilityEditor.Window
                 }
             }
 
-            m_assemblies = m_types.Keys.ToArray();
+            _assemblies = m_types.Keys.ToArray();
         }
 
         private void OnGUI()
         {
-            if (m_assemblies.Length == 0)
+            if (_assemblies.Length == 0)
             {
                 EditorGUILayout.LabelField("There is no assemblies.");
                 return;
@@ -57,16 +57,17 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            m_assemblyIndex = EditorGUILayout.Popup("Assembly:", m_assemblyIndex, m_assemblies);
+            _assemblyIndex = EditorGUILayout.Popup("Assembly:", _assemblyIndex % _assemblies.Length, _assemblies);
+            string assemblyName = _assemblies[_assemblyIndex];
 
             GUILayout.Space(10f);
 
-            m_typeIndex = Math.Min(m_typeIndex, m_types[m_assemblies[m_assemblyIndex]].Length - 1);
-            m_typeIndex = EditorGUILayout.Popup("ScriptableObject:", m_typeIndex, m_types[m_assemblies[m_assemblyIndex]]);
+            _typeIndex = Math.Min(_typeIndex, m_types[assemblyName].Length - 1);
+            _typeIndex = EditorGUILayout.Popup("ScriptableObject:", _typeIndex, m_types[assemblyName]);
 
             EditorGUILayout.Space();
 
-            m_targetRoot = EditorGUILayout.ObjectField("Parrent Asset", m_targetRoot, typeof(UnityObject), false);
+            _targetRoot = EditorGUILayout.ObjectField("Parrent Asset", _targetRoot, typeof(UnityObject), false);
 
             EditorGUILayout.Space(20f);
 
@@ -74,29 +75,28 @@ namespace UnityUtilityEditor.Window
             {
                 GUILayout.Space(10f);
 
-                m_keepOpened = EditorGUILayout.Toggle(m_keepOpened, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                _keepOpened = EditorGUILayout.Toggle(_keepOpened, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
                 EditorGUILayout.LabelField("Keep opened");
 
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Create", GUILayout.Width(100f), GUILayout.Height(30f)))
                 {
-                    string assemblyName = m_assemblies[m_assemblyIndex];
-                    string typeName = m_types[assemblyName][m_typeIndex];
+                    string typeName = m_types[assemblyName][_typeIndex];
                     Type type = Type.GetType($"{typeName}, {assemblyName}");
 
-                    string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");                    
+                    string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
 
                     if (path.HasUsefulData())
                     {
                         path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
 
-                        if (m_targetRoot == null)
+                        if (_targetRoot == null)
                             EditorUtilityExt.CreateScriptableObjectAsset(type, path);
                         else
-                            EditorUtilityExt.CreateScriptableObjectAsset(type, m_targetRoot, path);
+                            EditorUtilityExt.CreateScriptableObjectAsset(type, _targetRoot, path);
 
-                        if (!m_keepOpened)
+                        if (!_keepOpened)
                             Close();
                     }
                 }

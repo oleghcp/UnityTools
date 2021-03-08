@@ -7,7 +7,7 @@ using UnityUtility.NodeBased;
 namespace UnityUtilityEditor.CustomEditors.NodeBased
 {
     [CustomEditor(typeof(Node), true)]
-    internal class NodeEditor : Editor
+    internal class NodeEditor : Editor<Node>
     {
         public override void OnInspectorGUI()
         {
@@ -28,10 +28,9 @@ namespace UnityUtilityEditor.CustomEditors.NodeBased
 
         private void DestroyNode()
         {
-            Node targetNode = target as Node;
-            Graph graph = targetNode.Owner;
+            Graph graph = target.Owner;
 
-            ArrayUtility.Remove(ref graph.Nodes, targetNode);
+            ArrayUtility.Remove(ref graph.Nodes, target);
             if (graph.Nodes.Length == 0)
             {
                 graph.LastId = 0;
@@ -39,7 +38,7 @@ namespace UnityUtilityEditor.CustomEditors.NodeBased
             }
             EditorUtility.SetDirty(graph);
 
-            foreach (Node node in targetNode.Owner.Nodes)
+            foreach (Node node in target.Owner.Nodes)
             {
                 int index = node.Next.IndexOf(item => item.Node == target);
 
@@ -52,7 +51,7 @@ namespace UnityUtilityEditor.CustomEditors.NodeBased
 
             EditorUtilityExt.SaveProject();
 
-            DestroyImmediate(targetNode, true);
+            DestroyImmediate(target, true);
             AssetDatabase.SaveAssets();
         }
     }

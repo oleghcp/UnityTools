@@ -11,77 +11,77 @@ using UnityUtilityEditor.Window;
 namespace UnityUtilityEditor.CustomEditors.InputLayouts
 {
     [CustomEditor(typeof(LayoutConfig))]
-    internal class LayoutConfigEditor : Editor
+    internal class LayoutConfigEditor : Editor<LayoutConfig>
     {
         private const float COLUMN_WIDTH = 150f;
 
-        private TypeSelector m_keyEnumTypeSel;
-        private TypeSelector m_axisEnumTypeSel;
+        private TypeSelector _keyEnumTypeSel;
+        private TypeSelector _axisEnumTypeSel;
 
-        private TypeValue m_keyEnumTypeVal;
-        private TypeValue m_axisEnumTypeVal;
+        private TypeValue _keyEnumTypeVal;
+        private TypeValue _axisEnumTypeVal;
 
-        private SerializedProperty m_keyIndices;
-        private SerializedProperty m_axisIndices;
+        private SerializedProperty _keyIndices;
+        private SerializedProperty _axisIndices;
 
-        private SerializedProperty m_inputType;
-        private bool m_pretty;
+        private SerializedProperty _inputType;
+        private bool _pretty;
 
-        private KeyAxesWindow m_keyAxesPopup;
+        private KeyAxesWindow _keyAxesPopup;
 
         private void Awake()
         {
-            m_keyEnumTypeVal = new TypeValue(LayoutConfig.KeyEnumTypeFieldName);
-            m_axisEnumTypeVal = new TypeValue(LayoutConfig.AxisEnumTypeFieldName);
+            _keyEnumTypeVal = new TypeValue(LayoutConfig.KeyEnumTypeFieldName);
+            _axisEnumTypeVal = new TypeValue(LayoutConfig.AxisEnumTypeFieldName);
 
-            f_initTypeValue(m_keyEnumTypeVal);
-            f_initTypeValue(m_axisEnumTypeVal);
+            InitTypeValue(_keyEnumTypeVal);
+            InitTypeValue(_axisEnumTypeVal);
 
-            m_inputType = serializedObject.FindProperty(LayoutConfig.InputTypeFieldName);
+            _inputType = serializedObject.FindProperty(LayoutConfig.InputTypeFieldName);
 
-            m_keyIndices = serializedObject.FindProperty(LayoutConfig.KeyIndicesFieldName);
-            m_axisIndices = serializedObject.FindProperty(LayoutConfig.AxisIndicesFieldName);
+            _keyIndices = serializedObject.FindProperty(LayoutConfig.KeyIndicesFieldName);
+            _axisIndices = serializedObject.FindProperty(LayoutConfig.AxisIndicesFieldName);
         }
 
         public override void OnInspectorGUI()
         {
-            if (m_inputType.enumValueIndex == (int)InputType.None)
+            if (_inputType.enumValueIndex == (int)InputType.None)
             {
-                f_drawTypeChoice();
+                DrawTypeChoice();
             }
             else
             {
-                if (m_keyEnumTypeVal.IsEmpty)
+                if (_keyEnumTypeVal.IsEmpty)
                 {
-                    f_drawEnumChoice(ref m_keyEnumTypeSel, m_keyEnumTypeVal, "Choose your button action enum:");
+                    DrawEnumChoice(ref _keyEnumTypeSel, _keyEnumTypeVal, "Choose your button action enum:");
                 }
                 else
                 {
-                    if (f_chekKeys())
+                    if (ChekKeys())
                         serializedObject.ApplyModifiedProperties();
 
-                    int length = m_keyEnumTypeVal.EnumNames.Length;
-                    f_drawKeys(length);
-                    if (m_keyEnumTypeVal.Toggles.Any())
-                        f_drawKeysButtons(length);
+                    int length = _keyEnumTypeVal.EnumNames.Length;
+                    DrawKeys(length);
+                    if (_keyEnumTypeVal.Toggles.Any())
+                        DrawKeysButtons(length);
                 }
 
-                if (m_axisEnumTypeVal.IsEmpty)
+                if (_axisEnumTypeVal.IsEmpty)
                 {
-                    f_drawEnumChoice(ref m_axisEnumTypeSel, m_axisEnumTypeVal, "Choose your axis action enum:");
+                    DrawEnumChoice(ref _axisEnumTypeSel, _axisEnumTypeVal, "Choose your axis action enum:");
                 }
                 else
                 {
-                    if (f_chekAxes())
+                    if (ChekAxes())
                         serializedObject.ApplyModifiedProperties();
 
-                    int length = m_axisEnumTypeVal.EnumNames.Length;
-                    f_drawAxes(length);
-                    if (m_axisEnumTypeVal.Toggles.Any())
-                        f_drawAxesButtons(length);
+                    int length = _axisEnumTypeVal.EnumNames.Length;
+                    DrawAxes(length);
+                    if (_axisEnumTypeVal.Toggles.Any())
+                        DrawAxesButtons(length);
                 }
 
-                if (m_keyEnumTypeVal.IsEmpty || m_axisEnumTypeVal.IsEmpty)
+                if (_keyEnumTypeVal.IsEmpty || _axisEnumTypeVal.IsEmpty)
                 {
                     GUILayout.Space(10f);
                     EditorGUILayout.HelpBox("Enumerations which represent game actions (jump, shoot, move etc.). These enums must have consecutive int values: 0, 1, 2 etc.", MessageType.Info);
@@ -94,12 +94,12 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
                     GUILayout.Space(10f);
                     if (GUILayout.Button("Print Json", GUILayout.MaxWidth(300f)))
                     {
-                        object layout = (target as LayoutConfig).ToBindLayout();
-                        string json = JsonUtility.ToJson(layout, m_pretty);
+                        object layout = target.ToBindLayout();
+                        string json = JsonUtility.ToJson(layout, _pretty);
                         Debug.Log(json);
                     }
                     GUILayout.Space(10f);
-                    m_pretty = GUILayout.Toggle(m_pretty, "Pretty", GUILayout.MaxWidth(60f));
+                    _pretty = GUILayout.Toggle(_pretty, "Pretty", GUILayout.MaxWidth(60f));
                     EditorGUILayout.EndHorizontal();
                 }
             }
@@ -112,33 +112,33 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
 
         // -- //
 
-        private bool f_isKeyMouse()
+        private bool IsKeyMouse()
         {
-            return m_inputType.enumValueIndex == (int)InputType.KeyMouse;
+            return _inputType.enumValueIndex == (int)InputType.KeyMouse;
         }
 
-        private void f_initTypeValue(TypeValue typeValue)
+        private void InitTypeValue(TypeValue typeValue)
         {
             string enumName = serializedObject.FindProperty(typeValue.PropName).stringValue ?? string.Empty;
             typeValue.SetValue(Type.GetType(enumName));
         }
 
-        private void f_drawTypeChoice()
+        private void DrawTypeChoice()
         {
             GUILayout.Space(10f);
             GUIExt.DrawCenterLabel("Choose control type:", 150f);
             GUILayout.Space(5f);
 
             if (GUIExt.DrawCenterButton("Keyboard and Mouse", 150f, 30f))
-                m_inputType.enumValueIndex = (int)InputType.KeyMouse;
+                _inputType.enumValueIndex = (int)InputType.KeyMouse;
 
             GUILayout.Space(5f);
 
             if (GUIExt.DrawCenterButton("Gamepad", 150f, 30f))
-                m_inputType.enumValueIndex = (int)InputType.Gamepad;
+                _inputType.enumValueIndex = (int)InputType.Gamepad;
         }
 
-        private void f_drawEnumChoice(ref TypeSelector selector, TypeValue typeValue, string label)
+        private void DrawEnumChoice(ref TypeSelector selector, TypeValue typeValue, string label)
         {
             GUILayout.Space(10f);
 
@@ -173,7 +173,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             }
         }
 
-        private void f_drawKeys(int length)
+        private void DrawKeys(int length)
         {
             GUILayout.Space(10f);
 
@@ -181,10 +181,10 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
             EditorGUILayout.LabelField("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
 
-            bool all = m_keyEnumTypeVal.Toggles.All();
-            m_keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
-            if (m_keyEnumTypeVal.AllToggles != all)
-                m_keyEnumTypeVal.Toggles.SetAll(m_keyEnumTypeVal.AllToggles);
+            bool all = _keyEnumTypeVal.Toggles.All();
+            _keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+            if (_keyEnumTypeVal.AllToggles != all)
+                _keyEnumTypeVal.Toggles.SetAll(_keyEnumTypeVal.AllToggles);
 
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
@@ -193,36 +193,36 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             {
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(m_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
-                SerializedProperty keyIndexItem = m_keyIndices.GetArrayElementAtIndex(i);
+                EditorGUILayout.LabelField(_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+                SerializedProperty keyIndexItem = _keyIndices.GetArrayElementAtIndex(i);
 
-                if (f_isKeyMouse())
+                if (IsKeyMouse())
                     keyIndexItem.intValue = (int)(KMKeyCode)EditorGUILayout.EnumPopup((KMKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
                 else
                     keyIndexItem.intValue = (int)(GPKeyCode)EditorGUILayout.EnumPopup((GPKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
 
-                m_keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                _keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
 
                 EditorGUILayout.EndHorizontal();
             }
 
             GUILayout.Space(5f);
 
-            if (f_isKeyMouse())
+            if (IsKeyMouse())
             {
                 if (GUILayout.Button("Set Key Axes", GUILayout.MaxWidth(150f)))
                 {
-                    if (m_keyAxesPopup == null)
-                        (m_keyAxesPopup = KeyAxesWindow.Create()).SetUp(serializedObject, m_keyEnumTypeVal.EnumType);
+                    if (_keyAxesPopup == null)
+                        (_keyAxesPopup = KeyAxesWindow.Create()).SetUp(serializedObject, _keyEnumTypeVal.EnumType);
                     else
-                        m_keyAxesPopup.Focus();
+                        _keyAxesPopup.Focus();
                 }
 
                 GUILayout.Space(5f);
             }
         }
 
-        private void f_drawAxes(int length)
+        private void DrawAxes(int length)
         {
             GUILayout.Space(10f);
 
@@ -230,10 +230,10 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
             EditorGUILayout.LabelField("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
 
-            bool all = m_axisEnumTypeVal.Toggles.All();
-            m_axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
-            if (m_axisEnumTypeVal.AllToggles != all)
-                m_axisEnumTypeVal.Toggles.SetAll(m_axisEnumTypeVal.AllToggles);
+            bool all = _axisEnumTypeVal.Toggles.All();
+            _axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+            if (_axisEnumTypeVal.AllToggles != all)
+                _axisEnumTypeVal.Toggles.SetAll(_axisEnumTypeVal.AllToggles);
 
             EditorGUILayout.EndHorizontal();
 
@@ -243,15 +243,15 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             {
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(m_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
-                SerializedProperty axisIndexItem = m_axisIndices.GetArrayElementAtIndex(i);
+                EditorGUILayout.LabelField(_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+                SerializedProperty axisIndexItem = _axisIndices.GetArrayElementAtIndex(i);
 
-                if (f_isKeyMouse())
+                if (IsKeyMouse())
                     axisIndexItem.intValue = (int)(KMAxisCode)EditorGUILayout.EnumPopup((KMAxisCode)axisIndexItem.intValue);
                 else
                     axisIndexItem.intValue = (int)(GPAxisCode)EditorGUILayout.EnumPopup((GPAxisCode)axisIndexItem.intValue);
 
-                m_axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(m_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                _axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
 
                 EditorGUILayout.EndHorizontal();
             }
@@ -259,37 +259,37 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(5f);
         }
 
-        private void f_drawKeysButtons(int length)
+        private void DrawKeysButtons(int length)
         {
             EditorGUILayout.BeginHorizontal();
 
             if (GUILayout.Button("Move Up", GUILayout.MaxWidth(150f)))
             {
-                int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
-                LayoutEditorUtility.MoveElements(m_keyIndices, m_keyEnumTypeVal.Toggles, true, defVal);
-                LayoutEditorUtility.MoveToggles(m_keyEnumTypeVal.Toggles, m_keyIndices.arraySize, true);
+                int defVal = InputEnum.GetKeyDefVal(_inputType.enumValueIndex);
+                LayoutEditorUtility.MoveElements(_keyIndices, _keyEnumTypeVal.Toggles, true, defVal);
+                LayoutEditorUtility.MoveToggles(_keyEnumTypeVal.Toggles, _keyIndices.arraySize, true);
             }
 
             if (GUILayout.Button("Move Down", GUILayout.MaxWidth(150f)))
             {
-                int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
-                LayoutEditorUtility.MoveElements(m_keyIndices, m_keyEnumTypeVal.Toggles, false, defVal);
-                LayoutEditorUtility.MoveToggles(m_keyEnumTypeVal.Toggles, m_keyIndices.arraySize, false);
+                int defVal = InputEnum.GetKeyDefVal(_inputType.enumValueIndex);
+                LayoutEditorUtility.MoveElements(_keyIndices, _keyEnumTypeVal.Toggles, false, defVal);
+                LayoutEditorUtility.MoveToggles(_keyEnumTypeVal.Toggles, _keyIndices.arraySize, false);
             }
 
             GUILayout.Space(10f);
 
             if (GUILayout.Button("Clear", GUILayout.MaxWidth(80f)))
             {
-                int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
+                int defVal = InputEnum.GetKeyDefVal(_inputType.enumValueIndex);
 
                 for (int i = 0; i < length; i++)
                 {
-                    if (m_keyEnumTypeVal.Toggles[i])
-                        m_keyIndices.GetArrayElementAtIndex(i).intValue = defVal;
+                    if (_keyEnumTypeVal.Toggles[i])
+                        _keyIndices.GetArrayElementAtIndex(i).intValue = defVal;
                 }
 
-                m_keyEnumTypeVal.Toggles.SetAll(false);
+                _keyEnumTypeVal.Toggles.SetAll(false);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -297,36 +297,36 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(5f);
         }
 
-        private void f_drawAxesButtons(int length)
+        private void DrawAxesButtons(int length)
         {
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Move Up", GUILayout.MaxWidth(150f)))
             {
-                int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
-                LayoutEditorUtility.MoveElements(m_axisIndices, m_axisEnumTypeVal.Toggles, true, defVal);
-                LayoutEditorUtility.MoveToggles(m_axisEnumTypeVal.Toggles, m_axisIndices.arraySize, true);
+                int defVal = InputEnum.GetAxisDefVal(_inputType.enumValueIndex);
+                LayoutEditorUtility.MoveElements(_axisIndices, _axisEnumTypeVal.Toggles, true, defVal);
+                LayoutEditorUtility.MoveToggles(_axisEnumTypeVal.Toggles, _axisIndices.arraySize, true);
             }
 
             if (GUILayout.Button("Move Down", GUILayout.MaxWidth(150f)))
             {
-                int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
-                LayoutEditorUtility.MoveElements(m_axisIndices, m_axisEnumTypeVal.Toggles, false, defVal);
-                LayoutEditorUtility.MoveToggles(m_axisEnumTypeVal.Toggles, m_axisIndices.arraySize, false);
+                int defVal = InputEnum.GetAxisDefVal(_inputType.enumValueIndex);
+                LayoutEditorUtility.MoveElements(_axisIndices, _axisEnumTypeVal.Toggles, false, defVal);
+                LayoutEditorUtility.MoveToggles(_axisEnumTypeVal.Toggles, _axisIndices.arraySize, false);
             }
 
             GUILayout.Space(10f);
 
             if (GUILayout.Button("Clear", GUILayout.MaxWidth(80f)))
             {
-                int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
+                int defVal = InputEnum.GetAxisDefVal(_inputType.enumValueIndex);
 
                 for (int i = 0; i < length; i++)
                 {
-                    if (m_axisEnumTypeVal.Toggles[i])
-                        m_axisIndices.GetArrayElementAtIndex(i).intValue = defVal;
+                    if (_axisEnumTypeVal.Toggles[i])
+                        _axisIndices.GetArrayElementAtIndex(i).intValue = defVal;
                 }
 
-                m_axisEnumTypeVal.Toggles.SetAll(false);
+                _axisEnumTypeVal.Toggles.SetAll(false);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -334,19 +334,19 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(5f);
         }
 
-        private bool f_chekKeys()
+        private bool ChekKeys()
         {
-            int targetSize = m_keyEnumTypeVal.EnumNames.Length;
+            int targetSize = _keyEnumTypeVal.EnumNames.Length;
 
-            int defVal = InputEnum.GetKeyDefVal(m_inputType.enumValueIndex);
-            return LayoutEditorUtility.EqualizeSize(m_keyIndices, targetSize, defVal);
+            int defVal = InputEnum.GetKeyDefVal(_inputType.enumValueIndex);
+            return LayoutEditorUtility.EqualizeSize(_keyIndices, targetSize, defVal);
         }
 
-        private bool f_chekAxes()
+        private bool ChekAxes()
         {
-            int targetSize = m_axisEnumTypeVal.EnumNames.Length;
-            int defVal = InputEnum.GetAxisDefVal(m_inputType.enumValueIndex);
-            return LayoutEditorUtility.EqualizeSize(m_axisIndices, targetSize, defVal);
+            int targetSize = _axisEnumTypeVal.EnumNames.Length;
+            int defVal = InputEnum.GetAxisDefVal(_inputType.enumValueIndex);
+            return LayoutEditorUtility.EqualizeSize(_axisIndices, targetSize, defVal);
         }
 
         private class TypeSelector

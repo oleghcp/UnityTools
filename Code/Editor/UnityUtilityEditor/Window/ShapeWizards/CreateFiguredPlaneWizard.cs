@@ -33,9 +33,9 @@ namespace UnityUtilityEditor.Window.ShapeWizards
         {
             Mesh mesh = new Mesh
             {
-                vertices = f_getVertices(),
-                triangles = f_getTriangles(),
-                uv = f_getUV()
+                vertices = GetVertices(),
+                triangles = GetTriangles(),
+                uv = GetUvCoords()
             };
 
             mesh.RecalculateNormals();
@@ -45,7 +45,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
 
         // -- //
 
-        private Vector3[] f_getVertices()
+        private Vector3[] GetVertices()
         {
             Vector3[] vertices = new Vector3[Vertices + 1];
 
@@ -66,7 +66,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
             return vertices;
         }
 
-        private int[] f_getTriangles()
+        private int[] GetTriangles()
         {
             int[] triangles = new int[Vertices * 3];
 
@@ -82,7 +82,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
             return triangles;
         }
 
-        private Vector2[] f_getUV()
+        private Vector2[] GetUvCoords()
         {
             Vector2[] uv = new Vector2[Vertices + 1];
 

@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
         public bool AddCollider;
         public bool CreateAsset = true;
 
-        private static Material m_defaultMaterial;
+        private static Material _defaultMaterial;
 
         protected void OnWizardCreate()
         {
@@ -50,21 +50,21 @@ namespace UnityUtilityEditor.Window.ShapeWizards
             }
 
             MeshRenderer mr = mf.gameObject.AddComponent<MeshRenderer>();
-            mr.material = f_getDefaultMaterial();
+            mr.material = GetDefaultMaterial();
 
             Selection.activeObject = mf.gameObject;
         }
 
-        private Material f_getDefaultMaterial()
+        private Material GetDefaultMaterial()
         {
-            if (m_defaultMaterial == null)
+            if (_defaultMaterial == null)
             {
                 GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                m_defaultMaterial = go.GetComponent<MeshRenderer>().sharedMaterial;
+                _defaultMaterial = go.GetComponent<MeshRenderer>().sharedMaterial;
                 DestroyImmediate(go);
             }
 
-            return m_defaultMaterial;
+            return _defaultMaterial;
         }
 
         protected abstract string GenerateObjectName();
