@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -79,6 +80,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             Color targetColor = GraphEditorStyles.GetLineColor();
 
+            if (_points.Count == 0)
+            {
+                DrawLine(outPoint, inPoint, Vector2.right, Vector2.left, targetColor);
+                DrawButon((outPoint + inPoint) * 0.5f, targetColor);
+                return;
+            }
+
             Vector2 prevPoint = outPoint;
             for (int i = 0; i < _points.Count; i++)
             {
@@ -89,9 +97,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             DrawLine(prevPoint, inPoint, _points.Count == 0, true, targetColor);
-
-            if (_points.Count == 0)
-                DrawButon((outPoint + inPoint) * 0.5f, targetColor);
         }
 
         public bool ProcessEvents(Event e)
@@ -122,15 +127,21 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             Handles.color = Colours.White;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DrawLine(in Vector2 start, in Vector2 end, in Vector2 startTangentDir, in Vector2 endTangentDir)
         {
+            DrawLine(start, end, startTangentDir, endTangentDir, GraphEditorStyles.GetLineColor());
+        }
+
+        public static void DrawLine(in Vector2 start, in Vector2 end, in Vector2 startTangentDir, in Vector2 endTangentDir, in Color color)
+        {
             float factor = GetTangentFactor(start, end);
-            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, GraphEditorStyles.GetLineColor(), null, LINE_THICKNESS);
+            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, color, null, LINE_THICKNESS);
         }
 
         private static void DrawLine(in Vector2 start, in Vector2 end, bool lockStartTangent, bool lockEndTangent, in Color color)
         {
-            float factor = GetTangentFactor(start, end);
+            float factor = GetPointTangentFactor(start, end);
             Vector2 startTangentdir = lockStartTangent ? Vector2.right : new Vector2(end.x - start.x, 0f).normalized;
             Vector2 endTangentdir = lockEndTangent ? Vector2.left : new Vector2(start.x - end.x, 0f).normalized;
 
@@ -141,6 +152,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             float x = (end.x - start.x).Abs();
             float y = (end.y - start.y).Abs().CutAfter(x);
+            return (x + y) * 0.3f;
+        }
+
+        private static float GetPointTangentFactor(in Vector2 start, in Vector2 end)
+        {
+            float x = (end.x - start.x).Abs();
+            float y = (end.y - start.y).Abs();
             return (x + y) * 0.3f;
         }
     }
