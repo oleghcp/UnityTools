@@ -237,11 +237,11 @@ namespace UnityUtilityEditor.Window.NodeBased
             switch (_selectedPort.Type)
             {
                 case PortType.In:
-                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, mousePosition, Vector2.left, Vector2.right, GraphEditorStyles.GetLineColor());
+                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, mousePosition, Vector2.left, Vector2.right);
                     break;
 
                 case PortType.Out:
-                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, mousePosition, Vector2.right, Vector2.left, GraphEditorStyles.GetLineColor());
+                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, mousePosition, Vector2.right, Vector2.left);
                     break;
             }
 

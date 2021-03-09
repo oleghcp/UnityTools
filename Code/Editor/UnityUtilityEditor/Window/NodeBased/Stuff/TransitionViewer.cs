@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 
 #if UNITY_2019_3_OR_NEWER
@@ -10,7 +11,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class TransitionViewer
     {
-        private const float TANGENT_FACTOR = 0.5f;
         private const float LINE_THICKNESS = 2.5f;
 
         private GraphEditorWindow _window;
@@ -109,7 +109,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return needLock;
         }
 
-        private void DrawButon(Vector2 position, in Color color)
+        private void DrawButon(in Vector2 position, in Color color)
         {
             Handles.color = color;
             if (Handles.Button(position, Quaternion.identity, 4f, 8f, Handles.DotHandleCap))
@@ -122,19 +122,26 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             Handles.color = Colours.White;
         }
 
-        public static void DrawLine(Vector2 start, Vector2 end, Vector2 startTangentDir, Vector2 endTangentDir, in Color color)
+        public static void DrawLine(in Vector2 start, in Vector2 end, in Vector2 startTangentDir, in Vector2 endTangentDir)
         {
-            float factor = Vector2.Distance(end, start) * TANGENT_FACTOR;
-            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, color, null, LINE_THICKNESS);
+            float factor = GetTangentFactor(start, end);
+            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, GraphEditorStyles.GetLineColor(), null, LINE_THICKNESS);
         }
 
-        private static void DrawLine(Vector2 start, Vector2 end, bool lockStartTangent, bool lockEndTangent, in Color color)
+        private static void DrawLine(in Vector2 start, in Vector2 end, bool lockStartTangent, bool lockEndTangent, in Color color)
         {
-            float factor = Vector2.Distance(end, start) * TANGENT_FACTOR;
+            float factor = GetTangentFactor(start, end);
             Vector2 startTangentdir = lockStartTangent ? Vector2.right : new Vector2(end.x - start.x, 0f).normalized;
             Vector2 endTangentdir = lockEndTangent ? Vector2.left : new Vector2(start.x - end.x, 0f).normalized;
 
             Handles.DrawBezier(start, end, start + startTangentdir * factor, end + endTangentdir * factor, color, null, LINE_THICKNESS);
+        }
+
+        private static float GetTangentFactor(in Vector2 start, in Vector2 end)
+        {
+            float x = (end.x - start.x).Abs();
+            float y = (end.y - start.y).Abs().CutAfter(x);
+            return (x + y) * 0.3f;
         }
     }
 }
