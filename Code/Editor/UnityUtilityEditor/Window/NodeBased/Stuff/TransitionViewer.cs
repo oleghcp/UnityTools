@@ -11,6 +11,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     internal class TransitionViewer
     {
         private const float TANGENT_FACTOR = 0.5f;
+        private const float LINE_THICKNESS = 2.5f;
 
         private GraphEditorWindow _window;
 
@@ -124,7 +125,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public static void DrawLine(Vector2 start, Vector2 end, Vector2 startTangentDir, Vector2 endTangentDir, in Color color)
         {
             float factor = Vector2.Distance(end, start) * TANGENT_FACTOR;
-            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, color, null, 3f);
+            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, color, null, LINE_THICKNESS);
         }
 
         private static void DrawLine(Vector2 start, Vector2 end, bool lockStartTangent, bool lockEndTangent, in Color color)
@@ -133,7 +134,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             Vector2 startTangentdir = lockStartTangent ? Vector2.right : new Vector2(end.x - start.x, 0f).normalized;
             Vector2 endTangentdir = lockEndTangent ? Vector2.left : new Vector2(start.x - end.x, 0f).normalized;
 
-            Handles.DrawBezier(start, end, start + startTangentdir * factor, end + endTangentdir * factor, color, null, 3f);
+            Handles.DrawBezier(start, end, start + startTangentdir * factor, end + endTangentdir * factor, color, null, LINE_THICKNESS);
         }
     }
 }

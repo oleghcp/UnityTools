@@ -8,7 +8,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class PointViewer
     {
-        private const float RADIUS = 6f;
+        private const float VIEW_RADIUS = 5f;
+        private const float PICK_SIZE = VIEW_RADIUS * 4f;
 
         private SerializedProperty _property;
         private TransitionViewer _transitionViewer;
@@ -32,7 +33,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Draw(in Color color)
         {
             Handles.color = color;
-            Handles.DrawSolidDisc(_window.Camera.WorldToScreen(Position), Vector3.back, RADIUS);
+            Handles.DrawSolidDisc(_window.Camera.WorldToScreen(Position), Vector3.back, VIEW_RADIUS);
             Handles.color = Colours.White;
         }
 
@@ -43,7 +44,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    Rect pointRect = new Rect(_window.Camera.WorldToScreen(Position) - Vector2.one * RADIUS, Vector2.one * (RADIUS * 2f));
+                    Vector2 rectSize = new Vector2(PICK_SIZE, PICK_SIZE);
+                    Vector2 rectPos = _window.Camera.WorldToScreen(Position) - rectSize * 0.5f;
+                    Rect pointRect = new Rect(rectPos, rectSize);
 
                     if (e.button == 0)
                     {
