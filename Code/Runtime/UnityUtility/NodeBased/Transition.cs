@@ -7,7 +7,7 @@ namespace UnityUtility.NodeBased
     [Serializable]
     public abstract class Transition
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal Node Node;
 
 #if UNITY_EDITOR

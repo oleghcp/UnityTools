@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased.Stuff;
 
 #if UNITY_2019_3_OR_NEWER
@@ -71,7 +72,27 @@ namespace UnityUtilityEditor.Window.NodeBased
                 GUILayout.Space(10f);
 
                 _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
-                EditorGUILayout.PropertyField(_transitionProp, _label, true);
+
+                using (SerializedProperty iterator = _transitionProp.Copy())
+                {
+                    SerializedProperty end = iterator.GetEndProperty();
+                    EditorGUILayout.PropertyField(iterator, _label);
+
+                    if (iterator.isExpanded)
+                    {
+                        while (iterator.NextVisible(false) && !SerializedProperty.EqualContents(iterator, end))
+                        {
+                            if (iterator.name == Transition.NodeFieldName ||
+                                iterator.name == Transition.PointsFieldName)
+                            {
+                                continue;
+                            }
+
+                            EditorGUILayout.PropertyField(iterator);
+                        }
+                    }
+                }
+
                 EditorGUILayout.EndScrollView();
 
                 GUILayout.FlexibleSpace();
@@ -90,8 +111,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                 }
             }
 
-            if (GUI.changed)
-                _transitionProp.serializedObject.ApplyModifiedProperties();
+            _transitionProp.serializedObject.ApplyModifiedProperties();
         }
     }
 }
