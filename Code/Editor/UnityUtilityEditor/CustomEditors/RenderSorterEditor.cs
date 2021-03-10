@@ -8,16 +8,15 @@ namespace UnityUtilityEditor.CustomEditors
     [CustomEditor(typeof(RenderSorter))]
     internal class RenderSorterEditor : Editor<RenderSorter>
     {
-        private Renderer _renderer;
         private DrawTool _drawer;
-        private SerializedObject _serializedObject;
+        private Renderer _renderer;
 
         private void Awake()
         {
-            SerializedProperty rendererProp = serializedObject.FindProperty("_renderer");
-            _renderer = rendererProp.objectReferenceValue as Renderer;
-            _serializedObject = new SerializedObject(_renderer);
             _drawer = new DrawTool();
+
+            SerializedProperty rendererProp = serializedObject.FindProperty(RenderSorter.RendererFieldName);
+            _renderer = rendererProp.objectReferenceValue as Renderer;
 
             if (_renderer == null || _renderer.gameObject != target.gameObject)
             {
@@ -30,13 +29,17 @@ namespace UnityUtilityEditor.CustomEditors
         {
             EditorGUI.BeginChangeCheck();
 
-            _renderer.sortingLayerID = _drawer.Draw("Sorting Layer", _renderer.sortingLayerID);
-            _renderer.sortingOrder = EditorGUILayout.IntField("Sorting Order", _renderer.sortingOrder);
+            int sortingLayerID = _drawer.Draw("Sorting Layer", _renderer.sortingLayerID);
+            int sortingOrder = EditorGUILayout.IntField("Sorting Order", _renderer.sortingOrder);
 
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RegisterCompleteObjectUndo(_renderer, "Renderer sorting");
-                _serializedObject.ApplyModifiedProperties();
+
+                _renderer.sortingLayerID = sortingLayerID;
+                _renderer.sortingOrder = sortingOrder;
+
+                EditorUtility.SetDirty(_renderer);
             }
         }
     }

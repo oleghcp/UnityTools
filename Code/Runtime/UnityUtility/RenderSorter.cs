@@ -8,5 +8,9 @@ namespace UnityUtility
     {
         [SerializeField, HideInInspector]
         private Renderer _renderer;
+
+#if UNITY_EDITOR
+        internal static string RendererFieldName => nameof(_renderer); 
+#endif
     }
 }
