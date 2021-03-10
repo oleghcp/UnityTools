@@ -6,14 +6,20 @@ namespace UnityUtilityEditor.CustomEditors.AsyncSystem
     [CustomEditor(typeof(RoutineRunner))]
     internal class RoutineRunnerEditor : Editor<RoutineRunner>
     {
+        private long _id;
+        private bool _paused;
+
         private void Awake()
         {
-            EditorApplication.update += Repaint;
+            _id = target.Id;
+            _paused = target.IsPaused;
+
+            EditorApplication.update += Update;
         }
 
         private void OnDestroy()
         {
-            EditorApplication.update -= Repaint;
+            EditorApplication.update -= Update;
         }
 
         public override void OnInspectorGUI()
@@ -24,8 +30,18 @@ namespace UnityUtilityEditor.CustomEditors.AsyncSystem
                 return;
             }
 
-            EditorGUILayout.LabelField("Task ID: " + target.Id.ToString());
+            EditorGUILayout.LabelField($"Task ID: {target.Id}");
             EditorGUILayout.LabelField("Status: " + (target.IsPaused ? "Paused" : "Running"));
+        }
+
+        private void Update()
+        {
+            if (_id != target.Id || _paused != target.IsPaused)
+            {
+                _id = target.Id;
+                _paused = target.IsPaused;
+                Repaint();
+            }
         }
     }
 }
