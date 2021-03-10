@@ -5,7 +5,7 @@ using UnityUtility;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DisableEditingAttribute))]
-    public class DisableEditingDrawer : PropertyDrawer
+    internal class DisableEditingDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

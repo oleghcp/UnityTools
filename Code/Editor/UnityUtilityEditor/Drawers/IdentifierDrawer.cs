@@ -6,7 +6,7 @@ using UnityUtility;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(IdentifierAttribute))]
-    public class IdentifierDrawer : AttributeDrawer<IdentifierAttribute>
+    internal class IdentifierDrawer : AttributeDrawer<IdentifierAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

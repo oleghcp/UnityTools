@@ -7,7 +7,7 @@ using UnityUtility.MathExt;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DiapasonAttribute))]
-    public class DiapasonDrawer : AttributeDrawer<DiapasonAttribute>
+    internal class DiapasonDrawer : AttributeDrawer<DiapasonAttribute>
     {
         private GUIContent[] _floatSubLabels = { new GUIContent("Min"), new GUIContent("Max") };
         private GUIContent[] _intSubLabels = { new GUIContent("From"), new GUIContent("Before") };

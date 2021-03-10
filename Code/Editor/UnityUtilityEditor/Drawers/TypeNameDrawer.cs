@@ -7,7 +7,7 @@ namespace UnityUtilityEditor.Drawers
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(TypeNameAttribute))]
-    public class TypeNameDrawer : AttributeDrawer<TypeNameAttribute>
+    internal class TypeNameDrawer : AttributeDrawer<TypeNameAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
