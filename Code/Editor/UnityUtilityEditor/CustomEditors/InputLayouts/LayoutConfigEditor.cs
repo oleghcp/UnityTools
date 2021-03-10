@@ -45,6 +45,8 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+
             if (_inputType.enumValueIndex == (int)InputType.None)
             {
                 DrawTypeChoice();
@@ -104,10 +106,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
                 }
             }
 
-            if (GUI.changed)
-            {
-                serializedObject.ApplyModifiedProperties();
-            }
+            serializedObject.ApplyModifiedProperties();
         }
 
         // -- //
