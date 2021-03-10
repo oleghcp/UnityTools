@@ -306,10 +306,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsServiceField(SerializedProperty property)
         {
-            return property.propertyPath == EditorUtilityExt.SCRIPT_FIELD;
+            string fieldName = property.propertyPath;
+
+            return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
+                   fieldName == Node.ArrayFieldName ||
+                   fieldName == Node.GraphFieldName ||
+                   fieldName == Node.IdFieldName ||
+                   fieldName == Node.PositionFieldName;
         }
 
         private void Drag(Vector2 mouseDelta)

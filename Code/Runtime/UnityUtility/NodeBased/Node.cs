@@ -5,18 +5,18 @@ namespace UnityUtility.NodeBased
 {
     public abstract class Node : ScriptableObject
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal int Id;
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal Graph Owner;
-        [SerializeReference, HideInInspector]
+        [SerializeReference]
         internal Transition[] Next;
 
         public int LocalId => Id;
         public Graph Graph => Owner;
 
 #if UNITY_EDITOR
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal Vector2 Position;
 
         internal static string PositionFieldName => nameof(Position);

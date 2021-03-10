@@ -9,17 +9,17 @@ namespace UnityUtility.NodeBased
 {
     public abstract class Graph : ScriptableObject
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal Node[] Nodes;
 
         public Node RootNode => Nodes.Length > 0 ? Nodes[0] : null;
 
 #if UNITY_EDITOR
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal int LastId;
-        [SerializeField, HideInInspector]
+        [SerializeField]
         internal Vector2 CameraPosition;
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private float _nodeWidth;
 
         internal static string IdGeneratorFieldName => nameof(LastId);
@@ -115,10 +115,7 @@ namespace UnityUtility.NodeBased
                 _index = 0;
             }
 
-            public void Dispose()
-            {
-
-            }
+            public void Dispose() { }
         }
     }
 }

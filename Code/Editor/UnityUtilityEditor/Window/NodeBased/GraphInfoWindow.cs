@@ -57,7 +57,13 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private bool IsServiceField(SerializedProperty property)
         {
-            return property.propertyPath == EditorUtilityExt.SCRIPT_FIELD;
+            string fieldName = property.propertyPath;
+
+            return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
+                   fieldName == Graph.ArrayFieldName ||
+                   fieldName == Graph.IdGeneratorFieldName ||
+                   fieldName == Graph.CameraPositionFieldName ||
+                   fieldName == Graph.WidthFieldName;
         }
     }
 }
