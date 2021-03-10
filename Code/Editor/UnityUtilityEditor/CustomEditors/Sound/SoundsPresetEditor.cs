@@ -1,125 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using UnityUtility.MathExt;
+using UnityUtility.Sound;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.CustomEditors.Sound
 {
-    internal abstract class SoundsPresetEditor : Editor
+    [CustomEditor(typeof(SoundsPreset))]
+    internal class SoundsPresetEditor : AudioPresetEditor
     {
-        private SerializedProperty _nodes;
-
-        private Vector2 _scrollPos;
-
-        private void OnEnable()
+        protected override void DrawTableHeader()
         {
-            _nodes = serializedObject.FindProperty("_nodes");
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Name", EditorStyles.boldLabel, GUILayout.Width(100f));
+                EditorGUILayout.LabelField("Vol", EditorStyles.boldLabel, GUILayout.Width(40f));
+                EditorGUILayout.LabelField("Loop", EditorStyles.boldLabel, GUILayout.Width(35f));
+                EditorGUILayout.LabelField("Pitch", EditorStyles.boldLabel, GUILayout.Width(40f));
+                GUILayout.Space(5f);
+                EditorGUILayout.LabelField("Min/Max Dist", EditorStyles.boldLabel, GUILayout.Width(90f));
+            }
         }
 
-        public override void OnInspectorGUI()
+        protected override bool DrawTableRow(SerializedProperty nodes, int index)
         {
-            int length = _nodes.arraySize;
+            SerializedProperty node = nodes.GetArrayElementAtIndex(index);
 
-            using (var scope = new EditorGUILayout.ScrollViewScope(_scrollPos, false, false, GUILayout.MaxHeight((length + 1) * 23f + 5f)))
-            {
-                DrawTableHeader();
+            SerializedProperty name = node.FindPropertyRelative(SoundsPreset.NamePropName);
+            SerializedProperty stats = node.FindPropertyRelative(SoundsPreset.StatsPropName);
 
-                GUILayout.Space(5f);
+            SerializedProperty volume = stats.FindPropertyRelative(nameof(SPreset.Volume));
+            SerializedProperty loop = stats.FindPropertyRelative(nameof(SPreset.Looped));
+            SerializedProperty pitch = stats.FindPropertyRelative(nameof(SPreset.Pitch));
+            SerializedProperty minDist = stats.FindPropertyRelative(nameof(SPreset.MinDist));
+            SerializedProperty maxDist = stats.FindPropertyRelative(nameof(SPreset.MaxDist));
 
-                for (int i = 0; i < length; i++)
-                {
-                    if (DrawTableRow(_nodes, i))
-                        break;
-
-                    GUILayout.Space(3f);
-                }
-
-                _scrollPos = scope.scrollPosition;
-            }
-
-            GUILayout.Space(5f);
+            bool needBreak = false;
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button("Add", GUILayout.MinWidth(100f)))
-                    AddObject(_nodes, null);
-
+                name.stringValue = EditorGUILayout.TextField(name.stringValue, GUILayout.Width(100f));
+                volume.floatValue = EditorGUILayout.FloatField(volume.floatValue, GUILayout.Width(40f)).Clamp01();
                 GUILayout.Space(10f);
-
-                if (GUILayout.Button("Sort", GUILayout.MinWidth(100f)))
-                    Sort();
-
-                GUILayout.FlexibleSpace();
-            }
-
-            GUILayout.Space(5f);
-
-            UnityObject[] objects = GUIExt.DropArea("Drag and drop your audio clips here.", 50f);
-
-            if (objects.HasAnyData())
-            {
-                AddObjects(objects);
-
-                Sort();
-
-                serializedObject.ApplyModifiedProperties();
-
-                return;
-            }
-
-            GUILayout.Space(5f);
-
-            if (_nodes.arraySize > 0)
-            {
-                using (new EditorGUILayout.HorizontalScope())
+                loop.boolValue = EditorGUILayout.Toggle(loop.boolValue, GUILayout.Width(25f));
+                pitch.floatValue = EditorGUILayout.FloatField(pitch.floatValue, GUILayout.Width(40f)).Clamp(0f, 3f);
+                GUILayout.Space(5f);
+                minDist.floatValue = EditorGUILayout.FloatField(minDist.floatValue, GUILayout.Width(40f)).Clamp(0f, maxDist.floatValue - 1f);
+                maxDist.floatValue = EditorGUILayout.FloatField(maxDist.floatValue, GUILayout.Width(40f)).CutBefore(minDist.floatValue + 1f);
+                GUILayout.Space(5f);
+                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth)))
                 {
-                    GUILayout.FlexibleSpace();
-
-                    const string description = "Are you sure you want to clear List?";
-                    if (GUILayout.Button("Clear List", GUILayout.MinWidth(100f)) &&
-                        EditorUtility.DisplayDialog("Clear List?", description, "Yes", "No"))
-                        _nodes.ClearArray();
+                    nodes.DeleteArrayElementAtIndex(index);
+                    needBreak = true;
                 }
             }
 
-            if (GUI.changed)
-                serializedObject.ApplyModifiedProperties();
+            return needBreak;
         }
 
-        // -- //
-
-        protected abstract void DrawTableHeader();
-        protected abstract bool DrawTableRow(SerializedProperty nodes, int index);
-        protected abstract void AddObject(SerializedProperty nodes, UnityObject obj);
-
-        // -- //
-
-        private void AddObjects(UnityObject[] objects)
+        protected override void AddObject(SerializedProperty nodes, UnityObject obj)
         {
-            for (int i = 0; i < objects.Length; i++)
-            {
-                if (objects[i] is AudioClip)
-                    AddObject(_nodes, objects[i]);
-            }
-        }
+            SerializedProperty node = nodes.PlaceArrayElement();
 
-        private void Sort()
-        {
-            int i = 0;
-            while (i < _nodes.arraySize)
-            {
-                SerializedProperty name = _nodes.GetArrayElementAtIndex(i).FindPropertyRelative("Name");
+            node.FindPropertyRelative(SoundsPreset.NamePropName).stringValue = obj != null ? obj.name : string.Empty;
 
-                if (name.stringValue.HasAnyData())
-                    i++;
-                else
-                    _nodes.DeleteArrayElementAtIndex(i);
-            }
+            SerializedProperty stats = node.FindPropertyRelative(SoundsPreset.StatsPropName);
 
-            _nodes.SortArray(prop => prop.FindPropertyRelative("Name").stringValue);
+            stats.FindPropertyRelative(nameof(SPreset.Looped)).boolValue = false;
+            stats.FindPropertyRelative(nameof(SPreset.Volume)).floatValue = 1f;
+            stats.FindPropertyRelative(nameof(SPreset.Pitch)).floatValue = 1f;
+            stats.FindPropertyRelative(nameof(SPreset.MinDist)).floatValue = 1f;
+            stats.FindPropertyRelative(nameof(SPreset.MaxDist)).floatValue = 500f;
         }
     }
 }

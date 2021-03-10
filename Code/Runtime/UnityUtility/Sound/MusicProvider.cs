@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 using UnityUtility.SaveLoad;
-using UnityUtility.Sound.SoundProviderStuff;
+using UnityUtility.Sound.SoundStuff;
 
 namespace UnityUtility.Sound
 {
@@ -10,8 +10,8 @@ namespace UnityUtility.Sound
     {
         private readonly MPreset _defaultPreset = new MPreset { Volume = 1f, Pitch = 1f, Looped = true, RisingDur = 0.5f };
 
-        private static IObjectCreator<MusObject> _creator;
-        private static ObjectPool<MusObject> _pool;
+        private static IObjectCreator<MusicInfo> _creator;
+        private static ObjectPool<MusicInfo> _pool;
 
         private bool _locked;
 
@@ -23,7 +23,7 @@ namespace UnityUtility.Sound
         private float _pitch = 1f;
         private bool _paused;
 
-        private Dictionary<string, MusObject> _music;
+        private Dictionary<string, MusicInfo> _music;
 
         private IClipLoader _loader;
         private Dictionary<string, MPreset> _presetList;
@@ -51,7 +51,7 @@ namespace UnityUtility.Sound
         static MusicProvider()
         {
             _creator = new DynamicMusSourceCreator();
-            _pool = new ObjectPool<MusObject>(_creator.Create);
+            _pool = new ObjectPool<MusicInfo>(_creator.Create);
         }
 
         public MusicProvider(MusicPreset presetList = null) : this(new DefaultClipLoader("Music/"), presetList)
@@ -61,13 +61,13 @@ namespace UnityUtility.Sound
 
         public MusicProvider(IClipLoader loader, MusicPreset presetList = null)
         {
-            _music = new Dictionary<string, MusObject>();
+            _music = new Dictionary<string, MusicInfo>();
 
             _loader = loader;
             _presetList = presetList == null ? new Dictionary<string, MPreset>() : presetList.CreateDict();
         }
 
-        public static void OverrideAudioSourceCreator(IObjectCreator<MusObject> newCreator)
+        public static void OverrideAudioSourceCreator(IObjectCreator<MusicInfo> newCreator)
         {
             _creator = newCreator;
             _pool.ChangeCreator(_creator.Create);
@@ -97,7 +97,7 @@ namespace UnityUtility.Sound
         {
             if (_paused) { return; }
 
-            if (!_music.TryGetValue(musicName, out MusObject mus))
+            if (!_music.TryGetValue(musicName, out MusicInfo mus))
             {
                 if (!_presetList.TryGetValue(musicName, out MPreset set))
                     set = _defaultPreset;
@@ -113,7 +113,7 @@ namespace UnityUtility.Sound
 
         public void Stop(string musicName)
         {
-            if (_music.TryGetValue(musicName, out MusObject mus))
+            if (_music.TryGetValue(musicName, out MusicInfo mus))
             {
                 mus.Stop();
             }
@@ -121,7 +121,7 @@ namespace UnityUtility.Sound
 
         public void StopFading(string musicName, float time = 1f)
         {
-            if (_music.TryGetValue(musicName, out MusObject mus))
+            if (_music.TryGetValue(musicName, out MusicInfo mus))
             {
                 mus.StopFading(time);
             }
@@ -169,7 +169,7 @@ namespace UnityUtility.Sound
             }
         }
 
-        internal void ReleaseMusic(MusObject mus)
+        internal void ReleaseMusic(MusicInfo mus)
         {
             if (!_locked)
             {

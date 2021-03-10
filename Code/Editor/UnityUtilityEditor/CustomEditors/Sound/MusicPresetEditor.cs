@@ -7,7 +7,7 @@ using UnityObject = UnityEngine.Object;
 namespace UnityUtilityEditor.CustomEditors.Sound
 {
     [CustomEditor(typeof(MusicPreset))]
-    internal class MusPresetEditor : SoundsPresetEditor
+    internal class MusicPresetEditor : AudioPresetEditor
     {
         protected override void DrawTableHeader()
         {

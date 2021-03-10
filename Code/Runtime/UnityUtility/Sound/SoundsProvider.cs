@@ -5,17 +5,17 @@ using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 using UnityUtility.SaveLoad;
-using UnityUtility.Sound.SoundProviderStuff;
+using UnityUtility.Sound.SoundStuff;
 using UnityUtilityTools;
 
 namespace UnityUtility.Sound
 {
-    public class SoundProvider
+    public class SoundsProvider
     {
         private readonly SPreset _defaultPreset = new SPreset { Volume = 1f, Pitch = 1f, MinDist = 1f, MaxDist = 500f };
 
-        private static IObjectCreator<SndObject> _creator;
-        private static ObjectPool<SndObject> _pool;
+        private static IObjectCreator<SoundInfo> _creator;
+        private static ObjectPool<SoundInfo> _pool;
 
         private bool _locked;
 
@@ -27,8 +27,8 @@ namespace UnityUtility.Sound
         private float _pitch = 1f;
         private bool _paused;
 
-        private Dictionary<SoundKey, SndObject> _keyedSounds;
-        private HashSet<SndObject> _freeSounds;
+        private Dictionary<SoundKey, SoundInfo> _keyedSounds;
+        private HashSet<SoundInfo> _freeSounds;
         private IClipLoader _loader;
         private Dictionary<string, SPreset> _presetList;
 
@@ -52,27 +52,27 @@ namespace UnityUtility.Sound
             get { return _paused; }
         }
 
-        static SoundProvider()
+        static SoundsProvider()
         {
             _creator = new DynamicSndSourceCreator();
-            _pool = new ObjectPool<SndObject>(_creator.Create);
+            _pool = new ObjectPool<SoundInfo>(_creator.Create);
         }
 
-        public SoundProvider(SoundsPreset presetList = null) : this(new DefaultClipLoader("Sounds/"), presetList)
+        public SoundsProvider(SoundsPreset presetList = null) : this(new DefaultClipLoader("Sounds/"), presetList)
         {
 
         }
 
-        public SoundProvider(IClipLoader loader, SoundsPreset presetList = null)
+        public SoundsProvider(IClipLoader loader, SoundsPreset presetList = null)
         {
-            _keyedSounds = new Dictionary<SoundKey, SndObject>();
-            _freeSounds = new HashSet<SndObject>();
+            _keyedSounds = new Dictionary<SoundKey, SoundInfo>();
+            _freeSounds = new HashSet<SoundInfo>();
 
             _loader = loader;
             _presetList = presetList == null ? new Dictionary<string, SPreset>() : presetList.CreateDict();
         }
 
-        public static void OverrideAudioSourceCreator(IObjectCreator<SndObject> newCreator)
+        public static void OverrideAudioSourceCreator(IObjectCreator<SoundInfo> newCreator)
         {
             _creator = newCreator;
             _pool.ChangeCreator(_creator.Create);
@@ -105,7 +105,7 @@ namespace UnityUtility.Sound
 
             SPreset set = GetPreset(clip.name);
 
-            SndObject snd = _pool.Get();
+            SoundInfo snd = _pool.Get();
             snd.Play(this, null, clip, set);
             _freeSounds.Add(snd);
         }
@@ -122,7 +122,7 @@ namespace UnityUtility.Sound
 
             SoundKey key = new SoundKey(sender, clip.name);
 
-            if (!_keyedSounds.TryGetValue(key, out SndObject snd))
+            if (!_keyedSounds.TryGetValue(key, out SoundInfo snd))
             {
                 SPreset set = GetPreset(clip.name);
                 snd = _keyedSounds.Place(key, _pool.Get());
@@ -146,7 +146,7 @@ namespace UnityUtility.Sound
 
             SPreset set = GetPreset(clip.name);
 
-            SndObject snd = _pool.Get();
+            SoundInfo snd = _pool.Get();
             snd.Play3D(this, clip, set, pos);
             _freeSounds.Add(snd);
         }
@@ -162,7 +162,7 @@ namespace UnityUtility.Sound
             if (_paused) { return; }
             SoundKey key = new SoundKey(sender, clip.name);
 
-            if (!_keyedSounds.TryGetValue(key, out SndObject snd))
+            if (!_keyedSounds.TryGetValue(key, out SoundInfo snd))
             {
                 SPreset set = GetPreset(clip.name);
                 snd = _keyedSounds.Place(key, _pool.Get());
@@ -176,7 +176,7 @@ namespace UnityUtility.Sound
 
         public void Stop(object sender, string soundName)
         {
-            if (_keyedSounds.TryGetValue(new SoundKey(sender, soundName), out SndObject snd))
+            if (_keyedSounds.TryGetValue(new SoundKey(sender, soundName), out SoundInfo snd))
             {
                 snd.Stop();
             }
@@ -184,7 +184,7 @@ namespace UnityUtility.Sound
 
         public void StopFading(object sender, string soundName, float time = 1f)
         {
-            if (_keyedSounds.TryGetValue(new SoundKey(sender, soundName), out SndObject snd))
+            if (_keyedSounds.TryGetValue(new SoundKey(sender, soundName), out SoundInfo snd))
             {
                 snd.StopFading(time);
             }
@@ -229,14 +229,14 @@ namespace UnityUtility.Sound
             }
         }
 
-        internal void ReleaseSound(SndObject snd)
+        internal void ReleaseSound(SoundInfo snd)
         {
             RemoveSound(snd);
 
             _pool.Release(snd);
         }
 
-        internal void RemoveSound(SndObject snd)
+        internal void RemoveSound(SoundInfo snd)
         {
             if (!_locked)
             {

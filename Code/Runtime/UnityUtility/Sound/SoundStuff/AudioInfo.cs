@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility.Sound.SoundProviderStuff
+namespace UnityUtility.Sound.SoundStuff
 {
-    public abstract class SoundObjectInfo : MonoBehaviour
+    public abstract class AudioInfo : MonoBehaviour
     {
         internal abstract string ClipName { get; }
         internal abstract AudioSource AudioSource { get; }

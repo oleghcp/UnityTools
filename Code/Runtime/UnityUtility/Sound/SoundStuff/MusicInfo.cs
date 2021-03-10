@@ -1,39 +1,39 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 using UnityUtilityTools;
 
-namespace UnityUtility.Sound.SoundProviderStuff
+namespace UnityUtility.Sound.SoundStuff
 {
     [DisallowMultipleComponent]
-    public sealed class SndObject : SoundObjectInfo, IPoolable
+    public sealed class MusicInfo : AudioInfo, IPoolable
     {
-        internal object Sender;
-
         [SerializeField]
         private AudioSource _audioSource;
 
         private float _volume;
         private float _pitch;
-        private SPreset _preset;
-        private SoundProvider _provider;
+        private MusicProvider _provider;
         private Action _update;
+        private MPreset _preset;
+
+        private bool _fading;
 
         internal override string ClipName
         {
             get { return _audioSource.clip.name; }
         }
 
-        internal bool IsLooped
-        {
-            get { return _audioSource.loop; }
-        }
-
         internal override AudioSource AudioSource
         {
             get { return _audioSource; }
+        }
+
+        internal bool Fading
+        {
+            get { return _fading; }
         }
 
         ///////////////
@@ -48,8 +48,6 @@ namespace UnityUtility.Sound.SoundProviderStuff
             {
                 _audioSource = gameObject.GetOrAddComponent<AudioSource>();
                 _audioSource.playOnAwake = false;
-                _audioSource.dopplerLevel = 0f;
-                _audioSource.rolloffMode = AudioRolloffMode.Custom;
             }
 
             _update = () =>
@@ -61,56 +59,15 @@ namespace UnityUtility.Sound.SoundProviderStuff
             ApplicationUtility.OnUpdate_Event += _update;
         }
 
-        private void OnDestroy()
-        {
-            _provider.RemoveSound(this);
-            ApplicationUtility.OnUpdate_Event -= _update;
-        }
-
         ////////////////
         //Public Funcs//
-        ////////////////
+        ////////////////        
 
-        internal void Play(SoundProvider provider, object sender, AudioClip clip, SPreset preset)
+        internal void Play(MusicProvider provider, AudioClip clip, MPreset preset)
         {
+            _provider = provider;
             _audioSource.clip = clip;
             _preset = preset;
-
-            _provider = provider;
-            Sender = sender;
-
-            PlayInternal();
-        }
-
-        internal void Play3D(SoundProvider provider, AudioClip clip, SPreset preset, Vector3 pos)
-        {
-            _audioSource.clip = clip;
-            _preset = preset;
-
-            _audioSource.minDistance = preset.MinDist;
-            _audioSource.maxDistance = preset.MaxDist;
-            _audioSource.spatialBlend = 1f;
-
-            _provider = provider;
-
-            transform.position = pos;
-
-            PlayInternal();
-        }
-
-        internal void Play3D(SoundProvider provider, AudioClip clip, SPreset preset, Transform sender)
-        {
-            _audioSource.clip = clip;
-            _preset = preset;
-
-            _audioSource.minDistance = preset.MinDist;
-            _audioSource.maxDistance = preset.MaxDist;
-            _audioSource.spatialBlend = 1f;
-
-            _provider = provider;
-            Sender = sender;
-
-            transform.SetParent(sender, Vector3.zero);
 
             PlayInternal();
         }
@@ -119,6 +76,8 @@ namespace UnityUtility.Sound.SoundProviderStuff
         {
             StopAllCoroutines();
             _audioSource.Stop();
+            _fading = false;
+
             PlayInternal();
         }
 
@@ -126,7 +85,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
         {
             StopAllCoroutines();
             _audioSource.Stop();
-            _provider.ReleaseSound(this);
+            _provider.ReleaseMusic(this);
         }
 
         internal void StopFading(float time)
@@ -164,6 +123,27 @@ namespace UnityUtility.Sound.SoundProviderStuff
         //Inner Funcs//
         ///////////////
 
+        private void PlayInternal()
+        {
+            _audioSource.loop = _preset.Looped;
+            _audioSource.time = _preset.StartTime;
+            _pitch = _preset.Pitch;
+
+            if (_preset.Rising)
+            {
+                _volume = 0f;
+                StartCoroutine(Rise());
+            }
+            else
+            {
+                _volume = _preset.Volume;
+                UpdVolume();
+            }
+
+            UpdPitch();
+            _audioSource.PlayDelayed(_preset.StartDelay);
+        }
+
         #region IPoolable
         void IPoolable.Reinit()
         {
@@ -173,39 +153,54 @@ namespace UnityUtility.Sound.SoundProviderStuff
 
         void IPoolable.CleanUp()
         {
-            if (Sender != null && Sender is Transform) { transform.Free(); }
             gameObject.SetActive(false);
             _audioSource.clip = null;
-            _audioSource.spatialBlend = 0f;
-            Sender = null;
+            _fading = false;
             ApplicationUtility.OnUpdate_Event -= _update;
         }
         #endregion
 
-        //////////////
-        //Inner fncs//
-        //////////////
-
-        private void PlayInternal()
-        {
-            _volume = _preset.Volume;
-            _pitch = _preset.Pitch;
-            _audioSource.loop = Sender == null ? false : _preset.Looped;
-            _audioSource.mute = _provider.Muted;
-            UpdVolume();
-            UpdPitch();
-            _audioSource.Play();
-        }
-
         ////////////
         //Routines//
         ////////////
+
+        private IEnumerator Rise()
+        {
+            UpdVolume();
+            float curTime = 0f;
+
+            while (curTime < _preset.StartDelay)
+            {
+                yield return null;
+
+                if (_provider.Paused) { continue; }
+
+                curTime += Time.unscaledDeltaTime * _audioSource.pitch.Abs();
+            }
+
+            curTime = 0f;
+            float ratio = 0f;
+
+            do
+            {
+                yield return null;
+
+                if (_provider.Paused) { continue; }
+
+                curTime += Time.unscaledDeltaTime * _provider.Pitch.Abs();
+                ratio = curTime / _preset.RisingDur;
+                _volume = Mathf.Lerp(0f, _preset.Volume, curTime);
+                UpdVolume();
+
+            } while (ratio < 1f);
+        }
 
         private IEnumerator FadeAndStop(float time)
         {
             if (time < 0f)
                 throw Errors.NegativeTime(nameof(time));
 
+            _fading = true;
             float startVal = _volume;
             float curTime = 0f;
             float ratio = 0f;
@@ -224,7 +219,7 @@ namespace UnityUtility.Sound.SoundProviderStuff
             } while (ratio < 1f);
 
             _audioSource.Stop();
-            _provider.ReleaseSound(this);
+            _provider.ReleaseMusic(this);
         }
     }
 }
