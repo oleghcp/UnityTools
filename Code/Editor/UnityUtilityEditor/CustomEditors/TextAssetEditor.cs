@@ -11,12 +11,11 @@ namespace UnityUtilityEditor.CustomEditors
         private bool _isBinary;
 
         private string _text;
-        private bool _cut;
+        private bool _tooLarge;
 
         private void OnEnable()
         {
             _path = AssetDatabase.GetAssetPath(target);
-
             _isBinary = Path.GetExtension(_path) == ".bytes";
 
             if (!_isBinary)
@@ -25,70 +24,48 @@ namespace UnityUtilityEditor.CustomEditors
 
         public override void OnInspectorGUI()
         {
-            if (_isBinary)
-                DrawBinaryMode();
-            else
-                DrawTextMode();
-        }
-
-        private void DrawBinaryMode()
-        {
-            GUI.enabled = true;
-            EditorGUILayout.HelpBox("The TextAsset is marked as binary.", MessageType.Info);
-        }
-
-        private void DrawTextMode()
-        {
-            if (_cut)
+            if (_isBinary || _tooLarge)
             {
-                GUI.enabled = true;
-                EditorGUILayout.HelpBox("The text is too large for editing.", MessageType.Info);
-                GUI.enabled = false;
-                EditorGUILayout.TextArea(_text);
+                base.OnInspectorGUI();
+                return;
             }
-            else
+
+            GUI.enabled = true;
+            DrawTextField();
+        }
+
+        private void DrawTextField()
+        {
+            _text = EditorGUILayout.TextArea(_text);
+
+            GUILayout.Space(5f);
+
+            using (new EditorGUILayout.HorizontalScope())
             {
-                GUI.enabled = true;
+                EditorGUILayout.Space();
 
-                _text = EditorGUILayout.TextArea(_text);
-
-                GUILayout.Space(5f);
-
-                using (new EditorGUILayout.HorizontalScope())
+                if (GUILayout.Button("Apply"))
                 {
-                    EditorGUILayout.Space();
-
-                    if (GUILayout.Button("Apply"))
-                    {
-                        File.WriteAllText(_path, _text);
-                        AssetDatabase.Refresh();
-                    }
-
-                    GUILayout.Space(10f);
-
-                    if (GUILayout.Button("Discard"))
-                    {
-                        GUIUtility.keyboardControl = 0;
-                        LoadText();
-                    }
-
-                    EditorGUILayout.Space();
+                    File.WriteAllText(_path, _text);
+                    AssetDatabase.Refresh();
                 }
+
+                GUILayout.Space(10f);
+
+                if (GUILayout.Button("Discard"))
+                {
+                    GUIUtility.keyboardControl = 0;
+                    LoadText();
+                }
+
+                EditorGUILayout.Space();
             }
         }
 
         private void LoadText()
         {
             _text = target.text;
-
-            int maxLen = 16382;
-
-            if (_text.Length > maxLen)
-            {
-                char[] chars = _text.ToCharArray(0, maxLen);
-                _text = new string(chars);
-                _cut = true;
-            }
+            _tooLarge = _text.Length > 16382;
         }
     }
 }
