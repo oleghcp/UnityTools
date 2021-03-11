@@ -9,14 +9,17 @@ namespace UnityUtilityEditor.Window
 {
     internal class ScriptableObjectWindow : EditorWindow
     {
+        private const string ASSEMBLY_INDEX_KEY = "uu_csowai";
+
         private static bool _keepOpened;
         private UnityObject _targetRoot;
 
         private string[] _assemblies;
-        private Dictionary<string, string[]> m_types;
+        private Dictionary<string, Type[]> _types;
 
         private static int _assemblyIndex;
         private int _typeIndex;
+        private Rect _dropdownButtonRect;
 
         private void Awake()
         {
@@ -30,7 +33,7 @@ namespace UnityUtilityEditor.Window
                        !type.IsSubclassOf(typeof(EditorWindow));
             }
 
-            m_types = new Dictionary<string, string[]>();
+            _types = new Dictionary<string, Type[]>();
 
             foreach (var assembly in EditorUtilityExt.GetAssemblies())
             {
@@ -39,12 +42,11 @@ namespace UnityUtilityEditor.Window
 
                 if (types.HasAnyData())
                 {
-                    m_types[assembly.GetName().Name] = types.Select(itm => itm.FullName)
-                                                            .ToArray();
+                    _types[assembly.GetName().Name] = types.ToArray();
                 }
             }
 
-            _assemblies = m_types.Keys.ToArray();
+            _assemblies = _types.Keys.ToArray();
         }
 
         private void OnGUI()
@@ -57,13 +59,26 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            _assemblyIndex = EditorGUILayout.Popup("Assembly:", _assemblyIndex % _assemblies.Length, _assemblies);
+            _assemblyIndex = EditorGUILayout.Popup("Assembly:", EditorPrefs.GetInt(ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
+            EditorPrefs.SetInt(ASSEMBLY_INDEX_KEY, _assemblyIndex);
             string assemblyName = _assemblies[_assemblyIndex];
 
             GUILayout.Space(10f);
 
-            _typeIndex = Math.Min(_typeIndex, m_types[assemblyName].Length - 1);
-            _typeIndex = EditorGUILayout.Popup("ScriptableObject:", _typeIndex, m_types[assemblyName]);
+            _typeIndex = Math.Min(_typeIndex, _types[assemblyName].Length - 1);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.PrefixLabel("ScriptableObject:");
+
+                bool btn = EditorGUILayout.DropdownButton(new GUIContent(GetDisplayName(_types[assemblyName][_typeIndex])), FocusType.Passive);
+
+                if (Event.current.type == EventType.Repaint)
+                    _dropdownButtonRect = GUILayoutUtility.GetLastRect();
+
+                if (btn)
+                    ShowMenu(assemblyName);
+            }
 
             EditorGUILayout.Space();
 
@@ -82,8 +97,7 @@ namespace UnityUtilityEditor.Window
 
                 if (GUILayout.Button("Create", GUILayout.Width(100f), GUILayout.Height(30f)))
                 {
-                    string typeName = m_types[assemblyName][_typeIndex];
-                    Type type = Type.GetType($"{typeName}, {assemblyName}");
+                    Type type = _types[assemblyName][_typeIndex];
 
                     string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
 
@@ -101,6 +115,26 @@ namespace UnityUtilityEditor.Window
                     }
                 }
             }
+        }
+
+        private static string GetDisplayName(Type type)
+        {
+            return $"{type.Name} ({type.Namespace})";
+        }
+
+        private void ShowMenu(string assemblyName)
+        {
+            DropDownList list = DropDownList.Create();
+            Type[] typeNames = _types[assemblyName];
+
+            for (int i = 0; i < typeNames.Length; i++)
+            {
+                int index = i;
+                list.AddItem(GetDisplayName(typeNames[i]), _typeIndex == i, () => _typeIndex = index);
+            }
+
+
+            list.ShowMenu(_dropdownButtonRect);
         }
     }
 }

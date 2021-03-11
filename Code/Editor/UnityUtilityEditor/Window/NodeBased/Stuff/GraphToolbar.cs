@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     internal class GraphToolbar
     {
         private const float TOOLBAR_HEIGHT = 25f;
-        private const string GRID_SNAPING_KEY = "uuggs";
+        private const string GRID_SNAPING_KEY = "uu_ggs";
         private readonly Vector2 HINT_SIZE = new Vector2(200f, 150f);
         private const float HINT_OFFSET = 5f;
 

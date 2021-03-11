@@ -85,7 +85,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             DrawConnectionLine(e.mousePosition);
             DrawNodes();
             DrawSelectionRect(e.mousePosition);
-            EditorGUILayout.LabelField(_graphAssetEditor.GraphAsset.name, EditorStyles.boldLabel);
+            GUILayout.Label(_graphAssetEditor.GraphAsset.name, EditorStyles.boldLabel);
             _toolbar.Draw();
 
             ProcessNodeEvents(e);
@@ -334,7 +334,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void ProcessContextMenu(Vector2 mousePosition)
         {
-            GenericMenu genericMenu = new GenericMenu();
+            GenericMenu menu = new GenericMenu();
 
             addMenuItem(_graphAssetEditor.NodeType);
 
@@ -343,14 +343,14 @@ namespace UnityUtilityEditor.Window.NodeBased
                 addMenuItem(type);
             }
 
-            genericMenu.ShowAsContext();
+            menu.ShowAsContext();
 
             void addMenuItem(Type type)
             {
                 if (type.IsAbstract)
-                    genericMenu.AddDisabledItem(new GUIContent($"Add node/{type.FullName} (Abstract)"));
+                    menu.AddDisabledItem(new GUIContent($"Add node/{type.FullName} (Abstract)"));
                 else
-                    genericMenu.AddItem(new GUIContent($"Add node/{type.FullName}"), false, () => CreateNode(mousePosition, type));
+                    menu.AddItem(new GUIContent($"Add node/{type.FullName}"), false, () => CreateNode(mousePosition, type));
             }
         }
     }
