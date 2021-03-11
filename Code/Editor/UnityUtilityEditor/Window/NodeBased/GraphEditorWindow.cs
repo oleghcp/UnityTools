@@ -51,8 +51,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
 
             _graphAssetEditor = new GraphAssetEditor(graphAsset);
-            _camera = new GraphCamera(this);
-            _grid = new GraphGrid(this);
 
             foreach (Node item in _graphAssetEditor.ParseList())
             {
@@ -67,6 +65,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnEnable()
         {
+            _camera = new GraphCamera(this);
+            _grid = new GraphGrid(this);
             _toolbar = new GraphToolbar(this);
             _nodeViewers = new List<NodeViewer>();
             _transitionViewers = new List<TransitionViewer>();
