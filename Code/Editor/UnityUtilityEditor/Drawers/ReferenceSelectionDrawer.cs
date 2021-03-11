@@ -71,9 +71,9 @@ namespace UnityUtilityEditor.Drawers
 
         private static void ShowContextMenu(SerializedProperty property)
         {
-            GenericMenu context = new GenericMenu();
+            GenericMenu menu = new GenericMenu();
 
-            context.AddItem(new GUIContent("Null"), false, () => AssignField(property, null));
+            menu.AddItem(new GUIContent("Null"), false, () => AssignField(property, null));
 
             Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
 
@@ -90,7 +90,7 @@ namespace UnityUtilityEditor.Drawers
                 addMenuItem(type);
             }
 
-            context.ShowAsContext();
+            menu.ShowAsContext();
 
             void addMenuItem(Type type)
             {
@@ -98,7 +98,7 @@ namespace UnityUtilityEditor.Drawers
                 {
                     string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
                     string entryName = $"{type}  ({assemblyName})";
-                    context.AddItem(new GUIContent(entryName), false, () => AssignField(property, Activator.CreateInstance(type)));
+                    menu.AddItem(new GUIContent(entryName), false, () => AssignField(property, Activator.CreateInstance(type)));
                 }
             }
         }

@@ -22,13 +22,12 @@ namespace UnityEditor
             SerializedProperty iterator = self.Copy();
             SerializedProperty end = iterator.GetEndProperty();
 
-            if (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, end))
+            if (moveNext(true))
             {
-                do
-                {
-                    yield return iterator;
-                } while (iterator.NextVisible(false) && !SerializedProperty.EqualContents(iterator, end));
+                do { yield return iterator; } while (moveNext(false));
             }
+
+            bool moveNext(bool enterChildren) => iterator.NextVisible(enterChildren) && !SerializedProperty.EqualContents(iterator, end);
         }
 
         public static IEnumerable<SerializedProperty> EnumerateArrayElements(this SerializedProperty self)
@@ -111,7 +110,7 @@ namespace UnityEditor
 
         public static void SetBytesValue(this SerializedProperty self, Bytes value)
         {
-            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.SerFieldName))
+            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
             {
                 inner.intValue = (int)value;
             }
@@ -119,7 +118,7 @@ namespace UnityEditor
 
         public static Bytes GetBytesValue(this SerializedProperty self)
         {
-            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.SerFieldName))
+            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
             {
                 return inner.intValue;
             }

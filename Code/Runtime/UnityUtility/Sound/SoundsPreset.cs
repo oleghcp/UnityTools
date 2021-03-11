@@ -28,8 +28,10 @@ namespace UnityUtility.Sound
         [SerializeField]
         private Node[] _nodes;
 
+#if UNITY_EDITOR
         internal static string NamePropName => nameof(Node.Name);
         internal static string StatsPropName => nameof(Node.Stats);
+#endif
 
         internal Dictionary<string, SPreset> CreateDict()
         {

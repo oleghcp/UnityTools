@@ -24,10 +24,9 @@ namespace UnityUtility
             get { return SIZE; }
         }
 
-        internal static string SerFieldName
-        {
-            get { return nameof(_field); }
-        }
+#if UNITY_EDITOR
+        internal static string FieldName => nameof(_field);
+#endif
 
         public byte this[int index]
         {

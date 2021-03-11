@@ -103,8 +103,8 @@ namespace UnityUtilityEditor.Window.BitArrays
 
         public static void CheckArray(SerializedProperty bitMask, string[] names)
         {
-            var length = bitMask.FindPropertyRelative(BitArrayMask.LengthFieldName);
-            var array = bitMask.FindPropertyRelative(BitArrayMask.ArrayFieldName);
+            SerializedProperty length = bitMask.FindPropertyRelative(BitArrayMask.LengthFieldName);
+            SerializedProperty array = bitMask.FindPropertyRelative(BitArrayMask.ArrayFieldName);
 
             CheckArray(length, array, names);
         }

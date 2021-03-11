@@ -5,18 +5,8 @@ using UnityUtilityEditor.Window.BitArrays;
 
 namespace UnityUtilityEditor.Drawers
 {
-    internal abstract class BitArrayMaskWindow : EditorWindow
-    {
-        public abstract void SetUp(object param);
-
-        public static T Create<T>() where T : BitArrayMaskWindow
-        {
-            return GetWindow(typeof(T), true, "Bit Array Mask Values") as T;
-        }
-    }
-
     [CustomPropertyDrawer(typeof(BitArrayMask))]
-    internal class BitArrayMaskDrawer : PropertyDrawer
+    internal class BitArrayDrawer : PropertyDrawer
     {
         private SimpleBitArrayMaskWindow _window;
 
@@ -34,6 +24,16 @@ namespace UnityUtilityEditor.Drawers
                     (window = BitArrayMaskWindow.Create<T>()).SetUp(popupParam);
                 else
                     window.Focus();
+        }
+    }
+
+    internal abstract class BitArrayMaskWindow : EditorWindow
+    {
+        public abstract void SetUp(object param);
+
+        public static T Create<T>() where T : BitArrayMaskWindow
+        {
+            return GetWindow<T>(true, "Bit Array Values");
         }
     }
 }

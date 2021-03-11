@@ -26,36 +26,27 @@ namespace UnityUtilityEditor.Drawers
 
             private readonly GUIContent _label;
             private readonly string[] _names;
-            private readonly bool _array;
+            private readonly bool _isBitArray;
 
             private EnumBitArrayMaskWindow _window;
 
             public Data(SerializedProperty property, AttributeDrawer<DrawBitMaskAttribute> drawer)
             {
                 Type type = EditorUtilityExt.GetFieldType(drawer.fieldInfo);
-                Array values;
 
-                if (type == typeof(BitArrayMask))
-                {
-                    _label = new GUIContent(property.displayName);
-                    values = Enum.GetValues(drawer.attribute.EnumType);
-                    _array = true;
-                }
-                else if (type.GetTypeCode() == TypeCode.Int32)
-                {
-                    values = Enum.GetValues(drawer.attribute.EnumType);
-
-                    if (values.Length > BitMask.SIZE)
-                    {
-                        _error = "Enum values amount cannot be more than " + BitMask.SIZE.ToString();
-                        return;
-                    }
-
-                    _label = new GUIContent(property.displayName);
-                }
-                else
+                if (type != typeof(BitArrayMask) && type.GetTypeCode() != TypeCode.Int32)
                 {
                     _error = $"Use {nameof(DrawBitMaskAttribute)} with Int32 or BitArrayMask.";
+                    return;
+                }
+
+                _label = new GUIContent(property.displayName);
+                Array values = Enum.GetValues(drawer.attribute.EnumType);
+                _isBitArray = type == typeof(BitArrayMask);
+
+                if (!_isBitArray && values.Length > BitMask.SIZE)
+                {
+                    _error = $"Enum values amount cannot be more than {BitMask.SIZE}";
                     return;
                 }
 
@@ -67,7 +58,7 @@ namespace UnityUtilityEditor.Drawers
                     _names[item.ToInteger()] = item.GetName();
                 }
 
-                if (_array)
+                if (_isBitArray)
                 {
                     EnumBitArrayMaskWindow.CheckArray(property, _names);
                     property.serializedObject.ApplyModifiedProperties();
@@ -82,8 +73,8 @@ namespace UnityUtilityEditor.Drawers
                     return;
                 }
 
-                if (_array)
-                    BitArrayMaskDrawer.Draw(position, _label, ref _window, Tuple.Create(property, _names));
+                if (_isBitArray)
+                    BitArrayDrawer.Draw(position, _label, ref _window, Tuple.Create(property, _names));
                 else
                     property.intValue = EditorGUI.MaskField(position, _label, property.intValue, _names);
             }

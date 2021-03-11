@@ -71,17 +71,17 @@ namespace UnityUtilityEditor.Drawers
 
         private void f_showContextMenu(SerializedProperty property)
         {
-            GenericMenu context = new GenericMenu();
+            GenericMenu menu = new GenericMenu();
 
-            context.AddItem(new GUIContent("Base"), false, initByBase);
+            menu.AddItem(new GUIContent("Base"), false, initByBase);
 
             foreach (Type type in TypeCache.GetTypesDerivedFrom(attribute.TargetType))
             {
                 string entryName = type.GetTypeName();
-                context.AddItem(new GUIContent(entryName), false, initByInstance, entryName);
+                menu.AddItem(new GUIContent(entryName), false, initByInstance, entryName);
             }
 
-            context.ShowAsContext();
+            menu.ShowAsContext();
 
             void initByBase()
             {

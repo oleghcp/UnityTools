@@ -19,15 +19,10 @@ namespace UnityUtility.Collections
 
         private int _version;
 
-        internal static string ArrayFieldName
-        {
-            get { return nameof(_array); }
-        }
-
-        internal static string LengthFieldName
-        {
-            get { return nameof(_length); }
-        }
+#if UNITY_EDITOR
+        internal static string ArrayFieldName => nameof(_array);
+        internal static string LengthFieldName => nameof(_length); 
+#endif
 
         public bool this[int index]
         {
