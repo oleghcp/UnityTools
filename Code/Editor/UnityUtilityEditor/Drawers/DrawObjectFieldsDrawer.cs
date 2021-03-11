@@ -43,7 +43,19 @@ namespace UnityUtilityEditor.Drawers
 
                 using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
                 {
-                    GUIExt.DrawObjectFields(rect, serObject, prop => prop.propertyPath == EditorUtilityExt.SCRIPT_FIELD);
+                    EditorGUI.indentLevel++;
+
+                    foreach (var item in serObject.EnumerateProperties())
+                    {
+                        if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
+                            continue;
+
+                        EditorGUI.PropertyField(rect, item, true);
+                        rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
+                    }
+
+                    EditorGUI.indentLevel--;
+
                     serObject.ApplyModifiedProperties();
                 }
             }

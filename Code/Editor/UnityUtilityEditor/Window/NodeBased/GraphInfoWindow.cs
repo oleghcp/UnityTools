@@ -47,12 +47,17 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             EditorGUILayout.Space(2f);
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
-            GUIExt.DrawObjectFields(_serializedObject, IsServiceField);
+
+            foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
+            {
+                if (!IsServiceField(item))
+                    EditorGUILayout.PropertyField(item, true);
+            }
+
             EditorGUILayout.EndScrollView();
             EditorGUILayout.Space(2f);
 
-            if (GUI.changed)
-                _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedProperties();
         }
 
         private bool IsServiceField(SerializedProperty property)

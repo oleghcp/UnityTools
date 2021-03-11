@@ -7,6 +7,30 @@ namespace UnityEditor
 {
     public static class UnityEditorExtensions
     {
+        public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self)
+        {
+            SerializedProperty iterator = self.GetIterator();
+
+            for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
+            {
+                yield return iterator;
+            }
+        }
+
+        public static IEnumerable<SerializedProperty> EnumerateInnerProperties(this SerializedProperty self)
+        {
+            SerializedProperty iterator = self.Copy();
+            SerializedProperty end = iterator.GetEndProperty();
+
+            if (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, end))
+            {
+                do
+                {
+                    yield return iterator;
+                } while (iterator.NextVisible(false) && !SerializedProperty.EqualContents(iterator, end));
+            }
+        }
+
         public static IEnumerable<SerializedProperty> EnumerateArrayElements(this SerializedProperty self)
         {
             int len = self.arraySize;

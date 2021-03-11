@@ -60,15 +60,10 @@ namespace UnityEditor
         {
             float height = 0;
 
-            using (SerializedProperty iterator = serializedObject.GetIterator())
+            foreach (var item in serializedObject.EnumerateProperties())
             {
-                for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
-                {
-                    if (ignoreCondition != null && ignoreCondition(iterator))
-                        continue;
-
-                    height += EditorGUI.GetPropertyHeight(iterator) + EditorGUIUtility.standardVerticalSpacing;
-                }
+                if (ignoreCondition == null || ignoreCondition(item))
+                    height += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
             }
 
             return height;

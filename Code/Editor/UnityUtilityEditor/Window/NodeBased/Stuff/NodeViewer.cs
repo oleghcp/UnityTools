@@ -265,7 +265,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             float labelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = width * 0.5f;
-            GUIExt.DrawObjectFields(_serializedObject, IsServiceField);
+
+            foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
+            {
+                if (!IsServiceField(item))
+                    EditorGUILayout.PropertyField(item, true);
+            }
+
             EditorGUIUtility.labelWidth = labelWidth;
         }
 

@@ -73,24 +73,21 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 
-                using (SerializedProperty iterator = _transitionProp.Copy())
+                EditorGUILayout.PropertyField(_transitionProp, _label);
+
+                if (_transitionProp.isExpanded)
                 {
-                    SerializedProperty end = iterator.GetEndProperty();
-                    EditorGUILayout.PropertyField(iterator, _label);
-
-                    if (iterator.isExpanded)
+                    EditorGUI.indentLevel++;
+                    foreach (SerializedProperty item in _transitionProp.EnumerateInnerProperties())
                     {
-                        while (iterator.NextVisible(false) && !SerializedProperty.EqualContents(iterator, end))
+                        if (item.name == Transition.NodeFieldName || item.name == Transition.PointsFieldName)
                         {
-                            if (iterator.name == Transition.NodeFieldName ||
-                                iterator.name == Transition.PointsFieldName)
-                            {
-                                continue;
-                            }
-
-                            EditorGUILayout.PropertyField(iterator);
+                            continue;
                         }
+
+                        EditorGUILayout.PropertyField(item);
                     }
+                    EditorGUI.indentLevel--;
                 }
 
                 EditorGUILayout.EndScrollView();
