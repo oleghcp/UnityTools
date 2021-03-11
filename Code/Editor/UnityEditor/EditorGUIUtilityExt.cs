@@ -62,7 +62,7 @@ namespace UnityEditor
 
             foreach (var item in serializedObject.EnumerateProperties())
             {
-                if (ignoreCondition == null || ignoreCondition(item))
+                if (ignoreCondition == null || !ignoreCondition(item))
                     height += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
             }
 
