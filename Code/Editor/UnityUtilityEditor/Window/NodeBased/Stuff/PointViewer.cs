@@ -78,6 +78,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 case EventType.MouseDrag:
                     if (e.button == 0 && _isDragged && e.control)
                     {
+                        _property.serializedObject.Update();
                         Drag(e.delta);
                         _property.serializedObject.ApplyModifiedProperties();
                         GUI.changed = true;

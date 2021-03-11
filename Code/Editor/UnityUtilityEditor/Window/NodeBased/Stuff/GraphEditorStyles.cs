@@ -61,15 +61,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Texture2D Load(string path)
-        {
-            return EditorGUIUtility.Load(path) as Texture2D;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color GetLineColor()
         {
             return EditorGUIUtility.isProSkin ? Colours.White : Colours.Black;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Texture2D Load(string path)
+        {
+            return EditorGUIUtility.Load(path) as Texture2D;
         }
     }
 }

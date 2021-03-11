@@ -41,6 +41,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             get => _positionProperty.vector2Value;
             set
             {
+                _serializedObject.Update();
                 _positionProperty.vector2Value = value;
                 _serializedObject.ApplyModifiedProperties();
             }
@@ -120,7 +121,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             transition.Node = next;
             SerializedProperty property = _transitionsProperty.PlaceArrayElement();
             property.managedReferenceValue = transition;
-            _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
             return property;
         }
 
@@ -137,7 +138,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         if (nodeProp.objectReferenceValue == next)
                         {
                             _transitionsProperty.DeleteArrayElementAtIndex(i);
-                            _serializedObject.ApplyModifiedProperties();
+                            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
                             break;
                         }
                     }
@@ -149,6 +150,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             if (_nodeAsset == null)
                 return;
+
+            _serializedObject.Update();
 
             _in.Draw();
             _out.Draw();
@@ -166,13 +169,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
                 if (_window.Camera.Size <= 1f)
                     DrawContent(nodeRect.width);
-
-                if (GUI.changed)
-                {
-                    _serializedObject.ApplyModifiedProperties();
-                    _height = CalcNodeHeight();
-                }
             }
+
+            _height = CalcNodeHeight();
+            _serializedObject.ApplyModifiedProperties();
         }
 
         public bool ProcessEvents(Event e)

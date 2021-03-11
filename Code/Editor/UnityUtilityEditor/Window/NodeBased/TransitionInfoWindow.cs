@@ -108,7 +108,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                 }
             }
 
-            _transitionProp.serializedObject.ApplyModifiedProperties();
+            _transitionProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }

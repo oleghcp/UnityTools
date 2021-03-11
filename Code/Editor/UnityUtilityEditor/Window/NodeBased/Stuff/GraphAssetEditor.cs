@@ -40,7 +40,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             set
             {
                 _cameraPositionProperty.vector2Value = value;
-                _serializedObject.ApplyModifiedProperties();
+                _serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
 
@@ -59,7 +59,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_widthProperty.floatValue == 0)
             {
                 _widthProperty.floatValue = DEF_NODE_WIDTH;
-                _serializedObject.ApplyModifiedProperties();
+                _serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
 
@@ -72,14 +72,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void ChangeNodeWidth(int dir)
         {
             _widthProperty.floatValue = (_widthProperty.floatValue + (NODE_WIDTH_STEP * dir)).Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
-            _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void SetAsRoot(Node nodeAsset)
         {
             int index = _nodesProperty.GetArrayElement(out _, item => item.objectReferenceValue == nodeAsset);
             _nodesProperty.MoveArrayElement(index, 0);
-            _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public Node CreateNode(Vector2 position, Type type)
@@ -110,7 +110,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             _idProperty.intValue = newId;
             _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
-            _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public Transition CreateTransition()
@@ -131,7 +131,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 _cameraPositionProperty.vector2Value = default;
             }
 
-            _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
             UnityObject.DestroyImmediate(nodeAsset, true);
             AssetDatabase.SaveAssets();
         }

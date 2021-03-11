@@ -45,6 +45,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnGUI()
         {
+            _serializedObject.Update();
+
             EditorGUILayout.Space(2f);
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 
