@@ -68,5 +68,10 @@ namespace UnityEditor
 
             return height;
         }
+
+        public static string GetTypeDisplayName(Type type)
+        {
+            return $"{type.Name} ({type.Namespace})";
+        }
     }
 }

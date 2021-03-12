@@ -149,14 +149,14 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
                 if (selector.Types.Length > 0)
                 {
                     selector.Types = selector.Types.OrderBy(itm => itm.FullName).ToArray();
-                    selector.TypeNames = selector.Types.Select(itm => itm.FullName).ToArray();
+                    selector.TypeNames = selector.Types.Select(EditorGUIUtilityExt.GetTypeDisplayName).ToArray();
                 }
             }
 
             EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
             if (selector.Types.Length > 0)
             {
-                selector.Selected = EditorGUILayout.Popup(selector.Selected, selector.TypeNames);
+                selector.Selected = GUIExt.DropDown(selector.Selected, selector.TypeNames);
                 GUILayout.Space(5f);
                 if (GUIExt.DrawCenterButton("Apply", 100f, 30f))
                 {

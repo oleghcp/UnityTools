@@ -40,7 +40,7 @@ namespace UnityUtilityEditor.Window
                 Type[] types = typeSelection.ToArray();
 
                 _types[assemblyName] = types;
-                _typeNames[assemblyName] = types.Select(item => $"{item.Name} ({item.Namespace})")
+                _typeNames[assemblyName] = types.Select(EditorGUIUtilityExt.GetTypeDisplayName)
                                                 .ToArray();
             }
 
