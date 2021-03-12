@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -62,6 +63,44 @@ namespace UnityEditor
             }
 
             return null;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
+        {
+            return DropDown(null, selectedIndex, displayedOptions, options);
+        }
+
+        public static int DropDown(string label, int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return DropDown(propertyRect, label, selectedIndex, displayedOptions);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int DropDown(Rect propertyRect, int selectedIndex, string[] displayedOptions)
+        {
+            return DropDown(propertyRect, null, selectedIndex, displayedOptions);
+        }
+
+        public static int DropDown(Rect propertyRect, string label, int selectedIndex, string[] displayedOptions)
+        {
+            int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
+
+            if (label != null)
+                propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent(label));
+
+            selectedIndex = DropDownData.GetSelectedIndexById(selectedIndex, controlId);
+
+            if (EditorGUI.DropdownButton(propertyRect, new GUIContent(displayedOptions[selectedIndex]), FocusType.Keyboard))
+            {
+                EditorUtilityExt.DisplayDropDownList(propertyRect,
+                                                     displayedOptions,
+                                                     index => index == selectedIndex,
+                                                     index => DropDownData.MenuAction(controlId, index));
+            }
+
+            return selectedIndex;
         }
     }
 }

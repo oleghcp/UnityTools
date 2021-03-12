@@ -103,5 +103,24 @@ namespace UnityEditor
             return fieldInfo.FieldType.IsArray ? fieldInfo.FieldType.GetElementType()
                                                : fieldInfo.FieldType;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DisplayDropDownList(Vector2 position, string[] displayedOptions, Predicate<int> checkEnabled, Action<int> onItemSelected)
+        {
+            DisplayDropDownList(new Rect(position, Vector2.zero), displayedOptions, checkEnabled, onItemSelected);
+        }
+
+        public static void DisplayDropDownList(in Rect buttonRect, string[] displayedOptions, Predicate<int> checkEnabled, Action<int> onItemSelected)
+        {
+            DropDownList list = DropDownList.Create();
+
+            for (int i = 0; i < displayedOptions.Length; i++)
+            {
+                int index = i;
+                list.AddItem(displayedOptions[i], checkEnabled(i), () => onItemSelected(index));
+            }
+
+            list.ShowMenu(buttonRect);
+        }
     }
 }

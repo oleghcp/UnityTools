@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -16,14 +17,34 @@ namespace UnityUtilityEditor.Window
 
         private string[] _assemblies;
         private Dictionary<string, Type[]> _types;
+        private Dictionary<string, string[]> _typeNames;
 
         private static int _assemblyIndex;
         private int _typeIndex;
-        private Rect _dropdownButtonRect;
 
         private void Awake()
         {
             maxSize = minSize = new Vector2(400f, 145f);
+
+            _types = new Dictionary<string, Type[]>();
+            _typeNames = new Dictionary<string, string[]>();
+
+            foreach (Assembly assembly in EditorUtilityExt.GetAssemblies())
+            {
+                IEnumerable<Type> typeSelection = assembly.GetTypes()
+                                                          .Where(select);
+                if (typeSelection.IsNullOrEmpty())
+                    continue;
+
+                string assemblyName = assembly.GetName().Name;
+                Type[] types = typeSelection.ToArray();
+
+                _types[assemblyName] = types;
+                _typeNames[assemblyName] = types.Select(item => $"{item.Name} ({item.Namespace})")
+                                                .ToArray();
+            }
+
+            _assemblies = _types.Keys.ToArray();
 
             bool select(Type type)
             {
@@ -32,21 +53,6 @@ namespace UnityUtilityEditor.Window
                        !type.IsSubclassOf(typeof(Editor)) &&
                        !type.IsSubclassOf(typeof(EditorWindow));
             }
-
-            _types = new Dictionary<string, Type[]>();
-
-            foreach (var assembly in EditorUtilityExt.GetAssemblies())
-            {
-                IEnumerable<Type> types = assembly.GetTypes()
-                                                  .Where(select);
-
-                if (types.HasAnyData())
-                {
-                    _types[assembly.GetName().Name] = types.ToArray();
-                }
-            }
-
-            _assemblies = _types.Keys.ToArray();
         }
 
         private void OnGUI()
@@ -59,26 +65,15 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            _assemblyIndex = EditorGUILayout.Popup("Assembly:", EditorPrefs.GetInt(ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
+            _assemblyIndex = GUIExt.DropDown("Assembly:", EditorPrefs.GetInt(ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
+
             EditorPrefs.SetInt(ASSEMBLY_INDEX_KEY, _assemblyIndex);
             string assemblyName = _assemblies[_assemblyIndex];
 
             GUILayout.Space(10f);
 
             _typeIndex = Math.Min(_typeIndex, _types[assemblyName].Length - 1);
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.PrefixLabel("ScriptableObject:");
-
-                bool btn = EditorGUILayout.DropdownButton(new GUIContent(GetDisplayName(_types[assemblyName][_typeIndex])), FocusType.Passive);
-
-                if (Event.current.type == EventType.Repaint)
-                    _dropdownButtonRect = GUILayoutUtility.GetLastRect();
-
-                if (btn)
-                    ShowMenu(assemblyName);
-            }
+            _typeIndex = GUIExt.DropDown("ScriptableObject:", _typeIndex, _typeNames[assemblyName]);
 
             EditorGUILayout.Space();
 
@@ -115,25 +110,6 @@ namespace UnityUtilityEditor.Window
                     }
                 }
             }
-        }
-
-        private static string GetDisplayName(Type type)
-        {
-            return $"{type.Name} ({type.Namespace})";
-        }
-
-        private void ShowMenu(string assemblyName)
-        {
-            DropDownList list = DropDownList.Create();
-            Type[] typeNames = _types[assemblyName];
-
-            for (int i = 0; i < typeNames.Length; i++)
-            {
-                int index = i;
-                list.AddItem(GetDisplayName(typeNames[i]), _typeIndex == i, () => _typeIndex = index);
-            }
-
-            list.ShowMenu(_dropdownButtonRect);
         }
     }
 }

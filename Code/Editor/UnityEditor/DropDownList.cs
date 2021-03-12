@@ -228,7 +228,7 @@ namespace UnityEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (item.On)
-                        GUILayout.Label("√", "Button", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+                        GUILayout.Label("√", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
                     else
                         GUILayout.Label(string.Empty, GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
 
