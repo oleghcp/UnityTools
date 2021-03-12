@@ -166,21 +166,6 @@ namespace UnityEditor
                 _selectedId = -1;
         }
 
-        private void TryMoveSelector(int direction)
-        {
-            if (_searchResult.Count > 0)
-            {
-                _keyboardSelection = true;
-                int index = _searchResult.IndexOf(item => item.Id == _selectedId);
-
-                if (index < 0 && direction < 0)
-                    index = _searchResult.Count;
-
-                index = (index + direction).Repeat(_searchResult.Count);
-                _selectedId = _searchResult[index].Id;
-            }
-        }
-
         private void Search()
         {
             if (_tapeString.IsNullOrWhiteSpace())
@@ -262,6 +247,29 @@ namespace UnityEditor
             {
                 _items[_selectedId].OnSelected();
                 Close();
+            }
+        }
+
+        private void TryMoveSelector(int direction)
+        {
+            if (_searchResult.Count > 0)
+            {
+                _keyboardSelection = true;
+                int index = _searchResult.IndexOf(item => item.Id == _selectedId);
+
+                if (index < 0 && direction < 0)
+                    index = _searchResult.Count;
+
+                index = (index + direction).Repeat(_searchResult.Count);
+                _selectedId = _searchResult[index].Id;
+
+                if (index == _searchResult.Count - 1 && direction < 0)
+                    _scrollPos.y = float.PositiveInfinity;
+                else if (index == 0 && direction > 0)
+                    _scrollPos.y = 0f;
+                else
+                    _scrollPos.y += EditorGUIUtility.singleLineHeight * direction;
+                GUI.changed = true;
             }
         }
 
