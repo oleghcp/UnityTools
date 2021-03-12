@@ -57,7 +57,7 @@ namespace UnityEditor
                     _searchResult = Search(tapeString);
                 }
 
-                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, false);
                 DrawResults(_searchResult);
                 EditorGUILayout.EndScrollView();
             }
@@ -75,7 +75,22 @@ namespace UnityEditor
                 return;
 
             buttonRect = GUIUtility.GUIToScreenRect(buttonRect);
-            ShowAsDropDown(buttonRect, new Vector2(GetWidth(), GetHeight()));
+            ShowAsDropDown(buttonRect, new Vector2(getWidth(), getHeight()));
+
+            float getHeight()
+            {
+                float linesHeight = EditorGUIUtility.singleLineHeight * (_items.Count + 1);
+                float spacesHeight = EditorGUIUtility.standardVerticalSpacing * _items.Count;
+                return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
+            }
+
+            float getWidth()
+            {
+                Data itemWithLongestText = _items.Where(item => !item.IsSeparator).GetWithMax(item => item.Text.Length);
+                _maxLabelSize = GUI.skin.label.CalcSize(new GUIContent(itemWithLongestText.Text));
+                float lineWidth = EditorGUIUtilityExt.StandardHorizontalSpacing * 5f + EditorGUIUtilityExt.SmallButtonWidth + _maxLabelSize.x + 2f;
+                return (lineWidth + lineWidth * 0.12f).Clamp(200f, Screen.currentResolution.width * 0.5f);
+            }
         }
 
         public void AddDisabledItem(string content)
@@ -124,11 +139,11 @@ namespace UnityEditor
                 {
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        GUILayout.Space(GetCheckBoxWidth());
+                        GUILayout.Space(EditorGUIUtilityExt.SmallButtonWidth + EditorGUIUtilityExt.StandardHorizontalSpacing * 2f);
                         EditorGUILayout.LabelField((string)null,
                                                    GUI.skin.horizontalSlider,
-                                                   GUILayout.Width(EditorGUIUtility.labelWidth),
-                                                   GUILayout.Height(EditorGUIUtility.singleLineHeight - 1f));
+                                                   GUILayout.Width(_maxLabelSize.x),
+                                                   GUILayout.Height(EditorGUIUtility.singleLineHeight - EditorGUIUtility.standardVerticalSpacing));
                     }
                     continue;
                 }
@@ -137,9 +152,9 @@ namespace UnityEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (item.On)
-                        GUILayout.Label("√", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+                        GUILayout.Label("√", "Button", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
                     else
-                        GUILayout.Space(GetCheckBoxWidth());
+                        GUILayout.Label(string.Empty, GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
 
                     GUILayout.Label(item.Text);
                 }
@@ -173,26 +188,6 @@ namespace UnityEditor
         {
             Event curEvent = Event.current;
             return curEvent.type == EventType.MouseDown && uiElementPos.Contains(curEvent.mousePosition);
-        }
-
-        private float GetHeight()
-        {
-            float linesHeight = EditorGUIUtility.singleLineHeight * (_items.Count + 1);
-            float spacesHeight = EditorGUIUtility.standardVerticalSpacing * _items.Count;
-            return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
-        }
-
-        private float GetWidth()
-        {
-            Data itemWithLongestText = _items.Where(item => !item.IsSeparator).GetWithMax(item => item.Text.Length);
-            _maxLabelSize = GUI.skin.label.CalcSize(new GUIContent(itemWithLongestText.Text));
-            float lineWidth = GetCheckBoxWidth() + _maxLabelSize.x + 30f + (5f + EditorGUIUtilityExt.StandardHorizontalSpacing) * 2f;
-            return lineWidth.Clamp(200f, Screen.currentResolution.width * 0.5f);
-        }
-
-        private float GetCheckBoxWidth()
-        {
-            return EditorGUIUtilityExt.SmallButtonWidth + EditorGUIUtilityExt.StandardHorizontalSpacing;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

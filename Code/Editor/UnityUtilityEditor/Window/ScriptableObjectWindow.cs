@@ -133,7 +133,6 @@ namespace UnityUtilityEditor.Window
                 list.AddItem(GetDisplayName(typeNames[i]), _typeIndex == i, () => _typeIndex = index);
             }
 
-
             list.ShowMenu(_dropdownButtonRect);
         }
     }
