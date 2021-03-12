@@ -358,6 +358,18 @@ namespace UnityEngine
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetComponentInParent<T>(this Component self, bool includeInactive)
+        {
+            return self.transform.GetComponentInParent<T>(includeInactive);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetComponentInParent<T>(this GameObject self, bool includeInactive)
+        {
+            return self.transform.GetComponentInParent<T>(includeInactive);
+        }
+
         public static T GetComponentInParent<T>(this Transform self, bool includeInactive)
         {
             if (!includeInactive)

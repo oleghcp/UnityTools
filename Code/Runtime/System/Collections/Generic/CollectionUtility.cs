@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using UnityUtility;
-using UnityUtilityTools;
 
 namespace System.Collections.Generic
 {
@@ -161,7 +160,7 @@ namespace System.Collections.Generic
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
-            int index = 0;
+            int index = -1;
             TKey minKey = default;
             result = default;
 
@@ -191,10 +190,7 @@ namespace System.Collections.Generic
                 ++i;
             }
 
-            if (nonFirstIteration)
-                return index;
-
-            throw Errors.NoElements();
+            return index;
         }
 
         internal static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
@@ -207,7 +203,7 @@ namespace System.Collections.Generic
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
-            int index = 0;
+            int index = -1;
             TKey maxKey = default;
             result = default;
 
@@ -237,10 +233,7 @@ namespace System.Collections.Generic
                 ++i;
             }
 
-            if (nonFirstIteration)
-                return index;
-
-            throw Errors.NoElements();
+            return index;
         }
     }
 }

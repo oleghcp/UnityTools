@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -10,20 +11,17 @@ namespace UnityEditor
 {
     public class DropDownList : EditorWindow
     {
-        private List<Data> _items = new List<Data>();
         private SearchField _searchField;
+        private List<Data> _items = new List<Data>();
 
+        private Vector2 _maxLabelSize;
         private Vector2 _scrollPos;
         private string _tapeString;
-        private IEnumerable<Data> _searchResult;
-        private Vector2 _maxLabelSize;
+        private int _selectedId = -1;
+        private bool _keyboardSelection;
+        private IList<Data> _searchResult;
 
         public int ItemsCount => _items.Count;
-
-        public static DropDownList Create()
-        {
-            return CreateInstance<DropDownList>();
-        }
 
         private void Update()
         {
@@ -41,12 +39,6 @@ namespace UnityEditor
             if (_searchResult == null)
                 _searchResult = _items;
 
-            if (Event.current.keyCode == KeyCode.Escape)
-            {
-                Close();
-                return;
-            }
-
             using (new GUILayout.AreaScope(new Rect(Vector2.zero, position.size), (string)null, EditorStyles.helpBox))
             {
                 string tapeString = _searchField.OnGUI(_tapeString);
@@ -54,16 +46,24 @@ namespace UnityEditor
                 if (_tapeString != tapeString)
                 {
                     _tapeString = tapeString;
-                    _searchResult = Search(tapeString);
+                    Search();
+                    minSize = maxSize = new Vector2(GetWidth(_searchResult), GetHeight(_searchResult.Count));
                 }
 
                 _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, false);
-                DrawResults(_searchResult);
+                DrawResults();
                 EditorGUILayout.EndScrollView();
             }
+
+            HandleEvents(Event.current);
         }
 
         #region List functions
+        public static DropDownList Create()
+        {
+            return CreateInstance<DropDownList>();
+        }
+
         public void ShowMenu()
         {
             ShowMenu(new Rect(Event.current.mousePosition, Vector2.zero));
@@ -74,66 +74,142 @@ namespace UnityEditor
             if (_items.Count == 0)
                 return;
 
+            wantsMouseMove = true;
             buttonRect = GUIUtility.GUIToScreenRect(buttonRect);
-            ShowAsDropDown(buttonRect, new Vector2(getWidth(), getHeight()));
-
-            float getHeight()
-            {
-                float linesHeight = EditorGUIUtility.singleLineHeight * (_items.Count + 1);
-                float spacesHeight = EditorGUIUtility.standardVerticalSpacing * _items.Count;
-                return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
-            }
-
-            float getWidth()
-            {
-                Data itemWithLongestText = _items.Where(item => !item.IsSeparator).GetWithMax(item => item.Text.Length);
-                _maxLabelSize = GUI.skin.label.CalcSize(new GUIContent(itemWithLongestText.Text));
-                float lineWidth = EditorGUIUtilityExt.StandardHorizontalSpacing * 5f + EditorGUIUtilityExt.SmallButtonWidth + _maxLabelSize.x + 2f;
-                return (lineWidth + lineWidth * 0.12f).Clamp(200f, Screen.currentResolution.width * 0.5f);
-            }
-        }
-
-        public void AddDisabledItem(string content)
-        {
-            content = content ?? string.Empty;
-            _items.Add(new Data { Text = content, Disabled = true, });
-        }
-
-        public void AddDisabledItem(string content, bool on)
-        {
-            content = content ?? string.Empty;
-            _items.Add(new Data { Text = content, Disabled = true, On = on, });
+            ShowAsDropDown(buttonRect, new Vector2(GetWidth(_items), GetHeight(_items.Count)));
         }
 
         public void AddItem(string content, Action onSelected)
         {
-            content = content ?? string.Empty;
-            _items.Add(new Data { Text = content, OnSelected = onSelected, });
+            Data data = new Data
+            {
+                Id = _items.Count,
+                Text = content ?? string.Empty,
+                OnSelected = onSelected,
+            };
+
+            _items.Add(data);
         }
 
         public void AddItem(string content, bool on, Action onSelected)
         {
-            content = content ?? string.Empty;
-            _items.Add(new Data { Text = content, On = on, OnSelected = onSelected, });
+            Data data = new Data
+            {
+                Id = _items.Count,
+                Text = content ?? string.Empty,
+                On = on,
+                OnSelected = onSelected,
+            };
+
+            _items.Add(data);
+        }
+
+        public void AddDisabledItem(string content)
+        {
+            Data data = new Data
+            {
+                Id = _items.Count,
+                Text = content ?? string.Empty,
+                Disabled = true,
+            };
+
+            _items.Add(data);
+        }
+
+        public void AddDisabledItem(string content, bool on)
+        {
+            Data data = new Data
+            {
+                Id = _items.Count,
+                Text = content ?? string.Empty,
+                Disabled = true,
+                On = on,
+            };
+
+            _items.Add(data);
         }
 
         public void AddSeparator()
         {
-            _items.Add(new Data());
+            _items.Add(new Data { Id = -1, });
         }
         #endregion
 
-        private IEnumerable<Data> Search(string tapeString)
+        private void HandleEvents(Event e)
         {
-            if (tapeString.IsNullOrWhiteSpace())
-                return _items;
+            switch (e.type)
+            {
+                case EventType.KeyDown:
+                    if (e.keyCode == KeyCode.Escape)
+                        Close();
 
-            return _items.Where(item => !item.IsSeparator && item.Text.IndexOf(tapeString, StringComparison.CurrentCultureIgnoreCase) == 0);
+                    if (e.keyCode == KeyCode.Return)
+                        TryInvokeItem();
+
+                    if (e.keyCode == KeyCode.DownArrow)
+                        TryMoveSelector(1);
+
+                    if (e.keyCode == KeyCode.UpArrow)
+                        TryMoveSelector(-1);
+                    break;
+
+                case EventType.MouseDown:
+                    TryInvokeItem();
+                    break;
+
+                case EventType.MouseMove:
+                    _keyboardSelection = false;
+                    break;
+            }
+
+            if (!_keyboardSelection)
+                _selectedId = -1;
         }
 
-        private void DrawResults(IEnumerable<Data> searchResult)
+        private void TryMoveSelector(int direction)
         {
-            foreach (Data item in searchResult)
+            if (_searchResult.Count > 0)
+            {
+                _keyboardSelection = true;
+                int index = _searchResult.IndexOf(item => item.Id == _selectedId);
+
+                if (index < 0 && direction < 0)
+                    index = _searchResult.Count;
+
+                index = (index + direction).Repeat(_searchResult.Count);
+                _selectedId = _searchResult[index].Id;
+            }
+        }
+
+        private void Search()
+        {
+            if (_tapeString.IsNullOrWhiteSpace())
+            {
+                _searchResult = _items;
+                return;
+            }
+
+            _searchResult = _items.Where(item => !item.IsSeparator)
+                                  .Where(item => item.Text.IndexOf(_tapeString, StringComparison.CurrentCultureIgnoreCase) == 0)
+                                  .ToArray();
+        }
+
+        private void DrawResults()
+        {
+            if (_searchResult.Count == 0)
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    GUI.enabled = false;
+                    GUILayout.Label("No Results");
+                    GUI.enabled = true;
+                    GUILayout.FlexibleSpace();
+                }
+                return;
+            }
+
+            foreach (Data item in _searchResult)
             {
                 if (item.IsSeparator)
                 {
@@ -163,31 +239,53 @@ namespace UnityEditor
                 if (!item.Disabled)
                 {
                     Rect linePos = GUILayoutUtility.GetLastRect();
-                    linePos.x -= 1f;
-                    linePos.width += 2f;
 
-                    if (Hovered(linePos))
-                        GUI.Box(linePos, string.Empty, EditorStyles.helpBox);
-
-                    if (GetClick(linePos))
+                    if (_keyboardSelection)
                     {
-                        item.OnSelected();
-                        Close();
+                        if (item.Id == _selectedId)
+                            GUI.Box(linePos, string.Empty, EditorStyles.helpBox);
+                    }
+                    else if (Hovered(linePos))
+                    {
+                        _selectedId = item.Id;
+                        linePos.x -= 1f;
+                        linePos.width += 2f;
+                        GUI.Box(linePos, string.Empty, EditorStyles.helpBox);
                     }
                 }
             }
         }
 
-        private bool Hovered(in Rect uiElementPos)
+        private void TryInvokeItem()
         {
-            Event curEvent = Event.current;
-            return uiElementPos.Contains(curEvent.mousePosition);
+            if (_selectedId >= 0)
+            {
+                _items[_selectedId].OnSelected();
+                Close();
+            }
         }
 
-        private bool GetClick(in Rect uiElementPos)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool Hovered(in Rect uiElementPos)
         {
-            Event curEvent = Event.current;
-            return curEvent.type == EventType.MouseDown && uiElementPos.Contains(curEvent.mousePosition);
+            return uiElementPos.Contains(Event.current.mousePosition);
+        }
+
+        private float GetHeight(int itemsCount)
+        {
+            itemsCount += itemsCount == 0 ? 2 : 1;
+            float linesHeight = EditorGUIUtility.singleLineHeight * itemsCount;
+            float spacesHeight = EditorGUIUtility.standardVerticalSpacing * (itemsCount + 4);
+            return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
+        }
+
+        private float GetWidth(IList<Data> items)
+        {
+            Data itemWithLongestText = items.Where(item => !item.IsSeparator)
+                                            .GetWithMax(item => item.Text.Length);
+            _maxLabelSize = GUI.skin.label.CalcSize(new GUIContent(itemWithLongestText.Text));
+            float lineWidth = EditorGUIUtilityExt.StandardHorizontalSpacing * 5f + EditorGUIUtilityExt.SmallButtonWidth + _maxLabelSize.x + 2f;
+            return (lineWidth + lineWidth * 0.12f).Clamp(200f, Screen.currentResolution.width * 0.5f);
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -195,6 +293,7 @@ namespace UnityEditor
         {
             public string Text;
             public Action OnSelected;
+            public int Id;
             public bool On;
             public bool Disabled;
 
