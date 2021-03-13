@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility;
+using UnityUtility.Collections;
 using UnityUtility.MathExt;
 using UnityObject = UnityEngine.Object;
 
@@ -56,7 +59,7 @@ namespace UnityEditor
             if (label != null)
                 propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent(label));
 
-            selectedIndex = DropDownData.GetSelectedIndexById(selectedIndex, controlId)
+            selectedIndex = DropDownData.GetSelectedValueById(selectedIndex, controlId)
                                         .Clamp(0, displayedOptions.Length);
 
             if (EditorGUI.DropdownButton(propertyRect, new GUIContent(displayedOptions[selectedIndex]), FocusType.Keyboard))
@@ -102,6 +105,46 @@ namespace UnityEditor
             int index = Array.IndexOf(enumData.EnumValues, selected);
             index = DropDown(propertyRect, label, index, enumData.EnumNames);
             return (Enum)enumData.EnumValues.GetValue(index);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int MaskDropDown(Rect propertyRect, int mask, string[] displayedOptions)
+        {
+            return MaskDropDown(propertyRect, null, mask, displayedOptions);
+        }
+
+        public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions)
+        {
+            int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
+
+            if (label != null)
+                propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent(label));
+
+            int bitsCount = Math.Min(displayedOptions.Length, BitMask.SIZE);
+            mask = DropDownData.GetSelectedValueById(mask, controlId);
+
+            if (EditorGUI.DropdownButton(propertyRect, new GUIContent(getContentText()), FocusType.Keyboard))
+            {
+                EditorUtilityExt.DisplayMultiSelectableList(propertyRect,
+                                                            BitList.CreateFromBitMask(mask, bitsCount),
+                                                            displayedOptions,
+                                                            bitList => DropDownData.MenuAction(controlId, bitList.ToIntBitMask()));
+            }
+
+            return mask;
+
+            string getContentText()
+            {
+                if (BitMask.AllFor(mask, bitsCount))
+                    return DropDownList.EVERYTHING_ITEM;
+
+                if (BitMask.EmptyFor(mask, bitsCount))
+                    return DropDownList.NOTHING_ITEM;
+
+                return BitMask.EnumerateIndices(mask, bitsCount)
+                              .Select(item => displayedOptions[item])
+                              .ConcatToString(", ");
+            }
         }
     }
 }

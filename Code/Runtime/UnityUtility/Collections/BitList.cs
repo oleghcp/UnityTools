@@ -206,14 +206,21 @@ namespace UnityUtility.Collections
             throw new ArgumentOutOfRangeException(nameof(index));
         }
 
+        public void Switch(int index)
+        {
+            Set(index, !Get(index));
+        }
+
         public void SetAll(bool value)
         {
             int num = value ? (-1) : 0;
             int arrayLength = GetArraySize(_length);
+
             for (int i = 0; i < arrayLength; i++)
             {
                 _array[i] = num;
             }
+
             _version++;
         }
 
@@ -309,15 +316,18 @@ namespace UnityUtility.Collections
 
         public bool IsEmpty()
         {
-            int arrayLength = GetArraySize(_length);
+            int lastElement = GetArraySize(_length) - 1;
 
-            for (int i = 0; i < arrayLength; i++)
+            if (lastElement < 0)
+                return true;
+
+            for (int i = 0; i < lastElement; i++)
             {
                 if (_array[i] != 0)
                     return false;
             }
 
-            return true;
+            return !BitMask.AnyFor(_array[lastElement], GetAppendixLength());
         }
 
         public int GetCount()
@@ -364,8 +374,6 @@ namespace UnityUtility.Collections
             return new BitArray(_array) { Length = _length };
         }
 
-        // -- //
-
         public static BitList CreateFromBitMask(int bitMask, int length = BitMask.SIZE)
         {
             if (length > BitMask.SIZE || length < 0)
@@ -409,8 +417,6 @@ namespace UnityUtility.Collections
             _length = value;
             _version++;
         }
-
-        // -- //
 
         private int GetAppendixLength()
         {

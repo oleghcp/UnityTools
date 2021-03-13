@@ -41,30 +41,30 @@ namespace UnityEditor
     {
         private static DropDownData _instance;
         private int _id;
-        private int _selectedIndex;
+        private int _selectedValue;
 
-        public static int GetSelectedIndexById(int selectedIndex, int controlId)
+        public static int GetSelectedValueById(int selectedValue, int controlId)
         {
             if (_instance != null)
             {
                 if (_instance._id == controlId)
                 {
-                    selectedIndex = _instance._selectedIndex;
+                    selectedValue = _instance._selectedValue;
                     _instance = null;
                 }
             }
 
-            return selectedIndex;
+            return selectedValue;
         }
 
-        public static void MenuAction(int controlId, int index)
+        public static void MenuAction(int controlId, int value)
         {
             if (_instance != null)
                 _instance._id = controlId;
             else
                 _instance = new DropDownData { _id = controlId };
 
-            _instance._selectedIndex = index;
+            _instance._selectedValue = value;
         }
     }
 

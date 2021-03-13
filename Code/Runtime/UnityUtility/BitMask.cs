@@ -176,6 +176,23 @@ namespace UnityUtility
             return false;
         }
 
+        public static bool EmptyFor(int mask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+                return IsEmpty(mask);
+
+            for (int i = 0; i < length; i++)
+            {
+                if (HasFlag(mask, i))
+                    return false;
+            }
+
+            return true;
+        }
+
         public static int GetCount(int mask, int length = SIZE)
         {
             if (length > SIZE)

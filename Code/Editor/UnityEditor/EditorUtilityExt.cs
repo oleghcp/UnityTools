@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility.Collections;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -121,6 +122,18 @@ namespace UnityEditor
             }
 
             list.ShowMenu(buttonRect);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        {
+            DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onClose);
+        }
+
+        public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        {
+            DropDownList.Create(flags, displayedOptions, onClose)
+                        .ShowMenu(buttonRect);
         }
 
         //The functions based on https://gist.github.com/bzgeb/3800350

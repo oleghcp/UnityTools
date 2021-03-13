@@ -289,26 +289,6 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Is position in bounds.
-        /// </summary>
-        /// <param name="bounds">Checked bounds</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InBounds(this in Vector2 pos, in Rect bounds)
-        {
-            return bounds.Contains(pos);
-        }
-
-        /// <summary>
-        /// Is position in bounds.
-        /// </summary>
-        /// <param name="bounds">Checked bounds</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InBounds(this in Vector3 pos, in Rect bounds)
-        {
-            return bounds.Contains(pos);
-        }
-
-        /// <summary>
         /// Returns the aspect ratio of the rect (height / width).
         /// </summary>
         public static float GetAspectRatio(this in Rect value)
