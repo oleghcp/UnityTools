@@ -1,7 +1,42 @@
-﻿using UnityObject = UnityEngine.Object;
+﻿using System;
+using System.Collections.Generic;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
 {
+    internal class DragAndDropData
+    {
+        private static DragAndDropData _instance;
+        private int _id;
+        private UnityObject[] _droppedObjects;
+
+        public static UnityObject[] GetObjectsById(int controlId)
+        {
+            UnityObject[] objects = null;
+
+            if (_instance != null)
+            {
+                if (_instance._id == controlId)
+                {
+                    objects = _instance._droppedObjects;
+                    _instance = null;
+                }
+            }
+
+            return objects;
+        }
+
+        public static void PlaceObjects(int controlId, UnityObject[] objects)
+        {
+            if (_instance != null)
+                _instance._id = controlId;
+            else
+                _instance = new DragAndDropData { _id = controlId };
+
+            _instance._droppedObjects = objects;
+        }
+    }
+
     internal class DropDownData
     {
         private static DropDownData _instance;
@@ -33,36 +68,29 @@ namespace UnityEditor
         }
     }
 
-    internal class DragAndDropData
+    internal static class EnumDropDownData
     {
-        private static DragAndDropData _instance;
-        private int _id;
-        private UnityObject[] _droppedObjects;
+        private static Dictionary<Type, Data> _data;
 
-        public static UnityObject[] GetObjectsById(int controlId)
+        public static Data GetData(Type enumType)
         {
-            UnityObject[] objects = null;
+            _data ??= new Dictionary<Type, Data>();
 
-            if (_instance != null)
+            if (!_data.TryGetValue(enumType, out Data data))
             {
-                if (_instance._id == controlId)
-                {
-                    objects = _instance._droppedObjects;
-                    _instance = null;
-                }
+                UnityEngine.Debug.Log($"init: {enumType.Name}");
+                data.EnumNames = Enum.GetNames(enumType);
+                data.EnumValues = Enum.GetValues(enumType);
+                _data[enumType] = data;
             }
 
-            return objects;
+            return data;
         }
 
-        public static void PlaceObjects(int controlId, UnityObject[] objects)
+        public struct Data
         {
-            if (_instance != null)
-                _instance._id = controlId;
-            else
-                _instance = new DragAndDropData { _id = controlId };
-
-            _instance._droppedObjects = objects;
+            public string[] EnumNames;
+            public Array EnumValues;
         }
     }
 }

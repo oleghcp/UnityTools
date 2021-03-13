@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.MathExt;
@@ -86,6 +87,21 @@ namespace UnityEditor
             int index = optionValues.IndexOf(selectedValue);
             index = DropDown(propertyRect, label, index, displayedOptions);
             return optionValues[index];
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Enum EnumDropDown(Rect propertyRect, Enum selected)
+        {
+            return EnumDropDown(propertyRect, null, selected);
+        }
+
+        public static Enum EnumDropDown(Rect propertyRect, string label, Enum selected)
+        {
+            var enumData = EnumDropDownData.GetData(selected.GetType());
+
+            int index = Array.IndexOf(enumData.EnumValues, selected);
+            index = DropDown(propertyRect, label, index, enumData.EnumNames);
+            return (Enum)enumData.EnumValues.GetValue(index);
         }
     }
 }

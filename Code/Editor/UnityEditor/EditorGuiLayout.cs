@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -71,6 +72,18 @@ namespace UnityEditor
         {
             Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.IntDropDown(propertyRect, label, selectedValue, displayedOptions, optionValues);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Enum EnumDropDown(Enum selected, params GUILayoutOption[] options)
+        {
+            return EnumDropDown(null, selected, options);
+        }
+
+        public static Enum EnumDropDown(string label, Enum selected, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.EnumDropDown(propertyRect, label, selected);
         }
     }
 }
