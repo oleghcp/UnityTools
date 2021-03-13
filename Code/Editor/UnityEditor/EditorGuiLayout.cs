@@ -7,6 +7,18 @@ namespace UnityEditor
     public static class EditorGuiLayout
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UnityObject[] DropArea(string text, params GUILayoutOption[] options)
+        {
+            return DropArea(text, EditorStylesExt.DropArea, options);
+        }
+
+        public static UnityObject[] DropArea(string text, GUIStyle style, params GUILayoutOption[] options)
+        {
+            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DropArea(position, text, style);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool CenterButton(string text, params GUILayoutOption[] options)
         {
             return CenterButton(text, GUI.skin.button, options);
@@ -38,18 +50,6 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static UnityObject[] DropArea(string text, params GUILayoutOption[] options)
-        {
-            return DropArea(text, EditorStylesExt.DropArea, options);
-        }
-
-        public static UnityObject[] DropArea(string text, GUIStyle style, params GUILayoutOption[] options)
-        {
-            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
-            return EditorGui.DropArea(position, text, style);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
         {
             return DropDown(null, selectedIndex, displayedOptions, options);
@@ -59,6 +59,18 @@ namespace UnityEditor
         {
             Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DropDown(propertyRect, label, selectedIndex, displayedOptions);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IntDropDown(int selectedValue, string[] displayedOptions, int[] optionValues, params GUILayoutOption[] options)
+        {
+            return IntDropDown(null, selectedValue, displayedOptions, optionValues, options);
+        }
+
+        public static int IntDropDown(string label, int selectedValue, string[] displayedOptions, int[] optionValues, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.IntDropDown(propertyRect, label, selectedValue, displayedOptions, optionValues);
         }
     }
 }

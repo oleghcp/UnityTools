@@ -1,17 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility.MathExt;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
 {
     public static class EditorGui
     {
-        internal static void WrongTypeLabel(Rect position, GUIContent label, string message)
-        {
-            Rect rect = EditorGUI.PrefixLabel(position, label);
-            EditorGUI.LabelField(rect, message);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UnityObject[] DropArea(Rect position)
         {
@@ -40,6 +36,12 @@ namespace UnityEditor
             return objects;
         }
 
+        internal static void WrongTypeLabel(Rect position, GUIContent label, string message)
+        {
+            Rect rect = EditorGUI.PrefixLabel(position, label);
+            GUI.Label(rect, message);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int DropDown(Rect propertyRect, int selectedIndex, string[] displayedOptions)
         {
@@ -53,7 +55,8 @@ namespace UnityEditor
             if (label != null)
                 propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent(label));
 
-            selectedIndex = DropDownData.GetSelectedIndexById(selectedIndex, controlId);
+            selectedIndex = DropDownData.GetSelectedIndexById(selectedIndex, controlId)
+                                        .Clamp(0, displayedOptions.Length);
 
             if (EditorGUI.DropdownButton(propertyRect, new GUIContent(displayedOptions[selectedIndex]), FocusType.Keyboard))
             {
@@ -64,6 +67,25 @@ namespace UnityEditor
             }
 
             return selectedIndex;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IntDropDown(Rect propertyRect, int selectedValue, string[] displayedOptions, int[] optionValues)
+        {
+            return IntDropDown(propertyRect, null, selectedValue, displayedOptions, optionValues);
+        }
+
+        public static int IntDropDown(Rect propertyRect, string label, int selectedValue, string[] displayedOptions, int[] optionValues)
+        {
+            if (displayedOptions.Length != optionValues.Length)
+            {
+                Debug.LogError("Different array sizes.");
+                return 0;
+            }
+
+            int index = optionValues.IndexOf(selectedValue);
+            index = DropDown(propertyRect, label, index, displayedOptions);
+            return optionValues[index];
         }
     }
 }
