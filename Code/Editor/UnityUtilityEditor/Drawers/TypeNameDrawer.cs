@@ -24,7 +24,7 @@ namespace UnityUtilityEditor.Drawers
             DrawSelectionButton(position, property);
         }
 
-        private void DrawSelectionButton(Rect position, SerializedProperty property)
+        private void DrawSelectionButton(in Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 
@@ -63,35 +63,25 @@ namespace UnityUtilityEditor.Drawers
             }
 
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
-                f_showContextMenu(property);
+                ShowContextMenu(buttonPosition, property);
 
             GUI.color = Colours.White;
             EditorGUI.indentLevel = storedIndent;
         }
 
-        private void f_showContextMenu(SerializedProperty property)
+        private void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
         {
-            GenericMenu menu = new GenericMenu();
+            DropDownList menu = DropDownList.Create();
 
-            menu.AddItem(new GUIContent("Base"), false, initByBase);
+            menu.AddItem("Base", () => AssignField(property, attribute.TargetType.GetTypeName()));
 
             foreach (Type type in TypeCache.GetTypesDerivedFrom(attribute.TargetType))
             {
                 string entryName = type.GetTypeName();
-                menu.AddItem(new GUIContent(entryName), false, initByInstance, entryName);
+                menu.AddItem(entryName, () => AssignField(property, entryName));
             }
 
-            menu.ShowAsContext();
-
-            void initByBase()
-            {
-                AssignField(property, attribute.TargetType.GetTypeName());
-            }
-
-            void initByInstance(object typeName)
-            {
-                AssignField(property, (string)typeName);
-            }
+            menu.ShowMenu(buttonPosition);
         }
 
         private static void AssignField(SerializedProperty property, string newValue)

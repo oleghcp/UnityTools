@@ -175,7 +175,7 @@ namespace UnityEditor
             }
 
             _searchResult = _items.Where(item => !item.IsSeparator)
-                                  .Where(item => item.Text.IndexOf(_tapeString, StringComparison.CurrentCultureIgnoreCase) == 0)
+                                  .Where(item => item.Text.IndexOf(_tapeString, StringComparison.CurrentCultureIgnoreCase) >= 0)
                                   .ToArray();
         }
 

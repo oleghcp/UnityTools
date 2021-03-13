@@ -30,7 +30,7 @@ namespace UnityUtilityEditor.Drawers
             return EditorGUI.GetPropertyHeight(property, true);
         }
 
-        private void DrawSelectionButton(Rect position, SerializedProperty property)
+        private void DrawSelectionButton(in Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 
@@ -63,18 +63,14 @@ namespace UnityUtilityEditor.Drawers
                 GUI.color = Colours.Cyan;
 
             if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
-                ShowContextMenu(property);
+                ShowContextMenu(buttonPosition, property);
 
             GUI.color = Colours.White;
             EditorGUI.indentLevel = storedIndent;
         }
 
-        private static void ShowContextMenu(SerializedProperty property)
+        private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
         {
-            GenericMenu menu = new GenericMenu();
-
-            menu.AddItem(new GUIContent("Null"), false, () => AssignField(property, null));
-
             Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
 
             if (fieldType == null)
@@ -83,6 +79,9 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
+            DropDownList menu = DropDownList.Create();
+
+            menu.AddItem("Null", () => AssignField(property, null));
             addMenuItem(fieldType);
 
             foreach (Type type in TypeCache.GetTypesDerivedFrom(fieldType))
@@ -90,7 +89,7 @@ namespace UnityUtilityEditor.Drawers
                 addMenuItem(type);
             }
 
-            menu.ShowAsContext();
+            menu.ShowMenu(buttonPosition);
 
             void addMenuItem(Type type)
             {
@@ -98,7 +97,7 @@ namespace UnityUtilityEditor.Drawers
                 {
                     string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
                     string entryName = $"{type}  ({assemblyName})";
-                    menu.AddItem(new GUIContent(entryName), false, () => AssignField(property, Activator.CreateInstance(type)));
+                    menu.AddItem(entryName, () => AssignField(property, Activator.CreateInstance(type)));
                 }
             }
         }
