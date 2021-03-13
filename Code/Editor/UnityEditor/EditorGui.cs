@@ -6,7 +6,7 @@ namespace UnityEditor
 {
     public static class EditorGui
     {
-        internal static void DrawWrongTypeMessage(Rect position, GUIContent label, string message)
+        internal static void WrongTypeLabel(Rect position, GUIContent label, string message)
         {
             Rect rect = EditorGUI.PrefixLabel(position, label);
             EditorGUI.LabelField(rect, message);

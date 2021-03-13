@@ -21,7 +21,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 if (EditorUtilityExt.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.Int32)
                 {
-                    EditorGui.DrawWrongTypeMessage(position, label, $"Use {nameof(SortingLayerIDAttribute)} with int.");
+                    EditorGui.WrongTypeLabel(position, label, $"Use {nameof(SortingLayerIDAttribute)} with int.");
                     return;
                 }
 

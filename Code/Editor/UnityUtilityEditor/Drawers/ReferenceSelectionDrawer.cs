@@ -15,7 +15,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (EditorUtilityExt.GetFieldType(fieldInfo).IsValueType)
             {
-                EditorGui.DrawWrongTypeMessage(position, label, $"Use {nameof(ReferenceSelectionAttribute)} only with reference types.");
+                EditorGui.WrongTypeLabel(position, label, $"Use {nameof(ReferenceSelectionAttribute)} only with reference types.");
                 return;
             }
 

@@ -183,14 +183,9 @@ namespace UnityEditor
         {
             if (_searchResult.Count == 0)
             {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    GUILayout.FlexibleSpace();
-                    GUI.enabled = false;
-                    GUILayout.Label("No Results");
-                    GUI.enabled = true;
-                    GUILayout.FlexibleSpace();
-                }
+                GUI.enabled = false;
+                EditorGuiLayout.CenterLabel("No Results", EditorStyles.boldLabel);
+                GUI.enabled = true;
                 return;
             }
 

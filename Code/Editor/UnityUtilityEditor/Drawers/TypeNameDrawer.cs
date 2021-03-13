@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (EditorUtilityExt.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.String)
             {
-                EditorGui.DrawWrongTypeMessage(position, label, $"Use {nameof(TypeNameAttribute)} only with strings.");
+                EditorGui.WrongTypeLabel(position, label, $"Use {nameof(TypeNameAttribute)} only with strings.");
                 return;
             }
 
