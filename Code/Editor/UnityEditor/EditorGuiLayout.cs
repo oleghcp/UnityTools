@@ -6,14 +6,10 @@ namespace UnityEditor
 {
     public static class EditorGuiLayout
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool CenterButton(string text, params GUILayoutOption[] options)
         {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            bool pressed = GUILayout.Button(text, options);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            return pressed;
+            return CenterButton(text, GUI.skin.button, options);
         }
 
         public static bool CenterButton(string text, GUIStyle style, params GUILayoutOption[] options)
@@ -26,13 +22,10 @@ namespace UnityEditor
             return pressed;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CenterLabel(string text, params GUILayoutOption[] options)
         {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label(text, options);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            CenterLabel(text, GUI.skin.label, options);
         }
 
         public static void CenterLabel(string text, GUIStyle style, params GUILayoutOption[] options)
@@ -44,6 +37,7 @@ namespace UnityEditor
             EditorGUILayout.EndHorizontal();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UnityObject[] DropArea(string text, params GUILayoutOption[] options)
         {
             return DropArea(text, EditorStylesExt.DropArea, options);
