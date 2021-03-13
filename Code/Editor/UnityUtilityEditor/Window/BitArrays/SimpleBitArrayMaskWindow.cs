@@ -19,8 +19,8 @@ namespace UnityUtilityEditor.Window.BitArrays
         {
             SerializedProperty property = param as SerializedProperty;
             _serializedObject = property.serializedObject;
-            _length = property.FindPropertyRelative(BitArrayMask.LengthFieldName);
-            _array = property.FindPropertyRelative(BitArrayMask.ArrayFieldName);
+            _length = property.FindPropertyRelative(BitList.LengthFieldName);
+            _array = property.FindPropertyRelative(BitList.ArrayFieldName);
         }
 
         private void Awake()
@@ -93,7 +93,7 @@ namespace UnityUtilityEditor.Window.BitArrays
 
         private void CheckArray()
         {
-            int len = BitArrayMask.GetArraySize(_length.intValue);
+            int len = BitList.GetArraySize(_length.intValue);
             int size = _array.arraySize;
 
             if (len > size)

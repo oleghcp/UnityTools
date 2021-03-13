@@ -361,7 +361,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             public Type EnumType;
             public string PropName;
             public string[] EnumNames;
-            public BitArrayMask Toggles;
+            public BitList Toggles;
             public bool AllToggles;
 
             public bool IsEmpty
@@ -380,7 +380,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
                 if (EnumType != null)
                 {
                     EnumNames = Enum.GetNames(EnumType);
-                    Toggles = new BitArrayMask(EnumNames.Length);
+                    Toggles = new BitList(EnumNames.Length);
                 }
             }
         }

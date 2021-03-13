@@ -10,7 +10,7 @@ namespace UnityUtility.Collections
 {
     //Based on System.Collections.BitArray
     [Serializable]
-    public sealed class BitArrayMask : ICloneable, IReadOnlyList<bool>
+    public sealed class BitList : ICloneable, IReadOnlyList<bool>
     {
         [SerializeField, HideInInspector]
         private int[] _array;
@@ -21,8 +21,14 @@ namespace UnityUtility.Collections
 
 #if UNITY_EDITOR
         internal static string ArrayFieldName => nameof(_array);
-        internal static string LengthFieldName => nameof(_length); 
+        internal static string LengthFieldName => nameof(_length);
 #endif
+
+        public int Count
+        {
+            get { return _length; }
+            set { SetLength(value); }
+        }
 
         public bool this[int index]
         {
@@ -30,26 +36,15 @@ namespace UnityUtility.Collections
             set { Set(index, value); }
         }
 
-        public int Length
-        {
-            get { return _length; }
-            set { SetLength(value); }
-        }
-
         public int Version
         {
             get { return _version; }
         }
 
-        int IReadOnlyCollection<bool>.Count
-        {
-            get { return _length; }
-        }
-
         [Preserve]
-        private BitArrayMask() { }
+        private BitList() { }
 
-        public BitArrayMask(int length, bool defaultValue = false)
+        public BitList(int length, bool defaultValue = false)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
@@ -64,7 +59,7 @@ namespace UnityUtility.Collections
         }
 
         #region constructor with flag indices
-        public BitArrayMask(int length, int flagIndex0)
+        public BitList(int length, int flagIndex0)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
@@ -74,7 +69,7 @@ namespace UnityUtility.Collections
             Set(flagIndex0, true);
         }
 
-        public BitArrayMask(int length, int flagIndex0, int flagIndex1)
+        public BitList(int length, int flagIndex0, int flagIndex1)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
@@ -85,7 +80,7 @@ namespace UnityUtility.Collections
             Set(flagIndex1, true);
         }
 
-        public BitArrayMask(int length, int flagIndex0, int flagIndex1, int flagIndex2)
+        public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
@@ -97,7 +92,7 @@ namespace UnityUtility.Collections
             Set(flagIndex2, true);
         }
 
-        public BitArrayMask(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
+        public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
@@ -110,7 +105,7 @@ namespace UnityUtility.Collections
             Set(flagIndex3, true);
         }
 
-        public BitArrayMask(int length, params int[] indices)
+        public BitList(int length, params int[] indices)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
@@ -124,7 +119,7 @@ namespace UnityUtility.Collections
         }
         #endregion
 
-        public BitArrayMask(IEnumerable<bool> values)
+        public BitList(IEnumerable<bool> values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
@@ -146,7 +141,7 @@ namespace UnityUtility.Collections
             _length = i;
         }
 
-        public BitArrayMask(ICollection<bool> values)
+        public BitList(ICollection<bool> values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
@@ -165,7 +160,7 @@ namespace UnityUtility.Collections
             }
         }
 
-        private BitArrayMask(ICollection<int> values)
+        private BitList(ICollection<int> values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
@@ -177,7 +172,7 @@ namespace UnityUtility.Collections
             _array = values.ToArray();
         }
 
-        public BitArrayMask(BitArrayMask bits)
+        public BitList(BitList bits)
         {
             if (bits == null)
                 throw new ArgumentNullException(nameof(bits));
@@ -222,7 +217,7 @@ namespace UnityUtility.Collections
             _version++;
         }
 
-        public void And(BitArrayMask value)
+        public void And(BitList value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -238,7 +233,7 @@ namespace UnityUtility.Collections
             _version++;
         }
 
-        public void Or(BitArrayMask value)
+        public void Or(BitList value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -254,7 +249,7 @@ namespace UnityUtility.Collections
             _version++;
         }
 
-        public void Xor(BitArrayMask value)
+        public void Xor(BitList value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -342,9 +337,9 @@ namespace UnityUtility.Collections
             return count;
         }
 
-        public BitArrayMask Clone()
+        public BitList Clone()
         {
-            return new BitArrayMask(_array)
+            return new BitList(_array)
             {
                 _version = _version,
                 _length = _length
@@ -371,12 +366,12 @@ namespace UnityUtility.Collections
 
         // -- //
 
-        public static BitArrayMask CreateFromBitMask(int bitMask, int length = BitMask.SIZE)
+        public static BitList CreateFromBitMask(int bitMask, int length = BitMask.SIZE)
         {
             if (length > BitMask.SIZE || length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), $"Length cannot be negative or more than {BitMask.SIZE}.");
 
-            return new BitArrayMask()
+            return new BitList()
             {
                 _array = new[] { bitMask },
                 _length = length

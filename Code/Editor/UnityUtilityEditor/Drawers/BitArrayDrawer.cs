@@ -5,7 +5,7 @@ using UnityUtilityEditor.Window.BitArrays;
 
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(BitArrayMask))]
+    [CustomPropertyDrawer(typeof(BitList))]
     internal class BitArrayDrawer : PropertyDrawer
     {
         private SimpleBitArrayMaskWindow _window;

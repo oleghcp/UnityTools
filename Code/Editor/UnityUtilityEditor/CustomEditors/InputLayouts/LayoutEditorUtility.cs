@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             return changed;
         }
 
-        public static void MoveToggles(BitArrayMask bits, int length, bool up)
+        public static void MoveToggles(BitList bits, int length, bool up)
         {
             if (up)
             {
@@ -44,7 +44,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             }
         }
 
-        public static void MoveElements(SerializedProperty arrayProp, BitArrayMask bits, bool up, object defVal)
+        public static void MoveElements(SerializedProperty arrayProp, BitList bits, bool up, object defVal)
         {
             int length = arrayProp.arraySize;
 
@@ -64,7 +64,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             }
         }
 
-        private static void ToggleIteration(BitArrayMask bits, int offset, int i, bool condition)
+        private static void ToggleIteration(BitList bits, int offset, int i, bool condition)
         {
             if (bits.Get(i))
             {
@@ -75,7 +75,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             }
         }
 
-        private static void ElementIteration(SerializedProperty arrayProp, BitArrayMask bits, object defVal, int offset, int i, bool condition)
+        private static void ElementIteration(SerializedProperty arrayProp, BitList bits, object defVal, int offset, int i, bool condition)
         {
             if (bits.Get(i))
             {

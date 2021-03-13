@@ -34,7 +34,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 Type type = EditorUtilityExt.GetFieldType(drawer.fieldInfo);
 
-                if (type != typeof(BitArrayMask) && type.GetTypeCode() != TypeCode.Int32)
+                if (type != typeof(BitList) && type.GetTypeCode() != TypeCode.Int32)
                 {
                     _error = $"Use {nameof(DrawBitMaskAttribute)} with Int32 or BitArrayMask.";
                     return;
@@ -42,7 +42,7 @@ namespace UnityUtilityEditor.Drawers
 
                 _label = new GUIContent(property.displayName);
                 Array values = Enum.GetValues(drawer.attribute.EnumType);
-                _isBitArray = type == typeof(BitArrayMask);
+                _isBitArray = type == typeof(BitList);
 
                 if (!_isBitArray && values.Length > BitMask.SIZE)
                 {

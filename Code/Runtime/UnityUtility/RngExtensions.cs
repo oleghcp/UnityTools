@@ -163,11 +163,11 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random flag contains in the specified mask.
         /// </summary>
-        public static int RandomFlag(this IRng self, BitArrayMask mask)
+        public static int RandomFlag(this IRng self, BitList mask)
         {
             int rn = self.Next(mask.GetCount());
 
-            for (int i = 0; i < mask.Length; i++)
+            for (int i = 0; i < mask.Count; i++)
             {
                 if (mask.Get(i))
                 {
@@ -225,7 +225,7 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random flag contains in the specified mask and which is satisfies the specified condition.
         /// </summary>
-        public static int RandomFlag(this IRng self, BitArrayMask mask, Func<int, bool> condition)
+        public static int RandomFlag(this IRng self, BitList mask, Func<int, bool> condition)
         {
             int value;
             do { value = self.RandomFlag(mask); } while (!condition(value));

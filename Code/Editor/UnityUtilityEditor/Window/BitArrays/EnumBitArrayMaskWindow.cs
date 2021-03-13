@@ -20,8 +20,8 @@ namespace UnityUtilityEditor.Window.BitArrays
             var data = param as Tuple<SerializedProperty, string[]>;
             var property = data.Item1;
             _serializedObject = property.serializedObject;
-            _length = property.FindPropertyRelative(BitArrayMask.LengthFieldName);
-            _array = property.FindPropertyRelative(BitArrayMask.ArrayFieldName);
+            _length = property.FindPropertyRelative(BitList.LengthFieldName);
+            _array = property.FindPropertyRelative(BitList.ArrayFieldName);
             _names = data.Item2;
 
             CheckArray(_length, _array, _names);
@@ -103,8 +103,8 @@ namespace UnityUtilityEditor.Window.BitArrays
 
         public static void CheckArray(SerializedProperty bitMask, string[] names)
         {
-            SerializedProperty length = bitMask.FindPropertyRelative(BitArrayMask.LengthFieldName);
-            SerializedProperty array = bitMask.FindPropertyRelative(BitArrayMask.ArrayFieldName);
+            SerializedProperty length = bitMask.FindPropertyRelative(BitList.LengthFieldName);
+            SerializedProperty array = bitMask.FindPropertyRelative(BitList.ArrayFieldName);
 
             CheckArray(length, array, names);
         }
@@ -114,7 +114,7 @@ namespace UnityUtilityEditor.Window.BitArrays
             if (length.intValue != names.Length)
                 length.intValue = names.Length;
 
-            int countedSize = BitArrayMask.GetArraySize(names.Length);
+            int countedSize = BitList.GetArraySize(names.Length);
             int realSize = array.arraySize;
 
             if (countedSize > realSize)
