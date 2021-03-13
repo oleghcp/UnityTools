@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
 {
@@ -43,6 +44,17 @@ namespace UnityEditor
             EditorGUILayout.EndHorizontal();
         }
 
+        public static UnityObject[] DropArea(string text, params GUILayoutOption[] options)
+        {
+            return DropArea(text, EditorStylesExt.DropArea, options);
+        }
+
+        public static UnityObject[] DropArea(string text, GUIStyle style, params GUILayoutOption[] options)
+        {
+            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DropArea(position, text, style);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
         {
@@ -51,7 +63,7 @@ namespace UnityEditor
 
         public static int DropDown(string label, int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
         {
-            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DropDown(propertyRect, label, selectedIndex, displayedOptions);
         }
     }

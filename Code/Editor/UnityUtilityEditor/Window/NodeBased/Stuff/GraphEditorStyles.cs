@@ -16,7 +16,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public GUIStyle NodeHeader { get; }
         public GUIStyle InPort { get; }
         public GUIStyle OutPort { get; }
-        public GUIStyle InfoButton { get; }
         public GUIContent RightTriangle { get; }
 
         public static GraphEditorStyles Styles => _styles ?? (_styles = new GraphEditorStyles());

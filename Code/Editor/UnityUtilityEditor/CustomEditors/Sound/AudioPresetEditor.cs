@@ -8,20 +8,14 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 {
     internal abstract class AudioPresetEditor : Editor
     {
-        private SerializedProperty _nodes;
-
         private Vector2 _scrollPos;
-
-        private void OnEnable()
-        {
-            _nodes = serializedObject.FindProperty("_nodes");
-        }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            int length = _nodes.arraySize;
+            SerializedProperty nodesProp = serializedObject.FindProperty("_nodes");
+            int length = nodesProp.arraySize;
 
             using (var scope = new EditorGUILayout.ScrollViewScope(_scrollPos, false, false, GUILayout.MaxHeight((length + 1) * 23f + 5f)))
             {
@@ -31,7 +25,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
                 for (int i = 0; i < length; i++)
                 {
-                    if (DrawTableRow(_nodes, i))
+                    if (DrawTableRow(nodesProp, i))
                         break;
 
                     GUILayout.Space(3f);
@@ -47,33 +41,33 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Add", GUILayout.MinWidth(100f)))
-                    AddObject(_nodes, null);
+                    AddObject(nodesProp, null);
 
                 GUILayout.Space(10f);
 
                 if (GUILayout.Button("Sort", GUILayout.MinWidth(100f)))
-                    Sort();
+                    Sort(nodesProp);
 
                 GUILayout.FlexibleSpace();
             }
 
             GUILayout.Space(5f);
 
-            UnityObject[] objects = EditorGui.DropArea("Drag and drop your audio clips here.", 50f);
+            UnityObject[] objects = EditorGuiLayout.DropArea("Drag and drop your audio clips to here.", GUILayout.Height(50f));
 
             if (objects.HasAnyData())
             {
                 for (int i = 0; i < objects.Length; i++)
                 {
-                    if (objects[i] is AudioClip)
-                        AddObject(_nodes, objects[i]);
+                    if (objects[i] is AudioClip audioClip)
+                        AddObject(nodesProp, audioClip);
                 }
-                Sort();
+                Sort(nodesProp);
             }
 
             GUILayout.Space(5f);
 
-            if (_nodes.arraySize > 0)
+            if (nodesProp.arraySize > 0)
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -82,7 +76,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                     const string description = "Are you sure you want to clear List?";
                     if (GUILayout.Button("Clear List", GUILayout.MinWidth(100f)) &&
                         EditorUtility.DisplayDialog("Clear List?", description, "Yes", "No"))
-                        _nodes.ClearArray();
+                        nodesProp.ClearArray();
                 }
             }
 
@@ -97,20 +91,20 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
         // -- //
 
-        private void Sort()
+        private void Sort(SerializedProperty nodesArrayProp)
         {
             int i = 0;
-            while (i < _nodes.arraySize)
+            while (i < nodesArrayProp.arraySize)
             {
-                SerializedProperty name = _nodes.GetArrayElementAtIndex(i).FindPropertyRelative("Name");
+                SerializedProperty name = nodesArrayProp.GetArrayElementAtIndex(i).FindPropertyRelative("Name");
 
                 if (name.stringValue.HasAnyData())
                     i++;
                 else
-                    _nodes.DeleteArrayElementAtIndex(i);
+                    nodesArrayProp.DeleteArrayElementAtIndex(i);
             }
 
-            _nodes.SortArray(prop => prop.FindPropertyRelative("Name").stringValue);
+            nodesArrayProp.SortArray(prop => prop.FindPropertyRelative("Name").stringValue);
         }
     }
 }

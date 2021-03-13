@@ -122,5 +122,31 @@ namespace UnityEditor
 
             list.ShowMenu(buttonRect);
         }
+
+        //The functions based on https://gist.github.com/bzgeb/3800350
+        //God save this guy
+        public static bool GetDroppedObjects(in Rect position, out UnityObject[] result)
+        {
+            Event curEvent = Event.current;
+            switch (curEvent.type)
+            {
+                case EventType.DragUpdated:
+                case EventType.DragPerform:
+                    if (position.Contains(curEvent.mousePosition))
+                    {
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                        if (curEvent.type == EventType.DragPerform)
+                        {
+                            DragAndDrop.AcceptDrag();
+                            result = DragAndDrop.objectReferences;
+                            return true;
+                        }
+                    }
+                    break;
+            }
+
+            result = null;
+            return false;
+        }
     }
 }
