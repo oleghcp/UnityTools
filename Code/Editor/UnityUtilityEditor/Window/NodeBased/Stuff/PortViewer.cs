@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
     internal class PortViewer
     {
-        private const float xOffset = 8f;
+        private const float X_OFFSET = 8f;
 
         private PortType _type;
         private GraphEditorWindow _window;
@@ -41,11 +41,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             switch (_type)
             {
                 case PortType.In:
-                    _screenRect.x = nodeScreenRect.x - _screenRect.width + xOffset;
+                    _screenRect.x = nodeScreenRect.x - _screenRect.width + X_OFFSET;
                     break;
 
                 case PortType.Out:
-                    _screenRect.x = nodeScreenRect.x + nodeScreenRect.width - xOffset;
+                    _screenRect.x = nodeScreenRect.x + nodeScreenRect.width - X_OFFSET;
                     break;
             }
 
