@@ -6,7 +6,7 @@ namespace UnityUtility
 {
     public static class BitMask
     {
-        internal const int SIZE = 32;
+        public const int SIZE = 32;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsEmpty(int mask)

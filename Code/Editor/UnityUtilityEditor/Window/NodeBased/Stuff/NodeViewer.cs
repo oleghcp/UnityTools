@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -75,24 +74,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public SerializedProperty GetTransitionProperty(TransitionViewer transition)
-        {
-            Node nextNode = transition.In.Node._nodeAsset;
-
-            foreach (var transitionProp in _transitionsProperty.EnumerateArrayElements())
-            {
-                using (var nodeProp = transitionProp.FindPropertyRelative(Transition.NodeFieldName))
-                {
-                    if (nodeProp.objectReferenceValue == nextNode)
-                        return transitionProp;
-                }
-
-                transitionProp.Dispose();
-            }
-
-            throw new InvalidOperationException("Transition not found.");
-        }
-
         public Rect GetRectInScreen()
         {
             return new Rect(_window.Camera.WorldToScreen(Position),
@@ -112,7 +93,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_isSelected == on)
                 return;
 
-            SetSelection(on);
+            _isSelected = on;
             GUI.changed = true;
         }
 
@@ -190,14 +171,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         {
                             _dragedPosition = Position;
                             _isDragged = true;
-                            SetSelection(true);
+                            _isSelected = true;
                             needLock = true;
                         }
                         else
                         {
                             _renaming = false;
                             if (!(_isSelected && e.control))
-                                SetSelection(false);
+                                _isSelected = false;
                         }
                         GUI.changed = true;
                     }
@@ -205,7 +186,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     {
                         if (nodeRect.Contains(e.mousePosition))
                         {
-                            SetSelection(true);
+                            _isSelected = true;
                             GUI.changed = true;
                             needLock = true;
                             ProcessContextMenu();
@@ -273,11 +254,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             EditorGUIUtility.labelWidth = labelWidth;
-        }
-
-        private void SetSelection(bool on)
-        {
-            _isSelected = on;
         }
 
         private void ProcessContextMenu()

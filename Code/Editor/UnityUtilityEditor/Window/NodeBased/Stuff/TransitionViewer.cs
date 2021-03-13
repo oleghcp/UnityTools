@@ -41,7 +41,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _transitionProp = transitionProp;
 
             _pointsProp = transitionProp.FindPropertyRelative(Transition.PointsFieldName);
-            foreach (SerializedProperty item in _pointsProp.EnumerateArrayElements())
+            foreach (SerializedProperty item in _pointsProp)
             {
                 _points.Add(new PointViewer(item, this, window));
             }

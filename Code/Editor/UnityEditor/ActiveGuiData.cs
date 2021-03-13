@@ -78,7 +78,6 @@ namespace UnityEditor
 
             if (!_data.TryGetValue(enumType, out Data data))
             {
-                UnityEngine.Debug.Log($"init: {enumType.Name}");
                 data.EnumNames = Enum.GetNames(enumType);
                 data.EnumValues = Enum.GetValues(enumType);
                 _data[enumType] = data;
