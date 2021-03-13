@@ -32,20 +32,16 @@ namespace UnityUtilityEditor.Window
 
         private void OnGUI()
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space();
-            EditorGUILayout.BeginVertical();
-            _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, false, false).y;
+            GUILayout.Space(5f);
+
+            _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
             for (int i = 0; i < _names.Count; i++)
             {
                 EditorGUILayout.LabelField(_names[i], GUILayout.MaxWidth(150f), GUILayout.MinWidth(10f));
             }
             GUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(10f);
-
 
             EditorGUILayout.LabelField("Add gamepad axes:", EditorStyles.boldLabel);
             GUILayout.Space(5f);
@@ -86,7 +82,7 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            if (GUIExt.DrawCenterButton("Remove gamepad axes", 100f, 30f))
+            if (EditorGuiLayout.CenterButton("Remove gamepad axes", GUILayout.Height(30f), GUILayout.Width(150f)))
             {
                 int i = 0;
 

@@ -57,7 +57,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                 intensity.floatValue = EditorGUILayout.FloatField(intensity.floatValue, GUILayout.Width(40f)).CutBefore(0f);
                 GUI.enabled = true;
                 GUILayout.Space(5f);
-                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth)))
+                if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
                 {
                     nodes.DeleteArrayElementAtIndex(index);
                     needBreak = true;

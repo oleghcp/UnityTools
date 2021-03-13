@@ -161,36 +161,6 @@ namespace UnityUtilityEditor
             }
         }
 
-#if UNITY_2019_1_OR_NEWER
-        public static void CreateScript()
-        {
-            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#ScriptTemplate.cs.txt";
-
-            if (!File.Exists(templatePath))
-            {
-                string text = @"using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityUtility;
-using UnityObject = UnityEngine.Object;
-
-namespace Project
-{
-    public class #SCRIPTNAME# : MonoBehaviour
-    {
-
-    }
-}
-";
-                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
-                File.WriteAllText(templatePath, text);
-            }
-
-            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyClass.cs");
-        }
-#endif
-
         private class SearchProgress
         {
             public List<object> FoundObjects = new List<object>();

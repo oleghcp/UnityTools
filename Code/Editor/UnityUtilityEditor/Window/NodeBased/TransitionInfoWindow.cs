@@ -61,11 +61,11 @@ namespace UnityUtilityEditor.Window.NodeBased
                     GUILayout.FlexibleSpace();
 
                     GUI.enabled = pointsCount > 0;
-                    if (GUILayout.Button("-", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth)))
+                    if (GUILayout.Button("-", GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
                         _transition.RemovePoint();
                     GUI.enabled = true;
 
-                    if (GUILayout.Button("+", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth)))
+                    if (GUILayout.Button("+", GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
                         _transition.AddPoint();
                 }
 

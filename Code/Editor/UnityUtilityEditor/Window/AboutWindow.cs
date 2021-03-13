@@ -27,8 +27,8 @@ namespace UnityUtilityEditor.Window
         {
             GUILayout.Space(10f);
 
-            GUIExt.DrawCenterLabel(_description, 235f);
-            GUIExt.DrawCenterLabel(_copyright, 140f);
+            EditorGuiLayout.CenterLabel(_description);
+            EditorGuiLayout.CenterLabel(_copyright);
         }
     }
 }

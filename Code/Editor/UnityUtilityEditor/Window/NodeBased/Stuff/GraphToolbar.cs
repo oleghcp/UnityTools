@@ -106,14 +106,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUILayout.Space(10f);
             GraphEditorWindow.GridSnapping = GUILayout.Toggle(EditorPrefs.GetBool(GRID_SNAPING_KEY),
                                                               _snapButton, "Button",
-                                                              GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+                                                              GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             EditorPrefs.SetBool(GRID_SNAPING_KEY, GraphEditorWindow.GridSnapping);
 
             GUILayout.Space(10f);
 
-            bool minusBtn = GUILayout.RepeatButton(_leftWidthButton, GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
-            bool plusBtn = GUILayout.RepeatButton(_rightWidthButton, GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+            bool minusBtn = GUILayout.RepeatButton(_leftWidthButton, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+            bool plusBtn = GUILayout.RepeatButton(_rightWidthButton, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             if (minusBtn)
                 _window.GraphAssetEditor.ChangeNodeWidth(-1);
@@ -123,7 +123,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             GUILayout.Space(10f);
 
-            _toggle = GUILayout.Toggle(_toggle, "?", "Button", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+            _toggle = GUILayout.Toggle(_toggle, "?", "Button", GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             if (minusBtn || plusBtn)
                 GUI.changed = true;

@@ -13,7 +13,8 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor<LayoutConfig>
     {
-        private const float COLUMN_WIDTH = 150f;
+        private const float MAX_COLUMN_WIDTH = 200f;
+        private const float MIN_COLUMN_WIDTH = 10f;
 
         private TypeSelector _keyEnumTypeSel;
         private TypeSelector _axisEnumTypeSel;
@@ -125,15 +126,15 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
         private void DrawTypeChoice()
         {
             GUILayout.Space(10f);
-            GUIExt.DrawCenterLabel("Choose control type:", 150f);
+            EditorGuiLayout.CenterLabel("Choose control type:", EditorStyles.boldLabel);
             GUILayout.Space(5f);
 
-            if (GUIExt.DrawCenterButton("Keyboard and Mouse", 150f, 30f))
+            if (EditorGuiLayout.CenterButton("Keyboard and Mouse", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
                 _inputType.enumValueIndex = (int)InputType.KeyMouse;
 
             GUILayout.Space(5f);
 
-            if (GUIExt.DrawCenterButton("Gamepad", 150f, 30f))
+            if (EditorGuiLayout.CenterButton("Gamepad", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
                 _inputType.enumValueIndex = (int)InputType.Gamepad;
         }
 
@@ -149,16 +150,16 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
                 if (selector.Types.Length > 0)
                 {
                     selector.Types = selector.Types.OrderBy(itm => itm.FullName).ToArray();
-                    selector.TypeNames = selector.Types.Select(EditorGUIUtilityExt.GetTypeDisplayName).ToArray();
+                    selector.TypeNames = selector.Types.Select(EditorGuiUtility.GetTypeDisplayName).ToArray();
                 }
             }
 
             EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
             if (selector.Types.Length > 0)
             {
-                selector.Selected = GUIExt.DropDown(selector.Selected, selector.TypeNames);
+                selector.Selected = EditorGuiLayout.DropDown(selector.Selected, selector.TypeNames);
                 GUILayout.Space(5f);
-                if (GUIExt.DrawCenterButton("Apply", 100f, 30f))
+                if (EditorGuiLayout.CenterButton("Apply", GUILayout.Height(30f), GUILayout.MinWidth(100f)))
                 {
                     typeValue.SetValue(selector.Types[selector.Selected]);
                     string typeName = typeValue.EnumType.GetTypeName();
@@ -177,11 +178,11 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
-            EditorGUILayout.LabelField("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+            GUILayout.Label("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
+            GUILayout.Label("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
 
             bool all = _keyEnumTypeVal.Toggles.All();
-            _keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+            _keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
             if (_keyEnumTypeVal.AllToggles != all)
                 _keyEnumTypeVal.Toggles.SetAll(_keyEnumTypeVal.AllToggles);
 
@@ -192,15 +193,15 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             {
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+                GUILayout.Label(_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
                 SerializedProperty keyIndexItem = _keyIndices.GetArrayElementAtIndex(i);
 
                 if (IsKeyMouse())
-                    keyIndexItem.intValue = (int)(KMKeyCode)EditorGUILayout.EnumPopup((KMKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
+                    keyIndexItem.intValue = (int)(KMKeyCode)EditorGUILayout.EnumPopup((KMKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(MAX_COLUMN_WIDTH));
                 else
-                    keyIndexItem.intValue = (int)(GPKeyCode)EditorGUILayout.EnumPopup((GPKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(COLUMN_WIDTH));
+                    keyIndexItem.intValue = (int)(GPKeyCode)EditorGUILayout.EnumPopup((GPKeyCode)keyIndexItem.intValue, GUILayout.MaxWidth(MAX_COLUMN_WIDTH));
 
-                _keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                _keyEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(_keyEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
 
                 EditorGUILayout.EndHorizontal();
             }
@@ -226,11 +227,11 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
-            EditorGUILayout.LabelField("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+            GUILayout.Label("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
+            GUILayout.Label("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
 
             bool all = _axisEnumTypeVal.Toggles.All();
-            _axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+            _axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
             if (_axisEnumTypeVal.AllToggles != all)
                 _axisEnumTypeVal.Toggles.SetAll(_axisEnumTypeVal.AllToggles);
 
@@ -242,15 +243,15 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             {
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(COLUMN_WIDTH), GUILayout.MinWidth(10f));
+                GUILayout.Label(_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
                 SerializedProperty axisIndexItem = _axisIndices.GetArrayElementAtIndex(i);
 
                 if (IsKeyMouse())
-                    axisIndexItem.intValue = (int)(KMAxisCode)EditorGUILayout.EnumPopup((KMAxisCode)axisIndexItem.intValue);
+                    axisIndexItem.intValue = (int)(KMAxisCode)EditorGUILayout.EnumPopup((KMAxisCode)axisIndexItem.intValue, GUILayout.MaxWidth(MAX_COLUMN_WIDTH));
                 else
-                    axisIndexItem.intValue = (int)(GPAxisCode)EditorGUILayout.EnumPopup((GPAxisCode)axisIndexItem.intValue);
+                    axisIndexItem.intValue = (int)(GPAxisCode)EditorGUILayout.EnumPopup((GPAxisCode)axisIndexItem.intValue, GUILayout.MaxWidth(MAX_COLUMN_WIDTH));
 
-                _axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                _axisEnumTypeVal.Toggles[i] = EditorGUILayout.Toggle(_axisEnumTypeVal.Toggles[i], GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
 
                 EditorGUILayout.EndHorizontal();
             }

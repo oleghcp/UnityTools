@@ -59,7 +59,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
 
             GUILayout.Space(5f);
 
-            UnityObject[] objects = GUIExt.DropArea("Drag and drop your audio clips here.", 50f);
+            UnityObject[] objects = EditorGui.DropArea("Drag and drop your audio clips here.", 50f);
 
             if (objects.HasAnyData())
             {

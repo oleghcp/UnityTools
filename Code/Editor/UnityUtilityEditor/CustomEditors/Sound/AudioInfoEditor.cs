@@ -10,6 +10,16 @@ namespace UnityUtilityEditor.CustomEditors.Sound
     {
         private string _lengthInfo;
 
+        private void OnEnable()
+        {
+            EditorApplication.update += Repaint;
+        }
+
+        private void OnDestroy()
+        {
+            EditorApplication.update -= Repaint;
+        }
+
         public override void OnInspectorGUI()
         {
             AudioSource audioSource = target.AudioSource;
@@ -27,7 +37,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                 EditorGUILayout.Slider(audioSource.time, 0f, audioSource.clip.length);
                 GUI.enabled = true;
 
-                if (GUIExt.DrawCenterButton("Stop", 30f, 150f))
+                if (EditorGuiLayout.CenterButton("Stop", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
                     target.Stop();
 
                 GUILayout.Space(10f);
@@ -37,6 +47,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
                 _lengthInfo = null;
             }
         }
+        
 
         private void InitLengthInfo()
         {
@@ -44,7 +55,7 @@ namespace UnityUtilityEditor.CustomEditors.Sound
             {
                 AudioClip clip = target.AudioSource.clip;
                 if (clip != null)
-                    _lengthInfo = "Length: " + TimeSpan.FromSeconds(clip.length).ToString(@"hh\:mm\:ss\:fff");
+                    _lengthInfo = "Length: " + TimeSpan.FromSeconds(clip.length).ToString(@"hh\:mm\:ss\.fff");
             }
         }
     }

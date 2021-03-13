@@ -40,7 +40,7 @@ namespace UnityUtilityEditor.Window
                 Type[] types = typeSelection.ToArray();
 
                 _types[assemblyName] = types;
-                _typeNames[assemblyName] = types.Select(EditorGUIUtilityExt.GetTypeDisplayName)
+                _typeNames[assemblyName] = types.Select(EditorGuiUtility.GetTypeDisplayName)
                                                 .ToArray();
             }
 
@@ -65,7 +65,7 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            _assemblyIndex = GUIExt.DropDown("Assembly:", EditorPrefs.GetInt(ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
+            _assemblyIndex = EditorGuiLayout.DropDown("Assembly:", EditorPrefs.GetInt(ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
 
             EditorPrefs.SetInt(ASSEMBLY_INDEX_KEY, _assemblyIndex);
             string assemblyName = _assemblies[_assemblyIndex];
@@ -73,7 +73,7 @@ namespace UnityUtilityEditor.Window
             GUILayout.Space(10f);
 
             _typeIndex = Math.Min(_typeIndex, _types[assemblyName].Length - 1);
-            _typeIndex = GUIExt.DropDown("ScriptableObject:", _typeIndex, _typeNames[assemblyName]);
+            _typeIndex = EditorGuiLayout.DropDown("ScriptableObject:", _typeIndex, _typeNames[assemblyName]);
 
             EditorGUILayout.Space();
 
@@ -85,7 +85,7 @@ namespace UnityUtilityEditor.Window
             {
                 GUILayout.Space(10f);
 
-                _keepOpened = EditorGUILayout.Toggle(_keepOpened, GUILayout.MaxWidth(EditorGUIUtilityExt.SmallButtonWidth));
+                _keepOpened = EditorGUILayout.Toggle(_keepOpened, GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
                 EditorGUILayout.LabelField("Keep opened");
 
                 GUILayout.FlexibleSpace();

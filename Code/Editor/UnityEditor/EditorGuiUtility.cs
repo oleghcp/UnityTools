@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    public static class EditorGUIUtilityExt
+    public static class EditorGuiUtility
     {
         public static float SmallButtonWidth
         {

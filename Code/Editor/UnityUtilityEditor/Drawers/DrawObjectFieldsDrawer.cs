@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (!EditorUtilityExt.GetFieldType(fieldInfo).Is(typeof(ScriptableObject)))
             {
-                GUIExt.DrawWrongTypeMessage(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
+                EditorGui.DrawWrongTypeMessage(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
                 return;
             }
 
@@ -70,7 +70,7 @@ namespace UnityUtilityEditor.Drawers
 
             using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
             {
-                return EditorGUIUtilityExt.GetDrawHeight(serObject);
+                return EditorGuiUtility.GetDrawHeight(serObject);
             }
         }
     }

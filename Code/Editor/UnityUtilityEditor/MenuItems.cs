@@ -11,19 +11,19 @@ namespace UnityUtilityEditor
         [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Node C# Script")]
         private static void CreateNodeScript()
         {
-            GraphAssetMenuUtility.CreateNodeScript();
+            TemplatesUtility.CreateNodeScript();
         }
 
         [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Transition C# Script")]
         private static void CreateTransitionScript()
         {
-            GraphAssetMenuUtility.CreateTransitionScript();
+            TemplatesUtility.CreateTransitionScript();
         }
 
         [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Graph C# Script")]
         private static void CreateGraphScript()
         {
-            GraphAssetMenuUtility.CreateGraphScript();
+            TemplatesUtility.CreateGraphScript();
         }
 #endif
 
@@ -106,7 +106,7 @@ namespace UnityUtilityEditor
         [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/C# Script (ext.)", false, CREATE_CS_SCRIPT_PRIORITY)]
         private static void CreateScript()
         {
-            MenuItemsUtility.CreateScript();
+            TemplatesUtility.CreateScript();
         }
 #endif
     }

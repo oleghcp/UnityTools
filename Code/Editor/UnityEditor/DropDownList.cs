@@ -200,7 +200,7 @@ namespace UnityEditor
                 {
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        GUILayout.Space(EditorGUIUtilityExt.SmallButtonWidth + EditorGUIUtilityExt.StandardHorizontalSpacing * 2f);
+                        GUILayout.Space(EditorGuiUtility.SmallButtonWidth + EditorGuiUtility.StandardHorizontalSpacing * 2f);
                         EditorGUILayout.LabelField((string)null,
                                                    GUI.skin.horizontalSlider,
                                                    GUILayout.Width(_maxLabelSize.x),
@@ -213,9 +213,9 @@ namespace UnityEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (item.On)
-                        GUILayout.Label("√", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+                        GUILayout.Label("√", GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
                     else
-                        GUILayout.Label(string.Empty, GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth));
+                        GUILayout.Label(string.Empty, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
                     GUILayout.Label(item.Text);
                 }
@@ -292,7 +292,7 @@ namespace UnityEditor
             Data itemWithLongestText = items.Where(item => !item.IsSeparator)
                                             .GetWithMax(item => item.Text.Length);
             _maxLabelSize = GUI.skin.label.CalcSize(new GUIContent(itemWithLongestText.Text));
-            float lineWidth = EditorGUIUtilityExt.StandardHorizontalSpacing * 5f + EditorGUIUtilityExt.SmallButtonWidth + _maxLabelSize.x + 2f;
+            float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLabelSize.x + 2f;
             return (lineWidth + lineWidth * 0.12f).Clamp(200f, Screen.currentResolution.width * 0.5f);
         }
 

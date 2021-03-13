@@ -69,7 +69,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 if (_error != null)
                 {
-                    GUIExt.DrawWrongTypeMessage(position, label, _error);
+                    EditorGui.DrawWrongTypeMessage(position, label, _error);
                     return;
                 }
 

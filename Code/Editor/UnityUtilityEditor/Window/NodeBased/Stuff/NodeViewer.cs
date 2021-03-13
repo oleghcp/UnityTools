@@ -249,7 +249,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     _nameProperty.stringValue = EditorGUILayout.TextField(_nameProperty.stringValue);
-                    if (GUILayout.Button("V", GUILayout.Width(EditorGUIUtilityExt.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button("V", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
                         _renaming = false;
                 }
             }
@@ -303,7 +303,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private float CalcNodeHeight()
         {
-            return SmallHeight() + EditorGUIUtilityExt.GetDrawHeight(_serializedObject, IsServiceField);
+            return SmallHeight() + EditorGuiUtility.GetDrawHeight(_serializedObject, IsServiceField);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
