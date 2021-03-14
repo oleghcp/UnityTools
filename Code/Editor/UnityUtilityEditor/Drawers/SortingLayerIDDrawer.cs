@@ -44,14 +44,14 @@ namespace UnityUtilityEditor.Drawers
             public int Draw(string propertyName, int layerId)
             {
                 int index = layers.IndexOf(itm => itm.id == layerId).CutBefore(0);
-                index = EditorGUILayout.Popup(propertyName, index, m_names);
+                index = EditorGuiLayout.DropDown(propertyName, index, m_names);
                 return layers[index].id;
             }
 
             public int Draw(Rect position, string propertyName, int layerId)
             {
                 int index = layers.IndexOf(itm => itm.id == layerId).CutBefore(0);
-                index = EditorGUI.Popup(position, propertyName, index, m_names);
+                index = EditorGui.DropDown(position, propertyName, index, m_names);
                 return layers[index].id;
             }
         }

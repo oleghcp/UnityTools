@@ -100,10 +100,13 @@ namespace UnityEditor
         public static Enum EnumDropDown(Rect propertyRect, string label, Enum selected)
         {
             var enumData = EnumDropDownData.GetData(selected.GetType());
-
             int index = Array.IndexOf(enumData.EnumValues, selected);
-            index = DropDown(propertyRect, label, index, enumData.EnumNames);
-            return (Enum)enumData.EnumValues.GetValue(index);
+            int newIndex = DropDown(propertyRect, label, index, enumData.EnumNames);
+
+            if (index == newIndex)
+                return selected;
+
+            return (Enum)enumData.EnumValues.GetValue(newIndex);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,6 +147,26 @@ namespace UnityEditor
                               .Select(item => displayedOptions[item])
                               .ConcatToString(", ");
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Enum FlagsDropDown(Rect propertyRect, Enum flags)
+        {
+            return FlagsDropDown(propertyRect, null, flags);
+        }
+
+        public static Enum FlagsDropDown(Rect propertyRect, string label, Enum flags)
+        {
+            Type type = flags.GetType();
+            var enumData = EnumDropDownData.GetData(type);
+
+            int mask = Convert.ToInt32(flags);
+            int newMask = MaskDropDown(propertyRect, label, mask, enumData.EnumNames);
+
+            if (mask == newMask)
+                return flags;
+
+            return (Enum)Enum.ToObject(type, newMask);
         }
     }
 }

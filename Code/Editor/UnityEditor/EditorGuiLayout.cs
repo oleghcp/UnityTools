@@ -97,5 +97,17 @@ namespace UnityEditor
             Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.MaskDropDown(propertyRect, label, mask, displayedOptions);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Enum FlagsDropDown(Enum flags, params GUILayoutOption[] options)
+        {
+            return FlagsDropDown(null, flags, options);
+        }
+
+        public static Enum FlagsDropDown(string label, Enum flags, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.FlagsDropDown(propertyRect, label, flags);
+        }
     }
 }

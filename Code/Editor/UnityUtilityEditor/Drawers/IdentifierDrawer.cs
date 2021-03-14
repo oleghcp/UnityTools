@@ -20,13 +20,9 @@ namespace UnityUtilityEditor.Drawers
                 property.stringValue = Guid.NewGuid().ToString();
 
             if (attribute.Editable)
-            {
                 EditorGUI.PropertyField(position, property);
-                return;
-            }
-
-            Rect rect = EditorGUI.PrefixLabel(position, label);
-            EditorGUI.LabelField(rect, property.stringValue);
+            else
+                EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(property.stringValue));
         }
     }
 }
