@@ -15,7 +15,6 @@ namespace UnityUtilityEditor.Window.NodeBased
         private SerializedProperty _transitionProp;
         private GraphEditorWindow _mainWindow;
         private Vector2 _scrollPos;
-        private GUIContent _label = new GUIContent("Transition properties:");
 
         public static void Open(TransitionViewer transition, SerializedProperty transitionProp, GraphEditorWindow mainWindow)
         {
@@ -73,7 +72,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 
-                EditorGUILayout.PropertyField(_transitionProp, _label);
+                EditorGUILayout.PropertyField(_transitionProp, EditorGuiUtility.TempContent("Transition properties:"));
 
                 if (_transitionProp.isExpanded)
                 {

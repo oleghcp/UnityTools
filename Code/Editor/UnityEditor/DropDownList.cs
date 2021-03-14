@@ -67,7 +67,7 @@ namespace UnityEditor
                     EditorGUILayout.BeginHorizontal();
                     tapeString = _searchField.OnGUI(_tapeString);
                     GUI.color = Colours.Red;
-                    if (GUILayout.Button("X", GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
+                    if (GUILayout.Button("X", GUILayout.Height(EditorGUIUtility.singleLineHeight), GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
                         Close();
                     GUI.color = Colours.White;
                     EditorGUILayout.EndHorizontal();
@@ -224,10 +224,7 @@ namespace UnityEditor
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUILayout.Space(EditorGuiUtility.SmallButtonWidth + EditorGuiUtility.StandardHorizontalSpacing * 2f);
-                        EditorGUILayout.LabelField((string)null,
-                                                   GUI.skin.horizontalSlider,
-                                                   GUILayout.Width(_maxLabelSize.x),
-                                                   GUILayout.Height(EditorGUIUtility.singleLineHeight - EditorGUIUtility.standardVerticalSpacing));
+                        EditorGUILayout.LabelField((string)null, GUI.skin.horizontalSlider, GUILayout.Width(_maxLabelSize.x));
                     }
                     continue;
                 }
@@ -236,11 +233,11 @@ namespace UnityEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (IsItemOn(item))
-                        GUILayout.Label("√", GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+                        EditorGUILayout.LabelField("√", GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
                     else
-                        GUILayout.Label(string.Empty, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+                        EditorGUILayout.LabelField(string.Empty, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
-                    GUILayout.Label(item.Text);
+                    EditorGUILayout.LabelField(item.Text, GUILayout.Width(_maxLabelSize.x));
                 }
                 GUI.enabled = true;
 
@@ -320,7 +317,11 @@ namespace UnityEditor
 
         private float GetHeight(int itemsCount)
         {
-            itemsCount += itemsCount == 0 ? 2 : 1;
+            if (itemsCount == 0)
+                itemsCount += 2;
+            else
+                itemsCount += 1;
+
             float linesHeight = EditorGUIUtility.singleLineHeight * itemsCount;
             float spacesHeight = EditorGUIUtility.standardVerticalSpacing * (itemsCount + 4);
             return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
@@ -330,7 +331,7 @@ namespace UnityEditor
         {
             Data itemWithLongestText = items.Where(item => !item.IsSeparator)
                                             .GetWithMax(item => item.Text.Length);
-            _maxLabelSize = GUI.skin.label.CalcSize(new GUIContent(itemWithLongestText.Text));
+            _maxLabelSize = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(itemWithLongestText.Text));
             float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLabelSize.x + 2f;
             return (lineWidth + lineWidth * 0.12f).Clamp(200f, Screen.currentResolution.width * 0.5f);
         }

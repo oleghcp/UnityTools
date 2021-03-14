@@ -6,6 +6,8 @@ namespace UnityEditor
 {
     public static class EditorGuiUtility
     {
+        private static GUIContent _commonContent;
+
         public static float SmallButtonWidth
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,6 +18,17 @@ namespace UnityEditor
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => EditorGUIUtility.standardVerticalSpacing + 1f;
+        }
+
+        public static GUIContent TempContent(string t, string tooltip = null)
+        {
+            if (_commonContent == null)
+                _commonContent = new GUIContent();
+
+            _commonContent.text = t;
+            _commonContent.tooltip = tooltip;
+            _commonContent.image = null;
+            return _commonContent;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

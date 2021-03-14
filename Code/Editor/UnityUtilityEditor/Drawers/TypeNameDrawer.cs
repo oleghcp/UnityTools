@@ -62,7 +62,7 @@ namespace UnityUtilityEditor.Drawers
                     GUI.color = Colours.Yellow;
             }
 
-            if (GUI.Button(buttonPosition, new GUIContent(shortName, toolTip)))
+            if (GUI.Button(buttonPosition, EditorGuiUtility.TempContent(shortName, toolTip)))
                 ShowContextMenu(buttonPosition, property);
 
             GUI.color = Colours.White;

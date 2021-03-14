@@ -57,12 +57,12 @@ namespace UnityEditor
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
 
             if (label != null)
-                propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent(label));
+                propertyRect = EditorGUI.PrefixLabel(propertyRect, EditorGuiUtility.TempContent(label));
 
             selectedIndex = DropDownData.GetSelectedValueById(selectedIndex, controlId)
                                         .Clamp(0, displayedOptions.Length);
 
-            if (EditorGUI.DropdownButton(propertyRect, new GUIContent(displayedOptions[selectedIndex]), FocusType.Keyboard))
+            if (EditorGUI.DropdownButton(propertyRect, EditorGuiUtility.TempContent(displayedOptions[selectedIndex]), FocusType.Keyboard))
             {
                 EditorUtilityExt.DisplayDropDownList(propertyRect,
                                                      displayedOptions,
@@ -118,12 +118,12 @@ namespace UnityEditor
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
 
             if (label != null)
-                propertyRect = EditorGUI.PrefixLabel(propertyRect, new GUIContent(label));
+                propertyRect = EditorGUI.PrefixLabel(propertyRect, EditorGuiUtility.TempContent(label));
 
             int bitsCount = Math.Min(displayedOptions.Length, BitMask.SIZE);
             mask = DropDownData.GetSelectedValueById(mask, controlId);
 
-            if (EditorGUI.DropdownButton(propertyRect, new GUIContent(getContentText()), FocusType.Keyboard))
+            if (EditorGUI.DropdownButton(propertyRect, EditorGuiUtility.TempContent(getContentText()), FocusType.Keyboard))
             {
                 EditorUtilityExt.DisplayMultiSelectableList(propertyRect,
                                                             BitList.CreateFromBitMask(mask, bitsCount),
