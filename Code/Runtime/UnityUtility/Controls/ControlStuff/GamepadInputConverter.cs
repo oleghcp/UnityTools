@@ -14,16 +14,16 @@ namespace UnityUtility.Controls.ControlStuff
             padNum++;
             StringBuilder builder = new StringBuilder();
 
-            Span<KeyCode> rawKeyCodes = stackalloc KeyCode[InputEnum.GPKeyCodeCount];
+            Span<KeyCode> rawKeyCodes = stackalloc KeyCode[InputEnumUtility.GPKeyCodeCount];
             InputUnility.GetRawKeyCodes(type, rawKeyCodes);
-            KeyCodes = new KeyCode[InputEnum.GPKeyCodeCount];
-            for (int i = 0; i < InputEnum.GPKeyCodeCount; i++)
+            KeyCodes = new KeyCode[InputEnumUtility.GPKeyCodeCount];
+            for (int i = 0; i < InputEnumUtility.GPKeyCodeCount; i++)
                 KeyCodes[i] = InputUnility.CreateKeyCode(rawKeyCodes[i], padNum, builder);
 
-            Span<int> axisCodes = stackalloc int[InputEnum.GPAxisCodeCount];
+            Span<int> axisCodes = stackalloc int[InputEnumUtility.GPAxisCodeCount];
             InputUnility.GetRawAxisCodes(type, axisCodes);
-            AxisNames = new string[InputEnum.GPAxisCodeCount];
-            for (int i = 0; i < InputEnum.GPAxisCodeCount; i++)
+            AxisNames = new string[InputEnumUtility.GPAxisCodeCount];
+            for (int i = 0; i < InputEnumUtility.GPAxisCodeCount; i++)
                 AxisNames[i] = InputUnility.AxisName(axisCodes[i], padNum, builder);
         }
     }

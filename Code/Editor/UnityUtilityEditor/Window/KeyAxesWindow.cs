@@ -12,18 +12,24 @@ namespace UnityUtilityEditor.Window
         private SerializedProperty[] _directs;
         private string[] _names;
 
-        public static KeyAxesWindow Create()
+        public static void Create(SerializedObject param, Type keyFuncsEnum)
         {
-            return GetWindow<KeyAxesWindow>(true, "Set Key Axes");
+            KeyAxesWindow window = CreateInstance<KeyAxesWindow>();
+            window.SetUp(param, keyFuncsEnum);
+            Rect buttonRect = new Rect(Event.current.mousePosition, default);
+            buttonRect = GUIUtility.GUIToScreenRect(buttonRect);
+            window.ShowAsDropDown(buttonRect, new Vector2(200f, getHeigth()));
+
+            float getHeigth()
+            {
+                const int linesCount = 4;
+                float lines = EditorGUIUtility.singleLineHeight * linesCount;
+                float spaces = EditorGUIUtility.standardVerticalSpacing * (linesCount + 2);
+                return lines + spaces;
+            }
         }
 
-        private void Awake()
-        {
-            minSize = new Vector2(200f, 100f);
-            maxSize = new Vector2(200f, 100f);
-        }
-
-        public void SetUp(SerializedObject param, Type keyFuncsEnum)
+        private void SetUp(SerializedObject param, Type keyFuncsEnum)
         {
             _serializedObject = param;
 
@@ -53,20 +59,17 @@ namespace UnityUtilityEditor.Window
                 return;
             }
 
-            GUILayout.Space(10f);
-
+            GUILayout.BeginArea(new Rect(default, position.size), EditorStyles.helpBox);
             for (int i = 0; i < _directs.Length; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(_directs[i].displayName, GUILayout.MaxWidth(100f));
+                EditorGUILayout.LabelField(_directs[i].displayName, GUILayout.MaxWidth(75f));
                 _directs[i].intValue = EditorGUILayout.Popup(_directs[i].intValue, _names);
                 EditorGUILayout.EndHorizontal();
             }
+            GUILayout.EndArea();
 
-            GUILayout.Space(10f);
-
-            if (GUI.changed)
-                _serializedObject.ApplyModifiedProperties();
+            _serializedObject.ApplyModifiedProperties();
         }
     }
 }

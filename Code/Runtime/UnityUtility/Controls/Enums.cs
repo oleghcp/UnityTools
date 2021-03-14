@@ -1,6 +1,5 @@
-﻿using UnityUtility.Controls.ControlStuff;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityUtility.Controls.ControlStuff;
 
 namespace UnityUtility.Controls
 {
@@ -61,7 +60,7 @@ namespace UnityUtility.Controls
         Vertical
     }
 
-    internal static class InputEnum
+    internal static class InputEnumUtility
     {
         public const int GPKeyCodeCount = 16;
         public const int GPAxisCodeCount = 8;

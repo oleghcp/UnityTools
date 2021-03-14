@@ -220,10 +220,10 @@ namespace UnityUtility.Controls.ControlStuff
         {
             if (Input.anyKeyDown)
             {
-                Span<KeyCode> codes = stackalloc KeyCode[InputEnum.GPKeyCodeCount];
+                Span<KeyCode> codes = stackalloc KeyCode[InputEnumUtility.GPKeyCodeCount];
                 GetRawKeyCodes(type, codes);
 
-                for (int i = 0; i < InputEnum.GPKeyCodeCount; i++)
+                for (int i = 0; i < InputEnumUtility.GPKeyCodeCount; i++)
                 {
                     if (Input.GetKeyDown(codes[i]))
                     { return (GPKeyCode)i; }
