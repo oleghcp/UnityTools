@@ -4,11 +4,11 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DrawBitMaskAttribute : PropertyAttribute
+    public class DrawFlagsAttribute : PropertyAttribute
     {
         internal Type EnumType { get; }
 
-        public DrawBitMaskAttribute(Type enumType)
+        public DrawFlagsAttribute(Type enumType)
         {
             EnumType = enumType;
         }

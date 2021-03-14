@@ -7,8 +7,8 @@ using UnityUtilityEditor.Window.BitArrays;
 
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(DrawBitMaskAttribute))]
-    internal class DrawBitMaskDrawer : AttributeDrawer<DrawBitMaskAttribute>
+    [CustomPropertyDrawer(typeof(DrawFlagsAttribute))]
+    internal class DrawFlagsDrawer : AttributeDrawer<DrawFlagsAttribute>
     {
         private Data _data;
 
@@ -30,13 +30,13 @@ namespace UnityUtilityEditor.Drawers
 
             private EnumBitArrayMaskWindow _window;
 
-            public Data(SerializedProperty property, AttributeDrawer<DrawBitMaskAttribute> drawer)
+            public Data(SerializedProperty property, AttributeDrawer<DrawFlagsAttribute> drawer)
             {
                 Type type = EditorUtilityExt.GetFieldType(drawer);
 
                 if (type != typeof(BitList) && type.GetTypeCode() != TypeCode.Int32)
                 {
-                    _error = $"Use {nameof(DrawBitMaskAttribute)} with Int32 or BitArrayMask.";
+                    _error = $"Use {nameof(DrawFlagsAttribute)} with Int32 or BitArrayMask.";
                     return;
                 }
 
@@ -74,7 +74,7 @@ namespace UnityUtilityEditor.Drawers
                 }
 
                 if (_isBitArray)
-                    BitArrayDrawer.Draw(position, _label, ref _window, Tuple.Create(property, _names));
+                    BitListDrawer.Draw(position, _label, ref _window, Tuple.Create(property, _names));
                 else
                     property.intValue = EditorGUI.MaskField(position, _label, property.intValue, _names);
             }
