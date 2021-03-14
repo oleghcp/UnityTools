@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityUtility; 
 #endif
 
-namespace UnityUtilityEditor.CustomEditors
+namespace UnityUtilityEditor.Inspectors
 {
     [CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor<Transform>

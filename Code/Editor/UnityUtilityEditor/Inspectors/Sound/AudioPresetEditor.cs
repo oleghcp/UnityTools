@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.CustomEditors.Sound
+namespace UnityUtilityEditor.Inspectors.Sound
 {
     internal abstract class AudioPresetEditor : Editor
     {

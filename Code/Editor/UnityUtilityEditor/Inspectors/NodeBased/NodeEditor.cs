@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility.NodeBased;
 
 #if UNITY_2019_3_OR_NEWER
-namespace UnityUtilityEditor.CustomEditors.NodeBased
+namespace UnityUtilityEditor.Inspectors.NodeBased
 {
     [CustomEditor(typeof(Node), true)]
     internal class NodeEditor : Editor<Node>

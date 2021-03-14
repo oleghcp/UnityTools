@@ -8,7 +8,7 @@ using UnityUtility.Controls;
 using UnityUtility.Controls.ControlStuff;
 using UnityUtilityEditor.Window;
 
-namespace UnityUtilityEditor.CustomEditors.InputLayouts
+namespace UnityUtilityEditor.Inspectors.InputLayouts
 {
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor<LayoutConfig>

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityUtility.Collections;
 
-namespace UnityUtilityEditor.CustomEditors.InputLayouts
+namespace UnityUtilityEditor.Inspectors.InputLayouts
 {
     internal class LayoutEditorUtility
     {

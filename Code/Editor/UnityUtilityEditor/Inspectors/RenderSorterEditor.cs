@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityUtility;
 using static UnityUtilityEditor.Drawers.SortingLayerIDDrawer;
 
-namespace UnityUtilityEditor.CustomEditors
+namespace UnityUtilityEditor.Inspectors
 {
     [CustomEditor(typeof(RenderSorter))]
     internal class RenderSorterEditor : Editor<RenderSorter>

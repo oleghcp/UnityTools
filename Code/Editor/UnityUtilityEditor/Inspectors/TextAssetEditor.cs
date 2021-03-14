@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityUtilityEditor.CustomEditors
+namespace UnityUtilityEditor.Inspectors
 {
     [CustomEditor(typeof(TextAsset))]
     internal class TextAssetEditor : Editor<TextAsset>

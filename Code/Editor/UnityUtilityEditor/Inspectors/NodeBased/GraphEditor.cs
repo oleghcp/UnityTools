@@ -5,7 +5,7 @@ using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased;
 
 #if UNITY_2019_3_OR_NEWER
-namespace UnityUtilityEditor.CustomEditors.NodeBased
+namespace UnityUtilityEditor.Inspectors.NodeBased
 {
     [CustomEditor(typeof(Graph), true)]
     internal class GraphEditor : Editor
