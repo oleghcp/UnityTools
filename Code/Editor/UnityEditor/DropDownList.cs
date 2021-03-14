@@ -15,6 +15,7 @@ namespace UnityEditor
     {
         internal const string NOTHING_ITEM = "Nothing";
         internal const string EVERYTHING_ITEM = "Everything";
+        private const float MIN_WINDOW_WIDTH = 150f;
 
         private SearchField _searchField;
         private List<Data> _items = new List<Data>();
@@ -333,7 +334,7 @@ namespace UnityEditor
                                             .GetWithMax(item => item.Text.Length);
             _maxLabelSize = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(itemWithLongestText.Text));
             float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLabelSize.x + 2f;
-            return (lineWidth + lineWidth * 0.12f).Clamp(200f, Screen.currentResolution.width * 0.5f);
+            return (lineWidth + lineWidth * 0.12f).Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
         }
 
         private bool MultiSelectable()

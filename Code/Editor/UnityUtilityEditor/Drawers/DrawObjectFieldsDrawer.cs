@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (!EditorUtilityExt.GetFieldType(fieldInfo).Is(typeof(ScriptableObject)))
+            if (!EditorUtilityExt.GetFieldType(this).Is(typeof(ScriptableObject)))
             {
                 EditorGui.WrongTypeLabel(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
                 return;

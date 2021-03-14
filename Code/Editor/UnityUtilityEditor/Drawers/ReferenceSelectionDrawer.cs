@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (EditorUtilityExt.GetFieldType(fieldInfo).IsValueType)
+            if (EditorUtilityExt.GetFieldType(this).IsValueType)
             {
                 EditorGui.WrongTypeLabel(position, label, $"Use {nameof(ReferenceSelectionAttribute)} only with reference types.");
                 return;

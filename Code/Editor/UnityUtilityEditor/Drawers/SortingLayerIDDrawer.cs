@@ -19,7 +19,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (_tool == null)
             {
-                if (EditorUtilityExt.GetFieldType(fieldInfo).GetTypeCode() != TypeCode.Int32)
+                if (EditorUtilityExt.GetFieldType(this).GetTypeCode() != TypeCode.Int32)
                 {
                     EditorGui.WrongTypeLabel(position, label, $"Use {nameof(SortingLayerIDAttribute)} with int.");
                     return;

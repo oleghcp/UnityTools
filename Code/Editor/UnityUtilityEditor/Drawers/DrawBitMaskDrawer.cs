@@ -32,7 +32,7 @@ namespace UnityUtilityEditor.Drawers
 
             public Data(SerializedProperty property, AttributeDrawer<DrawBitMaskAttribute> drawer)
             {
-                Type type = EditorUtilityExt.GetFieldType(drawer.fieldInfo);
+                Type type = EditorUtilityExt.GetFieldType(drawer);
 
                 if (type != typeof(BitList) && type.GetTypeCode() != TypeCode.Int32)
                 {

@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Drawers
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Type type = EditorUtilityExt.GetFieldType(fieldInfo);
+            Type type = EditorUtilityExt.GetFieldType(this);
 
             SerializedProperty min = property.FindPropertyRelative("x");
             SerializedProperty max = property.FindPropertyRelative("y");

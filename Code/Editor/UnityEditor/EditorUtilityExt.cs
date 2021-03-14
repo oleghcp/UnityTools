@@ -99,10 +99,10 @@ namespace UnityEditor
             return Type.GetType($"{className}, {assemblyName}");
         }
 
-        public static Type GetFieldType(FieldInfo fieldInfo)
+        public static Type GetFieldType(PropertyDrawer drawer)
         {
-            return fieldInfo.FieldType.IsArray ? fieldInfo.FieldType.GetElementType()
-                                               : fieldInfo.FieldType;
+            Type drawnType = drawer.fieldInfo.FieldType;
+            return drawnType.IsArray ? drawnType.GetElementType() : drawnType;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
