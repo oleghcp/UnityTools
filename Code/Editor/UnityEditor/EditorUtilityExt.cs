@@ -138,8 +138,7 @@ namespace UnityEditor
 
         public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            DropDownList.Create(flags, displayedOptions, onClose)
-                        .ShowMenu(buttonRect);
+            DropDownList.Create(flags, displayedOptions, onClose)?.ShowMenu(buttonRect);
         }
 
         //The functions based on https://gist.github.com/bzgeb/3800350

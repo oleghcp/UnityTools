@@ -104,7 +104,10 @@ namespace UnityEditor
             DropDownList popup = CreateInstance<DropDownList>();
 
             if (flags.Count != displayedOptions.Length)
+            {
                 Debug.LogError("Flags count != displayedOptions count.");
+                return null;
+            }
 
             popup._flags = flags;
             popup._onClose = onClose;
@@ -355,10 +358,13 @@ namespace UnityEditor
 
             public static Data CreateItem(int id, string content, bool on, Action onSelected)
             {
+                if (content == null)
+                    return CreateSeparator();
+
                 return new Data
                 {
                     Id = id,
-                    Text = content ?? string.Empty,
+                    Text = content,
                     On = on,
                     OnSelected = onSelected,
                 };
@@ -366,15 +372,19 @@ namespace UnityEditor
 
             public static Data CreateDisabledItem(int id, string content, bool on)
             {
+                if (content == null)
+                    return CreateSeparator();
+
                 return new Data
                 {
                     Id = id,
-                    Text = content ?? string.Empty,
+                    Text = content,
                     Disabled = true,
                     On = on,
                 };
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static Data CreateSeparator()
             {
                 return new Data { Id = -1, };
