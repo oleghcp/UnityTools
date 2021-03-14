@@ -26,7 +26,6 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
         private SerializedProperty _axisIndices;
 
         private SerializedProperty _inputType;
-        private bool _pretty;
 
         private KeyAxesWindow _keyAxesPopup;
 
@@ -95,19 +94,23 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
 
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(10f);
-                    if (GUILayout.Button("Print Json", GUILayout.MaxWidth(300f)))
-                    {
-                        object layout = target.ToBindLayout();
-                        string json = JsonUtility.ToJson(layout, _pretty);
-                        Debug.Log(json);
-                    }
+                    if (GUILayout.Button("Print Json"))
+                        prinJson(false);
+                    if (GUILayout.Button("Print Json Pretty"))
+                        prinJson(true);
                     GUILayout.Space(10f);
-                    _pretty = GUILayout.Toggle(_pretty, "Pretty", GUILayout.MaxWidth(60f));
                     EditorGUILayout.EndHorizontal();
                 }
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            void prinJson(bool pretty)
+            {
+                object layout = target.ToBindLayout();
+                string json = JsonUtility.ToJson(layout, pretty);
+                Debug.Log(json);
+            }
         }
 
         // -- //
@@ -178,8 +181,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
-            GUILayout.Label("KeyCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
+            EditorGUILayout.LabelField("Actions", "KeyCodes", EditorStyles.boldLabel);
 
             bool all = _keyEnumTypeVal.Toggles.All();
             _keyEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
@@ -193,7 +195,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             {
                 EditorGUILayout.BeginHorizontal();
 
-                GUILayout.Label(_keyEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
+                EditorGUILayout.PrefixLabel(_keyEnumTypeVal.EnumNames[i]);
                 SerializedProperty keyIndexItem = _keyIndices.GetArrayElementAtIndex(i);
 
                 if (IsKeyMouse())
@@ -227,8 +229,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             GUILayout.Space(10f);
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Actions", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
-            GUILayout.Label("AxisCodes", EditorStyles.boldLabel, GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
+            EditorGUILayout.LabelField("Actions", "AxisCodes", EditorStyles.boldLabel);
 
             bool all = _axisEnumTypeVal.Toggles.All();
             _axisEnumTypeVal.AllToggles = EditorGUILayout.Toggle(all, GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
@@ -243,7 +244,7 @@ namespace UnityUtilityEditor.CustomEditors.InputLayouts
             {
                 EditorGUILayout.BeginHorizontal();
 
-                GUILayout.Label(_axisEnumTypeVal.EnumNames[i], GUILayout.MaxWidth(MAX_COLUMN_WIDTH), GUILayout.MinWidth(MIN_COLUMN_WIDTH));
+                EditorGUILayout.PrefixLabel(_axisEnumTypeVal.EnumNames[i]);
                 SerializedProperty axisIndexItem = _axisIndices.GetArrayElementAtIndex(i);
 
                 if (IsKeyMouse())

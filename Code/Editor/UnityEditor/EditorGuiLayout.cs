@@ -38,7 +38,7 @@ namespace UnityEditor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CenterLabel(string text, params GUILayoutOption[] options)
         {
-            CenterLabel(text, GUI.skin.label, options);
+            CenterLabel(text, EditorStyles.label, options);
         }
 
         public static void CenterLabel(string text, GUIStyle style, params GUILayoutOption[] options)

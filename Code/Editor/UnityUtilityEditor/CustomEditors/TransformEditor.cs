@@ -14,8 +14,8 @@ namespace UnityUtilityEditor.CustomEditors
     {
         private const string UNDO_NAME = "Transform";
         private const float SPACE = 5f;
-        private const float BTN_WIDTH = 35f;
-        private const float LABEL_WIDTH = 35f;
+        private const float BTN_WIDTH = 40f;
+        private const float LABEL_WIDTH = 40f;
 
         private static readonly string[] _toolbarNames = new string[] { "Local", "World" };
 
@@ -129,7 +129,7 @@ namespace UnityUtilityEditor.CustomEditors
                 {
                     bool changed;
                     EditorGUILayout.BeginHorizontal();
-                    GUILayout.Label(label, GUILayout.Width(LABEL_WIDTH));
+                    EditorGUILayout.LabelField(label, GUILayout.Width(LABEL_WIDTH));
                     if (locked)
                     {
                         GUI.enabled = false;
@@ -149,9 +149,9 @@ namespace UnityUtilityEditor.CustomEditors
                     return changed;
                 }
 
-                if (drawLine("[Pos]", target.position, out Vector3 pos)) { target.position = pos; }
-                if (drawLine("[Rot]", target.eulerAngles, out Vector3 rot)) { target.eulerAngles = rot; }
-                drawLine("[Scl]", target.lossyScale, out _, true);
+                if (drawLine("[ Pos ]", target.position, out Vector3 pos)) { target.position = pos; }
+                if (drawLine("[ Rot ]", target.eulerAngles, out Vector3 rot)) { target.eulerAngles = rot; }
+                drawLine("[ Scl ]", target.lossyScale, out _, true);
             }
             else
             {
@@ -161,7 +161,7 @@ namespace UnityUtilityEditor.CustomEditors
                 {
                     EditorGUI.BeginChangeCheck();
                     EditorGUILayout.BeginHorizontal();
-                    if (GUILayout.Button(label, GUILayout.Width(BTN_WIDTH))) { newValue = defVal; }
+                    if (GUILayout.Button(label, GUILayout.Width(BTN_WIDTH), GUILayout.Height(EditorGUIUtility.singleLineHeight))) { newValue = defVal; }
                     else { newValue = EditorGUILayout.Vector3Field(GUIContent.none, curValue); }
                     EditorGUILayout.EndHorizontal();
                     bool ch = EditorGUI.EndChangeCheck();
