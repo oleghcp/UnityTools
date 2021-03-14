@@ -35,15 +35,6 @@ namespace System
             return Enum.GetName(self.GetType(), self);
         }
 
-        /// <summary>
-        /// Returns integer value of converted enumeration or non-standard integer enumeration (such as byte, short, etc.)
-        /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ToInteger(this Enum self)
-        {
-            return Convert.ToInt32(self);
-        }
-
         public static char LastChar(this string self)
         {
             if (self.Length == 0)

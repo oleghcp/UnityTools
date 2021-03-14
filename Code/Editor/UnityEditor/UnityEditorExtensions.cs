@@ -102,12 +102,6 @@ namespace UnityEditor
             return self.GetArrayElementAtIndex(index);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ManagedReferenceValueIsNull(this SerializedProperty self)
-        {
-            return self.managedReferenceFullTypename.IsNullOrEmpty();
-        }
-
         public static void SetBytesValue(this SerializedProperty self, Bytes value)
         {
             using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))

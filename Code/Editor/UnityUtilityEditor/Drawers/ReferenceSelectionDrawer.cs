@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -30,43 +30,20 @@ namespace UnityUtilityEditor.Drawers
             return EditorGUI.GetPropertyHeight(property, true);
         }
 
-        private void DrawSelectionButton(in Rect position, SerializedProperty property)
+        private void DrawSelectionButton(Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 
-            Rect buttonPosition = position;
-            buttonPosition.x += shift;
-            buttonPosition.width = position.width - shift;
-            buttonPosition.height = EditorGUIUtility.singleLineHeight;
+            position.x += shift;
+            position.width -= shift;
 
-            int storedIndent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
+            if (property.managedReferenceFullTypename.IsNullOrEmpty())
+                GUI.color = Colours.Grey;
 
-            bool isNull = property.ManagedReferenceValueIsNull();
-
-            string shortName;
-            string toolTip;
-
-            if (isNull)
-            {
-                shortName = "Null";
-                toolTip = "Not assigned";
-            }
-            else
-            {
-                var (assemblyName, className) = EditorUtilityExt.SplitSerializedPropertyTypename(property.managedReferenceFullTypename);
-                shortName = PathUtility.GetName(className, '.');
-                toolTip = $"{className}  ({assemblyName})";
-            }
-
-            if (isNull)
-                GUI.color = Colours.Cyan;
-
-            if (GUI.Button(buttonPosition, EditorGuiUtility.TempContent(shortName, toolTip)))
-                ShowContextMenu(buttonPosition, property);
+            if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent("Select Type"), FocusType.Keyboard))
+                ShowContextMenu(position, property);
 
             GUI.color = Colours.White;
-            EditorGUI.indentLevel = storedIndent;
         }
 
         private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
@@ -79,12 +56,15 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
+            Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
+            var types = TypeCache.GetTypesDerivedFrom(fieldType);
+
             DropDownList menu = DropDownList.Create();
 
-            menu.AddItem("Null", () => AssignField(property, null));
+            menu.AddItem("Null", assignedType == null, () => assignField(property, null));
             addMenuItem(fieldType);
 
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(fieldType))
+            foreach (Type type in types)
             {
                 addMenuItem(type);
             }
@@ -93,20 +73,27 @@ namespace UnityUtilityEditor.Drawers
 
             void addMenuItem(Type type)
             {
-                if (!type.IsAbstract && !type.IsInterface)
+                if (isValidType(type))
                 {
                     string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
                     string entryName = $"{type}  ({assemblyName})";
-                    menu.AddItem(entryName, () => AssignField(property, Activator.CreateInstance(type)));
+                    menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
                 }
             }
-        }
 
-        private static void AssignField(SerializedProperty property, object newValue)
-        {
-            property.serializedObject.Update();
-            property.managedReferenceValue = newValue;
-            property.serializedObject.ApplyModifiedProperties();
+            bool isValidType(Type type)
+            {
+                return !type.IsAbstract &&
+                       !type.IsInterface &&
+                       type.IsDefined(typeof(SerializableAttribute), false);
+            }
+
+            void assignField(SerializedProperty property, object newValue)
+            {
+                property.serializedObject.Update();
+                property.managedReferenceValue = newValue;
+                property.serializedObject.ApplyModifiedProperties();
+            }
         }
     }
 }

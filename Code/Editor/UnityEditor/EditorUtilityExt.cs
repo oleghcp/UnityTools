@@ -93,10 +93,16 @@ namespace UnityEditor
             return (typeSplitString[0], typeSplitString[1]);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConvertToSystemTypename(in (string assemblyName, string className) splittedTypename)
+        {
+            return $"{splittedTypename.className}, {splittedTypename.assemblyName}";
+        }
+
         public static Type GetTypeFromSerializedPropertyTypename(string typename)
         {
-            var (assemblyName, className) = SplitSerializedPropertyTypename(typename);
-            return Type.GetType($"{className}, {assemblyName}");
+            (string assemblyName, string className) splittedTypename = SplitSerializedPropertyTypename(typename);
+            return Type.GetType(ConvertToSystemTypename(splittedTypename));
         }
 
         public static Type GetFieldType(PropertyDrawer drawer)

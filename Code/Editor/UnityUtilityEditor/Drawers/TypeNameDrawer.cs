@@ -5,7 +5,6 @@ using UnityUtility;
 
 namespace UnityUtilityEditor.Drawers
 {
-    //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(TypeNameAttribute))]
     internal class TypeNameDrawer : AttributeDrawer<TypeNameAttribute>
     {
@@ -20,75 +19,61 @@ namespace UnityUtilityEditor.Drawers
             if (property.stringValue.IsNullOrWhiteSpace())
                 property.stringValue = attribute.TargetType.GetTypeName();
 
-            EditorGUI.LabelField(position, label);
+            position = EditorGUI.PrefixLabel(position, label);
             DrawSelectionButton(position, property);
         }
 
         private void DrawSelectionButton(in Rect position, SerializedProperty property)
         {
-            float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
-
-            Rect buttonPosition = position;
-            buttonPosition.x += shift;
-            buttonPosition.width = position.width - shift;
-            buttonPosition.height = EditorGUIUtility.singleLineHeight;
-
-            int storedIndent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-
             Type savedType = Type.GetType(property.stringValue);
 
             string shortName;
-            string toolTip;
 
             if (savedType == null)
             {
                 shortName = "Unknown";
-                toolTip = "TypeName is broken";
                 GUI.color = Colours.Red;
             }
             else if (savedType.IsAbstract)
             {
-                shortName = $"Type name of {savedType.Name} (Abstract)";
-                toolTip = savedType.GetTypeName();
-                GUI.color = Colours.Orange;
+                shortName = $"Typename of {savedType.Name} (Abstract)";
+                GUI.color = Colours.Grey;
             }
             else
             {
-                shortName = "Type name of " + savedType.Name;
-                toolTip = savedType.GetTypeName();
-
-                if (attribute.TargetType == savedType)
-                    GUI.color = Colours.Yellow;
+                shortName = "Typename of " + savedType.Name;
             }
 
-            if (GUI.Button(buttonPosition, EditorGuiUtility.TempContent(shortName, toolTip)))
-                ShowContextMenu(buttonPosition, property);
+            if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(shortName), FocusType.Keyboard))
+                ShowContextMenu(position, property);
 
             GUI.color = Colours.White;
-            EditorGUI.indentLevel = storedIndent;
         }
 
         private void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
         {
             DropDownList menu = DropDownList.Create();
 
-            menu.AddItem("Base", () => AssignField(property, attribute.TargetType.GetTypeName()));
+            addMenuItem(attribute.TargetType.GetTypeName());
 
             foreach (Type type in TypeCache.GetTypesDerivedFrom(attribute.TargetType))
             {
-                string entryName = type.GetTypeName();
-                menu.AddItem(entryName, () => AssignField(property, entryName));
+                addMenuItem(type.GetTypeName());
             }
 
             menu.ShowMenu(buttonPosition);
-        }
 
-        private static void AssignField(SerializedProperty property, string newValue)
-        {
-            property.serializedObject.Update();
-            property.stringValue = newValue;
-            property.serializedObject.ApplyModifiedProperties();
+            void addMenuItem(string entryName)
+            {
+                menu.AddItem(entryName, entryName == property.stringValue, () => assignField(property, entryName));
+            }
+
+            void assignField(SerializedProperty property, string newValue)
+            {
+                property.serializedObject.Update();
+                property.stringValue = newValue;
+                property.serializedObject.ApplyModifiedProperties();
+            }
         }
     }
 }

@@ -51,11 +51,11 @@ namespace UnityUtilityEditor.Drawers
                 }
 
                 Enum lastElement = values.GetValue(values.Length - 1) as Enum;
-                _names = new string[lastElement.ToInteger() + 1];
+                _names = new string[Convert.ToInt32(lastElement) + 1];
 
                 foreach (Enum item in values)
                 {
-                    _names[item.ToInteger()] = item.GetName();
+                    _names[Convert.ToInt32(item)] = item.GetName();
                 }
 
                 if (_isBitArray)
