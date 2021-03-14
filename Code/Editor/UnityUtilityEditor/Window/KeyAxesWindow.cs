@@ -33,7 +33,7 @@ namespace UnityUtilityEditor.Window
         {
             _serializedObject = param;
 
-            var prop = _serializedObject.FindProperty(LayoutConfig.KeyAxesFieldName);
+            SerializedProperty prop = _serializedObject.FindProperty(LayoutConfig.KeyAxesFieldName);
             _directs = new[]
             {
                 prop.FindPropertyRelative("Up"),
@@ -43,12 +43,6 @@ namespace UnityUtilityEditor.Window
             };
 
             _names = Enum.GetNames(keyFuncsEnum);
-        }
-
-        private void Update()
-        {
-            if (_serializedObject.Disposed())
-                Close();
         }
 
         private void OnGUI()
