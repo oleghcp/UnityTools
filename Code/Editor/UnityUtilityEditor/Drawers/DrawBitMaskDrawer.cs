@@ -69,7 +69,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 if (_error != null)
                 {
-                    EditorGui.WrongTypeLabel(position, label, _error);
+                    EditorGui.ErrorLabel(position, label, _error);
                     return;
                 }
 

@@ -40,10 +40,9 @@ namespace UnityEditor
             return objects;
         }
 
-        internal static void WrongTypeLabel(Rect position, GUIContent label, string message)
+        internal static void ErrorLabel(Rect position, GUIContent label, string message)
         {
-            Rect rect = EditorGUI.PrefixLabel(position, label);
-            GUI.Label(rect, message);
+            EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
