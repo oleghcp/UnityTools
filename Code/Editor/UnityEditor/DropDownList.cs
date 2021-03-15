@@ -67,10 +67,8 @@ namespace UnityEditor
                 {
                     EditorGUILayout.BeginHorizontal();
                     tapeString = _searchField.OnGUI(_tapeString);
-                    GUI.color = Colours.Red;
-                    if (GUILayout.Button("X", GUILayout.Height(EditorGUIUtility.singleLineHeight), GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
+                    if (GUILayout.Button("X", GUILayout.Height(16f), GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
                         Close();
-                    GUI.color = Colours.White;
                     EditorGUILayout.EndHorizontal();
                 }
                 else

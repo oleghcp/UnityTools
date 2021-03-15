@@ -12,6 +12,8 @@ namespace UnityUtility.Collections
     [Serializable]
     public sealed class BitList : ICloneable, IReadOnlyList<bool>
     {
+        private const int MAX_LENGTH = int.MaxValue / BitMask.SIZE;
+
         [SerializeField, HideInInspector]
         private int[] _array;
         [SerializeField, HideInInspector]
@@ -39,6 +41,11 @@ namespace UnityUtility.Collections
         public int Version
         {
             get { return _version; }
+        }
+
+        internal IReadOnlyList<int> IntBlocks
+        {
+            get { return _array; }
         }
 
         [Preserve]
@@ -160,16 +167,28 @@ namespace UnityUtility.Collections
             }
         }
 
-        private BitList(ICollection<int> values)
+        public BitList(ICollection<int> intBlocks)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
+            if (intBlocks == null)
+                throw new ArgumentNullException(nameof(intBlocks));
 
-            if (values.Count > 67108863)
-                throw new ArgumentException("Array is too large.", nameof(values));
+            if (intBlocks.Count > MAX_LENGTH)
+                throw new ArgumentException("Array is too large.", nameof(intBlocks));
 
-            _length = values.Count * BitMask.SIZE;
-            _array = values.ToArray();
+            _length = intBlocks.Count * BitMask.SIZE;
+            _array = intBlocks.ToArray();
+        }
+
+        public BitList(Span<int> intBlocks)
+        {
+            if (intBlocks == null)
+                throw new ArgumentNullException(nameof(intBlocks));
+
+            if (intBlocks.Length > MAX_LENGTH)
+                throw new ArgumentException("Array is too large.", nameof(intBlocks));
+
+            _length = intBlocks.Length * BitMask.SIZE;
+            _array = intBlocks.ToArray();
         }
 
         public BitList(BitList bits)
