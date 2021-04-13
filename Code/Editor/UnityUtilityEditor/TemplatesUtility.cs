@@ -88,18 +88,10 @@ namespace Project
 
             if (!File.Exists(templatePath))
             {
-                string text = @"using UnityUtility.NodeBased;
-using UnityEngine;
-
-namespace Project
-{" +
-    $"\n    [CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \"{MenuItems.MENU_GRAPH_PATH}#SCRIPTNAME#\", fileName = \"#SCRIPTNAME#\")]\n" +
-    @"    public class #SCRIPTNAME# : Graph</*your node type*/, /*your transition type*/>
-    {
-
-    }
-}
-";
+                string text = "using UnityUtility.NodeBased;\nusing UnityEngine;\n\nnamespace Project\n{\n" +
+                              $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \" (ext.)/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
+                              "\tpublic class #SCRIPTNAME# : Graph</*your node type*/, /*your transition type*/>\n\t{\n\n\t}\n}\n";
+                
                 Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
