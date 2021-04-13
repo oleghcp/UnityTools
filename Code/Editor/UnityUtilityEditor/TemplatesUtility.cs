@@ -65,10 +65,12 @@ namespace Project
 
             if (!File.Exists(templatePath))
             {
-                string text = @"using UnityUtility.NodeBased;
+                string text = @"using System;
+using UnityUtility.NodeBased;
 
 namespace Project
 {
+    [Serializable]
     public class #SCRIPTNAME# : Transition</*your node type*/>
     {
 

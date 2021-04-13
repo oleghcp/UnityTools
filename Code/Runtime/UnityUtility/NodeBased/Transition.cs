@@ -19,6 +19,7 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
+    [Serializable]
     public abstract class Transition<TNode> : Transition where TNode : Node
     {
         public TNode NextNode => Node as TNode;
