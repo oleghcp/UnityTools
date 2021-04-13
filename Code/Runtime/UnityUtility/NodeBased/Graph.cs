@@ -36,9 +36,9 @@ namespace UnityUtility.NodeBased
             return Nodes.Find(item => item.LocalId == id) as TNode;
         }
 
-        public IReadOnlyList<TTransition> GetTransitons(TNode node)
+        public TransitionsInfo<TNode, TTransition> GetTransitons(TNode node)
         {
-            return node.Next as TTransition[];
+            return new TransitionsInfo<TNode, TTransition>(node);
         }
 
 #if UNITY_EDITOR
