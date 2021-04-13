@@ -17,7 +17,7 @@ namespace UnityUtility.Sound
         public float RisingDur;
     }
 
-    [CreateAssetMenu(menuName = "Sound (ext.)/Music Preset", fileName = "MusicPreset")]
+    [CreateAssetMenu(menuName = nameof(UnityUtility) + " (ext.)/Sound/Music Preset", fileName = "MusicPreset")]
     public sealed class MusicPreset : ScriptableObject
     {
         [Serializable]

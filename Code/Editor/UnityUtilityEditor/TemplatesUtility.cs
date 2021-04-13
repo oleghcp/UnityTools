@@ -93,7 +93,7 @@ using UnityEngine;
 
 namespace Project
 {" +
-    "\n    [CreateAssetMenu(menuName = \"Graph (ext.)/#SCRIPTNAME#\", fileName = \"#SCRIPTNAME#\")]\n" +
+    $"\n    [CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \"{MenuItems.MENU_GRAPH_PATH}#SCRIPTNAME#\", fileName = \"#SCRIPTNAME#\")]\n" +
     @"    public class #SCRIPTNAME# : Graph</*your node type*/, /*your transition type*/>
     {
 

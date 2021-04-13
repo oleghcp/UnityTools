@@ -8,19 +8,22 @@ namespace UnityUtilityEditor
     internal static class MenuItems
     {
 #if UNITY_2019_3_OR_NEWER
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Node C# Script")]
+        public const string MENU_GRAPH_PATH = " (ext.)/Graph/";
+        private const string FULL_MENU_GRAPH_PATH = EditorUtilityExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + MENU_GRAPH_PATH;
+
+        [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
         private static void CreateNodeScript()
         {
             TemplatesUtility.CreateNodeScript();
         }
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Transition C# Script")]
+        [MenuItem(FULL_MENU_GRAPH_PATH + "Transition C# Script")]
         private static void CreateTransitionScript()
         {
             TemplatesUtility.CreateTransitionScript();
         }
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/Graph (ext.)/Graph C# Script")]
+        [MenuItem(FULL_MENU_GRAPH_PATH + "Graph C# Script")]
         private static void CreateGraphScript()
         {
             TemplatesUtility.CreateGraphScript();

@@ -4,7 +4,7 @@ using UnityUtility.Controls.ControlStuff;
 #pragma warning disable CS0169, CS0649
 namespace UnityUtility.Controls
 {
-    [CreateAssetMenu(menuName = "Input (ext.)/Layout Config", fileName = "LayoutConfig")]
+    [CreateAssetMenu(menuName = nameof(UnityUtility) + " (ext.)/Input/Layout Config", fileName = "LayoutConfig")]
     public sealed class LayoutConfig : ScriptableObject
     {
 #if UNITY_EDITOR
