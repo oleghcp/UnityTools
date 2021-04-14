@@ -71,7 +71,7 @@ using UnityUtility.NodeBased;
 namespace Project
 {
     [Serializable]
-    public class #SCRIPTNAME# : Transition</*your node type*/>
+    public class #SCRIPTNAME# : Transition
     {
 
     }
@@ -92,7 +92,7 @@ namespace Project
             {
                 string text = "using UnityUtility.NodeBased;\nusing UnityEngine;\n\nnamespace Project\n{\n" +
                               $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \" (ext.)/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
-                              "\tpublic class #SCRIPTNAME# : Graph</*your node type*/, /*your transition type*/>\n\t{\n\n\t}\n}\n";
+                              "\tpublic class #SCRIPTNAME# : Graph</*your node type*/>\n\t{\n\n\t}\n}\n";
                 
                 Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);

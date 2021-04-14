@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace UnityUtility.NodeBased
 {
-    public struct Connection<TNode, TTransition> where TNode : Node where TTransition : Transition, new()
+    public struct Connection<TNode, TTransition> where TNode : Node<TTransition> where TTransition : Transition, new()
     {
         private TNode _node;
 
@@ -32,7 +32,7 @@ namespace UnityUtility.NodeBased
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Pair Get(int index)
         {
-            return new Pair((TNode)_node.Next[index].Node, (TTransition)_node.Next[index]);
+            return new Pair((TNode)_node.Next[index].NextNode, _node.Next[index]);
         }
 
         public struct Pair

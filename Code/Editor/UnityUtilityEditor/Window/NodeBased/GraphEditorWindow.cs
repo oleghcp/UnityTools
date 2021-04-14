@@ -52,7 +52,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _graphAssetEditor = new GraphAssetEditor(graphAsset);
 
-            foreach (Node item in _graphAssetEditor.ParseList())
+            foreach (RawNode item in _graphAssetEditor.ParseList())
             {
                 _nodeViewers.Add(new NodeViewer(item, this));
             }
@@ -109,7 +109,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             EditorUtilityExt.SaveProject();
         }
 
-        public bool IsRootNode(Node node)
+        public bool IsRootNode(RawNode node)
         {
             return _graphAssetEditor.RootNode == node;
         }
@@ -145,8 +145,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 if (!_transitionViewers.Any(item => item.In == inPort && item.Out == outPort))
                 {
-                    Transition transition = _graphAssetEditor.CreateTransition();
-                    SerializedProperty property = outPort.Node.AddTransition(inPort.Node.NodeAsset, transition);
+                    SerializedProperty property = outPort.Node.AddTransition(inPort.Node.NodeAsset);
                     _transitionViewers.Add(new TransitionViewer(outPort, inPort, property, this));
                 }
             }
@@ -167,7 +166,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
             {
                 Rect rect = item.GetRectInWorld();
-                Node newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
+                RawNode newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
                 NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(newNode, this));
                 CreateTransitionsForNode(newNodeEditor);
                 item.Select(false);
@@ -180,7 +179,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void CreateNode(Vector2 mousePosition, Type type)
         {
             Vector2 position = _camera.ScreenToWorld(mousePosition);
-            Node nodeAsset = _graphAssetEditor.CreateNode(position, type);
+            RawNode nodeAsset = _graphAssetEditor.CreateNode(position, type);
             _nodeViewers.Add(new NodeViewer(nodeAsset, this));
         }
 

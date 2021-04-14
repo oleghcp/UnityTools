@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.NodeBased;
 
 #if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
@@ -16,7 +17,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private readonly Vector2 UI_SHRINK = new Vector2(20f, 22f);
 
         private GraphEditorWindow _window;
-        private Node _nodeAsset;
+        private RawNode _nodeAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nameProperty;
         private SerializedProperty _transitionsProperty;
@@ -31,7 +32,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private PortViewer _in;
         private PortViewer _out;
 
-        public Node NodeAsset => _nodeAsset;
+        public RawNode NodeAsset => _nodeAsset;
+        public int NextCount => _transitionsProperty.arraySize;
         public PortViewer In => _in;
         public PortViewer Out => _out;
         public bool IsSelected => _isSelected;
@@ -46,29 +48,29 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public NodeViewer(Node nodeAsset, GraphEditorWindow window)
+        public NodeViewer(RawNode nodeAsset, GraphEditorWindow window)
         {
             _nodeAsset = nodeAsset;
             _window = window;
             _serializedObject = new SerializedObject(nodeAsset);
             _nameProperty = _serializedObject.FindProperty(EditorUtilityExt.ASSET_NAME_FIELD);
-            _positionProperty = _serializedObject.FindProperty(Node.PositionFieldName);
-            _transitionsProperty = _serializedObject.FindProperty(Node.ArrayFieldName);
+            _positionProperty = _serializedObject.FindProperty(RawNode.PositionFieldName);
+            _transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
             _height = CalcNodeHeight();
 
             _in = new PortViewer(this, PortType.In, window);
             _out = new PortViewer(this, PortType.Out, window);
         }
 
-        public IEnumerable<(SerializedProperty transitionProp, Node connectedNode)> ParseTransitionsList()
+        public IEnumerable<(SerializedProperty transitionProp, RawNode connectedNode)> ParseTransitionsList()
         {
             return _transitionsProperty.EnumerateArrayElements().Select(getPair);
 
-            (SerializedProperty transitionProp, Node node) getPair(SerializedProperty transitionProp)
+            (SerializedProperty transitionProp, RawNode node) getPair(SerializedProperty transitionProp)
             {
                 using (SerializedProperty nodeProp = transitionProp.FindPropertyRelative(Transition.NodeFieldName))
                 {
-                    Node node = nodeProp.objectReferenceValue as Node;
+                    RawNode node = nodeProp.objectReferenceValue as RawNode;
                     return (transitionProp, node);
                 }
             }
@@ -97,16 +99,21 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUI.changed = true;
         }
 
-        public SerializedProperty AddTransition(Node next, Transition transition)
+        public SerializedProperty AddTransition(RawNode nextNode)
         {
-            transition.Node = next;
-            SerializedProperty property = _transitionsProperty.PlaceArrayElement();
-            property.managedReferenceValue = transition;
+            SerializedProperty newItem = _transitionsProperty.PlaceArrayElement();
+
+            if (_transitionsProperty.arraySize > 1)
+                newItem.ResetToDefault();
+
+            newItem.FindPropertyRelative(Transition.NodeFieldName).objectReferenceValue = nextNode;
+
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            return property;
+
+            return newItem;
         }
 
-        public void RemoveReference(Node next)
+        public void RemoveReference(RawNode next)
         {
             int length = _transitionsProperty.arraySize;
 
@@ -249,8 +256,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
             {
-                if (!IsServiceField(item))
-                    EditorGUILayout.PropertyField(item, true);
+                if (IsServiceField(item))
+                    continue;
+
+                EditorGUILayout.PropertyField(item, true);
             }
 
             EditorGUIUtility.labelWidth = labelWidth;
@@ -293,10 +302,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             string fieldName = property.propertyPath;
 
             return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
-                   fieldName == Node.ArrayFieldName ||
-                   fieldName == Node.GraphFieldName ||
-                   fieldName == Node.IdFieldName ||
-                   fieldName == Node.PositionFieldName;
+                   fieldName == DummyNode.ArrayFieldName ||
+                   fieldName == RawNode.GraphFieldName ||
+                   fieldName == RawNode.IdFieldName ||
+                   fieldName == RawNode.PositionFieldName;
         }
 
         private void Drag(Vector2 mouseDelta)

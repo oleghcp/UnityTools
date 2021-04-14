@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityUtility.IdGenerating;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.NodeBased;
 using UnityObject = UnityEngine.Object;
 
 #if UNITY_2019_3_OR_NEWER
@@ -30,10 +31,21 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Func<Type> _getTransitionType;
 
         public Graph GraphAsset => _graphAsset;
-        public Node RootNode => _graphAsset.RootNode;
         public Type NodeType => _getNodeType();
         public Type TransitionType => _getTransitionType();
         public float NodeWidth => _widthProperty.floatValue;
+
+        public RawNode RootNode
+        {
+            get
+            {
+                if (_nodesProperty.arraySize == 0)
+                    return null;
+
+                return _nodesProperty.GetArrayElementAtIndex(0).objectReferenceValue as RawNode;
+            }
+        }
+
         public Vector2 CameraPosition
         {
             get => _cameraPositionProperty.vector2Value;
@@ -47,8 +59,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public GraphAssetEditor(Graph graphAsset)
         {
             _graphAsset = graphAsset;
-            _getNodeType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), _graphAsset, DummyGrapth.GetNodeTypeMethodName);
-            _getTransitionType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), _graphAsset, DummyGrapth.GetTransitionTypeMethodName);
+            _getNodeType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetNodeTypeMethodName);
+            _getTransitionType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetTransitionTypeMethodName);
             _serializedObject = new SerializedObject(graphAsset);
             _nodesProperty = _serializedObject.FindProperty(Graph.ArrayFieldName);
             _idProperty = _serializedObject.FindProperty(Graph.IdGeneratorFieldName);
@@ -63,10 +75,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public IEnumerable<Node> ParseList()
+        public IEnumerable<RawNode> ParseList()
         {
             return _nodesProperty.EnumerateArrayElements()
-                                 .Select(item => item.objectReferenceValue as Node);
+                                 .Select(item => item.objectReferenceValue as RawNode);
         }
 
         public void ChangeNodeWidth(int dir)
@@ -75,28 +87,28 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        public void SetAsRoot(Node nodeAsset)
+        public void SetAsRoot(RawNode nodeAsset)
         {
             int index = _nodesProperty.GetArrayElement(out _, item => item.objectReferenceValue == nodeAsset);
             _nodesProperty.MoveArrayElement(index, 0);
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        public Node CreateNode(Vector2 position, Type type)
+        public RawNode CreateNode(Vector2 position, Type type)
         {
-            Node newNodeAsset = ScriptableObject.CreateInstance(type) as Node;
+            RawNode newNodeAsset = ScriptableObject.CreateInstance(type) as RawNode;
             InitAndSaveCreatedNode(position, newNodeAsset);
             return newNodeAsset;
         }
 
-        public Node CreateNode(Vector2 position, Node sourceNode)
+        public RawNode CreateNode(Vector2 position, RawNode sourceNode)
         {
-            Node newNodeAsset = sourceNode.Install();
+            RawNode newNodeAsset = sourceNode.Install();
             InitAndSaveCreatedNode(position, newNodeAsset);
             return newNodeAsset;
         }
 
-        private void InitAndSaveCreatedNode(Vector2 position, Node newNodeAsset)
+        private void InitAndSaveCreatedNode(Vector2 position, RawNode newNodeAsset)
         {
             int newId = _idGenerator.GetNewId();
 
@@ -113,12 +125,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        public Transition CreateTransition()
-        {
-            return Activator.CreateInstance(_getTransitionType()) as Transition;
-        }
-
-        public void DestroyNode(Node nodeAsset)
+        public void DestroyNode(RawNode nodeAsset)
         {
             int index = _nodesProperty.GetArrayElement(out var element, item => item.objectReferenceValue == nodeAsset);
             element.objectReferenceValue = null;
@@ -135,8 +142,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             UnityObject.DestroyImmediate(nodeAsset, true);
             AssetDatabase.SaveAssets();
         }
-
-        private abstract class DummyGrapth : Graph<Node> { }
     }
 }
 #endif

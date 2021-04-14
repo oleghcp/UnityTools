@@ -8,7 +8,7 @@ using UnityUtilityEditor.Window.NodeBased;
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {
     [CustomEditor(typeof(Graph), true)]
-    internal class GraphEditor : Editor
+    internal class GraphEditor : Editor<Graph>
     {
         private const string MENU_NAME = "Open Graph Editor";
 
@@ -23,13 +23,13 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
                 GUI.color = Colours.White;
 
                 if (buttonPressed)
-                    GraphEditorWindow.OpenWindow(target as Graph);
+                    GraphEditorWindow.OpenWindow(target);
 
                 EditorGUILayout.Space();
             }
         }
 
-        [MenuItem("CONTEXT/Graph/" + MENU_NAME)]
+        [MenuItem("CONTEXT/" + nameof(Graph) + "/" + MENU_NAME)]
         private static void MenuItem(MenuCommand command)
         {
             GraphEditorWindow.OpenWindow(command.context as Graph);

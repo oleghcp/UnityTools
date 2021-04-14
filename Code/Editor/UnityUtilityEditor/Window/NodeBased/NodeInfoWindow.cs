@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Window.NodeBased
     {
         private NodeViewer _nodeEditor;
         private GraphEditorWindow _mainWindow;
-        private Node[] _list;
+        private RawNode[] _list;
         private Type _nodeType;
 
         private Vector2 _scrollPosition;
@@ -55,7 +55,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             EditorGUILayout.LabelField($"Local Id: {_nodeEditor.NodeAsset.LocalId}");
 
             EditorGUILayout.Space(10f);
-            EditorGUILayout.LabelField($"Connected Nodes: {_nodeEditor.NodeAsset.Next.Length}");
+            EditorGUILayout.LabelField($"Connected Nodes: {_nodeEditor.NextCount}");
 
             foreach (var item in _list)
             {

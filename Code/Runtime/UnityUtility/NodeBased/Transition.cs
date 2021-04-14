@@ -8,15 +8,13 @@ namespace UnityUtility.NodeBased
     public class Transition
     {
         [SerializeField]
-        internal Node Node;
-
-        public Node NextNode => Node;
+        internal ScriptableObject NextNode;
 
 #if UNITY_EDITOR
         [SerializeField]
         private Vector2[] _points;
 
-        internal static string NodeFieldName => nameof(Node);
+        internal static string NodeFieldName => nameof(NextNode);
         internal static string PointsFieldName => nameof(_points);
 #endif
     }

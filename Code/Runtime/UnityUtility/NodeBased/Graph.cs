@@ -8,9 +8,7 @@ namespace UnityUtility.NodeBased
     public abstract class Graph : ScriptableObject
     {
         [SerializeField]
-        internal Node[] Nodes;
-
-        public Node RootNode => Nodes.Length > 0 ? Nodes[0] : null;
+        internal RawNode[] Nodes;
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -27,13 +25,13 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Graph<TNode, TTransition> : Graph where TNode : Node where TTransition : Transition, new()
+    public abstract class Graph<TNode, TTransition> : Graph where TNode : Node<TTransition> where TTransition : Transition, new()
     {
-        public new TNode RootNode => base.RootNode as TNode;
+        public TNode RootNode => Nodes.Length > 0 ? (TNode)Nodes[0] : null;
 
         public TNode GetNodeById(int id)
         {
-            return Nodes.Find(item => item.LocalId == id) as TNode;
+            return Nodes.Find(item => ((TNode)item).LocalId == id) as TNode;
         }
 
         public Connection<TNode, TTransition> GetTransitons(TNode node)
@@ -50,7 +48,7 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Graph<TNode> : Graph<TNode, Transition> where TNode : Node
+    public abstract class Graph<TNode> : Graph<TNode, Transition> where TNode : Node<Transition>
     {
 
     }

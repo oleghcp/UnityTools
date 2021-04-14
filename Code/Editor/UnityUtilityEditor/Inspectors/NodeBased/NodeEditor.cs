@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.NodeBased;
 
 #if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {
-    [CustomEditor(typeof(Node), true)]
-    internal class NodeEditor : Editor<Node>
+    [CustomEditor(typeof(RawNode), true)]
+    internal class NodeEditor : Editor<RawNode>
     {
         private const string DIALOG_TITLE = "Delete node?";
         private const string DIALOG_TEXT = "Are you sure you want delete this node?";
@@ -28,14 +28,14 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
             }
         }
 
-        [MenuItem("CONTEXT/Node/" + MENU_NAME)]
+        [MenuItem("CONTEXT/" + nameof(RawNode) + "/" + MENU_NAME)]
         private static void MenuItem(MenuCommand command)
         {
             if (EditorUtility.DisplayDialog(DIALOG_TITLE, DIALOG_TEXT, "Yes", "No"))
-                DestroyNode(command.context as Node);
+                DestroyNode(command.context as RawNode);
         }
 
-        private static void DestroyNode(Node target)
+        private static void DestroyNode(RawNode target)
         {
             Graph graph = target.Owner;
 
@@ -49,14 +49,17 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
                 }
                 EditorUtility.SetDirty(graph);
 
-                foreach (Node node in target.Owner.Nodes)
+                foreach (var node in target.Owner.Nodes)
                 {
-                    int index = node.Next.IndexOf(item => item.Node == target);
+                    SerializedObject serialized = new SerializedObject(node);
+                    SerializedProperty arrayProp = serialized.FindProperty(DummyNode.ArrayFieldName);
+
+                    int index = arrayProp.GetArrayElement(out var connected, predicate);
 
                     if (index >= 0)
                     {
-                        ArrayUtility.RemoveAt(ref node.Next, index);
-                        EditorUtility.SetDirty(node);
+                        arrayProp.DeleteArrayElementAtIndex(index);
+                        serialized.ApplyModifiedPropertiesWithoutUndo();
                     }
                 }
 
@@ -65,6 +68,12 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
             DestroyImmediate(target, true);
             AssetDatabase.SaveAssets();
+
+            bool predicate(SerializedProperty property)
+            {
+                SerializedProperty nodeProp = property.FindPropertyRelative(Transition.NodeFieldName);
+                return nodeProp.objectReferenceValue == target;
+            }
         }
     }
 }
