@@ -10,6 +10,8 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
     [CustomEditor(typeof(Graph), true)]
     internal class GraphEditor : Editor
     {
+        private const string MENU_NAME = "Open Graph Editor";
+
         public override void OnInspectorGUI()
         {
             using (new EditorGUILayout.HorizontalScope())
@@ -17,7 +19,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
                 EditorGUILayout.Space();
 
                 GUI.color = Colours.Lime;
-                bool buttonPressed = GUILayout.Button("Open Graph Editor", GUILayout.Height(30f));
+                bool buttonPressed = GUILayout.Button(MENU_NAME, GUILayout.Height(30f));
                 GUI.color = Colours.White;
 
                 if (buttonPressed)
@@ -25,6 +27,12 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
                 EditorGUILayout.Space();
             }
+        }
+
+        [MenuItem("CONTEXT/Graph/" + MENU_NAME)]
+        private static void MenuItem(MenuCommand command)
+        {
+            GraphEditorWindow.OpenWindow(command.context as Graph);
         }
     }
 }

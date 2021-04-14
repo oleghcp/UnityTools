@@ -9,24 +9,33 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
     [CustomEditor(typeof(Node), true)]
     internal class NodeEditor : Editor<Node>
     {
+        private const string DIALOG_TITLE = "Delete node?";
+        private const string DIALOG_TEXT = "Are you sure you want delete this node?";
+        private const string MENU_NAME = "Delete Node";
+
         public override void OnInspectorGUI()
         {
-            const string title = "Delete node?";
-            const string text = "Are you sure you want delete this node?";
 
             using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.Space();
 
-                if (GUILayout.Button("Delete Node", GUILayout.Width(100f), GUILayout.Height(30f)) &&
-                    EditorUtility.DisplayDialog(title, text, "Yes", "No"))
-                    DestroyNode();
+                if (GUILayout.Button(MENU_NAME, GUILayout.Width(100f), GUILayout.Height(30f)) &&
+                    EditorUtility.DisplayDialog(DIALOG_TITLE, DIALOG_TEXT, "Yes", "No"))
+                    DestroyNode(target);
 
                 EditorGUILayout.Space();
             }
         }
 
-        private void DestroyNode()
+        [MenuItem("CONTEXT/Node/" + MENU_NAME)]
+        private static void MenuItem(MenuCommand command)
+        {
+            if (EditorUtility.DisplayDialog(DIALOG_TITLE, DIALOG_TEXT, "Yes", "No"))
+                DestroyNode(command.context as Node);
+        }
+
+        private static void DestroyNode(Node target)
         {
             Graph graph = target.Owner;
 
@@ -42,7 +51,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
                 foreach (Node node in target.Owner.Nodes)
                 {
-                    int index = node.Next.IndexOf(item => item.Node == target);
+                    int index = node.Next.IndexOf(item => item.Node == node);
 
                     if (index >= 0)
                     {
