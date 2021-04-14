@@ -51,7 +51,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
                 foreach (Node node in target.Owner.Nodes)
                 {
-                    int index = node.Next.IndexOf(item => item.Node == node);
+                    int index = node.Next.IndexOf(item => item.Node == target);
 
                     if (index >= 0)
                     {
