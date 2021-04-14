@@ -1,12 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityUtility;
 
 namespace UnityEditor
 {
     public static class UnityEditorExtensions
     {
+        public static void ResetToDefault(this SerializedProperty self)
+        {
+            #region Switch/Case
+            switch (self.propertyType)
+            {
+                case SerializedPropertyType.FixedBufferSize:
+                    //SerializedProperty.fixedBufferSize is read only
+                    break;
+
+                case SerializedPropertyType.Generic:
+                case SerializedPropertyType.LayerMask:
+                case SerializedPropertyType.Gradient:
+                    self.EnumerateInnerProperties()
+                        .ForEach(item => item.ResetToDefault());
+                    break;
+
+                case SerializedPropertyType.ObjectReference:
+                    self.objectReferenceValue = null;
+                    break;
+
+                case SerializedPropertyType.ExposedReference:
+                    self.exposedReferenceValue = null;
+                    break;
+
+#if UNITY_2019_3_OR_NEWER
+                case SerializedPropertyType.ManagedReference:
+                    self.managedReferenceValue = null;
+                    break;
+#endif
+                case SerializedPropertyType.String:
+                case SerializedPropertyType.Character:
+                    self.stringValue = string.Empty;
+                    break;
+
+                case SerializedPropertyType.Integer:
+                    self.intValue = default;
+                    break;
+
+                case SerializedPropertyType.Boolean:
+                    self.boolValue = default;
+                    break;
+
+                case SerializedPropertyType.Float:
+                    self.floatValue = default;
+                    break;
+
+                case SerializedPropertyType.Color:
+                    self.colorValue = default;
+                    break;
+
+                case SerializedPropertyType.Enum:
+                    self.enumValueIndex = default;
+                    break;
+
+                case SerializedPropertyType.Vector2:
+                    self.vector2Value = default;
+                    break;
+
+                case SerializedPropertyType.Vector3:
+                    self.vector3Value = default;
+                    break;
+
+                case SerializedPropertyType.Vector4:
+                    self.vector4Value = default;
+                    break;
+
+                case SerializedPropertyType.Rect:
+                    self.rectValue = default;
+                    break;
+
+                case SerializedPropertyType.ArraySize:
+                    self.arraySize = default;
+                    break;
+
+                case SerializedPropertyType.AnimationCurve:
+                    self.animationCurveValue = new AnimationCurve();
+                    break;
+
+                case SerializedPropertyType.Bounds:
+                    self.boundsValue = default;
+                    break;
+
+                case SerializedPropertyType.Quaternion:
+                    self.quaternionValue = Quaternion.identity;
+                    break;
+
+                case SerializedPropertyType.Vector2Int:
+                    self.vector2IntValue = default;
+                    break;
+
+                case SerializedPropertyType.Vector3Int:
+                    self.vector3IntValue = default;
+                    break;
+
+                case SerializedPropertyType.RectInt:
+                    self.rectIntValue = default;
+                    break;
+
+                case SerializedPropertyType.BoundsInt:
+                    self.boundsIntValue = default;
+                    break;
+
+                default:
+                    throw new UnsupportedValueException(self.propertyType);
+            }
+            #endregion
+        }
+
         public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self)
         {
             SerializedProperty iterator = self.GetIterator();
