@@ -36,6 +36,7 @@ namespace UnityUtilityEditor.Drawers
 
             position.x += shift;
             position.width -= shift;
+            position.height = EditorGUIUtility.singleLineHeight;
 
             if (property.managedReferenceFullTypename.IsNullOrEmpty())
                 GUI.color = Colours.Grey;
