@@ -5,10 +5,12 @@ using UnityEngine;
 namespace UnityUtility.NodeBased
 {
     [Serializable]
-    public abstract class Transition
+    public class Transition
     {
         [SerializeField]
         internal Node Node;
+
+        public Node NextNode => Node;
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -17,12 +19,6 @@ namespace UnityUtility.NodeBased
         internal static string NodeFieldName => nameof(Node);
         internal static string PointsFieldName => nameof(_points);
 #endif
-    }
-
-    [Serializable]
-    public abstract class Transition<TNode> : Transition where TNode : Node
-    {
-        public TNode NextNode => Node as TNode;
     }
 }
 #endif

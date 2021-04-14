@@ -136,8 +136,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             AssetDatabase.SaveAssets();
         }
 
-        private abstract class DummyGrapth : Graph<Node, DummyTransition> { }
-        private sealed class DummyTransition : Transition<Node> { }
+        private abstract class DummyGrapth : Graph<Node> { }
     }
 }
 #endif

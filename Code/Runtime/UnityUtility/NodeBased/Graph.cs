@@ -27,7 +27,7 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Graph<TNode, TTransition> : Graph where TNode : Node where TTransition : Transition<TNode>, new()
+    public abstract class Graph<TNode, TTransition> : Graph where TNode : Node where TTransition : Transition, new()
     {
         public new TNode RootNode => base.RootNode as TNode;
 
@@ -36,9 +36,9 @@ namespace UnityUtility.NodeBased
             return Nodes.Find(item => item.LocalId == id) as TNode;
         }
 
-        public TransitionsInfo<TNode, TTransition> GetTransitons(TNode node)
+        public Connection<TNode, TTransition> GetTransitons(TNode node)
         {
-            return new TransitionsInfo<TNode, TTransition>(node);
+            return new Connection<TNode, TTransition>(node);
         }
 
 #if UNITY_EDITOR
@@ -48,6 +48,11 @@ namespace UnityUtility.NodeBased
         internal static string GetNodeTypeMethodName => nameof(GetNodeType);
         internal static string GetTransitionTypeMethodName => nameof(GetTransitionType);
 #endif
+    }
+
+    public abstract class Graph<TNode> : Graph<TNode, Transition> where TNode : Node
+    {
+
     }
 }
 #endif
