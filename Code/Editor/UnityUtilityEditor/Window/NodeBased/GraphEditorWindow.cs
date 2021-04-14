@@ -91,9 +91,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             ProcessNodeEvents(e);
             ProcessTransitionsEvents(e);
             ProcessEvents(e);
-
-            if (GUI.changed)
-                Repaint();
         }
 
         private void OnDestroy()
@@ -347,9 +344,9 @@ namespace UnityUtilityEditor.Window.NodeBased
             void addMenuItem(Type type)
             {
                 if (type.IsAbstract)
-                    menu.AddDisabledItem(new GUIContent($"Add node/{type.FullName} (Abstract)"));
+                    menu.AddDisabledItem(new GUIContent($"Abstract {type.Name} ({type.Namespace})"));
                 else
-                    menu.AddItem(new GUIContent($"Add node/{type.FullName}"), false, () => CreateNode(mousePosition, type));
+                    menu.AddItem(new GUIContent($"{type.Name} ({type.Namespace})"), false, () => CreateNode(mousePosition, type));
             }
         }
     }
