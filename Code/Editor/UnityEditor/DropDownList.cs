@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 
@@ -80,7 +79,9 @@ namespace UnityEditor
                 {
                     _tapeString = tapeString;
                     Search();
-                    minSize = maxSize = new Vector2(GetWidth(_searchResult), GetHeight(_searchResult.Count));
+                    Vector2 size = GetWinSize(_searchResult);
+                    minSize = size;
+                    maxSize = size;
                 }
 
                 _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, false);
@@ -129,14 +130,15 @@ namespace UnityEditor
             ShowMenu(new Rect(Event.current.mousePosition, Vector2.zero));
         }
 
-        public void ShowMenu(Rect buttonRect)
+        public void ShowMenu(in Rect buttonRect)
         {
             if (_items.Count == 0)
                 return;
 
             wantsMouseMove = true;
-            buttonRect = GUIUtility.GUIToScreenRect(buttonRect);
-            ShowAsDropDown(buttonRect, new Vector2(GetWidth(_items), GetHeight(_items.Count)));
+            Vector2 size = GetWinSize(_items);
+            maxSize = size;
+            ShowAsDropDown(GUIUtility.GUIToScreenRect(buttonRect), size);
         }
 
         public void AddItem(string content, Action onSelected)
@@ -317,25 +319,34 @@ namespace UnityEditor
             return uiElementPos.Contains(Event.current.mousePosition);
         }
 
-        private float GetHeight(int itemsCount)
+        private Vector2 GetWinSize(IList<Data> items)
         {
-            if (itemsCount == 0)
-                itemsCount += 2;
-            else
-                itemsCount += 1;
+            return new Vector2(getWidth(items), getHeight(items.Count));
 
-            float linesHeight = EditorGUIUtility.singleLineHeight * itemsCount;
-            float spacesHeight = EditorGUIUtility.standardVerticalSpacing * (itemsCount + 4);
-            return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
-        }
+            float getHeight(int itemsCount)
+            {
+                int linesCount = getLinesCount();
+                float linesHeight = EditorGUIUtility.singleLineHeight * linesCount;
+                float spacesHeight = EditorGUIUtility.standardVerticalSpacing * (linesCount + 4);
+                return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
 
-        private float GetWidth(IList<Data> items)
-        {
-            Data itemWithLongestText = items.Where(item => !item.IsSeparator)
-                                            .GetWithMax(item => item.Text.Length);
-            _maxLabelSize = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(itemWithLongestText.Text));
-            float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLabelSize.x + 2f;
-            return (lineWidth + lineWidth * 0.12f).Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
+                int getLinesCount()
+                {
+                    if (itemsCount == 0)
+                        return 2;
+
+                    return itemsCount + 1;
+                }
+            }
+
+            float getWidth(IList<Data> items)
+            {
+                Data itemWithLongestText = items.Where(item => !item.IsSeparator)
+                                                .GetWithMax(item => item.Text.Length);
+                _maxLabelSize = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(itemWithLongestText.Text));
+                float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLabelSize.x + 2f;
+                return (lineWidth + lineWidth * 0.12f).Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
+            }
         }
 
         private bool MultiSelectable()
