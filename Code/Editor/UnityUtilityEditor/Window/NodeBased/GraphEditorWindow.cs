@@ -73,17 +73,21 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnGUI()
         {
-            _grid.Draw();
-
             if (_graphAssetEditor.GraphAsset == null)
+            {
+                Close();
                 return;
+            }
 
             Event e = Event.current;
 
+            ProcessCamera(e);
+            _grid.Draw();
+
             DrawConnections();
-            DrawConnectionLine(e.mousePosition);
+            DrawConnectionLine(e);
             DrawNodes();
-            DrawSelectionRect(e.mousePosition);
+            DrawSelectionRect(e);
             GUILayout.Label(_graphAssetEditor.GraphAsset.name, EditorStyles.boldLabel);
             _toolbar.Draw();
 
@@ -204,11 +208,11 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
-        private void DrawSelectionRect(Vector2 mousePosition)
+        private void DrawSelectionRect(Event e)
         {
             if (_selectionRectOn)
             {
-                Rect selectionRect = new Rect(_downPoint, mousePosition - _downPoint);
+                Rect selectionRect = new Rect(_downPoint, e.mousePosition - _downPoint);
 
                 Handles.DrawSolidRectangleWithOutline(selectionRect, SELECTION_COLOR, GraphEditorStyles.GetLineColor());
 
@@ -224,7 +228,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
-        private void DrawConnectionLine(Vector2 mousePosition)
+        private void DrawConnectionLine(Event e)
         {
             if (_selectedPort == null)
                 return;
@@ -232,15 +236,37 @@ namespace UnityUtilityEditor.Window.NodeBased
             switch (_selectedPort.Type)
             {
                 case PortType.In:
-                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, mousePosition, Vector2.left, Vector2.right);
+                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, e.mousePosition, Vector2.left, Vector2.right);
                     break;
 
                 case PortType.Out:
-                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, mousePosition, Vector2.right, Vector2.left);
+                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, e.mousePosition, Vector2.right, Vector2.left);
                     break;
             }
 
             GUI.changed = true;
+        }
+
+        public void ProcessCamera(Event e)
+        {
+            switch (e.type)
+            {
+                case EventType.MouseDrag:
+                    if (e.button == 2)
+                    {
+                        _camera.Drag(e.delta);
+                        GUI.changed = true;
+                    }
+                    break;
+
+                case EventType.ScrollWheel:
+                    if (e.delta.y > 0f)
+                        _camera.Size = 2f;
+                    else
+                        _camera.Size = 1f;
+                    GUI.changed = true;
+                    break;
+            }
         }
 
         private void ProcessEvents(Event e)
@@ -265,22 +291,6 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 case EventType.MouseUp:
                     _selectionRectOn = false;
-                    break;
-
-                case EventType.MouseDrag:
-                    if (e.button == 2)
-                    {
-                        _camera.Drag(e.delta);
-                        GUI.changed = true;
-                    }
-                    break;
-
-                case EventType.ScrollWheel:
-                    if (e.delta.y > 0f)
-                        _camera.Size = 2f;
-                    else
-                        _camera.Size = 1f;
-                    GUI.changed = true;
                     break;
 
                 case EventType.KeyDown:
