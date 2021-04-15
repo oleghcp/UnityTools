@@ -54,7 +54,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             EditorGUILayout.LabelField($"Local Id: {_nodeEditor.NodeAsset.LocalId}");
 
             EditorGUILayout.Space(10f);
-            EditorGUILayout.LabelField($"Connected Nodes: {_nodeEditor.NextCount}");
+            EditorGUILayout.LabelField($"Connected Nodes: {_list.Length}");
 
             foreach (var item in _list)
             {

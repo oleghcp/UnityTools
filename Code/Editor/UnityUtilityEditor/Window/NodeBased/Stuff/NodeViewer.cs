@@ -19,32 +19,25 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private RawNode _nodeAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nameProperty;
-        private SerializedProperty _transitionsProperty;
-        private SerializedProperty _positionProperty;
 
         private bool _isDragged;
         private bool _isSelected;
         private bool _renaming;
         private float _height;
+        private Vector2 _position;
         private Vector2 _dragedPosition;
 
         private PortViewer _in;
         private PortViewer _out;
 
         public RawNode NodeAsset => _nodeAsset;
-        public int NextCount => _transitionsProperty.arraySize;
         public PortViewer In => _in;
         public PortViewer Out => _out;
         public bool IsSelected => _isSelected;
         public Vector2 Position
         {
-            get => _positionProperty.vector2Value;
-            set
-            {
-                _serializedObject.Update();
-                _positionProperty.vector2Value = value;
-                _serializedObject.ApplyModifiedProperties();
-            }
+            get => _position;
+            set => _position = value;
         }
 
         public NodeViewer(RawNode nodeAsset, GraphEditorWindow window)
@@ -53,8 +46,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _window = window;
             _serializedObject = new SerializedObject(nodeAsset);
             _nameProperty = _serializedObject.FindProperty(EditorUtilityExt.ASSET_NAME_FIELD);
-            _positionProperty = _serializedObject.FindProperty(RawNode.PositionFieldName);
-            _transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            _position = _serializedObject.FindProperty(RawNode.PositionFieldName).vector2Value;
             _height = CalcNodeHeight();
 
             _in = new PortViewer(this, PortType.In, window);
@@ -63,7 +55,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public IEnumerable<(SerializedProperty transitionProp, RawNode connectedNode)> ParseTransitionsList()
         {
-            return _transitionsProperty.EnumerateArrayElements().Select(getPair);
+            SerializedProperty transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            return transitionsProperty.EnumerateArrayElements().Select(getPair);
 
             (SerializedProperty transitionProp, RawNode node) getPair(SerializedProperty transitionProp)
             {
@@ -77,14 +70,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public Rect GetRectInScreen()
         {
-            return new Rect(_window.Camera.WorldToScreen(Position),
+            return new Rect(_window.Camera.WorldToScreen(_position),
                             new Vector2(_window.GraphAssetEditor.NodeWidth / _window.Camera.Size,
-                            _window.Camera.Size > 1 ? SmallHeight() : _height));
+                                        _window.Camera.Size > 1 ? SmallHeight() : _height));
         }
 
         public Rect GetRectInWorld()
         {
-            return new Rect(Position,
+            return new Rect(_position,
                             new Vector2(_window.GraphAssetEditor.NodeWidth,
                                         _window.Camera.Size > 1 ? SmallHeight() : _height));
         }
@@ -100,9 +93,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public SerializedProperty AddTransition(RawNode nextNode)
         {
-            SerializedProperty newItem = _transitionsProperty.PlaceArrayElement();
+            SerializedProperty transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
 
-            if (_transitionsProperty.arraySize > 1)
+            if (transitionsProperty.arraySize > 1)
                 newItem.ResetToDefault();
 
             newItem.FindPropertyRelative(Transition.NodeFieldName).objectReferenceValue = nextNode;
@@ -114,17 +108,18 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void RemoveReference(RawNode next)
         {
-            int length = _transitionsProperty.arraySize;
+            SerializedProperty transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            int length = transitionsProperty.arraySize;
 
             for (int i = 0; i < length; i++)
             {
-                using (SerializedProperty transitionProp = _transitionsProperty.GetArrayElementAtIndex(i))
+                using (SerializedProperty transitionProp = transitionsProperty.GetArrayElementAtIndex(i))
                 {
                     using (SerializedProperty nodeProp = transitionProp.FindPropertyRelative(Transition.NodeFieldName))
                     {
                         if (nodeProp.objectReferenceValue == next)
                         {
-                            _transitionsProperty.DeleteArrayElementAtIndex(i);
+                            transitionsProperty.DeleteArrayElementAtIndex(i);
                             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
                             break;
                         }
@@ -175,7 +170,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     {
                         if (nodeRect.Contains(e.mousePosition))
                         {
-                            _dragedPosition = Position;
+                            _dragedPosition = _position;
                             _isDragged = true;
                             _isSelected = true;
                             needLock = true;
@@ -227,6 +222,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             return needLock;
+        }
+
+        public void Save()
+        {
+            SerializedProperty positionProperty = _serializedObject.FindProperty(RawNode.PositionFieldName);
+            positionProperty.vector2Value = _position;
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void DrawHeader()
@@ -312,11 +314,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (GraphEditorWindow.GridSnapping)
             {
                 _dragedPosition += mouseDelta * _window.Camera.Size;
-                Position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));
+                _position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));
             }
             else
             {
-                Position += mouseDelta * _window.Camera.Size;
+                _position += mouseDelta * _window.Camera.Size;
             }
         }
     }

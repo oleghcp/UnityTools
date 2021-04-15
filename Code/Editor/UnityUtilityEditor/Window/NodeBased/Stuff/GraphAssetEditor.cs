@@ -13,7 +13,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphAssetEditor
     {
-        private const float DEF_NODE_WIDTH = 200f;
         private const float MIN_NODE_WIDTH = 200f;
         private const float MAX_NODE_WIDTH = 400f;
         private const float NODE_WIDTH_STEP = 1f;
@@ -21,10 +20,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Graph _graphAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nodesProperty;
-        private SerializedProperty _idProperty;
-        private SerializedProperty _widthProperty;
         private SerializedProperty _cameraPositionProperty;
 
+        private float _nodeWidth;
         private IntIdGenerator _idGenerator;
         private Func<Type> _getNodeType;
         private Func<Type> _getTransitionType;
@@ -32,7 +30,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public Graph GraphAsset => _graphAsset;
         public Type NodeType => _getNodeType();
         public Type TransitionType => _getTransitionType();
-        public float NodeWidth => _widthProperty.floatValue;
+        public float NodeWidth => _nodeWidth;
+        public Vector2 CameraPosition => _cameraPositionProperty.vector2Value;
 
         public RawNode RootNode
         {
@@ -45,16 +44,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public Vector2 CameraPosition
-        {
-            get => _cameraPositionProperty.vector2Value;
-            set
-            {
-                _cameraPositionProperty.vector2Value = value;
-                _serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
-        }
-
         public GraphAssetEditor(Graph graphAsset)
         {
             _graphAsset = graphAsset;
@@ -62,16 +51,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _getTransitionType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetTransitionTypeMethodName);
             _serializedObject = new SerializedObject(graphAsset);
             _nodesProperty = _serializedObject.FindProperty(Graph.ArrayFieldName);
-            _idProperty = _serializedObject.FindProperty(Graph.IdGeneratorFieldName);
-            _widthProperty = _serializedObject.FindProperty(Graph.WidthFieldName);
             _cameraPositionProperty = _serializedObject.FindProperty(Graph.CameraPositionFieldName);
-            _idGenerator = new IntIdGenerator(_idProperty.intValue);
-
-            if (_widthProperty.floatValue == 0)
-            {
-                _widthProperty.floatValue = DEF_NODE_WIDTH;
-                _serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
+            _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue);
+            _nodeWidth = _serializedObject.FindProperty(Graph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
         }
 
         public IEnumerable<RawNode> ParseList()
@@ -82,7 +64,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void ChangeNodeWidth(int dir)
         {
-            _widthProperty.floatValue = (_widthProperty.floatValue + (NODE_WIDTH_STEP * dir)).Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
+            _nodeWidth = (_nodeWidth + (NODE_WIDTH_STEP * dir)).Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -119,7 +101,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
             AssetDatabase.SaveAssets();
 
-            _idProperty.intValue = newId;
+            _serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue = newId;
             _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -133,13 +115,19 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_nodesProperty.arraySize == 0)
             {
                 _idGenerator = new IntIdGenerator();
-                _idProperty.intValue = 0;
-                _cameraPositionProperty.vector2Value = default;
+                _serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue = 0;
             }
 
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
             UnityObject.DestroyImmediate(nodeAsset, true);
             AssetDatabase.SaveAssets();
+        }
+
+        public void Save(Vector2 cameraPosition)
+        {
+            _cameraPositionProperty.vector2Value = cameraPosition;
+            _serializedObject.FindProperty(Graph.WidthFieldName).floatValue = _nodeWidth;
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }

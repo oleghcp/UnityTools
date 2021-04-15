@@ -97,17 +97,16 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnDestroy()
         {
-            if (_nodeViewers.Count == 0)
-                _graphAssetEditor.CameraPosition = default;
-            else
-                _graphAssetEditor.CameraPosition = _camera.Position;
+            if (_graphAssetEditor.GraphAsset == null)
+                return;
 
+            Save();
             EditorUtilityExt.SaveProject();
         }
 
         private void OnLostFocus()
         {
-            _graphAssetEditor.CameraPosition = _camera.Position;
+            Save();
             EditorUtilityExt.SaveProject();
         }
 
@@ -127,6 +126,9 @@ namespace UnityUtilityEditor.Window.NodeBased
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveReference(node.NodeAsset));
             _graphAssetEditor.DestroyNode(node.NodeAsset);
+
+            if (_nodeViewers.Count == 0)
+                _camera.Position = default;
         }
 
         public void OnClickOnPort(PortViewer newPort)
@@ -359,6 +361,12 @@ namespace UnityUtilityEditor.Window.NodeBased
                 else
                     menu.AddItem(new GUIContent($"{type.Name} ({type.Namespace})"), false, () => CreateNode(mousePosition, type));
             }
+        }
+
+        private void Save()
+        {
+            _nodeViewers.ForEach(item => item.Save());
+            _graphAssetEditor.Save(_camera.Position);
         }
     }
 }
