@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphEditorStyles
@@ -72,4 +71,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

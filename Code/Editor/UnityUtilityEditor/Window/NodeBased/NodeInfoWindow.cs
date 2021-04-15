@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased.Stuff;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class NodeInfoWindow : EditorWindow
@@ -67,4 +66,3 @@ namespace UnityUtilityEditor.Window.NodeBased
         }
     }
 }
-#endif

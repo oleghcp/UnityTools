@@ -2,7 +2,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility.NodeBased;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphInfoWindow : EditorWindow
@@ -74,4 +73,3 @@ namespace UnityUtilityEditor.Window.NodeBased
         }
     }
 }
-#endif

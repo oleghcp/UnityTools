@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphCamera
@@ -55,4 +54,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

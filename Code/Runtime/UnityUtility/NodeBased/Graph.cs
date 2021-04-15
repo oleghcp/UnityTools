@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtility.NodeBased
 {
     public abstract class Graph : ScriptableObject
@@ -53,4 +52,3 @@ namespace UnityUtility.NodeBased
 
     }
 }
-#endif

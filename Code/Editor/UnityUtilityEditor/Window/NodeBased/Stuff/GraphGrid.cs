@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphGrid
@@ -58,4 +57,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

@@ -1,6 +1,5 @@
 using UnityEngine;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal enum PortType : byte
@@ -56,4 +55,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

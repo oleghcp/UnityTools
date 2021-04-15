@@ -1,6 +1,5 @@
 using UnityEngine;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtility.NodeBased
 {
     public abstract class RawNode : ScriptableObject
@@ -35,4 +34,3 @@ namespace UnityUtility.NodeBased
 
     public abstract class Node : Node<Transition> { }
 }
-#endif

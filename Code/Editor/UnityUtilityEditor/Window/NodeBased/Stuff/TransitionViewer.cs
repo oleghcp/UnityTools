@@ -7,7 +7,6 @@ using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class TransitionViewer
@@ -163,4 +162,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

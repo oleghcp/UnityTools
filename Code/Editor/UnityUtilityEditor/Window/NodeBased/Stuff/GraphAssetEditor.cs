@@ -9,7 +9,6 @@ using UnityUtility.NodeBased;
 using UnityUtilityEditor.NodeBased;
 using UnityObject = UnityEngine.Object;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphAssetEditor
@@ -144,4 +143,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

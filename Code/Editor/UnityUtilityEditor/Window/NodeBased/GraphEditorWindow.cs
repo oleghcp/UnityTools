@@ -7,7 +7,6 @@ using UnityUtility;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased.Stuff;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphEditorWindow : EditorWindow
@@ -351,4 +350,3 @@ namespace UnityUtilityEditor.Window.NodeBased
         }
     }
 }
-#endif

@@ -4,7 +4,6 @@ using UnityUtility;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {
     [CustomEditor(typeof(Graph), true)]
@@ -42,4 +41,3 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
         }
     }
 }
-#endif

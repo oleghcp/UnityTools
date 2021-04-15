@@ -8,7 +8,6 @@ using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.NodeBased;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class NodeViewer
@@ -322,4 +321,3 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
-#endif

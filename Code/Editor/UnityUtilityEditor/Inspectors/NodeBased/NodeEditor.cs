@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.NodeBased;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {
     [CustomEditor(typeof(RawNode), true)]
@@ -83,4 +82,3 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
         }
     }
 }
-#endif

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtility.NodeBased
 {
     [Serializable]
@@ -19,4 +18,3 @@ namespace UnityUtility.NodeBased
 #endif
     }
 }
-#endif
