@@ -26,7 +26,6 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public static bool GridSnapping;
 
-        public float NodeWidth => _graphAssetEditor.NodeWidth;
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public GraphCamera Camera => _camera;
@@ -50,6 +49,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
 
             _graphAssetEditor = new GraphAssetEditor(graphAsset);
+            _camera = new GraphCamera(this, _graphAssetEditor.CameraPosition);
 
             foreach (RawNode item in _graphAssetEditor.ParseList())
             {
@@ -64,7 +64,6 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnEnable()
         {
-            _camera = new GraphCamera(this);
             _grid = new GraphGrid(this);
             _toolbar = new GraphToolbar(this);
             _nodeViewers = new List<NodeViewer>();
@@ -99,13 +98,16 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void OnDestroy()
         {
             if (_nodeViewers.Count == 0)
-                _camera.Position = default;
+                _graphAssetEditor.CameraPosition = default;
+            else
+                _graphAssetEditor.CameraPosition = _camera.Position;
 
             EditorUtilityExt.SaveProject();
         }
 
         private void OnLostFocus()
         {
+            _graphAssetEditor.CameraPosition = _camera.Position;
             EditorUtilityExt.SaveProject();
         }
 

@@ -78,14 +78,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public Rect GetRectInScreen()
         {
             return new Rect(_window.Camera.WorldToScreen(Position),
-                            new Vector2(_window.NodeWidth / _window.Camera.Size,
+                            new Vector2(_window.GraphAssetEditor.NodeWidth / _window.Camera.Size,
                             _window.Camera.Size > 1 ? SmallHeight() : _height));
         }
 
         public Rect GetRectInWorld()
         {
             return new Rect(Position,
-                            new Vector2(_window.NodeWidth,
+                            new Vector2(_window.GraphAssetEditor.NodeWidth,
                                         _window.Camera.Size > 1 ? SmallHeight() : _height));
         }
 
