@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
     {
         private const string DIALOG_TITLE = "Delete node?";
         private const string DIALOG_TEXT = "Are you sure you want delete this node?";
-        private const string MENU_NAME = "Delete Node";
+        private const string DELETE_ITEM_NAME = "Delete Node";
 
         public override void OnInspectorGUI()
         {
@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
             {
                 EditorGUILayout.Space();
 
-                if (GUILayout.Button(MENU_NAME, GUILayout.Width(100f), GUILayout.Height(30f)) &&
+                if (GUILayout.Button(DELETE_ITEM_NAME, GUILayout.Width(100f), GUILayout.Height(30f)) &&
                     EditorUtility.DisplayDialog(DIALOG_TITLE, DIALOG_TEXT, "Yes", "No"))
                     DestroyNode(target);
 
@@ -28,8 +28,14 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
             }
         }
 
-        [MenuItem("CONTEXT/" + nameof(RawNode) + "/" + MENU_NAME)]
-        private static void MenuItem(MenuCommand command)
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawNode) + "/" + MenuItems.RESET_ITEM_NAME)]
+        private static void ResetMenuItem() { }
+
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawNode) + "/" + MenuItems.RESET_ITEM_NAME, true)]
+        private static bool ResetMenuItemValidate() => false;
+
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawNode) + "/" + DELETE_ITEM_NAME)]
+        private static void DeleteMenuItem(MenuCommand command)
         {
             if (EditorUtility.DisplayDialog(DIALOG_TITLE, DIALOG_TEXT, "Yes", "No"))
                 DestroyNode(command.context as RawNode);

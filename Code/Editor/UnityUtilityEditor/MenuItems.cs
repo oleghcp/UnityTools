@@ -7,6 +7,9 @@ namespace UnityUtilityEditor
 {
     internal static class MenuItems
     {
+        public const string CONTEXT_MENU_NAME = "CONTEXT/";
+        public const string RESET_ITEM_NAME = "Reset";
+
 #if UNITY_2019_3_OR_NEWER
         public const string MENU_GRAPH_PATH = " (ext.)/Graph/";
         private const string FULL_MENU_GRAPH_PATH = EditorUtilityExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + MENU_GRAPH_PATH;
