@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.MathExt;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
@@ -10,6 +9,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private float _sizeFactor = 1f;
         private Rect _rect;
         private Vector2 _position;
+        private bool _isDragging;
+
+        public float Size => _sizeFactor;
+        public bool IsDragging => _isDragging;
 
         public Vector2 Position
         {
@@ -17,16 +20,45 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             set => _position = value;
         }
 
-        public float Size
-        {
-            get => _sizeFactor;
-            set => _sizeFactor = value.Clamp(0.1f, 10f);
-        }
-
         public GraphCamera(GraphEditorWindow window, Vector2 position)
         {
             _window = window;
             _position = position;
+        }
+
+        public void ProcessEvents(Event e)
+        {
+            switch (e.type)
+            {
+                case EventType.MouseDown:
+                    if (e.button == 2)
+                    {
+                        _isDragging = true;
+                        GUI.changed = true;
+                    }
+                    break;
+
+                case EventType.MouseUp:
+                    if (e.button == 2)
+                    {
+                        _isDragging = false;
+                        GUI.changed = true;
+                    }
+                    break;
+
+                case EventType.MouseDrag:
+                    if (e.button == 2)
+                    {
+                        _position -= e.delta * _sizeFactor;
+                        GUI.changed = true;
+                    }
+                    break;
+
+                case EventType.ScrollWheel:
+                    _sizeFactor = e.delta.y > 0f ? 2f : 1f;
+                    GUI.changed = true;
+                    break;
+            }
         }
 
         public void Drag(Vector2 mouseDelta)

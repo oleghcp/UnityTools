@@ -80,7 +80,10 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             Event e = Event.current;
 
-            ProcessCamera(e);
+            _camera.ProcessEvents(e);
+            if (_camera.IsDragging)
+                EditorGUIUtility.AddCursorRect(new Rect(Vector2.zero, position.size), MouseCursor.Pan);
+
             _grid.Draw();
 
             DrawConnections();
@@ -249,28 +252,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
 
             GUI.changed = true;
-        }
-
-        public void ProcessCamera(Event e)
-        {
-            switch (e.type)
-            {
-                case EventType.MouseDrag:
-                    if (e.button == 2)
-                    {
-                        _camera.Drag(e.delta);
-                        GUI.changed = true;
-                    }
-                    break;
-
-                case EventType.ScrollWheel:
-                    if (e.delta.y > 0f)
-                        _camera.Size = 2f;
-                    else
-                        _camera.Size = 1f;
-                    GUI.changed = true;
-                    break;
-            }
         }
 
         private void ProcessEvents(Event e)
