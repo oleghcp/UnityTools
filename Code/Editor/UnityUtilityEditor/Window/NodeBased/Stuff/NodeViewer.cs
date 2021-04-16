@@ -28,7 +28,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Vector2 _dragedPosition;
         private Rect _screenRect;
         private Rect _worldRect;
-        private int _onGuiCounter;
+        private int _screenOnGuiCounter;
+        private int _worldOnGuiCounter;
+        private bool _isInCamera;
+        private int _overlapOnGuiCounter;
 
         private PortViewer _in;
         private PortViewer _out;
@@ -44,35 +47,49 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             set => _position = value;
         }
 
-        public Rect RectInScreen
+        public Rect ScreenRect
         {
             get
             {
-                if (_onGuiCounter != _window.OnGuiCounter)
+                if (_screenOnGuiCounter != _window.OnGuiCounter)
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
                     _screenRect.width = _window.GraphAssetEditor.NodeWidth / _window.Camera.Size;
                     _screenRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
-                    _onGuiCounter = _window.OnGuiCounter;
+                    _screenOnGuiCounter = _window.OnGuiCounter;
                 }
 
                 return _screenRect;
             }
         }
 
-        public Rect RectInWorld
+        public Rect WorldRect
         {
             get
             {
-                if (_onGuiCounter != _window.OnGuiCounter)
+                if (_worldOnGuiCounter != _window.OnGuiCounter)
                 {
                     _worldRect.position = _position;
                     _worldRect.width = _window.GraphAssetEditor.NodeWidth;
                     _worldRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
-                    _onGuiCounter = _window.OnGuiCounter;
+                    _worldOnGuiCounter = _window.OnGuiCounter;
                 }
 
                 return _worldRect;
+            }
+        }
+
+        public bool IsInCamera
+        {
+            get
+            {
+                if (_overlapOnGuiCounter != _window.OnGuiCounter)
+                {
+                    _isInCamera = _window.Camera.WorldRect.Overlaps(WorldRect);
+                    _overlapOnGuiCounter = _window.OnGuiCounter;
+                }
+
+                return _isInCamera;
             }
         }
 
@@ -155,12 +172,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_nodeAsset == null)
                 return;
 
+            if (!IsInCamera)
+                return;
+
             _serializedObject.Update();
 
             _in.Draw();
             _out.Draw();
 
-            Rect nodeRect = RectInScreen;
+            Rect nodeRect = ScreenRect;
 
             GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.SelectedNode : GraphEditorStyles.Styles.Node);
 
@@ -181,12 +201,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public bool ProcessEvents(Event e)
         {
+            if (!IsInCamera)
+                return false;
+
             bool needLock = false;
 
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    Rect nodeRect = RectInScreen;
+                    Rect nodeRect = ScreenRect;
 
                     if (e.button == 0)
                     {

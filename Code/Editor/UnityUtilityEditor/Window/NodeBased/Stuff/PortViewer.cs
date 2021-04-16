@@ -52,7 +52,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             if (_onGuiCounter != _window.OnGuiCounter)
             {
-                Rect nodeScreenRect = _node.RectInScreen;
+                Rect nodeScreenRect = _node.ScreenRect;
                 _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
 
                 switch (_type)

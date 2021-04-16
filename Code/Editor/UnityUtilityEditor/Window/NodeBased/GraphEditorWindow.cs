@@ -175,7 +175,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
             {
-                Rect rect = item.RectInWorld;
+                Rect rect = item.WorldRect;
                 RawNode newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
                 NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(newNode, this));
                 CreateTransitionsForNode(newNodeEditor);
@@ -228,7 +228,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 for (int i = 0; i < _nodeViewers.Count; i++)
                 {
-                    _nodeViewers[i].Select(selectionRect.Overlaps(_nodeViewers[i].RectInScreen, true));
+                    _nodeViewers[i].Select(selectionRect.Overlaps(_nodeViewers[i].ScreenRect, true));
                 }
 
                 GUI.changed = true;

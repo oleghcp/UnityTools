@@ -51,7 +51,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             SerializedProperty pointProp = _pointsProp.PlaceArrayElement();
 
             if (_points.Count == 0)
-                pointProp.vector2Value = (_out.Node.RectInWorld.center + _in.Node.RectInWorld.center) * 0.5f;
+                pointProp.vector2Value = (_out.Node.WorldRect.center + _in.Node.WorldRect.center) * 0.5f;
             else
                 pointProp.vector2Value += Vector2.one * 30f;
 
