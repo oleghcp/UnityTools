@@ -14,13 +14,22 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private PortType _type;
         private GraphEditorWindow _window;
-        private Rect _screenRect;
         private NodeViewer _node;
         private GUIStyle _style;
+        private Rect _screenRect;
+        private int _onGuiCounter;
 
-        public Rect ScreenRect => _screenRect;
         public NodeViewer Node => _node;
         public PortType Type => _type;
+
+        public Rect ScreenRect
+        {
+            get
+            {
+                UpdateRect();
+                return _screenRect;
+            }
+        }
 
         public PortViewer(NodeViewer node, PortType type, GraphEditorWindow window)
         {
@@ -33,24 +42,31 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            Rect nodeScreenRect = _node.RectInScreen;
-
-            _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
-
-            switch (_type)
-            {
-                case PortType.In:
-                    _screenRect.x = nodeScreenRect.x - _screenRect.width + X_OFFSET;
-                    break;
-
-                case PortType.Out:
-                    _screenRect.x = nodeScreenRect.x + nodeScreenRect.width - X_OFFSET;
-                    break;
-            }
+            UpdateRect();
 
             if (GUI.Button(_screenRect, GraphEditorStyles.Styles.RightTriangle, _style))
-            {
                 _window.OnClickOnPort(this);
+        }
+
+        private void UpdateRect()
+        {
+            if (_onGuiCounter != _window.OnGuiCounter)
+            {
+                Rect nodeScreenRect = _node.RectInScreen;
+                _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
+
+                switch (_type)
+                {
+                    case PortType.In:
+                        _screenRect.x = nodeScreenRect.x - _screenRect.width + X_OFFSET;
+                        break;
+
+                    case PortType.Out:
+                        _screenRect.x = nodeScreenRect.x + nodeScreenRect.width - X_OFFSET;
+                        break;
+                }
+
+                _onGuiCounter = _window.OnGuiCounter;
             }
         }
     }
