@@ -10,6 +10,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Rect _rect;
         private Vector2 _position;
         private bool _isDragging;
+        private int _onGuiCounter;
 
         public float Size => _sizeFactor;
         public bool IsDragging => _isDragging;
@@ -20,10 +21,36 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             set => _position = value;
         }
 
+        public Rect WorldRect
+        {
+            get
+            {
+                if (_onGuiCounter != _window.OnGuiCounter)
+                {
+                    Vector2 size = _window.position.size * _sizeFactor;
+                    _rect.size = size;
+                    _rect.position = _position - size * 0.5f;
+                    _onGuiCounter = _window.OnGuiCounter;
+                }
+
+                return _rect;
+            }
+        }
+
         public GraphCamera(GraphEditorWindow window, Vector2 position)
         {
             _window = window;
             _position = position;
+        }
+
+        public Vector2 ScreenToWorld(Vector2 screenPoint)
+        {
+            return (screenPoint - GetWindowHalfSize()) * _sizeFactor + _position;
+        }
+
+        public Vector2 WorldToScreen(Vector2 worldPoint)
+        {
+            return (worldPoint - _position) / _sizeFactor + GetWindowHalfSize();
         }
 
         public void ProcessEvents(Event e)
@@ -59,29 +86,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     GUI.changed = true;
                     break;
             }
-        }
-
-        public void Drag(Vector2 mouseDelta)
-        {
-            _position -= mouseDelta * _sizeFactor;
-        }
-
-        public Rect GetWorldRect()
-        {
-            Vector2 size = _window.position.size * _sizeFactor;
-            _rect.size = size;
-            _rect.position = _position - size * 0.5f;
-            return _rect;
-        }
-
-        public Vector2 ScreenToWorld(Vector2 screenPoint)
-        {
-            return (screenPoint - GetWindowHalfSize()) * _sizeFactor + _position;
-        }
-
-        public Vector2 WorldToScreen(Vector2 worldPoint)
-        {
-            return (worldPoint - _position) / _sizeFactor + GetWindowHalfSize();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -25,9 +25,11 @@ namespace UnityUtilityEditor.Window.NodeBased
         private Vector2 _downPoint;
 
         public static bool GridSnapping;
+        private int _onGuiCounter;
 
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
+        public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
 
         public static void OpenWindow(Graph graphAsset)
@@ -78,6 +80,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                 return;
             }
 
+            _onGuiCounter++;
             Event e = Event.current;
 
             _camera.ProcessEvents(e);
@@ -172,7 +175,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
             {
-                Rect rect = item.GetRectInWorld();
+                Rect rect = item.RectInWorld;
                 RawNode newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
                 NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(newNode, this));
                 CreateTransitionsForNode(newNodeEditor);
@@ -227,7 +230,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 for (int i = 0; i < _nodeViewers.Count; i++)
                 {
-                    if (selectionRect.Overlaps(_nodeViewers[i].GetRectInScreen(), true))
+                    if (selectionRect.Overlaps(_nodeViewers[i].RectInScreen, true))
                         _nodeViewers[i].Select(true);
                 }
 

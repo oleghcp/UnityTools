@@ -26,6 +26,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private float _height;
         private Vector2 _position;
         private Vector2 _dragedPosition;
+        private Rect _screenRect;
+        private Rect _worldRect;
+        private int _onGuiCounter;
 
         private PortViewer _in;
         private PortViewer _out;
@@ -34,10 +37,43 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public PortViewer In => _in;
         public PortViewer Out => _out;
         public bool IsSelected => _isSelected;
+
         public Vector2 Position
         {
             get => _position;
             set => _position = value;
+        }
+
+        public Rect RectInScreen
+        {
+            get
+            {
+                if (_onGuiCounter != _window.OnGuiCounter)
+                {
+                    _screenRect.position = _window.Camera.WorldToScreen(_position);
+                    _screenRect.width = _window.GraphAssetEditor.NodeWidth / _window.Camera.Size;
+                    _screenRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
+                    _onGuiCounter = _window.OnGuiCounter;
+                }
+
+                return _screenRect;
+            }
+        }
+
+        public Rect RectInWorld
+        {
+            get
+            {
+                if (_onGuiCounter != _window.OnGuiCounter)
+                {
+                    _worldRect.position = _position;
+                    _worldRect.width = _window.GraphAssetEditor.NodeWidth;
+                    _worldRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
+                    _onGuiCounter = _window.OnGuiCounter;
+                }
+
+                return _worldRect;
+            }
         }
 
         public NodeViewer(RawNode nodeAsset, GraphEditorWindow window)
@@ -66,20 +102,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     return (transitionProp, node);
                 }
             }
-        }
-
-        public Rect GetRectInScreen()
-        {
-            return new Rect(_window.Camera.WorldToScreen(_position),
-                            new Vector2(_window.GraphAssetEditor.NodeWidth / _window.Camera.Size,
-                                        _window.Camera.Size > 1 ? SmallHeight() : _height));
-        }
-
-        public Rect GetRectInWorld()
-        {
-            return new Rect(_position,
-                            new Vector2(_window.GraphAssetEditor.NodeWidth,
-                                        _window.Camera.Size > 1 ? SmallHeight() : _height));
         }
 
         public void Select(bool on)
@@ -138,7 +160,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _in.Draw();
             _out.Draw();
 
-            Rect nodeRect = GetRectInScreen();
+            Rect nodeRect = RectInScreen;
 
             GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.SelectedNode : GraphEditorStyles.Styles.Node);
 
@@ -164,7 +186,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    Rect nodeRect = GetRectInScreen();
+                    Rect nodeRect = RectInScreen;
 
                     if (e.button == 0)
                     {

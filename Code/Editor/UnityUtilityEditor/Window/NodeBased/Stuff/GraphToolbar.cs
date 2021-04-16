@@ -74,7 +74,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 Vector2? pos = null;
                 foreach (NodeViewer item in nodeViewers)
                 {
-                    Rect nodeRect = item.GetRectInWorld();
+                    Rect nodeRect = item.RectInWorld;
 
                     if (item.IsSelected)
                     {
@@ -93,7 +93,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (GUILayout.Button(_moveButton, GUILayout.Width(buttonWidth)))
             {
                 NodeViewer viewer = _window.NodeViewers.First(item => item.NodeAsset == _window.GraphAssetEditor.RootNode);
-                _window.Camera.Position = viewer.GetRectInWorld().center;
+                _window.Camera.Position = viewer.RectInWorld.center;
             }
 
             GUI.enabled = true;

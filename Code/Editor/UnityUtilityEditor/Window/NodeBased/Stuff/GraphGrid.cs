@@ -21,7 +21,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            Rect worldRect = _window.Camera.GetWorldRect();
+            Rect worldRect = _window.Camera.WorldRect;
 
             Handles.color = SMALL_COLOR;
             drawInternal(SMALL_STEP);

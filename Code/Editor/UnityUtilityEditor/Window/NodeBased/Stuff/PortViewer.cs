@@ -33,7 +33,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            Rect nodeScreenRect = _node.GetRectInScreen();
+            Rect nodeScreenRect = _node.RectInScreen;
 
             _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
 
