@@ -226,12 +226,9 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 Handles.DrawSolidRectangleWithOutline(selectionRect, SELECTION_COLOR, GraphEditorStyles.GetLineColor());
 
-                _nodeViewers.ForEach(item => item.Select(false));
-
                 for (int i = 0; i < _nodeViewers.Count; i++)
                 {
-                    if (selectionRect.Overlaps(_nodeViewers[i].RectInScreen, true))
-                        _nodeViewers[i].Select(true);
+                    _nodeViewers[i].Select(selectionRect.Overlaps(_nodeViewers[i].RectInScreen, true));
                 }
 
                 GUI.changed = true;
