@@ -8,7 +8,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphToolbar
     {
-        public const float TOOLBAR_HEIGHT = 25f;
+        public const float HEIGHT = 25f;
         private const string GRID_SNAPING_KEY = "uu_ggs";
         private readonly Vector2 HINT_SIZE = new Vector2(200f, 150f);
         private const float HINT_OFFSET = 5f;
@@ -30,8 +30,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            Vector2 winSize = _window.position.size;
-            Rect rect = new Rect(new Vector2(0f, winSize.y - TOOLBAR_HEIGHT), new Vector2(winSize.x, TOOLBAR_HEIGHT));
+            Vector2 winSize = _window.Size;
+            Rect rect = new Rect(new Vector2(0f, winSize.y), new Vector2(winSize.x, HEIGHT));
 
             using (new GUILayout.AreaScope(rect, (string)null, GraphEditorStyles.Styles.Toolbar))
             {
@@ -129,7 +129,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void DrawHint(Vector2 winSize)
         {
-            Rect rect = new Rect(new Vector2(winSize.x - HINT_SIZE.x - HINT_OFFSET, winSize.y - HINT_SIZE.y - HINT_OFFSET - TOOLBAR_HEIGHT), HINT_SIZE);
+            Rect rect = new Rect(new Vector2(winSize.x - HINT_SIZE.x - HINT_OFFSET, winSize.y - HINT_SIZE.y - HINT_OFFSET - HEIGHT), HINT_SIZE);
 
             using (new GUILayout.AreaScope(rect, (string)null, EditorStyles.helpBox))
             {

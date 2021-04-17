@@ -23,6 +23,8 @@ namespace UnityUtilityEditor.Window.NodeBased
         private PortViewer _selectedPort;
         private bool _selectionRectOn;
         private Vector2 _downPoint;
+        private Vector2 _size;
+        private int _sizeVersion;
 
         public static bool GridSnapping;
         private int _onGuiCounter;
@@ -31,6 +33,21 @@ namespace UnityUtilityEditor.Window.NodeBased
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
+
+        public Vector2 Size
+        {
+            get
+            {
+                if (_sizeVersion != _onGuiCounter)
+                {
+                    _size.x = position.width;
+                    _size.y = position.height - GraphToolbar.HEIGHT;
+                    _sizeVersion = _onGuiCounter;
+                }
+
+                return _size;
+            }
+        }
 
         public static void OpenWindow(Graph graphAsset)
         {
@@ -85,7 +102,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _camera.ProcessEvents(e);
             if (_camera.IsDragging)
-                EditorGUIUtility.AddCursorRect(new Rect(Vector2.zero, position.size), MouseCursor.Pan);
+                EditorGUIUtility.AddCursorRect(new Rect(Vector2.zero, Size), MouseCursor.Pan);
 
             _grid.Draw();
 

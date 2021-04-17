@@ -17,7 +17,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private NodeViewer _node;
         private GUIStyle _style;
         private Rect _screenRect;
-        private int _onGuiCounter;
+        private int _screenRectVersion;
 
         public NodeViewer Node => _node;
         public PortType Type => _type;
@@ -50,7 +50,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void UpdateRect()
         {
-            if (_onGuiCounter != _window.OnGuiCounter)
+            if (_screenRectVersion != _window.OnGuiCounter)
             {
                 Rect nodeScreenRect = _node.ScreenRect;
                 _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
@@ -66,7 +66,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         break;
                 }
 
-                _onGuiCounter = _window.OnGuiCounter;
+                _screenRectVersion = _window.OnGuiCounter;
             }
         }
     }

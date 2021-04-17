@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Rect _rect;
         private Vector2 _position;
         private bool _isDragging;
-        private int _onGuiCounter;
+        private int _worldRectVersion;
 
         public float Size => _sizeFactor;
         public bool IsDragging => _isDragging;
@@ -25,12 +25,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             get
             {
-                if (_onGuiCounter != _window.OnGuiCounter)
+                if (_worldRectVersion != _window.OnGuiCounter)
                 {
-                    Vector2 size = _window.position.size * _sizeFactor;
+                    Vector2 size = _window.Size * _sizeFactor;
                     _rect.size = size;
                     _rect.position = _position - size * 0.5f;
-                    _onGuiCounter = _window.OnGuiCounter;
+                    _worldRectVersion = _window.OnGuiCounter;
                 }
 
                 return _rect;
@@ -91,7 +91,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Vector2 GetWindowHalfSize()
         {
-            return _window.position.size * 0.5f;
+            return _window.Size * 0.5f;
         }
     }
 }

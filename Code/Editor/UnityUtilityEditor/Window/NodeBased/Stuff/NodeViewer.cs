@@ -24,14 +24,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private bool _isSelected;
         private bool _renaming;
         private float _height;
+
         private Vector2 _position;
         private Vector2 _dragedPosition;
+
         private Rect _screenRect;
         private Rect _worldRect;
-        private int _screenOnGuiCounter;
-        private int _worldOnGuiCounter;
         private bool _isInCamera;
-        private int _overlapOnGuiCounter;
+
+        private int _screenRectVersion;
+        private int _worldRectVersion;
+        private int _overlapVersion;
 
         private PortViewer _in;
         private PortViewer _out;
@@ -51,12 +54,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             get
             {
-                if (_screenOnGuiCounter != _window.OnGuiCounter)
+                if (_screenRectVersion != _window.OnGuiCounter)
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
                     _screenRect.width = _window.GraphAssetEditor.NodeWidth / _window.Camera.Size;
                     _screenRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
-                    _screenOnGuiCounter = _window.OnGuiCounter;
+                    _screenRectVersion = _window.OnGuiCounter;
                 }
 
                 return _screenRect;
@@ -67,12 +70,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             get
             {
-                if (_worldOnGuiCounter != _window.OnGuiCounter)
+                if (_worldRectVersion != _window.OnGuiCounter)
                 {
                     _worldRect.position = _position;
                     _worldRect.width = _window.GraphAssetEditor.NodeWidth;
                     _worldRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
-                    _worldOnGuiCounter = _window.OnGuiCounter;
+                    _worldRectVersion = _window.OnGuiCounter;
                 }
 
                 return _worldRect;
@@ -83,10 +86,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             get
             {
-                if (_overlapOnGuiCounter != _window.OnGuiCounter)
+                if (_overlapVersion != _window.OnGuiCounter)
                 {
                     _isInCamera = _window.Camera.WorldRect.Overlaps(WorldRect);
-                    _overlapOnGuiCounter = _window.OnGuiCounter;
+                    _overlapVersion = _window.OnGuiCounter;
                 }
 
                 return _isInCamera;
