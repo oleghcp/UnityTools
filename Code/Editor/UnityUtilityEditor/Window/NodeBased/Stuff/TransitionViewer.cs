@@ -87,6 +87,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             Vector2 prevPoint = outPoint;
+            Vector2 prevEndTangentDir = default;
 
             for (int i = 0; i < _points.Count; i++)
             {
@@ -96,20 +97,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                                                   : GetPointTangentFactor(prevPoint, nexpoint);
                 float endTangentFactor = GetPointTangentFactor(prevPoint, nexpoint);
 
-                Vector2 startTangentdir = i == 0 ? Vector2.right : GetStartTangentdir(prevPoint, nexpoint);
-                Vector2 endTangentdir = GetEndTangentdir(prevPoint, nexpoint);
+                Vector2 startTangentDir = i == 0 ? Vector2.right : -prevEndTangentDir;
+                prevEndTangentDir = new Vector2(prevPoint.x - nexpoint.x, 0f).normalized;
 
-                DrawLine(prevPoint, nexpoint, startTangentFactor, endTangentFactor, startTangentdir, endTangentdir, targetColor);
-
+                DrawLine(prevPoint, nexpoint, startTangentFactor, endTangentFactor, startTangentDir, prevEndTangentDir, targetColor);
                 _points[i].Draw(targetColor);
+
                 prevPoint = nexpoint;
             }
-            {
-                Vector2 startTangentdir = GetStartTangentdir(prevPoint, inPoint);
-                Vector2 endTangentdir = Vector2.left;
 
-                DrawLine(prevPoint, inPoint, GetPointTangentFactor(prevPoint, inPoint), GetTangentFactor(prevPoint, inPoint), startTangentdir, endTangentdir, targetColor);
-            }
+            DrawLine(prevPoint, inPoint, GetPointTangentFactor(prevPoint, inPoint), GetTangentFactor(prevPoint, inPoint), -prevEndTangentDir, Vector2.left, targetColor);
         }
 
         public bool ProcessEvents(Event e)
@@ -162,18 +159,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         // -- //
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Vector2 GetStartTangentdir(in Vector2 start, in Vector2 end)
-        {
-            return new Vector2(end.x - start.x, 0f).normalized;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Vector2 GetEndTangentdir(in Vector2 start, in Vector2 end)
-        {
-            return new Vector2(start.x - end.x, 0f).normalized;
-        }
 
         private static float GetTangentFactor(in Vector2 start, in Vector2 end)
         {
