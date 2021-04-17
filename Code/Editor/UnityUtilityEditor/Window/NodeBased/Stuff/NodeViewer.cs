@@ -32,6 +32,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Rect _worldRect;
         private bool _isInCamera;
 
+        private int _heightVersion;
         private int _screenRectVersion;
         private int _worldRectVersion;
         private int _overlapVersion;
@@ -58,7 +59,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
                     _screenRect.width = _window.GraphAssetEditor.NodeWidth / _window.Camera.Size;
-                    _screenRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
+                    _screenRect.height = _window.Camera.Size > 1f ? GetSmallNodeHeight() : GetBigNodeHeight();
                     _screenRectVersion = _window.OnGuiCounter;
                 }
 
@@ -74,7 +75,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 {
                     _worldRect.position = _position;
                     _worldRect.width = _window.GraphAssetEditor.NodeWidth;
-                    _worldRect.height = _window.Camera.Size > 1 ? SmallHeight() : _height;
+                    _worldRect.height = _window.Camera.Size > 1f ? GetSmallNodeHeight() : GetBigNodeHeight();
                     _worldRectVersion = _window.OnGuiCounter;
                 }
 
@@ -103,7 +104,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject = new SerializedObject(nodeAsset);
             _nameProperty = _serializedObject.FindProperty(EditorUtilityExt.ASSET_NAME_FIELD);
             _position = _serializedObject.FindProperty(RawNode.PositionFieldName).vector2Value;
-            _height = CalcNodeHeight();
 
             _in = new PortViewer(this, PortType.In, window);
             _out = new PortViewer(this, PortType.Out, window);
@@ -198,7 +198,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     DrawContent(nodeRect.width);
             }
 
-            _height = CalcNodeHeight();
             _serializedObject.ApplyModifiedProperties();
         }
 
@@ -335,15 +334,20 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private float CalcNodeHeight()
-        {
-            return SmallHeight() + EditorGuiUtility.GetDrawHeight(_serializedObject, IsServiceField);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private float SmallHeight()
+        private float GetSmallNodeHeight()
         {
             return EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
+        }
+
+        private float GetBigNodeHeight()
+        {
+            if (_heightVersion != _window.OnGuiCounter)
+            {
+                _height = GetSmallNodeHeight() + EditorGuiUtility.GetDrawHeight(_serializedObject, IsServiceField);
+                _heightVersion = _window.OnGuiCounter;
+            }
+
+            return _height;
         }
 
         private bool IsServiceField(SerializedProperty property)

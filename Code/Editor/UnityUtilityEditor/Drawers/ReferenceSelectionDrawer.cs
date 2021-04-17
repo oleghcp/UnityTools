@@ -27,7 +27,7 @@ namespace UnityUtilityEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUI.GetPropertyHeight(property, true);
+            return EditorGUI.GetPropertyHeight(property, label);
         }
 
         private void DrawSelectionButton(Rect position, SerializedProperty property)

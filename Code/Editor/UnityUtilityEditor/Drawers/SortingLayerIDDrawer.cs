@@ -28,7 +28,7 @@ namespace UnityUtilityEditor.Drawers
                 _tool = new DrawTool();
             }
 
-            property.intValue = _tool.Draw(position, property.displayName, property.intValue);
+            property.intValue = _tool.Draw(position, label.text, property.intValue);
         }
 
         public class DrawTool
