@@ -74,10 +74,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
+            Color targetColor = GraphEditorStyles.GetLineColor();
+
             Vector2 outPoint = _out.ScreenRect.center;
             Vector2 inPoint = _in.ScreenRect.center;
-
-            Color targetColor = GraphEditorStyles.GetLineColor();
 
             if (_points.Count == 0)
             {
@@ -87,15 +87,29 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             Vector2 prevPoint = outPoint;
+
             for (int i = 0; i < _points.Count; i++)
             {
                 Vector2 nexpoint = _window.Camera.WorldToScreen(_points[i].Position);
-                DrawLine(prevPoint, nexpoint, i == 0, false, targetColor);
+
+                float startTangentFactor = i == 0 ? GetTangentFactor(prevPoint, nexpoint)
+                                                  : GetPointTangentFactor(prevPoint, nexpoint);
+                float endTangentFactor = GetPointTangentFactor(prevPoint, nexpoint);
+
+                Vector2 startTangentdir = i == 0 ? Vector2.right : GetStartTangentdir(prevPoint, nexpoint);
+                Vector2 endTangentdir = GetEndTangentdir(prevPoint, nexpoint);
+
+                DrawLine(prevPoint, nexpoint, startTangentFactor, endTangentFactor, startTangentdir, endTangentdir, targetColor);
+
                 _points[i].Draw(targetColor);
                 prevPoint = nexpoint;
             }
+            {
+                Vector2 startTangentdir = GetStartTangentdir(prevPoint, inPoint);
+                Vector2 endTangentdir = Vector2.left;
 
-            DrawLine(prevPoint, inPoint, _points.Count == 0, true, targetColor);
+                DrawLine(prevPoint, inPoint, GetPointTangentFactor(prevPoint, inPoint), GetTangentFactor(prevPoint, inPoint), startTangentdir, endTangentdir, targetColor);
+            }
         }
 
         public bool ProcessEvents(Event e)
@@ -135,16 +149,30 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public static void DrawLine(in Vector2 start, in Vector2 end, in Vector2 startTangentDir, in Vector2 endTangentDir, in Color color)
         {
             float factor = GetTangentFactor(start, end);
-            Handles.DrawBezier(start, end, start + startTangentDir * factor, end + endTangentDir * factor, color, null, LINE_THICKNESS);
+            DrawLine(start, end, factor, factor, startTangentDir, endTangentDir, color);
         }
 
-        private static void DrawLine(in Vector2 start, in Vector2 end, bool lockStartTangent, bool lockEndTangent, in Color color)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void DrawLine(in Vector2 start, in Vector2 end,
+                                     float startTangentFactor, float endTangentFactor,
+                                     in Vector2 startTangentdir, in Vector2 endTangentdir,
+                                     in Color color)
         {
-            float factor = GetPointTangentFactor(start, end);
-            Vector2 startTangentdir = lockStartTangent ? Vector2.right : new Vector2(end.x - start.x, 0f).normalized;
-            Vector2 endTangentdir = lockEndTangent ? Vector2.left : new Vector2(start.x - end.x, 0f).normalized;
+            Handles.DrawBezier(start, end, start + startTangentdir * startTangentFactor, end + endTangentdir * endTangentFactor, color, null, LINE_THICKNESS);
+        }
 
-            Handles.DrawBezier(start, end, start + startTangentdir * factor, end + endTangentdir * factor, color, null, LINE_THICKNESS);
+        // -- //
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Vector2 GetStartTangentdir(in Vector2 start, in Vector2 end)
+        {
+            return new Vector2(end.x - start.x, 0f).normalized;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Vector2 GetEndTangentdir(in Vector2 start, in Vector2 end)
+        {
+            return new Vector2(start.x - end.x, 0f).normalized;
         }
 
         private static float GetTangentFactor(in Vector2 start, in Vector2 end)
