@@ -227,6 +227,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                             _renaming = false;
                             if (!(_isSelected && e.control))
                                 _isSelected = false;
+                            GUI.FocusControl(null);
                         }
                         GUI.changed = true;
                     }
