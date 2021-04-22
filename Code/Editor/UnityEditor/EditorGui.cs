@@ -13,18 +13,18 @@ namespace UnityEditor
     public static class EditorGui
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static UnityObject[] DropArea(Rect position)
+        public static UnityObject[] DropArea(in Rect position)
         {
             return DropArea(position, null);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static UnityObject[] DropArea(Rect position, string text)
+        public static UnityObject[] DropArea(in Rect position, string text)
         {
             return DropArea(position, text, EditorStylesExt.DropArea);
         }
 
-        public static UnityObject[] DropArea(Rect position, string text, GUIStyle style)
+        public static UnityObject[] DropArea(in Rect position, string text, GUIStyle style)
         {
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
             UnityObject[] objects = DragAndDropData.GetObjectsById(controlId);
@@ -40,13 +40,13 @@ namespace UnityEditor
             return objects;
         }
 
-        internal static void ErrorLabel(Rect position, GUIContent label, string message)
+        internal static void ErrorLabel(in Rect position, GUIContent label, string message)
         {
             EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int DropDown(Rect propertyRect, int selectedIndex, string[] displayedOptions)
+        public static int DropDown(in Rect propertyRect, int selectedIndex, string[] displayedOptions)
         {
             return DropDown(propertyRect, null, selectedIndex, displayedOptions);
         }
@@ -73,12 +73,12 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int IntDropDown(Rect propertyRect, int selectedValue, string[] displayedOptions, int[] optionValues)
+        public static int IntDropDown(in Rect propertyRect, int selectedValue, string[] displayedOptions, int[] optionValues)
         {
             return IntDropDown(propertyRect, null, selectedValue, displayedOptions, optionValues);
         }
 
-        public static int IntDropDown(Rect propertyRect, string label, int selectedValue, string[] displayedOptions, int[] optionValues)
+        public static int IntDropDown(in Rect propertyRect, string label, int selectedValue, string[] displayedOptions, int[] optionValues)
         {
             if (displayedOptions.Length != optionValues.Length)
             {
@@ -92,12 +92,12 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Enum EnumDropDown(Rect propertyRect, Enum selected)
+        public static Enum EnumDropDown(in Rect propertyRect, Enum selected)
         {
             return EnumDropDown(propertyRect, null, selected);
         }
 
-        public static Enum EnumDropDown(Rect propertyRect, string label, Enum selected)
+        public static Enum EnumDropDown(in Rect propertyRect, string label, Enum selected)
         {
             var enumData = EnumDropDownData.GetData(selected.GetType());
             int index = Array.IndexOf(enumData.EnumValues, selected);
@@ -110,7 +110,7 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int MaskDropDown(Rect propertyRect, int mask, string[] displayedOptions)
+        public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions)
         {
             return MaskDropDown(propertyRect, null, mask, displayedOptions);
         }
@@ -150,12 +150,12 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Enum FlagsDropDown(Rect propertyRect, Enum flags)
+        public static Enum FlagsDropDown(in Rect propertyRect, Enum flags)
         {
             return FlagsDropDown(propertyRect, null, flags);
         }
 
-        public static Enum FlagsDropDown(Rect propertyRect, string label, Enum flags)
+        public static Enum FlagsDropDown(in Rect propertyRect, string label, Enum flags)
         {
             Type type = flags.GetType();
             var enumData = EnumDropDownData.GetData(type);
