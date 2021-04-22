@@ -387,11 +387,10 @@ namespace UnityEngine
 
         public static void DestroyChildren(this Transform self)
         {
-            int length = self.childCount;
-
-            for (int i = 0; i < length; i++)
+            foreach (Transform child in self)
             {
-                self.GetChild(i).gameObject.Destroy();
+                child.SetParent(null);
+                child.gameObject.Destroy();
             }
         }
 
@@ -400,7 +399,10 @@ namespace UnityEngine
             foreach (Transform child in self)
             {
                 if (predicate(child))
+                {
+                    child.SetParent(null);
                     child.gameObject.Destroy();
+                }
             }
         }
 
