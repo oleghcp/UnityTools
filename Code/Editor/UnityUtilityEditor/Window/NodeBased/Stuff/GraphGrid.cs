@@ -31,7 +31,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             void drawInternal(float spacing)
             {
-                Vector2 winSize = _window.Size;
+                Vector2 winSize = _window.MapSize;
 
                 int widthDivs = (worldRect.width / spacing).Ceiling() + 1;
                 int heightDivs = (worldRect.height / spacing).Ceiling() + 1;

@@ -21,42 +21,52 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private GUIContent _snapButton = new GUIContent("#", "Grid Snapping");
         private GUIContent _leftWidthButton = new GUIContent("<", "Node Width");
         private GUIContent _rightWidthButton = new GUIContent(">", "Node Width");
-        private bool _toggle;
+
+        private bool _hintToggle;
+        private bool _propertiesToggle;
+        private bool _gridToggle;
+
+        public bool GridToggle => _gridToggle;
+        public bool PropertiesToggle => _propertiesToggle;
 
         public GraphToolbar(GraphEditorWindow window)
         {
             _window = window;
+            _gridToggle = EditorPrefs.GetBool(GRID_SNAPING_KEY);
         }
 
         public void Draw()
         {
-            Vector2 winSize = _window.Size;
-            Rect rect = new Rect(new Vector2(0f, winSize.y), new Vector2(winSize.x, HEIGHT));
+            Vector2 winSize = _window.WinSize;
+            Rect rect = new Rect(new Vector2(0f, winSize.y - HEIGHT), new Vector2(winSize.x, HEIGHT));
 
-            using (new GUILayout.AreaScope(rect, (string)null, GraphEditorStyles.Styles.Toolbar))
+            GUILayout.BeginArea(rect, (string)null, GraphEditorStyles.Styles.Toolbar);
+            GUILayout.FlexibleSpace();
+            using (new EditorGUILayout.HorizontalScope())
             {
+                GUILayout.Space(5f);
+                DrawLeft();
                 GUILayout.FlexibleSpace();
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    GUILayout.Space(5f);
-                    DrawLeft();
-                    GUILayout.FlexibleSpace();
-                    DrawMiddle();
-                    GUILayout.FlexibleSpace();
-                    DrawRigt();
-                    GUILayout.Space(5f);
-                }
+                DrawMiddle();
                 GUILayout.FlexibleSpace();
+                DrawRigt();
+                GUILayout.Space(5f);
             }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndArea();
 
-            if (_toggle)
+            if (_hintToggle)
                 DrawHint(winSize);
+        }
+
+        public void Save()
+        {
+            EditorPrefs.SetBool(GRID_SNAPING_KEY, _gridToggle);
         }
 
         private void DrawLeft()
         {
-            if (GUILayout.Button("Properties", GUILayout.Width(100f)))
-                GraphInfoWindow.Open(_window.GraphAssetEditor.GraphAsset, _window);
+            _propertiesToggle = GUILayout.Toggle(_propertiesToggle, "Properties", GUI.skin.button, GUILayout.Width(100f));
         }
 
         private void DrawMiddle()
@@ -102,11 +112,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private void DrawRigt()
         {
             GUILayout.Space(10f);
-            GraphEditorWindow.GridSnapping = GUILayout.Toggle(EditorPrefs.GetBool(GRID_SNAPING_KEY),
-                                                              _snapButton, "Button",
-                                                              GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
-            EditorPrefs.SetBool(GRID_SNAPING_KEY, GraphEditorWindow.GridSnapping);
+            _gridToggle = GUILayout.Toggle(_gridToggle, _snapButton, GUI.skin.button, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             GUILayout.Space(10f);
 
@@ -121,7 +128,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             GUILayout.Space(10f);
 
-            _toggle = GUILayout.Toggle(_toggle, "?", "Button", GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+            _hintToggle = GUILayout.Toggle(_hintToggle, "?", GUI.skin.button, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             if (minusBtn || plusBtn)
                 GUI.changed = true;
@@ -129,7 +136,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void DrawHint(Vector2 winSize)
         {
-            Rect rect = new Rect(new Vector2(winSize.x - HINT_SIZE.x - HINT_OFFSET, winSize.y - HINT_SIZE.y - HINT_OFFSET), HINT_SIZE);
+            Rect rect = new Rect(new Vector2(winSize.x - HINT_SIZE.x - HINT_OFFSET, winSize.y - HINT_SIZE.y - HINT_OFFSET - HEIGHT), HINT_SIZE);
 
             using (new GUILayout.AreaScope(rect, (string)null, EditorStyles.helpBox))
             {

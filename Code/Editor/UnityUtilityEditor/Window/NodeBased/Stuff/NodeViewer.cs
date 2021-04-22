@@ -364,7 +364,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void Drag(Vector2 mouseDelta)
         {
-            if (GraphEditorWindow.GridSnapping)
+            if (_window.GridSnapping)
             {
                 _dragedPosition += mouseDelta * _window.Camera.Size;
                 _position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));

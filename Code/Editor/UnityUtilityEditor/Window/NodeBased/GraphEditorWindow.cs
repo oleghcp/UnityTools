@@ -23,29 +23,48 @@ namespace UnityUtilityEditor.Window.NodeBased
         private PortViewer _selectedPort;
         private bool _selectionRectOn;
         private Vector2 _downPoint;
-        private Vector2 _size;
-        private int _sizeVersion;
+        private Vector2 _mapSize;
+        private Vector2 _winSize;
+        private int _mapSizeVersion;
+        private int _winSizeVersion;
 
-        public static bool GridSnapping;
         private int _onGuiCounter;
 
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
+        public bool GridSnapping => _toolbar.GridToggle;
 
-        public Vector2 Size
+        public Vector2 WinSize
         {
             get
             {
-                if (_sizeVersion != _onGuiCounter)
+                if (_winSizeVersion != _onGuiCounter)
                 {
-                    _size.x = position.width;
-                    _size.y = position.height - GraphToolbar.HEIGHT;
-                    _sizeVersion = _onGuiCounter;
+                    _winSize.x = position.width;
+                    _winSize.y = position.height;
+                    _winSizeVersion = _onGuiCounter;
                 }
 
-                return _size;
+                return _winSize;
+            }
+        }
+
+        public Vector2 MapSize
+        {
+            get
+            {
+                if (_mapSizeVersion != _onGuiCounter)
+                {
+                    _mapSize = WinSize;
+                    if (_toolbar.PropertiesToggle)
+                        _mapSize.x -= GraphAssetEditor.PANEL_WIDTH;
+                    _mapSize.y -= GraphToolbar.HEIGHT;
+                    _mapSizeVersion = _onGuiCounter;
+                }
+
+                return _mapSize;
             }
         }
 
@@ -98,11 +117,22 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
 
             _onGuiCounter++;
+
             Event e = Event.current;
+
+            _toolbar.Draw();
+
+            Vector2 mapScreenPos = new Vector2(_toolbar.PropertiesToggle ? GraphAssetEditor.PANEL_WIDTH : 0f, 0f);
+            Rect mapRect = new Rect(mapScreenPos, MapSize);
+
+            if (_toolbar.PropertiesToggle)
+                _graphAssetEditor.Draw(new Rect(0f, 0f, GraphAssetEditor.PANEL_WIDTH, mapRect.height));
+
+            GUI.BeginGroup(mapRect);
 
             _camera.ProcessEvents(e);
             if (_camera.IsDragging)
-                EditorGUIUtility.AddCursorRect(new Rect(Vector2.zero, Size), MouseCursor.Pan);
+                EditorGUIUtility.AddCursorRect(mapRect, MouseCursor.Pan);
 
             _grid.Draw();
 
@@ -110,12 +140,12 @@ namespace UnityUtilityEditor.Window.NodeBased
             DrawConnectionLine(e);
             DrawNodes();
             DrawSelectionRect(e);
-            GUILayout.Label(_graphAssetEditor.GraphAsset.name, EditorStyles.boldLabel);
-            _toolbar.Draw();
 
             ProcessNodeEvents(e);
             ProcessTransitionsEvents(e);
             ProcessEvents(e);
+
+            GUI.EndGroup();
         }
 
         private void OnDestroy()
@@ -124,13 +154,11 @@ namespace UnityUtilityEditor.Window.NodeBased
                 return;
 
             Save();
-            EditorUtilityExt.SaveProject();
         }
 
         private void OnLostFocus()
         {
             Save();
-            EditorUtilityExt.SaveProject();
         }
 
         public bool IsRootNode(RawNode node)
@@ -365,6 +393,8 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             _nodeViewers.ForEach(item => item.Save());
             _graphAssetEditor.Save(_camera.Position);
+            _toolbar.Save();
+            EditorUtilityExt.SaveProject();
         }
     }
 }

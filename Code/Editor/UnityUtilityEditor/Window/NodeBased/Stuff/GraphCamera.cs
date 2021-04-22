@@ -27,7 +27,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             {
                 if (_worldRectVersion != _window.OnGuiCounter)
                 {
-                    Vector2 size = _window.Size * _sizeFactor;
+                    Vector2 size = _window.MapSize * _sizeFactor;
                     _rect.size = size;
                     _rect.position = _position - size * 0.5f;
                     _worldRectVersion = _window.OnGuiCounter;
@@ -91,7 +91,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Vector2 GetWindowHalfSize()
         {
-            return _window.Size * 0.5f;
+            return _window.MapSize * 0.5f;
         }
     }
 }

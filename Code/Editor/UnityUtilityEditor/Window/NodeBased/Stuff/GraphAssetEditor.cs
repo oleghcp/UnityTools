@@ -13,6 +13,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphAssetEditor
     {
+        public const float PANEL_WIDTH = 300f;
         private const float MIN_NODE_WIDTH = 200f;
         private const float MAX_NODE_WIDTH = 400f;
         private const float NODE_WIDTH_STEP = 1f;
@@ -23,6 +24,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedProperty _cameraPositionProperty;
 
         private float _nodeWidth;
+        private Vector2 _scrollPos;
         private IntIdGenerator _idGenerator;
         private Func<Type> _getNodeType;
         private Func<Type> _getTransitionType;
@@ -54,6 +56,29 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _cameraPositionProperty = _serializedObject.FindProperty(Graph.CameraPositionFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(Graph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
+        }
+
+        public void Draw(in Rect position)
+        {
+            _serializedObject.Update();
+
+            GUILayout.BeginArea(position);
+            _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
+
+            EditorGUILayout.LabelField(_graphAsset.name, EditorStyles.boldLabel);
+
+            EditorGUILayout.Space();
+
+            foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
+            {
+                if (!IsServiceField(item))
+                    EditorGUILayout.PropertyField(item, true);
+            }
+
+            EditorGUILayout.EndScrollView();
+            GUILayout.EndArea();
+
+            _serializedObject.ApplyModifiedProperties();
         }
 
         public IEnumerable<RawNode> ParseList()
@@ -89,23 +114,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return newNodeAsset;
         }
 
-        private void InitAndSaveCreatedNode(Vector2 position, RawNode newNodeAsset)
-        {
-            int newId = _idGenerator.GetNewId();
-
-            newNodeAsset.name = $"Node {newId}";
-            newNodeAsset.Id = newId;
-            newNodeAsset.Owner = _graphAsset;
-            newNodeAsset.Position = position;
-
-            AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
-            AssetDatabase.SaveAssets();
-
-            _serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue = newId;
-            _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
-        }
-
         public void DestroyNode(RawNode nodeAsset)
         {
             int index = _nodesProperty.GetArrayElement(out var element, item => item.objectReferenceValue == nodeAsset);
@@ -128,6 +136,34 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _cameraPositionProperty.vector2Value = cameraPosition;
             _serializedObject.FindProperty(Graph.WidthFieldName).floatValue = _nodeWidth;
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private void InitAndSaveCreatedNode(Vector2 position, RawNode newNodeAsset)
+        {
+            int newId = _idGenerator.GetNewId();
+
+            newNodeAsset.name = $"Node {newId}";
+            newNodeAsset.Id = newId;
+            newNodeAsset.Owner = _graphAsset;
+            newNodeAsset.Position = position;
+
+            AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
+            AssetDatabase.SaveAssets();
+
+            _serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue = newId;
+            _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private bool IsServiceField(SerializedProperty property)
+        {
+            string fieldName = property.propertyPath;
+
+            return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
+                   fieldName == Graph.ArrayFieldName ||
+                   fieldName == Graph.IdGeneratorFieldName ||
+                   fieldName == Graph.CameraPositionFieldName ||
+                   fieldName == Graph.WidthFieldName;
         }
     }
 }
