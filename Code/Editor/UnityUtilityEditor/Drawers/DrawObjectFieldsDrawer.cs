@@ -18,49 +18,10 @@ namespace UnityUtilityEditor.Drawers
 
             position.height = EditorGUIUtility.singleLineHeight;
 
-            if (property.objectReferenceValue != null)
-            {
-                Rect foldPos = position;
-
-                if (fieldInfo.FieldType.IsArray)
-                    foldPos.x += 16f;
-
-                foldPos.width -= EditorGUI.PrefixLabel(position, label).width;
-                property.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(foldPos, property.isExpanded, string.Empty);
-            }
-
-            label = EditorGUI.BeginProperty(position, label, property);
-            EditorGUI.PropertyField(position, property, label, true);
-            EditorGUI.EndProperty();
-
             if (property.objectReferenceValue == null)
-                return;
-
-            if (property.isExpanded)
-            {
-                Rect rect = position;
-                rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-
-                using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
-                {
-                    EditorGUI.indentLevel++;
-
-                    foreach (var item in serObject.EnumerateProperties())
-                    {
-                        if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
-                            continue;
-
-                        EditorGUI.PropertyField(rect, item, true);
-                        rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
-                    }
-
-                    EditorGUI.indentLevel--;
-
-                    serObject.ApplyModifiedProperties();
-                }
-            }
-
-            EditorGUI.EndFoldoutHeaderGroup();
+                EditorGUI.PropertyField(position, property, label);
+            else
+                DrawProperty(position, property, label);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -71,6 +32,48 @@ namespace UnityUtilityEditor.Drawers
             using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
             {
                 return EditorGuiUtility.GetDrawHeight(serObject);
+            }
+        }
+
+        private void DrawProperty(in Rect position, SerializedProperty property, GUIContent label)
+        {
+            Rect labelPos = position;
+            labelPos.width = EditorGUIUtility.labelWidth;
+
+            Rect fieldRect = position;
+            fieldRect.x += labelPos.width + EditorGuiUtility.StandardHorizontalSpacing;
+            fieldRect.width -= labelPos.width + EditorGuiUtility.StandardHorizontalSpacing;
+
+            property.isExpanded = GUI.Toggle(labelPos, property.isExpanded, label, EditorStylesExt.DropDown);
+            property.objectReferenceValue = EditorGUI.ObjectField(fieldRect, property.objectReferenceValue, typeof(ScriptableObject), false);
+
+            if (property.isExpanded)
+            {
+                if (property.objectReferenceValue != null)
+                {
+                    Rect rect = position;
+                    rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
+                    using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
+                    {
+                        serObject.Update();
+
+                        EditorGUI.indentLevel++;
+
+                        foreach (var item in serObject.EnumerateProperties())
+                        {
+                            if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
+                                continue;
+
+                            EditorGUI.PropertyField(rect, item, true);
+                            rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
+                        }
+
+                        EditorGUI.indentLevel--;
+
+                        serObject.ApplyModifiedProperties();
+                    }
+                }
             }
         }
     }
