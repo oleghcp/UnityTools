@@ -68,14 +68,14 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
-        public static void OpenWindow(Graph graphAsset)
+        public static void OpenWindow(RawGraph graphAsset)
         {
             GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, "Graph Editor");
             window.minSize = new Vector2(800f, 600f);
             window.SetUp(graphAsset);
         }
 
-        private void SetUp(Graph graphAsset)
+        private void SetUp(RawGraph graphAsset)
         {
             if (_graphAssetEditor?.GraphAsset == graphAsset)
                 return;

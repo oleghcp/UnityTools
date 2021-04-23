@@ -7,10 +7,10 @@ namespace UnityUtility.NodeBased
         [SerializeField]
         internal int Id;
         [SerializeField]
-        internal Graph Owner;
+        internal RawGraph Owner;
 
         public int LocalId => Id;
-        public Graph Graph => Owner;
+        public RawGraph Graph => Owner;
 
 #if UNITY_EDITOR
         [SerializeField]

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityUtility.NodeBased
 {
-    public abstract class Graph : ScriptableObject
+    public abstract class RawGraph : ScriptableObject
     {
         [SerializeField]
         internal RawNode[] Nodes;
@@ -24,7 +24,7 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Graph<TNode, TTransition> : Graph where TNode : Node<TTransition> where TTransition : Transition, new()
+    public abstract class Graph<TNode, TTransition> : RawGraph where TNode : Node<TTransition> where TTransition : Transition, new()
     {
         public TNode RootNode => Nodes.Length > 0 ? (TNode)Nodes[0] : null;
 

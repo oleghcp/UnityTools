@@ -6,8 +6,8 @@ using UnityUtilityEditor.Window.NodeBased;
 
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {
-    [CustomEditor(typeof(Graph), true)]
-    internal class GraphEditor : Editor<Graph>
+    [CustomEditor(typeof(RawGraph), true)]
+    internal class GraphEditor : Editor<RawGraph>
     {
         private const string OPEN_ITEM_NAME = "Open Graph Editor";
 
@@ -28,16 +28,16 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
             }
         }
 
-        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(Graph) + "/" + MenuItems.RESET_ITEM_NAME)]
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItems.RESET_ITEM_NAME)]
         private static void ResetMenuItem() { }
 
-        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(Graph) + "/" + MenuItems.RESET_ITEM_NAME, true)]
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItems.RESET_ITEM_NAME, true)]
         private static bool ResetMenuItemValidate() => false;
 
-        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(Graph) + "/" + OPEN_ITEM_NAME)]
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
         private static void OpenMenuItem(MenuCommand command)
         {
-            GraphEditorWindow.OpenWindow(command.context as Graph);
+            GraphEditorWindow.OpenWindow(command.context as RawGraph);
         }
     }
 }

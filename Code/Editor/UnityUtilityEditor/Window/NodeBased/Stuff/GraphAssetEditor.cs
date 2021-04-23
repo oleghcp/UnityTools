@@ -18,7 +18,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private const float MAX_NODE_WIDTH = 400f;
         private const float NODE_WIDTH_STEP = 1f;
 
-        private Graph _graphAsset;
+        private RawGraph _graphAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nodesProperty;
         private SerializedProperty _cameraPositionProperty;
@@ -29,7 +29,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Func<Type> _getNodeType;
         private Func<Type> _getTransitionType;
 
-        public Graph GraphAsset => _graphAsset;
+        public RawGraph GraphAsset => _graphAsset;
         public Type NodeType => _getNodeType();
         public Type TransitionType => _getTransitionType();
         public float NodeWidth => _nodeWidth;
@@ -46,16 +46,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public GraphAssetEditor(Graph graphAsset)
+        public GraphAssetEditor(RawGraph graphAsset)
         {
             _graphAsset = graphAsset;
             _getNodeType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetNodeTypeMethodName);
             _getTransitionType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetTransitionTypeMethodName);
             _serializedObject = new SerializedObject(graphAsset);
-            _nodesProperty = _serializedObject.FindProperty(Graph.ArrayFieldName);
-            _cameraPositionProperty = _serializedObject.FindProperty(Graph.CameraPositionFieldName);
-            _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue);
-            _nodeWidth = _serializedObject.FindProperty(Graph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
+            _nodesProperty = _serializedObject.FindProperty(RawGraph.ArrayFieldName);
+            _cameraPositionProperty = _serializedObject.FindProperty(RawGraph.CameraPositionFieldName);
+            _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
+            _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
         }
 
         public void Draw(in Rect position)
@@ -123,7 +123,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_nodesProperty.arraySize == 0)
             {
                 _idGenerator = new IntIdGenerator();
-                _serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue = 0;
+                _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = 0;
             }
 
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
@@ -134,7 +134,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Save(Vector2 cameraPosition)
         {
             _cameraPositionProperty.vector2Value = cameraPosition;
-            _serializedObject.FindProperty(Graph.WidthFieldName).floatValue = _nodeWidth;
+            _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue = _nodeWidth;
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -150,7 +150,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
             AssetDatabase.SaveAssets();
 
-            _serializedObject.FindProperty(Graph.IdGeneratorFieldName).intValue = newId;
+            _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newId;
             _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -160,10 +160,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             string fieldName = property.propertyPath;
 
             return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
-                   fieldName == Graph.ArrayFieldName ||
-                   fieldName == Graph.IdGeneratorFieldName ||
-                   fieldName == Graph.CameraPositionFieldName ||
-                   fieldName == Graph.WidthFieldName;
+                   fieldName == RawGraph.ArrayFieldName ||
+                   fieldName == RawGraph.IdGeneratorFieldName ||
+                   fieldName == RawGraph.CameraPositionFieldName ||
+                   fieldName == RawGraph.WidthFieldName;
         }
     }
 }

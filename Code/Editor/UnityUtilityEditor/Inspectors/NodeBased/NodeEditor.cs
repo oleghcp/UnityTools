@@ -42,7 +42,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
         private static void DestroyNode(RawNode target)
         {
-            Graph graph = target.Owner;
+            RawGraph graph = target.Owner;
 
             if (graph != null)
             {
