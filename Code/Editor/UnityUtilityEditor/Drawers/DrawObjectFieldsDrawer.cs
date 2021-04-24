@@ -47,33 +47,30 @@ namespace UnityUtilityEditor.Drawers
             property.isExpanded = GUI.Toggle(labelPos, property.isExpanded, label, EditorStylesExt.DropDown);
             property.objectReferenceValue = EditorGUI.ObjectField(fieldRect, property.objectReferenceValue, typeof(ScriptableObject), false);
 
-            if (property.isExpanded)
+            if (property.objectReferenceValue == null || !property.isExpanded)
+                return;
+
+            Rect rect = position;
+            rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
+            using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
             {
-                if (property.objectReferenceValue != null)
+                serObject.Update();
+
+                EditorGUI.indentLevel++;
+
+                foreach (var item in serObject.EnumerateProperties())
                 {
-                    Rect rect = position;
-                    rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                    if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
+                        continue;
 
-                    using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
-                    {
-                        serObject.Update();
-
-                        EditorGUI.indentLevel++;
-
-                        foreach (var item in serObject.EnumerateProperties())
-                        {
-                            if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
-                                continue;
-
-                            EditorGUI.PropertyField(rect, item, true);
-                            rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
-                        }
-
-                        EditorGUI.indentLevel--;
-
-                        serObject.ApplyModifiedProperties();
-                    }
+                    EditorGUI.PropertyField(rect, item, true);
+                    rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
                 }
+
+                EditorGUI.indentLevel--;
+
+                serObject.ApplyModifiedProperties();
             }
         }
     }
