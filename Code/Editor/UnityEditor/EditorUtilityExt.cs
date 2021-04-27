@@ -131,12 +131,12 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
             DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onClose);
         }
 
-        public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
             DropDownList.Create(flags, displayedOptions, onClose)?.ShowMenu(buttonRect);
         }

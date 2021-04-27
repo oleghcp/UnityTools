@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -150,11 +151,14 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
             {
                 selector = new TypeSelector();
                 Assembly[] assemblies = EditorUtilityExt.GetAssemblies();
-                selector.Types = EditorUtilityExt.GetTypes(assemblies, type => type.IsSubclassOf(typeof(Enum)));
+                selector.Types = EditorUtilityExt.GetTypes(assemblies, type => type.IsEnum);
+
                 if (selector.Types.Length > 0)
                 {
-                    selector.Types = selector.Types.OrderBy(itm => itm.FullName).ToArray();
-                    selector.TypeNames = selector.Types.Select(EditorGuiUtility.GetTypeDisplayName).ToArray();
+                    selector.Types.Sort(item => item.Name);
+                    selector.TypeNames = selector.Types
+                                                 .Select(EditorGuiUtility.GetTypeDisplayName)
+                                                 .ToArray();
                 }
             }
 
