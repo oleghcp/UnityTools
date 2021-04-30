@@ -597,11 +597,13 @@ namespace System.Collections.Generic
                 action(item.Key, item.Value);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in KeyValuePair<TKey, TValue> keyValuePair)
         {
             self.Add(keyValuePair.Key, keyValuePair.Value);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in (TKey key, TValue value) pair)
         {
             self.Add(pair.key, pair.value);
@@ -610,6 +612,20 @@ namespace System.Collections.Generic
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key)
         {
             self.TryGetValue(key, out TValue value);
+            return value;
+        }
+
+        public static TValue GetOrCreateValue<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key) where TValue : new()
+        {
+            if (!self.TryGetValue(key, out TValue value))
+                self.Add(key, value = new TValue());
+            return value;
+        }
+
+        public static TValue GetOrCreateValue<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, Func<TKey, TValue> creator)
+        {
+            if (!self.TryGetValue(key, out TValue value))
+                self.Add(key, value = creator(key));
             return value;
         }
 
