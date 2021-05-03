@@ -243,50 +243,50 @@ namespace UnityUtility.Collections
             _version++;
         }
 
-        public void And(BitList value)
+        public void And(BitList other)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
-            if (_length != value._length)
+            if (_length != other._length)
                 throw Errors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
             {
-                _array[i] &= value._array[i];
+                _array[i] &= other._array[i];
             }
             _version++;
         }
 
-        public void Or(BitList value)
+        public void Or(BitList other)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
-            if (_length != value._length)
+            if (_length != other._length)
                 throw Errors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
             {
-                _array[i] |= value._array[i];
+                _array[i] |= other._array[i];
             }
             _version++;
         }
 
-        public void Xor(BitList value)
+        public void Xor(BitList other)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
-            if (_length != value._length)
+            if (_length != other._length)
                 throw Errors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
             {
-                _array[i] ^= value._array[i];
+                _array[i] ^= other._array[i];
             }
             _version++;
         }
@@ -333,6 +333,44 @@ namespace UnityUtility.Collections
             return BitMask.AllFor(_array[lastElement], GetAppendixLength());
         }
 
+        public bool Intersects(BitList other)
+        {
+            if (_length != other._length)
+                throw Errors.DifferentArrayLengths();
+
+            int lastElement = GetArraySize(_length) - 1;
+
+            if (lastElement < 0)
+                return false;
+
+            for (int i = 0; i < lastElement; i++)
+            {
+                if ((_array[i] & other._array[i]) == 0)
+                    return false;
+            }
+
+            return BitMask.Intersects(_array[lastElement], other._array[lastElement], GetAppendixLength());
+        }
+
+        public bool Coincides(BitList other)
+        {
+            if (_length != other._length)
+                throw Errors.DifferentArrayLengths();
+
+            int lastElement = GetArraySize(_length) - 1;
+
+            if (lastElement < 0)
+                return true;
+
+            for (int i = 0; i < lastElement; i++)
+            {
+                if (_array[i] != other._array[i])
+                    return false;
+            }
+
+            return BitMask.Equals(_array[lastElement], other._array[lastElement], GetAppendixLength());
+        }
+
         public bool IsEmpty()
         {
             int lastElement = GetArraySize(_length) - 1;
@@ -346,7 +384,7 @@ namespace UnityUtility.Collections
                     return false;
             }
 
-            return !BitMask.AnyFor(_array[lastElement], GetAppendixLength());
+            return BitMask.EmptyFor(_array[lastElement], GetAppendixLength());
         }
 
         public int GetCount()
