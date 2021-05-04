@@ -80,9 +80,11 @@ namespace UnityUtilityEditor.Drawers
             }
 
             SerializedProperty arrayProp = property.FindPropertyRelative(BitList.ArrayFieldName);
+            SerializedProperty lengthProp = property.FindPropertyRelative(BitList.LengthFieldName);
 
             int intBlocksCount = BitList.GetArraySize(names.Length);
             arrayProp.arraySize = intBlocksCount;
+            lengthProp.intValue = names.Length;
 
             Span<int> intBlocks = stackalloc int[intBlocksCount];
             for (int i = 0; i < intBlocks.Length; i++)
