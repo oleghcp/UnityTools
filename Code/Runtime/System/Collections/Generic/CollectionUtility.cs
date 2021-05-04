@@ -184,6 +184,7 @@ namespace System.Collections.Generic
                 {
                     minKey = keySelector(item);
                     result = item;
+                    index = i;
                     nonFirstIteration = true;
                 }
 
@@ -227,6 +228,7 @@ namespace System.Collections.Generic
                 {
                     maxKey = keySelector(item);
                     result = item;
+                    index = i;
                     nonFirstIteration = true;
                 }
 
