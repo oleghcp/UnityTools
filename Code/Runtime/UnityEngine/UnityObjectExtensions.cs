@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityUtility;
 using UnityObject = UnityEngine.Object;
@@ -387,32 +388,41 @@ namespace UnityEngine
 
         public static void DestroyChildren(this Transform self)
         {
-            foreach (Transform child in self)
+            Transform[] children = self.GetTopChildren();
+            self.DetachChildren();
+
+            for (int i = 0; i < children.Length; i++)
             {
-                child.SetParent(null);
-                child.gameObject.Destroy();
+                children[i].gameObject.Destroy();
             }
         }
 
         public static void DestroyChildren(this Transform self, Predicate<Transform> predicate)
         {
-            foreach (Transform child in self)
+            Transform[] children = GetSelectedChildren(self, predicate);
+
+            for (int i = 0; i < children.Length; i++)
             {
-                if (predicate(child))
-                {
-                    child.SetParent(null);
-                    child.gameObject.Destroy();
-                }
+                children[i].SetParent(null);
+                children[i].gameObject.Destroy();
             }
         }
 
         public static void DetachChildren(this Transform self, Predicate<Transform> predicate)
         {
-            foreach (Transform child in self)
+            Transform[] children = GetSelectedChildren(self, predicate);
+
+            for (int i = 0; i < children.Length; i++)
             {
-                if (predicate(child))
-                    child.SetParent(null);
+                children[i].SetParent(null);
             }
+        }
+
+        private static Transform[] GetSelectedChildren(Transform self, Predicate<Transform> predicate)
+        {
+            return self.EnumerateChildren(false)
+                       .Where(item => predicate(item))
+                       .ToArray();
         }
 
         /// <summary>
