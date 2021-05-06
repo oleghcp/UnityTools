@@ -6,22 +6,22 @@ namespace UnityEngine
 {
     public static class UnityStructExtensions
     {
-        public static Vector3 AlterX(this Vector3 value, float x)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 AlterX(this in Vector3 value, float x)
         {
-            value.x = x;
-            return value;
+            return new Vector3(x, value.y, value.z);
         }
 
-        public static Vector3 AlterY(this Vector3 value, float y)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 AlterY(this in Vector3 value, float y)
         {
-            value.y = y;
-            return value;
+            return new Vector3(value.x, y, value.z);
         }
 
-        public static Vector3 AlterZ(this Vector3 value, float z)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 AlterZ(this in Vector3 value, float z)
         {
-            value.z = z;
-            return value;
+            return new Vector3(value.x, value.y, z);
         }
 
         //--//
@@ -84,22 +84,22 @@ namespace UnityEngine
 
         //--//
 
-        public static Vector3Int AlterX(this Vector3Int value, int x)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3Int AlterX(this in Vector3Int value, int x)
         {
-            value.x = x;
-            return value;
+            return new Vector3Int(x, value.y, value.z);
         }
 
-        public static Vector3Int AlterY(this Vector3Int value, int y)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3Int AlterY(this in Vector3Int value, int y)
         {
-            value.y = y;
-            return value;
+            return new Vector3Int(value.x, y, value.z);
         }
 
-        public static Vector3Int AlterZ(this Vector3Int value, int z)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3Int AlterZ(this in Vector3Int value, int z)
         {
-            value.z = z;
-            return value;
+            return new Vector3Int(value.x, value.y, z);
         }
 
         //--//
@@ -237,14 +237,10 @@ namespace UnityEngine
         /// Returns vector2int rotated right angles (90, 180, etc.).
         /// </summary>
         /// <param name="rotations">Defines a rotation angle by multiplying by 90 degrees. If the value is positive returns rotated counterclockwise.</param>
-        public static Vector2Int GetRotated(this Vector2Int localPos, int rotations)
+        public static Vector2Int GetRotated(this in Vector2Int localPos, int rotations)
         {
             (int y, int x) = MathUtility.RotateCellPos(localPos.y, localPos.x, rotations);
-
-            localPos.x = x;
-            localPos.y = y;
-
-            return localPos;
+            return new Vector2Int(x, y);
         }
 
         //--//
@@ -289,14 +285,6 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Returns the aspect ratio of the rect (height / width).
-        /// </summary>
-        public static float GetAspectRatio(this in Rect value)
-        {
-            return value.height / value.width;
-        }
-
-        /// <summary>
         /// Returns the diagonal length of the rect.
         /// </summary>
         public static float GetDiagonal(this in Rect value)
@@ -311,9 +299,11 @@ namespace UnityEngine
         /// </summary>
         public static Vector2 GetPivot(this in Rect rect)
         {
-            float x = (0f - rect.xMin) / rect.width;
-            float y = (0f - rect.yMin) / rect.height;
-            return new Vector2(x, y);
+            return new Vector2
+            {
+                x = (0f - rect.xMin) / rect.width,
+                y = (0f - rect.yMin) / rect.height,
+            };
         }
 
         /// <summary>
@@ -328,15 +318,13 @@ namespace UnityEngine
         /// <summary>
         /// Returns rect expanded multiplicatively relative to zero coordinates.
         /// </summary>
-        public static Rect GetMultiplied(this Rect value, float xFactor, float yFactor)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Rect GetMultiplied(this in Rect value, float xFactor, float yFactor)
         {
-            value.xMin *= xFactor;
-            value.yMin *= yFactor;
-
-            value.xMax *= xFactor;
-            value.yMax *= yFactor;
-
-            return value;
+            return Rect.MinMaxRect(value.xMin * xFactor,
+                                   value.yMin * yFactor,
+                                   value.xMax * xFactor,
+                                   value.yMax * yFactor);
         }
 
         /// <summary>
@@ -361,12 +349,10 @@ namespace UnityEngine
         /// <summary>
         /// Returns additively expanded rect without preserving pivot.
         /// </summary>        
-        public static Rect GetExpanded(this Rect value, in Vector2 expandSize)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Rect GetExpanded(this in Rect value, in Vector2 expandSize)
         {
-            value.size += expandSize;
-            value.position -= expandSize * 0.5f;
-
-            return value;
+            return new Rect(value.position - expandSize * 0.5f, value.size + expandSize);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -403,28 +389,28 @@ namespace UnityEngine
 
         // -- //
 
-        public static Color AlterR(this Color color, float r)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color AlterR(this in Color color, float r)
         {
-            color.r = r;
-            return color;
+            return new Color(r, color.g, color.b, color.a);
         }
 
-        public static Color AlterG(this Color color, float g)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color AlterG(this in Color color, float g)
         {
-            color.g = g;
-            return color;
+            return new Color(color.r, g, color.b, color.a);
         }
 
-        public static Color AlterB(this Color color, float b)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color AlterB(this in Color color, float b)
         {
-            color.b = b;
-            return color;
+            return new Color(color.r, color.g, b, color.a);
         }
 
-        public static Color AlterA(this Color color, float a)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color AlterA(this in Color color, float a)
         {
-            color.a = a;
-            return color;
+            return new Color(color.r, color.g, color.b, a);
         }
     }
 }

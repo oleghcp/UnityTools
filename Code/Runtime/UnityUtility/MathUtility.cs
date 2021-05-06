@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityUtility.MathExt;
-using static System.Math;
+using static System.MathF;
 
 namespace UnityUtility
 {
@@ -43,8 +43,8 @@ namespace UnityUtility
         public static Vector2 RotateVector(in Vector2 rotated, float angle)
         {
             angle = angle.ToRadians();
-            float sin = (float)Sin(angle);
-            float cos = (float)Cos(angle);
+            float sin = Sin(angle);
+            float cos = Cos(angle);
 
             return new Vector2(rotated.x * cos - rotated.y * sin, rotated.x * sin + rotated.y * cos);
         }
@@ -57,8 +57,8 @@ namespace UnityUtility
         {
             angle = angle.ToRadians();
 
-            float sin = (float)Sin(angle);
-            float cos = (float)Cos(angle);
+            float sin = Sin(angle);
+            float cos = Cos(angle);
 
             float oneMinusCos = 1f - cos;
             float oneMinusCosByXY = oneMinusCos * axis.x * axis.y;
@@ -72,7 +72,7 @@ namespace UnityUtility
             {
                 x = rotated.x * (cos + oneMinusCos * axis.x * axis.x) + rotated.y * (oneMinusCosByXY - zSin) + rotated.z * (oneMinusCosByZX + ySin),
                 y = rotated.x * (oneMinusCosByXY + zSin) + rotated.y * (cos + oneMinusCos * axis.y * axis.y) + rotated.z * (oneMinusCosByYZ - xSin),
-                z = rotated.x * (oneMinusCosByZX - ySin) + rotated.y * (oneMinusCosByYZ + xSin) + rotated.z * (cos + oneMinusCos * axis.z * axis.z)
+                z = rotated.x * (oneMinusCosByZX - ySin) + rotated.y * (oneMinusCosByYZ + xSin) + rotated.z * (cos + oneMinusCos * axis.z * axis.z),
             };
         }
 
@@ -83,7 +83,7 @@ namespace UnityUtility
         public static Vector2 AngleToVector2(float angle)
         {
             angle = angle.ToRadians();
-            return new Vector2((float)Cos(angle), (float)Sin(angle));
+            return new Vector2(Cos(angle), Sin(angle));
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace UnityUtility
         public static Quaternion LookRotation(Vector3 forward, float angle)
         {
             float halfAngle = angle.ToRadians() * 0.5f;
-            Vector3 xyz = forward.normalized * (float)Sin(halfAngle);
-            float w = (float)Cos(halfAngle);
+            Vector3 xyz = forward.normalized * Sin(halfAngle);
+            float w = Cos(halfAngle);
             return new Quaternion(xyz.x, xyz.y, xyz.z, w);
         }
     }
