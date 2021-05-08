@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedObject _serializedObject;
         private SerializedProperty _nameProperty;
 
-        private bool _isDragged;
+        private bool _isBeingDragged;
         private bool _isSelected;
         private bool _renaming;
         private float _height;
@@ -218,7 +218,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         if (nodeRect.Contains(e.mousePosition))
                         {
                             _dragedPosition = _position;
-                            _isDragged = true;
+                            _isBeingDragged = true;
                             _isSelected = true;
                             needLock = true;
                         }
@@ -244,11 +244,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     break;
 
                 case EventType.MouseUp:
-                    _isDragged = false;
+                    _isBeingDragged = false;
                     break;
 
                 case EventType.MouseDrag:
-                    if (e.button == 0 && (_isDragged || _isSelected))
+                    if (e.button == 0 && (_isBeingDragged || _isSelected))
                     {
                         Drag(e.delta);
                         GUI.changed = true;

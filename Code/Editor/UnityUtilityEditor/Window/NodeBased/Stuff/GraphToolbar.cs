@@ -10,7 +10,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     {
         public const float HEIGHT = 25f;
         private const string GRID_SNAPING_KEY = "uu_ggs";
-        private readonly Vector2 HINT_SIZE = new Vector2(200f, 140f);
+        private const float HINT_WIDTH = 200f;
+        private const float HINT_HEIGHT = 140f;
         private const float HINT_OFFSET = 5f;
 
         private GraphEditorWindow _window;
@@ -38,7 +39,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Draw()
         {
             Vector2 winSize = _window.WinSize;
-            Rect rect = new Rect(new Vector2(0f, winSize.y - HEIGHT), new Vector2(winSize.x, HEIGHT));
+            Rect rect = new Rect(0f, winSize.y - HEIGHT, winSize.x, HEIGHT);
 
             GUILayout.BeginArea(rect, (string)null, GraphEditorStyles.Styles.Toolbar);
             GUILayout.FlexibleSpace();
@@ -136,7 +137,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void DrawHint(Vector2 winSize)
         {
-            Rect rect = new Rect(new Vector2(winSize.x - HINT_SIZE.x - HINT_OFFSET, winSize.y - HINT_SIZE.y - HINT_OFFSET - HEIGHT), HINT_SIZE);
+            Rect rect = new Rect(winSize.x - HINT_WIDTH - HINT_OFFSET,
+                                 winSize.y - HINT_HEIGHT - HINT_OFFSET - HEIGHT,
+                                 HINT_WIDTH,
+                                 HINT_HEIGHT);
 
             using (new GUILayout.AreaScope(rect, (string)null, EditorStyles.helpBox))
             {
