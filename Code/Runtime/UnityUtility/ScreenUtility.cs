@@ -53,7 +53,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetPathScreenFactor(float verticalFieldOfView, float distance)
         {
-            return GetPathScreenFactor(distance * HalfFovTan(verticalFieldOfView));
+            return GetPathScreenFactor(distance * GetHalfFovTan(verticalFieldOfView));
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetCameraViewRadius(float verticalFieldOfView, float distance)
         {
-            return GetCameraViewRadius(distance * HalfFovTan(verticalFieldOfView));
+            return GetCameraViewRadius(distance * GetHalfFovTan(verticalFieldOfView));
         }
 
         /// <summary>
@@ -95,15 +95,21 @@ namespace UnityUtility
         /// <param name="ratio">Value is width/height for vertical fov and vice versa.</param>
         public static float GetAspectAngle(float fieldOfView, float ratio)
         {
-            float tan1 = HalfFovTan(fieldOfView);
+            float tan1 = GetHalfFovTan(fieldOfView);
             float tan2 = ratio * tan1;
-            return Mathf.Atan(tan2).ToDegrees() * 2f;
+            return GetFovFromHalfTan(tan2);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static float HalfFovTan(float fov)
+        internal static float GetHalfFovTan(float fov)
         {
             return MathF.Tan((fov * 0.5f).ToRadians());
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static float GetFovFromHalfTan(float halfFovTan)
+        {
+            return MathF.Atan(halfFovTan).ToDegrees() * 2f;
         }
     }
 }

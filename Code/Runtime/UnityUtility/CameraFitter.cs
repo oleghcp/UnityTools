@@ -118,8 +118,8 @@ namespace UnityUtility
                 return;
             }
 
-            float vTan = ScreenUtility.HalfFovTan(_targetVertical);
-            float hTan = ScreenUtility.HalfFovTan(_targetHorizontal);
+            float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
+            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
 
             float targetRatio = vTan / hTan;
 
