@@ -53,7 +53,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetPathScreenFactor(float verticalFieldOfView, float distance)
         {
-            return GetPathScreenFactor(distance * MathTan(verticalFieldOfView));
+            return GetPathScreenFactor(distance * HalfFovTan(verticalFieldOfView));
         }
 
         /// <summary>
@@ -73,13 +73,37 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetCameraViewRadius(float verticalFieldOfView, float distance)
         {
-            return GetCameraViewRadius(distance * MathTan(verticalFieldOfView));
+            return GetCameraViewRadius(distance * HalfFovTan(verticalFieldOfView));
+        }
+
+        /// <summary>
+        /// Returns horizontal field of view for known vertical one and vice versa.
+        /// </summary>
+        /// <param name="fieldOfViewA">Horizontal or vertical field of view.</param>
+        /// <param name="sizeA">Screen height if <paramref name="fieldOfViewA"/> is vertical and width for horizontal.</param>
+        /// <param name="sizeB">Oppsite to <paramref name="sizeA"/></param>
+        /// <returns>Field of view B.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetAspectAngle(float fieldOfViewA, float sizeA, float sizeB)
+        {
+            return GetAspectAngle(fieldOfViewA, sizeB / sizeA);
+        }
+
+        /// <summary>
+        /// Returns horizontal field of view for known vertical one and vice versa.
+        /// </summary>        
+        /// <param name="ratio">Value is width/height for vertical fov and vice versa.</param>
+        public static float GetAspectAngle(float fieldOfView, float ratio)
+        {
+            float tan1 = HalfFovTan(fieldOfView);
+            float tan2 = ratio * tan1;
+            return Mathf.Atan(tan2).ToDegrees() * 2f;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float MathTan(float verticalFieldOfView)
+        internal static float HalfFovTan(float fov)
         {
-            return MathF.Tan((verticalFieldOfView * 0.5f).ToRadians());
+            return MathF.Tan((fov * 0.5f).ToRadians());
         }
     }
 }

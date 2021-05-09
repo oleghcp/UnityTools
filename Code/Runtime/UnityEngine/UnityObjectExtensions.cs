@@ -596,5 +596,11 @@ namespace UnityEngine
         {
             return ScreenUtility.GetCameraViewRadius(self.fieldOfView, distance);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetHorizontalFov(this Camera self)
+        {
+            return Camera.VerticalToHorizontalFieldOfView(self.fieldOfView, (float)Screen.width / Screen.height);
+        }
     }
 }
