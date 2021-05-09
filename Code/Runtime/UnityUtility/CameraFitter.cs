@@ -98,7 +98,7 @@ namespace UnityUtility
         {
             if (_aspectMode == AspectMode.FixedWidth)
             {
-                _camera.orthographicSize = _targetHorizontal * _currentAspect;
+                _camera.orthographicSize = _targetVertical = _targetHorizontal * _currentAspect;
                 return;
             }
 
@@ -114,7 +114,7 @@ namespace UnityUtility
         {
             if (_aspectMode == AspectMode.FixedWidth)
             {
-                _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontal, _currentAspect);
+                _camera.fieldOfView = _targetVertical = ScreenUtility.GetAspectAngle(_targetHorizontal, _currentAspect);
                 return;
             }
 
