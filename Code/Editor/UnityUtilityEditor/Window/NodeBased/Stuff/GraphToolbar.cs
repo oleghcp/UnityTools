@@ -9,7 +9,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     internal class GraphToolbar
     {
         public const float HEIGHT = 25f;
-        private const string GRID_SNAPING_KEY = "uu_ggs";
         private const float HINT_WIDTH = 200f;
         private const float HINT_HEIGHT = 140f;
         private const float HINT_OFFSET = 5f;
@@ -33,7 +32,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public GraphToolbar(GraphEditorWindow window)
         {
             _window = window;
-            _gridToggle = EditorPrefs.GetBool(GRID_SNAPING_KEY);
+            _gridToggle = EditorPrefs.GetBool(PrefsConstants.GRID_SNAPING_KEY);
         }
 
         public void Draw()
@@ -62,7 +61,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Save()
         {
-            EditorPrefs.SetBool(GRID_SNAPING_KEY, _gridToggle);
+            EditorPrefs.SetBool(PrefsConstants.GRID_SNAPING_KEY, _gridToggle);
         }
 
         private void DrawLeft()

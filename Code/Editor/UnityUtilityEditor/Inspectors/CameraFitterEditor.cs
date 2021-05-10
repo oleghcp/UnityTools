@@ -12,11 +12,19 @@ namespace UnityUtilityEditor.Inspectors
         private SerializedProperty _vertical;
         private SerializedProperty _horizontal;
 
+        private bool _widthToHeight;
+
         private void OnEnable()
         {
             _mode = serializedObject.FindProperty(CameraFitter.ModeFieldName);
             _vertical = serializedObject.FindProperty(CameraFitter.VerticalFieldName);
             _horizontal = serializedObject.FindProperty(CameraFitter.HorizontalFieldName);
+            _widthToHeight = EditorPrefs.GetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY);
+        }
+
+        private void OnDestroy()
+        {
+            EditorPrefs.SetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY, _widthToHeight);
         }
 
         public override void OnInspectorGUI()
@@ -83,11 +91,16 @@ namespace UnityUtilityEditor.Inspectors
 
             if (ortho)
             {
-                float calculatedRatio = _horizontal.floatValue / _vertical.floatValue;
-                float ratio = EditorGUILayout.FloatField("Aspect Ratio", calculatedRatio).CutBefore(0f);
+                float calculatedRatio = GetRatio(_horizontal.floatValue, _vertical.floatValue);
+
+                EditorGUILayout.BeginHorizontal();
+                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
+                if (GUILayout.Button("*", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                    _widthToHeight = !_widthToHeight;
+                EditorGUILayout.EndHorizontal();
 
                 if (calculatedRatio != ratio)
-                    _horizontal.floatValue = _vertical.floatValue * ratio;
+                    _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
 
                 DrawSize(_horizontal, "Target Horizontal Size");
                 DrawSize(_vertical, "Target Vertical Size");
@@ -96,11 +109,16 @@ namespace UnityUtilityEditor.Inspectors
             {
                 float hTan = ScreenUtility.GetHalfFovTan(_horizontal.floatValue);
                 float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
-                float calculatedRatio = hTan / vTan;
-                float ratio = EditorGUILayout.FloatField("Aspect Ratio", calculatedRatio).CutBefore(0f);
+                float calculatedRatio = GetRatio(hTan, vTan);
+
+                EditorGUILayout.BeginHorizontal();
+                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
+                if (GUILayout.Button("*", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                    _widthToHeight = !_widthToHeight;
+                EditorGUILayout.EndHorizontal();
 
                 if (calculatedRatio != ratio)
-                    _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(vTan * ratio);
+                    _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
 
                 DrawFov(_horizontal, "Target Horizontal Fov");
                 DrawFov(_vertical, "Target Vertical Fov");
@@ -123,6 +141,21 @@ namespace UnityUtilityEditor.Inspectors
             Vector3 p1 = center - up;
             Vector3 p2 = center + up;
             Handles.DrawLine(p1, p2, 2f);
+        }
+
+        private float GetRatio(float width, float height)
+        {
+            return _widthToHeight ? width / height : height / width;
+        }
+
+        private float GetWidth(float height, float ratio)
+        {
+            return _widthToHeight ? ratio * height : height / ratio;
+        }
+
+        private string GetRatioLabel()
+        {
+            return _widthToHeight ? "Width / Height" : "Height / Width";
         }
     }
 }

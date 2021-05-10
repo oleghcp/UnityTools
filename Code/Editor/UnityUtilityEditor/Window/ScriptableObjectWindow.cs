@@ -10,8 +10,6 @@ namespace UnityUtilityEditor.Window
 {
     internal class ScriptableObjectWindow : EditorWindow
     {
-        private const string ASSEMBLY_INDEX_KEY = "uu_csowai";
-
         private static bool _keepOpened;
         private UnityObject _targetRoot;
 
@@ -65,9 +63,9 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            _assemblyIndex = EditorGuiLayout.DropDown("Assembly:", EditorPrefs.GetInt(ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
+            _assemblyIndex = EditorGuiLayout.DropDown("Assembly:", EditorPrefs.GetInt(PrefsConstants.ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
 
-            EditorPrefs.SetInt(ASSEMBLY_INDEX_KEY, _assemblyIndex);
+            EditorPrefs.SetInt(PrefsConstants.ASSEMBLY_INDEX_KEY, _assemblyIndex);
             string assemblyName = _assemblies[_assemblyIndex];
 
             GUILayout.Space(10f);
