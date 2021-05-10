@@ -13,13 +13,10 @@ namespace UnityUtility.NodeBased
         [SerializeField]
         internal int LastId;
         [SerializeField]
-        internal Vector2 CameraPosition;
-        [SerializeField]
         private float _nodeWidth;
 
         internal static string IdGeneratorFieldName => nameof(LastId);
         internal static string WidthFieldName => nameof(_nodeWidth);
-        internal static string CameraPositionFieldName => nameof(CameraPosition);
         internal static string ArrayFieldName => nameof(Nodes);
 #endif
     }

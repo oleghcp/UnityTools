@@ -21,7 +21,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private RawGraph _graphAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nodesProperty;
-        private SerializedProperty _cameraPositionProperty;
 
         private float _nodeWidth;
         private Vector2 _scrollPos;
@@ -33,7 +32,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public Type NodeType => _getNodeType();
         public Type TransitionType => _getTransitionType();
         public float NodeWidth => _nodeWidth;
-        public Vector2 CameraPosition => _cameraPositionProperty.vector2Value;
 
         public RawNode RootNode
         {
@@ -53,7 +51,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _getTransitionType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetTransitionTypeMethodName);
             _serializedObject = new SerializedObject(graphAsset);
             _nodesProperty = _serializedObject.FindProperty(RawGraph.ArrayFieldName);
-            _cameraPositionProperty = _serializedObject.FindProperty(RawGraph.CameraPositionFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
         }
@@ -131,9 +128,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             AssetDatabase.SaveAssets();
         }
 
-        public void Save(Vector2 cameraPosition)
+        public void Save()
         {
-            _cameraPositionProperty.vector2Value = cameraPosition;
             _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue = _nodeWidth;
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -162,7 +158,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
                    fieldName == RawGraph.ArrayFieldName ||
                    fieldName == RawGraph.IdGeneratorFieldName ||
-                   fieldName == RawGraph.CameraPositionFieldName ||
                    fieldName == RawGraph.WidthFieldName;
         }
     }

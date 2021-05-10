@@ -48,10 +48,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
             {
                 ArrayUtility.Remove(ref graph.Nodes, target);
                 if (graph.Nodes.Length == 0)
-                {
                     graph.LastId = 0;
-                    graph.CameraPosition = default;
-                }
                 EditorUtility.SetDirty(graph);
 
                 foreach (var node in target.Owner.Nodes)

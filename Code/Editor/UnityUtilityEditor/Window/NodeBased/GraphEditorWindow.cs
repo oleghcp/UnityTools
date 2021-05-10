@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace UnityUtilityEditor.Window.NodeBased
     {
         private readonly Color SELECTION_COLOR = Colours.Black.AlterA(0.25f);
 
+        private GraphEditorSettings _settings;
         private GraphAssetEditor _graphAssetEditor;
         private GraphCamera _camera;
         private GraphGrid _grid;
@@ -86,8 +88,9 @@ namespace UnityUtilityEditor.Window.NodeBased
                 _transitionViewers.Clear();
             }
 
+            _settings = LoadSettings(graphAsset);
             _graphAssetEditor = new GraphAssetEditor(graphAsset);
-            _camera = new GraphCamera(this, _graphAssetEditor.CameraPosition);
+            _camera = new GraphCamera(this, _settings.CameraPosition);
 
             foreach (RawNode item in _graphAssetEditor.ParseList())
             {
@@ -392,9 +395,42 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void Save()
         {
             _nodeViewers.ForEach(item => item.Save());
-            _graphAssetEditor.Save(_camera.Position);
+            _graphAssetEditor.Save();
             _toolbar.Save();
+            _settings.CameraPosition = _camera.Position;
+            SaveSettings(_graphAssetEditor.GraphAsset, _settings);
             EditorUtilityExt.SaveProject();
+        }
+
+        private static GraphEditorSettings LoadSettings(RawGraph asset)
+        {
+            if (AssetDatabase.TryGetGUIDAndLocalFileIdentifier(asset, out string guid, out long _))
+            {
+                string floderPath = Path.Combine(Application.persistentDataPath, "GraphSettings");
+                Directory.CreateDirectory(floderPath);
+                string filePath = Path.Combine(floderPath, guid);
+
+                if (!File.Exists(filePath))
+                    return new GraphEditorSettings();
+
+                GraphEditorSettings graphSettings = BinaryFileUtility.Load<GraphEditorSettings>(filePath);
+                return graphSettings ?? new GraphEditorSettings();
+            }
+
+            return new GraphEditorSettings();
+        }
+
+        private static void SaveSettings(RawGraph asset, GraphEditorSettings settings)
+        {
+            if (!AssetDatabase.TryGetGUIDAndLocalFileIdentifier(asset, out string guid, out long _))
+            {
+                Debug.LogWarning("Cannot get asset guid.");
+                return;
+            }
+
+            string path = Path.Combine(Application.persistentDataPath, "GraphSettings");
+            Directory.CreateDirectory(path);
+            BinaryFileUtility.Save(Path.Combine(path, guid), settings);
         }
     }
 }
