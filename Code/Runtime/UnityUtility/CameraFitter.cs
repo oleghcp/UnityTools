@@ -20,9 +20,9 @@ namespace UnityUtility
         [SerializeField]
         private AspectMode _aspectMode;
         [SerializeField]
-        private float _targetVertical;
+        private float _targetVertical = 30f;
         [SerializeField]
-        private float _targetHorizontal;
+        private float _targetHorizontal = 40f;
 
         private float _currentAspect;
 
