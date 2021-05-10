@@ -36,8 +36,12 @@ namespace UnityUtilityEditor.Drawers
             var data = EnumDropDownData.GetData(attribute.EnumType);
             Array enumValues = data.EnumValues;
 
-            Enum lastElement = enumValues.GetValue(enumValues.Length - 1) as Enum;
-            int length = Convert.ToInt32(lastElement) + 1;
+            int length = 0;
+            if (enumValues.Length > 0)
+            {
+                Enum lastElement = enumValues.GetValue(enumValues.Length - 1) as Enum;
+                length = Convert.ToInt32(lastElement) + 1;
+            }
 
             if (length > BitMask.SIZE)
             {
@@ -71,8 +75,14 @@ namespace UnityUtilityEditor.Drawers
             var data = EnumDropDownData.GetData(attribute.EnumType);
             Array enumValues = data.EnumValues;
 
-            Enum lastElement = enumValues.GetValue(enumValues.Length - 1) as Enum;
-            string[] names = new string[Convert.ToInt32(lastElement) + 1];
+            int length = 0;
+            if (enumValues.Length > 0)
+            {
+                Enum lastElement = enumValues.GetValue(enumValues.Length - 1) as Enum;
+                length = Convert.ToInt32(lastElement) + 1;
+            }
+
+            string[] names = new string[length];
 
             foreach (Enum item in enumValues)
             {
