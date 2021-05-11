@@ -12,13 +12,18 @@ namespace UnityUtilityEditor.Window
         private UnityObject[] _objects;
         private Vector2 _scrollPosition;
 
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontSave;
+            minSize = new Vector2(250f, 200f);
+        }
+
         public static void Create(string targetObjectGuid, List<object> referingObjectGuids)
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
             window._target = EditorUtilityExt.LoadAssetByGuid(targetObjectGuid);
             window._objects = referingObjectGuids.Select(itm => EditorUtilityExt.LoadAssetByGuid(itm.ToString())).ToArray();
-            window.minSize = new Vector2(250f, 200f);
         }
 
         private void OnGUI()

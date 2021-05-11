@@ -70,10 +70,15 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontSave;
+            minSize = new Vector2(800f, 600f);
+        }
+
         public static void OpenWindow(RawGraph graphAsset)
         {
             GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, "Graph Editor");
-            window.minSize = new Vector2(800f, 600f);
             window.SetUp(graphAsset);
         }
 
@@ -86,6 +91,13 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 _nodeViewers.Clear();
                 _transitionViewers.Clear();
+            }
+            else
+            {
+                _grid = new GraphGrid(this);
+                _toolbar = new GraphToolbar(this);
+                _nodeViewers = new List<NodeViewer>();
+                _transitionViewers = new List<TransitionViewer>();
             }
 
             _settings = LoadSettings(graphAsset);
@@ -101,14 +113,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 CreateTransitionsForNode(_nodeViewers[i]);
             }
-        }
-
-        private void OnEnable()
-        {
-            _grid = new GraphGrid(this);
-            _toolbar = new GraphToolbar(this);
-            _nodeViewers = new List<NodeViewer>();
-            _transitionViewers = new List<TransitionViewer>();
         }
 
         private void OnGUI()

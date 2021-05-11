@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Window
 {
-    public class DropDownList : EditorWindow
+    internal class DropDownWindow : EditorWindow
     {
-        internal const string NOTHING_ITEM = "Nothing";
-        internal const string EVERYTHING_ITEM = "Everything";
+        public const string NOTHING_ITEM = "Nothing";
+        public const string EVERYTHING_ITEM = "Everything";
         private const float MIN_WINDOW_WIDTH = 150f;
 
         private SearchField _searchField;
@@ -30,6 +31,12 @@ namespace UnityEditor
         private Action<BitList> _onClose;
 
         public int ItemsCount => _items.Count;
+
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontSave;
+            wantsMouseMove = true;
+        }
 
         private void Update()
         {
@@ -93,19 +100,19 @@ namespace UnityEditor
         }
 
         #region List functions
-        public static DropDownList Create()
+        public static void Create(BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            return CreateInstance<DropDownList>();
+            Create(GetButtonRect(), flags, displayedOptions, onClose);
         }
 
-        internal static DropDownList Create(BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void Create(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            DropDownList popup = CreateInstance<DropDownList>();
+            DropDownWindow popup = CreateInstance<DropDownWindow>();
 
             if (flags.Count != displayedOptions.Length)
             {
                 Debug.LogError("Flags count != displayedOptions count.");
-                return null;
+                return;
             }
 
             popup._flags = flags;
@@ -122,12 +129,13 @@ namespace UnityEditor
             popup._items.Insert(1, Data.CreateItem(popup._items.Count, EVERYTHING_ITEM, false, () => flags.SetAll(true)));
             popup._items.Insert(2, Data.CreateSeparator());
 
-            return popup;
+            popup.ShowMenu(buttonRect);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ShowMenu()
         {
-            ShowMenu(new Rect(Event.current.mousePosition, Vector2.zero));
+            ShowMenu(GetButtonRect());
         }
 
         public void ShowMenu(in Rect buttonRect)
@@ -135,7 +143,6 @@ namespace UnityEditor
             if (_items.Count == 0)
                 return;
 
-            wantsMouseMove = true;
             Vector2 size = GetWinSize(_items);
             maxSize = size;
             ShowAsDropDown(GUIUtility.GUIToScreenRect(buttonRect), size);
@@ -352,6 +359,12 @@ namespace UnityEditor
         private bool MultiSelectable()
         {
             return _flags != null;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Rect GetButtonRect()
+        {
+            return new Rect(Event.current.mousePosition, Vector2.zero);
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

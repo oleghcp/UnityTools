@@ -18,7 +18,7 @@ namespace UnityUtilityEditor.Window
         private int _pads = 2;
         private int _axes = 15;
 
-        private void Awake()
+        private void OnEnable()
         {
             minSize = new Vector2(300f, 300f);
             maxSize = new Vector2(300f, 1500f);

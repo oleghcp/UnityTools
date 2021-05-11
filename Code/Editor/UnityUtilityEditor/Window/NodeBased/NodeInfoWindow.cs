@@ -16,15 +16,17 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private Vector2 _scrollPosition;
 
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontSave;
+            minSize = new Vector2(250f, 250f);
+        }
+
         public static void Open(NodeViewer nodeEditor, GraphEditorWindow mainWindow)
         {
             NodeInfoWindow window = CreateInstance<NodeInfoWindow>();
-
             window.titleContent = new GUIContent(nodeEditor.NodeAsset.name);
-            window.minSize = new Vector2(250f, 250f);
-
             window.SetUp(nodeEditor, mainWindow);
-
             window.ShowAuxWindow();
         }
 

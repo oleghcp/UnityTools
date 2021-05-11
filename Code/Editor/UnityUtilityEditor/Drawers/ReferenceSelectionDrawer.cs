@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtilityEditor.Window;
 
 #if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Drawers
@@ -58,7 +59,7 @@ namespace UnityUtilityEditor.Drawers
             Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
             var types = TypeCache.GetTypesDerivedFrom(fieldType);
 
-            DropDownList menu = DropDownList.Create();
+            DropDownWindow menu = ScriptableObject.CreateInstance<DropDownWindow>();
 
             menu.AddItem("Null", assignedType == null, () => assignField(property, null));
             addMenuItem(fieldType);

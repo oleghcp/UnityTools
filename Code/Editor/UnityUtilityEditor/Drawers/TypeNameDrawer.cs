@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtilityEditor.Window;
 
 namespace UnityUtilityEditor.Drawers
 {
@@ -52,7 +53,7 @@ namespace UnityUtilityEditor.Drawers
 
         private void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
         {
-            DropDownList menu = DropDownList.Create();
+            DropDownWindow menu = ScriptableObject.CreateInstance<DropDownWindow>();
 
             addMenuItem(attribute.TargetType.GetTypeName());
 

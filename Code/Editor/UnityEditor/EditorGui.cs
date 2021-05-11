@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
+using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -138,10 +139,10 @@ namespace UnityEditor
             string getContentText()
             {
                 if (BitMask.AllFor(mask, bitsCount))
-                    return DropDownList.EVERYTHING_ITEM;
+                    return DropDownWindow.EVERYTHING_ITEM;
 
                 if (BitMask.EmptyFor(mask, bitsCount))
-                    return DropDownList.NOTHING_ITEM;
+                    return DropDownWindow.NOTHING_ITEM;
 
                 return BitMask.EnumerateIndices(mask, bitsCount)
                               .Select(item => displayedOptions[item])

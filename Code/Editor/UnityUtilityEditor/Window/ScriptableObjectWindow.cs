@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.Window
         private static int _assemblyIndex;
         private int _typeIndex;
 
-        private void Awake()
+        private void OnEnable()
         {
             maxSize = minSize = new Vector2(400f, 145f);
 

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Collections;
+using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -119,7 +120,7 @@ namespace UnityEditor
 
         public static void DisplayDropDownList(in Rect buttonRect, string[] displayedOptions, Predicate<int> checkEnabled, Action<int> onItemSelected)
         {
-            DropDownList list = DropDownList.Create();
+            DropDownWindow list = ScriptableObject.CreateInstance<DropDownWindow>();
 
             for (int i = 0; i < displayedOptions.Length; i++)
             {
@@ -138,7 +139,7 @@ namespace UnityEditor
 
         public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
-            DropDownList.Create(flags, displayedOptions, onClose)?.ShowMenu(buttonRect);
+            DropDownWindow.Create(buttonRect, flags, displayedOptions, onClose);
         }
 
         //The functions based on https://gist.github.com/bzgeb/3800350

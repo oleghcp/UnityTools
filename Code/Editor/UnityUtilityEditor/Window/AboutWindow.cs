@@ -9,10 +9,9 @@ namespace UnityUtilityEditor.Window
         private string _copyright;
         private string _description;
 
-        private void Awake()
+        private void OnEnable()
         {
-            minSize = new Vector2(350f, 150f);
-            maxSize = new Vector2(350f, 150f);
+            minSize = maxSize = new Vector2(350f, 150f);
 
             Assembly assembly = Assembly.Load(nameof(UnityUtility)) ?? Assembly.GetExecutingAssembly();
 

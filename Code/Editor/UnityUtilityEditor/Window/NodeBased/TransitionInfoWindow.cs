@@ -15,15 +15,17 @@ namespace UnityUtilityEditor.Window.NodeBased
         private GraphEditorWindow _mainWindow;
         private Vector2 _scrollPos;
 
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontSave;
+            minSize = new Vector2(300f, 300f);
+        }
+
         public static void Open(TransitionViewer transition, SerializedProperty transitionProp, GraphEditorWindow mainWindow)
         {
             TransitionInfoWindow window = CreateInstance<TransitionInfoWindow>();
-
             window.titleContent = new GUIContent("Transition Info");
-            window.minSize = new Vector2(300f, 300f);
-
             window.SetUp(transition, transitionProp, mainWindow);
-
             window.ShowAuxWindow();
         }
 
