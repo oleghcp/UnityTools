@@ -139,7 +139,7 @@ namespace UnityEditor
 
         public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
-            DropDownWindow.Create(buttonRect, flags, displayedOptions, onClose);
+            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, onClose);
         }
 
         //The functions based on https://gist.github.com/bzgeb/3800350

@@ -49,14 +49,14 @@ namespace UnityEditor
             _window.AddSeparator();
         }
 
-        public static void Create(BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void CreateFlagsMenu(BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            DropDownWindow.Create(flags, displayedOptions, onClose);
+            DropDownWindow.CreateForFlags(flags, displayedOptions, onClose);
         }
 
-        public static void Create(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void CreateFlagsMenu(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            DropDownWindow.Create(buttonRect, flags, displayedOptions, onClose);
+            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, onClose);
         }
     }
 }

@@ -100,12 +100,12 @@ namespace UnityUtilityEditor.Window
         }
 
         #region List functions
-        public static void Create(BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void CreateForFlags(BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            Create(GetButtonRect(), flags, displayedOptions, onClose);
+            CreateForFlags(GetButtonRect(), flags, displayedOptions, onClose);
         }
 
-        public static void Create(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
             DropDownWindow popup = CreateInstance<DropDownWindow>();
 
