@@ -14,7 +14,6 @@ namespace UnityUtilityEditor.Window
 
         private void OnEnable()
         {
-            hideFlags = HideFlags.DontSave;
             minSize = new Vector2(250f, 200f);
         }
 

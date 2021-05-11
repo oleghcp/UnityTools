@@ -72,7 +72,6 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnEnable()
         {
-            hideFlags = HideFlags.DontSave;
             minSize = new Vector2(800f, 600f);
         }
 
