@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.Window
         private SearchField _searchField;
         private List<Data> _items = new List<Data>();
 
-        private Vector2 _maxLabelSize;
+        private float _maxLineLength;
         private Vector2 _scrollPos;
         private string _tapeString;
         private Data _selectedItem = new Data { Id = -1 };
@@ -235,7 +235,7 @@ namespace UnityUtilityEditor.Window
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUILayout.Space(EditorGuiUtility.SmallButtonWidth + EditorGuiUtility.StandardHorizontalSpacing * 2f);
-                        EditorGUILayout.LabelField((string)null, GUI.skin.horizontalSlider, GUILayout.Width(_maxLabelSize.x));
+                        EditorGUILayout.LabelField((string)null, GUI.skin.horizontalSlider, GUILayout.Width(_maxLineLength));
                     }
                     continue;
                 }
@@ -248,7 +248,7 @@ namespace UnityUtilityEditor.Window
                     else
                         EditorGUILayout.LabelField(string.Empty, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
-                    EditorGUILayout.LabelField(item.Text, GUILayout.Width(_maxLabelSize.x));
+                    EditorGUILayout.LabelField(item.Text, GUILayout.Width(_maxLineLength));
                 }
                 GUI.enabled = true;
 
@@ -348,10 +348,12 @@ namespace UnityUtilityEditor.Window
 
             float getWidth(IList<Data> items)
             {
-                Data itemWithLongestText = items.Where(item => !item.IsSeparator)
-                                                .GetWithMax(item => item.Text.Length);
-                _maxLabelSize = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(itemWithLongestText.Text));
-                float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLabelSize.x + 2f;
+                GUIStyle labelStyle = GUI.skin.label;
+
+                _maxLineLength = items.Where(item => !item.IsSeparator)
+                                      .Max(item => labelStyle.CalcSize(EditorGuiUtility.TempContent(item.Text)).x);
+
+                float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLineLength + 2f;
                 return (lineWidth + lineWidth * 0.12f).Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
             }
         }
