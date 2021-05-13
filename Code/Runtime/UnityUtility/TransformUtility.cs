@@ -5,11 +5,27 @@ namespace UnityUtility
 {
     public static class TransformUtility
     {
-        public static void OrderChildrenDueToListIndecies<T>(IList<T> components) where T : Component
+        public static void OrderSiblingsByList<T>(IList<Transform> siblings) 
         {
-            for (int i = 0; i < components.Count; i++)
+            for (int i = 0; i < siblings.Count; i++)
             {
-                components[i].transform.SetSiblingIndex(i);
+                siblings[i].SetSiblingIndex(i);
+            }
+        }
+
+        public static void OrderSiblingsByList<T>(IList<T> siblings) where T : Component
+        {
+            for (int i = 0; i < siblings.Count; i++)
+            {
+                siblings[i].transform.SetSiblingIndex(i);
+            }
+        }
+
+        public static void OrderSiblingsByList<T>(IList<GameObject> siblings) 
+        {
+            for (int i = 0; i < siblings.Count; i++)
+            {
+                siblings[i].transform.SetSiblingIndex(i);
             }
         }
     }
