@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityUtility.IdGenerating;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.NodeBased;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff

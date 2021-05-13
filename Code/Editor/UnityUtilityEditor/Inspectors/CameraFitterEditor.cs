@@ -22,7 +22,7 @@ namespace UnityUtilityEditor.Inspectors
             _widthToHeight = EditorPrefs.GetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             EditorPrefs.SetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY, _widthToHeight);
         }

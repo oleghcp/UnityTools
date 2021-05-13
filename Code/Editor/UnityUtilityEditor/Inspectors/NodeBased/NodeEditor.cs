@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.NodeBased;
+using UnityUtilityEditor.Window.NodeBased.Stuff;
 
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {

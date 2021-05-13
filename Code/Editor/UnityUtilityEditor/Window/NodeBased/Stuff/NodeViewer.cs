@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.NodeBased;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {

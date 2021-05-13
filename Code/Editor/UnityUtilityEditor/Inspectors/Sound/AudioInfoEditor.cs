@@ -15,7 +15,7 @@ namespace UnityUtilityEditor.Inspectors.Sound
             EditorApplication.update += Repaint;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             EditorApplication.update -= Repaint;
         }
