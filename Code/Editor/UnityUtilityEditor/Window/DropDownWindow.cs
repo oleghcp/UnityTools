@@ -111,7 +111,7 @@ namespace UnityUtilityEditor.Window
 
             if (flags.Count != displayedOptions.Length)
             {
-                Debug.LogError("Flags count != displayedOptions count.");
+                Debug.LogError($"Flags count ({flags.Count}) != displayed options count ({displayedOptions.Length}).");
                 return;
             }
 

@@ -99,5 +99,13 @@ namespace UnityUtility
             float w = Cos(halfAngle);
             return new Quaternion(xyz.x, xyz.y, xyz.z, w);
         }
+
+        public static (float ch1, float ch2) LerpColorChannels(float ratio)
+        {
+            ratio = 1f - ratio.Clamp01();
+            float ch1 = (ratio * 2f).Clamp01();
+            float ch2 = (2f - ratio * 2f).Clamp01();
+            return (ch1, ch2);
+        }
     }
 }
