@@ -76,6 +76,16 @@ namespace UnityUtility
         }
 #endif
 
+        public float GetEnvelopeRatio()
+        {
+            if (_camera.orthographic)
+                return _targetHorizontal / _targetVertical;
+
+            float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
+            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
+            return hTan / vTan;
+        }
+
         private void LateUpdate()
         {
             if (_aspectMode == AspectMode.FixedHeight)

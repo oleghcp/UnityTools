@@ -246,14 +246,14 @@ namespace UnityEngine
         //--//
 
         /// <summary>
-        /// Returns vector2 value clamped between values represented by the bounds.
+        /// Returns vector2 position clamped in bounds.
         /// </summary>
         public static Vector2 GetClamped(this in Vector2 value, in Rect bounds)
         {
             return new Vector2
             {
                 x = value.x.Clamp(bounds.xMin, bounds.xMax),
-                y = value.y.Clamp(bounds.yMin, bounds.yMax)
+                y = value.y.Clamp(bounds.yMin, bounds.yMax),
             };
         }
 
@@ -264,6 +264,22 @@ namespace UnityEngine
         public static Vector2 GetClamped(this in Vector2 value, float maxLength)
         {
             return Vector2.ClampMagnitude(value, maxLength);
+        }
+
+        /// <summary>
+        /// Returns vector2 position clamped in bounds.
+        /// </summary>
+        public static Vector2 GetClamped(this in Vector3 value, in Bounds bounds)
+        {
+            Vector3 min = bounds.min;
+            Vector3 max = bounds.max;
+
+            return new Vector3
+            {
+                x = value.x.Clamp(min.x, max.x),
+                y = value.y.Clamp(min.y, max.y),
+                z = value.z.Clamp(min.z, max.z),
+            };
         }
 
         /// <summary>
