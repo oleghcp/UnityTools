@@ -6,7 +6,7 @@ using UnityUtility;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DrawObjectFieldsAttribute))]
-    internal class DrawObjectFieldsDrawer : PropertyDrawer
+    internal class DrawObjectFieldsDrawer : AttributeDrawer<DrawObjectFieldsAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -57,7 +57,8 @@ namespace UnityUtilityEditor.Drawers
             {
                 serObject.Update();
 
-                EditorGUI.indentLevel++;
+                if (attribute.NeedIndent)
+                    EditorGUI.indentLevel++;
 
                 foreach (var item in serObject.EnumerateProperties())
                 {
@@ -68,7 +69,8 @@ namespace UnityUtilityEditor.Drawers
                     rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
                 }
 
-                EditorGUI.indentLevel--;
+                if (attribute.NeedIndent)
+                    EditorGUI.indentLevel--;
 
                 serObject.ApplyModifiedProperties();
             }
