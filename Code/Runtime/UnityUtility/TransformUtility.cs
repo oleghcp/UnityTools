@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityUtility
 {
@@ -30,52 +31,52 @@ namespace UnityUtility
             }
         }
 
-        public static void AlignPositions(Span<Vector2> positions, float step, in Vector2 center, in Vector2 direction)
+        public static void AlignPositions(Span<Vector2> positions, in Vector2 startPosition, in Vector2 direction, float step, float startPosOffsetRatio = 0f)
         {
             int count = positions.Length;
-            float offset = (count - 1) * step * 0.5f;
+            float offset = (count - 1) * step * startPosOffsetRatio.Clamp01();
 
             for (int i = 0; i < count; i++)
             {
-                positions[i] = center - direction * offset;
+                positions[i] = startPosition - direction * offset;
                 offset -= step;
             }
         }
 
-        public static void AlignPositions(Span<Vector3> positions, float step, in Vector3 center, in Vector3 direction)
+        public static void AlignPositions(Span<Vector3> positions, in Vector3 startPosition, in Vector3 direction, float step, float startPosOffsetRatio = 0f)
         {
             int count = positions.Length;
-            float offset = (count - 1) * step * 0.5f;
+            float offset = (count - 1) * step * startPosOffsetRatio.Clamp01();
 
             for (int i = 0; i < count; i++)
             {
-                positions[i] = center - direction * offset;
+                positions[i] = startPosition - direction * offset;
                 offset -= step;
             }
         }
 
-        public static void AlignPositions(Span<Vector2> positions, Span<float> stepsBetweenItems, in Vector2 center, in Vector2 direction)
+        public static void AlignPositions(Span<Vector2> positions, in Vector2 startPosition, in Vector2 direction, Span<float> stepsBetweenItems, float startPosOffsetRatio = 0f)
         {
             int count = positions.Length;
-            float offset = stepsBetweenItems.Sum() * 0.5f;
+            float offset = stepsBetweenItems.Sum() * startPosOffsetRatio;
 
             for (int i = 0; i < count; i++)
             {
-                positions[i] = center - direction * offset;
+                positions[i] = startPosition - direction * offset;
 
                 if (i + 1 < count)
                     offset -= stepsBetweenItems[i];
             }
         }
 
-        public static void AlignPositions(Span<Vector3> positions, Span<float> stepsBetweenItems, in Vector3 center, in Vector3 direction)
+        public static void AlignPositions(Span<Vector3> positions, in Vector3 startPosition, in Vector3 direction, Span<float> stepsBetweenItems, float startPosOffsetRatio = 0f)
         {
             int count = positions.Length;
-            float offset = stepsBetweenItems.Sum() * 0.5f;
+            float offset = stepsBetweenItems.Sum() * startPosOffsetRatio;
 
             for (int i = 0; i < count; i++)
             {
-                positions[i] = center - direction * offset;
+                positions[i] = startPosition - direction * offset;
 
                 if (i + 1 < count)
                     offset -= stepsBetweenItems[i];
