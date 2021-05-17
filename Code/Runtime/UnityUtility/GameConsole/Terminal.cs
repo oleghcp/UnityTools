@@ -41,8 +41,6 @@ namespace UnityUtility.GameConsole
         private object _cmdRun;
         private Dictionary<string, MethodInfo> _commands;
 
-        private string[][] _invokeParams;
-
         private List<string> _cmdHistory;
         private int _curHistoryIndex;
 
@@ -68,8 +66,6 @@ namespace UnityUtility.GameConsole
 
             _pointerEventData = new PointerEventData(EventSystem.current);
             _stringBuilder = new StringBuilder();
-
-            _invokeParams = new string[1][];
 
             _cmdHistory = new List<string>() { string.Empty };
 
@@ -232,14 +228,12 @@ namespace UnityUtility.GameConsole
 
                 if (_commands.TryGetValue(command, out MethodInfo method))
                 {
-                    if (words.Length > 1)
-                    {
-                        _invokeParams[0] = new string[words.Length - 1];
-                        Array.Copy(words, 1, _invokeParams[0], 0, _invokeParams[0].Length);
-                    }
+                    string[][] keys = null;
 
-                    object cmdKeysParseError = method.Invoke(_cmdRun, _invokeParams);
-                    _invokeParams[0] = null;
+                    if (method.GetParameters().Length > 0)
+                        keys = new[] { words.Length > 1 ? words.GetSubArray(1) : new string[0] };
+
+                    object cmdKeysParseError = method.Invoke(_cmdRun, keys);
 
                     if (cmdKeysParseError == null)
                         _log.WriteLine(CMD_COLOR, text);
@@ -310,7 +304,7 @@ namespace UnityUtility.GameConsole
 
                 return baseStr.Substring(startIndex, characters);
             }
-        }        
+        }
 
         private void SwitchHistoryLine(bool back)
         {
