@@ -37,10 +37,14 @@ namespace UnityUtilityEditor.Drawers
             position.width -= shift;
             position.height = EditorGUIUtility.singleLineHeight;
 
-            if (property.managedReferenceFullTypename.IsNullOrEmpty())
-                GUI.color = Colours.Grey;
+            string typeName = property.managedReferenceFullTypename;
+            bool nullRef = typeName.IsNullOrEmpty();
+            string label = nullRef ? "Select Type" : typeName;
 
-            if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent("Select Type"), FocusType.Keyboard))
+            if (nullRef)
+                GUI.color = Colours.Red;
+
+            if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(label), FocusType.Keyboard))
                 ShowContextMenu(position, property);
 
             GUI.color = Colours.White;
