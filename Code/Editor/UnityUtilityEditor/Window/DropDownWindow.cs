@@ -350,6 +350,9 @@ namespace UnityUtilityEditor.Window
             {
                 GUIStyle labelStyle = GUI.skin.label;
 
+                if (items.Count == 0)
+                    return MIN_WINDOW_WIDTH;
+
                 _maxLineLength = items.Where(item => !item.IsSeparator)
                                       .Max(item => labelStyle.CalcSize(EditorGuiUtility.TempContent(item.Text)).x);
 
