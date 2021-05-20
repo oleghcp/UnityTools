@@ -30,11 +30,6 @@ namespace UnityUtility.NodeBased
             return Nodes.Find(item => ((TNode)item).LocalId == id) as TNode;
         }
 
-        public Connection<TNode, TTransition> GetTransitons(TNode node)
-        {
-            return new Connection<TNode, TTransition>(node);
-        }
-
 #if UNITY_EDITOR
         internal Type GetNodeType() => typeof(TNode);
         internal Type GetTransitionType() => typeof(TTransition);
