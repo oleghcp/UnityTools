@@ -35,14 +35,12 @@ namespace UnityUtilityEditor.Drawers
                 shortName = "Unknown";
                 GUI.color = Colours.Red;
             }
-            else if (savedType.IsAbstract)
-            {
-                shortName = $"Typename of {savedType.Name} (Abstract)";
-                GUI.color = Colours.Grey;
-            }
             else
             {
-                shortName = "Typename of " + savedType.Name;
+                if (savedType.IsAbstract)
+                    GUI.color = Colours.Orange;
+
+                shortName = savedType.Name;
             }
 
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(shortName), FocusType.Keyboard))

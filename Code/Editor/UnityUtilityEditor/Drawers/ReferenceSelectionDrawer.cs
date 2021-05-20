@@ -42,7 +42,7 @@ namespace UnityUtilityEditor.Drawers
             string label = nullRef ? "Select Type" : typeName;
 
             if (nullRef)
-                GUI.color = Colours.Red;
+                GUI.color = Colours.Orange;
 
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(label), FocusType.Keyboard))
                 ShowContextMenu(position, property);
