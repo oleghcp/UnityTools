@@ -39,8 +39,8 @@ namespace UnityUtility
         /// </summary>
         public Vector3 StartDir
         {
-            get { return AngleToDir(HorAngle, VertAngle); }
-            set { DirToAngle(value, out HorAngle, out VertAngle); }
+            get => AngleToDir(HorAngle, VertAngle);
+            set => DirToAngle(value, out HorAngle, out VertAngle);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace UnityUtility
         /// </summary>
         public Vector3 StartVector
         {
-            get { return AngleToDir(HorAngle, VertAngle) * StartSpeed; }
+            get => AngleToDir(HorAngle, VertAngle) * StartSpeed;
             set
             {
                 DirToAngle(value, out HorAngle, out VertAngle);

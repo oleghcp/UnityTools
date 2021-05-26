@@ -24,10 +24,7 @@ namespace UnityUtility.Controls
         [SerializeField]
         internal KeyAxes KeyAxes;
 
-        public InputType Type
-        {
-            get { return InputType; }
-        }
+        public InputType Type => InputType;
 
 #if UNITY_EDITOR
         internal static string KeyEnumTypeFieldName => nameof(_keyEnumType);

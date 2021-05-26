@@ -21,20 +21,9 @@ namespace UnityUtility.Sound.SoundStuff
         private SoundsProvider _provider;
         private Action _update;
 
-        internal override string ClipName
-        {
-            get { return _audioSource.clip.name; }
-        }
-
-        internal bool IsLooped
-        {
-            get { return _audioSource.loop; }
-        }
-
-        internal override AudioSource AudioSource
-        {
-            get { return _audioSource; }
-        }
+        internal override string ClipName => _audioSource.clip.name;
+        internal bool IsLooped => _audioSource.loop;
+        internal override AudioSource AudioSource => _audioSource;
 
         ///////////////
         //Unity Funcs//
@@ -190,7 +179,7 @@ namespace UnityUtility.Sound.SoundStuff
         {
             _volume = _preset.Volume;
             _pitch = _preset.Pitch;
-            _audioSource.loop = Sender == null ? false : _preset.Looped;
+            _audioSource.loop = Sender != null && _preset.Looped;
             _audioSource.mute = _provider.Muted;
             UpdVolume();
             UpdPitch();

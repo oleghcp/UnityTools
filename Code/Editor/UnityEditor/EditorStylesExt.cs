@@ -9,13 +9,17 @@ namespace UnityEditor
 
         static EditorStylesExt()
         {
-            DropArea = new GUIStyle(EditorStyles.helpBox);
-            DropArea.alignment = TextAnchor.MiddleCenter;
-            DropArea.fontSize = 12;
+            DropArea = new GUIStyle(EditorStyles.helpBox)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 12
+            };
 
-            DropDown = new GUIStyle("DropDownButton");
-            DropDown.alignment = TextAnchor.MiddleLeft;
-            DropDown.contentOffset = new Vector2(2f, 0f);
+            DropDown = new GUIStyle("DropDownButton")
+            {
+                alignment = TextAnchor.MiddleLeft,
+                contentOffset = new Vector2(2f, 0f)
+            };
         }
     }
 }

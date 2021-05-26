@@ -33,25 +33,25 @@ namespace UnityUtilityEditor.Drawers
 
         public class DrawTool
         {
-            private string[] m_names;
+            private string[] _names;
 
             public DrawTool()
             {
-                m_names = layers.Select(itm => itm.name)
+                _names = layers.Select(itm => itm.name)
                                 .ToArray();
             }
 
             public int Draw(string propertyName, int layerId)
             {
                 int index = layers.IndexOf(itm => itm.id == layerId).CutBefore(0);
-                index = EditorGuiLayout.DropDown(propertyName, index, m_names);
+                index = EditorGuiLayout.DropDown(propertyName, index, _names);
                 return layers[index].id;
             }
 
             public int Draw(Rect position, string propertyName, int layerId)
             {
                 int index = layers.IndexOf(itm => itm.id == layerId).CutBefore(0);
-                index = EditorGui.DropDown(position, propertyName, index, m_names);
+                index = EditorGui.DropDown(position, propertyName, index, _names);
                 return layers[index].id;
             }
         }

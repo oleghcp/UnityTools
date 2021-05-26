@@ -192,29 +192,29 @@ namespace UnityUtility.Collections
 
         public class CustomNodeWrapper : IActiveNode
         {
-            protected CustomTrackerNode _node;
+            protected CustomTrackerNode Node;
 
-            public bool Changed => _node.Changed;
+            public bool Changed => Node.Changed;
 
             public CustomNodeWrapper(CustomTrackerNode node)
             {
-                _node = node;
+                Node = node;
             }
 
             public void Check()
             {
-                _node.Check();
+                Node.Check();
             }
 
             public void Force()
             {
-                _node.Force();
+                Node.Force();
             }
         }        
 
         public class CustomNodeWrapper<T> : CustomNodeWrapper, IValueKeeper<T>
         {
-            public T Value => (_node as CustomTrackerNode<T>).Value;
+            public T Value => (Node as CustomTrackerNode<T>).Value;
 
             public CustomNodeWrapper(CustomTrackerNode<T> node) : base(node)
             {

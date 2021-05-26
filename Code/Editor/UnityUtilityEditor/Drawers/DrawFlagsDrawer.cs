@@ -101,8 +101,10 @@ namespace UnityUtilityEditor.Drawers
             {
                 intBlocks[i] = arrayProp.GetArrayElementAtIndex(i).intValue;
             }
-            BitList bits = new BitList(intBlocks);
-            bits.Count = names.Length;
+            BitList bits = new BitList(intBlocks)
+            {
+                Count = names.Length
+            };
 
             EditorUtilityExt.DisplayMultiSelectableList(position, bits, names, onCloseMenu);
 

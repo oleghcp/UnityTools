@@ -281,10 +281,7 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
             public BitList Toggles;
             public bool AllToggles;
 
-            public bool IsEmpty
-            {
-                get { return EnumType == null; }
-            }
+            public bool IsEmpty => EnumType == null;
 
             public TypeValue(string propName)
             {

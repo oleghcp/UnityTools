@@ -8,40 +8,25 @@ namespace UnityUtility.NumericEntities
     [Serializable]
     public sealed class StaticInt : IStaticEntity<int>
     {
-        private int m_min;
-        private int m_max;
-        private int m_value;
+        private int _min;
+        private int _max;
+        private int _value;
 
-        private HashSet<IAbsoluteModifier<int>> m_absMods;
-        private HashSet<IRelativeModifier<int>> m_relMods;
-        private Func<int> m_getValue;
+        private HashSet<IAbsoluteModifier<int>> _absMods;
+        private HashSet<IRelativeModifier<int>> _relMods;
+        private Func<int> _getValue;
 
-        public int PureValue
-        {
-            get { return m_getValue(); }
-        }
-
-        public int MinValue
-        {
-            get { return m_min; }
-        }
-
-        public int MaxValue
-        {
-            get { return m_max; }
-        }
-
-        public bool Modified
-        {
-            get { return m_absMods.Count > 0 && m_relMods.Count > 0; }
-        }
+        public int PureValue => _getValue();
+        public int MinValue => _min;
+        public int MaxValue => _max;
+        public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
 
         private StaticInt(int minValue, int maxValue)
         {
             Resize(minValue, maxValue);
 
-            m_absMods = new HashSet<IAbsoluteModifier<int>>();
-            m_relMods = new HashSet<IRelativeModifier<int>>();
+            _absMods = new HashSet<IAbsoluteModifier<int>>();
+            _relMods = new HashSet<IRelativeModifier<int>>();
         }
 
         public StaticInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
@@ -49,8 +34,8 @@ namespace UnityUtility.NumericEntities
             if (pureValue < minValue || pureValue > maxValue)
                 throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));
 
-            m_value = pureValue;
-            m_getValue = () => m_value;
+            _value = pureValue;
+            _getValue = () => _value;
         }
 
         public StaticInt(Func<int> valueDefiner, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
@@ -58,32 +43,32 @@ namespace UnityUtility.NumericEntities
             if (valueDefiner == null)
                 throw new ArgumentNullException(nameof(valueDefiner));
 
-            m_getValue = valueDefiner;
+            _getValue = valueDefiner;
         }
 
         public void AddModifier(IAbsoluteModifier<int> modifier)
         {
-            m_absMods.Add(modifier);
+            _absMods.Add(modifier);
         }
 
         public void AddModifier(IRelativeModifier<int> modifier)
         {
-            m_relMods.Add(modifier);
+            _relMods.Add(modifier);
         }
 
         public void RemoveModifier(IAbsoluteModifier<int> modifier)
         {
-            m_absMods.Remove(modifier);
+            _absMods.Remove(modifier);
         }
 
         public void RemoveModifier(IRelativeModifier<int> modifier)
         {
-            m_relMods.Remove(modifier);
+            _relMods.Remove(modifier);
         }
 
         public int GetCurValue()
         {
-            return (m_getValue() + GetAbsSum() + GetRelSum()).Clamp(m_min, m_max);
+            return (_getValue() + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
         }
 
         public void Revalue(int value, ResizeType resizeType = ResizeType.NewValue)
@@ -91,13 +76,13 @@ namespace UnityUtility.NumericEntities
             switch (resizeType)
             {
                 case ResizeType.NewValue:
-                    if (value < m_min || value > m_max)
+                    if (value < _min || value > _max)
                         throw Errors.OutOfRange(nameof(value), nameof(MinValue), nameof(MaxValue));
-                    m_value = value;
+                    _value = value;
                     break;
 
                 case ResizeType.Delta:
-                    m_value = (m_value + value).Clamp(m_min, m_max);
+                    _value = (_value + value).Clamp(_min, _max);
                     break;
 
                 default:
@@ -110,22 +95,22 @@ namespace UnityUtility.NumericEntities
             if (minValue > maxValue)
                 throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
-            m_min = minValue;
-            m_max = maxValue;
+            _min = minValue;
+            _max = maxValue;
 
-            m_value = m_value.Clamp(m_min, m_max);
+            _value = _value.Clamp(_min, _max);
         }
 
         //--//
 
         private int GetAbsSum()
         {
-            if (m_absMods.Count == 0)
+            if (_absMods.Count == 0)
                 return 0;
 
             int sum = 0;
 
-            foreach (var item in m_absMods)
+            foreach (var item in _absMods)
             {
                 sum += item.Value;
             }
@@ -135,13 +120,13 @@ namespace UnityUtility.NumericEntities
 
         private int GetRelSum()
         {
-            if (m_relMods.Count == 0)
+            if (_relMods.Count == 0)
                 return 0;
 
             int sum = 0;
-            int value = m_getValue();
+            int value = _getValue();
 
-            foreach (var item in m_relMods)
+            foreach (var item in _relMods)
             {
                 sum += value * item.Value;
             }

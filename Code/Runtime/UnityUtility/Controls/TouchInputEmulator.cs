@@ -54,15 +54,8 @@ namespace UnityUtility.Controls
         private ScreenTouch[] _touches;
         private int _touchCount;
 
-        public ScreenTouch[] Touches
-        {
-            get { return _touches; }
-        }
-
-        public int TouchCount
-        {
-            get { return _touchCount; }
-        }
+        public ScreenTouch[] Touches => _touches;
+        public int TouchCount => _touchCount;
 
         public TouchInputEmulator()
         {

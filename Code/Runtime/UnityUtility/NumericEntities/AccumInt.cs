@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityUtilityTools;
 using UnityEngine;
+using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
 {
@@ -12,25 +12,10 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private int m_spent;
 
-        public int Value
-        {
-            get { return m_got - m_spent; }
-        }
-
-        public bool IsEmpty
-        {
-            get { return m_got == m_spent; }
-        }
-
-        public int Got
-        {
-            get { return m_got; }
-        }
-
-        public int Spent
-        {
-            get { return m_spent; }
-        }
+        public int Value => m_got - m_spent;
+        public bool IsEmpty => m_got == m_spent;
+        public int Got => m_got;
+        public int Spent => m_spent;
 
         public AccumInt(int got, int spent)
         {
@@ -73,7 +58,7 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is AccumInt && this == (AccumInt)obj;
+            return obj is AccumInt accumInt && this == accumInt;
         }
 
         public bool Equals(AccumInt other)

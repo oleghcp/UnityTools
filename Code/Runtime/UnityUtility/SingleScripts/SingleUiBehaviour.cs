@@ -7,9 +7,6 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class SingleUiBehaviour<T> : SingleBehaviour<T> where T : SingleUiBehaviour<T>
     {
-        public RectTransform rectTransform
-        {
-            get { return transform as RectTransform; }
-        }
+        public RectTransform rectTransform => transform as RectTransform;
     }
 }

@@ -41,7 +41,7 @@ namespace UnityUtility
                 float angle = StartAngle.ToRadians();
                 return new Vector2(Cos(angle), Sin(angle));
             }
-            set { StartAngle = DirToAngle(value); }
+            set => StartAngle = DirToAngle(value);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace UnityUtility
         /// </summary>
         public Vector2 StartVector
         {
-            get { return StartDir * StartSpeed; }
+            get => StartDir * StartSpeed;
             set
             {
                 StartAngle = DirToAngle(value);

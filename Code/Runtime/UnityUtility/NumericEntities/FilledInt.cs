@@ -13,35 +13,12 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private int m_filler;
 
-        public int CurValue
-        {
-            get { return m_filler.Clamp(0, m_threshold); }
-        }
-
-        public int Threshold
-        {
-            get { return m_threshold; }
-        }
-
-        public bool FilledFully
-        {
-            get { return m_filler >= m_threshold; }
-        }
-
-        public bool IsEmpty
-        {
-            get { return m_filler == 0; }
-        }
-
-        public float Ratio
-        {
-            get { return (float)m_filler.CutAfter(m_threshold) / m_threshold; }
-        }
-
-        public int Excess
-        {
-            get { return (m_filler - m_threshold).CutBefore(0); }
-        }
+        public int CurValue => m_filler.Clamp(0, m_threshold);
+        public int Threshold => m_threshold;
+        public bool FilledFully => m_filler >= m_threshold;
+        public bool IsEmpty => m_filler == 0;
+        public float Ratio => (float)m_filler.CutAfter(m_threshold) / m_threshold;
+        public int Excess => (m_filler - m_threshold).CutBefore(0);
 
         public FilledInt(int threshold)
         {

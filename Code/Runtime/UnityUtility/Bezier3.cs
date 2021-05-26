@@ -14,26 +14,23 @@ namespace UnityUtility
 
         public Vector3 Origin
         {
-            get { return _points[0]; }
-            set { _points[0] = value; }
+            get => _points[0];
+            set => _points[0] = value;
         }
 
         public Vector3 Dest
         {
-            get { return _points.FromEnd(0); }
-            set { _points[_points.Length - 1] = value; }
+            get => _points.FromEnd(0);
+            set => _points[_points.Length - 1] = value;
         }
 
         public Vector3 this[int index]
         {
-            get { return _points[index + 1]; }
-            set { _points[index + 1] = value; }
+            get => _points[index + 1];
+            set => _points[index + 1] = value;
         }
 
-        public int Count
-        {
-            get { return _points.Length - 2; }
-        }
+        public int Count => _points.Length - 2;
 
         public Bezier3(Vector3 orig, Vector3 dest, int helpPoints)
         {

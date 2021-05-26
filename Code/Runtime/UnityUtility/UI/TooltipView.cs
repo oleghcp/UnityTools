@@ -13,15 +13,12 @@ namespace UnityUtility.UI
         [SerializeField]
         private float _frameOffset;
 
-        public bool IsActive
-        {
-            get { return gameObject.activeSelf; }
-        }
+        public bool IsActive => gameObject.activeSelf;
 
         public float FrameOffset
         {
-            get { return _frameOffset; }
-            set { _frameOffset = value; }
+            get => _frameOffset;
+            set => _frameOffset = value;
         }
 
         protected override void Construct()

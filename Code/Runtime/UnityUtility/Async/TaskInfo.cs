@@ -12,23 +12,14 @@ namespace UnityUtility.Async
         /// <summary>
         /// Provides task ID.
         /// </summary>
-        public long TaskId
-        {
-            get { return _id; }
-        }
+        public long TaskId => _id;
 
         /// <summary>
         /// Returns true if the task is alive. The task is alive while it runs.
         /// </summary>
-        public bool IsAlive
-        {
-            get { return IsAliveInternal(); }
-        }
+        public bool IsAlive => IsAliveInternal();
 
-        public bool IsPaused
-        {
-            get { return IsAliveInternal() && _task.IsPaused; }
-        }
+        public bool IsPaused => IsAliveInternal() && _task.IsPaused;
 
         internal TaskInfo(RoutineRunner runner)
         {
@@ -93,7 +84,7 @@ namespace UnityUtility.Async
 
         public override bool Equals(object obj)
         {
-            return obj is TaskInfo && this == (TaskInfo)obj;
+            return obj is TaskInfo taskInfo && this == taskInfo;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -17,10 +17,7 @@ namespace UnityUtility.Controls
         private ButtonState[] _buttonStates;
         private float[] _axisStates;
 
-        public BindLayout CurLayout
-        {
-            get { return _curLayout; }
-        }
+        public BindLayout CurLayout => _curLayout;
 
         public GamepadInputObtainer(GamepadType type, int num, BindLayout bindLayout)
         {

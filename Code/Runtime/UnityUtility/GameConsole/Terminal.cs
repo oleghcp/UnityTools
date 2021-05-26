@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityUtility.MathExt;
 using UnityUtility.SingleScripts;
 using static UnityEngine.RectTransform;
 
@@ -46,15 +47,8 @@ namespace UnityUtility.GameConsole
 
         private TerminalOptions _options;
 
-        public bool IsOn
-        {
-            get { return _isOn; }
-        }
-
-        public TerminalOptions Options
-        {
-            get { return _options; }
-        }
+        public bool IsOn => _isOn;
+        public TerminalOptions Options => _options;
 
         ///////////////
         //Unity funcs//
@@ -311,14 +305,11 @@ namespace UnityUtility.GameConsole
             if (_cmdHistory.Count == 0) { return; }
 
             if (back)
-            {
-                _curHistoryIndex = _curHistoryIndex - 1;
-                if (_curHistoryIndex < 0) { _curHistoryIndex = _cmdHistory.Count - 1; }
-            }
+                _curHistoryIndex--;
             else
-            {
-                _curHistoryIndex = (_curHistoryIndex + 1) % _cmdHistory.Count;
-            }
+                _curHistoryIndex++;
+
+            _curHistoryIndex = _curHistoryIndex.Repeat(_cmdHistory.Count);
 
             _field.text = _cmdHistory[_curHistoryIndex];
             _field.caretPosition = _field.text.Length;

@@ -15,7 +15,7 @@ namespace UnityUtility
 
         public float Interval
         {
-            get { return _interval; }
+            get => _interval;
             set
             {
                 if (value <= 0f)
@@ -27,20 +27,17 @@ namespace UnityUtility
 
         public float CurrentValue
         {
-            get { return _currentValue; }
-            set { _currentValue = value.CutAfter(_interval); }
+            get => _currentValue;
+            set => _currentValue = value.CutAfter(_interval);
         }
 
         public float Ratio
         {
-            get { return _currentValue / _interval; }
-            set { _currentValue = _interval * value.Clamp01(); }
+            get => _currentValue / _interval;
+            set => _currentValue = _interval * value.Clamp01();
         }
 
-        public float Shortage
-        {
-            get { return (_interval - _currentValue).CutBefore(0f); }
-        }
+        public float Shortage => (_interval - _currentValue).CutBefore(0f);
 
         public IntervalChecker(float interval)
         {

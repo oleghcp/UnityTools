@@ -26,9 +26,6 @@ namespace UnityUtility.SingleScripts
         /// <summary>
         /// Returns true if the instance is not null.
         /// </summary>
-        public static bool Exists
-        {
-            get { return _inst != null; }
-        }
+        public static bool Exists => _inst != null;
     }
 }

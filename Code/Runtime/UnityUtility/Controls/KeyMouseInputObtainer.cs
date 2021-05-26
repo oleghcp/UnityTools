@@ -15,10 +15,7 @@ namespace UnityUtility.Controls
 
         private BindLayout _curLayout;
 
-        public BindLayout CurLayout
-        {
-            get { return _curLayout; }
-        }
+        public BindLayout CurLayout => _curLayout;
 
         public KeyMouseInputObtainer(BindLayout bindLayout)
         {

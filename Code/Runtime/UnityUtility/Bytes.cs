@@ -19,10 +19,7 @@ namespace UnityUtility
         [FieldOffset(0), NonSerialized]
         private float _floatField;
 
-        public int Size
-        {
-            get { return SIZE; }
-        }
+        public int Size => SIZE;
 
 #if UNITY_EDITOR
         internal static string FieldName => nameof(_field);
@@ -87,7 +84,7 @@ namespace UnityUtility
 
         public override bool Equals(object obj)
         {
-            return obj is Bytes && this == (Bytes)obj;
+            return obj is Bytes bytes && this == bytes;
         }
 
         public bool Equals(Bytes other)

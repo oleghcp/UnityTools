@@ -24,20 +24,9 @@ namespace UnityUtility.Async
         private readonly bool _canBeStoppedGlobally;
         private readonly bool _dontDestroyOnLoad;
 
-        public bool CanBeStopped
-        {
-            get { return _canBeStopped; }
-        }
-
-        public bool CanBeStoppedGlobally
-        {
-            get { return _canBeStoppedGlobally; }
-        }
-
-        public IIdGenerator<long> IdProvider
-        {
-            get { return _idProvider; }
-        }
+        public bool CanBeStopped => _canBeStopped;
+        public bool CanBeStoppedGlobally => _canBeStoppedGlobally;
+        public IIdGenerator<long> IdProvider => _idProvider;
 
         public TaskFactory(IAsyncSettings settings, IIdGenerator<long> idProvider, bool doNotDestroyOnLoad)
         {

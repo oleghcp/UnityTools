@@ -10,7 +10,7 @@ namespace UnityUtility.Controls
 
         public override bool Equals(object obj)
         {
-            return obj is ButtonInfo && this == (ButtonInfo)obj;
+            return obj is ButtonInfo buttonInfo && this == buttonInfo;
         }
 
         public bool Equals(ButtonInfo other)

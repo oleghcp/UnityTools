@@ -15,10 +15,7 @@ namespace UnityUtility.IdGenerating
         [SerializeField, HideInInspector]
         protected T _lastId;
 
-        public T LastID
-        {
-            get { return _lastId; }
-        }
+        public T LastID => _lastId;
 
         public IdGenerator(T startId)
         {

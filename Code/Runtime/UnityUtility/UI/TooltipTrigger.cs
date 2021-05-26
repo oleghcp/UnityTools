@@ -17,20 +17,20 @@ namespace UnityUtility.UI
 
         public string Text
         {
-            get { return _text; }
-            set { _text = value; }
+            get => _text;
+            set => _text = value;
         }
 
         public bool CustomPosition
         {
-            get { return _customPosition; }
-            set { _customPosition = value; }
+            get => _customPosition;
+            set => _customPosition = value;
         }
 
         public Vector2 Position
         {
-            get { return _anchoredPosition; }
-            set { _anchoredPosition = value; }
+            get => _anchoredPosition;
+            set => _anchoredPosition = value;
         }
 
         public void Refresh()

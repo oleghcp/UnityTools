@@ -13,25 +13,10 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private float m_spent;
 
-        public float Value
-        {
-            get { return m_got - m_spent; }
-        }
-
-        public bool IsEmpty
-        {
-            get { return m_got.Approx(m_spent); }
-        }
-
-        public float Got
-        {
-            get { return m_got; }
-        }
-
-        public float Spent
-        {
-            get { return m_spent; }
-        }
+        public float Value => m_got - m_spent;
+        public bool IsEmpty => m_got.Approx(m_spent);
+        public float Got => m_got;
+        public float Spent => m_spent;
 
         public AccumFloat(float got, float spent)
         {
@@ -74,7 +59,7 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is AccumFloat && this == (AccumFloat)obj;
+            return obj is AccumFloat accumFloat && this == accumFloat;
         }
 
         public bool Equals(AccumFloat other)

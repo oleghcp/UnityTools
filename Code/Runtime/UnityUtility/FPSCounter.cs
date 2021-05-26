@@ -11,10 +11,7 @@
 
         public float RefreshTime;
 
-        public float FrameRate
-        {
-            get { return _curFps; }
-        }
+        public float FrameRate => _curFps;
 
         public FpsCounter(float refreshTime = 0.5f)
         {

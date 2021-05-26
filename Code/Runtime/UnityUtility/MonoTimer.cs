@@ -19,10 +19,7 @@ namespace UnityUtility
 
             //IEnumerator//
 
-            public object Current
-            {
-                get { return null; }
-            }
+            public object Current => null;
 
             public bool MoveNext()
             {
@@ -51,36 +48,21 @@ namespace UnityUtility
 
         private Enumerator _routine = new Enumerator();
 
-        public bool IsRunning
-        {
-            get { return _routine.IsRunning; }
-        }
-
-        public float TargetTime
-        {
-            get { return _routine.WaitTime; }
-        }
-
-        public float CurrentTime
-        {
-            get { return _routine.CurrentTime.CutAfter(_routine.WaitTime); }
-        }
-
-        public float Progress
-        {
-            get { return CurrentTime / TargetTime; }
-        }
+        public bool IsRunning => _routine.IsRunning;
+        public float TargetTime => _routine.WaitTime;
+        public float CurrentTime => _routine.CurrentTime.CutAfter(_routine.WaitTime);
+        public float Progress => CurrentTime / TargetTime;
 
         public float TimeScale
         {
-            get { return _routine.TimeScale; }
-            set { _routine.TimeScale = value; }
+            get => _routine.TimeScale;
+            set => _routine.TimeScale = value;
         }
 
         public bool ConsiderGlobalTimeScale
         {
-            get { return _routine.GlobalScale; }
-            set { _routine.GlobalScale = value; }
+            get => _routine.GlobalScale;
+            set => _routine.GlobalScale = value;
         }
 
         public void Prolong(float addTime)

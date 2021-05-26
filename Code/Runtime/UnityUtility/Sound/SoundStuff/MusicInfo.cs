@@ -21,20 +21,9 @@ namespace UnityUtility.Sound.SoundStuff
 
         private bool _fading;
 
-        internal override string ClipName
-        {
-            get { return _audioSource.clip.name; }
-        }
-
-        internal override AudioSource AudioSource
-        {
-            get { return _audioSource; }
-        }
-
-        internal bool Fading
-        {
-            get { return _fading; }
-        }
+        internal override string ClipName => _audioSource.clip.name;
+        internal override AudioSource AudioSource => _audioSource;
+        internal bool Fading => _fading;
 
         ///////////////
         //Unity Funcs//

@@ -32,25 +32,10 @@ namespace UnityUtility.Sound
         private IClipLoader _loader;
         private Dictionary<string, SPreset> _presetList;
 
-        public bool Muted
-        {
-            get { return _isMuted; }
-        }
-
-        public float Volume
-        {
-            get { return _volume; }
-        }
-
-        public float Pitch
-        {
-            get { return _pitch; }
-        }
-
-        public bool Paused
-        {
-            get { return _paused; }
-        }
+        public bool Muted => _isMuted;
+        public float Volume => _volume;
+        public float Pitch => _pitch;
+        public bool Paused => _paused;
 
         static SoundsProvider()
         {
@@ -266,7 +251,7 @@ namespace UnityUtility.Sound
 
             // -- //
 
-            public override bool Equals(object obj) => obj is SoundKey && Equals((SoundKey)obj);
+            public override bool Equals(object obj) => obj is SoundKey soundKey && Equals(soundKey);
             public bool Equals(SoundKey other) => HASH == other.HASH;
             public override int GetHashCode() => HASH;
             public static bool operator ==(SoundKey a, SoundKey b) => a.HASH == b.HASH;

@@ -27,10 +27,7 @@ namespace UnityUtility.SaveLoad
         private IKeyGenerator _keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> _fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
 
-        public ISaver Saver
-        {
-            get { return _saver; }
-        }
+        public ISaver Saver => _saver;
 
         public SaveProvider(ISaver saver)
         {

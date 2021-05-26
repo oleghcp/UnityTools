@@ -5,26 +5,19 @@ namespace UnityUtility.Async
 {
     internal class RoutineIterator : IEnumerator
     {
-        private readonly RoutineRunner m_owner;
+        private readonly RoutineRunner _owner;
 
         private IEnumerator _curRoutine;
         private bool _isPaused;
         private bool _isStopped;
         private CancellationToken _token;
 
-        internal bool IsEmpty
-        {
-            get { return _curRoutine == null; }
-        }
-
-        internal bool IsPaused
-        {
-            get { return _isPaused; }
-        }
+        internal bool IsEmpty => _curRoutine == null;
+        internal bool IsPaused => _isPaused;
 
         internal RoutineIterator(RoutineRunner owner)
         {
-            m_owner = owner;
+            _owner = owner;
         }
 
         internal void Fill(IEnumerator routine)
@@ -55,22 +48,19 @@ namespace UnityUtility.Async
             _token = default;
         }
 
-        object IEnumerator.Current
-        {
-            get { return _curRoutine.Current; }
-        }
+        object IEnumerator.Current => _curRoutine.Current;
 
         bool IEnumerator.MoveNext()
         {
             if (_isStopped)
             {
-                m_owner.OnCoroutineInterrupted(false);
+                _owner.OnCoroutineInterrupted(false);
                 return false;
             }
 
             if (_token.IsCancellationRequested)
             {
-                m_owner.OnCoroutineInterrupted(true);
+                _owner.OnCoroutineInterrupted(true);
                 return false;
             }
 
@@ -79,7 +69,7 @@ namespace UnityUtility.Async
                 return true;
             }
 
-            m_owner.OnCoroutineEnded();
+            _owner.OnCoroutineEnded();
             return false;
         }
     }

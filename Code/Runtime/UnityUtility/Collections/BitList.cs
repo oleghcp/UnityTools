@@ -28,25 +28,19 @@ namespace UnityUtility.Collections
 
         public int Count
         {
-            get { return _length; }
-            set { SetLength(value); }
+            get => _length;
+            set => SetLength(value);
         }
 
         public bool this[int index]
         {
-            get { return Get(index); }
-            set { Set(index, value); }
+            get => Get(index);
+            set => Set(index, value);
         }
 
-        public int Version
-        {
-            get { return _version; }
-        }
+        public int Version => _version;
 
-        internal IReadOnlyList<int> IntBlocks
-        {
-            get { return _array; }
-        }
+        internal IReadOnlyList<int> IntBlocks => _array;
 
         [Preserve]
         private BitList() { }

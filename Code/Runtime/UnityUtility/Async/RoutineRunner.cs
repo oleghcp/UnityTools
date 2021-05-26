@@ -15,15 +15,8 @@ namespace UnityUtility.Async
 
         private long _id;
 
-        public bool IsPaused
-        {
-            get { return _iterator.IsPaused; }
-        }
-
-        public long Id
-        {
-            get { return _id; }
-        }
+        public bool IsPaused => _iterator.IsPaused;
+        public long Id => _id;
 
         private void Awake()
         {

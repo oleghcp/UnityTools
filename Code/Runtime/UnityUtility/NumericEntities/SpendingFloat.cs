@@ -13,40 +13,13 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private float m_curValue;
 
-        public float Capacity
-        {
-            get { return m_capacity; }
-        }
-
-        public float CurValue
-        {
-            get { return m_curValue.CutBefore(0f); }
-        }
-
-        public float Shortage
-        {
-            get { return (m_capacity - m_curValue).CutAfter(m_capacity); }
-        }
-
-        public float ReducingExcess
-        {
-            get { return m_curValue.CutAfter(0f).Abs(); }
-        }
-
-        public float Ratio
-        {
-            get { return CurValue / m_capacity; }
-        }
-
-        public bool IsFull
-        {
-            get { return m_curValue == m_capacity; }
-        }
-
-        public bool IsEmpty
-        {
-            get { return m_curValue <= 0f; }
-        }
+        public float Capacity => m_capacity;
+        public float CurValue => m_curValue.CutBefore(0f);
+        public float Shortage => (m_capacity - m_curValue).CutAfter(m_capacity);
+        public float ReducingExcess => m_curValue.CutAfter(0f).Abs();
+        public float Ratio => CurValue / m_capacity;
+        public bool IsFull => m_curValue == m_capacity;
+        public bool IsEmpty => m_curValue <= 0f;
 
         public SpendingFloat(float capacity)
         {
@@ -114,7 +87,7 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is SpendingFloat && Equals((SpendingFloat)obj);
+            return obj is SpendingFloat spendingFloat && Equals(spendingFloat);
         }
 
         public bool Equals(SpendingFloat other)
