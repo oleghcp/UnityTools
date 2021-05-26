@@ -114,5 +114,11 @@ namespace System
         {
             return self.IsSubclassOf(familyType) || self == familyType;
         }
+
+        public static T GetTarget<T>(this WeakReference<T> self) where T : class
+        {
+            self.TryGetTarget(out var target);
+            return target;
+        }
     }
 }
