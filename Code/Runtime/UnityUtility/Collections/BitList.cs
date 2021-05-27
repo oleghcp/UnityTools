@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityUtilityTools;
@@ -34,7 +35,9 @@ namespace UnityUtility.Collections
 
         public bool this[int index]
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => Get(index);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set => Set(index, value);
         }
 
