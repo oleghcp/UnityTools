@@ -10,11 +10,6 @@ namespace UnityUtilityTools
             return new InvalidOperationException("Collection is empty.");
         }
 
-        public static InvalidOperationException EmptyMask()
-        {
-            return new InvalidOperationException("Mask is empty.");
-        }
-
         public static InvalidOperationException CollectionChanged()
         {
             return new InvalidOperationException("Collection has been changed.");

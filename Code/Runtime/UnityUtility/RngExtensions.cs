@@ -141,7 +141,7 @@ namespace UnityUtility
 #endif
 
         /// <summary>
-        /// Returns a random flag contains in the specified mask.
+        /// Returns a random flag contains in the specified mask. Returns -1 if mask is empty.
         /// </summary>
         /// <param name="length">How many flags of 32bit mask should be considered.</param>
         public static int RandomFlag(this IRng self, int mask, int length)
@@ -157,11 +157,11 @@ namespace UnityUtility
                 }
             }
 
-            throw Errors.EmptyMask();
+            return -1;
         }
 
         /// <summary>
-        /// Returns a random flag contains in the specified mask.
+        /// Returns a random flag contains in the specified mask. Returns -1 if mask is empty.
         /// </summary>
         public static int RandomFlag(this IRng self, BitList mask)
         {
@@ -176,7 +176,7 @@ namespace UnityUtility
                 }
             }
 
-            throw Errors.EmptyMask();
+            return -1;
         }
 
         #region randoms by condition
