@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.IdGenerating;
@@ -133,11 +134,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string GetDefaultNodeName(int newId)
+        {
+            return $"Node {newId}";
+        }
+
         private void InitAndSaveCreatedNode(Vector2 position, RawNode newNodeAsset)
         {
             int newId = _idGenerator.GetNewId();
 
-            newNodeAsset.name = $"Node {newId}";
+            newNodeAsset.name = GetDefaultNodeName(newId);
             newNodeAsset.Id = newId;
             newNodeAsset.Owner = _graphAsset;
             newNodeAsset.Position = position;

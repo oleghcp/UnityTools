@@ -319,6 +319,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
 
+            string defaultName = GraphAssetEditor.GetDefaultNodeName(_nodeAsset.Id);
+            if (_nodeAsset.name != defaultName)
+                genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset(defaultName));
+
             if (_window.IsRootNode(_nodeAsset))
                 genericMenu.AddDisabledItem(new GUIContent("Set as root"));
             else
@@ -331,6 +335,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
 
             genericMenu.ShowAsContext();
+
+            void renameAsset(string name)
+            {
+                _serializedObject.Update();
+                _nameProperty.stringValue = name;
+                _serializedObject.ApplyModifiedProperties();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
