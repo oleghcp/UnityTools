@@ -359,6 +359,13 @@ namespace UnityEngine
             }
         }
 
+        public static void OrderSiblings<TKey>(this Transform self, Func<Transform, TKey> keySelector)
+        {
+            Transform[] children = self.GetTopChildren();
+            children.Sort(keySelector);
+            TransformUtility.OrderSiblingsByList(children);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponentInParent<T>(this Component self, bool includeInactive)
         {
