@@ -20,8 +20,10 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
+            label = EditorGUI.BeginProperty(position, label, property);
             DrawSelectionButton(position, property);
             EditorGUI.PropertyField(position, property, label, true);
+            EditorGUI.EndProperty();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
