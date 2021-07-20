@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using UnityUtilityTools;
 
 namespace UnityUtility.Rng
@@ -8,13 +7,15 @@ namespace UnityUtility.Rng
     [Serializable]
     public class TimeBytesBasedRng : IRng
     {
-        private ByteGenerator _rng;
+        private readonly byte MULT;
 
-        public TimeBytesBasedRng() : this(Environment.TickCount) { }
+        private uint _seed;
+        private uint _ticks;
 
-        public TimeBytesBasedRng(int seed)
+        public TimeBytesBasedRng()
         {
-            _rng = new ByteGenerator(seed);
+            _seed = (uint)Environment.TickCount;
+            MULT = (byte)(_seed % 8 + 2);
         }
 
         public int Next(int minValue, int maxValue)
@@ -58,14 +59,14 @@ namespace UnityUtility.Rng
 
         public byte NextByte()
         {
-            return _rng.RandomByte();
+            return RandomByte();
         }
 
         public void NextBytes(byte[] buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                buffer[i] = _rng.RandomByte();
+                buffer[i] = RandomByte();
             }
         }
 
@@ -73,7 +74,7 @@ namespace UnityUtility.Rng
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                buffer[i] = _rng.RandomByte();
+                buffer[i] = RandomByte();
             }
         }
 
@@ -83,7 +84,7 @@ namespace UnityUtility.Rng
 
             if (length <= 256L)
             {
-                byte rn = _rng.RandomByte();
+                byte rn = RandomByte();
                 return rn % (int)length + minValue;
             }
             else if (length <= 65536L)
@@ -102,35 +103,12 @@ namespace UnityUtility.Rng
             }
         }
 
-        [Serializable]
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct ByteGenerator
+        private byte RandomByte()
         {
-            private readonly byte MULT;
-
-            private uint _seed;
-            private uint _ticks;
-
-            public ByteGenerator(int seed)
-            {
-                MULT = (byte)((uint)seed % 8 + 2);
-                _seed = (uint)seed;
-                _ticks = 0;
-            }
-
-            public byte RandomByte()
-            {
-                uint newTicks = (uint)Environment.TickCount;
-
-                if (_ticks < newTicks)
-                    _ticks = newTicks;
-                else
-                    _ticks++;
-
-                _seed = MULT * _seed + _ticks;
-
-                return (byte)(_seed % 256);
-            }
+            uint newTicks = (uint)Environment.TickCount;
+            _ticks = _ticks < newTicks ? newTicks : _ticks + 1;
+            _seed = MULT * _seed + _ticks;
+            return (byte)(_seed % 256);
         }
     }
 }
