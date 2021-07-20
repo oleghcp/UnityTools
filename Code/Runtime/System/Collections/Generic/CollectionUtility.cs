@@ -6,6 +6,19 @@ namespace System.Collections.Generic
 {
     public static class CollectionUtility
     {
+        public static T[] GetSubArray<T>(IReadOnlyList<T> self, int startIndex, int length)
+        {
+            T[] subArray = new T[length];
+            for (int i = 0; i < length; i++) { subArray[i] = self[i + startIndex]; }
+            return subArray;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetSubArray<T>(IReadOnlyList<T> self, int startIndex)
+        {
+            return GetSubArray(self, startIndex, self.Count - startIndex);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<T>(ReadOnlyCollection<T> collection, T item)
         {
