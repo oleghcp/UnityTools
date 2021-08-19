@@ -18,14 +18,14 @@ namespace UnityUtility.Controls
     public enum GPKeyCode : sbyte
     {
         None = -1,
-        LeftArrow,
-        RightArrow,
-        DownArrow,
-        UpArrow,
-        ActionL,
-        ActionR,
-        ActionB,
-        ActionT,
+        ArrowLeft,
+        ArrowRight,
+        ArrowDown,
+        ArrowUp,
+        ActionWest,
+        ActionEast,
+        ActionSouth,
+        ActionNorth,
         LeftBumper,
         RightBumper,
         LeftStick,
@@ -50,6 +50,7 @@ namespace UnityUtility.Controls
         RightTrgr
     }
 
+    //DO NOT CHANGE THE ORDER!
     public enum KMAxisCode : sbyte
     {
         None = -1,
