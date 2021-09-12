@@ -10,7 +10,6 @@ namespace UnityUtilityEditor.Window
 {
     internal class ScriptableObjectWindow : EditorWindow
     {
-        private static bool _keepOpened;
         private UnityObject _targetRoot;
 
         private string[] _assemblies;
@@ -81,30 +80,25 @@ namespace UnityUtilityEditor.Window
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.Space(10f);
-
-                _keepOpened = EditorGUILayout.Toggle(_keepOpened, GUILayout.MaxWidth(EditorGuiUtility.SmallButtonWidth));
-                EditorGUILayout.LabelField("Keep opened");
-
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Create", GUILayout.Width(100f), GUILayout.Height(30f)))
                 {
                     Type type = _types[assemblyName][_typeIndex];
 
-                    string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
-
-                    if (path.HasUsefulData())
+                    if (_targetRoot != null)
                     {
-                        path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
+                        EditorUtilityExt.CreateScriptableObjectAsset(type, _targetRoot);
+                    }
+                    else
+                    {
+                        string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
 
-                        if (_targetRoot == null)
+                        if (path.HasUsefulData())
+                        {
+                            path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
                             EditorUtilityExt.CreateScriptableObjectAsset(type, path);
-                        else
-                            EditorUtilityExt.CreateScriptableObjectAsset(type, _targetRoot, path);
-
-                        if (!_keepOpened)
-                            Close();
+                        }
                     }
                 }
             }

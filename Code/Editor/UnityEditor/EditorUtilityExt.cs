@@ -63,26 +63,31 @@ namespace UnityEditor
             _clearFunc.Invoke(null, null);
         }
 
-        public static void CreateScriptableObjectAsset(Type type, string assetName = null)
+        public static void CreateScriptableObjectAsset(Type type, string assetPath = null)
         {
             ScriptableObject so = ScriptableObject.CreateInstance(type);
-            string name = GetAssetName(type, assetName);
+            string name = getAssetName(type, assetPath);
             AssetDatabase.CreateAsset(so, name);
             AssetDatabase.SaveAssets();
+
+            string getAssetName(Type type, string path)
+            {
+                return path.HasUsefulData() ? $"{ASSET_FOLDER}{type.Name}{ASSET_EXTENSION}"
+                                            : path;
+            }
         }
 
         public static void CreateScriptableObjectAsset(Type type, UnityObject rootObject, string assetName = null)
         {
             ScriptableObject so = ScriptableObject.CreateInstance(type);
-            so.name = GetAssetName(type, assetName);
+            so.name = getAssetName(type, assetName);
             AssetDatabase.AddObjectToAsset(so, rootObject);
             AssetDatabase.SaveAssets();
-        }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static string GetAssetName(Type type, string path)
-        {
-            return path.IsNullOrWhiteSpace() ? $"{ASSET_FOLDER}{type.Name}{ASSET_EXTENSION}" : path;
+            string getAssetName(Type type, string path)
+            {
+                return path.IsNullOrWhiteSpace() ? type.Name : path;
+            }
         }
 
         public static (string AssemblyName, string ClassName) SplitSerializedPropertyTypename(string typename)

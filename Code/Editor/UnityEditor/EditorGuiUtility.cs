@@ -84,7 +84,11 @@ namespace UnityEditor
 
         public static string GetTypeDisplayName(Type type)
         {
-            return $"{type.Name} ({type.Namespace})";
+            string nameSpace = type.Namespace;
+            if (nameSpace.IsNullOrEmpty())
+                nameSpace = "no namespace";
+
+            return $"{type.Name} ({nameSpace})";
         }
     }
 }
