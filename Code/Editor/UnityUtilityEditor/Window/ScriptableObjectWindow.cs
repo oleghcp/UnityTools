@@ -92,11 +92,12 @@ namespace UnityUtilityEditor.Window
                     }
                     else
                     {
-                        string path = EditorUtility.SaveFilePanel("Save asset", Application.dataPath, type.Name + EditorUtilityExt.ASSET_EXTENSION, "asset");
+                        string dataPath = Application.dataPath;
+                        string path = EditorUtility.SaveFilePanel("Save asset", dataPath, type.Name, "asset");
 
                         if (path.HasUsefulData())
                         {
-                            path = EditorUtilityExt.ASSET_FOLDER + path.Substring(Application.dataPath.Length);
+                            path = EditorUtilityExt.ASSET_FOLDER + path.Substring(dataPath.Length + 1);
                             EditorUtilityExt.CreateScriptableObjectAsset(type, path);
                         }
                     }

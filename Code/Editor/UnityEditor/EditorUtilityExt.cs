@@ -72,8 +72,8 @@ namespace UnityEditor
 
             string getAssetName(Type type, string path)
             {
-                return path.HasUsefulData() ? $"{ASSET_FOLDER}{type.Name}{ASSET_EXTENSION}"
-                                            : path;
+                return path.IsNullOrWhiteSpace() ? $"{ASSET_FOLDER}{type.Name}{ASSET_EXTENSION}"
+                                                 : path;
             }
         }
 
