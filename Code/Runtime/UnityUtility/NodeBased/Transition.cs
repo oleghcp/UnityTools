@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased
 {
@@ -16,7 +17,12 @@ namespace UnityUtility.NodeBased
 
         public bool Available(object data = null)
         {
-            return _condition == null ? true : _condition.Satisfied(this, data);
+            return _condition == null || _condition.Satisfied(this, data);
+        }
+
+        public Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
+        {
+            return _condition.CreateCondition<TState, TData>();
         }
 
 #if UNITY_EDITOR
@@ -32,5 +38,10 @@ namespace UnityUtility.NodeBased
     public abstract class Condition
     {
         public abstract bool Satisfied(in Transition transition, object data);
+
+        public virtual Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }

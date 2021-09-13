@@ -22,14 +22,10 @@ namespace UnityUtility.Collections
         public TState CurrentState => _currentNode?.State;
         public bool IsAlive => _currentNode != null;
 
-        public StateMachine(TData data)
+        public StateMachine(TData data, Action<TState, TState> onStateChanging = null, Action finalCallback = null)
         {
             _data = data;
             _nodes = new Dictionary<TState, Node>();
-        }
-
-        public StateMachine(TData data, Action<TState, TState> onStateChanging = null, Action finalCallback = null) : this(data)
-        {
             _onStateChanging = onStateChanging;
             _final = finalCallback;
         }
@@ -56,7 +52,7 @@ namespace UnityUtility.Collections
             _nodes[state] = node;
         }
 
-        public void AddTransition(TState from, TState to, Func<TState, TData, bool> condition)
+        public void AddTransition(TState from, Func<TState, TData, bool> condition, TState to = null)
         {
             Transition transition = new Transition
             {
@@ -70,16 +66,6 @@ namespace UnityUtility.Collections
         public void SetAsStart(TState startState)
         {
             _startNode = _nodes[startState];
-        }
-
-        public void AddExit(TState from, Func<TState, TData, bool> condition)
-        {
-            Transition transition = new Transition
-            {
-                Condition = condition,
-            };
-
-            _nodes[from].Transitions.Add(transition);
         }
 
         public void CheckConditions()

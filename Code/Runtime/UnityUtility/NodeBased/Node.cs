@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased
 {
@@ -24,6 +26,8 @@ namespace UnityUtility.NodeBased
             return Next[index].NextNode;
         }
 
+        public abstract (bool valid, TState state) CreateState<TState>() where TState : class, IState;
+
 #if UNITY_EDITOR
         [SerializeField]
         internal Vector2 Position;
@@ -44,6 +48,11 @@ namespace UnityUtility.NodeBased
         public new TNode GetNextNode(int index)
         {
             return (TNode)Next[index].NextNode;
+        }
+
+        public override (bool valid, TState state) CreateState<TState>()
+        {
+            throw new NotImplementedException();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
