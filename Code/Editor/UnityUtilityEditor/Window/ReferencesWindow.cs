@@ -17,12 +17,15 @@ namespace UnityUtilityEditor.Window
             minSize = new Vector2(250f, 200f);
         }
 
-        public static void Create(string targetObjectGuid, List<object> referingObjectGuids)
+        public static void Create(string targetObjectGuid, List<string> referingObjectGuids)
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
             window._target = EditorUtilityExt.LoadAssetByGuid(targetObjectGuid);
-            window._objects = referingObjectGuids.Select(itm => EditorUtilityExt.LoadAssetByGuid(itm.ToString())).ToArray();
+
+            if (referingObjectGuids.Count > 0)
+                window._objects = referingObjectGuids.Select(EditorUtilityExt.LoadAssetByGuid)
+                                                     .ToArray();
         }
 
         private void OnGUI()
@@ -40,6 +43,12 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space(5f);
+
+            if (_objects == null)
+            {
+                EditorGUILayout.LabelField("There are no references.");
+                return;
+            }
 
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 

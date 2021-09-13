@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,21 +37,12 @@ namespace UnityUtilityEditor
             }
         }
 
-        public static void FindReferences()
+        public static void FindReferences(Func<string, List<string>, IEnumerator<float>> searchingFunc)
         {
             string targetGuid = Selection.assetGUIDs[0];
-            SearchProgress progress = new SearchProgress();
+            List<string> foundObjects = new List<string>();
             bool isCanseled = false;
-            IEnumerator iterator;
-
-            if (EditorSettings.serializationMode == SerializationMode.ForceText)
-            {
-                iterator = FindReferencesByText(targetGuid, progress);
-            }
-            else
-            {
-                iterator = FindReferencesDataBase(targetGuid, progress);
-            }
+            IEnumerator<float> iterator = searchingFunc(targetGuid, foundObjects);
 
             EditorApplication.update += Proceed;
 
@@ -59,36 +50,28 @@ namespace UnityUtilityEditor
             {
                 if (!isCanseled && iterator.MoveNext())
                 {
-                    isCanseled = EditorUtility.DisplayCancelableProgressBar("Searching references", "That could take a while...", progress.Progress);
+                    isCanseled = EditorUtility.DisplayCancelableProgressBar("Searching references",
+                                                                            "That could take a while...",
+                                                                            iterator.Current);
                     return;
                 }
 
                 EditorApplication.update -= Proceed;
-
                 EditorUtility.ClearProgressBar();
-
-                if (progress.FoundObjects.Count == 0)
-                {
-                    Debug.Log("There are no dependencies.");
-                    return;
-                }
-
-                ReferencesWindow.Create(targetGuid, progress.FoundObjects);
+                ReferencesWindow.Create(targetGuid, foundObjects);
             }
         }
 
-        private static IEnumerator FindReferencesDataBase(string targetGuid, SearchProgress progress)
+        public static IEnumerator<float> SearchReferencesByDataBase(string targetGuid, List<string> foundObjects)
         {
             string[] assetGuids = AssetDatabase.FindAssets(string.Empty);
             int count = assetGuids.Length;
             int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 
-            yield return null;
+            yield return 0f;
 
             for (int i = 0; i < count; i++)
             {
-                progress.Progress = (i + 1f) / count;
-
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
                 string[] dependencies = AssetDatabase.GetDependencies(assetPath);
 
@@ -98,34 +81,32 @@ namespace UnityUtilityEditor
 
                     if (dependencyGuid == targetGuid && dependencyGuid != assetGuids[i])
                     {
-                        progress.FoundObjects.Add(assetGuids[i]);
+                        foundObjects.Add(assetGuids[i]);
                     }
                 }
 
                 if (i % actionsPerFrame == 0)
                 {
-                    yield return null;
+                    yield return (i + 1f) / count;
                 }
             }
         }
 
-        private static IEnumerator FindReferencesByText(string targetGuid, SearchProgress progress)
+        public static IEnumerator<float> SearchReferencesByText(string targetGuid, List<string> foundObjects)
         {
             string assetsFolderPath = Application.dataPath;
             string[] files = Directory.GetFiles(assetsFolderPath, "*", SearchOption.AllDirectories);
 
-            yield return null;
+            yield return 0f;
 
             string projectFolderPath = PathUtility.GetParentPath(assetsFolderPath);
             int count = files.Length;
             int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 
-            yield return null;
+            yield return 0f;
 
             for (int i = 0; i < count; i++)
             {
-                progress.Progress = (i + 1f) / count;
-
                 string filePath = files[i];
 
                 if (invalidExtension(Path.GetExtension(filePath)))
@@ -137,12 +118,12 @@ namespace UnityUtilityEditor
                 {
                     string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
                     string guid = AssetDatabase.AssetPathToGUID(assetPath);
-                    progress.FoundObjects.Add(guid);
+                    foundObjects.Add(guid);
                 }
 
                 if (i % actionsPerFrame == 0)
                 {
-                    yield return null;
+                    yield return (i + 1f) / count;
                 }
             }
 
@@ -159,12 +140,6 @@ namespace UnityUtilityEditor
                        extension != ".scenetemplate" &&
                        !extension.Contains("override");
             }
-        }
-
-        private class SearchProgress
-        {
-            public List<object> FoundObjects = new List<object>();
-            public float Progress;
         }
     }
 }

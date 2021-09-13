@@ -20,12 +20,6 @@ namespace UnityUtilityEditor
             TemplatesUtility.CreateNodeScript();
         }
 
-        [MenuItem(FULL_MENU_GRAPH_PATH + "Transition C# Script")]
-        private static void CreateTransitionScript()
-        {
-            TemplatesUtility.CreateTransitionScript();
-        }
-
         [MenuItem(FULL_MENU_GRAPH_PATH + "Graph C# Script")]
         private static void CreateGraphScript()
         {
@@ -82,7 +76,10 @@ namespace UnityUtilityEditor
         [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Find References In Project (ext.)", false, 25)]
         private static void FindReferences()
         {
-            MenuItemsUtility.FindReferences();
+            if (EditorSettings.serializationMode == SerializationMode.ForceText)
+                MenuItemsUtility.FindReferences(MenuItemsUtility.SearchReferencesByText);
+            else
+                MenuItemsUtility.FindReferences(MenuItemsUtility.SearchReferencesByDataBase);
         }
 
         [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Find References In Project (ext.)", true)]
