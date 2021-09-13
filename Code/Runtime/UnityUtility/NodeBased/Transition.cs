@@ -5,12 +5,15 @@ using UnityEngine.Serialization;
 namespace UnityUtility.NodeBased
 {
     [Serializable]
-    public class Transition
+    public struct Transition
     {
         [SerializeField, FormerlySerializedAs("NextNode")]
-        private ScriptableObject _nextNode;
+        private RawNode _nextNode;
+        [SerializeReference, ReferenceSelection]
+        private Condition _condition;
 
-        public ScriptableObject NextNode => _nextNode;
+        public RawNode NextNode => _nextNode;
+        public bool Available => _condition == null ? true : _condition.Satisfied(this);
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -19,5 +22,11 @@ namespace UnityUtility.NodeBased
         internal static string NodeFieldName => nameof(_nextNode);
         internal static string PointsFieldName => nameof(_points);
 #endif
+    }
+
+    [Serializable]
+    public abstract class Condition
+    {
+        public abstract bool Satisfied(in Transition transition);
     }
 }

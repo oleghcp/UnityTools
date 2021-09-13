@@ -110,7 +110,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public IEnumerable<(SerializedProperty transitionProp, RawNode connectedNode)> ParseTransitionsList()
         {
-            SerializedProperty transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
             return transitionsProperty.EnumerateArrayElements().Select(getPair);
 
             (SerializedProperty transitionProp, RawNode node) getPair(SerializedProperty transitionProp)
@@ -134,7 +134,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public SerializedProperty AddTransition(RawNode nextNode)
         {
-            SerializedProperty transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
 
             if (transitionsProperty.arraySize > 1)
@@ -149,7 +149,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void RemoveReference(RawNode next)
         {
-            SerializedProperty transitionsProperty = _serializedObject.FindProperty(DummyNode.ArrayFieldName);
+            SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
             int length = transitionsProperty.arraySize;
 
             for (int i = 0; i < length; i++)
@@ -366,7 +366,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             string fieldName = property.propertyPath;
 
             return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
-                   fieldName == DummyNode.ArrayFieldName ||
+                   fieldName == RawNode.ArrayFieldName ||
                    fieldName == RawNode.GraphFieldName ||
                    fieldName == RawNode.IdFieldName ||
                    fieldName == RawNode.PositionFieldName;

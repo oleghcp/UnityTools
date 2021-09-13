@@ -46,7 +46,7 @@ namespace Project
 
 namespace Project
 {
-    public class #SCRIPTNAME# : SimpleNode<#SCRIPTNAME#>
+    public class #SCRIPTNAME# : Node<#SCRIPTNAME#>
     {
 
     }
@@ -59,31 +59,6 @@ namespace Project
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyNode.cs");
         }
 
-        public static void CreateTransitionScript()
-        {
-            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#TransitionScriptTemplate.cs.txt";
-
-            if (!File.Exists(templatePath))
-            {
-                string text = @"using System;
-using UnityUtility.NodeBased;
-
-namespace Project
-{
-    [Serializable]
-    public class #SCRIPTNAME# : Transition
-    {
-
-    }
-}
-";
-                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
-                File.WriteAllText(templatePath, text);
-            }
-
-            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyTransition.cs");
-        }
-
         public static void CreateGraphScript()
         {
             string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#GraphScriptTemplate.cs.txt";
@@ -93,7 +68,7 @@ namespace Project
                 string text = "using UnityUtility.NodeBased;\nusing UnityEngine;\n\nnamespace Project\n{\n" +
                               $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \" (ext.)/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
                               "\tpublic class #SCRIPTNAME# : Graph</*your node type*/>\n\t{\n\n\t}\n}\n";
-                
+
                 Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }

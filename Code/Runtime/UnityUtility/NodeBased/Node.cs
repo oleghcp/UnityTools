@@ -10,9 +10,19 @@ namespace UnityUtility.NodeBased
         internal int Id;
         [SerializeField]
         internal RawGraph Owner;
+        [SerializeField]
+        private protected Transition[] Next;
 
         public int LocalId => Id;
         public RawGraph Graph => Owner;
+
+        public int NextCount => Next.Length;
+        public IReadOnlyList<Transition> Transitions => Next;
+
+        public RawNode GetNextNode(int index)
+        {
+            return Next[index].NextNode;
+        }
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -21,36 +31,19 @@ namespace UnityUtility.NodeBased
         internal static string PositionFieldName => nameof(Position);
         internal static string IdFieldName => nameof(Id);
         internal static string GraphFieldName => nameof(Owner);
-#endif
-    }
-
-    public abstract class Node<TTransition> : RawNode where TTransition : Transition, new()
-    {
-        [SerializeField]
-        private protected TTransition[] Next;
-
-        public int NextCount => Next.Length;
-        public IReadOnlyList<TTransition> Transitions => Next;
-
-        public Node<TTransition> GetNextNode(int index)
-        {
-            return (Node<TTransition>)Next[index].NextNode;
-        }
-
-#if UNITY_EDITOR
         internal static string ArrayFieldName => nameof(Next);
 #endif
     }
 
-    public abstract class SimpleNode<T> : Node<Transition>, IReadOnlyList<T> where T : SimpleNode<T>
+    public abstract class Node<TNode> : RawNode, IReadOnlyList<TNode> where TNode : Node<TNode>
     {
-        public T this[int index] => (T)Next[index].NextNode;
-        public new Graph<T, Transition> Graph => Owner as Graph<T, Transition>;
-        int IReadOnlyCollection<T>.Count => Next.Length;
+        public TNode this[int index] => (TNode)Next[index].NextNode;
+        public new Graph<TNode> Graph => Owner as Graph<TNode>;
+        int IReadOnlyCollection<TNode>.Count => Next.Length;
 
-        public new T GetNextNode(int index)
+        public new TNode GetNextNode(int index)
         {
-            return (T)Next[index].NextNode;
+            return (TNode)Next[index].NextNode;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -58,11 +51,11 @@ namespace UnityUtility.NodeBased
             return GetEnumerator();
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TNode> GetEnumerator()
         {
             for (int i = 0; i < NextCount; i++)
             {
-                yield return (T)Next[i].NextNode;
+                yield return (TNode)Next[i].NextNode;
             };
         }
     }

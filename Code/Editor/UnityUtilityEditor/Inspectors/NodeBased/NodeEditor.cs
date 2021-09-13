@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.Window.NodeBased.Stuff;
 
 namespace UnityUtilityEditor.Inspectors.NodeBased
 {
@@ -54,7 +53,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
                 foreach (var node in target.Owner.Nodes)
                 {
                     SerializedObject serialized = new SerializedObject(node);
-                    SerializedProperty arrayProp = serialized.FindProperty(DummyNode.ArrayFieldName);
+                    SerializedProperty arrayProp = serialized.FindProperty(RawNode.ArrayFieldName);
 
                     int index = arrayProp.GetArrayElement(out var connected, predicate);
 

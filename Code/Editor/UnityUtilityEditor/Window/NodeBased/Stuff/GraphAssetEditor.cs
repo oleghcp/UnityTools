@@ -25,12 +25,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private float _nodeWidth;
         private Vector2 _scrollPos;
         private IntIdGenerator _idGenerator;
-        private Func<Type> _getNodeType;
-        private Func<Type> _getTransitionType;
 
         public RawGraph GraphAsset => _graphAsset;
-        public Type NodeType => _getNodeType();
-        public Type TransitionType => _getTransitionType();
+        public Type NodeType => _graphAsset.GetNodeType();
         public float NodeWidth => _nodeWidth;
 
         public RawNode RootNode
@@ -47,8 +44,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public GraphAssetEditor(RawGraph graphAsset)
         {
             _graphAsset = graphAsset;
-            _getNodeType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetNodeTypeMethodName);
-            _getTransitionType = (Func<Type>)Delegate.CreateDelegate(typeof(Func<Type>), graphAsset, DummyGrapth.GetTransitionTypeMethodName);
             _serializedObject = new SerializedObject(graphAsset);
             _nodesProperty = _serializedObject.FindProperty(RawGraph.ArrayFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
