@@ -13,7 +13,11 @@ namespace UnityUtility.NodeBased
         private Condition _condition;
 
         public RawNode NextNode => _nextNode;
-        public bool Available => _condition == null ? true : _condition.Satisfied(this);
+
+        public bool Available(object data = null)
+        {
+            return _condition == null ? true : _condition.Satisfied(this, data);
+        }
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -27,6 +31,6 @@ namespace UnityUtility.NodeBased
     [Serializable]
     public abstract class Condition
     {
-        public abstract bool Satisfied(in Transition transition);
+        public abstract bool Satisfied(in Transition transition, object data);
     }
 }
