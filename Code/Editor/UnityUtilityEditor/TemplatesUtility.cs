@@ -46,7 +46,7 @@ namespace Project
 
 namespace Project
 {
-    public class #SCRIPTNAME# : Node
+    public class #SCRIPTNAME# : SimpleNode<#SCRIPTNAME#>
     {
 
     }
