@@ -10,10 +10,11 @@ namespace UnityUtility.Collections
     }
 
     [Serializable]
-    public class StateMachine<TState> where TState : class, IState
+    public class StateMachine<TState, TData> where TState : class, IState where TData : class
     {
         private Node _startNode;
         private Node _currentNode;
+        private TData _data;
         private Dictionary<TState, Node> _nodes;
         private Action<TState, TState> _onStateChanging;
         private Action _final;
@@ -21,12 +22,13 @@ namespace UnityUtility.Collections
         public TState CurrentState => _currentNode?.State;
         public bool IsAlive => _currentNode != null;
 
-        public StateMachine()
+        public StateMachine(TData data)
         {
+            _data = data;
             _nodes = new Dictionary<TState, Node>();
         }
 
-        public StateMachine(Action<TState, TState> onStateChanging = null, Action finalCallback = null) : this()
+        public StateMachine(TData data, Action<TState, TState> onStateChanging = null, Action finalCallback = null) : this(data)
         {
             _onStateChanging = onStateChanging;
             _final = finalCallback;
@@ -54,7 +56,7 @@ namespace UnityUtility.Collections
             _nodes[state] = node;
         }
 
-        public void AddTransition(TState from, TState to, Func<TState, bool> condition)
+        public void AddTransition(TState from, TState to, Func<TState, TData, bool> condition)
         {
             Transition transition = new Transition
             {
@@ -70,7 +72,7 @@ namespace UnityUtility.Collections
             _startNode = _nodes[startState];
         }
 
-        public void AddExit(TState from, Func<TState, bool> condition)
+        public void AddExit(TState from, Func<TState, TData, bool> condition)
         {
             Transition transition = new Transition
             {
@@ -87,7 +89,7 @@ namespace UnityUtility.Collections
 
             foreach (Transition transition in _currentNode.Transitions)
             {
-                if (transition.Condition(_currentNode.State))
+                if (transition.Condition(_currentNode.State, _data))
                 {
                     _currentNode.State.End();
                     Node prevNode = _currentNode;
@@ -123,7 +125,7 @@ namespace UnityUtility.Collections
         private class Transition
         {
             public Node Next;
-            public Func<TState, bool> Condition;
+            public Func<TState, TData, bool> Condition;
         }
         #endregion
     }
