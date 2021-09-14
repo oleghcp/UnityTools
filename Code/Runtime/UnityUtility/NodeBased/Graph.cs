@@ -11,49 +11,20 @@ namespace UnityUtility.NodeBased
         [SerializeField]
         internal RawNode[] Nodes;
 
-        public RawNode RootNode => Nodes.Length > 0 ? Nodes[0] : null;
+        public RawNode RootNode
+        {
+            get
+            {
+                if (Nodes.Length == 0)
+                    return null;
+
+                return Nodes.Find(item => item.RealNode());
+            }
+        }
 
         public RawNode GetNodeById(int id)
         {
-            return Nodes.Find(item => item.LocalId == id);
-        }
-
-        public StateMachine<TState, TData> CreateStateMachine<TState, TData>(TData data,
-                                                                             Action<TState, TState> onStateChanging = null,
-                                                                             Action finalCallback = null)
-            where TState : class, IState where TData : class
-        {
-            var stateMachine = new StateMachine<TState, TData>(data, onStateChanging, finalCallback);
-            var states = new Dictionary<RawNode, TState>(Nodes.Length);
-
-            RawNode rootNode = RootNode;
-
-            foreach (RawNode node in Nodes)
-            {
-                var (valid, state) = node.CreateState<TState>();
-
-                if (valid)
-                {
-                    states[node] = state;
-                    stateMachine.AddState(state, node == rootNode);
-                }
-                else
-                {
-                    states[node] = null;
-                }
-            }
-
-            foreach (RawNode node in Nodes)
-            {
-                foreach (Transition transition in node.Transitions)
-                {
-                    stateMachine.AddTransition(states[node],
-                                               transition.CreateCondition<TState, TData>(),
-                                               states[transition.NextNode]);
-                }
-            }
-
-            return stateMachine;
+            return Nodes.Find(item => item.RealNode() && item.LocalId == id);
         }
 
 #if UNITY_EDITOR
@@ -65,7 +36,7 @@ namespace UnityUtility.NodeBased
         internal abstract Type GetNodeType();
         internal static string IdGeneratorFieldName => nameof(LastId);
         internal static string WidthFieldName => nameof(_nodeWidth);
-        internal static string ArrayFieldName => nameof(Nodes);
+        internal static string NodesFieldName => nameof(Nodes);
 #endif
     }
 
@@ -81,6 +52,43 @@ namespace UnityUtility.NodeBased
         public new TNode GetNodeById(int id)
         {
             return base.GetNodeById(id) as TNode;
+        }
+
+        public StateMachine<TState, TData> CreateStateMachine<TState, TData>(TData data,
+                                                                             Action<TState, TState> onStateChanging = null,
+                                                                             Action finalCallback = null)
+            where TState : class, IState where TData : class
+        {
+            var stateMachine = new StateMachine<TState, TData>(data, onStateChanging, finalCallback);
+            var states = new Dictionary<RawNode, TState>(Nodes.Length);
+
+            RawNode rootNode = RootNode;
+
+            foreach (RawNode node in Nodes)
+            {
+                if (node.ServiceNode())
+                    continue;
+
+                TState state = states.Place(node, node.CreateState<TState>());
+
+                if (state != null)
+                    stateMachine.AddState(state, node == rootNode);
+            }
+
+            foreach (RawNode node in Nodes)
+            {
+                if (node.ServiceNode())
+                    continue;
+
+                foreach (Transition<TNode> transition in node as TNode)
+                {
+                    stateMachine.AddTransition(states[node],
+                                               transition.CreateCondition<TState, TData>(),
+                                               states[transition.NextNode]);
+                }
+            }
+
+            return stateMachine;
         }
 
 #if UNITY_EDITOR

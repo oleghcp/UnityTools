@@ -50,7 +50,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
                     graph.LastId = 0;
                 EditorUtility.SetDirty(graph);
 
-                foreach (var node in target.Owner.Nodes)
+                foreach (RawNode node in target.Owner.Nodes)
                 {
                     SerializedObject serialized = new SerializedObject(node);
                     SerializedProperty arrayProp = serialized.FindProperty(RawNode.ArrayFieldName);

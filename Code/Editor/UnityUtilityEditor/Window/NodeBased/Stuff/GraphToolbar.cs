@@ -102,7 +102,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             if (GUILayout.Button(_moveButton, GUILayout.Width(buttonWidth)))
             {
-                NodeViewer viewer = _window.NodeViewers.First(item => item.NodeAsset == _window.GraphAssetEditor.RootNode);
+                NodeViewer viewer = _window.NodeViewers.First(item => item.NodeAsset == _window.RootNode);
                 _window.Camera.Position = viewer.WorldRect.center;
             }
 

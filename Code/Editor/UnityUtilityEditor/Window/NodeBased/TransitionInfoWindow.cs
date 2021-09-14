@@ -12,6 +12,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private TransitionViewer _transition;
         private SerializedProperty _transitionProp;
+        private SerializedProperty _conditionProp;
         private GraphEditorWindow _mainWindow;
         private Vector2 _scrollPos;
 
@@ -32,6 +33,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             _transition = transition;
             _transitionProp = transitionProp;
+            _conditionProp = transitionProp.FindPropertyRelative(Transition.ConditionFieldName);
             _mainWindow = mainWindow;
         }
 
@@ -70,23 +72,12 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 GUILayout.Space(10f);
 
-                _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
-
-                EditorGUILayout.LabelField("Transition properties:", EditorStyles.boldLabel);
-                EditorGUILayout.Space();
-
-                EditorGUI.indentLevel++;
-                foreach (SerializedProperty item in _transitionProp.EnumerateInnerProperties())
+                if (!(_transition.In.Node.NodeAsset is HubNode))
                 {
-                    if (item.name == Transition.NodeFieldName ||
-                        item.name == Transition.PointsFieldName)
-                        continue;
-
-                    EditorGUILayout.PropertyField(item);
+                    _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
+                    EditorGUILayout.PropertyField(_conditionProp);
+                    EditorGUILayout.EndScrollView();
                 }
-                EditorGUI.indentLevel--;
-
-                EditorGUILayout.EndScrollView();
 
                 GUILayout.FlexibleSpace();
 

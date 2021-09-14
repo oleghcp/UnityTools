@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -11,8 +10,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class NodeViewer
     {
-        private readonly Vector2 UI_OFFSET = new Vector2(10f, 10f);
-        private readonly Vector2 UI_SHRINK = new Vector2(20f, 22f);
+        private readonly Vector2 UI_OFFSET;
+        private readonly Vector2 UI_SHRINK;
+        private readonly float SMALL_NODE_HEIGHT;
 
         private GraphEditorWindow _window;
         private RawNode _nodeAsset;
@@ -57,8 +57,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_screenRectVersion != _window.OnGuiCounter)
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
-                    _screenRect.width = _window.GraphAssetEditor.NodeWidth / _window.Camera.Size;
-                    _screenRect.height = _window.Camera.Size > 1f ? GetSmallNodeHeight() : GetBigNodeHeight();
+                    float width = _nodeAsset.ServiceNode() ? GraphAssetEditor.SERV_NODE_WIDTH : _window.GraphAssetEditor.NodeWidth;
+                    _screenRect.width = width / _window.Camera.Size;
+                    _screenRect.height = _window.Camera.Size > 1f ? SMALL_NODE_HEIGHT : GetBigNodeHeight();
                     _screenRectVersion = _window.OnGuiCounter;
                 }
 
@@ -73,8 +74,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_worldRectVersion != _window.OnGuiCounter)
                 {
                     _worldRect.position = _position;
-                    _worldRect.width = _window.GraphAssetEditor.NodeWidth;
-                    _worldRect.height = _window.Camera.Size > 1f ? GetSmallNodeHeight() : GetBigNodeHeight();
+                    _worldRect.width = _nodeAsset.ServiceNode() ? GraphAssetEditor.SERV_NODE_WIDTH : _window.GraphAssetEditor.NodeWidth;
+                    _worldRect.height = _window.Camera.Size > 1f ? SMALL_NODE_HEIGHT : GetBigNodeHeight();
                     _worldRectVersion = _window.OnGuiCounter;
                 }
 
@@ -98,6 +99,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public NodeViewer(RawNode nodeAsset, GraphEditorWindow window)
         {
+            UI_OFFSET = new Vector2(10f, 10f);
+            UI_SHRINK = new Vector2(20f, 22f);
+            SMALL_NODE_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
+
             _nodeAsset = nodeAsset;
             _window = window;
             _serializedObject = new SerializedObject(nodeAsset);
@@ -177,10 +182,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (!IsInCamera)
                 return;
 
+            bool serviceNode = _nodeAsset.ServiceNode();
+
             _serializedObject.Update();
 
             _in.Draw();
-            _out.Draw();
+
+            if (!(_nodeAsset is ExitNode))
+                _out.Draw();
 
             Rect nodeRect = ScreenRect;
 
@@ -198,6 +207,66 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             _serializedObject.ApplyModifiedProperties();
+
+            void DrawHeader()
+            {
+                if (_renaming)
+                {
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        _nameProperty.stringValue = EditorGUILayout.TextField(_nameProperty.stringValue);
+                        if (GUILayout.Button("V", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                            _renaming = false;
+                    }
+                }
+                else
+                {
+                    if (serviceNode)
+                    {
+                        if (_nodeAsset is ExitNode)
+                            GUI.color = Colours.Yellow;
+                        else if (_nodeAsset is HubNode)
+                            GUI.color = Colours.Silver;
+                        else
+                            throw new UnsupportedValueException(_nodeAsset.GetType().Name);
+                    }
+                    else
+                    {
+                        GUI.color = _window.RootNode == _nodeAsset ? Colours.Orange : Colours.Cyan;
+                    }
+
+                    EditorGUILayout.LabelField(_nodeAsset.name, GraphEditorStyles.Styles.NodeHeader);
+                    GUI.color = Colours.White;
+                }
+            }
+
+            void DrawContent(float width)
+            {
+                if (serviceNode)
+                {
+                    if (_nodeAsset is ExitNode)
+                        EditorGUILayout.LabelField("→ → →");
+                    else if (_nodeAsset is HubNode)
+                        EditorGUILayout.LabelField("► ► ►");
+                    else
+                        throw new UnsupportedValueException(_nodeAsset.GetType().Name);
+                }
+                else
+                {
+                    float labelWidth = EditorGUIUtility.labelWidth;
+                    EditorGUIUtility.labelWidth = width * 0.5f;
+
+                    foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
+                    {
+                        if (IsServiceField(item))
+                            continue;
+
+                        EditorGUILayout.PropertyField(item, true);
+                    }
+
+                    EditorGUIUtility.labelWidth = labelWidth;
+                }
+            }
         }
 
         public bool ProcessEvents(Event e)
@@ -278,61 +347,39 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private void DrawHeader()
-        {
-            if (_renaming)
-            {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    _nameProperty.stringValue = EditorGUILayout.TextField(_nameProperty.stringValue);
-                    if (GUILayout.Button("V", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
-                        _renaming = false;
-                }
-            }
-            else
-            {
-                GUI.color = _window.IsRootNode(_nodeAsset) ? Colours.Orange : Colours.Cyan;
-                EditorGUILayout.LabelField(_nodeAsset.name, GraphEditorStyles.Styles.NodeHeader);
-                GUI.color = Colours.White;
-            }
-        }
-
-        private void DrawContent(float width)
-        {
-            float labelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = width * 0.5f;
-
-            foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
-            {
-                if (IsServiceField(item))
-                    continue;
-
-                EditorGUILayout.PropertyField(item, true);
-            }
-
-            EditorGUIUtility.labelWidth = labelWidth;
-        }
-
         private void ProcessContextMenu()
         {
             GenericMenu genericMenu = new GenericMenu();
 
-            genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
+            if (_nodeAsset.ServiceNode())
+            {
+                genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
 
-            string defaultName = GraphAssetEditor.GetDefaultNodeName(_nodeAsset.Id);
-            if (_nodeAsset.name != defaultName)
-                genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset(defaultName));
-
-            if (_window.IsRootNode(_nodeAsset))
-                genericMenu.AddDisabledItem(new GUIContent("Set as root"));
+                if (_nodeAsset is HubNode)
+                {
+                    genericMenu.AddSeparator(null);
+                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                }
+            }
             else
-                genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
+            {
+                genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
 
-            genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
-            genericMenu.AddSeparator(null);
-            genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
-            genericMenu.AddSeparator(null);
-            genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                string defaultName = GraphAssetEditor.GetDefaultNodeName(_nodeAsset.Id);
+                if (_nodeAsset.name != defaultName)
+                    genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset(defaultName));
+
+                if (_window.RootNode == _nodeAsset && _nodeAsset.RealNode())
+                    genericMenu.AddDisabledItem(new GUIContent("Set as root"));
+                else
+                    genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
+
+                genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
+                genericMenu.AddSeparator(null);
+                genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                genericMenu.AddSeparator(null);
+                genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+            }
 
             genericMenu.ShowAsContext();
 
@@ -344,17 +391,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private float GetSmallNodeHeight()
-        {
-            return EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
-        }
-
         private float GetBigNodeHeight()
         {
             if (_heightVersion != _window.OnGuiCounter)
             {
-                _height = GetSmallNodeHeight() + EditorGuiUtility.GetDrawHeight(_serializedObject, IsServiceField);
+                _height = SMALL_NODE_HEIGHT + EditorGuiUtility.GetDrawHeight(_serializedObject, IsServiceField).CutBefore(EditorGUIUtility.singleLineHeight);
                 _heightVersion = _window.OnGuiCounter;
             }
 

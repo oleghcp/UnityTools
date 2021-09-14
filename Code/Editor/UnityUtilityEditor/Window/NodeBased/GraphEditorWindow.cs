@@ -29,8 +29,11 @@ namespace UnityUtilityEditor.Window.NodeBased
         private Vector2 _winSize;
         private int _mapSizeVersion;
         private int _winSizeVersion;
+        private int _rootNodeVersion;
 
         private int _onGuiCounter;
+        private bool _hasExitNode;
+        private RawNode _rootNode;
 
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
@@ -70,6 +73,20 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
+        public RawNode RootNode
+        {
+            get
+            {
+                if (_rootNodeVersion != _onGuiCounter)
+                {
+                    _rootNode = _graphAssetEditor.GraphAsset.RootNode;
+                    _rootNodeVersion = _onGuiCounter;
+                }
+
+                return _rootNode;
+            }
+        }
+
         private void OnEnable()
         {
             minSize = new Vector2(800f, 600f);
@@ -106,6 +123,8 @@ namespace UnityUtilityEditor.Window.NodeBased
             foreach (RawNode item in _graphAssetEditor.ParseList())
             {
                 _nodeViewers.Add(new NodeViewer(item, this));
+                if (item is ExitNode)
+                    _hasExitNode = true;
             }
 
             for (int i = 0; i < _nodeViewers.Count; i++)
@@ -167,11 +186,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             Save();
         }
 
-        public bool IsRootNode(RawNode node)
-        {
-            return _graphAssetEditor.RootNode == node;
-        }
-
         public void SetAsRoot(NodeViewer node)
         {
             _graphAssetEditor.SetAsRoot(node.NodeAsset);
@@ -186,6 +200,9 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             if (_nodeViewers.Count == 0)
                 _camera.Position = default;
+
+            if (node.NodeAsset is ExitNode)
+                _hasExitNode = false;
         }
 
         public void OnClickOnPort(PortViewer newPort)
@@ -193,22 +210,25 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (_selectedPort == newPort)
                 return;
 
-            if (_selectedPort == null)
+            if (_selectedPort == null || _selectedPort.Type == newPort.Type || _selectedPort.Node == newPort.Node)
             {
                 _selectedPort = newPort;
                 return;
             }
 
-            if (_selectedPort.Type != newPort.Type && _selectedPort.Node != newPort.Node)
+            if (_selectedPort.Node.NodeAsset is HubNode && newPort.Node.NodeAsset is HubNode)
             {
-                PortViewer outPort = newPort.Type == PortType.Out ? newPort : _selectedPort;
-                PortViewer inPort = newPort.Type == PortType.In ? newPort : _selectedPort;
+                _selectedPort = newPort;
+                return;
+            }
 
-                if (!_transitionViewers.Any(item => item.In == inPort && item.Out == outPort))
-                {
-                    SerializedProperty property = outPort.Node.AddTransition(inPort.Node.NodeAsset);
-                    _transitionViewers.Add(new TransitionViewer(outPort, inPort, property, this));
-                }
+            PortViewer outPort = newPort.Type == PortType.Out ? newPort : _selectedPort;
+            PortViewer inPort = newPort.Type == PortType.In ? newPort : _selectedPort;
+
+            if (!_transitionViewers.Any(item => item.In == inPort && item.Out == outPort))
+            {
+                SerializedProperty property = outPort.Node.AddTransition(inPort.Node.NodeAsset);
+                _transitionViewers.Add(new TransitionViewer(outPort, inPort, property, this));
             }
 
             _selectedPort = null;
@@ -226,6 +246,9 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
             {
+                if (item.NodeAsset.ServiceNode())
+                    continue;
+
                 Rect rect = item.WorldRect;
                 RawNode newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
                 NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(newNode, this));
@@ -242,6 +265,8 @@ namespace UnityUtilityEditor.Window.NodeBased
             Vector2 position = _camera.ScreenToWorld(mousePosition);
             RawNode nodeAsset = _graphAssetEditor.CreateNode(position, type);
             _nodeViewers.Add(new NodeViewer(nodeAsset, this));
+            if (nodeAsset is ExitNode)
+                _hasExitNode = true;
         }
 
         private void CreateTransitionsForNode(NodeViewer nodeViewer)
@@ -377,16 +402,29 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             GenericMenu menu = new GenericMenu();
 
-            addMenuItem(_graphAssetEditor.NodeType);
+            addNodeMenuItem(_graphAssetEditor.NodeType);
 
             foreach (Type type in TypeCache.GetTypesDerivedFrom(_graphAssetEditor.NodeType))
             {
-                addMenuItem(type);
+                addNodeMenuItem(type);
             }
+
+            menu.AddSeparator(string.Empty);
+
+            addServiceMenuItem(typeof(HubNode), false);
+            addServiceMenuItem(typeof(ExitNode), _hasExitNode);
 
             menu.ShowAsContext();
 
-            void addMenuItem(Type type)
+            void addServiceMenuItem(Type type, bool disabled)
+            {
+                if (disabled)
+                    menu.AddDisabledItem(new GUIContent(type.Name));
+                else
+                    menu.AddItem(new GUIContent(type.Name), false, () => CreateNode(mousePosition, type));
+            }
+
+            void addNodeMenuItem(Type type)
             {
                 if (type.IsAbstract)
                     menu.AddDisabledItem(new GUIContent($"Abstract {type.Name} ({type.Namespace})"));

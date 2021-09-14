@@ -51,10 +51,14 @@ namespace UnityUtilityEditor.Window.NodeBased
             EditorGUILayout.Space(2f);
             _scrollPosition.y = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox).y;
 
-            EditorGUILayout.LabelField(_nodeType.FullName);
-            EditorGUILayout.LabelField($"Local Id: {_nodeEditor.NodeAsset.LocalId}");
+            if (_nodeEditor.NodeAsset.RealNode())
+            {
+                EditorGUILayout.LabelField(_nodeType.FullName);
+                EditorGUILayout.LabelField($"Local Id: {_nodeEditor.NodeAsset.LocalId}");
 
-            EditorGUILayout.Space(10f);
+                EditorGUILayout.Space(10f);
+            }
+
             EditorGUILayout.LabelField($"Connected Nodes: {_list.Length}");
 
             foreach (var item in _list)

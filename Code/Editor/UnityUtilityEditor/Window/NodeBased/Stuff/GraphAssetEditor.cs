@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility;
 using UnityUtility.IdGenerating;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
@@ -14,6 +15,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     internal class GraphAssetEditor
     {
         public const float PANEL_WIDTH = 300f;
+        public const float SERV_NODE_WIDTH = 150f;
         private const float MIN_NODE_WIDTH = 200f;
         private const float MAX_NODE_WIDTH = 400f;
         private const float NODE_WIDTH_STEP = 1f;
@@ -30,22 +32,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public Type NodeType => _graphAsset.GetNodeType();
         public float NodeWidth => _nodeWidth;
 
-        public RawNode RootNode
-        {
-            get
-            {
-                if (_nodesProperty.arraySize == 0)
-                    return null;
-
-                return _nodesProperty.GetArrayElementAtIndex(0).objectReferenceValue as RawNode;
-            }
-        }
-
         public GraphAssetEditor(RawGraph graphAsset)
         {
             _graphAsset = graphAsset;
             _serializedObject = new SerializedObject(graphAsset);
-            _nodesProperty = _serializedObject.FindProperty(RawGraph.ArrayFieldName);
+            _nodesProperty = _serializedObject.FindProperty(RawGraph.NodesFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
         }
@@ -95,7 +86,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public RawNode CreateNode(Vector2 position, Type type)
         {
             RawNode newNodeAsset = ScriptableObject.CreateInstance(type) as RawNode;
-            InitAndSaveCreatedNode(position, newNodeAsset);
+
+            if (newNodeAsset.RealNode())
+                InitAndSaveCreatedNode(position, newNodeAsset);
+            else
+                InitAndSaveCreatedServiceNode(position, newNodeAsset);
+
             return newNodeAsset;
         }
 
@@ -152,12 +148,32 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
+        private void InitAndSaveCreatedServiceNode(Vector2 position, RawNode newNodeAsset)
+        {
+            if (newNodeAsset is HubNode)
+                newNodeAsset.name = "Hub";
+            else if (newNodeAsset is ExitNode)
+                newNodeAsset.name = "Exit";
+            else
+                throw new UnsupportedValueException(newNodeAsset.GetType().Name);
+
+            newNodeAsset.Id = 0;
+            newNodeAsset.Owner = _graphAsset;
+            newNodeAsset.Position = position;
+
+            AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
+            AssetDatabase.SaveAssets();
+
+            _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
+            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
         private bool IsServiceField(SerializedProperty property)
         {
             string fieldName = property.propertyPath;
 
             return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
-                   fieldName == RawGraph.ArrayFieldName ||
+                   fieldName == RawGraph.NodesFieldName ||
                    fieldName == RawGraph.IdGeneratorFieldName ||
                    fieldName == RawGraph.WidthFieldName;
         }

@@ -13,20 +13,14 @@ namespace UnityUtility.NodeBased
         [SerializeField]
         internal RawGraph Owner;
         [SerializeField]
-        private protected Transition[] Next;
+        internal Transition[] Next;
 
         public int LocalId => Id;
-        public RawGraph Graph => Owner;
 
-        public int NextCount => Next.Length;
-        public IReadOnlyList<Transition> Transitions => Next;
-
-        public RawNode GetNextNode(int index)
+        public virtual TState CreateState<TState>() where TState : class, IState
         {
-            return Next[index].NextNode;
+            throw new NotImplementedException();
         }
-
-        public abstract (bool valid, TState state) CreateState<TState>() where TState : class, IState;
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -39,32 +33,41 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Node<TNode> : RawNode, IReadOnlyList<TNode> where TNode : Node<TNode>
+    public abstract class Node<TNode> : RawNode, IEnumerable<Transition<TNode>> where TNode : Node<TNode>
     {
-        public TNode this[int index] => (TNode)Next[index].NextNode;
-        public new Graph<TNode> Graph => Owner as Graph<TNode>;
-        int IReadOnlyCollection<TNode>.Count => Next.Length;
-
-        public new TNode GetNextNode(int index)
-        {
-            return (TNode)Next[index].NextNode;
-        }
-
-        public override (bool valid, TState state) CreateState<TState>()
-        {
-            throw new NotImplementedException();
-        }
+        public Graph<TNode> Graph => Owner as Graph<TNode>;
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        public IEnumerator<TNode> GetEnumerator()
+        public IEnumerator<Transition<TNode>> GetEnumerator()
         {
-            for (int i = 0; i < NextCount; i++)
+            for (int i = 0; i < Next.Length; i++)
             {
-                yield return (TNode)Next[i].NextNode;
+                RawNode node = Next[i].NextNode;
+
+                if (node is HubNode)
+                {
+                    Transition[] nextFromHub = node.Next;
+
+                    for (int j = 0; j < nextFromHub.Length; j++)
+                    {
+                        yield return new Transition<TNode>(nextFromHub[i]);
+                    }
+
+                    continue;
+                }
+
+                if (node is ExitNode)
+                {
+                    yield return new Transition<TNode>(Next[i].CreateExit());
+
+                    continue;
+                }
+
+                yield return new Transition<TNode>(Next[i]);
             };
         }
     }
