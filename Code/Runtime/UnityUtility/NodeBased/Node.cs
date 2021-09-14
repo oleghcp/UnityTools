@@ -63,12 +63,11 @@ namespace UnityUtility.NodeBased
                 if (node is ExitNode)
                 {
                     yield return new Transition<TNode>(Next[i].CreateExit());
-
                     continue;
                 }
 
                 yield return new Transition<TNode>(Next[i]);
-            };
+            }
         }
     }
 }
