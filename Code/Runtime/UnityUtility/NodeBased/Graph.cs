@@ -66,7 +66,7 @@ namespace UnityUtility.NodeBased
 
             foreach (RawNode node in Nodes)
             {
-                if (node.ServiceNode())
+                if (node is HubNode)
                     continue;
 
                 TState state = states.Place(node, node.CreateState<TState>());
@@ -80,7 +80,7 @@ namespace UnityUtility.NodeBased
                 if (node.ServiceNode())
                     continue;
 
-                foreach (Transition<TNode> transition in node as TNode)
+                foreach (Transition transition in node)
                 {
                     stateMachine.AddTransition(states[node],
                                                transition.CreateCondition<TState, TData>(),

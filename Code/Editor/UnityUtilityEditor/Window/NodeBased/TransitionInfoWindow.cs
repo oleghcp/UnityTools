@@ -70,12 +70,11 @@ namespace UnityUtilityEditor.Window.NodeBased
                         _transition.AddPoint();
                 }
 
-                GUILayout.Space(10f);
-
                 if (!(_transition.In.Node.NodeAsset is HubNode))
                 {
+                    GUILayout.Space(10f);
                     _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
-                    EditorGUILayout.PropertyField(_conditionProp);
+                    EditorGUILayout.PropertyField(_conditionProp, true);
                     EditorGUILayout.EndScrollView();
                 }
 

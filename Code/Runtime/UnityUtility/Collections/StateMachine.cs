@@ -56,7 +56,7 @@ namespace UnityUtility.Collections
         {
             Transition transition = new Transition
             {
-                Next = _nodes[to],
+                Next = to == null ? null : _nodes[to],
                 Condition = condition,
             };
 

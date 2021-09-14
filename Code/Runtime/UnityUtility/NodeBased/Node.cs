@@ -6,7 +6,7 @@ using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased
 {
-    public abstract class RawNode : ScriptableObject
+    public abstract class RawNode : ScriptableObject, IEnumerable
     {
         [SerializeField]
         internal int Id;
@@ -20,6 +20,28 @@ namespace UnityUtility.NodeBased
         public virtual TState CreateState<TState>() where TState : class, IState
         {
             throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            for (int i = 0; i < Next.Length; i++)
+            {
+                RawNode node = Next[i].NextNode;
+
+                if (node is HubNode)
+                {
+                    Transition[] nextFromHub = node.Next;
+
+                    for (int j = 0; j < nextFromHub.Length; j++)
+                    {
+                        yield return nextFromHub[j];
+                    }
+
+                    continue;
+                }
+
+                yield return Next[i];
+            }
         }
 
 #if UNITY_EDITOR
@@ -36,11 +58,6 @@ namespace UnityUtility.NodeBased
     public abstract class Node<TNode> : RawNode, IEnumerable<Transition<TNode>> where TNode : Node<TNode>
     {
         public Graph<TNode> Graph => Owner as Graph<TNode>;
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
 
         public IEnumerator<Transition<TNode>> GetEnumerator()
         {
