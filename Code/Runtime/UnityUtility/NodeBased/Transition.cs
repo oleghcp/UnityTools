@@ -47,6 +47,7 @@ namespace UnityUtility.NodeBased
         private Transition _transition;
 
         public TNode NextNode => _transition.NextNode as TNode;
+        public bool IsExit => _transition.NextNode is ExitNode;
 
         internal Transition(in Transition transition)
         {

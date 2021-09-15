@@ -76,11 +76,11 @@ namespace UnityUtilityEditor.Window.NodeBased
                     _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
                     EditorGUILayout.PropertyField(_conditionProp, true);
                     EditorGUILayout.EndScrollView();
+                    GUILayout.Space(10f);
                 }
 
                 GUILayout.FlexibleSpace();
 
-                GUILayout.Space(10f);
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
