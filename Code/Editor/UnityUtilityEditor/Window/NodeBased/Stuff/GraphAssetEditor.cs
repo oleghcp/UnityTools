@@ -64,12 +64,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.ApplyModifiedProperties();
         }
 
-        public IEnumerable<RawNode> ParseList()
-        {
-            return _nodesProperty.EnumerateArrayElements()
-                                 .Select(item => item.objectReferenceValue as RawNode);
-        }
-
         public void ChangeNodeWidth(int dir)
         {
             _nodeWidth = (_nodeWidth + (NODE_WIDTH_STEP * dir)).Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);

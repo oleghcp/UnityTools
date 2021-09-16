@@ -16,14 +16,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private GraphEditorWindow _window;
 
-        private PortViewer _destination;
         private PortViewer _source;
+        private PortViewer _destination;
         private List<PointViewer> _points;
 
         private bool _controlPresed;
 
-        public PortViewer Source => _destination;
-        public PortViewer Destination => _source;
+        public PortViewer Source => _source;
+        public PortViewer Destination => _destination;
         public int PointsCount => _points.Count;
 
         public TransitionViewer(PortViewer source, PortViewer destination, GraphEditorWindow window)

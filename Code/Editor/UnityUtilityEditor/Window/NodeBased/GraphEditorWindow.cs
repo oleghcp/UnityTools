@@ -20,7 +20,6 @@ namespace UnityUtilityEditor.Window.NodeBased
         private GraphGrid _grid;
         private GraphToolbar _toolbar;
         private List<NodeViewer> _nodeViewers;
-        private List<TransitionViewer> _transitionViewers;
 
         private PortViewer _selectedPort;
         private bool _selectionRectOn;
@@ -106,31 +105,26 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (_graphAssetEditor != null)
             {
                 _nodeViewers.Clear();
-                _transitionViewers.Clear();
             }
             else
             {
                 _grid = new GraphGrid(this);
                 _toolbar = new GraphToolbar(this);
                 _nodeViewers = new List<NodeViewer>();
-                _transitionViewers = new List<TransitionViewer>();
             }
 
             _settings = LoadSettings(graphAsset);
             _graphAssetEditor = new GraphAssetEditor(graphAsset);
             _camera = new GraphCamera(this, _settings.CameraPosition);
 
-            foreach (RawNode item in _graphAssetEditor.ParseList())
+            foreach (RawNode node in _graphAssetEditor.GraphAsset.Nodes)
             {
-                _nodeViewers.Add(new NodeViewer(item, this));
-                if (item is ExitNode)
+                _nodeViewers.Add(new NodeViewer(node, this));
+                if (node is ExitNode)
                     _hasExitNode = true;
             }
 
-            for (int i = 0; i < _nodeViewers.Count; i++)
-            {
-                CreateTransitionsForNode(_nodeViewers[i]);
-            }
+            _nodeViewers.ForEach(item => item.CreateConnections());
         }
 
         private void OnGUI()
@@ -161,13 +155,11 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _grid.Draw();
 
-            DrawConnections();
             DrawConnectionLine(e);
             DrawNodes();
             DrawSelectionRect(e);
 
             ProcessNodeEvents(e);
-            ProcessTransitionsEvents(e);
             ProcessEvents(e);
 
             GUI.EndGroup();
@@ -193,9 +185,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public void DeleteNode(NodeViewer node)
         {
-            _transitionViewers.RemoveAll(item => item.Source == node.In || item.Destination == node.Out);
             _nodeViewers.Remove(node);
-            _nodeViewers.ForEach(item => item.RemoveReference(node.NodeAsset));
+            _nodeViewers.ForEach(item => item.RemoveTransition(node));
             _graphAssetEditor.DestroyNode(node.NodeAsset);
 
             if (_nodeViewers.Count == 0)
@@ -222,22 +213,17 @@ namespace UnityUtilityEditor.Window.NodeBased
                 return;
             }
 
-            PortViewer outPort = newPort.Type == PortType.Out ? newPort : _selectedPort;
-            PortViewer inPort = newPort.Type == PortType.In ? newPort : _selectedPort;
+            PortViewer dest = newPort.Type == PortType.Out ? newPort : _selectedPort;
+            PortViewer source = newPort.Type == PortType.In ? newPort : _selectedPort;
 
-            if (!_transitionViewers.Any(item => item.Source == inPort && item.Destination == outPort))
-            {
-                outPort.Node.AddTransition(inPort.Node.NodeAsset);
-                _transitionViewers.Add(new TransitionViewer(outPort, inPort, this));
-            }
+            dest.Node.CreateTransition(source.Node);
 
             _selectedPort = null;
         }
 
         public void DeleteTransition(TransitionViewer transition)
         {
-            _transitionViewers.Remove(transition);
-            transition.Destination.Node.RemoveReference(transition.Source.Node.NodeAsset);
+            transition.Source.Node.RemoveTransition(transition);
         }
 
         public void CopySelectedNode()
@@ -252,7 +238,6 @@ namespace UnityUtilityEditor.Window.NodeBased
                 Rect rect = item.WorldRect;
                 RawNode newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
                 NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(newNode, this));
-                CreateTransitionsForNode(newNodeEditor);
                 item.Select(false);
                 newNodeEditor.Select(true);
             }
@@ -269,28 +254,11 @@ namespace UnityUtilityEditor.Window.NodeBased
                 _hasExitNode = true;
         }
 
-        private void CreateTransitionsForNode(NodeViewer nodeViewer)
-        {
-            foreach (RawNode connectedNode in nodeViewer.ParseTransitionsList())
-            {
-                NodeViewer connectedNodeViewer = _nodeViewers.Find(itm => itm.NodeAsset == connectedNode);
-                _transitionViewers.Add(new TransitionViewer(nodeViewer.Out, connectedNodeViewer.In, this));
-            }
-        }
-
         private void DrawNodes()
         {
             for (int i = 0; i < _nodeViewers.Count; i++)
             {
                 _nodeViewers[i].Draw();
-            }
-        }
-
-        private void DrawConnections()
-        {
-            for (int i = 0; i < _transitionViewers.Count; i++)
-            {
-                _transitionViewers[i].Draw();
             }
         }
 
@@ -381,23 +349,6 @@ namespace UnityUtilityEditor.Window.NodeBased
                 e.Use();
         }
 
-        private void ProcessTransitionsEvents(Event e)
-        {
-            if (_selectionRectOn)
-                return;
-
-            bool needLockEvent = false;
-
-            for (int i = 0; i < _transitionViewers.Count; i++)
-            {
-                if (_transitionViewers[i].ProcessEvents(e))
-                    needLockEvent = true;
-            }
-
-            if (needLockEvent)
-                e.Use();
-        }
-
         private void ProcessContextMenu(Vector2 mousePosition)
         {
             GenericMenu menu = new GenericMenu();
@@ -436,7 +387,6 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void Save()
         {
             _nodeViewers.ForEach(item => item.Save());
-            _transitionViewers.ForEach(item => item.Save());
             _graphAssetEditor.Save();
             _toolbar.Save();
             _settings.CameraPosition = _camera.Position;

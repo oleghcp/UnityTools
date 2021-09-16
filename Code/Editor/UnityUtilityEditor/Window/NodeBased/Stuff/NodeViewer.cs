@@ -38,6 +38,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private PortViewer _in;
         private PortViewer _out;
+        private List<TransitionViewer> _transitionViewers;
 
         public RawNode NodeAsset => _nodeAsset;
         public PortViewer In => _in;
@@ -110,18 +111,30 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _nameProperty = _serializedObject.FindProperty(EditorUtilityExt.ASSET_NAME_FIELD);
             _position = _serializedObject.FindProperty(RawNode.PositionFieldName).vector2Value;
 
+            _transitionViewers = new List<TransitionViewer>();
+
             _in = new PortViewer(this, PortType.In, window);
             _out = new PortViewer(this, PortType.Out, window);
+        }
+
+        public void CreateConnections()
+        {
+            var dict = _window.GraphAssetEditor.GraphAsset.Nodes.ToDictionary(key => key.Id, value => value);
+
+            for (int i = 0; i < _nodeAsset.Next.Length; i++)
+            {
+                NodeViewer connectedNodeViewer = _window.NodeViewers.First(itm => itm.NodeAsset.Id == _nodeAsset.Next[i].NextNodeId);
+                _transitionViewers.Add(new TransitionViewer(_out, connectedNodeViewer.In, _window));
+            }
         }
 
         public IEnumerable<RawNode> ParseTransitionsList()
         {
             var dict = _window.GraphAssetEditor.GraphAsset.Nodes.ToDictionary(key => key.Id, value => value);
-
-            return _serializedObject.FindProperty(RawNode.ArrayFieldName)
-                                    .EnumerateArrayElements()
-                                    .Select(item => item.FindPropertyRelative(Transition.NodeIdFieldName))
-                                    .Select(item => dict[item.intValue]);
+            for (int i = 0; i < _nodeAsset.Next.Length; i++)
+            {
+                yield return dict[_nodeAsset.Next[i].NextNodeId];
+            }
         }
 
         public void Select(bool on)
@@ -133,8 +146,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUI.changed = true;
         }
 
-        public void AddTransition(RawNode nextNode)
+        public void CreateTransition(NodeViewer nextNodeViewer)
         {
+            if (_transitionViewers.Any(item => item.Destination.Node == nextNodeViewer))
+                return;
+
+            RawNode nextNode = nextNodeViewer.NodeAsset;
+
             SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
 
@@ -142,12 +160,22 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 newItem.ResetToDefault();
 
             newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = nextNode.Id;
+            _transitionViewers.Add(new TransitionViewer(_out, nextNodeViewer._in, _window));
 
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        public void RemoveReference(RawNode next)
+        public void RemoveTransition(NodeViewer nextNodeViewer)
         {
+            TransitionViewer transition = _transitionViewers.Find(item => item.Destination.Node == nextNodeViewer);
+            RemoveTransition(transition);
+        }
+
+        public void RemoveTransition(TransitionViewer transition)
+        {
+            _transitionViewers.Remove(transition);
+            RawNode next = transition.Destination.Node.NodeAsset;
+
             SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
             int length = transitionsProperty.arraySize;
 
@@ -173,36 +201,41 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_nodeAsset == null)
                 return;
 
-            if (!IsInCamera)
-                return;
-
-            bool serviceNode = _nodeAsset.ServiceNode();
-
             _serializedObject.Update();
 
-            _in.Draw();
-
-            if (!(_nodeAsset is ExitNode))
-                _out.Draw();
-
-            Rect nodeRect = ScreenRect;
-
-            GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.SelectedNode : GraphEditorStyles.Styles.Node);
-
-            nodeRect.position += UI_OFFSET;
-            nodeRect.size -= UI_SHRINK;
-
-            using (new GUILayout.AreaScope(nodeRect))
+            for (int i = 0; i < _transitionViewers.Count; i++)
             {
-                DrawHeader();
+                _transitionViewers[i].Draw();
+            }
 
-                if (_window.Camera.Size <= 1f)
-                    DrawContent(nodeRect.width);
+            if (IsInCamera)
+            {
+                _in.Draw();
+
+                if (!(_nodeAsset is ExitNode))
+                    _out.Draw();
+
+                Rect nodeRect = ScreenRect;
+
+                GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.SelectedNode : GraphEditorStyles.Styles.Node);
+
+                nodeRect.position += UI_OFFSET;
+                nodeRect.size -= UI_SHRINK;
+
+                using (new GUILayout.AreaScope(nodeRect))
+                {
+                    bool serviceNode = _nodeAsset.ServiceNode();
+
+                    DrawHeader(serviceNode);
+
+                    if (_window.Camera.Size <= 1f)
+                        DrawContent(nodeRect.width, serviceNode);
+                }
             }
 
             _serializedObject.ApplyModifiedProperties();
 
-            void DrawHeader()
+            void DrawHeader(bool serviceNode)
             {
                 if (_renaming)
                 {
@@ -234,7 +267,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 }
             }
 
-            void DrawContent(float width)
+            void DrawContent(float width, bool serviceNode)
             {
                 if (serviceNode)
                 {
@@ -331,6 +364,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     break;
             }
 
+            for (int i = 0; i < _transitionViewers.Count; i++)
+            {
+                if (_transitionViewers[i].ProcessEvents(e))
+                    needLock = true;
+            }
+
             return needLock;
         }
 
@@ -338,6 +377,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             SerializedProperty positionProperty = _serializedObject.FindProperty(RawNode.PositionFieldName);
             positionProperty.vector2Value = _position;
+            _transitionViewers.ForEach(item => item.Save());
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
