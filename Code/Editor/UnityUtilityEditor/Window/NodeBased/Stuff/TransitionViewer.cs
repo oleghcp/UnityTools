@@ -39,7 +39,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             SerializedProperty pointsProp = GetProperty().FindPropertyRelative(Transition.PointsFieldName);
             foreach (SerializedProperty item in pointsProp)
             {
-                _points.Add(new PointViewer(item, this, window));
+                _points.Add(new PointViewer(item.vector2Value, this, window));
             }
         }
 
@@ -53,7 +53,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             else
                 pointProp.vector2Value += Vector2.one * 30f;
 
-            _points.Add(new PointViewer(pointProp, this, _window));
+            _points.Add(new PointViewer(pointProp.vector2Value, this, _window));
 
             GUI.changed = true;
         }
@@ -73,7 +73,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Save()
         {
+            SerializedProperty pointsProp = GetProperty().FindPropertyRelative(Transition.PointsFieldName);
 
+            for (int i = 0; i < _points.Count; i++)
+            {
+                pointsProp.GetArrayElementAtIndex(i).vector2Value = _points[i].Position;
+            }
         }
 
         public void Draw()

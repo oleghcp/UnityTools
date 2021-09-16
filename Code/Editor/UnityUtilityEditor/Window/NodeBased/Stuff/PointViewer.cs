@@ -10,21 +10,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private const float VIEW_RADIUS = 5f;
         private const float PICK_SIZE = VIEW_RADIUS * 4f;
 
-        private SerializedProperty _property;
         private TransitionViewer _transitionViewer;
         private GraphEditorWindow _window;
         private bool _isDragged;
         private Vector2 _dragedPosition;
+        private Vector2 _position;
 
-        public Vector2 Position
-        {
-            get => _property.vector2Value;
-            set => _property.vector2Value = value;
-        }
+        public Vector2 Position => _position;
 
-        public PointViewer(SerializedProperty pointProperty, TransitionViewer transitionViewer, GraphEditorWindow window)
+        public PointViewer(Vector2 position, TransitionViewer transitionViewer, GraphEditorWindow window)
         {
-            _property = pointProperty;
+            _position = position;
             _transitionViewer = transitionViewer;
             _window = window;
         }
@@ -77,9 +73,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 case EventType.MouseDrag:
                     if (e.button == 0 && _isDragged && e.control)
                     {
-                        _property.serializedObject.Update();
                         Drag(e.delta);
-                        _property.serializedObject.ApplyModifiedProperties();
                         GUI.changed = true;
                         needLock = true;
                     }
@@ -94,11 +88,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (_window.GridSnapping)
             {
                 _dragedPosition += mouseDelta * _window.Camera.Size;
-                Position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));
+                _position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));
             }
             else
             {
-                Position += mouseDelta * _window.Camera.Size;
+                _position += mouseDelta * _window.Camera.Size;
             }
         }
     }

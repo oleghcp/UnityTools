@@ -35,7 +35,14 @@ namespace UnityUtilityEditor.Window.NodeBased
             _mainWindow = mainWindow;
             _nodeType = nodeEditor.NodeAsset.GetType();
 
-            _list = nodeEditor.ParseTransitionsList()
+            var dict = mainWindow.GraphAssetEditor
+                                 .GraphAsset
+                                 .Nodes
+                                 .ToDictionary(key => key.Id, value => value);
+
+            _list = nodeEditor.NodeAsset
+                              .Next
+                              .Select(item => dict[item.NextNodeId])
                               .ToArray();
         }
 

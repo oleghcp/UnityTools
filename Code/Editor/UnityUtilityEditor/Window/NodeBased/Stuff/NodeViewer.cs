@@ -128,15 +128,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public IEnumerable<RawNode> ParseTransitionsList()
-        {
-            var dict = _window.GraphAssetEditor.GraphAsset.Nodes.ToDictionary(key => key.Id, value => value);
-            for (int i = 0; i < _nodeAsset.Next.Length; i++)
-            {
-                yield return dict[_nodeAsset.Next[i].NextNodeId];
-            }
-        }
-
         public void Select(bool on)
         {
             if (_isSelected == on)
