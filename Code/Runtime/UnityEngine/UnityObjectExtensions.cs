@@ -38,6 +38,16 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Instantiates unity object of defined type.
+        /// </summary>
+        public static T Install<T>(this T self, HideFlags hideFlags) where T : UnityObject
+        {
+            T obj = UnityObject.Instantiate(self);
+            obj.hideFlags = hideFlags;
+            return obj;
+        }
+
+        /// <summary>
         /// Instantiates gameobject as a child of the specified parent.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
