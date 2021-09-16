@@ -21,9 +21,9 @@ namespace UnityUtilityEditor.Window.ShapeWizards
 
             if (CreateAsset)
             {
-                string dir = $"{EditorUtilityExt.ASSET_FOLDER}Meshes/";
+                string dir = $"{AssetDatabaseExt.ASSET_FOLDER}Meshes/";
                 if (!Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
-                string meshPrefabPath = $"{dir}{GenerateMeshName()}{EditorUtilityExt.ASSET_EXTENSION}";
+                string meshPrefabPath = $"{dir}{GenerateMeshName()}{AssetDatabaseExt.ASSET_EXTENSION}";
 
                 mesh = (Mesh)AssetDatabase.LoadAssetAtPath(meshPrefabPath, typeof(Mesh));
 

@@ -8,7 +8,7 @@ namespace UnityUtilityEditor
 #if UNITY_2019_1_OR_NEWER
         public static void CreateScript()
         {
-            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#ScriptTemplate.cs.txt";
+            string templatePath = AssetDatabaseExt.TEMPLATES_FOLDER + "C#ScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -27,7 +27,7 @@ namespace Project
     }
 }
 ";
-                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
+                Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 
@@ -38,7 +38,7 @@ namespace Project
 #if UNITY_2019_3_OR_NEWER
         public static void CreateNodeScript()
         {
-            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#NodeScriptTemplate.cs.txt";
+            string templatePath = AssetDatabaseExt.TEMPLATES_FOLDER + "C#NodeScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -52,7 +52,7 @@ namespace Project
     }
 }
 ";
-                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
+                Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 
@@ -61,7 +61,7 @@ namespace Project
 
         public static void CreateGraphScript()
         {
-            string templatePath = EditorUtilityExt.TEMPLATES_FOLDER + "C#GraphScriptTemplate.cs.txt";
+            string templatePath = AssetDatabaseExt.TEMPLATES_FOLDER + "C#GraphScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -69,7 +69,7 @@ namespace Project
                               $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \" (ext.)/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
                               "\tpublic class #SCRIPTNAME# : Graph</*your node type*/>\n\t{\n\n\t}\n}\n";
 
-                Directory.CreateDirectory(EditorUtilityExt.TEMPLATES_FOLDER);
+                Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);
                 File.WriteAllText(templatePath, text);
             }
 

@@ -129,7 +129,7 @@ namespace UnityUtilityEditor
 
             bool invalidExtension(string extension)
             {
-                return extension != EditorUtilityExt.ASSET_EXTENSION &&
+                return extension != AssetDatabaseExt.ASSET_EXTENSION &&
                        extension != ".prefab" &&
                        extension != ".unity" &&
                        extension != ".mat" &&

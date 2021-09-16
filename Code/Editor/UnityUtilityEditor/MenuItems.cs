@@ -9,11 +9,11 @@ namespace UnityUtilityEditor
     {
         public const string CONTEXT_MENU_NAME = "CONTEXT/";
         public const string RESET_ITEM_NAME = "Reset";
-        public const string CREATE_ASSET_PATH = EditorUtilityExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + " (ext.)/Asset";
+        public const string CREATE_ASSET_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + " (ext.)/Asset";
 
 #if UNITY_2019_3_OR_NEWER
         public const string MENU_GRAPH_PATH = " (ext.)/Graph/";
-        private const string FULL_MENU_GRAPH_PATH = EditorUtilityExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + MENU_GRAPH_PATH;
+        private const string FULL_MENU_GRAPH_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + MENU_GRAPH_PATH;
 
         [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
         private static void CreateNodeScript()
@@ -87,7 +87,7 @@ namespace UnityUtilityEditor
 
         // ------------- //
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Find References In Project (ext.)", false, 25)]
+        [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Find References In Project (ext.)", false, 25)]
         private static void FindReferences()
         {
             if (EditorSettings.serializationMode == SerializationMode.ForceText)
@@ -96,13 +96,13 @@ namespace UnityUtilityEditor
                 MenuItemsUtility.FindReferences(MenuItemsUtility.SearchReferencesByDataBase);
         }
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Find References In Project (ext.)", true)]
+        [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Find References In Project (ext.)", true)]
         private static bool FindRefsValidation()
         {
             return Selection.assetGUIDs.Length == 1;
         }
 
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Show Guid (ext.)", false, 20)]
+        [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Show Guid (ext.)", false, 20)]
         private static void ShowGUID()
         {
             string[] guids = Selection.assetGUIDs;
@@ -120,7 +120,7 @@ namespace UnityUtilityEditor
 #endif
 
 #if UNITY_2019_1_OR_NEWER
-        [MenuItem(EditorUtilityExt.ASSET_FOLDER + "Create/C# Script (ext.)", false, CREATE_CS_SCRIPT_PRIORITY)]
+        [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Create/C# Script (ext.)", false, CREATE_CS_SCRIPT_PRIORITY)]
         private static void CreateScript()
         {
             TemplatesUtility.CreateScript();

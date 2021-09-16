@@ -150,8 +150,8 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
             if (selector == null)
             {
                 selector = new TypeSelector();
-                Assembly[] assemblies = EditorUtilityExt.GetAssemblies();
-                selector.Types = EditorUtilityExt.GetTypes(assemblies, type => type.IsEnum);
+                Assembly[] assemblies = AssetDatabaseExt.GetAssemblies();
+                selector.Types = AssetDatabaseExt.GetTypes(assemblies, type => type.IsEnum);
 
                 if (selector.Types.Length > 0)
                 {

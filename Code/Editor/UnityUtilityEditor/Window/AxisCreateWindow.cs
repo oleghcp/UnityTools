@@ -23,7 +23,7 @@ namespace UnityUtilityEditor.Window
             minSize = new Vector2(300f, 300f);
             maxSize = new Vector2(300f, 1500f);
 
-            UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>($"ProjectSettings/InputManager{EditorUtilityExt.ASSET_EXTENSION}");
+            UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>($"ProjectSettings/InputManager{AssetDatabaseExt.ASSET_EXTENSION}");
             _inputManager = new SerializedObject(asset);
             _axesArray = GetAxes();
             _names = new List<string>();

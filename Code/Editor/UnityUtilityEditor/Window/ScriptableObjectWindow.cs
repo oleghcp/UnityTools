@@ -27,7 +27,7 @@ namespace UnityUtilityEditor.Window
             _types = new Dictionary<string, Type[]>();
             _typeNames = new Dictionary<string, string[]>();
 
-            foreach (Assembly assembly in EditorUtilityExt.GetAssemblies())
+            foreach (Assembly assembly in AssetDatabaseExt.GetAssemblies())
             {
                 IEnumerable<Type> typeSelection = assembly.GetTypes()
                                                           .Where(select);
@@ -90,9 +90,9 @@ namespace UnityUtilityEditor.Window
                     if (_targetRoot != null)
                     {
                         if (_defaultFolder.HasUsefulData())
-                            EditorUtilityExt.CreateScriptableObjectAsset(type, $"{_defaultFolder}/{type.Name}{EditorUtilityExt.ASSET_EXTENSION}");
+                            AssetDatabaseExt.CreateScriptableObjectAsset(type, $"{_defaultFolder}/{type.Name}{AssetDatabaseExt.ASSET_EXTENSION}");
                         else
-                            EditorUtilityExt.CreateScriptableObjectAsset(type, _targetRoot);
+                            AssetDatabaseExt.CreateScriptableObjectAsset(type, _targetRoot);
                     }
                     else
                     {
@@ -101,8 +101,8 @@ namespace UnityUtilityEditor.Window
 
                         if (path.HasUsefulData())
                         {
-                            path = EditorUtilityExt.ASSET_FOLDER + path.Substring(dataPath.Length + 1);
-                            EditorUtilityExt.CreateScriptableObjectAsset(type, path);
+                            path = AssetDatabaseExt.ASSET_FOLDER + path.Substring(dataPath.Length + 1);
+                            AssetDatabaseExt.CreateScriptableObjectAsset(type, path);
                         }
                     }
                 }

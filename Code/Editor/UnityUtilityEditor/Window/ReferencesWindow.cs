@@ -21,10 +21,10 @@ namespace UnityUtilityEditor.Window
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
-            window._target = EditorUtilityExt.LoadAssetByGuid(targetObjectGuid);
+            window._target = AssetDatabaseExt.LoadAssetByGuid(targetObjectGuid);
 
             if (referingObjectGuids.Count > 0)
-                window._objects = referingObjectGuids.Select(EditorUtilityExt.LoadAssetByGuid)
+                window._objects = referingObjectGuids.Select(AssetDatabaseExt.LoadAssetByGuid)
                                                      .ToArray();
         }
 

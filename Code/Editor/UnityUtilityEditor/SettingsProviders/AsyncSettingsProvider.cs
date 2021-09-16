@@ -62,7 +62,7 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private static AsyncSystemSettings GetOrCreateSettings()
         {
-            string settingsPath = $"{EditorUtilityExt.ASSET_FOLDER}{nameof(Resources)}/{nameof(AsyncSystemSettings)}{EditorUtilityExt.ASSET_EXTENSION}";
+            string settingsPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}/{nameof(AsyncSystemSettings)}{AssetDatabaseExt.ASSET_EXTENSION}";
 
             var settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(settingsPath);
             if (settings == null)
