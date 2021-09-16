@@ -29,13 +29,13 @@ namespace UnityUtilityEditor.Window
 
             foreach (Assembly assembly in AssetDatabaseExt.LoadScriptAssemblies())
             {
-                IEnumerable<Type> typeSelection = assembly.GetTypes()
-                                                          .Where(select);
-                if (typeSelection.IsNullOrEmpty())
+                Type[] types = assembly.ExportedTypes
+                                       .Where(select)
+                                       .ToArray();
+                if (types.Length == 0)
                     continue;
 
                 string assemblyName = assembly.GetName().Name;
-                Type[] types = typeSelection.ToArray();
 
                 _types[assemblyName] = types;
                 _typeNames[assemblyName] = types.Select(EditorGuiUtility.GetTypeDisplayName)
@@ -90,9 +90,18 @@ namespace UnityUtilityEditor.Window
                     if (_targetRoot != null)
                     {
                         if (_defaultFolder.HasUsefulData())
-                            AssetDatabaseExt.CreateScriptableObjectAsset(type, $"{_defaultFolder}/{type.Name}{AssetDatabaseExt.ASSET_EXTENSION}");
+                        {
+                            string path = $"{_defaultFolder}/{type.Name}{AssetDatabaseExt.ASSET_EXTENSION}";
+
+                            if (AssetDatabase.LoadAssetAtPath(path, typeof(UnityObject)) != null)
+                                path = AssetDatabase.GenerateUniqueAssetPath(path);
+
+                            AssetDatabaseExt.CreateScriptableObjectAsset(type, path);
+                        }
                         else
+                        {
                             AssetDatabaseExt.CreateScriptableObjectAsset(type, _targetRoot);
+                        }
                     }
                     else
                     {
