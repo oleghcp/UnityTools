@@ -86,12 +86,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public RawNode CreateNode(Vector2 position, Type type)
         {
             RawNode newNodeAsset = ScriptableObject.CreateInstance(type) as RawNode;
-
-            if (newNodeAsset.RealNode())
-                InitAndSaveCreatedNode(position, newNodeAsset);
-            else
-                InitAndSaveCreatedServiceNode(position, newNodeAsset);
-
+            InitAndSaveCreatedNode(position, newNodeAsset);
             return newNodeAsset;
         }
 
@@ -126,44 +121,35 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDefaultNodeName(int newId)
+        public static string GetDefaultNodeName(RawNode nodeAsset)
         {
-            return $"Node {newId}";
+            return nodeAsset.GetType().Name;
         }
 
         private void InitAndSaveCreatedNode(Vector2 position, RawNode newNodeAsset)
         {
-            int newId = _idGenerator.GetNewId();
-
-            newNodeAsset.name = GetDefaultNodeName(newId);
-            newNodeAsset.Id = newId;
+            newNodeAsset.Id = _idGenerator.GetNewId();
             newNodeAsset.Owner = _graphAsset;
             newNodeAsset.Position = position;
 
-            AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
-            AssetDatabase.SaveAssets();
-
-            _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newId;
-            _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private void InitAndSaveCreatedServiceNode(Vector2 position, RawNode newNodeAsset)
-        {
-            if (newNodeAsset is HubNode)
-                newNodeAsset.name = "Hub";
-            else if (newNodeAsset is ExitNode)
-                newNodeAsset.name = "Exit";
+            if (newNodeAsset.ServiceNode())
+            {
+                if (newNodeAsset is HubNode)
+                    newNodeAsset.name = "Hub";
+                else if (newNodeAsset is ExitNode)
+                    newNodeAsset.name = "Exit";
+                else
+                    throw new UnsupportedValueException(newNodeAsset.GetType().Name);
+            }
             else
-                throw new UnsupportedValueException(newNodeAsset.GetType().Name);
-
-            newNodeAsset.Id = 0;
-            newNodeAsset.Owner = _graphAsset;
-            newNodeAsset.Position = position;
+            {
+                newNodeAsset.name = GetDefaultNodeName(newNodeAsset);
+            }
 
             AssetDatabase.AddObjectToAsset(newNodeAsset, _graphAsset);
             AssetDatabase.SaveAssets();
 
+            _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
             _nodesProperty.PlaceArrayElement().objectReferenceValue = newNodeAsset;
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }

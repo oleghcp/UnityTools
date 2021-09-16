@@ -8,23 +8,15 @@ namespace UnityUtility.NodeBased
     internal struct Transition
     {
         [SerializeField]
-        private RawNode _nextNode;
+        private int _nextNodeId;
         [SerializeReference, ReferenceSelection]
         private Condition _condition;
 
-        public RawNode NextNode => _nextNode;
-
-        public Transition CreateExit()
-        {
-            return new Transition
-            {
-                _condition = _condition,
-            };
-        }
+        public int NextNodeId => _nextNodeId;
 
         public bool Available(object data = null)
         {
-            return _condition == null || _condition.Satisfied(_nextNode, data);
+            return _condition == null || _condition.Satisfied(data);
         }
 
         public Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
@@ -36,7 +28,7 @@ namespace UnityUtility.NodeBased
         [SerializeField]
         private Vector2[] _points;
 
-        internal static string NodeFieldName => nameof(_nextNode);
+        internal static string NodeIdFieldName => nameof(_nextNodeId);
         internal static string ConditionFieldName => nameof(_condition);
         internal static string PointsFieldName => nameof(_points);
 #endif
@@ -45,13 +37,15 @@ namespace UnityUtility.NodeBased
     public struct Transition<TNode> where TNode : Node<TNode>
     {
         private Transition _transition;
+        private RawNode _nextNode;
 
-        public TNode NextNode => _transition.NextNode as TNode;
-        public bool IsExit => _transition.NextNode is ExitNode;
+        public TNode NextNode => _nextNode as TNode;
+        public bool IsExit => _nextNode is ExitNode;
 
-        internal Transition(in Transition transition)
+        internal Transition(in Transition transition, RawNode nextNode)
         {
             _transition = transition;
+            _nextNode = nextNode;
         }
 
         public bool Available(object data = null)
@@ -68,7 +62,7 @@ namespace UnityUtility.NodeBased
     [Serializable]
     public abstract class Condition
     {
-        public abstract bool Satisfied(RawNode nextNode, object data);
+        public abstract bool Satisfied(object data);
 
         public virtual Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Collections;
@@ -10,6 +11,18 @@ namespace UnityUtility.NodeBased
     {
         [SerializeField]
         internal RawNode[] Nodes;
+        private Dictionary<int, RawNode> _dict;
+
+        protected Dictionary<int, RawNode> Dict
+        {
+            get
+            {
+                if (_dict == null)
+                    _dict = Nodes.ToDictionary(key => key.Id, value => value);
+
+                return _dict;
+            }
+        }
 
         public RawNode RootNode
         {
@@ -24,7 +37,10 @@ namespace UnityUtility.NodeBased
 
         public RawNode GetNodeById(int id)
         {
-            return Nodes.Find(item => item.RealNode() && item.LocalId == id);
+            if (Dict.TryGetValue(id, out RawNode value) && value.RealNode())
+                return value;
+
+            return null;
         }
 
 #if UNITY_EDITOR
@@ -54,6 +70,24 @@ namespace UnityUtility.NodeBased
             return base.GetNodeById(id) as TNode;
         }
 
+        public IEnumerable<Transition<TNode>> GetNextFor(RawNode node)
+        {
+            foreach (Transition transition in node.Next)
+            {
+                RawNode nextNode = Dict[transition.NextNodeId];
+
+                if (nextNode is HubNode)
+                {
+                    foreach (Transition<TNode> item in GetNextFor(nextNode))
+                        yield return item;
+                }
+                else
+                {
+                    yield return new Transition<TNode>(transition, nextNode);
+                }
+            }
+        }
+
         public StateMachine<TState, TData> CreateStateMachine<TState, TData>(TData data,
                                                                              Action<TState, TState> onStateChanging = null,
                                                                              Action finalCallback = null)
@@ -80,7 +114,7 @@ namespace UnityUtility.NodeBased
                 if (node.ServiceNode())
                     continue;
 
-                foreach (Transition transition in node)
+                foreach (Transition<TNode> transition in GetNextFor(node))
                 {
                     stateMachine.AddTransition(states[node],
                                                transition.CreateCondition<TState, TData>(),

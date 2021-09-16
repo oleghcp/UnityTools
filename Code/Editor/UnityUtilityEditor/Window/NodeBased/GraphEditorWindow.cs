@@ -193,7 +193,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public void DeleteNode(NodeViewer node)
         {
-            _transitionViewers.RemoveAll(item => item.In == node.In || item.Out == node.Out);
+            _transitionViewers.RemoveAll(item => item.Source == node.In || item.Destination == node.Out);
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveReference(node.NodeAsset));
             _graphAssetEditor.DestroyNode(node.NodeAsset);
@@ -225,10 +225,10 @@ namespace UnityUtilityEditor.Window.NodeBased
             PortViewer outPort = newPort.Type == PortType.Out ? newPort : _selectedPort;
             PortViewer inPort = newPort.Type == PortType.In ? newPort : _selectedPort;
 
-            if (!_transitionViewers.Any(item => item.In == inPort && item.Out == outPort))
+            if (!_transitionViewers.Any(item => item.Source == inPort && item.Destination == outPort))
             {
-                SerializedProperty property = outPort.Node.AddTransition(inPort.Node.NodeAsset);
-                _transitionViewers.Add(new TransitionViewer(outPort, inPort, property, this));
+                outPort.Node.AddTransition(inPort.Node.NodeAsset);
+                _transitionViewers.Add(new TransitionViewer(outPort, inPort, this));
             }
 
             _selectedPort = null;
@@ -237,7 +237,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         public void DeleteTransition(TransitionViewer transition)
         {
             _transitionViewers.Remove(transition);
-            transition.Out.Node.RemoveReference(transition.In.Node.NodeAsset);
+            transition.Destination.Node.RemoveReference(transition.Source.Node.NodeAsset);
         }
 
         public void CopySelectedNode()
@@ -271,10 +271,10 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void CreateTransitionsForNode(NodeViewer nodeViewer)
         {
-            foreach (var (transitionProp, connectedNode) in nodeViewer.ParseTransitionsList())
+            foreach (RawNode connectedNode in nodeViewer.ParseTransitionsList())
             {
                 NodeViewer connectedNodeViewer = _nodeViewers.Find(itm => itm.NodeAsset == connectedNode);
-                _transitionViewers.Add(new TransitionViewer(nodeViewer.Out, connectedNodeViewer.In, transitionProp, this));
+                _transitionViewers.Add(new TransitionViewer(nodeViewer.Out, connectedNodeViewer.In, this));
             }
         }
 
@@ -436,6 +436,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void Save()
         {
             _nodeViewers.ForEach(item => item.Save());
+            _transitionViewers.ForEach(item => item.Save());
             _graphAssetEditor.Save();
             _toolbar.Save();
             _settings.CameraPosition = _camera.Position;

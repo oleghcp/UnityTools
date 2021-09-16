@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -15,32 +16,28 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private GraphEditorWindow _window;
 
-        private SerializedProperty _transitionProp;
-        private SerializedProperty _pointsProp;
-
-        private PortViewer _in;
-        private PortViewer _out;
+        private PortViewer _destination;
+        private PortViewer _source;
         private List<PointViewer> _points;
 
         private bool _controlPresed;
 
-        public PortViewer In => _in;
-        public PortViewer Out => _out;
+        public PortViewer Source => _destination;
+        public PortViewer Destination => _source;
         public int PointsCount => _points.Count;
 
-        public TransitionViewer(PortViewer outPoint, PortViewer inPoint, SerializedProperty transitionProp, GraphEditorWindow window)
+        public TransitionViewer(PortViewer source, PortViewer destination, GraphEditorWindow window)
         {
-            if (outPoint.Type == inPoint.Type)
+            if (source.Type == destination.Type)
                 throw new ArgumentException("Connection point types cannot be equal.");
 
             _window = window;
-            _out = outPoint;
-            _in = inPoint;
+            _source = source;
+            _destination = destination;
             _points = new List<PointViewer>();
-            _transitionProp = transitionProp;
 
-            _pointsProp = transitionProp.FindPropertyRelative(Transition.PointsFieldName);
-            foreach (SerializedProperty item in _pointsProp)
+            SerializedProperty pointsProp = GetProperty().FindPropertyRelative(Transition.PointsFieldName);
+            foreach (SerializedProperty item in pointsProp)
             {
                 _points.Add(new PointViewer(item, this, window));
             }
@@ -48,10 +45,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void AddPoint()
         {
-            SerializedProperty pointProp = _pointsProp.PlaceArrayElement();
+            SerializedProperty pointsProp = GetProperty().FindPropertyRelative(Transition.PointsFieldName);
+            SerializedProperty pointProp = pointsProp.PlaceArrayElement();
 
             if (_points.Count == 0)
-                pointProp.vector2Value = (_out.Node.WorldRect.center + _in.Node.WorldRect.center) * 0.5f;
+                pointProp.vector2Value = (_source.Node.WorldRect.center + _destination.Node.WorldRect.center) * 0.5f;
             else
                 pointProp.vector2Value += Vector2.one * 30f;
 
@@ -62,22 +60,28 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void RemovePoint()
         {
-            _pointsProp.arraySize--;
+            SerializedProperty pointsProp = GetProperty().FindPropertyRelative(Transition.PointsFieldName);
+            pointsProp.arraySize--;
             _points.Pop();
             GUI.changed = true;
         }
 
         public void ShowTransitionInfoWindow()
         {
-            TransitionInfoWindow.Open(this, _transitionProp, _window);
+            TransitionInfoWindow.Open(this, GetProperty(), _window);
+        }
+
+        public void Save()
+        {
+
         }
 
         public void Draw()
         {
             Color targetColor = GraphEditorStyles.GetLineColor();
 
-            Vector2 outPoint = _out.ScreenRect.center;
-            Vector2 inPoint = _in.ScreenRect.center;
+            Vector2 outPoint = _source.ScreenRect.center;
+            Vector2 inPoint = _destination.ScreenRect.center;
 
             if (_points.Count == 0)
             {
@@ -159,6 +163,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         // -- //
+
+        private SerializedProperty GetProperty()
+        {
+            return _source.Node
+                          .SerializedObject
+                          .FindProperty(RawNode.ArrayFieldName)
+                          .EnumerateArrayElements()
+                          .First(item => item.FindPropertyRelative(Transition.NodeIdFieldName).intValue == _destination.Node.NodeAsset.Id);
+        }
 
         private static float GetTangentFactor(in Vector2 start, in Vector2 end)
         {

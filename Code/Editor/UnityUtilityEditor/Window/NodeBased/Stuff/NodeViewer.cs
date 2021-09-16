@@ -43,6 +43,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public PortViewer In => _in;
         public PortViewer Out => _out;
         public bool IsSelected => _isSelected;
+        public SerializedObject SerializedObject => _serializedObject;
 
         public Vector2 Position
         {
@@ -113,19 +114,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _out = new PortViewer(this, PortType.Out, window);
         }
 
-        public IEnumerable<(SerializedProperty transitionProp, RawNode connectedNode)> ParseTransitionsList()
+        public IEnumerable<RawNode> ParseTransitionsList()
         {
-            SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
-            return transitionsProperty.EnumerateArrayElements().Select(getPair);
+            var dict = _window.GraphAssetEditor.GraphAsset.Nodes.ToDictionary(key => key.Id, value => value);
 
-            (SerializedProperty transitionProp, RawNode node) getPair(SerializedProperty transitionProp)
-            {
-                using (SerializedProperty nodeProp = transitionProp.FindPropertyRelative(Transition.NodeFieldName))
-                {
-                    RawNode node = nodeProp.objectReferenceValue as RawNode;
-                    return (transitionProp, node);
-                }
-            }
+            return _serializedObject.FindProperty(RawNode.ArrayFieldName)
+                                    .EnumerateArrayElements()
+                                    .Select(item => item.FindPropertyRelative(Transition.NodeIdFieldName))
+                                    .Select(item => dict[item.intValue]);
         }
 
         public void Select(bool on)
@@ -137,7 +133,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUI.changed = true;
         }
 
-        public SerializedProperty AddTransition(RawNode nextNode)
+        public void AddTransition(RawNode nextNode)
         {
             SerializedProperty transitionsProperty = _serializedObject.FindProperty(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
@@ -145,11 +141,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (transitionsProperty.arraySize > 1)
                 newItem.ResetToDefault();
 
-            newItem.FindPropertyRelative(Transition.NodeFieldName).objectReferenceValue = nextNode;
+            newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = nextNode.Id;
 
             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
-
-            return newItem;
         }
 
         public void RemoveReference(RawNode next)
@@ -161,9 +155,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             {
                 using (SerializedProperty transitionProp = transitionsProperty.GetArrayElementAtIndex(i))
                 {
-                    using (SerializedProperty nodeProp = transitionProp.FindPropertyRelative(Transition.NodeFieldName))
+                    using (SerializedProperty nodeIdProp = transitionProp.FindPropertyRelative(Transition.NodeIdFieldName))
                     {
-                        if (nodeProp.objectReferenceValue == next)
+                        if (nodeIdProp.intValue == next.Id)
                         {
                             transitionsProperty.DeleteArrayElementAtIndex(i);
                             _serializedObject.ApplyModifiedPropertiesWithoutUndo();
@@ -365,7 +359,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             {
                 genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
 
-                string defaultName = GraphAssetEditor.GetDefaultNodeName(_nodeAsset.Id);
+                string defaultName = GraphAssetEditor.GetDefaultNodeName(_nodeAsset);
                 if (_nodeAsset.name != defaultName)
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset(defaultName));
 

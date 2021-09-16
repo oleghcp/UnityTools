@@ -36,7 +36,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             _nodeType = nodeEditor.NodeAsset.GetType();
 
             _list = nodeEditor.ParseTransitionsList()
-                              .Select(item => item.connectedNode)
                               .ToArray();
         }
 

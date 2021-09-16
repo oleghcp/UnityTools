@@ -72,8 +72,8 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
             bool predicate(SerializedProperty property)
             {
-                SerializedProperty nodeProp = property.FindPropertyRelative(Transition.NodeFieldName);
-                return nodeProp.objectReferenceValue == target;
+                SerializedProperty nodeIdProp = property.FindPropertyRelative(Transition.NodeIdFieldName);
+                return nodeIdProp.intValue == target.Id;
             }
         }
     }
