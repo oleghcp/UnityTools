@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -31,29 +31,29 @@ namespace UnityEditor
             AssetDatabase.SaveAssets();
         }
 
-        public static UnityObject LoadAssetByGuid(string guid)
+        public static UnityObject LoadAssetByGuid(string guid, Type type)
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
-            return AssetDatabase.LoadAssetAtPath(path, typeof(UnityObject));
+            return AssetDatabase.LoadAssetAtPath(path, type);
         }
 
-        public static Assembly[] GetAssemblies()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T LoadAssetByGuid<T>(string guid) where T : UnityObject
+        {
+            return LoadAssetByGuid(guid, typeof(T)) as T;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UnityObject LoadAssetByGuid(string guid)
+        {
+            return LoadAssetByGuid(guid, typeof(UnityObject));
+        }
+
+        public static Assembly[] LoadScriptAssemblies()
         {
             return Directory.GetFiles(@"Library\ScriptAssemblies\", "*.dll", SearchOption.AllDirectories)
                             .Select(file => Assembly.LoadFrom(file))
                             .ToArray();
-        }
-
-        public static Type[] GetTypes(Assembly[] assemblies, Func<Type, bool> selector)
-        {
-            List<Type> types = new List<Type>();
-
-            for (int i = 0; i < assemblies.Length; i++)
-            {
-                types.AddRange(assemblies[i].GetTypes());
-            }
-
-            return types.Where(selector).ToArray();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace UnityUtilityEditor.Window
             _types = new Dictionary<string, Type[]>();
             _typeNames = new Dictionary<string, string[]>();
 
-            foreach (Assembly assembly in AssetDatabaseExt.GetAssemblies())
+            foreach (Assembly assembly in AssetDatabaseExt.LoadScriptAssemblies())
             {
                 IEnumerable<Type> typeSelection = assembly.GetTypes()
                                                           .Where(select);

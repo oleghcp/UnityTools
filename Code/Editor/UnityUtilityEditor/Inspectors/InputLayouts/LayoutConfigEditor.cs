@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
@@ -149,9 +148,13 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
 
             if (selector == null)
             {
-                selector = new TypeSelector();
-                Assembly[] assemblies = AssetDatabaseExt.GetAssemblies();
-                selector.Types = AssetDatabaseExt.GetTypes(assemblies, type => type.IsEnum);
+                selector = new TypeSelector
+                {
+                    Types = AssetDatabaseExt.LoadScriptAssemblies()
+                                            .SelectMany(item => item.ExportedTypes)
+                                            .Where(type => type.IsEnum)
+                                            .ToArray()
+                };
 
                 if (selector.Types.Length > 0)
                 {

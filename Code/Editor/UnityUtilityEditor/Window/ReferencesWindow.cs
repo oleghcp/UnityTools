@@ -21,7 +21,7 @@ namespace UnityUtilityEditor.Window
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
-            window._target = AssetDatabaseExt.LoadAssetByGuid(targetObjectGuid);
+            window._target = AssetDatabaseExt.LoadAssetByGuid<UnityObject>(targetObjectGuid);
 
             if (referingObjectGuids.Count > 0)
                 window._objects = referingObjectGuids.Select(AssetDatabaseExt.LoadAssetByGuid)
