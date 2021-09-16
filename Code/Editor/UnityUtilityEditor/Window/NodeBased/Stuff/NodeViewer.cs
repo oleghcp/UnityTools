@@ -168,7 +168,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void RemoveTransition(NodeViewer nextNodeViewer)
         {
             TransitionViewer transition = _transitionViewers.Find(item => item.Destination.Node == nextNodeViewer);
-            RemoveTransition(transition);
+            if (transition != null)
+                RemoveTransition(transition);
         }
 
         public void RemoveTransition(TransitionViewer transition)
