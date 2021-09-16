@@ -9,6 +9,7 @@ namespace UnityUtilityEditor
     {
         public const string CONTEXT_MENU_NAME = "CONTEXT/";
         public const string RESET_ITEM_NAME = "Reset";
+        public const string CREATE_ASSET_PATH = EditorUtilityExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + " (ext.)/Asset";
 
 #if UNITY_2019_3_OR_NEWER
         public const string MENU_GRAPH_PATH = " (ext.)/Graph/";
@@ -26,6 +27,19 @@ namespace UnityUtilityEditor
             TemplatesUtility.CreateGraphScript();
         }
 #endif
+
+        [MenuItem(CREATE_ASSET_PATH)]
+        private static void CreateAsset()
+        {
+            ScriptableObjectWindow window = EditorWindow.GetWindow<ScriptableObjectWindow>(true, "Scriptable Objects");
+            window.SetParent(Selection.activeObject);
+        }
+
+        [MenuItem(CREATE_ASSET_PATH, true)]
+        private static bool CreateAssetValidation()
+        {
+            return Selection.objects.Length == 1;
+        }
 
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]
         private static void RemoveEmptyFolders()

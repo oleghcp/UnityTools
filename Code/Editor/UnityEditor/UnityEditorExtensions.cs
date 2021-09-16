@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
 {
@@ -236,7 +237,7 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsFolder(this DefaultAsset self)
+        public static bool IsFolder(this UnityObject self)
         {
             return ProjectWindowUtil.IsFolder(self.GetInstanceID());
         }

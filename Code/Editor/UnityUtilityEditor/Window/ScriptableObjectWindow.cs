@@ -18,6 +18,7 @@ namespace UnityUtilityEditor.Window
 
         private static int _assemblyIndex;
         private int _typeIndex;
+        private string _defaultFolder;
 
         private void OnEnable()
         {
@@ -88,7 +89,10 @@ namespace UnityUtilityEditor.Window
 
                     if (_targetRoot != null)
                     {
-                        EditorUtilityExt.CreateScriptableObjectAsset(type, _targetRoot);
+                        if (_defaultFolder.HasUsefulData())
+                            EditorUtilityExt.CreateScriptableObjectAsset(type, $"{_defaultFolder}/{type.Name}{EditorUtilityExt.ASSET_EXTENSION}");
+                        else
+                            EditorUtilityExt.CreateScriptableObjectAsset(type, _targetRoot);
                     }
                     else
                     {
@@ -103,6 +107,14 @@ namespace UnityUtilityEditor.Window
                     }
                 }
             }
+        }
+
+        public void SetParent(UnityObject parent)
+        {
+            _targetRoot = parent;
+
+            if (parent.IsFolder())
+                _defaultFolder = AssetDatabase.GetAssetPath(parent);
         }
     }
 }
