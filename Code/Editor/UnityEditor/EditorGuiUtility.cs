@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -71,15 +72,12 @@ namespace UnityEditor
 
         public static float GetDrawHeight(SerializedObject serializedObject, Predicate<SerializedProperty> ignoreCondition = null)
         {
-            float height = 0;
+            return GetDrawHeight(serializedObject.EnumerateProperties(), ignoreCondition);
+        }
 
-            foreach (var item in serializedObject.EnumerateProperties())
-            {
-                if (ignoreCondition == null || !ignoreCondition(item))
-                    height += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
-            }
-
-            return height;
+        public static float GetDrawHeight(SerializedProperty property, Predicate<SerializedProperty> ignoreCondition = null)
+        {
+            return GetDrawHeight(property.EnumerateInnerProperties(), ignoreCondition);
         }
 
         public static string GetTypeDisplayName(Type type)
@@ -89,6 +87,19 @@ namespace UnityEditor
                 nameSpace = "no namespace";
 
             return $"{type.Name} ({nameSpace})";
+        }
+
+        private static float GetDrawHeight(IEnumerable<SerializedProperty> properties, Predicate<SerializedProperty> ignoreCondition)
+        {
+            float height = 0;
+
+            foreach (SerializedProperty item in properties)
+            {
+                if (ignoreCondition == null || !ignoreCondition(item))
+                    height += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
+            }
+
+            return height;
         }
     }
 }
