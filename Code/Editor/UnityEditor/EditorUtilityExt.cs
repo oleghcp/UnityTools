@@ -33,7 +33,7 @@ namespace UnityEditor
             _clearFunc.Invoke(null, null);
         }
 
-        public static (string AssemblyName, string ClassName) SplitSerializedPropertyTypename(string typename)
+        public static (string assemblyName, string alassName) SplitSerializedPropertyTypename(string typename)
         {
             if (typename.IsNullOrEmpty())
                 return (null, null);
@@ -42,16 +42,16 @@ namespace UnityEditor
             return (typeSplitString[0], typeSplitString[1]);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConvertToSystemTypename(in (string assemblyName, string className) splittedTypename)
+        public static string ConvertToSystemTypename(string managedReferenceFieldTypename)
         {
-            return $"{splittedTypename.className}, {splittedTypename.assemblyName}";
+            (string assemblyName, string className) = SplitSerializedPropertyTypename(managedReferenceFieldTypename);
+            return $"{className}, {assemblyName}";
         }
 
-        public static Type GetTypeFromSerializedPropertyTypename(string typename)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Type GetTypeFromSerializedPropertyTypename(string managedReferenceTypename)
         {
-            (string assemblyName, string className) splittedTypename = SplitSerializedPropertyTypename(typename);
-            return Type.GetType(ConvertToSystemTypename(splittedTypename));
+            return Type.GetType(ConvertToSystemTypename(managedReferenceTypename));
         }
 
         public static Type GetFieldType(PropertyDrawer drawer)
