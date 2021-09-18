@@ -70,20 +70,26 @@ namespace UnityUtility.NodeBased
             return base.GetNodeById(id) as TNode;
         }
 
-        public IEnumerable<Transition<TNode>> GetNextFor(RawNode node)
+        internal IEnumerator<Transition<TNode>> GetEnumeratorFor(RawNode node)
         {
-            foreach (Transition transition in node.Next)
+            Transition[] next = node.Next;
+
+            for (int i = 0; i < next.Length; i++)
             {
-                RawNode nextNode = Dict[transition.NextNodeId];
+                RawNode nextNode = Dict[next[i].NextNodeId];
 
                 if (nextNode is HubNode)
                 {
-                    foreach (Transition<TNode> item in GetNextFor(nextNode))
-                        yield return item;
+                    var enumerator = GetEnumeratorFor(nextNode);
+
+                    while (enumerator.MoveNext())
+                    {
+                        yield return enumerator.Current;
+                    }
                 }
                 else
                 {
-                    yield return new Transition<TNode>(transition, nextNode);
+                    yield return new Transition<TNode>(next[i].Condition, node, nextNode);
                 }
             }
         }
@@ -98,8 +104,10 @@ namespace UnityUtility.NodeBased
 
             RawNode rootNode = RootNode;
 
-            foreach (RawNode node in Nodes)
+            for (int i = 0; i < Nodes.Length; i++)
             {
+                RawNode node = Nodes[i];
+
                 if (node is HubNode)
                     continue;
 
@@ -109,13 +117,19 @@ namespace UnityUtility.NodeBased
                     stateMachine.AddState(state, node == rootNode);
             }
 
-            foreach (RawNode node in Nodes)
+            for (int i = 0; i < Nodes.Length; i++)
             {
+                RawNode node = Nodes[i];
+
                 if (node.ServiceNode())
                     continue;
 
-                foreach (Transition<TNode> transition in GetNextFor(node))
+                var enumerator = GetEnumeratorFor(node);
+
+                while (enumerator.MoveNext())
                 {
+                    Transition<TNode> transition = enumerator.Current;
+
                     stateMachine.AddTransition(states[node],
                                                transition.CreateCondition<TState, TData>(),
                                                states[transition.NextNode]);

@@ -13,16 +13,7 @@ namespace UnityUtility.NodeBased
         private Condition _condition;
 
         public int NextNodeId => _nextNodeId;
-
-        public bool Available(object data = null)
-        {
-            return _condition == null || _condition.Satisfied(data);
-        }
-
-        public Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
-        {
-            return _condition.CreateCondition<TState, TData>();
-        }
+        public Condition Condition => _condition;
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -36,33 +27,35 @@ namespace UnityUtility.NodeBased
 
     public struct Transition<TNode> where TNode : Node<TNode>
     {
-        private Transition _transition;
+        private Condition _condition;
+        private RawNode _owner;
         private RawNode _nextNode;
 
         public TNode NextNode => _nextNode as TNode;
         public bool IsExit => _nextNode is ExitNode;
 
-        internal Transition(in Transition transition, RawNode nextNode)
+        internal Transition(Condition condition, RawNode from, RawNode to)
         {
-            _transition = transition;
-            _nextNode = nextNode;
+            _condition = condition;
+            _owner = from;
+            _nextNode = to;
         }
 
         public bool Available(object data = null)
         {
-            return _transition.Available(data);
+            return _condition == null || _condition.Satisfied(_owner, data);
         }
 
         public Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
         {
-            return _transition.CreateCondition<TState, TData>();
+            return _condition.CreateCondition<TState, TData>();
         }
     }
 
     [Serializable]
     public abstract class Condition
     {
-        public abstract bool Satisfied(object data);
+        public abstract bool Satisfied(RawNode from, object data);
 
         public virtual Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
         {

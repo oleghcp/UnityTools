@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Collections;
 
@@ -31,8 +33,18 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Node<TNode> : RawNode where TNode : Node<TNode>
+    public abstract class Node<TNode> : RawNode, IEnumerable<Transition<TNode>> where TNode : Node<TNode>
     {
         public Graph<TNode> Graph => Owner as Graph<TNode>;
+
+        public IEnumerator<Transition<TNode>> GetEnumerator()
+        {
+            return Graph.GetEnumeratorFor(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }
