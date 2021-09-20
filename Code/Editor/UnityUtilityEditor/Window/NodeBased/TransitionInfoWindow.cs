@@ -45,6 +45,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnGUI()
         {
+            _transitionProp.serializedObject.Update();
+
             string from = _transition.Source.Node.FindSubProperty(RawNode.NameFieldName).stringValue;
             string to = _transition.Destination.Node.FindSubProperty(RawNode.NameFieldName).stringValue;
 
@@ -88,13 +90,13 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                     if (GUILayout.Button("Delete", GUILayout.Height(30f), GUILayout.Width(100f)))
                     {
-                        _mainWindow.DeleteTransition(_transition);
+                        _transition.Source.Node.RemoveTransition(_transition);
                         Close();
                     }
                 }
             }
 
-            _transitionProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            _transitionProp.serializedObject.ApplyModifiedProperties();
         }
     }
 }

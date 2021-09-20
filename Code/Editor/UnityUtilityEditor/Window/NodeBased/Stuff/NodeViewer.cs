@@ -216,6 +216,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             {
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
 
+                if (nameProperty == null)
+                {
+                    return;
+                }
+
                 if (_renaming)
                 {
                     using (new EditorGUILayout.HorizontalScope())

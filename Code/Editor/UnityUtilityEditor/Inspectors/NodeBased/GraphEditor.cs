@@ -22,7 +22,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
                 GUI.color = Colours.White;
 
                 if (buttonPressed)
-                    GraphEditorWindow.OpenWindow(target);
+                    OpenWindow(target);
 
                 EditorGUILayout.Space();
             }
@@ -37,7 +37,13 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
         [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
         private static void OpenMenuItem(MenuCommand command)
         {
-            GraphEditorWindow.OpenWindow(command.context as RawGraph);
+            OpenWindow(command.context as RawGraph);
+        }
+
+        private static void OpenWindow(RawGraph graphAsset)
+        {
+            GraphEditorWindow window = EditorWindow.GetWindow<GraphEditorWindow>(true, "Graph Editor");
+            window.SetUp(graphAsset);
         }
     }
 }

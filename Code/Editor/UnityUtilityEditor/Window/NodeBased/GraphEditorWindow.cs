@@ -91,42 +91,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             minSize = new Vector2(800f, 600f);
         }
 
-        public static void OpenWindow(RawGraph graphAsset)
-        {
-            GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, "Graph Editor");
-            window.SetUp(graphAsset);
-        }
-
-        private void SetUp(RawGraph graphAsset)
-        {
-            if (_graphAssetEditor?.GraphAsset == graphAsset)
-                return;
-
-            if (_graphAssetEditor != null)
-            {
-                _nodeViewers.Clear();
-            }
-            else
-            {
-                _grid = new GraphGrid(this);
-                _toolbar = new GraphToolbar(this);
-                _nodeViewers = new List<NodeViewer>();
-            }
-
-            _settings = LoadSettings(graphAsset);
-            _graphAssetEditor = new GraphAssetEditor(graphAsset);
-            _camera = new GraphCamera(this, _settings.CameraPosition);
-
-            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
-            {
-                NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
-                if (viewer.Type == NodeType.Exit)
-                    _hasExitNode = true;
-            }
-
-            _nodeViewers.ForEach(item => item.CreateConnections());
-        }
-
         private void OnGUI()
         {
             if (_graphAssetEditor.GraphAsset == null)
@@ -134,6 +98,8 @@ namespace UnityUtilityEditor.Window.NodeBased
                 Close();
                 return;
             }
+
+            _graphAssetEditor.SerializedObject.Update();
 
             _onGuiCounter++;
 
@@ -163,6 +129,8 @@ namespace UnityUtilityEditor.Window.NodeBased
             ProcessEvents(e);
 
             GUI.EndGroup();
+
+            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
         }
 
         private void OnDestroy()
@@ -173,18 +141,53 @@ namespace UnityUtilityEditor.Window.NodeBased
             Save();
         }
 
-        private void OnLostFocus()
+        //private void OnLostFocus()
+        //{
+        //    Save();
+        //}
+
+        public void SetUp(RawGraph graphAsset)
         {
-            Save();
+            if (_graphAssetEditor?.GraphAsset == graphAsset)
+                return;
+
+            if (_graphAssetEditor != null)
+            {
+                _nodeViewers.Clear();
+            }
+            else
+            {
+                _grid = new GraphGrid(this);
+                _toolbar = new GraphToolbar(this);
+                _nodeViewers = new List<NodeViewer>();
+                _camera = new GraphCamera(this);
+            }
+
+            _settings = LoadSettings(graphAsset);
+            _graphAssetEditor = new GraphAssetEditor(graphAsset);
+            _camera.Position = _settings.CameraPosition;
+
+            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
+            {
+                NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
+                if (viewer.Type == NodeType.Exit)
+                    _hasExitNode = true;
+            }
+
+            _nodeViewers.ForEach(item => item.CreateConnections());
         }
 
         public void SetAsRoot(NodeViewer node)
         {
+            _graphAssetEditor.SerializedObject.Update();
             _graphAssetEditor.SetAsRoot(node);
+            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
         }
 
         public void DeleteNode(NodeViewer node)
         {
+            _graphAssetEditor.SerializedObject.Update();
+
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
             _graphAssetEditor.DestroyNode(node.Id);
@@ -200,6 +203,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             if (_nodeViewers.Count == 0)
                 _camera.Position = default;
+
+            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
         }
 
         public void OnClickOnPort(PortViewer newPort)
@@ -227,13 +232,10 @@ namespace UnityUtilityEditor.Window.NodeBased
             _selectedPort = null;
         }
 
-        public void DeleteTransition(TransitionViewer transition)
-        {
-            transition.Source.Node.RemoveTransition(transition);
-        }
-
         public void CopySelectedNode()
         {
+            _graphAssetEditor.SerializedObject.Update();
+
             List<NodeViewer> newNodes = new List<NodeViewer>();
 
             foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
@@ -242,22 +244,28 @@ namespace UnityUtilityEditor.Window.NodeBased
                     continue;
 
                 Rect rect = item.WorldRect;
-                SerializedProperty nodeProp = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.Id);
+                SerializedProperty nodeProp = _graphAssetEditor.CloneNode(rect.position + Vector2.up * (rect.height + 30f), item.Id);
                 NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(nodeProp, this));
                 item.Select(false);
                 newNodeEditor.Select(true);
             }
 
             _nodeViewers.AddRange(newNodes);
+
+            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
         }
 
         private void CreateNode(Vector2 mousePosition, Type type)
         {
+            _graphAssetEditor.SerializedObject.Update();
+
             Vector2 position = _camera.ScreenToWorld(mousePosition);
             SerializedProperty nodeProp = _graphAssetEditor.CreateNode(position, type);
             NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
             if (viewer.Type == NodeType.Exit)
                 _hasExitNode = true;
+
+            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawNodes()
@@ -395,6 +403,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             _nodeViewers.ForEach(item => item.Save());
             _graphAssetEditor.Save();
             _toolbar.Save();
+            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
             _settings.CameraPosition = _camera.Position;
             SaveSettings(_graphAssetEditor.GraphAsset, _settings);
             EditorUtilityExt.SaveProject();

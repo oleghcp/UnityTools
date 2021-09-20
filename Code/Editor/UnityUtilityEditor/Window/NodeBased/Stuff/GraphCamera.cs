@@ -37,10 +37,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public GraphCamera(GraphEditorWindow window, Vector2 position)
+        public GraphCamera(GraphEditorWindow window)
         {
             _window = window;
-            _position = position;
         }
 
         public Vector2 ScreenToWorld(Vector2 screenPoint)

@@ -139,7 +139,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (Handles.Button(position, Quaternion.identity, 4f, 8f, Handles.DotHandleCap))
             {
                 if (_controlPresed)
-                    _window.DeleteTransition(this);
+                    _source.Node.RemoveTransition(this);
                 else
                     ShowTransitionInfoWindow();
             }

@@ -29,6 +29,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public SerializedProperty NodesProperty => _nodesProperty;
         public Type NodeType => _graphAsset.GetNodeType();
         public float NodeWidth => _nodeWidth;
+        public SerializedObject SerializedObject => _serializedObject;
 
         public GraphAssetEditor(RawGraph graphAsset)
         {
@@ -41,8 +42,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw(in Rect position)
         {
-            _serializedObject.Update();
-
             GUILayout.BeginArea(position);
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 
@@ -58,21 +57,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             EditorGUILayout.EndScrollView();
             GUILayout.EndArea();
-
-            _serializedObject.ApplyModifiedProperties();
         }
 
         public void ChangeNodeWidth(int dir)
         {
             _nodeWidth = (_nodeWidth + (NODE_WIDTH_STEP * dir)).Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void SetAsRoot(NodeViewer node)
         {
             int index = _nodesProperty.GetArrayElement(out _, item => item.FindPropertyRelative(RawNode.IdFieldName).intValue == node.Id);
             _nodesProperty.MoveArrayElement(index, 0);
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public SerializedProperty CreateNode(Vector2 position, Type type)
@@ -81,8 +76,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return InitAndSaveCreatedNode(position, newNodeAsset);
         }
 
-        public SerializedProperty CreateNode(Vector2 position, int sourceNodeId)
+        public SerializedProperty CloneNode(Vector2 position, int sourceNodeId)
         {
+            throw new NotImplementedException();
             //RawNode newNodeAsset = sourceNodeId.Install();
             RawNode newNodeAsset = null;
             return InitAndSaveCreatedNode(position, newNodeAsset);
@@ -99,14 +95,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 _idGenerator = new IntIdGenerator();
                 _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = 0;
             }
-
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void Save()
         {
             _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue = _nodeWidth;
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -138,7 +131,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
             SerializedProperty nodeProp = _nodesProperty.PlaceArrayElement();
             nodeProp.managedReferenceValue = newNodeAsset;
-            _serializedObject.ApplyModifiedPropertiesWithoutUndo();
 
             return nodeProp;
         }
