@@ -207,27 +207,27 @@ namespace UnityUtilityEditor.Window.NodeBased
             _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
         }
 
-        public void OnClickOnPort(PortViewer newPort)
+        public void OnClickOnPort(PortViewer targetPort)
         {
-            if (_selectedPort == newPort)
+            if (_selectedPort == targetPort)
                 return;
 
-            if (_selectedPort == null || _selectedPort.Type == newPort.Type || _selectedPort.Node == newPort.Node)
+            if (_selectedPort == null || _selectedPort.Type == targetPort.Type || _selectedPort.Node == targetPort.Node)
             {
-                _selectedPort = newPort;
+                _selectedPort = targetPort;
                 return;
             }
 
-            if (_selectedPort.Node.Type == NodeType.Hub && newPort.Node.Type == NodeType.Hub)
+            if (_selectedPort.Node.Type == NodeType.Hub && targetPort.Node.Type == NodeType.Hub)
             {
-                _selectedPort = newPort;
+                _selectedPort = targetPort;
                 return;
             }
 
-            PortViewer dest = newPort.Type == PortType.Out ? newPort : _selectedPort;
-            PortViewer source = newPort.Type == PortType.In ? newPort : _selectedPort;
+            PortViewer sourse = targetPort.Type == PortType.Out ? targetPort : _selectedPort;
+            PortViewer dest = targetPort.Type == PortType.In ? targetPort : _selectedPort;
 
-            dest.Node.CreateTransition(source.Node);
+            sourse.Node.CreateTransition(dest);
 
             _selectedPort = null;
         }

@@ -152,17 +152,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUI.changed = true;
         }
 
-        public void CreateTransition(NodeViewer nextNodeViewer)
+        public void CreateTransition(PortViewer dest)
         {
-            if (_transitionViewers.Any(item => item.Destination.Node == nextNodeViewer))
+            if (_transitionViewers.Any(item => item.Destination.Node == dest.Node))
                 return;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
 
             newItem.ResetToDefault();
-            newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = nextNodeViewer.Id;
-            _transitionViewers.Add(new TransitionViewer(_out, nextNodeViewer._in, _window));
+            newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = dest.Node.Id;
+            _transitionViewers.Add(new TransitionViewer(_out, dest, _window));
         }
 
         public void RemoveTransition(NodeViewer nextNodeViewer)
@@ -215,11 +215,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             void DrawHeader()
             {
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
-
-                if (nameProperty == null)
-                {
-                    return;
-                }
 
                 if (_renaming)
                 {
