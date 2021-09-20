@@ -158,7 +158,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 return;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
-            SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
+            SerializedProperty newItem = transitionsProperty.AddArrayElement();
 
             newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = dest.Node.Id;
             newItem.FindPropertyRelative(Transition.ConditionFieldName).managedReferenceValue = null;
@@ -393,8 +393,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 else
                     genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
 
-                genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
-                genericMenu.AddSeparator(null);
+                //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
+                //genericMenu.AddSeparator(null);
                 genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
                 genericMenu.AddSeparator(null);
                 genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));

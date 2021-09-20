@@ -336,13 +336,13 @@ namespace UnityUtilityEditor.Window.NodeBased
                     _selectionRectOn = false;
                     break;
 
-                case EventType.KeyDown:
-                    if (e.keyCode == KeyCode.D)
-                    {
-                        CopySelectedNode();
-                        GUI.changed = true;
-                    }
-                    break;
+                //case EventType.KeyDown:
+                //    if (e.keyCode == KeyCode.D)
+                //    {
+                //        CopySelectedNode();
+                //        GUI.changed = true;
+                //    }
+                //    break;
             }
         }
 

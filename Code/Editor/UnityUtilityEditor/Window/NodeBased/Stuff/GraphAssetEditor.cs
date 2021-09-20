@@ -73,15 +73,35 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public SerializedProperty CreateNode(Vector2 position, Type type)
         {
             RawNode newNodeAsset = Activator.CreateInstance(type) as RawNode;
-            return InitAndSaveCreatedNode(position, newNodeAsset);
+
+            newNodeAsset.Id = _idGenerator.GetNewId();
+            newNodeAsset.Owner = _graphAsset;
+            newNodeAsset.Position = position;
+
+            if (newNodeAsset.ServiceNode())
+            {
+                if (newNodeAsset is HubNode)
+                    newNodeAsset.NodeName = "Hub";
+                else if (newNodeAsset is ExitNode)
+                    newNodeAsset.NodeName = "Exit";
+                else
+                    throw new UnsupportedValueException(newNodeAsset.GetType().Name);
+            }
+            else
+            {
+                newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType());
+            }
+
+            _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
+            SerializedProperty nodeProp = _nodesProperty.AddArrayElement();
+            nodeProp.managedReferenceValue = newNodeAsset;
+
+            return nodeProp;
         }
 
         public SerializedProperty CloneNode(Vector2 position, int sourceNodeId)
         {
             throw new NotImplementedException();
-            //RawNode newNodeAsset = sourceNodeId.Install();
-            RawNode newNodeAsset = null;
-            return InitAndSaveCreatedNode(position, newNodeAsset);
         }
 
         public void DestroyNode(int nodeId)
@@ -106,33 +126,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public static string GetDefaultNodeName(Type type)
         {
             return type.Name;
-        }
-
-        private SerializedProperty InitAndSaveCreatedNode(Vector2 position, RawNode newNodeAsset)
-        {
-            newNodeAsset.Id = _idGenerator.GetNewId();
-            newNodeAsset.Owner = _graphAsset;
-            newNodeAsset.Position = position;
-
-            if (newNodeAsset.ServiceNode())
-            {
-                if (newNodeAsset is HubNode)
-                    newNodeAsset.NodeName = "Hub";
-                else if (newNodeAsset is ExitNode)
-                    newNodeAsset.NodeName = "Exit";
-                else
-                    throw new UnsupportedValueException(newNodeAsset.GetType().Name);
-            }
-            else
-            {
-                newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType());
-            }
-
-            _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
-            SerializedProperty nodeProp = _nodesProperty.PlaceArrayElement();
-            nodeProp.managedReferenceValue = newNodeAsset;
-
-            return nodeProp;
         }
 
         private bool IsServiceField(SerializedProperty property)
