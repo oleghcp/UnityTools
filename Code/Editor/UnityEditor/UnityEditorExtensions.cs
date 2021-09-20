@@ -19,10 +19,17 @@ namespace UnityEditor
                     break;
 
                 case SerializedPropertyType.Generic:
+                    if (self.isArray)
+                        self.ClearArray();
+                    else
+                        self.EnumerateInnerProperties()
+                            .ForEach(ResetToDefault);
+                    break;
+
                 case SerializedPropertyType.LayerMask:
                 case SerializedPropertyType.Gradient:
                     self.EnumerateInnerProperties()
-                        .ForEach(item => item.ResetToDefault());
+                        .ForEach(ResetToDefault);
                     break;
 
                 case SerializedPropertyType.ObjectReference:
@@ -137,7 +144,10 @@ namespace UnityEditor
                 do { yield return iterator; } while (moveNext(false));
             }
 
-            bool moveNext(bool enterChildren) => iterator.NextVisible(enterChildren) && !SerializedProperty.EqualContents(iterator, end);
+            bool moveNext(bool enterChildren)
+            {
+                return iterator.NextVisible(enterChildren) && !SerializedProperty.EqualContents(iterator, end);
+            }
         }
 
         public static IEnumerable<SerializedProperty> EnumerateArrayElements(this SerializedProperty self)

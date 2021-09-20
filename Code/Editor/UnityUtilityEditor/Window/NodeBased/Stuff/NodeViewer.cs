@@ -154,14 +154,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void CreateTransition(PortViewer dest)
         {
-            if (_transitionViewers.Any(item => item.Destination.Node == dest.Node))
+            if (_transitionViewers.Any(item => item.Destination.Node.Id == dest.Node.Id))
                 return;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.PlaceArrayElement();
 
-            newItem.ResetToDefault();
             newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = dest.Node.Id;
+            newItem.FindPropertyRelative(Transition.ConditionFieldName).managedReferenceValue = null;
+            newItem.FindPropertyRelative(Transition.PointsFieldName).ClearArray();
+
             _transitionViewers.Add(new TransitionViewer(_out, dest, _window));
         }
 
