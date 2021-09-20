@@ -7,7 +7,7 @@ using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased
 {
-    public enum NodeType : byte
+    internal enum NodeType : byte
     {
         Real,
         Hub,
