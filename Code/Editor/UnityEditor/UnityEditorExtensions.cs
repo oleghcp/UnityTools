@@ -205,15 +205,10 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddArrayElement(this SerializedProperty self)
+        public static SerializedProperty AddArrayElement(this SerializedProperty self)
         {
-            self.InsertArrayElementAtIndex(self.arraySize);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SerializedProperty PlaceArrayElement(this SerializedProperty self)
-        {
-            return self.PushArrayElementAtIndex(self.arraySize);
+            int index = self.arraySize++;
+            return self.GetArrayElementAtIndex(index);
         }
 
         public static SerializedProperty PushArrayElementAtIndex(this SerializedProperty self, int index)
