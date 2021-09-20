@@ -26,7 +26,25 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             get
             {
-                UpdateRect();
+                if (_screenRectVersion != _window.OnGuiCounter)
+                {
+                    Rect nodeScreenRect = _node.ScreenRect;
+                    _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
+
+                    switch (_type)
+                    {
+                        case PortType.In:
+                            _screenRect.x = nodeScreenRect.x - _screenRect.width + X_OFFSET;
+                            break;
+
+                        case PortType.Out:
+                            _screenRect.x = nodeScreenRect.x + nodeScreenRect.width - X_OFFSET;
+                            break;
+                    }
+
+                    _screenRectVersion = _window.OnGuiCounter;
+                }
+
                 return _screenRect;
             }
         }
@@ -42,32 +60,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            UpdateRect();
-
-            if (GUI.Button(_screenRect, GraphEditorStyles.Styles.RightTriangle, _style))
+            if (GUI.Button(ScreenRect, GraphEditorStyles.Styles.RightTriangle, _style))
                 _window.OnClickOnPort(this);
-        }
-
-        private void UpdateRect()
-        {
-            if (_screenRectVersion != _window.OnGuiCounter)
-            {
-                Rect nodeScreenRect = _node.ScreenRect;
-                _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
-
-                switch (_type)
-                {
-                    case PortType.In:
-                        _screenRect.x = nodeScreenRect.x - _screenRect.width + X_OFFSET;
-                        break;
-
-                    case PortType.Out:
-                        _screenRect.x = nodeScreenRect.x + nodeScreenRect.width - X_OFFSET;
-                        break;
-                }
-
-                _screenRectVersion = _window.OnGuiCounter;
-            }
         }
     }
 }
