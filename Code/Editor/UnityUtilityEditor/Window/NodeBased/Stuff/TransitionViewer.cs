@@ -172,10 +172,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedProperty GetProperty()
         {
             return _source.Node
-                          .SerializedObject
-                          .FindProperty(RawNode.ArrayFieldName)
+                          .FindSubProperty(RawNode.ArrayFieldName)
                           .EnumerateArrayElements()
-                          .First(item => item.FindPropertyRelative(Transition.NodeIdFieldName).intValue == _destination.Node.NodeAsset.Id);
+                          .First(item => item.FindPropertyRelative(Transition.NodeIdFieldName).intValue == _destination.Node.Id);
         }
 
         private static float GetTangentFactor(in Vector2 start, in Vector2 end)

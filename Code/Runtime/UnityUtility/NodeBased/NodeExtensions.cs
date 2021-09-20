@@ -7,13 +7,25 @@ namespace UnityUtility.NodeBased
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ServiceNode(this RawNode self)
         {
-            return self is HubNode || self is ExitNode;
+            return self.NodeType != NodeType.Real;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool RealNode(this RawNode self)
         {
-            return !self.ServiceNode();
+            return self.NodeType == NodeType.Real;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ServiceNode(this NodeType self)
+        {
+            return self != NodeType.Real;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RealNode(this NodeType self)
+        {
+            return self == NodeType.Real;
         }
     }
 }

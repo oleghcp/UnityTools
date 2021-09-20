@@ -6,8 +6,18 @@ using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased
 {
-    public abstract class RawNode : ScriptableObject
+    public enum NodeType : byte
     {
+        Real,
+        Hub,
+        Exit,
+    }
+
+    [Serializable]
+    public abstract class RawNode
+    {
+        [SerializeField]
+        internal string NodeName;
         [SerializeField]
         internal int Id;
         [SerializeField]
@@ -16,6 +26,8 @@ namespace UnityUtility.NodeBased
         internal Transition[] Next;
 
         public int LocalId => Id;
+        public string Name => NodeName;
+        internal virtual NodeType NodeType => NodeType.Real;
 
         public virtual TState CreateState<TState>() where TState : class, IState
         {
@@ -28,11 +40,13 @@ namespace UnityUtility.NodeBased
 
         internal static string PositionFieldName => nameof(Position);
         internal static string IdFieldName => nameof(Id);
+        internal static string NameFieldName => nameof(NodeName);
         internal static string GraphFieldName => nameof(Owner);
         internal static string ArrayFieldName => nameof(Next);
 #endif
     }
 
+    [Serializable]
     public abstract class Node<TNode> : RawNode, IEnumerable<Transition<TNode>> where TNode : Node<TNode>
     {
         public Graph<TNode> Graph => Owner as Graph<TNode>;

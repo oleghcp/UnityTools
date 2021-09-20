@@ -45,8 +45,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnGUI()
         {
-            string from = _transition.Source.Node.NodeAsset.name;
-            string to = _transition.Destination.Node.NodeAsset.name;
+            string from = _transition.Source.Node.FindSubProperty(RawNode.NameFieldName).stringValue;
+            string to = _transition.Destination.Node.FindSubProperty(RawNode.NameFieldName).stringValue;
 
             using (new GUILayout.AreaScope(new Rect(_positionOffset, position.size - _sizeShrink), (string)null, EditorStyles.helpBox))
             {
@@ -70,7 +70,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                         _transition.AddPoint();
                 }
 
-                if (!(_transition.Destination.Node.NodeAsset is HubNode))
+                if (_transition.Destination.Node.Type != NodeType.Hub)
                 {
                     GUILayout.Space(10f);
                     _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;

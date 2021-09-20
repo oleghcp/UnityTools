@@ -32,7 +32,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private int _onGuiCounter;
         private bool _hasExitNode;
-        private RawNode _rootNode;
+        private int _rootNodeId;
 
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
@@ -72,17 +72,17 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
-        public RawNode RootNode
+        public int RootNodeId
         {
             get
             {
                 if (_rootNodeVersion != _onGuiCounter)
                 {
-                    _rootNode = _graphAssetEditor.GraphAsset.RootNode;
+                    _rootNodeId = _graphAssetEditor.GraphAsset.RootNode.Id;
                     _rootNodeVersion = _onGuiCounter;
                 }
 
-                return _rootNode;
+                return _rootNodeId;
             }
         }
 
@@ -117,10 +117,10 @@ namespace UnityUtilityEditor.Window.NodeBased
             _graphAssetEditor = new GraphAssetEditor(graphAsset);
             _camera = new GraphCamera(this, _settings.CameraPosition);
 
-            foreach (RawNode node in _graphAssetEditor.GraphAsset.Nodes)
+            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
             {
-                _nodeViewers.Add(new NodeViewer(node, this));
-                if (node is ExitNode)
+                NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
+                if (viewer.Type == NodeType.Exit)
                     _hasExitNode = true;
             }
 
@@ -180,20 +180,26 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public void SetAsRoot(NodeViewer node)
         {
-            _graphAssetEditor.SetAsRoot(node.NodeAsset);
+            _graphAssetEditor.SetAsRoot(node);
         }
 
         public void DeleteNode(NodeViewer node)
         {
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
-            _graphAssetEditor.DestroyNode(node.NodeAsset);
+            _graphAssetEditor.DestroyNode(node.Id);
+
+            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
+            {
+                int id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
+                _nodeViewers.Find(item => item.Id == id).ReinitSerializedProperty(nodeProp);
+            }
+
+            if (node.Type == NodeType.Exit)
+                _hasExitNode = false;
 
             if (_nodeViewers.Count == 0)
                 _camera.Position = default;
-
-            if (node.NodeAsset is ExitNode)
-                _hasExitNode = false;
         }
 
         public void OnClickOnPort(PortViewer newPort)
@@ -207,7 +213,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                 return;
             }
 
-            if (_selectedPort.Node.NodeAsset is HubNode && newPort.Node.NodeAsset is HubNode)
+            if (_selectedPort.Node.Type == NodeType.Hub && newPort.Node.Type == NodeType.Hub)
             {
                 _selectedPort = newPort;
                 return;
@@ -232,12 +238,12 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
             {
-                if (item.NodeAsset.ServiceNode())
+                if (item.Type.ServiceNode())
                     continue;
 
                 Rect rect = item.WorldRect;
-                RawNode newNode = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.NodeAsset);
-                NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(newNode, this));
+                SerializedProperty nodeProp = _graphAssetEditor.CreateNode(rect.position + Vector2.up * (rect.height + 30f), item.Id);
+                NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(nodeProp, this));
                 item.Select(false);
                 newNodeEditor.Select(true);
             }
@@ -248,9 +254,9 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void CreateNode(Vector2 mousePosition, Type type)
         {
             Vector2 position = _camera.ScreenToWorld(mousePosition);
-            RawNode nodeAsset = _graphAssetEditor.CreateNode(position, type);
-            _nodeViewers.Add(new NodeViewer(nodeAsset, this));
-            if (nodeAsset is ExitNode)
+            SerializedProperty nodeProp = _graphAssetEditor.CreateNode(position, type);
+            NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
+            if (viewer.Type == NodeType.Exit)
                 _hasExitNode = true;
         }
 

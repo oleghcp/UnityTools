@@ -42,10 +42,12 @@ namespace Project
 
             if (!File.Exists(templatePath))
             {
-                string text = @"using UnityUtility.NodeBased;
+                string text = @"System;
+using UnityUtility.NodeBased;
 
 namespace Project
 {
+    [Serializable]
     public class #SCRIPTNAME# : Node<#SCRIPTNAME#>
     {
 

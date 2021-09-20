@@ -9,16 +9,17 @@ namespace UnityUtility.NodeBased
 {
     public abstract class RawGraph : ScriptableObject
     {
-        [SerializeField]
-        internal RawNode[] Nodes;
+        [SerializeReference]
+        private protected RawNode[] _nodes;
+
         private Dictionary<int, RawNode> _dict;
 
-        protected Dictionary<int, RawNode> Dict
+        private protected Dictionary<int, RawNode> Dict
         {
             get
             {
                 if (_dict == null)
-                    _dict = Nodes.ToDictionary(key => key.Id, value => value);
+                    _dict = _nodes.ToDictionary(key => key.Id, value => value);
 
                 return _dict;
             }
@@ -28,10 +29,10 @@ namespace UnityUtility.NodeBased
         {
             get
             {
-                if (Nodes.Length == 0)
+                if (_nodes.Length == 0)
                     return null;
 
-                return Nodes.Find(item => item.RealNode());
+                return _nodes.Find(item => item.RealNode());
             }
         }
 
@@ -52,7 +53,7 @@ namespace UnityUtility.NodeBased
         internal abstract Type GetNodeType();
         internal static string IdGeneratorFieldName => nameof(LastId);
         internal static string WidthFieldName => nameof(_nodeWidth);
-        internal static string NodesFieldName => nameof(Nodes);
+        internal static string NodesFieldName => nameof(_nodes);
 #endif
     }
 
@@ -100,13 +101,13 @@ namespace UnityUtility.NodeBased
             where TState : class, IState where TData : class
         {
             var stateMachine = new StateMachine<TState, TData>(data, onStateChanging, finalCallback);
-            var states = new Dictionary<RawNode, TState>(Nodes.Length);
+            var states = new Dictionary<RawNode, TState>(_nodes.Length);
 
             RawNode rootNode = RootNode;
 
-            for (int i = 0; i < Nodes.Length; i++)
+            for (int i = 0; i < _nodes.Length; i++)
             {
-                RawNode node = Nodes[i];
+                RawNode node = _nodes[i];
 
                 if (node is HubNode)
                     continue;
@@ -117,9 +118,9 @@ namespace UnityUtility.NodeBased
                     stateMachine.AddState(state, node == rootNode);
             }
 
-            for (int i = 0; i < Nodes.Length; i++)
+            for (int i = 0; i < _nodes.Length; i++)
             {
-                RawNode node = Nodes[i];
+                RawNode node = _nodes[i];
 
                 if (node.ServiceNode())
                     continue;

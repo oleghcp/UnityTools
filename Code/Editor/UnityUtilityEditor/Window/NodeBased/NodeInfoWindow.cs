@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.Window.NodeBased
     {
         private NodeViewer _nodeEditor;
         private GraphEditorWindow _mainWindow;
-        private RawNode[] _list;
+        private string[] _nextNodeNames;
         private Type _nodeType;
 
         private Vector2 _scrollPosition;
@@ -24,7 +24,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         public static void Open(NodeViewer nodeEditor, GraphEditorWindow mainWindow)
         {
             NodeInfoWindow window = CreateInstance<NodeInfoWindow>();
-            window.titleContent = new GUIContent(nodeEditor.NodeAsset.name);
+            window.titleContent = new GUIContent(nodeEditor.FindSubProperty(RawNode.NameFieldName).stringValue);
             window.SetUp(nodeEditor, mainWindow);
             window.ShowAuxWindow();
         }
@@ -33,17 +33,18 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             _nodeEditor = nodeEditor;
             _mainWindow = mainWindow;
-            _nodeType = nodeEditor.NodeAsset.GetType();
+            _nodeType = nodeEditor.SystemType;
 
             var dict = mainWindow.GraphAssetEditor
-                                 .GraphAsset
-                                 .Nodes
-                                 .ToDictionary(key => key.Id, value => value);
+                                 .NodesProperty
+                                 .EnumerateArrayElements()
+                                 .Select(item => (item.FindPropertyRelative(RawNode.IdFieldName).intValue, item.FindPropertyRelative(RawNode.NameFieldName).stringValue))
+                                 .ToDictionary(key => key.Item1, value => value.Item2);
 
-            _list = nodeEditor.NodeAsset
-                              .Next
-                              .Select(item => dict[item.NextNodeId])
-                              .ToArray();
+            _nextNodeNames = nodeEditor.FindSubProperty(RawNode.ArrayFieldName)
+                                       .EnumerateArrayElements()
+                                       .Select(item => dict[item.FindPropertyRelative(Transition.NodeIdFieldName).intValue])
+                                       .ToArray();
         }
 
         private void OnDestroy()
@@ -57,19 +58,19 @@ namespace UnityUtilityEditor.Window.NodeBased
             EditorGUILayout.Space(2f);
             _scrollPosition.y = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox).y;
 
-            if (_nodeEditor.NodeAsset.RealNode())
+            if (_nodeEditor.Type.RealNode())
             {
                 EditorGUILayout.LabelField(_nodeType.FullName);
-                EditorGUILayout.LabelField($"Local Id: {_nodeEditor.NodeAsset.LocalId}");
+                EditorGUILayout.LabelField($"Local Id: {_nodeEditor.Id}");
 
                 EditorGUILayout.Space(10f);
             }
 
-            EditorGUILayout.LabelField($"Connected Nodes: {_list.Length}");
+            EditorGUILayout.LabelField($"Connected Nodes: {_nextNodeNames.Length}");
 
-            foreach (var item in _list)
+            for (int i = 0; i < _nextNodeNames.Length; i++)
             {
-                EditorGUILayout.LabelField($" - {item.name}");
+                EditorGUILayout.LabelField($" - {_nextNodeNames[i]}");
             }
 
             EditorGUILayout.EndScrollView();
