@@ -41,15 +41,19 @@ namespace UnityUtilityEditor.Inspectors
             _rotProp = serializedObject.FindProperty("m_LocalRotation");
             _sclProp = serializedObject.FindProperty("m_LocalScale");
 
+#if UNITY_2021_1_OR_NEWER
             Tools.pivotModeChanged += SceneView.RepaintAll;
             Tools.pivotRotationChanged += SceneView.RepaintAll;
+#endif
             SceneView.beforeSceneGui += DarwSceneGUI;
         }
 
         private void OnDisable()
         {
+#if UNITY_2021_1_OR_NEWER
             Tools.pivotModeChanged -= SceneView.RepaintAll;
             Tools.pivotRotationChanged -= SceneView.RepaintAll;
+#endif
             SceneView.beforeSceneGui -= DarwSceneGUI;
         }
 
