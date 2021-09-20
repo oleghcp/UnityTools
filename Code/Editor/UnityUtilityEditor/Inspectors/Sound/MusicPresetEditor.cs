@@ -69,7 +69,7 @@ namespace UnityUtilityEditor.Inspectors.Sound
 
         protected override void AddObject(SerializedProperty nodes, UnityObject obj)
         {
-            SerializedProperty node = nodes.PlaceArrayElement();
+            SerializedProperty node = nodes.AddArrayElement();
 
             node.FindPropertyRelative(MusicPreset.NameProp).stringValue = obj != null ? obj.name : string.Empty;
 

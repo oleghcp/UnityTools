@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
 
             while (arrayProp.arraySize < targetSize)
             {
-                InitProperty(arrayProp.PlaceArrayElement(), defVal);
+                InitProperty(arrayProp.AddArrayElement(), defVal);
 
                 changed = true;
             }

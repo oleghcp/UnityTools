@@ -46,7 +46,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void AddPoint()
         {
             SerializedProperty pointsProp = GetProperty().FindPropertyRelative(Transition.PointsFieldName);
-            SerializedProperty pointProp = pointsProp.PlaceArrayElement();
+            SerializedProperty pointProp = pointsProp.AddArrayElement();
 
             if (_points.Count == 0)
                 pointProp.vector2Value = (_source.Node.WorldRect.center + _destination.Node.WorldRect.center) * 0.5f;
