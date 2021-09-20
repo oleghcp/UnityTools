@@ -1,3 +1,4 @@
+#if UNITY_2019_3_OR_NEWER
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,3 +63,4 @@ namespace UnityUtility.NodeBased
         }
     }
 }
+#endif

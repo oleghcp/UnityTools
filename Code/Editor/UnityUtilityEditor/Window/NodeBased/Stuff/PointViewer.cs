@@ -1,3 +1,4 @@
+#if UNITY_2019_3_OR_NEWER
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -97,3 +98,4 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
+#endif

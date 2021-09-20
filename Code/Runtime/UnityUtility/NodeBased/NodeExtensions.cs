@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if UNITY_2019_3_OR_NEWER
+using System.Runtime.CompilerServices;
 
 namespace UnityUtility.NodeBased
 {
@@ -29,3 +30,4 @@ namespace UnityUtility.NodeBased
         }
     }
 }
+#endif

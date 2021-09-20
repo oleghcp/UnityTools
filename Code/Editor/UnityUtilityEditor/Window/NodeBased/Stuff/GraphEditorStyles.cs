@@ -1,3 +1,4 @@
+#if UNITY_2019_3_OR_NEWER
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -71,3 +72,4 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
     }
 }
+#endif
