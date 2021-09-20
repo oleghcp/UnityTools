@@ -567,12 +567,21 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Returns true if prefab. For scene objects returns false.
+        /// Returns true if a game object is prefab reference. For scene objects returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPrefab(this GameObject self)
         {
             return !self.scene.IsValid();
+        }
+
+        /// <summary>
+        /// Returns true if UnityEngine.Object is asset reference.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAsset(this UnityObject self)
+        {
+            return self.GetInstanceID() > 0;
         }
 
         /// <summary>
