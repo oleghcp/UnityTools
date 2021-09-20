@@ -130,7 +130,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             GUI.EndGroup();
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
+            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void OnDestroy()
@@ -181,7 +181,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             _graphAssetEditor.SerializedObject.Update();
             _graphAssetEditor.SetAsRoot(node);
-            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
+            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void DeleteNode(NodeViewer node)
@@ -204,7 +204,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (_nodeViewers.Count == 0)
                 _camera.Position = default;
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
+            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void OnClickOnPort(PortViewer targetPort)
@@ -252,7 +252,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _nodeViewers.AddRange(newNodes);
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
+            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void CreateNode(Vector2 mousePosition, Type type)
@@ -265,7 +265,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (viewer.Type == NodeType.Exit)
                 _hasExitNode = true;
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedProperties();
+            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void DrawNodes()
