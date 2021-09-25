@@ -1,12 +1,13 @@
 using UnityEngine;
+using UnityUtility.Shooting;
 
 namespace Project
 {
     public class TestMissile : MonoBehaviour
     {
-        private void OnHit(string msg)
+        public void OnHit(ProjectileEventType type)
         {
-            Debug.Log(msg);
+            Debug.Log(type);
         }
     }
 }

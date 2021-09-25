@@ -1,10 +1,17 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityUtility.MathExt;
 
 namespace UnityUtility.Shooting
 {
+    public enum ProjectileEventType : byte
+    {
+        Hit,
+        TimeOut,
+    }    
+
     public class Projectile : MonoBehaviour
     {
         [SerializeField]
@@ -17,11 +24,22 @@ namespace UnityUtility.Shooting
         private ProjectileMover _moving;
         [SerializeField]
         private ProjectileCaster _casting;
+        [Space]
+        [SerializeField]
+        private UnityEvent<ProjectileEventType> _onFinal;
+        [SerializeField]
+        private UnityEvent<Vector3> _onReflect;
+
+        private ITimeProvider _timeProvider;
+        private IGravityProvider _gravityProvider;
 
         private bool _canMove;
-        private float _curSpeed;
         private int _ricochetsLeft;
         private Vector3 _prevPos;
+        private Vector3 _velocity;
+
+        public UnityEvent<ProjectileEventType> OnFinal => _onFinal;
+        public UnityEvent<Vector3> OnReflect => _onReflect;
 
         private void Start()
         {
@@ -35,22 +53,20 @@ namespace UnityUtility.Shooting
                 return;
 
             Vector3 curPos = transform.position;
-            Vector3 curDir = UpdateState(_prevPos, curPos, transform.forward, out _prevPos, out curPos);
+            UpdateState(_prevPos, curPos, out _prevPos, out curPos);
 
             if (_canMove)
             {
-                UpdateDirection(_prevPos, curPos, ref curDir);
-                Vector3 newPos = _moving.GetNextPos(curPos, curDir, _curSpeed, GetDeltaTime(), 1f);
-                curDir = UpdateState(curPos, newPos, curDir, out _prevPos, out newPos);
+                Vector3 newPos = _moving.GetNextPos(curPos, ref _velocity, GetGravity(), GetDeltaTime(), 1f);
+                UpdateState(curPos, newPos, out _prevPos, out newPos);
                 curPos = newPos;
             }
 
-            transform.SetPositionAndRotation(curPos, Quaternion.LookRotation(curDir));
+            Quaternion curRot = Quaternion.LookRotation(UpdateDirection());
+            transform.SetPositionAndRotation(curPos, curRot);
 
             if (!_canMove)
-                Fin("Hit");
-
-            Debug.DrawLine(_prevPos, curPos, Colours.Red, Time.deltaTime);
+                Fin(ProjectileEventType.Hit);
         }
 
         public async void Play()
@@ -60,12 +76,12 @@ namespace UnityUtility.Shooting
 
             _canMove = true;
             _ricochetsLeft = _moving.Ricochets;
-            _curSpeed = _moving.StartSpeed;
+            _velocity = transform.forward * _moving.StartSpeed;
 
-            Vector3 newPos = _moving.GetNextPos(_prevPos = transform.position, transform.forward, _curSpeed, GetDeltaTime(), 0.5f);
-            Vector3 newDir = UpdateState(_prevPos, newPos, transform.forward, out _prevPos, out newPos);
-
-            transform.SetPositionAndRotation(newPos, Quaternion.LookRotation(newDir));
+            Vector3 newPos = _moving.GetNextPos(_prevPos = transform.position, ref _velocity, GetGravity(), GetDeltaTime(), 0.5f);
+            UpdateState(_prevPos, newPos, out _prevPos, out newPos);
+            Vector3 direction = UpdateDirection();
+            transform.SetPositionAndRotation(newPos, Quaternion.LookRotation(direction));
 
             if (_lifeTime.IsPosInfinity())
                 return;
@@ -77,57 +93,78 @@ namespace UnityUtility.Shooting
 
             _canMove = false;
 
-            Fin("Time Out");
+            Fin(ProjectileEventType.TimeOut);
         }
 
-        private Vector3 UpdateState(in Vector3 source, in Vector3 dest, in Vector3 direction, out Vector3 newSource, out Vector3 newDest)
+        public void OverrideTimeProvider(ITimeProvider timeProvider)
         {
-            if (_casting.Cast(source, direction, Vector3.Distance(dest, source), out RaycastHit hitInfo))
+            _timeProvider = timeProvider;
+        }
+
+        public void OverrideGravityProvider(IGravityProvider gravityProvider)
+        {
+            _gravityProvider = gravityProvider;
+        }
+
+        private void UpdateState(in Vector3 source, in Vector3 dest, out Vector3 newSource, out Vector3 newDest)
+        {
+            Vector3 vector = dest - source;
+            Vector3 direction = vector.normalized;
+
+            if (_casting.Cast(source, direction, vector.magnitude, out RaycastHit hitInfo))
             {
                 if (_ricochetsLeft != 0 && hitInfo.CompareLayer(_moving.RicochetMask))
                 {
                     _ricochetsLeft--;
-                    _curSpeed *= _moving.SpeedRemainder;
 
-                    var r = _moving.Reflect(hitInfo, dest, direction);
-                    return UpdateState(hitInfo.point, r.newDest, r.newDir, out newSource, out newDest);
+                    var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
+                    _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
+                    _onReflect.Invoke(hitInfo.point);
+                    UpdateState(hitInfo.point, reflectionInfo.newDest, out newSource, out newDest);
+                    return;
                 }
 
                 _canMove = false;
                 newSource = source;
                 newDest = hitInfo.point;
 
-                return direction;
+                return;
             }
 
             newSource = source;
             newDest = dest;
-
-            return direction;
         }
 
-        private void UpdateDirection(in Vector3 source, in Vector3 dest, ref Vector3 direction)
+        private Vector3 UpdateDirection()
         {
-            Vector3 vector = dest - source;
-            float length = vector.magnitude;
+            float length = _velocity.magnitude;
 
             if (length > Vector3.kEpsilon)
-                direction = vector / length;
+                return _velocity / length;
+
+            return transform.forward;
         }
 
-        private void Fin(string type)
+        private void Fin(ProjectileEventType type)
         {
-            SendMessage("OnHit", type, SendMessageOptions.DontRequireReceiver);
-
             if (_autodestruct)
                 gameObject.Destroy();
+
+            _onFinal.Invoke(type);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private float GetDeltaTime()
         {
-            //return m_config.Hostile ? Session.Run.FoeDeltaTime : Time.deltaTime;
-            return Time.deltaTime;
+            return _timeProvider != null ? _timeProvider.GetDeltaTime()
+                                         : Time.deltaTime;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private Vector3 GetGravity()
+        {
+            return _gravityProvider != null ? _gravityProvider.GetGravity()
+                                            : Physics.gravity;
         }
     }
 }
