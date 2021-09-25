@@ -104,26 +104,31 @@ namespace UnityUtility.Shooting
         private void UpdateState(in Vector2 source, in Vector2 dest, out Vector2 newSource, out Vector2 newDest)
         {
             Vector2 vector = dest - source;
-            Vector2 direction = vector.normalized;
+            float magnitude = vector.magnitude;
 
-            if (_casting.Cast(source, direction, vector.magnitude, out RaycastHit2D hitInfo))
+            if (magnitude > Vector2.kEpsilon)
             {
-                if (_ricochetsLeft != 0 && hitInfo.CompareLayer(_moving.RicochetMask))
-                {
-                    _ricochetsLeft--;
+                Vector2 direction = vector / magnitude;
 
-                    var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
-                    _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
-                    _onReflect.Invoke(hitInfo.point);
-                    UpdateState(Vector2.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, 0.1f), reflectionInfo.newDest, out newSource, out newDest);
+                if (_casting.Cast(source, direction, magnitude, out RaycastHit2D hitInfo))
+                {
+                    if (_ricochetsLeft != 0 && hitInfo.CompareLayer(_moving.RicochetMask))
+                    {
+                        _ricochetsLeft--;
+
+                        var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
+                        _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
+                        _onReflect.Invoke(hitInfo.point);
+                        UpdateState(Vector2.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, 0.1f), reflectionInfo.newDest, out newSource, out newDest);
+                        return;
+                    }
+
+                    _canMove = false;
+                    newSource = source;
+                    newDest = hitInfo.point;
+
                     return;
                 }
-
-                _canMove = false;
-                newSource = source;
-                newDest = hitInfo.point;
-
-                return;
             }
 
             newSource = source;
