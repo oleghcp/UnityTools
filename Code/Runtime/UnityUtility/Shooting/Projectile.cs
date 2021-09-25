@@ -31,12 +31,12 @@ namespace UnityUtility.Shooting
         {
             if (_canMove)
             {
-                _canMove = UpdateState(_prevPos, transform.position, out Vector3 newPos);
+                UpdateState(_prevPos, transform.position, out Vector3 newPos);
 
                 if (_canMove)
                 {
                     newPos = _mover.GetNextPos(newPos, GetDeltaTime());
-                    _canMove = UpdateState(transform.position, newPos, out newPos);
+                    UpdateState(transform.position, newPos, out newPos);
                 }
 
                 _prevPos = transform.position;
@@ -78,22 +78,25 @@ namespace UnityUtility.Shooting
             Fin("Time Out");
         }
 
-        private bool UpdateState(in Vector3 from, in Vector3 to, out Vector3 result)
+        private void UpdateState(in Vector3 from, in Vector3 to, out Vector3 result)
         {
             if (_caster.Cast(from, to, out RaycastHit hitInfo))
             {
                 if (hitInfo.CompareLayer(_mover.RicochetMask) && _mover.RicochetsLeft != 0)
                 {
                     Vector3 dir = _mover.Ricochet(hitInfo, from, to);
-                    return UpdateState(hitInfo.point, hitInfo.point + dir, out result);
+                    _canMove = true;
+                    UpdateState(hitInfo.point, hitInfo.point + dir, out result);
+                    return;
                 }
 
                 result = hitInfo.point;
-                return false;
+                _canMove = false;
+                return;
             }
 
             result = to;
-            return true;
+            _canMove = true;
         }
 
         private void Fin(string type)

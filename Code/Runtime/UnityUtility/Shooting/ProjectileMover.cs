@@ -22,8 +22,6 @@ namespace UnityUtility.Shooting
         private Arc3 _arc;
 
         public int Ricochets => _ricochets;
-        public float StartSpeed => _arc.StartSpeed;
-        public bool UseGravity => _useGravity;
         public LayerMask RicochetMask => _ricochetMask;
         public int RicochetsLeft => _ricochetsLeft;
 
@@ -48,7 +46,7 @@ namespace UnityUtility.Shooting
             if (_useGravity)
                 return _arc.Evaluate(_curTime += deltaTime * speedScale);
             else
-                return curPos + _arc.StartDir * (_arc.StartSpeed * speedScale * deltaTime);
+                return curPos + _arc.StartDir * (_arc.StartSpeed * deltaTime * speedScale);
         }
 
         public Vector3 Ricochet(in RaycastHit hitInfo, in Vector3 prevPos, in Vector3 lineEndPoint)
