@@ -156,15 +156,15 @@ MonoBehaviour:
   _playOnAwake: 1
   _lifeTime: Infinity
   _autodestruct: 0
-  _mover:
+  _moving:
     _startSpeed: 30
     _useGravity: 1
     _ricochets: 1
     _ricochetMask:
       serializedVersion: 2
       m_Bits: 1
-    _speedRemainder: 1
-  _caster:
+    _speedRemainder: 0.1
+  _casting:
     _hitMask:
       serializedVersion: 2
       m_Bits: 1

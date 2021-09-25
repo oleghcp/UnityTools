@@ -15,13 +15,11 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _highPrecision;
 
-        public bool Cast(Vector3 start, Vector3 end, out RaycastHit hitInfo)
+        public bool Cast(in Vector3 source, in Vector3 direction, float distance, out RaycastHit hitInfo)
         {
-            Vector3 direction = end - start;
-
             if (_castBounds > float.Epsilon)
             {
-                bool hit = Physics.SphereCast(start, _castBounds, direction, out hitInfo, direction.magnitude, _hitMask);
+                bool hit = Physics.SphereCast(source, _castBounds, direction, out hitInfo, distance, _hitMask);
 
                 if (!_highPrecision)
                     return hit;
@@ -29,7 +27,7 @@ namespace UnityUtility.Shooting
                     return true;
             }
 
-            return Physics.Raycast(start, direction, out hitInfo, direction.magnitude, _hitMask);
+            return Physics.Raycast(source, direction, out hitInfo, distance, _hitMask);
         }
     }
 }

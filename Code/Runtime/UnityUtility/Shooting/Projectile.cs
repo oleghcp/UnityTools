@@ -14,12 +14,14 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autodestruct;
         [SerializeField]
-        private ProjectileMover _mover;
+        private ProjectileMover _moving;
         [SerializeField]
-        private ProjectileCaster _caster;
+        private ProjectileCaster _casting;
 
-        private Vector3 _prevPos;
         private bool _canMove;
+        private float _curSpeed;
+        private int _ricochetsLeft;
+        private Vector3 _prevPos;
 
         private void Start()
         {
@@ -29,29 +31,26 @@ namespace UnityUtility.Shooting
 
         private void Update()
         {
+            if (!_canMove)
+                return;
+
+            Vector3 curPos = transform.position;
+            Vector3 curDir = UpdateState(_prevPos, curPos, transform.forward, out _prevPos, out curPos);
+
             if (_canMove)
             {
-                UpdateState(_prevPos, transform.position, out Vector3 newPos);
-
-                if (_canMove)
-                {
-                    newPos = _mover.GetNextPos(newPos, GetDeltaTime());
-                    UpdateState(transform.position, newPos, out newPos);
-                }
-
-                _prevPos = transform.position;
-                Vector3 dir = newPos - _prevPos;
-
-                if (dir.magnitude > Vector3.kEpsilon)
-                    transform.SetPositionAndRotation(newPos, Quaternion.LookRotation(dir));
-                else
-                    transform.position = newPos;
-
-                if (!_canMove)
-                    Fin("Hit");
+                UpdateDirection(_prevPos, curPos, ref curDir);
+                Vector3 newPos = _moving.GetNextPos(curPos, curDir, _curSpeed, GetDeltaTime(), 1f);
+                curDir = UpdateState(curPos, newPos, curDir, out _prevPos, out newPos);
+                curPos = newPos;
             }
 
-            Debug.DrawLine(_prevPos, transform.position, Colours.Red, Time.deltaTime);
+            transform.SetPositionAndRotation(curPos, Quaternion.LookRotation(curDir));
+
+            if (!_canMove)
+                Fin("Hit");
+
+            Debug.DrawLine(_prevPos, curPos, Colours.Red, Time.deltaTime);
         }
 
         public async void Play()
@@ -60,10 +59,13 @@ namespace UnityUtility.Shooting
                 return;
 
             _canMove = true;
+            _ricochetsLeft = _moving.Ricochets;
+            _curSpeed = _moving.StartSpeed;
 
-            _mover.Init(transform);
+            Vector3 newPos = _moving.GetNextPos(_prevPos = transform.position, transform.forward, _curSpeed, GetDeltaTime(), 0.5f);
+            Vector3 newDir = UpdateState(_prevPos, newPos, transform.forward, out _prevPos, out newPos);
 
-            transform.position = _mover.GetNextPos(_prevPos = transform.position, GetDeltaTime(), 0.5f);
+            transform.SetPositionAndRotation(newPos, Quaternion.LookRotation(newDir));
 
             if (_lifeTime.IsPosInfinity())
                 return;
@@ -78,25 +80,39 @@ namespace UnityUtility.Shooting
             Fin("Time Out");
         }
 
-        private void UpdateState(in Vector3 from, in Vector3 to, out Vector3 result)
+        private Vector3 UpdateState(in Vector3 source, in Vector3 dest, in Vector3 direction, out Vector3 newSource, out Vector3 newDest)
         {
-            if (_caster.Cast(from, to, out RaycastHit hitInfo))
+            if (_casting.Cast(source, direction, Vector3.Distance(dest, source), out RaycastHit hitInfo))
             {
-                if (hitInfo.CompareLayer(_mover.RicochetMask) && _mover.RicochetsLeft != 0)
+                if (hitInfo.CompareLayer(_moving.RicochetMask) && _ricochetsLeft != 0)
                 {
-                    Vector3 dir = _mover.Ricochet(hitInfo, from, to);
-                    _canMove = true;
-                    UpdateState(hitInfo.point, hitInfo.point + dir, out result);
-                    return;
+                    _ricochetsLeft--;
+                    _curSpeed *= _moving.SpeedRemainder;
+
+                    var r = _moving.Reflect(hitInfo, dest, direction);
+                    return UpdateState(hitInfo.point, r.newDest, r.newDir, out newSource, out newDest);
                 }
 
-                result = hitInfo.point;
                 _canMove = false;
-                return;
+                newSource = source;
+                newDest = hitInfo.point;
+
+                return direction;
             }
 
-            result = to;
-            _canMove = true;
+            newSource = source;
+            newDest = dest;
+
+            return direction;
+        }
+
+        private void UpdateDirection(in Vector3 source, in Vector3 dest, ref Vector3 direction)
+        {
+            Vector3 vector = dest - source;
+            float length = vector.magnitude;
+
+            if (length > Vector3.kEpsilon)
+                direction = vector / length;
         }
 
         private void Fin(string type)

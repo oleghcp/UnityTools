@@ -1,10 +1,12 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    internal class ProjectileMover
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct ProjectileMover
     {
         [SerializeField]
         private float _startSpeed;
@@ -15,63 +17,27 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private LayerMask _ricochetMask;
         [SerializeField, Range(0f, 1f)]
-        private float _speedRemainder = 1f;
+        private float _speedRemainder;
 
-        private float _curTime;
-        private int _ricochetsLeft;
-        private Arc3 _arc;
-
+        public float StartSpeed => _startSpeed;
         public int Ricochets => _ricochets;
+        public float SpeedRemainder => _speedRemainder;
         public LayerMask RicochetMask => _ricochetMask;
-        public int RicochetsLeft => _ricochetsLeft;
 
-        public void Init(Transform transform)
+        public Vector3 GetNextPos(in Vector3 curPos, in Vector3 dir, float curSpeed, float deltaTime, float speedScale)
         {
             if (_useGravity)
-            {
-                _curTime = 0f;
-                _arc = new Arc3(transform.forward, _startSpeed, Physics.gravity.magnitude, transform.position);
-            }
+                return curPos + (dir * curSpeed + Physics.gravity * deltaTime) * (deltaTime * speedScale);
             else
-            {
-                _arc.StartSpeed = _startSpeed;
-                _arc.StartDir = transform.forward;
-            }
-
-            _ricochetsLeft = _ricochets;
+                return curPos + dir * (curSpeed * deltaTime * speedScale);
         }
 
-        public Vector3 GetNextPos(in Vector3 curPos, float deltaTime, float speedScale = 1f)
+        public (Vector3 newDest, Vector3 newDir) Reflect(in RaycastHit hitInfo, in Vector3 dest, Vector3 direction)
         {
-            if (_useGravity)
-                return _arc.Evaluate(_curTime += deltaTime * speedScale);
-            else
-                return curPos + _arc.StartDir * (_arc.StartSpeed * deltaTime * speedScale);
-        }
+            direction = Vector3.Reflect(direction, hitInfo.normal);
+            float distanceAfterHit = Vector3.Distance(hitInfo.point, dest) * _speedRemainder;
 
-        public Vector3 Ricochet(in RaycastHit hitInfo, in Vector3 prevPos, in Vector3 lineEndPoint)
-        {
-            _ricochetsLeft--;
-
-            Vector3 oldDir = lineEndPoint - prevPos;
-            Vector3 newDir = Vector3.Reflect(oldDir.normalized, hitInfo.normal);
-
-            if (_useGravity)
-            {
-                _curTime = 0f;
-                _arc = new Arc3(newDir, _startSpeed, Physics.gravity.magnitude, hitInfo.point);
-            }
-            else
-            {
-                _arc.StartSpeed *= _speedRemainder;
-                _arc.StartDir = newDir;
-            }
-
-            float len = Vector3.Distance(hitInfo.point, lineEndPoint) * _speedRemainder;
-            if (len <= Vector3.kEpsilon)
-                len = 0.1f;
-
-            return newDir * len;
+            return (hitInfo.point + direction * distanceAfterHit, direction);
         }
     }
 }
