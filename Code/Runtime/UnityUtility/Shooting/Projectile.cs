@@ -18,6 +18,10 @@ namespace UnityUtility.Shooting
         private ProjectileMover _moving;
         [SerializeField]
         private ProjectileCaster _casting;
+#if UNITY_EDITOR
+        [SerializeField]
+        private Debugger _debugging;
+#endif
         [Space]
         [SerializeField]
         private UnityEvent<ProjectileEventType> _onFinal;
@@ -87,6 +91,10 @@ namespace UnityUtility.Shooting
 
             if (!_canMove)
                 Fin(ProjectileEventType.Hit);
+
+#if UNITY_EDITOR
+            _debugging.Draw(_prevPos, curPos); 
+#endif
         }
 
         public async void Play()
