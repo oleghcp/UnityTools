@@ -1,33 +1,40 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityUtility.Shooting
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct ProjectileCaster2D
+    public struct ProjectileCaster2D
     {
-        [SerializeField]
-        private LayerMask _hitMask;
+        [field: SerializeField]
+        public LayerMask HitMask { get; set; }
         [SerializeField, Min(0f)]
         private float _castBounds;
-        [SerializeField]
-        private bool _highPrecision;
+        [field: SerializeField]
+        public bool HighPrecision { get; set; }
 
-        public bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
+        public float CastBounds
+        {
+            get => _castBounds;
+            set => _castBounds = value.CutBefore(0f);
+        }
+
+        internal bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
         {
             if (_castBounds > float.Epsilon)
             {
-                hitInfo = Physics2D.CircleCast(source, _castBounds, direction, distance, _hitMask);
+                hitInfo = Physics2D.CircleCast(source, _castBounds, direction, distance, HitMask);
 
-                if (!_highPrecision)
+                if (!HighPrecision)
                     return hitInfo.Hit();
                 else if (hitInfo.Hit())
                     return true;
             }
 
-            hitInfo = Physics2D.Raycast(source, direction, distance, _hitMask);
+            hitInfo = Physics2D.Raycast(source, direction, distance, HitMask);
             return hitInfo.Hit();
         }
 

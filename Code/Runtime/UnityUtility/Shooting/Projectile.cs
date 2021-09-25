@@ -32,6 +32,32 @@ namespace UnityUtility.Shooting
         private Vector3 _prevPos;
         private Vector3 _velocity;
 
+        public Vector3 PrevPos => _prevPos;
+        public int RicochetsLeft => _ricochetsLeft;
+
+        public Vector3 Velocity
+        {
+            get => _velocity;
+            set => _velocity = value;
+        }
+
+        public bool Autodestruct
+        {
+            get => _autodestruct;
+            set => _autodestruct = value;
+        }
+
+        public ProjectileCaster Caster
+        {
+            get => _casting;
+            set => _casting = value;
+        }
+
+        public ProjectileMover Mover => _moving;
+
+        public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
+        public IGravityProvider GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
+
         public UnityEvent<ProjectileEventType> OnFinal => _onFinal;
         public UnityEvent<Vector3> OnReflect => _onReflect;
 
@@ -89,6 +115,11 @@ namespace UnityUtility.Shooting
             _canMove = false;
 
             Fin(ProjectileEventType.TimeOut);
+        }
+
+        public void Stop()
+        {
+            _canMove = false;
         }
 
         public void OverrideTimeProvider(ITimeProvider timeProvider)
