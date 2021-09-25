@@ -84,7 +84,7 @@ namespace UnityUtility.Shooting
         {
             if (_casting.Cast(source, direction, Vector3.Distance(dest, source), out RaycastHit hitInfo))
             {
-                if (hitInfo.CompareLayer(_moving.RicochetMask) && _ricochetsLeft != 0)
+                if (_ricochetsLeft != 0 && hitInfo.CompareLayer(_moving.RicochetMask))
                 {
                     _ricochetsLeft--;
                     _curSpeed *= _moving.SpeedRemainder;

@@ -1,12 +1,10 @@
 using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct ProjectileMover
+    internal class ProjectileMover
     {
         [SerializeField]
         private float _startSpeed;
@@ -17,7 +15,7 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private LayerMask _ricochetMask;
         [SerializeField, Range(0f, 1f)]
-        private float _speedRemainder;
+        private float _speedRemainder = 1f;
 
         public float StartSpeed => _startSpeed;
         public int Ricochets => _ricochets;
