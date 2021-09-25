@@ -47,6 +47,15 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Returns true if any object was hit. Otherwise returns false.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Hit(this in RaycastHit2D hit)
+        {
+            return hit.collider != null;
+        }
+
+        /// <summary>
         /// Calls GetComponent() on the game object that was hit.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
