@@ -115,7 +115,7 @@ namespace UnityUtility.Shooting
                     var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
                     _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
                     _onReflect.Invoke(hitInfo.point);
-                    UpdateState(hitInfo.point, reflectionInfo.newDest, out newSource, out newDest);
+                    UpdateState(Vector2.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, 0.1f), reflectionInfo.newDest, out newSource, out newDest);
                     return;
                 }
 

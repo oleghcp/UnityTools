@@ -163,7 +163,7 @@ MonoBehaviour:
     _ricochetMask:
       serializedVersion: 2
       m_Bits: 1
-    _speedRemainder: 0.141
+    _speedRemainder: 0.188
   _casting:
     _hitMask:
       serializedVersion: 2
