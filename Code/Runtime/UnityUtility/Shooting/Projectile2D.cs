@@ -7,7 +7,7 @@ using UnityUtility.MathExt;
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
-    public class Projectile2D : MonoBehaviour
+    public sealed class Projectile2D : MonoBehaviour
     {
         [SerializeField]
         private bool _playOnAwake;
@@ -105,6 +105,12 @@ namespace UnityUtility.Shooting
 #if UNITY_EDITOR
         private void Reset()
         {
+            if (GetComponent<Projectile>() != null)
+            {
+                DestroyImmediate(this);
+                return;
+            }
+
             _moving.SpeedRemainder = 1f;
             _casting.HitMask = LayerMask.GetMask("Default");
             _casting.ReflectedCastNear = 0.1f;
