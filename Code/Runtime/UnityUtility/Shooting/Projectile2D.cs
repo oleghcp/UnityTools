@@ -16,6 +16,8 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autodestruct;
         [SerializeField]
+        private bool _autoFlippingX = true;
+        [SerializeField]
         private ProjectileMover2D _moving;
         [SerializeField]
         private ProjectileCaster2D _casting;
@@ -91,8 +93,7 @@ namespace UnityUtility.Shooting
                 curPos = newPos;
             }
 
-            Quaternion curRot = Quaternion.FromToRotation(Vector3.right, UpdateDirection());
-            transform.SetPositionAndRotation(curPos, curRot);
+            transform.SetPositionAndRotation(curPos, GetRotation());
 
             if (!_canMove)
                 Fin(ProjectileEventType.Hit);
@@ -130,9 +131,8 @@ namespace UnityUtility.Shooting
 
             Vector2 newPos = _moving.GetNextPos(_prevPos = transform.position, ref _velocity, GetGravity(), GetDeltaTime(), 0.5f);
             UpdateState(_prevPos, newPos, out _prevPos, out newPos);
-            Quaternion newRot = Quaternion.FromToRotation(Vector3.right, UpdateDirection());
 
-            transform.SetPositionAndRotation(newPos, newRot);
+            transform.SetPositionAndRotation(newPos, GetRotation());
 
             if (_lifeTime.IsPosInfinity())
                 return;
@@ -201,14 +201,15 @@ namespace UnityUtility.Shooting
             newDest = dest;
         }
 
-        private Vector2 UpdateDirection()
+        private Quaternion GetRotation()
         {
-            float length = _velocity.magnitude;
+            Vector2 right = _velocity.magnitude > Vector2.kEpsilon ? _velocity
+                                                                   : transform.right.XY();
 
-            if (length > Vector2.kEpsilon)
-                return _velocity / length;
+            Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign())
+                                             : Vector3.forward;
 
-            return transform.right;
+            return Quaternion.LookRotation(forward, right.GetRotated(90f * forward.z));
         }
 
         private void Fin(ProjectileEventType type)

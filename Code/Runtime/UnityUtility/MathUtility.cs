@@ -12,7 +12,7 @@ namespace UnityUtility
         /// <param name="i">Row.</param>
         /// <param name="j">Column.</param>
         /// <param name="rotations">Defines a rotation angle by multiplying by 90 degrees. If the value is positive returns rotated clockwise.</param>
-        public static (int, int) RotateCellPos(int i, int j, int rotations)
+        public static (int i, int j) RotateCellPos(int i, int j, int rotations)
         {
             //Span<int> sinPtr = stackalloc[] { 0, 1, 0, -1 };
             //Span<int> cosPtr = stackalloc[] { 1, 0, -1, 0 };
@@ -96,8 +96,7 @@ namespace UnityUtility
         {
             float halfAngle = angle.ToRadians() * 0.5f;
             Vector3 xyz = forward.normalized * Sin(halfAngle);
-            float w = Cos(halfAngle);
-            return new Quaternion(xyz.x, xyz.y, xyz.z, w);
+            return new Quaternion(xyz.x, xyz.y, xyz.z, Cos(halfAngle));
         }
 
         public static (float ch1, float ch2) LerpColorChannels(float ratio)
