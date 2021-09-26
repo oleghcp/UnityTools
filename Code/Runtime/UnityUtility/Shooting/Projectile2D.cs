@@ -6,6 +6,7 @@ using UnityUtility.MathExt;
 
 namespace UnityUtility.Shooting
 {
+    [DisallowMultipleComponent]
     public class Projectile2D : MonoBehaviour
     {
         [SerializeField]
@@ -57,7 +58,11 @@ namespace UnityUtility.Shooting
             set => _casting = value;
         }
 
-        public ProjectileMover2D Mover => _moving;
+        public ProjectileMover2D Mover
+        {
+            get => _moving;
+            set => _moving = value;
+        }
 
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider2D GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
@@ -96,6 +101,17 @@ namespace UnityUtility.Shooting
             _debugging.Draw(_prevPos, curPos);
 #endif
         }
+
+#if UNITY_EDITOR
+        private void Reset()
+        {
+            _moving.SpeedRemainder = 1f;
+            _casting.HitMask = LayerMask.GetMask("Default");
+            _casting.ReflectedCastNear = 0.1f;
+            _debugging.Duration = 10f;
+            _debugging.Color = Colours.Green;
+        }
+#endif
 
         public async void Play()
         {
@@ -158,7 +174,12 @@ namespace UnityUtility.Shooting
                         var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
                         _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
                         _onReflect.Invoke(hitInfo.point);
-                        UpdateState(Vector2.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, 0.1f), reflectionInfo.newDest, out newSource, out newDest);
+
+                        float near = _casting.ReflectedCastNear;
+                        Vector2 from = near == 0f ? hitInfo.point
+                                                  : Vector2.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, near);
+
+                        UpdateState(from, reflectionInfo.newDest, out newSource, out newDest);
                         return;
                     }
 

@@ -1,11 +1,13 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    public class ProjectileMover2D
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ProjectileMover2D
     {
         [SerializeField]
         private float _startSpeed;
@@ -16,7 +18,7 @@ namespace UnityUtility.Shooting
         [field: SerializeField]
         public LayerMask RicochetMask { get; set; }
         [SerializeField, Range(0f, 1f)]
-        private float _speedRemainder = 1f;
+        private float _speedRemainder;
 
         public float SpeedRemainder
         {
