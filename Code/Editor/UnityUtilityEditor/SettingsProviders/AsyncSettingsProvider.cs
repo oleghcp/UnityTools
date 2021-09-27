@@ -10,6 +10,7 @@ namespace UnityUtilityEditor.SettingsProviders
     internal class AsyncSettingsProvider : SettingsProvider
     {
         private readonly string _settingsPath;
+
         private readonly GUIContent _labelForStopField;
         private readonly GUIContent _labelForGlobalStopField;
         private readonly GUIContent _labelForDestoryField;
@@ -30,10 +31,6 @@ namespace UnityUtilityEditor.SettingsProviders
 
             _labelForDestoryField = new GUIContent("Don't destroy on load",
                 "Whether task runners should be destroyed when scene is unloaded.");
-
-            AsyncSystemSettings settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(_settingsPath);
-            if (settings != null)
-                _serializedObject = new SerializedObject(settings);
         }
 
         [SettingsProvider]
@@ -46,19 +43,22 @@ namespace UnityUtilityEditor.SettingsProviders
 
         public override void OnGUI(string searchContext)
         {
-            if (_serializedObject == null)
+            if (_serializedObject == null || _serializedObject.targetObject == null)
             {
-                EditorGUILayout.Space();
+                AsyncSystemSettings settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(_settingsPath);
 
-                if (GUILayout.Button("Create Settings", GUILayout.MaxWidth(150f), GUILayout.Height(25f)))
-                    _serializedObject = new SerializedObject(CreateSettings());
+                if (settings == null)
+                {
+                    EditorGUILayout.Space();
 
-                return;
-            }
+                    if (GUILayout.Button("Create Settings", GUILayout.MaxWidth(150f), GUILayout.Height(25f)))
+                        _serializedObject = new SerializedObject(CreateSettings());
+                }
+                else
+                {
+                    _serializedObject = new SerializedObject(settings);
+                }
 
-            if (_serializedObject.targetObject == null)
-            {
-                _serializedObject = null;
                 return;
             }
 
