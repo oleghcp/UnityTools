@@ -7,7 +7,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
     [CustomEditor(typeof(AsyncSystemSettings))]
     internal class AsyncSystemSettingsEditor : Editor
     {
-        private readonly string HELP_BOX_NOTE = $"Don't touch this asset. Use {TaskSystem.SYSTEM_NAME} section in Project Settings instead.";
+        private readonly string HELP_BOX_NOTE = $"Use {TaskSystem.SYSTEM_NAME} section in Project Settings to edit this asset.";
 
         public override void OnInspectorGUI()
         {

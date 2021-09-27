@@ -7,15 +7,19 @@ using UnityUtility.Async;
 #if UNITY_2018_3_OR_NEWER
 namespace UnityUtilityEditor.SettingsProviders
 {
-    internal static class AsyncSettingsProvider
+    internal class AsyncSettingsProvider : SettingsProvider
     {
-        private static GUIContent _labelForStopField;
-        private static GUIContent _labelForGlobalStopField;
-        private static GUIContent _labelForDestoryField;
+        private readonly string _settingsPath;
+        private readonly GUIContent _labelForStopField;
+        private readonly GUIContent _labelForGlobalStopField;
+        private readonly GUIContent _labelForDestoryField;
 
-        [SettingsProvider]
-        public static SettingsProvider CreateMyCustomSettingsProvider()
+        private SerializedObject _serializedObject;
+
+        public AsyncSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
         {
+            _settingsPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}/{nameof(AsyncSystemSettings)}{AssetDatabaseExt.ASSET_EXTENSION}";
+
             string typeName = nameof(TaskInfo);
 
             _labelForStopField = new GUIContent("Allow stop tasks",
@@ -27,52 +31,66 @@ namespace UnityUtilityEditor.SettingsProviders
             _labelForDestoryField = new GUIContent("Don't destroy on load",
                 "Whether task runners should be destroyed when scene is unloaded.");
 
-            return new SettingsProvider("Project/" + TaskSystem.SYSTEM_NAME, SettingsScope.Project)
-            {
-                guiHandler = DrawGui,
-                keywords = new HashSet<string> { "Async", "Async System", "Stop", "Destroy" },
-            };
+            AsyncSystemSettings settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(_settingsPath);
+            if (settings != null)
+                _serializedObject = new SerializedObject(settings);
         }
 
-        private static void DrawGui(string searchContext)
+        [SettingsProvider]
+        private static SettingsProvider CreateMyCustomSettingsProvider()
         {
-            using (SerializedObject settings = new SerializedObject(GetOrCreateSettings()))
-            {
-                SerializedProperty canBeStoppedProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedName);
-                SerializedProperty canBeStoppedGloballyProperty = settings.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
-
-                canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(_labelForStopField, canBeStoppedProperty.boolValue);
-
-                GUI.enabled = canBeStoppedProperty.boolValue;
-
-                canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
-
-                if (canBeStoppedGloballyProperty.boolValue)
-                {
-                    EditorGUILayout.HelpBox("Are you sure? Stopping all tasks globally is a dangerous practice.", MessageType.Warning);
-                }
-
-                GUI.enabled = true;
-
-                settings.ApplyModifiedProperties();
-                canBeStoppedProperty.Dispose();
-                canBeStoppedGloballyProperty.Dispose();
-            }
+            return new AsyncSettingsProvider("Project/" + TaskSystem.SYSTEM_NAME,
+                                             SettingsScope.Project,
+                                             new[] { "Async", "System", "Stop", "Allow", "Task" });
         }
 
-        private static AsyncSystemSettings GetOrCreateSettings()
+        public override void OnGUI(string searchContext)
         {
-            string settingsPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}/{nameof(AsyncSystemSettings)}{AssetDatabaseExt.ASSET_EXTENSION}";
-
-            var settings = AssetDatabase.LoadAssetAtPath<AsyncSystemSettings>(settingsPath);
-            if (settings == null)
+            if (_serializedObject == null)
             {
-                string path = Path.Combine(Application.dataPath, nameof(Resources));
-                Directory.CreateDirectory(path);
-                settings = ScriptableObject.CreateInstance<AsyncSystemSettings>();
-                AssetDatabase.CreateAsset(settings, settingsPath);
-                AssetDatabase.SaveAssets();
+                EditorGUILayout.Space();
+
+                if (GUILayout.Button("Create Settings", GUILayout.MaxWidth(150f), GUILayout.Height(25f)))
+                    _serializedObject = new SerializedObject(CreateSettings());
+
+                return;
             }
+
+            if (_serializedObject.targetObject == null)
+            {
+                _serializedObject = null;
+                return;
+            }
+
+            _serializedObject.Update();
+
+            SerializedProperty canBeStoppedProperty = _serializedObject.FindProperty(AsyncSystemSettings.CanBeStoppedName);
+            SerializedProperty canBeStoppedGloballyProperty = _serializedObject.FindProperty(AsyncSystemSettings.CanBeStoppedGloballyName);
+
+            canBeStoppedProperty.boolValue = EditorGUILayout.Toggle(_labelForStopField, canBeStoppedProperty.boolValue);
+
+            GUI.enabled = canBeStoppedProperty.boolValue;
+
+            canBeStoppedGloballyProperty.boolValue = EditorGUILayout.Toggle(_labelForGlobalStopField, canBeStoppedGloballyProperty.boolValue);
+
+            if (canBeStoppedGloballyProperty.boolValue)
+            {
+                EditorGUILayout.HelpBox("Are you sure? Stopping all tasks globally is a dangerous practice.", MessageType.Warning);
+            }
+
+            GUI.enabled = true;
+
+            _serializedObject.ApplyModifiedProperties();
+            canBeStoppedProperty.Dispose();
+            canBeStoppedGloballyProperty.Dispose();
+        }
+
+        private AsyncSystemSettings CreateSettings()
+        {
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, nameof(Resources)));
+            AsyncSystemSettings settings = ScriptableObject.CreateInstance<AsyncSystemSettings>();
+            AssetDatabase.CreateAsset(settings, _settingsPath);
+            AssetDatabase.SaveAssets();
             return settings;
         }
     }
