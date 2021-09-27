@@ -1,37 +1,59 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Window
+namespace Project
 {
-    internal class AxisCreateWindow : EditorWindow
+    public class GamepadAxesSettingsProvider : SettingsProvider
     {
-        private SerializedObject _inputManager;
+        private SerializedObject _playerSettings;
+        private SerializedObject _inputSettings;
+
         private SerializedProperty _axesArray;
-        private List<string> _names;
+        private SerializedProperty _activeInputHandler;
+
+        private List<string> _names = new List<string>();
 
         private Vector2 _scrollPos;
 
         private int _pads = 2;
         private int _axes = 15;
 
-        private void OnEnable()
+        public GamepadAxesSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
         {
-            minSize = new Vector2(300f, 300f);
-            maxSize = new Vector2(300f, 1500f);
+            string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}ProjectSettings{AssetDatabaseExt.ASSET_EXTENSION}";
+            PlayerSettings playerSettings = AssetDatabase.LoadAssetAtPath<PlayerSettings>(assetPath);
+            _playerSettings = new SerializedObject(playerSettings);
+            _activeInputHandler = _playerSettings.FindProperty("activeInputHandler");
 
-            UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>($"ProjectSettings/InputManager{AssetDatabaseExt.ASSET_EXTENSION}");
-            _inputManager = new SerializedObject(asset);
-            _axesArray = GetAxes();
-            _names = new List<string>();
+            assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}InputManager{AssetDatabaseExt.ASSET_EXTENSION}";
+            UnityObject inputSettings = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
+            _inputSettings = new SerializedObject(inputSettings);
+            _axesArray = _inputSettings.FindProperty("m_Axes");
             RefreshAxes();
         }
 
-        private void OnGUI()
+        [SettingsProvider]
+        private static SettingsProvider CreateMyCustomSettingsProvider()
         {
+            return new GamepadAxesSettingsProvider("Project/Gamepad Axes (ext.)",
+                                                   SettingsScope.Project,
+                                                   new[] { "Gamepad", "Axes" });
+        }
+
+        public override void OnGUI(string searchContext)
+        {
+            if (_activeInputHandler.intValue == 1)
+            {
+                EditorGUILayout.HelpBox("Active input handling doesn't include Input Manager (Old).", MessageType.Info);
+                return;
+            }
+
+            _inputSettings.Update();
+
             GUILayout.Space(5f);
 
             _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
@@ -41,12 +63,10 @@ namespace UnityUtilityEditor.Window
             }
             GUILayout.EndScrollView();
 
-            GUILayout.Space(10f);
+            GUILayout.Space(5f);
 
             EditorGUILayout.LabelField("Add gamepad axes:", EditorStyles.boldLabel);
             GUILayout.Space(5f);
-
-            EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
@@ -60,8 +80,9 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
 
+            EditorGUILayout.Space(5f);
 
-            if (GUILayout.Button("Add", GUILayout.MinWidth(50f), GUILayout.Height(30f)))
+            if (GUILayout.Button("Add axes", GUILayout.Width(190f), GUILayout.Height(25f)))
             {
                 StringBuilder builder = new StringBuilder();
 
@@ -73,16 +94,11 @@ namespace UnityUtilityEditor.Window
                     }
                 }
                 RefreshAxes();
-                SaveInputManager();
             }
 
-            EditorGUILayout.Space();
+            EditorGUILayout.Space(5f);
 
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10f);
-
-            if (EditorGuiLayout.CenterButton("Remove gamepad axes", GUILayout.Height(30f), GUILayout.Width(150f)))
+            if (GUILayout.Button("Remove axes", GUILayout.Height(25f), GUILayout.Width(190f)))
             {
                 int i = 0;
 
@@ -105,28 +121,19 @@ namespace UnityUtilityEditor.Window
                 }
 
                 RefreshAxes();
-                SaveInputManager();
             }
 
             GUILayout.Space(10f);
-        }
 
-        // -- //
-
-        private SerializedProperty GetAxes()
-        {
-            return _inputManager.FindProperty("m_Axes");
+            _inputSettings.ApplyModifiedProperties();
         }
 
         private void RefreshAxes()
         {
             _names.Clear();
 
-            SerializedProperty axis;
-
-            for (int i = 0; i < _axesArray.arraySize; i++)
+            foreach (var axis in _axesArray.EnumerateArrayElements())
             {
-                axis = _axesArray.GetArrayElementAtIndex(i);
                 _names.Add(axis.FindPropertyRelative("m_Name").stringValue);
             }
         }
@@ -141,12 +148,6 @@ namespace UnityUtilityEditor.Window
             axis.FindPropertyRelative("type").enumValueIndex = 2;
             axis.FindPropertyRelative("axis").enumValueIndex = axNum - 1;
             axis.FindPropertyRelative("joyNum").enumValueIndex = padNum;
-        }
-
-        private void SaveInputManager()
-        {
-            _inputManager.ApplyModifiedProperties();
-            AssetDatabase.SaveAssets();
         }
     }
 }

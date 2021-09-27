@@ -47,12 +47,6 @@ namespace UnityUtilityEditor
             MenuItemsUtility.RemoveEmptyFolders();
         }
 
-        [MenuItem(nameof(UnityUtility) + "/Input/Gamepad Axes")]
-        private static void GetAxisCreateWindow()
-        {
-            EditorWindow.GetWindow(typeof(AxisCreateWindow), true, "Gamepad Axes");
-        }
-
         [MenuItem(nameof(UnityUtility) + "/Objects/Meshes/Create Rect Plane")]
         private static void GetCreateRectPlaneWizard()
         {

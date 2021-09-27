@@ -11,6 +11,7 @@ namespace UnityEditor
     public static class AssetDatabaseExt
     {
         public const string ASSET_FOLDER = "Assets/";
+        public const string PROJECT_SETTINGS_FOLDER = "ProjectSettings/";
         public const string ASSET_EXTENSION = ".asset";
         internal const string TEMPLATES_FOLDER = "Templates/";
 
