@@ -93,13 +93,13 @@ namespace UnityUtility.Shooting
                 curPos = newPos;
             }
 
-            transform.SetPositionAndRotation(curPos, GetRotation());
+            transform.SetPositionAndRotation(curPos.To_XYz(transform.position.z), GetRotation());
 
             if (!_canMove)
                 Fin(ProjectileEventType.Hit);
 
 #if UNITY_EDITOR
-            _debugging.Draw(_prevPos, curPos);
+            _debugging.Draw(_prevPos.To_XYz(transform.position.z), transform.position);
 #endif
         }
 
@@ -132,7 +132,7 @@ namespace UnityUtility.Shooting
             Vector2 newPos = _moving.GetNextPos(_prevPos = transform.position, ref _velocity, GetGravity(), GetDeltaTime(), 0.5f);
             UpdateState(_prevPos, newPos, out _prevPos, out newPos);
 
-            transform.SetPositionAndRotation(newPos, GetRotation());
+            transform.SetPositionAndRotation(newPos.To_XYz(transform.position.z), GetRotation());
 
             if (_lifeTime.IsPosInfinity())
                 return;
