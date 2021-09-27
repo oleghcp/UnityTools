@@ -53,5 +53,21 @@ namespace UnityUtility.Shooting
 
             return (hitInfo.point + newDirection * distanceAfterHit, newDirection);
         }
+
+        internal Vector2 GetNextPos(in Vector2 curPos, ref Vector2 velocity, in Vector2 gravity, float deltaTime, float speedScale)
+        {
+            if (UseGravity)
+                velocity += gravity * deltaTime;
+
+            return curPos + velocity * (deltaTime * speedScale);
+        }
+
+        internal (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction)
+        {
+            Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
+            float distanceAfterHit = Vector2.Distance(hitInfo.point, dest) * _speedRemainder;
+
+            return (hitInfo.point + newDirection * distanceAfterHit, newDirection);
+        }
     }
 }

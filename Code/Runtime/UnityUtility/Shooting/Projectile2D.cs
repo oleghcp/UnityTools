@@ -18,9 +18,9 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autoFlippingX = true;
         [SerializeField]
-        private ProjectileMover2D _moving;
+        private ProjectileMover _moving;
         [SerializeField]
-        private ProjectileCaster2D _casting;
+        private ProjectileCaster _casting;
 #if UNITY_EDITOR
         [SerializeField]
         private Debugger _debugging;
@@ -54,13 +54,13 @@ namespace UnityUtility.Shooting
             set => _autodestruct = value;
         }
 
-        public ProjectileCaster2D Caster
+        public ProjectileCaster Caster
         {
             get => _casting;
             set => _casting = value;
         }
 
-        public ProjectileMover2D Mover
+        public ProjectileMover Mover
         {
             get => _moving;
             set => _moving = value;
