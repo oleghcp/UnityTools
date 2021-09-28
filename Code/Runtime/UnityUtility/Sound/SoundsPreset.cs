@@ -15,7 +15,7 @@ namespace UnityUtility.Sound
         public float MaxDist;
     }
 
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + " (ext.)/Sound/Sounds Preset", fileName = "SoundsPreset")]
+    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Sound/Sounds Preset", fileName = "SoundsPreset")]
     public sealed class SoundsPreset : ScriptableObject
     {
         [Serializable]

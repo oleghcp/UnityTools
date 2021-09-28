@@ -68,7 +68,7 @@ namespace Project
             if (!File.Exists(templatePath))
             {
                 string text = "using UnityUtility.NodeBased;\nusing UnityEngine;\n\nnamespace Project\n{\n" +
-                              $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \" (ext.)/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
+                              $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \"/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
                               "\tpublic class #SCRIPTNAME# : Graph</*your node type*/>\n\t{\n\n\t}\n}\n";
 
                 Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);

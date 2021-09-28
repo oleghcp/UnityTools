@@ -9,11 +9,10 @@ namespace UnityUtilityEditor
     {
         public const string CONTEXT_MENU_NAME = "CONTEXT/";
         public const string RESET_ITEM_NAME = "Reset";
-        public const string CREATE_ASSET_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + " (ext.)/Asset";
+        public const string CREATE_ASSET_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + "/Asset";
 
 #if UNITY_2019_3_OR_NEWER
-        public const string MENU_GRAPH_PATH = " (ext.)/Graph/";
-        private const string FULL_MENU_GRAPH_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + MENU_GRAPH_PATH;
+        private const string FULL_MENU_GRAPH_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + "/Graph/";
 
         [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
         private static void CreateNodeScript()
