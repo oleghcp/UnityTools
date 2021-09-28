@@ -7,7 +7,6 @@ namespace UnityUtilityEditor.Configs
     [Serializable]
     internal class LayerSetConfig
     {
-        public bool GenerateStaticClass;
         public string ClassName = "LayerSet";
         public string RootFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Code/";
         public string Namespace = nameof(UnityEngine);

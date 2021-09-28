@@ -72,6 +72,8 @@ namespace UnityUtilityEditor.Gui
                 return;
             }
 
+            position.x += EditorGuiUtility.StandardHorizontalSpacing;
+            position.width -= EditorGuiUtility.StandardHorizontalSpacing * 2f;
             _list.DoList(position);
         }
 
@@ -83,7 +85,11 @@ namespace UnityUtilityEditor.Gui
                 return;
             }
 
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             _list.DoLayoutList();
+            GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
+            EditorGUILayout.EndHorizontal();
         }
 
         public float GetHeight()
