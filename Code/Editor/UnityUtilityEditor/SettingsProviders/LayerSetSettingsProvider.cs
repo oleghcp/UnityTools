@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Configs;
@@ -14,8 +16,12 @@ namespace UnityUtilityEditor.SettingsProviders
         private readonly string _settingsPath;
 
         private LayerSet _layerSet;
-        private SerializedObject _tagManager;
         private ListDrawer<LayerSet.LayerMaskField> _listDrawer;
+        private SerializedObject _tagManager;
+        private SerializedProperty _tags;
+        private SerializedProperty _sortingLayers;
+        private SerializedProperty _layers;
+
         private Vector2 _scrollPos;
 
         public LayerSetSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
@@ -35,6 +41,9 @@ namespace UnityUtilityEditor.SettingsProviders
             string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}TagManager{AssetDatabaseExt.ASSET_EXTENSION}";
             UnityObject tagManager = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
             _tagManager = new SerializedObject(tagManager);
+            _tags = _tagManager.FindProperty("tags");
+            _sortingLayers = _tagManager.FindProperty("m_SortingLayers");
+            _layers = _tagManager.FindProperty("layers");
 
             _listDrawer = new ListDrawer<LayerSet.LayerMaskField>(_layerSet.LayerMasks,
                                                                   ObjectNames.NicifyVariableName(nameof(_layerSet.LayerMasks)),
@@ -44,7 +53,9 @@ namespace UnityUtilityEditor.SettingsProviders
         [SettingsProvider]
         private static SettingsProvider CreateMyCustomSettingsProvider()
         {
-            return new LayerSetSettingsProvider($"{nameof(UnityUtility)}/Later Set", SettingsScope.Project);
+            return new LayerSetSettingsProvider($"{nameof(UnityUtility)}/Layer Set",
+                                                SettingsScope.Project,
+                                                new[] { "Layer", "Set", "Generate", "Class" });
         }
 
         public override void OnGUI(string searchContext)
@@ -53,6 +64,8 @@ namespace UnityUtilityEditor.SettingsProviders
 
             if (_layerSet.GenerateStaticClass)
             {
+                _tagManager.Update();
+
                 EditorGUILayout.Space();
 
                 _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
@@ -63,10 +76,20 @@ namespace UnityUtilityEditor.SettingsProviders
                 EditorGUILayout.Space();
 
                 _layerSet.TagFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_layerSet.TagFields)), _layerSet.TagFields);
-                _layerSet.SortingLayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_layerSet.SortingLayerFields)), _layerSet.SortingLayerFields);
-                _layerSet.LayersField = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_layerSet.LayersField)), _layerSet.LayersField);
+                DrawCollection(_layerSet.TagFields, _tags.EnumerateArrayElements(), item => EditorGUILayout.LabelField(CreateItemString(item.stringValue)));
 
-                if (_layerSet.LayersField)
+                _layerSet.SortingLayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_layerSet.SortingLayerFields)), _layerSet.SortingLayerFields);
+                DrawCollection(_layerSet.SortingLayerFields, SortingLayer.layers, item => EditorGUILayout.LabelField(CreateItemString(item.name)));
+
+                _layerSet.LayersFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_layerSet.LayersFields)), _layerSet.LayersFields);
+                DrawCollection(_layerSet.LayersFields, _layers.EnumerateArrayElements(), drawLayer);
+                void drawLayer(SerializedProperty item)
+                {
+                    if (item.stringValue.HasUsefulData())
+                        EditorGUILayout.LabelField(CreateItemString(item.stringValue));
+                }
+
+                if (_layerSet.LayersFields)
                     _listDrawer.Draw();
 
                 GUILayout.FlexibleSpace();
@@ -118,6 +141,26 @@ namespace UnityUtilityEditor.SettingsProviders
             {
                 return EditorGUIUtility.singleLineHeight;
             }
+        }
+
+        private void DrawCollection<T>(bool draw, IEnumerable<T> collection, Action<T> drawer)
+        {
+            if (!draw)
+                return;
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            foreach (var item in collection)
+            {
+                drawer(item);
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private string CreateItemString<T>(T item)
+        {
+            return $"- {item}";
         }
     }
 }

@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Configs
         public string NameSpace = nameof(UnityEngine);
         public bool TagFields;
         public bool SortingLayerFields;
-        public bool LayersField;
+        public bool LayersFields = true;
         public List<LayerMaskField> LayerMasks;
         public bool AutoGenerate;
 
