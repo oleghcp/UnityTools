@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtility.Collections;
 using UnityUtility.IdGenerating;
+using UnityUtilityTools;
 
 namespace UnityUtility.Async
 {
@@ -54,7 +55,7 @@ namespace UnityUtility.Async
         public void RegisterStopper(ITaskStopper stopper)
         {
             if (!_canBeStoppedGlobally)
-                throw new InvalidOperationException($"Tasks cannot be stopped due to the current system option. Check {TaskSystem.SYSTEM_NAME} settings.");
+                throw Errors.CannotStopTask();
 
             if (_stopper != null)
                 throw new InvalidOperationException("Stoping object is already set.");

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
 using UnityObject = UnityEngine.Object;
 
+#if UNITY_2018_3_OR_NEWER
 namespace Project
 {
     public class GamepadAxesSettingsProvider : SettingsProvider
@@ -39,7 +40,7 @@ namespace Project
         [SettingsProvider]
         private static SettingsProvider CreateMyCustomSettingsProvider()
         {
-            return new GamepadAxesSettingsProvider("Project/Gamepad Axes (ext.)",
+            return new GamepadAxesSettingsProvider($"{nameof(UnityUtility)}/Gamepad Axes",
                                                    SettingsScope.Project,
                                                    new[] { "Gamepad", "Axes" });
         }
@@ -151,3 +152,4 @@ namespace Project
         }
     }
 }
+#endif
