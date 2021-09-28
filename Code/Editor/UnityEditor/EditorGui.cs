@@ -41,6 +41,7 @@ namespace UnityEditor
             return objects;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void ErrorLabel(in Rect position, GUIContent label, string message)
         {
             EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));
