@@ -105,19 +105,22 @@ namespace UnityEditor
             int index = Array.IndexOf(enumData.EnumValues, selected);
             int newIndex = DropDown(propertyRect, label, index, enumData.EnumNames);
 
-            if (index == newIndex)
-                return selected;
+            if (index != newIndex)
+            {
+                GUI.changed = true;
+                return (Enum)enumData.EnumValues.GetValue(newIndex);
+            }
 
-            return (Enum)enumData.EnumValues.GetValue(newIndex);
+            return selected;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions)
+        public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions, bool drawEmptyDisplayedOptions = false)
         {
-            return MaskDropDown(propertyRect, null, mask, displayedOptions);
+            return MaskDropDown(propertyRect, null, mask, displayedOptions, drawEmptyDisplayedOptions);
         }
 
-        public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions)
+        public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions, bool drawEmptyDisplayedOptions = false)
         {
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
 
@@ -132,6 +135,7 @@ namespace UnityEditor
                 EditorUtilityExt.DisplayMultiSelectableList(propertyRect,
                                                             BitList.CreateFromBitMask(mask, bitsCount),
                                                             displayedOptions,
+                                                            drawEmptyDisplayedOptions,
                                                             bitList => DropDownData.MenuAction(controlId, bitList.ToIntBitMask()));
             }
 
@@ -165,10 +169,13 @@ namespace UnityEditor
             int mask = Convert.ToInt32(flags);
             int newMask = MaskDropDown(propertyRect, label, mask, enumData.EnumNames);
 
-            if (mask == newMask)
-                return flags;
+            if (mask != newMask)
+            {
+                GUI.changed = true;
+                return (Enum)Enum.ToObject(type, newMask);
+            }
 
-            return (Enum)Enum.ToObject(type, newMask);
+            return flags;
         }
     }
 }

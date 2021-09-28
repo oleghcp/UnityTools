@@ -82,12 +82,23 @@ namespace UnityEditor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
-            DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onClose);
+            DisplayMultiSelectableList(position, flags, displayedOptions, false, onClose);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, bool drawEmptyDisplayedOptions, Action<BitList> onClose = null)
+        {
+            DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, drawEmptyDisplayedOptions, onClose);
         }
 
         public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
-            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, onClose);
+            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, false, onClose);
+        }
+
+        public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, bool drawEmptyDisplayedOptions, Action<BitList> onClose = null)
+        {
+            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, drawEmptyDisplayedOptions, onClose);
         }
 
         //The functions based on https://gist.github.com/bzgeb/3800350

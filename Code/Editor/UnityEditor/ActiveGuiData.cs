@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -18,6 +19,8 @@ namespace UnityEditor
             {
                 if (_instance._id == controlId)
                 {
+                    GUI.changed = true;
+
                     objects = _instance._droppedObjects;
                     _instance = null;
                 }
@@ -49,6 +52,8 @@ namespace UnityEditor
             {
                 if (_instance._id == controlId)
                 {
+                    GUI.changed = true;
+
                     selectedValue = _instance._selectedValue;
                     _instance = null;
                 }

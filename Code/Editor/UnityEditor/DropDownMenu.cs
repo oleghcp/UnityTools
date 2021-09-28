@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Collections;
 using UnityUtilityEditor.Window;
 
 namespace UnityEditor
@@ -47,16 +46,6 @@ namespace UnityEditor
         public void AddSeparator()
         {
             _window.AddSeparator();
-        }
-
-        public static void CreateFlagsMenu(BitList flags, string[] displayedOptions, Action<BitList> onClose)
-        {
-            DropDownWindow.CreateForFlags(flags, displayedOptions, onClose);
-        }
-
-        public static void CreateFlagsMenu(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
-        {
-            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, onClose);
         }
     }
 }
