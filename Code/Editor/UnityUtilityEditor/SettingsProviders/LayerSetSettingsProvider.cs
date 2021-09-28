@@ -18,7 +18,7 @@ namespace UnityUtilityEditor.SettingsProviders
         private readonly string _settingsPath;
 
         private LayerSetConfig _config;
-        private ListDrawer<LayerSetConfig.LayerMaskField> _listDrawer;
+        private ListDrawer<LayerSetConfig.MaskField> _listDrawer;
         private SerializedObject _tagManager;
         private SerializedProperty _tags;
         private SerializedProperty _layers;
@@ -45,7 +45,7 @@ namespace UnityUtilityEditor.SettingsProviders
             _tags = _tagManager.FindProperty("tags");
             _layers = _tagManager.FindProperty("layers");
 
-            _listDrawer = new ListDrawer<LayerSetConfig.LayerMaskField>(_config.LayerMasks,
+            _listDrawer = new ListDrawer<LayerSetConfig.MaskField>(_config.LayerMasks,
                                                                   ObjectNames.NicifyVariableName(nameof(_config.LayerMasks)),
                                                                   new LayerMaskFieldDrawer());
         }
@@ -70,8 +70,9 @@ namespace UnityUtilityEditor.SettingsProviders
 
                 _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 
+                _config.ClassName = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.ClassName)), _config.ClassName);
+                _config.Namespace = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.Namespace)), _config.Namespace);
                 _config.RootFolder = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.RootFolder)), _config.RootFolder);
-                _config.NameSpace = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.NameSpace)), _config.NameSpace);
 
                 EditorGUILayout.Space();
 
@@ -153,16 +154,15 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private void GenerateClass()
         {
-            string className = "LayerSet";
-            string classText = LayerSetClassGenerator.Generate(className, _config, _tagManager);
-            GeneratingTools.CreateCsFile(classText, _config.RootFolder, className, _config.NameSpace);
+            string classText = LayerSetClassGenerator.Generate(_config, _tagManager);
+            GeneratingTools.CreateCsFile(classText, _config.RootFolder, _config.ClassName, _config.Namespace);
         }
 
-        private class LayerMaskFieldDrawer : IListElementDrawer<LayerSetConfig.LayerMaskField>
+        private class LayerMaskFieldDrawer : IListElementDrawer<LayerSetConfig.MaskField>
         {
             public string[] Names;
 
-            void IListElementDrawer<LayerSetConfig.LayerMaskField>.OnDrawElement(Rect position, ref LayerSetConfig.LayerMaskField element, bool isActive, bool isFocused)
+            void IListElementDrawer<LayerSetConfig.MaskField>.OnDrawElement(Rect position, ref LayerSetConfig.MaskField element, bool isActive, bool isFocused)
             {
                 Rect halfPos = position;
                 halfPos.width = halfPos.width * 0.5f - EditorGuiUtility.StandardHorizontalSpacing;
@@ -175,7 +175,7 @@ namespace UnityUtilityEditor.SettingsProviders
                 element.Mask = EditorGui.MaskDropDown(halfPos, element.Mask, Names);
             }
 
-            float IListElementDrawer<LayerSetConfig.LayerMaskField>.OnElementHeight(int index)
+            float IListElementDrawer<LayerSetConfig.MaskField>.OnElementHeight(int index)
             {
                 return EditorGUIUtility.singleLineHeight;
             }

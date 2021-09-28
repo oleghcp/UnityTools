@@ -8,21 +8,22 @@ namespace UnityUtilityEditor.Configs
     internal class LayerSetConfig
     {
         public bool GenerateStaticClass;
+        public string ClassName = "LayerSet";
         public string RootFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Code/";
-        public string NameSpace = nameof(UnityEngine);
+        public string Namespace = nameof(UnityEngine);
         public bool TagFields;
         public bool SortingLayerFields;
         public bool LayersFields = true;
-        public List<LayerMaskField> LayerMasks;
+        public List<MaskField> LayerMasks;
         public bool AutoGenerate;
 
         public LayerSetConfig()
         {
-            LayerMasks = new List<LayerMaskField>();
+            LayerMasks = new List<MaskField>();
         }
 
         [Serializable]
-        public struct LayerMaskField
+        public struct MaskField
         {
             public string Name;
             public int Mask;

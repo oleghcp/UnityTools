@@ -8,7 +8,7 @@ namespace UnityUtilityEditor.CodeGenerating
 {
     internal static class LayerSetClassGenerator
     {
-        public static string Generate(string className, LayerSetConfig config, SerializedObject tagManager)
+        public static string Generate(LayerSetConfig config, SerializedObject tagManager)
         {
             bool needEmptyLine = false;
 
@@ -20,9 +20,9 @@ namespace UnityUtilityEditor.CodeGenerating
             builder.AppendLine()
                    .AppendLine("using UnityEngine;")
                    .AppendLine()
-                   .Append("namespace ").AppendLine(config.NameSpace)
+                   .Append("namespace ").AppendLine(config.Namespace)
                    .AppendLine("{")
-                   .Append(tab).Append("public static class ").AppendLine(className)
+                   .Append(tab).Append("public static class ").AppendLine(config.ClassName)
                    .Append(tab).Append('{').AppendLine();
 
             if (config.TagFields)
