@@ -115,12 +115,12 @@ namespace UnityEditor
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions, bool drawEmptyDisplayedOptions = false)
+        public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions)
         {
-            return MaskDropDown(propertyRect, null, mask, displayedOptions, drawEmptyDisplayedOptions);
+            return MaskDropDown(propertyRect, null, mask, displayedOptions);
         }
 
-        public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions, bool drawEmptyDisplayedOptions = false)
+        public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions)
         {
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
 
@@ -135,7 +135,6 @@ namespace UnityEditor
                 EditorUtilityExt.DisplayMultiSelectableList(propertyRect,
                                                             BitList.CreateFromBitMask(mask, bitsCount),
                                                             displayedOptions,
-                                                            drawEmptyDisplayedOptions,
                                                             bitList => DropDownData.MenuAction(controlId, bitList.ToIntBitMask()));
             }
 

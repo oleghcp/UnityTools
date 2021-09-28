@@ -101,12 +101,12 @@ namespace UnityUtilityEditor.Window
 
         #region List functions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateForFlags(BitList flags, string[] displayedOptions, bool drawEmptyDisplayedOptions, Action<BitList> onClose)
+        public static void CreateForFlags(BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            CreateForFlags(GetButtonRect(), flags, displayedOptions, drawEmptyDisplayedOptions, onClose);
+            CreateForFlags(GetButtonRect(), flags, displayedOptions, onClose);
         }
 
-        public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, bool drawEmptyDisplayedOptions, Action<BitList> onClose)
+        public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
             DropDownWindow popup = CreateInstance<DropDownWindow>();
 
@@ -121,9 +121,6 @@ namespace UnityUtilityEditor.Window
 
             for (int i = 0; i < displayedOptions.Length; i++)
             {
-                if (!drawEmptyDisplayedOptions && displayedOptions[i].IsNullOrWhiteSpace())
-                    continue;
-
                 int index = i;
                 Data item = Data.CreateItem(i, displayedOptions[i], false, () => flags.Switch(index));
                 popup._items.Add(item);
