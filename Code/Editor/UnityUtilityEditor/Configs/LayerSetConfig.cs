@@ -5,7 +5,7 @@ using UnityEditor;
 namespace UnityUtilityEditor.Configs
 {
     [Serializable]
-    internal class LayerSet
+    internal class LayerSetConfig
     {
         public bool GenerateStaticClass;
         public string RootFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Code/";
@@ -16,7 +16,7 @@ namespace UnityUtilityEditor.Configs
         public List<LayerMaskField> LayerMasks;
         public bool AutoGenerate;
 
-        public LayerSet()
+        public LayerSetConfig()
         {
             LayerMasks = new List<LayerMaskField>();
         }
