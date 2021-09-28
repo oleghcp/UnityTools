@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -47,7 +48,7 @@ namespace UnityUtilityEditor.SettingsProviders
 
             _listDrawer = new ListDrawer<LayerSet.LayerMaskField>(_layerSet.LayerMasks,
                                                                   ObjectNames.NicifyVariableName(nameof(_layerSet.LayerMasks)),
-                                                                  new LayerMaskFieldDrawer());
+                                                                  new LayerMaskFieldDrawer(_layers));
         }
 
         [SettingsProvider]
@@ -123,26 +124,6 @@ namespace UnityUtilityEditor.SettingsProviders
             File.WriteAllText(_settingsPath, json);
         }
 
-        private class LayerMaskFieldDrawer : IListElementDrawer<LayerSet.LayerMaskField>
-        {
-            void IListElementDrawer<LayerSet.LayerMaskField>.OnDrawElement(Rect position, ref LayerSet.LayerMaskField element, bool isActive, bool isFocused)
-            {
-                Rect halfPos = position;
-                halfPos.width = halfPos.width * 0.5f - EditorGuiUtility.StandardHorizontalSpacing;
-                element.Name = EditorGUI.TextField(halfPos, element.Name);
-
-                halfPos = position;
-                halfPos.width *= 0.5f;
-                halfPos.x += position.width * 0.5f;
-                element.Mask = EditorGUI.MaskField(halfPos, element.Mask, new[] { "Qwe", "Rty" });
-            }
-
-            float IListElementDrawer<LayerSet.LayerMaskField>.OnElementHeight(int index)
-            {
-                return EditorGUIUtility.singleLineHeight;
-            }
-        }
-
         private void DrawCollection<T>(bool draw, IEnumerable<T> collection, Action<T> drawer)
         {
             if (!draw)
@@ -161,6 +142,39 @@ namespace UnityUtilityEditor.SettingsProviders
         private string CreateItemString<T>(T item)
         {
             return $"- {item}";
+        }
+
+        private class LayerMaskFieldDrawer : IListElementDrawer<LayerSet.LayerMaskField>
+        {
+            private SerializedProperty _layers;
+
+            public LayerMaskFieldDrawer(SerializedProperty layers)
+            {
+                _layers = layers;
+            }
+
+            void IListElementDrawer<LayerSet.LayerMaskField>.OnDrawElement(Rect position, ref LayerSet.LayerMaskField element, bool isActive, bool isFocused)
+            {
+                Rect halfPos = position;
+                halfPos.width = halfPos.width * 0.5f - EditorGuiUtility.StandardHorizontalSpacing;
+                element.Name = EditorGUI.TextField(halfPos, element.Name);
+
+                halfPos = position;
+                halfPos.width *= 0.5f;
+                halfPos.x += position.width * 0.5f;
+
+                var names = _layers.EnumerateArrayElements()
+                                   .Select(item => item.stringValue)
+                                   .Where(item => item.HasUsefulData())
+                                   .ToArray();
+
+                element.Mask = EditorGui.MaskDropDown(halfPos, element.Mask, names);
+            }
+
+            float IListElementDrawer<LayerSet.LayerMaskField>.OnElementHeight(int index)
+            {
+                return EditorGUIUtility.singleLineHeight;
+            }
         }
     }
 }
