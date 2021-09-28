@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityUtilityEditor.SettingsProviders;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
 
@@ -38,6 +39,12 @@ namespace UnityUtilityEditor
         private static bool CreateAssetValidation()
         {
             return Selection.objects.Length == 1;
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Generate Layer Set Class")]
+        private static void GenerateLayerSetClass()
+        {
+            LayerSetSettingsProvider.GenerateClass();
         }
 
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]

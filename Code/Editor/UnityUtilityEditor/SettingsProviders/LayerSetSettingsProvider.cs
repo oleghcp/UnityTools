@@ -75,6 +75,9 @@ namespace UnityUtilityEditor.SettingsProviders
 
         public override void OnGUI(string searchContext)
         {
+            if (GUILayout.Button("Open Tag Manager", GUILayout.Width(130f), GUILayout.Height(25f)))
+                Selection.activeObject = _tagManager.targetObject;
+
             _tagManager.Update();
 
             EditorGUILayout.Space();
@@ -120,7 +123,7 @@ namespace UnityUtilityEditor.SettingsProviders
             //_config.AutoGenerate = EditorGUILayout.Toggle(_config.AutoGenerate, GUILayout.Width(13f));
             //GUILayout.Label(ObjectNames.NicifyVariableName(nameof(_config.AutoGenerate)));
             //GUI.enabled = !_config.AutoGenerate;
-            if (GUILayout.Button("Generate", GUILayout.Width(100f), GUILayout.Height(25f)))
+            if (GUILayout.Button("Generate Class", GUILayout.Width(120f), GUILayout.Height(25f)))
                 GenerateClass();
             //GUI.enabled = true;
             EditorGUILayout.EndHorizontal();

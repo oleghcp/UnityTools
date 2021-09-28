@@ -54,20 +54,17 @@ namespace UnityUtilityEditor.CodeGenerating
                 if (needEmptyLine)
                     builder.AppendLine();
 
-                SortingLayer[] layers = SortingLayer.layers;
-
-                for (int i = 0; i < layers.Length; i++)
+                foreach (var layer in SortingLayer.layers)
                 {
                     builder.Append(tab)
                            .Append(tab)
                            .Append("public ")
-                           .Append("static ")
-                           .Append("readonly ")
-                           .Append("SortingLayer ")
-                           .Append(layers[i].name.Replace(" ", string.Empty))
-                           .Append("SortingLayer")
+                           .Append("const ")
+                           .Append("int ")
+                           .Append(layer.name.Replace(" ", string.Empty))
+                           .Append("Id")
                            .Append(" = ")
-                           .Append($"SortingLayer.layers[{i}]")
+                           .Append(layer.id)
                            .Append(';')
                            .AppendLine();
                 }

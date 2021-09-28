@@ -14,7 +14,6 @@ namespace UnityUtilityEditor.Configs
         public bool SortingLayerFields;
         public bool LayersFields = true;
         public List<MaskField> LayerMasks;
-        public bool AutoGenerate;
 
         public LayerSetConfig()
         {
