@@ -9,17 +9,12 @@ namespace UnityUtilityEditor.Configs
     {
         public string ClassName = "LayerSet";
         public string RootFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Code/";
-        public string Namespace = nameof(UnityEngine);
+        public string Namespace = "Project";
         public bool TagFields;
         public bool SortingLayerFields;
         public bool LayerFields = true;
         public LayerMaskFieldType MaskFieldType;
-        public List<MaskField> LayerMasks;
-
-        public LayerSetConfig()
-        {
-            LayerMasks = new List<MaskField>();
-        }
+        public List<MaskField> LayerMasks = new List<MaskField>();
 
         [Serializable]
         public struct MaskField

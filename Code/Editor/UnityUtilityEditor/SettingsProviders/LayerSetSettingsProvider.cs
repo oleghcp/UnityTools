@@ -19,7 +19,9 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private static LayerSetSettingsProvider _instance;
 
-        private LayerSetConfig _config;
+        private LayerSetConfigWrapper _configWrapper;
+        private LayerSetConfig _altConfigVersion = new LayerSetConfig();
+
         private ListDrawer<LayerSetConfig.MaskField> _listDrawer;
         private SerializedObject _tagManager;
         private SerializedProperty _tags;
@@ -46,14 +48,16 @@ namespace UnityUtilityEditor.SettingsProviders
         {
             _settingsPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}{nameof(LayerSetConfig)}.json";
 
+            _configWrapper = ScriptableObject.CreateInstance<LayerSetConfigWrapper>();
+
             if (File.Exists(_settingsPath))
             {
                 string json = File.ReadAllText(_settingsPath);
-                _config = JsonUtility.FromJson<LayerSetConfig>(json);
+                _configWrapper.Config = JsonUtility.FromJson<LayerSetConfig>(json);
             }
             else
             {
-                _config = new LayerSetConfig();
+                _configWrapper.Config = new LayerSetConfig();
             }
 
             string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}TagManager{AssetDatabaseExt.ASSET_EXTENSION}";
@@ -62,9 +66,9 @@ namespace UnityUtilityEditor.SettingsProviders
             _tags = _tagManager.FindProperty("tags");
             _layers = _tagManager.FindProperty("layers");
 
-            _listDrawer = new ListDrawer<LayerSetConfig.MaskField>(_config.LayerMasks,
-                                                                  ObjectNames.NicifyVariableName(nameof(_config.LayerMasks)),
-                                                                  new LayerMaskFieldDrawer());
+            _listDrawer = new ListDrawer<LayerSetConfig.MaskField>(_configWrapper.Config.LayerMasks,
+                                                                   ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks)),
+                                                                   new LayerMaskFieldDrawer());
         }
 
         [SettingsProvider]
@@ -80,6 +84,8 @@ namespace UnityUtilityEditor.SettingsProviders
 
             _tagManager.Update();
 
+            LayerSetConfig config = _configWrapper.Config;
+
             float labelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = labelWidth * 1.8f;
 
@@ -87,29 +93,29 @@ namespace UnityUtilityEditor.SettingsProviders
 
             _scrollPos.y = GUILayout.BeginScrollView(_scrollPos).y;
 
-            _config.ClassName = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.ClassName)), _config.ClassName);
-            _config.Namespace = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.Namespace)), _config.Namespace);
-            _config.RootFolder = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_config.RootFolder)), _config.RootFolder);
+            _altConfigVersion.ClassName = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.ClassName)), config.ClassName);
+            _altConfigVersion.Namespace = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.Namespace)), config.Namespace);
+            _altConfigVersion.RootFolder = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.RootFolder)), config.RootFolder);
 
             EditorGUILayout.Space();
 
-            _config.TagFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_config.TagFields)), _config.TagFields);
-            DrawCollection(_config.TagFields, _tags.EnumerateArrayElements(), item => EditorGUILayout.LabelField(CreateItemString(item.stringValue)));
+            _altConfigVersion.TagFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.TagFields)), config.TagFields);
+            DrawCollection(_altConfigVersion.TagFields, _tags.EnumerateArrayElements(), item => EditorGUILayout.LabelField(CreateItemString(item.stringValue)));
 
-            _config.SortingLayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_config.SortingLayerFields)), _config.SortingLayerFields);
-            DrawCollection(_config.SortingLayerFields, SortingLayer.layers, item => EditorGUILayout.LabelField(CreateItemString(item.name)));
+            _altConfigVersion.SortingLayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.SortingLayerFields)), config.SortingLayerFields);
+            DrawCollection(_altConfigVersion.SortingLayerFields, SortingLayer.layers, item => EditorGUILayout.LabelField(CreateItemString(item.name)));
 
-            _config.LayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_config.LayerFields)), _config.LayerFields);
-            DrawCollection(_config.LayerFields, _layers.EnumerateArrayElements(), drawLayer);
+            _altConfigVersion.LayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerFields)), config.LayerFields);
+            DrawCollection(_altConfigVersion.LayerFields, _layers.EnumerateArrayElements(), drawLayer);
             void drawLayer(SerializedProperty item)
             {
                 if (item.stringValue.HasUsefulData())
                     EditorGUILayout.LabelField(CreateItemString(item.stringValue));
             }
 
-            if (_config.LayerFields)
+            if (_altConfigVersion.LayerFields)
             {
-                _config.MaskFieldType = (LayerSetConfig.LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(_config.MaskFieldType)), _config.MaskFieldType);
+                _altConfigVersion.MaskFieldType = (LayerSetConfig.LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.MaskFieldType)), config.MaskFieldType);
                 var drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
                 drawer.Names = _layers.EnumerateArrayElements()
                                       .Select(item => item.stringValue)
@@ -126,30 +132,33 @@ namespace UnityUtilityEditor.SettingsProviders
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            //_config.AutoGenerate = EditorGUILayout.Toggle(_config.AutoGenerate, GUILayout.Width(13f));
-            //GUILayout.Label(ObjectNames.NicifyVariableName(nameof(_config.AutoGenerate)));
-            //GUI.enabled = !_config.AutoGenerate;
             if (GUILayout.Button("Generate Class", GUILayout.Width(120f), GUILayout.Height(25f)))
                 GenerateClass();
-            //GUI.enabled = true;
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
             if (GUI.changed)
+            {
+                Undo.RecordObject(_configWrapper, nameof(LayerSetSettingsProvider));
+                LayerSetConfig tmp = _configWrapper.Config;
+                _configWrapper.Config = _altConfigVersion;
+                _altConfigVersion = tmp;
+
                 SaveAsset();
+            }
         }
 
         public static void GenerateClass()
         {
-            LayerSetConfig config = Instance._config;
+            LayerSetConfig config = Instance._configWrapper.Config;
             string classText = LayerSetClassGenerator.Generate(config, Instance._tagManager);
             GeneratingTools.CreateCsFile(classText, config.RootFolder, config.ClassName, config.Namespace);
         }
 
         private void SaveAsset()
         {
-            string json = JsonUtility.ToJson(_config, true);
+            string json = JsonUtility.ToJson(_configWrapper.Config, true);
             File.WriteAllText(_settingsPath, json);
         }
 
