@@ -80,6 +80,9 @@ namespace UnityUtilityEditor.SettingsProviders
 
             _tagManager.Update();
 
+            float labelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = labelWidth * 1.8f;
+
             EditorGUILayout.Space();
 
             _scrollPos.y = GUILayout.BeginScrollView(_scrollPos).y;
@@ -96,16 +99,17 @@ namespace UnityUtilityEditor.SettingsProviders
             _config.SortingLayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_config.SortingLayerFields)), _config.SortingLayerFields);
             DrawCollection(_config.SortingLayerFields, SortingLayer.layers, item => EditorGUILayout.LabelField(CreateItemString(item.name)));
 
-            _config.LayersFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_config.LayersFields)), _config.LayersFields);
-            DrawCollection(_config.LayersFields, _layers.EnumerateArrayElements(), drawLayer);
+            _config.LayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(_config.LayerFields)), _config.LayerFields);
+            DrawCollection(_config.LayerFields, _layers.EnumerateArrayElements(), drawLayer);
             void drawLayer(SerializedProperty item)
             {
                 if (item.stringValue.HasUsefulData())
                     EditorGUILayout.LabelField(CreateItemString(item.stringValue));
             }
 
-            if (_config.LayersFields)
+            if (_config.LayerFields)
             {
+                _config.MaskFieldType = (LayerSetConfig.LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(_config.MaskFieldType)), _config.MaskFieldType);
                 var drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
                 drawer.Names = _layers.EnumerateArrayElements()
                                       .Select(item => item.stringValue)
@@ -117,6 +121,8 @@ namespace UnityUtilityEditor.SettingsProviders
             GUILayout.FlexibleSpace();
             GUILayout.EndScrollView();
             EditorGUILayout.Space();
+
+            EditorGUIUtility.labelWidth = labelWidth;
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();

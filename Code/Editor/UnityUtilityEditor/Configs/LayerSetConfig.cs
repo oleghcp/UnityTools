@@ -12,7 +12,8 @@ namespace UnityUtilityEditor.Configs
         public string Namespace = nameof(UnityEngine);
         public bool TagFields;
         public bool SortingLayerFields;
-        public bool LayersFields = true;
+        public bool LayerFields = true;
+        public LayerMaskFieldType MaskFieldType;
         public List<MaskField> LayerMasks;
 
         public LayerSetConfig()
@@ -25,6 +26,12 @@ namespace UnityUtilityEditor.Configs
         {
             public string Name;
             public int Mask;
+        }
+
+        public enum LayerMaskFieldType
+        {
+            LayerMask,
+            Int,
         }
     }
 }

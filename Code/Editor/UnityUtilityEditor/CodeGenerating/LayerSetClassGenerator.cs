@@ -72,7 +72,7 @@ namespace UnityUtilityEditor.CodeGenerating
                 needEmptyLine = true;
             }
 
-            if (config.LayersFields)
+            if (config.LayerFields)
             {
                 if (needEmptyLine)
                     builder.AppendLine();
@@ -104,11 +104,21 @@ namespace UnityUtilityEditor.CodeGenerating
                 {
                     builder.Append(tab)
                            .Append(tab)
-                           .Append("public ")
-                           .Append("static ")
-                           .Append("readonly ")
-                           .Append("LayerMask ")
-                           .Append(item.Name)
+                           .Append("public ");
+
+                    if (config.MaskFieldType == LayerSetConfig.LayerMaskFieldType.LayerMask)
+                    {
+                        builder.Append("static ")
+                               .Append("readonly ")
+                               .Append("LayerMask ");
+                    }
+                    else
+                    {
+                        builder.Append("const ")
+                               .Append("int ");
+                    }
+
+                    builder.Append(item.Name)
                            .Append("Mask")
                            .Append(" = ")
                            .Append(item.Mask)
