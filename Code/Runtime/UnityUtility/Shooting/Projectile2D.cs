@@ -27,9 +27,11 @@ namespace UnityUtility.Shooting
 #endif
         [Space]
         [SerializeField]
-        private UnityEvent<ProjectileEventType> _onFinal;
+        private UnityEvent<RaycastHit2D> _onHit;
         [SerializeField]
-        private UnityEvent<Vector2> _onReflect;
+        private UnityEvent _onTimeOut;
+        [SerializeField]
+        private UnityEvent<RaycastHit2D> _onReflect;
 
         private ITimeProvider _timeProvider;
         private IGravityProvider2D _gravityProvider;
@@ -38,6 +40,7 @@ namespace UnityUtility.Shooting
         private int _ricochetsLeft;
         private Vector2 _prevPos;
         private Vector2 _velocity;
+        private RaycastHit2D _hitInfo;
 
         public Vector2 PrevPos => _prevPos;
         public int RicochetsLeft => _ricochetsLeft;
@@ -69,9 +72,6 @@ namespace UnityUtility.Shooting
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider2D GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
 
-        public UnityEvent<ProjectileEventType> OnFinal => _onFinal;
-        public UnityEvent<Vector2> OnReflect => _onReflect;
-
         private void Start()
         {
             if (_playOnAwake)
@@ -96,7 +96,7 @@ namespace UnityUtility.Shooting
             transform.SetPositionAndRotation(curPos.To_XYz(transform.position.z), GetRotation());
 
             if (!_canMove)
-                Fin(ProjectileEventType.Hit);
+                InvokeHit();
 
 #if UNITY_EDITOR
             _debugging.Draw(_prevPos.To_XYz(transform.position.z), transform.position);
@@ -134,17 +134,23 @@ namespace UnityUtility.Shooting
 
             transform.SetPositionAndRotation(newPos.To_XYz(transform.position.z), GetRotation());
 
+            if (!_canMove)
+            {
+                InvokeHit();
+                return;
+            }
+
             if (_lifeTime.IsPosInfinity())
                 return;
 
             await Task.Delay((_lifeTime * 1000).ToInt());
 
-            if (!_canMove)
-                return;
-
             _canMove = false;
 
-            Fin(ProjectileEventType.TimeOut);
+            if (_autodestruct)
+                gameObject.Destroy();
+
+            _onTimeOut.Invoke();
         }
 
         public void Stop()
@@ -171,19 +177,19 @@ namespace UnityUtility.Shooting
             {
                 Vector2 direction = vector / magnitude;
 
-                if (_casting.Cast(source, direction, magnitude, out RaycastHit2D hitInfo))
+                if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    if (_ricochetsLeft != 0 && hitInfo.CompareLayer(_moving.RicochetMask))
+                    if (_ricochetsLeft != 0 && _hitInfo.CompareLayer(_moving.RicochetMask))
                     {
                         _ricochetsLeft--;
 
-                        var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
+                        var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction);
                         _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
-                        _onReflect.Invoke(hitInfo.point);
+                        _onReflect.Invoke(_hitInfo);
 
                         float near = _casting.ReflectedCastNear;
-                        Vector2 from = near == 0f ? hitInfo.point
-                                                  : Vector2.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, near);
+                        Vector2 from = near == 0f ? _hitInfo.point
+                                                  : Vector2.LerpUnclamped(_hitInfo.point, reflectionInfo.newDest, near);
 
                         UpdateState(from, reflectionInfo.newDest, out newSource, out newDest);
                         return;
@@ -191,7 +197,7 @@ namespace UnityUtility.Shooting
 
                     _canMove = false;
                     newSource = source;
-                    newDest = hitInfo.point;
+                    newDest = _hitInfo.point;
 
                     return;
                 }
@@ -212,12 +218,12 @@ namespace UnityUtility.Shooting
             return Quaternion.LookRotation(forward, right.GetRotated(90f * forward.z));
         }
 
-        private void Fin(ProjectileEventType type)
+        private void InvokeHit()
         {
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _onFinal.Invoke(type);
+            _onHit.Invoke(_hitInfo);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

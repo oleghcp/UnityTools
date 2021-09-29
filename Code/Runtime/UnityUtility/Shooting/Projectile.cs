@@ -25,9 +25,11 @@ namespace UnityUtility.Shooting
 #endif
         [Space]
         [SerializeField]
-        private UnityEvent<ProjectileEventType> _onFinal;
+        private UnityEvent<RaycastHit> _onHit;
         [SerializeField]
-        private UnityEvent<Vector3> _onReflect;
+        private UnityEvent _onTimeOut;
+        [SerializeField]
+        private UnityEvent<RaycastHit> _onReflect;
 
         private ITimeProvider _timeProvider;
         private IGravityProvider _gravityProvider;
@@ -36,6 +38,7 @@ namespace UnityUtility.Shooting
         private int _ricochetsLeft;
         private Vector3 _prevPos;
         private Vector3 _velocity;
+        private RaycastHit _hitInfo;
 
         public Vector3 PrevPos => _prevPos;
         public int RicochetsLeft => _ricochetsLeft;
@@ -67,9 +70,6 @@ namespace UnityUtility.Shooting
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
 
-        public UnityEvent<ProjectileEventType> OnFinal => _onFinal;
-        public UnityEvent<Vector3> OnReflect => _onReflect;
-
         private void Start()
         {
             if (_playOnAwake)
@@ -95,7 +95,7 @@ namespace UnityUtility.Shooting
             transform.SetPositionAndRotation(curPos, curRot);
 
             if (!_canMove)
-                Fin(ProjectileEventType.Hit);
+                InvokeHit();
 
 #if UNITY_EDITOR
             _debugging.Draw(_prevPos, curPos);
@@ -134,17 +134,23 @@ namespace UnityUtility.Shooting
 
             transform.SetPositionAndRotation(newPos, newRot);
 
+            if (!_canMove)
+            {
+                InvokeHit();
+                return;
+            }
+
             if (_lifeTime.IsPosInfinity())
                 return;
 
-            await Task.Delay((_lifeTime * 1000).ToInt());
-
-            if (!_canMove)
-                return;
+            await Task.Delay((_lifeTime * 1000).ToInt());            
 
             _canMove = false;
 
-            Fin(ProjectileEventType.TimeOut);
+            if (_autodestruct)
+                gameObject.Destroy();
+
+            _onTimeOut.Invoke();
         }
 
         public void Stop()
@@ -171,19 +177,19 @@ namespace UnityUtility.Shooting
             {
                 Vector3 direction = vector / magnitude;
 
-                if (_casting.Cast(source, direction, magnitude, out RaycastHit hitInfo))
+                if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    if (_ricochetsLeft != 0 && hitInfo.CompareLayer(_moving.RicochetMask))
+                    if (_ricochetsLeft != 0 && _hitInfo.CompareLayer(_moving.RicochetMask))
                     {
                         _ricochetsLeft--;
 
-                        var reflectionInfo = _moving.Reflect(hitInfo, dest, direction);
+                        var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction);
                         _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
-                        _onReflect.Invoke(hitInfo.point);
+                        _onReflect.Invoke(_hitInfo);
 
                         float near = _casting.ReflectedCastNear;
-                        Vector3 from = near == 0f ? hitInfo.point
-                                                  : Vector3.LerpUnclamped(hitInfo.point, reflectionInfo.newDest, near);
+                        Vector3 from = near == 0f ? _hitInfo.point
+                                                  : Vector3.LerpUnclamped(_hitInfo.point, reflectionInfo.newDest, near);
 
                         UpdateState(from, reflectionInfo.newDest, out newSource, out newDest);
                         return;
@@ -191,7 +197,7 @@ namespace UnityUtility.Shooting
 
                     _canMove = false;
                     newSource = source;
-                    newDest = hitInfo.point;
+                    newDest = _hitInfo.point;
 
                     return;
                 }
@@ -199,6 +205,14 @@ namespace UnityUtility.Shooting
 
             newSource = source;
             newDest = dest;
+        }
+
+        private void InvokeHit()
+        {
+            if (_autodestruct)
+                gameObject.Destroy();
+
+            _onHit.Invoke(_hitInfo);
         }
 
         private Vector3 UpdateDirection()
@@ -209,14 +223,6 @@ namespace UnityUtility.Shooting
                 return _velocity / length;
 
             return transform.forward;
-        }
-
-        private void Fin(ProjectileEventType type)
-        {
-            if (_autodestruct)
-                gameObject.Destroy();
-
-            _onFinal.Invoke(type);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
