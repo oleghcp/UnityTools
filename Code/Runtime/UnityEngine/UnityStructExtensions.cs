@@ -394,13 +394,13 @@ namespace UnityEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasLayer(this LayerMask mask, int layer)
         {
-            return (mask & 1 << layer) != 0;
+            return BitMask.HasFlag(mask, layer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasLayer(this LayerMask mask, string layer)
         {
-            return (mask & 1 << LayerMask.NameToLayer(layer)) != 0;
+            return BitMask.HasFlag(mask, LayerMask.NameToLayer(layer));
         }
 
         // -- //

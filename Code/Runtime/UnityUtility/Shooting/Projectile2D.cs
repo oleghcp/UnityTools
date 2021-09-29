@@ -179,7 +179,7 @@ namespace UnityUtility.Shooting
 
                 if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    if (_ricochetsLeft != 0 && _hitInfo.CompareLayer(_moving.RicochetMask))
+                    if (_ricochetsLeft != 0 && _moving.RicochetMask.HasLayer(_hitInfo.GetLayer()))
                     {
                         _ricochetsLeft--;
 
