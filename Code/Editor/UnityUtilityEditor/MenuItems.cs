@@ -41,10 +41,10 @@ namespace UnityUtilityEditor
             return Selection.objects.Length == 1;
         }
 
-        [MenuItem(nameof(UnityUtility) + "/Generate Layer Set Class")]
+        [MenuItem(nameof(UnityUtility) + "/Code/Generate Layer Set Class")]
         private static void GenerateLayerSetClass()
         {
-            LayerSetSettingsProvider.GenerateClass();
+            LayerSetWindow.CreateWindow();
         }
 
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]

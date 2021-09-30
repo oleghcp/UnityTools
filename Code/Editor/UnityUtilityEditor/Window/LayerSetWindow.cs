@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,14 +11,11 @@ using UnityUtilityEditor.Gui;
 using UnityUtilityTools;
 using UnityObject = UnityEngine.Object;
 
-#if UNITY_2018_3_OR_NEWER
-namespace UnityUtilityEditor.SettingsProviders
+namespace UnityUtilityEditor.Window
 {
-    internal class LayerSetSettingsProvider : SettingsProvider
+    internal class LayerSetWindow : EditorWindow
     {
-        private readonly string _settingsPath;
-
-        private static LayerSetSettingsProvider _instance;
+        private string _settingsPath;
 
         private LayerSetConfigWrapper _configWrapper;
         private LayerSetConfig _altConfigVersion = new LayerSetConfig();
@@ -30,26 +27,17 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private Vector2 _scrollPos;
 
-        public static LayerSetSettingsProvider Instance
+        public static void CreateWindow()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new LayerSetSettingsProvider($"{nameof(UnityUtility)}/Layer Set",
-                                                             SettingsScope.Project,
-                                                             new[] { "Layer", "Set", "Generate", "Class" });
-                }
-
-                return _instance;
-            }
+            LayerSetWindow window = GetWindow<LayerSetWindow>(true, "Layer Set");
+            window.minSize = new Vector2(350f, 500f);
         }
 
-        public LayerSetSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
+        private void OnEnable()
         {
             _settingsPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}{nameof(LayerSetConfig)}.json";
 
-            _configWrapper = ScriptableObject.CreateInstance<LayerSetConfigWrapper>();
+            _configWrapper = CreateInstance<LayerSetConfigWrapper>();
 
             if (File.Exists(_settingsPath))
             {
@@ -71,23 +59,16 @@ namespace UnityUtilityEditor.SettingsProviders
                                                                    new LayerMaskFieldDrawer());
         }
 
-        [SettingsProvider]
-        private static SettingsProvider CreateMyCustomSettingsProvider()
+        private void OnGUI()
         {
-            return Instance;
-        }
+            EditorGUILayout.Space();
 
-        public override void OnGUI(string searchContext)
-        {
-            if (GUILayout.Button("Open Tag Manager", GUILayout.Width(130f), GUILayout.Height(25f)))
+            if (GUILayout.Button("Open Tag Manager", GUILayout.Height(25f)))
                 Selection.activeObject = _tagManager.targetObject;
 
             _tagManager.Update();
 
             LayerSetConfig config = _configWrapper.Config;
-
-            float labelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = labelWidth * 1.8f;
 
             EditorGUILayout.Space();
 
@@ -129,8 +110,6 @@ namespace UnityUtilityEditor.SettingsProviders
             GUILayout.EndScrollView();
             EditorGUILayout.Space();
 
-            EditorGUIUtility.labelWidth = labelWidth;
-
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Generate Class", GUILayout.Width(120f), GUILayout.Height(25f)))
@@ -141,16 +120,16 @@ namespace UnityUtilityEditor.SettingsProviders
 
             if (GUI.changed)
             {
-                Undo.RecordObject(_configWrapper, nameof(LayerSetSettingsProvider));
+                Undo.RecordObject(_configWrapper, nameof(LayerSetWindow));
                 Helper.Swap(ref _configWrapper.Config, ref _altConfigVersion);
                 SaveAsset();
             }
         }
 
-        public static void GenerateClass()
+        public void GenerateClass()
         {
-            LayerSetConfig config = Instance._configWrapper.Config;
-            string classText = LayerSetClassGenerator.Generate(config, Instance._tagManager);
+            LayerSetConfig config = _configWrapper.Config;
+            string classText = LayerSetClassGenerator.Generate(config, _tagManager);
             GeneratingTools.CreateCsFile(classText, config.RootFolder, config.ClassName, config.Namespace);
         }
 
@@ -210,4 +189,3 @@ namespace UnityUtilityEditor.SettingsProviders
         }
     }
 }
-#endif
