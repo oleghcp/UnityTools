@@ -203,6 +203,11 @@ namespace UnityUtilityEditor.SettingsProviders
                 return EditorGUIUtility.singleLineHeight;
             }
         }
+
+        private class LayerSetConfigWrapper : ScriptableObject
+        {
+            public LayerSetConfig Config;
+        }
     }
 }
 #endif
