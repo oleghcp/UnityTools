@@ -55,6 +55,11 @@ namespace Project
 
             _inputSettings.Update();
 
+            EditorGUILayout.Space();
+
+            if (GUILayout.Button("Open Input Manager", GUILayout.MaxWidth(150f), GUILayout.Height(25f)))
+                Selection.activeObject = _inputSettings.targetObject;
+
             GUILayout.Space(5f);
 
             _scrollPos.y = GUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
