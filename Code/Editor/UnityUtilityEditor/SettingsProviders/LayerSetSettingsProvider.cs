@@ -67,8 +67,7 @@ namespace UnityUtilityEditor.SettingsProviders
             _tags = _tagManager.FindProperty("tags");
             _layers = _tagManager.FindProperty("layers");
 
-            _listDrawer = new ListDrawer<LayerSetConfig.MaskField>(_configWrapper.Config.LayerMasks,
-                                                                   ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks)),
+            _listDrawer = new ListDrawer<LayerSetConfig.MaskField>(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks)),
                                                                    new LayerMaskFieldDrawer());
         }
 
@@ -123,7 +122,7 @@ namespace UnityUtilityEditor.SettingsProviders
                                       .Where(item => item.HasUsefulData())
                                       .ToArray();
 
-                _altConfigVersion.LayerMasks = _listDrawer.Draw() as LayerSetConfig.MaskField[];
+                _altConfigVersion.LayerMasks = _listDrawer.Draw(config.LayerMasks);
             }
 
             GUILayout.FlexibleSpace();
@@ -185,7 +184,7 @@ namespace UnityUtilityEditor.SettingsProviders
         {
             public string[] Names;
 
-            void IListElementDrawer<LayerSetConfig.MaskField>.OnDrawElement(Rect position, ref LayerSetConfig.MaskField element, bool isActive, bool isFocused)
+            LayerSetConfig.MaskField IListElementDrawer<LayerSetConfig.MaskField>.OnDrawElement(Rect position, LayerSetConfig.MaskField element, bool isActive, bool isFocused)
             {
                 Rect halfPos = position;
                 halfPos.width = halfPos.width * 0.5f - EditorGuiUtility.StandardHorizontalSpacing;
@@ -196,6 +195,7 @@ namespace UnityUtilityEditor.SettingsProviders
                 halfPos.x += position.width * 0.5f;
 
                 element.Mask = EditorGui.MaskDropDown(halfPos, element.Mask, Names);
+                return element;
             }
 
             float IListElementDrawer<LayerSetConfig.MaskField>.OnElementHeight(int index)

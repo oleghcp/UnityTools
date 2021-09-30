@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -10,15 +11,18 @@ namespace UnityUtilityEditor.Gui
 {
     public interface IListElementDrawer<T>
     {
-        void OnDrawElement(Rect position, ref T element, bool isActive, bool isFocused);
+        T OnDrawElement(Rect position, T element, bool isActive, bool isFocused);
         float OnElementHeight(int index);
     }
 
     public sealed class ListDrawer<T>
     {
-        private ReorderableList _drawer;
+        private CustomReorderableList _drawer;
         private IListElementDrawer<T> _elementDrawer;
         private string _label;
+        private T[] _array = Array.Empty<T>();
+        private List<T> _list = new List<T>();
+        private bool _changed;
 
         public string Label
         {
@@ -38,52 +42,43 @@ namespace UnityUtilityEditor.Gui
             }
         }
 
-        private ListDrawer(IList elements, string label, IListElementDrawer<T> elementDrawer)
+        public ListDrawer(string label, IListElementDrawer<T> elementDrawer)
         {
-            if (elements == null || elementDrawer == null)
+            if (elementDrawer == null)
                 throw new ArgumentNullException();
 
             _label = label;
             _elementDrawer = elementDrawer;
 
-            _drawer = new ReorderableList(elements, typeof(T))
+            _drawer = new CustomReorderableList()
             {
                 drawHeaderCallback = OnDrawHeader,
                 drawElementCallback = OnDrawElement,
                 elementHeightCallback = _elementDrawer.OnElementHeight,
                 onAddCallback = OnAddElement,
                 onRemoveCallback = OnRemoveElement,
+                onChangedCallback = OnChanged,
             };
         }
 
-        public ListDrawer(List<T> elements, string label, IListElementDrawer<T> elementDrawer)
-            : this((IList)elements, label, elementDrawer)
+        public T[] Draw(in Rect position, T[] array)
         {
-
+            return (T[])DrawInternal(position, array);
         }
 
-        public ListDrawer(T[] elements, string label, IListElementDrawer<T> elementDrawer)
-            : this((IList)elements, label, elementDrawer)
+        public List<T> Draw(in Rect position, List<T> list)
         {
-
+            return (List<T>)DrawInternal(position, list);
         }
 
-        public IList<T> Draw(Rect position)
+        public T[] Draw(T[] array)
         {
-            position.x += EditorGuiUtility.StandardHorizontalSpacing;
-            position.width -= EditorGuiUtility.StandardHorizontalSpacing * 2f;
-            _drawer.DoList(position);
-            return (IList<T>)_drawer.list;
+            return (T[])DrawInternal(array);
         }
 
-        public IList<T> Draw()
+        public List<T> Draw(List<T> list)
         {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
-            _drawer.DoLayoutList();
-            GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
-            EditorGUILayout.EndHorizontal();
-            return (IList<T>)_drawer.list;
+            return (List<T>)DrawInternal(list);
         }
 
         public float GetHeight()
@@ -94,6 +89,64 @@ namespace UnityUtilityEditor.Gui
             return _drawer.GetHeight();
         }
 
+        private IList<T> DrawInternal(Rect position, IList<T> list)
+        {
+            Copy(list);
+
+            position.x += EditorGuiUtility.StandardHorizontalSpacing;
+            position.width -= EditorGuiUtility.StandardHorizontalSpacing * 2f;
+            _drawer.DoList(position);
+
+            return GetChanges(list);
+
+        }
+
+        private IList<T> DrawInternal(IList<T> list)
+        {
+            Copy(list);
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
+            _drawer.DoLayoutList();
+            GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
+            EditorGUILayout.EndHorizontal();
+
+            return GetChanges(list);
+        }
+
+        private void Copy(IList<T> list)
+        {
+            if (list is Array)
+            {
+                if (_array.Length != list.Count)
+                    _array = new T[list.Count];
+
+                list.CopyTo(_array, 0);
+                _drawer.list = _array;
+            }
+            else
+            {
+                _list.Clear();
+                _list.AddRange(list);
+                _drawer.list = _list;
+            }
+        }
+
+        private IList<T> GetChanges(IList<T> list)
+        {
+            if (_changed)
+            {
+                _changed = false;
+
+                if (list is Array)
+                    return _drawer.List.ToArray();
+
+                return list.ToList();
+            }
+
+            return list;
+        }
+
         private void OnDrawHeader(Rect rect)
         {
             EditorGUI.LabelField(rect, _label);
@@ -102,7 +155,7 @@ namespace UnityUtilityEditor.Gui
             rect.x += rect.width - fieldWidth;
             rect.width = fieldWidth;
 
-            IList<T> list = _drawer.list as IList<T>;
+            IList<T> list = _drawer.List;
 
             int newCount = EditorGUI.DelayedIntField(rect, list.Count);
 
@@ -119,6 +172,8 @@ namespace UnityUtilityEditor.Gui
 
                 if (_drawer.list.IsFixedSize)
                     _drawer.list = list.ToArray();
+
+                _changed = true;
             }
         }
 
@@ -127,14 +182,17 @@ namespace UnityUtilityEditor.Gui
             if (index >= _drawer.list.Count)
                 return;
 
-            T element = (T)_drawer.list[index];
-            _elementDrawer.OnDrawElement(position, ref element, isActive, isFocused);
-            _drawer.list[index] = element;
+            EditorGUI.BeginChangeCheck();
+
+            _drawer.list[index] = _elementDrawer.OnDrawElement(position, (T)_drawer.list[index], isActive, isFocused);
+
+            if (EditorGUI.EndChangeCheck())
+                _changed = true;
         }
 
         private void OnAddElement(ReorderableList _)
         {
-            IList<T> list = _drawer.list as IList<T>;
+            IList<T> list = _drawer.List;
 
             if (_drawer.list.IsFixedSize)
                 list = list.ToList();
@@ -150,7 +208,7 @@ namespace UnityUtilityEditor.Gui
         private void OnRemoveElement(ReorderableList _)
         {
             IList<int> indices = _drawer.selectedIndices;
-            IList<T> list = _drawer.list as IList<T>;
+            IList<T> list = _drawer.List;
 
             if (_drawer.list.IsFixedSize)
                 list = list.ToList();
@@ -172,6 +230,26 @@ namespace UnityUtilityEditor.Gui
 
             if (list.Count > 0)
                 _drawer.Select(list.Count - 1);
+        }
+
+        private void OnChanged(ReorderableList _)
+        {
+            _changed = true;
+        }
+
+        private class CustomReorderableList : ReorderableList
+        {
+            public IList<T> List
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => (IList<T>)list;
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                set => list = (IList)value;
+            }
+
+            public CustomReorderableList() : base(null, typeof(T))
+            {
+            }
         }
     }
 }
