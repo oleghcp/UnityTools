@@ -79,7 +79,8 @@ namespace UnityEditor
 
         public static Data GetData(Type enumType)
         {
-            _data ??= new Dictionary<Type, Data>();
+            if (_data == null)
+                _data = new Dictionary<Type, Data>();
 
             if (!_data.TryGetValue(enumType, out Data data))
             {
