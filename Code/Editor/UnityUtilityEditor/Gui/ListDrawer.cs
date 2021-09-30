@@ -16,15 +16,9 @@ namespace UnityUtilityEditor.Gui
 
     public sealed class ListDrawer<T>
     {
-        private ReorderableList _list;
+        private ReorderableList _drawer;
         private IListElementDrawer<T> _elementDrawer;
         private string _label;
-
-        public ReorderableList List
-        {
-            get => _list;
-            set => _list = value;
-        }
 
         public string Label
         {
@@ -52,7 +46,7 @@ namespace UnityUtilityEditor.Gui
             _label = label;
             _elementDrawer = elementDrawer;
 
-            _list = new ReorderableList(elements, typeof(T))
+            _drawer = new ReorderableList(elements, typeof(T))
             {
                 drawHeaderCallback = OnDrawHeader,
                 drawElementCallback = OnDrawElement,
@@ -78,26 +72,26 @@ namespace UnityUtilityEditor.Gui
         {
             position.x += EditorGuiUtility.StandardHorizontalSpacing;
             position.width -= EditorGuiUtility.StandardHorizontalSpacing * 2f;
-            _list.DoList(position);
-            return (IList<T>)_list.list;
+            _drawer.DoList(position);
+            return (IList<T>)_drawer.list;
         }
 
         public IList<T> Draw()
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
-            _list.DoLayoutList();
+            _drawer.DoLayoutList();
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             EditorGUILayout.EndHorizontal();
-            return (IList<T>)_list.list;
+            return (IList<T>)_drawer.list;
         }
 
         public float GetHeight()
         {
-            if (_list == null)
+            if (_drawer == null)
                 return EditorGUIUtility.singleLineHeight;
 
-            return _list.GetHeight();
+            return _drawer.GetHeight();
         }
 
         private void OnDrawHeader(Rect rect)
@@ -108,57 +102,57 @@ namespace UnityUtilityEditor.Gui
             rect.x += rect.width - fieldWidth;
             rect.width = fieldWidth;
 
-            IList<T> list = _list.list as IList<T>;
+            IList<T> list = _drawer.list as IList<T>;
 
             int newCount = EditorGUI.DelayedIntField(rect, list.Count);
 
             if (list.Count != newCount)
             {
-                if (_list.list.IsFixedSize)
+                if (_drawer.list.IsFixedSize)
                     list = list.ToList();
 
-                Action change = list.Count > newCount ? (Action)(() => list.Pop())
-                                                      : () => list.Add(Activator.CreateInstance<T>());
+                var change = list.Count > newCount ? (Action)(() => list.Pop())
+                                                   : () => list.Add(Activator.CreateInstance<T>());
 
                 while (list.Count != newCount)
                     change();
 
-                if (_list.list.IsFixedSize)
-                    _list.list = list.ToArray();
+                if (_drawer.list.IsFixedSize)
+                    _drawer.list = list.ToArray();
             }
         }
 
         private void OnDrawElement(Rect position, int index, bool isActive, bool isFocused)
         {
-            if (index >= _list.list.Count)
+            if (index >= _drawer.list.Count)
                 return;
 
-            T element = (T)_list.list[index];
+            T element = (T)_drawer.list[index];
             _elementDrawer.OnDrawElement(position, ref element, isActive, isFocused);
-            _list.list[index] = element;
+            _drawer.list[index] = element;
         }
 
         private void OnAddElement(ReorderableList _)
         {
-            IList<T> list = _list.list as IList<T>;
+            IList<T> list = _drawer.list as IList<T>;
 
-            if (_list.list.IsFixedSize)
+            if (_drawer.list.IsFixedSize)
                 list = list.ToList();
 
             list.Add(Activator.CreateInstance<T>());
 
-            if (_list.list.IsFixedSize)
-                _list.list = list.ToArray();
+            if (_drawer.list.IsFixedSize)
+                _drawer.list = list.ToArray();
 
-            _list.Select(list.Count - 1);
+            _drawer.Select(list.Count - 1);
         }
 
         private void OnRemoveElement(ReorderableList _)
         {
-            IList<int> indices = _list.selectedIndices;
-            IList<T> list = _list.list as IList<T>;
+            IList<int> indices = _drawer.selectedIndices;
+            IList<T> list = _drawer.list as IList<T>;
 
-            if (_list.list.IsFixedSize)
+            if (_drawer.list.IsFixedSize)
                 list = list.ToList();
 
             if (indices.Count == 0)
@@ -173,11 +167,11 @@ namespace UnityUtilityEditor.Gui
                 }
             }
 
-            if (_list.list.IsFixedSize)
-                _list.list = list.ToArray();
+            if (_drawer.list.IsFixedSize)
+                _drawer.list = list.ToArray();
 
             if (list.Count > 0)
-                _list.Select(list.Count - 1);
+                _drawer.Select(list.Count - 1);
         }
     }
 }
