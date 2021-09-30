@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 
 namespace UnityUtilityEditor.Configs
@@ -14,7 +13,7 @@ namespace UnityUtilityEditor.Configs
         public bool SortingLayerFields;
         public bool LayerFields = true;
         public LayerMaskFieldType MaskFieldType;
-        public List<MaskField> LayerMasks = new List<MaskField>();
+        public MaskField[] LayerMasks = new MaskField[0];
 
         [Serializable]
         public struct MaskField

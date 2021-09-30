@@ -97,7 +97,7 @@ namespace UnityUtilityEditor.CodeGenerating
                            .AppendLine();
                 }
 
-                if (config.LayerMasks.Count > 0)
+                if (config.LayerMasks.Length > 0)
                     builder.AppendLine();
 
                 foreach (var item in config.LayerMasks)

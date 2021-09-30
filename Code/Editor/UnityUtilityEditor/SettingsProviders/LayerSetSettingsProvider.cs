@@ -121,7 +121,8 @@ namespace UnityUtilityEditor.SettingsProviders
                                       .Select(item => item.stringValue)
                                       .Where(item => item.HasUsefulData())
                                       .ToArray();
-                _listDrawer.Draw();
+
+                _altConfigVersion.LayerMasks = _listDrawer.Draw() as LayerSetConfig.MaskField[];
             }
 
             GUILayout.FlexibleSpace();
