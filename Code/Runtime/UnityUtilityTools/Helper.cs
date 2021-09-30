@@ -1,10 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityUtility;
 
 namespace UnityUtilityTools
 {
     public static class Helper
     {
+        public static void Swap<T>(ref T a, ref T b)
+        {
+            T temp = a;
+            a = b;
+            b = temp;
+        }
+
+        public static void Swap<T>(IList<T> list, int i, int j)
+        {
+            T tmp = list[i];
+            list[i] = list[j];
+            list[j] = tmp;
+        }
+
         //The copy of internal System.Numerics.Hashing.HashHelpers
         public static int Combine(int hc1, int hc2)
         {

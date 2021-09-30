@@ -13,10 +13,7 @@ namespace UnityUtility
             while (last > 1)
             {
                 int cur = generator.Next(last--);
-
-                T value = array[cur];
-                array[cur] = array[last];
-                array[last] = value;
+                Helper.Swap(ref array[cur], ref array[last]);
             }
         }
 
@@ -27,10 +24,7 @@ namespace UnityUtility
             while (last > 1)
             {
                 int cur = UnityEngine.Random.Range(0, last--);
-
-                T value = array[cur];
-                array[cur] = array[last];
-                array[last] = value;
+                Helper.Swap(ref array[cur], ref array[last]);
             }
         }
 
@@ -77,14 +71,7 @@ namespace UnityUtility
                 while (array[j].CompareTo(pivot) > 0) { j--; }
 
                 if (i <= j)
-                {
-                    T tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-
-                    i++;
-                    j--;
-                }
+                    Helper.Swap(ref array[i++], ref array[j--]);
             }
 
             if (left < j)
@@ -105,14 +92,7 @@ namespace UnityUtility
                 while (comparer(array[j], pivot) > 0) { j--; }
 
                 if (i <= j)
-                {
-                    T tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-
-                    i++;
-                    j--;
-                }
+                    Helper.Swap(ref array[i++], ref array[j--]);
             }
 
             if (left < j)

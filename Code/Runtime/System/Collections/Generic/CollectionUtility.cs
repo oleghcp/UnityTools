@@ -84,10 +84,7 @@ namespace System.Collections.Generic
             while (last > 1)
             {
                 int cur = generator.Next(last--);
-
-                T value = collection[cur];
-                collection[cur] = collection[last];
-                collection[last] = value;
+                collection.Swap(cur, last);
             }
         }
 
@@ -98,10 +95,7 @@ namespace System.Collections.Generic
             while (last > 1)
             {
                 int cur = UnityEngine.Random.Range(0, last--);
-
-                T value = collection[cur];
-                collection[cur] = collection[last];
-                collection[last] = value;
+                collection.Swap(cur, last);
             }
         }
 
@@ -130,37 +124,30 @@ namespace System.Collections.Generic
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void QuickSort<T>(IList<T> array, int left, int right, IComparer<T> comparer)
+        internal static void QuickSort<T>(IList<T> collection, int left, int right, IComparer<T> comparer)
         {
-            QuickSort(array, left, right, comparer.Compare);
+            QuickSort(collection, left, right, comparer.Compare);
         }
 
-        internal static void QuickSort<T>(IList<T> array, int left, int right, Comparison<T> comparison)
+        internal static void QuickSort<T>(IList<T> collection, int left, int right, Comparison<T> comparison)
         {
             int i = left, j = right;
-            T pivot = array[(left + right) / 2];
+            T pivot = collection[(left + right) / 2];
 
             while (i < j)
             {
-                while (comparison(array[i], pivot) < 0) { i++; }
-                while (comparison(array[j], pivot) > 0) { j--; }
+                while (comparison(collection[i], pivot) < 0) { i++; }
+                while (comparison(collection[j], pivot) > 0) { j--; }
 
                 if (i <= j)
-                {
-                    T tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-
-                    i++;
-                    j--;
-                }
+                    collection.Swap(i++, j--);
             }
 
             if (left < j)
-                QuickSort(array, left, j, comparison);
+                QuickSort(collection, left, j, comparison);
 
             if (i < right)
-                QuickSort(array, i, right, comparison);
+                QuickSort(collection, i, right, comparison);
         }
 
         internal static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)

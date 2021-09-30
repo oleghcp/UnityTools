@@ -7,6 +7,18 @@ namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Swap<T>(this T[] self, int i, int j)
+        {
+            Helper.Swap(ref self[i], ref self[j]);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Swap<T>(this IList<T> self, int i, int j)
+        {
+            Helper.Swap(self, i, j);
+        }
+
         /// <summary>
         /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
         /// </summary>        

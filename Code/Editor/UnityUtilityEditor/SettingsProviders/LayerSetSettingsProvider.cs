@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityUtilityEditor.CodeGenerating;
 using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Gui;
+using UnityUtilityTools;
 using UnityObject = UnityEngine.Object;
 
 #if UNITY_2018_3_OR_NEWER
@@ -142,10 +143,7 @@ namespace UnityUtilityEditor.SettingsProviders
             if (GUI.changed)
             {
                 Undo.RecordObject(_configWrapper, nameof(LayerSetSettingsProvider));
-                LayerSetConfig tmp = _configWrapper.Config;
-                _configWrapper.Config = _altConfigVersion;
-                _altConfigVersion = tmp;
-
+                Helper.Swap(ref _configWrapper.Config, ref _altConfigVersion);
                 SaveAsset();
             }
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityUtility;
+using UnityUtilityTools;
 
 namespace System
 {
@@ -159,10 +160,14 @@ namespace System
 
             for (int i = 0; i < length; i++)
             {
-                T tmp = self[startIndex + i];
-                self[startIndex + i] = self[backIndex - i];
-                self[backIndex - i] = tmp;
+                Helper.Swap(ref self[startIndex + i], ref self[backIndex - i]);
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Swap<T>(this in Span<T> self, int i, int j) where T : unmanaged
+        {
+            Helper.Swap(ref self[i], ref self[j]);
         }
     }
 }
