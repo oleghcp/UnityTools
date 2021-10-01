@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.SettingsProviders;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
 
@@ -47,11 +46,13 @@ namespace UnityUtilityEditor
             LayerSetWindow.CreateWindow();
         }
 
+#if !UNITY_2018_3_OR_NEWER
         [MenuItem(nameof(UnityUtility) + "/Gamepad Axes")]
         private static void GamepadAxes()
         {
             GamepadAxesWindow.Create();
         }
+#endif
 
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]
         private static void RemoveEmptyFolders()

@@ -1,12 +1,13 @@
-﻿using UnityEditor;
+﻿#if !UNITY_2018_3_OR_NEWER
+using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.SettingsProviders;
+using UnityUtilityEditor.Window.GamepadAxes;
 
 namespace UnityUtilityEditor.Window
 {
     internal class GamepadAxesWindow : EditorWindow
     {
-        private SettingsProvider _settingsPropvider;
+        private GamepadAxesDrawer _drawer;
 
         public static void Create()
         {
@@ -16,12 +17,13 @@ namespace UnityUtilityEditor.Window
 
         private void OnEnable()
         {
-            _settingsPropvider = GamepadAxesSettingsProvider.CreateProvider();
+            _drawer = new GamepadAxesDrawer();
         }
 
         private void OnGUI()
         {
-            _settingsPropvider.OnGUI(null);
+            _drawer.OnGUI();
         }
     }
 }
+#endif
