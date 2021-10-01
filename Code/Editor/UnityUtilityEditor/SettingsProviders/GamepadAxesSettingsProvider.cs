@@ -1,3 +1,4 @@
+#if UNITY_2018_3_OR_NEWER
 using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
@@ -5,16 +6,13 @@ using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
 using UnityObject = UnityEngine.Object;
 
-#if UNITY_2018_3_OR_NEWER
-namespace Project
+namespace UnityUtilityEditor.SettingsProviders
 {
     public class GamepadAxesSettingsProvider : SettingsProvider
     {
-        private SerializedObject _playerSettings;
         private SerializedObject _inputSettings;
 
         private SerializedProperty _axesArray;
-        private SerializedProperty _activeInputHandler;
 
         private List<string> _names = new List<string>();
 
@@ -25,20 +23,17 @@ namespace Project
 
         public GamepadAxesSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
         {
-            string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}ProjectSettings{AssetDatabaseExt.ASSET_EXTENSION}";
-            PlayerSettings playerSettings = AssetDatabase.LoadAssetAtPath<PlayerSettings>(assetPath);
-            _playerSettings = new SerializedObject(playerSettings);
-            _activeInputHandler = _playerSettings.FindProperty("activeInputHandler");
-
-            assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}InputManager{AssetDatabaseExt.ASSET_EXTENSION}";
+            string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}InputManager{AssetDatabaseExt.ASSET_EXTENSION}";
             UnityObject inputSettings = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
             _inputSettings = new SerializedObject(inputSettings);
             _axesArray = _inputSettings.FindProperty("m_Axes");
             RefreshAxes();
         }
 
+#if ENABLE_LEGACY_INPUT_MANAGER
         [SettingsProvider]
-        private static SettingsProvider CreateMyCustomSettingsProvider()
+#endif
+        internal static SettingsProvider CreateProvider()
         {
             return new GamepadAxesSettingsProvider($"{nameof(UnityUtility)}/Gamepad Axes",
                                                    SettingsScope.Project,
@@ -47,12 +42,6 @@ namespace Project
 
         public override void OnGUI(string searchContext)
         {
-            if (_activeInputHandler.intValue == 1)
-            {
-                EditorGUILayout.HelpBox("Active input handling doesn't include Input Manager (Old).", MessageType.Info);
-                return;
-            }
-
             _inputSettings.Update();
 
             EditorGUILayout.Space();

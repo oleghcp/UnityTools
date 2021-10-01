@@ -47,6 +47,12 @@ namespace UnityUtilityEditor
             LayerSetWindow.CreateWindow();
         }
 
+        [MenuItem(nameof(UnityUtility) + "/Gamepad Axes")]
+        private static void GamepadAxes()
+        {
+            GamepadAxesWindow.Create();
+        }
+
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]
         private static void RemoveEmptyFolders()
         {
