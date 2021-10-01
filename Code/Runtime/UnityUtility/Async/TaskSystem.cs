@@ -25,18 +25,11 @@ namespace UnityUtility.Async
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void SetUp()
         {
-            IAsyncSettings settings = getSettings();
+            IAsyncSettings settings = AsyncSettings.GetSettings();
             LongIdGenerator idProvider = new LongIdGenerator();
 
             _globals = new TaskFactory(settings, idProvider, true);
             _locals = new TaskFactory(settings, idProvider, false);
-
-            IAsyncSettings getSettings()
-            {
-                AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
-                return settings == null ? new DefaultSettings()
-                                        : settings as IAsyncSettings;
-            }
         }
 
         public static void RegisterStopper(ITaskStopper stopper)
@@ -125,10 +118,20 @@ namespace UnityUtility.Async
             return _locals.GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
         }
 
-        private class DefaultSettings : IAsyncSettings
+        private class AsyncSettings : IAsyncSettings
         {
             bool IAsyncSettings.CanBeStopped => true;
             bool IAsyncSettings.CanBeStoppedGlobally => false;
+
+            public static IAsyncSettings GetSettings()
+            {
+                AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
+
+                if (settings != null)
+                    return settings;
+
+                return new AsyncSettings();
+            }
         }
     }
 }

@@ -17,7 +17,11 @@ namespace UnityUtilityEditor.Window
             KeyAxesWindow window = CreateInstance<KeyAxesWindow>();
             window.SetUp(param, keyFuncsEnum);
             Rect buttonRect = new Rect(Event.current.mousePosition, default);
+#if UNITY_2019_1_OR_NEWER
             buttonRect = GUIUtility.GUIToScreenRect(buttonRect);
+#else
+            buttonRect.position = GUIUtility.GUIToScreenPoint(buttonRect.position);
+#endif
             window.ShowAsDropDown(buttonRect, new Vector2(200f, getHeigth()));
 
             float getHeigth()

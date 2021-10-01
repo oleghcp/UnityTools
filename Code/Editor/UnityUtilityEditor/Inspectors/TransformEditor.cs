@@ -18,9 +18,11 @@ namespace UnityUtilityEditor.Inspectors
         private const float LABEL_WIDTH = 40f;
 
         private string[] _toolbarNames = new string[] { "Local", "World" };
+#if UNITY_2019_1_OR_NEWER
         private string _pivotModeWarning = $"→ {PivotMode.Center}";
         private string _pivotRotationWarning = $"→ {PivotRotation.Global}";
         private Rect _sceneGuiArea = new Rect(5f, 0f, 60f, 40f);
+#endif
 
         private static bool _world;
 
@@ -45,7 +47,9 @@ namespace UnityUtilityEditor.Inspectors
             Tools.pivotModeChanged += SceneView.RepaintAll;
             Tools.pivotRotationChanged += SceneView.RepaintAll;
 #endif
+#if UNITY_2019_1_OR_NEWER
             SceneView.beforeSceneGui += DarwSceneGUI;
+#endif
         }
 
         private void OnDisable()
@@ -54,7 +58,9 @@ namespace UnityUtilityEditor.Inspectors
             Tools.pivotModeChanged -= SceneView.RepaintAll;
             Tools.pivotRotationChanged -= SceneView.RepaintAll;
 #endif
+#if UNITY_2019_1_OR_NEWER
             SceneView.beforeSceneGui -= DarwSceneGUI;
+#endif
         }
 
         public override void OnInspectorGUI()
@@ -112,6 +118,7 @@ namespace UnityUtilityEditor.Inspectors
 #endif
         }
 
+#if UNITY_2019_1_OR_NEWER
         private void DarwSceneGUI(SceneView sceneView)
         {
             if (sceneView.in2DMode)
@@ -134,6 +141,7 @@ namespace UnityUtilityEditor.Inspectors
             GUI.color = Colours.White;
             GUILayout.EndArea();
         }
+#endif
 
 #if !UNITY_2019_3_OR_NEWER
         private void OnSceneGUI()

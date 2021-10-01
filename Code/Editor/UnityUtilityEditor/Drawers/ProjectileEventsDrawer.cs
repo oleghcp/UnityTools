@@ -1,9 +1,9 @@
+#if UNITY_2019_3_OR_NEWER
 using System;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Shooting;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(ProjectileEvents))]

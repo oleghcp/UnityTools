@@ -140,7 +140,11 @@ namespace UnityUtilityEditor.Inspectors
             Vector3 up = axis * size;
             Vector3 p1 = center - up;
             Vector3 p2 = center + up;
+#if UNITY_2020_2_OR_NEWER
             Handles.DrawLine(p1, p2, 2f);
+#else
+            Handles.DrawLine(p1, p2);
+#endif
         }
 
         private float GetRatio(float width, float height)

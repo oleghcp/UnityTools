@@ -86,7 +86,7 @@ namespace Project
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.Space(5f);
+            GUILayout.Space(5f);
 
             if (GUILayout.Button("Add axes", GUILayout.Width(190f), GUILayout.Height(25f)))
             {
@@ -102,7 +102,7 @@ namespace Project
                 RefreshAxes();
             }
 
-            EditorGUILayout.Space(5f);
+            GUILayout.Space(5f);
 
             if (GUILayout.Button("Remove axes", GUILayout.Height(25f), GUILayout.Width(190f)))
             {

@@ -60,7 +60,7 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
                     DrawLines<KMKeyCode, GPKeyCode>(_keyEnumTypeVal, _keyIndices);
                     DrawButtons(_keyEnumTypeVal, _keyIndices, InputEnumUtility.GetKeyDefVal);
 
-                    EditorGUILayout.Space(5f);
+                    GUILayout.Space(5f);
 
                     if (IsKeyMouse())
                     {

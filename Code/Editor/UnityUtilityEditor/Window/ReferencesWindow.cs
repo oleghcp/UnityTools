@@ -30,7 +30,7 @@ namespace UnityUtilityEditor.Window
 
         private void OnGUI()
         {
-            EditorGUILayout.Space(5f);
+            GUILayout.Space(5f);
 
             EditorGUILayout.BeginHorizontal();
 
@@ -42,7 +42,7 @@ namespace UnityUtilityEditor.Window
 
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.Space(5f);
+            GUILayout.Space(5f);
 
             if (_objects == null)
             {

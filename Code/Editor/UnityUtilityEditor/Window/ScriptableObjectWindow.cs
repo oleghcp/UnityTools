@@ -77,7 +77,7 @@ namespace UnityUtilityEditor.Window
 
             _targetRoot = EditorGUILayout.ObjectField("Parrent Asset", _targetRoot, typeof(UnityObject), false);
 
-            EditorGUILayout.Space(20f);
+            GUILayout.Space(20f);
 
             using (new EditorGUILayout.HorizontalScope())
             {
