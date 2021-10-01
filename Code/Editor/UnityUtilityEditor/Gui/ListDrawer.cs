@@ -107,7 +107,12 @@ namespace UnityUtilityEditor.Gui
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
-            _drawer.DoLayoutList();
+
+#if !UNITY_2020_4_OR_NEWER
+            using (new EditorGUILayout.VerticalScope())
+#endif
+                _drawer.DoLayoutList();
+
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             EditorGUILayout.EndHorizontal();
 
