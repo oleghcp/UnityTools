@@ -1,9 +1,9 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityUtility.MathExt;
 
+#if UNITY_2019_3_OR_NEWER
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
@@ -23,16 +23,12 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private Debugger _debugging;
 #endif
-        [Space]
-        [SerializeField]
-        private UnityEvent<RaycastHit> _onHit;
-        [SerializeField]
-        private UnityEvent _onTimeOut;
-        [SerializeField]
-        private UnityEvent<RaycastHit> _onReflect;
+        [SerializeReference]
+        private ProjectileEvents _events;
 
         private ITimeProvider _timeProvider;
         private IGravityProvider _gravityProvider;
+        private IEventListener _listener;
 
         private bool _canMove;
         private int _ricochetsLeft;
@@ -67,8 +63,10 @@ namespace UnityUtility.Shooting
             set => _moving = value;
         }
 
+        public ProjectileEvents Events => _events;
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
+        public IEventListener Listener { get => _listener; set => _listener = value; }
 
         private void Start()
         {
@@ -150,22 +148,13 @@ namespace UnityUtility.Shooting
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _onTimeOut.Invoke();
+            _events?.OnTimeOut.Invoke();
+            _listener?.OnTimeOut();
         }
 
         public void Stop()
         {
             _canMove = false;
-        }
-
-        public void OverrideTimeProvider(ITimeProvider timeProvider)
-        {
-            _timeProvider = timeProvider;
-        }
-
-        public void OverrideGravityProvider(IGravityProvider gravityProvider)
-        {
-            _gravityProvider = gravityProvider;
         }
 
         private void UpdateState(in Vector3 source, in Vector3 dest, out Vector3 newSource, out Vector3 newDest)
@@ -185,7 +174,9 @@ namespace UnityUtility.Shooting
 
                         var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction);
                         _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
-                        _onReflect.Invoke(_hitInfo);
+
+                        _events?.OnReflect.Invoke(_hitInfo);
+                        _listener?.OnReflect(_hitInfo);
 
                         float near = _casting.ReflectedCastNear;
                         Vector3 from = near == 0f ? _hitInfo.point
@@ -212,7 +203,8 @@ namespace UnityUtility.Shooting
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _onHit.Invoke(_hitInfo);
+            _events?.OnHit.Invoke(_hitInfo);
+            _listener?.OnHit(_hitInfo);
         }
 
         private Vector3 UpdateDirection()
@@ -240,3 +232,4 @@ namespace UnityUtility.Shooting
         }
     }
 }
+#endif

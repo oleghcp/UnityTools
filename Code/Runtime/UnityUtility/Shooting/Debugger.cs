@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
 namespace UnityUtility.Shooting
 {
-#if UNITY_EDITOR
     [Serializable]
     internal struct Debugger
     {
@@ -18,5 +18,5 @@ namespace UnityUtility.Shooting
                 Debug.DrawLine(from, to, Color, Duration);
         }
     }
-#endif
 }
+#endif

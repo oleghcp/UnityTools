@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
+#if UNITY_2019_3_OR_NEWER
 namespace UnityUtility.Shooting
 {
     [Serializable]
@@ -71,3 +72,4 @@ namespace UnityUtility.Shooting
         }
     }
 }
+#endif
