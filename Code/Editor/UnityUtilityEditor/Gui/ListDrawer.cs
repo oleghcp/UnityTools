@@ -202,14 +202,14 @@ namespace UnityUtilityEditor.Gui
             if (_drawer.list.IsFixedSize)
                 _drawer.list = list.ToArray();
 
-#if UNITY_2019_1_OR_NEWER
+#if UNITY_2020_4_OR_NEWER
             _drawer.Select(list.Count - 1);
 #endif
         }
 
         private void OnRemoveElement(ReorderableList _)
         {
-#if UNITY_2019_1_OR_NEWER
+#if UNITY_2020_4_OR_NEWER
             IList<int> indices = _drawer.selectedIndices;
 #else
             IList<int> indices = new[] { _drawer.index };
@@ -234,7 +234,7 @@ namespace UnityUtilityEditor.Gui
             if (_drawer.list.IsFixedSize)
                 _drawer.list = list.ToArray();
 
-#if UNITY_2019_1_OR_NEWER
+#if UNITY_2020_4_OR_NEWER
             if (list.Count > 0)
                 _drawer.Select(list.Count - 1);
 #endif
