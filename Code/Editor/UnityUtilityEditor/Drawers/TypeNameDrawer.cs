@@ -68,11 +68,11 @@ namespace UnityUtilityEditor.Drawers
                 menu.AddItem(entryName, entryName == property.stringValue, () => assignField(property, entryName));
             }
 
-            void assignField(SerializedProperty property, string newValue)
+            void assignField(SerializedProperty prop, string newValue)
             {
-                property.serializedObject.Update();
-                property.stringValue = newValue;
-                property.serializedObject.ApplyModifiedProperties();
+                prop.serializedObject.Update();
+                prop.stringValue = newValue;
+                prop.serializedObject.ApplyModifiedProperties();
             }
         }
     }

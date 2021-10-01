@@ -114,7 +114,6 @@ namespace UnityUtilityEditor.Drawers
                     return;
 
                 property.serializedObject.Update();
-                SerializedProperty arrayProp = property.FindPropertyRelative(BitList.ArrayFieldName);
                 for (int i = 0; i < bitList.IntBlocks.Count; i++)
                 {
                     arrayProp.GetArrayElementAtIndex(i).intValue = bitList.IntBlocks[i];

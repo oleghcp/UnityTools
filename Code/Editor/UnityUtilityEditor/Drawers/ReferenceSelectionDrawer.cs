@@ -94,11 +94,11 @@ namespace UnityUtilityEditor.Drawers
                        type.IsDefined(typeof(SerializableAttribute), false);
             }
 
-            void assignField(SerializedProperty property, object newValue)
+            void assignField(SerializedProperty prop, object newValue)
             {
-                property.serializedObject.Update();
-                property.managedReferenceValue = newValue;
-                property.serializedObject.ApplyModifiedProperties();
+                prop.serializedObject.Update();
+                prop.managedReferenceValue = newValue;
+                prop.serializedObject.ApplyModifiedProperties();
             }
         }
     }

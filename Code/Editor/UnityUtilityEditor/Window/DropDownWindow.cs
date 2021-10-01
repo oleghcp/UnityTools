@@ -336,9 +336,9 @@ namespace UnityUtilityEditor.Window
 
         private Vector2 GetWinSize(IList<Data> items)
         {
-            return new Vector2(getWidth(items), getHeight(items.Count));
+            return new Vector2(getWidth(), getHeight());
 
-            float getHeight(int itemsCount)
+            float getHeight()
             {
                 int linesCount = getLinesCount();
                 float linesHeight = EditorGUIUtility.singleLineHeight * linesCount;
@@ -347,14 +347,14 @@ namespace UnityUtilityEditor.Window
 
                 int getLinesCount()
                 {
-                    if (itemsCount == 0)
+                    if (items.Count == 0)
                         return 2;
 
-                    return itemsCount + 1;
+                    return items.Count + 1;
                 }
             }
 
-            float getWidth(IList<Data> items)
+            float getWidth()
             {
                 GUIStyle labelStyle = GUI.skin.label;
 
