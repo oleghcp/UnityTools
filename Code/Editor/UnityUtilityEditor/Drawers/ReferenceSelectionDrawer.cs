@@ -1,37 +1,18 @@
-﻿using System;
+﻿#if UNITY_2019_3_OR_NEWER
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtilityEditor.Window;
 
-#if UNITY_2019_3_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]
-    internal class ReferenceSelectionDrawer : PropertyDrawer
+    internal class ReferenceSelectionDrawer : SerializeReferenceDrawer<ReferenceSelectionAttribute>
     {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            if (EditorUtilityExt.GetFieldType(this).IsValueType)
-            {
-                EditorGui.ErrorLabel(position, label, $"Use {nameof(ReferenceSelectionAttribute)} only with reference types.");
-                return;
-            }
-
-            label = EditorGUI.BeginProperty(position, label, property);
-            DrawSelectionButton(position, property);
-            EditorGUI.PropertyField(position, property, label, true);
-            EditorGUI.EndProperty();
-        }
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return EditorGUI.GetPropertyHeight(property, label);
-        }
-
-        private void DrawSelectionButton(Rect position, SerializedProperty property)
+        protected override void DrawContent(Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 

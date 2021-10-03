@@ -2,30 +2,14 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Shooting;
+using UnityUtility;
 
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(ProjectileEvents))]
-    [CustomPropertyDrawer(typeof(ProjectileEvents2D))]
-    internal class ProjectileEventsDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(InitToggleAttribute))]
+    internal class InitToggleDrawer : SerializeReferenceDrawer<InitToggleAttribute>
     {
-        private const string LABEL = "Use Events";
-
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            label = EditorGUI.BeginProperty(position, EditorGuiUtility.TempContent(LABEL), property);
-            DrawSelectionButton(position, property);
-            EditorGUI.PropertyField(position, property, label, true);
-            EditorGUI.EndProperty();
-        }
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return EditorGUI.GetPropertyHeight(property, label);
-        }
-
-        private void DrawSelectionButton(Rect position, SerializedProperty property)
+        protected override void DrawContent(Rect position, SerializedProperty property)
         {
             float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
 

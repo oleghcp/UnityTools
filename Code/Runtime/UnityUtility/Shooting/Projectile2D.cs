@@ -22,10 +22,10 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private ProjectileCaster _casting;
 #if UNITY_EDITOR
-        [SerializeField]
+        [SerializeReference, InitToggle]
         private Debugger _debugging;
 #endif
-        [SerializeReference]
+        [SerializeReference, InitToggle]
         private ProjectileEvents2D _events;
 
         private ITimeProvider _timeProvider;
@@ -97,7 +97,7 @@ namespace UnityUtility.Shooting
                 InvokeHit();
 
 #if UNITY_EDITOR
-            _debugging.Draw(_prevPos.To_XYz(transform.position.z), transform.position);
+            _debugging?.Draw(_prevPos.To_XYz(transform.position.z), transform.position);
 #endif
         }
 
@@ -113,8 +113,6 @@ namespace UnityUtility.Shooting
             _moving.SpeedRemainder = 1f;
             _casting.HitMask = LayerMask.GetMask("Default");
             _casting.ReflectedCastNear = 0.1f;
-            _debugging.Duration = 10f;
-            _debugging.Color = Colours.Green;
         }
 #endif
 

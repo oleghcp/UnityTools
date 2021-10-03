@@ -5,17 +5,15 @@ using UnityEngine;
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    internal struct Debugger
+    internal class Debugger
     {
-        public bool DrawPath;
         [Min(1f)]
-        public float Duration;
-        public Color Color;
+        public float Duration = 15f;
+        public Color Color = Colours.Green;
 
         public void Draw(in Vector3 from, in Vector3 to)
         {
-            if (DrawPath)
-                Debug.DrawLine(from, to, Color, Duration);
+            Debug.DrawLine(from, to, Color, Duration);
         }
     }
 }
