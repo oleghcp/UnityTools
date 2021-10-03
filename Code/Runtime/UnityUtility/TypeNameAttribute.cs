@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class TypeNameAttribute : PropertyAttribute
+    public sealed class TypeNameAttribute : PropertyAttribute
     {
         internal Type TargetType { get; }
 

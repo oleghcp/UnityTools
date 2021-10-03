@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DiapasonAttribute : PropertyAttribute
+    public sealed class DiapasonAttribute : PropertyAttribute
     {
         internal float MinValue { get; }
 

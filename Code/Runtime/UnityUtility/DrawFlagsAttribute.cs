@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DrawFlagsAttribute : PropertyAttribute
+    public sealed class DrawFlagsAttribute : PropertyAttribute
     {
         internal Type EnumType { get; }
 

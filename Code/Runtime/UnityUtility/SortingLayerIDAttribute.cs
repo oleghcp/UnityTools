@@ -4,5 +4,5 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class SortingLayerIDAttribute : PropertyAttribute { }
+    public sealed class SortingLayerIDAttribute : PropertyAttribute { }
 }

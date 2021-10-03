@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class IdentifierAttribute : PropertyAttribute
+    public sealed class IdentifierAttribute : PropertyAttribute
     {
         internal bool Editable { get; }
 

@@ -4,5 +4,5 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DisableEditingAttribute : PropertyAttribute { }
+    public sealed class DisableEditingAttribute : PropertyAttribute { }
 }

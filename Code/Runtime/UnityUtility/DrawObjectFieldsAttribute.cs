@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DrawObjectFieldsAttribute : PropertyAttribute
+    public sealed class DrawObjectFieldsAttribute : PropertyAttribute
     {
         internal bool NeedIndent { get; }
 
