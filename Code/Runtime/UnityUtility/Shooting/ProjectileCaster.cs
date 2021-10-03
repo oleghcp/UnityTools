@@ -12,17 +12,21 @@ namespace UnityUtility.Shooting
     {
         [field: SerializeField]
         public LayerMask HitMask { get; set; }
-        [SerializeField, Min(0f)]
-        private float _castBounds;
-        [field: SerializeField]
-        public bool HighPrecision { get; set; }
+        [SerializeField]
+        private CastOptions _castBounds;
         [SerializeField, Range(0f, 1f)]
         private float _reflectedCastNear;
 
         public float CastBounds
         {
-            get => _castBounds;
-            set => _castBounds = value.CutBefore(0f);
+            get => _castBounds.CastBounds;
+            set => _castBounds.CastBounds = value.CutBefore(0f);
+        }
+
+        public bool HighPrecision
+        {
+            get => _castBounds.HighPrecision;
+            set => _castBounds.HighPrecision = value;
         }
 
         public float ReflectedCastNear
@@ -37,7 +41,7 @@ namespace UnityUtility.Shooting
             {
                 bool hit = Physics.SphereCast(source, CastBounds, direction, out hitInfo, distance, HitMask);
 
-                if (!HighPrecision)
+                if (!_castBounds.HighPrecision)
                     return hit;
                 else if (hit)
                     return true;
@@ -48,11 +52,11 @@ namespace UnityUtility.Shooting
 
         internal bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
         {
-            if (_castBounds > float.Epsilon)
+            if (_castBounds.CastBounds > float.Epsilon)
             {
-                hitInfo = Physics2D.CircleCast(source, _castBounds, direction, distance, HitMask);
+                hitInfo = Physics2D.CircleCast(source, _castBounds.CastBounds, direction, distance, HitMask);
 
-                if (!HighPrecision)
+                if (!_castBounds.HighPrecision)
                     return hitInfo.Hit();
                 else if (hitInfo.Hit())
                     return true;

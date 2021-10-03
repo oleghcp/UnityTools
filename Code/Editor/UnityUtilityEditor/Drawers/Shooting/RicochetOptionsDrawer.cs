@@ -5,14 +5,14 @@ using UnityUtility.Shooting;
 
 namespace UnityUtilityEditor.Drawers.Shooting
 {
-    [CustomPropertyDrawer(typeof(RicochetInfo))]
-    public class RicochetInfoDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(RicochetOptions))]
+    public class RicochetOptionsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty count = property.FindPropertyRelative(nameof(RicochetInfo.Count));
-            SerializedProperty mask = property.FindPropertyRelative(nameof(RicochetInfo.RicochetMask));
-            SerializedProperty remainder = property.FindPropertyRelative(nameof(RicochetInfo.SpeedRemainder));
+            SerializedProperty count = property.FindPropertyRelative(nameof(RicochetOptions.Count));
+            SerializedProperty mask = property.FindPropertyRelative(nameof(RicochetOptions.RicochetMask));
+            SerializedProperty remainder = property.FindPropertyRelative(nameof(RicochetOptions.SpeedRemainder));
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
@@ -36,7 +36,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.FindPropertyRelative(nameof(RicochetInfo.Count)).intValue != 0)
+            if (property.FindPropertyRelative(nameof(RicochetOptions.Count)).intValue != 0)
                 return EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing * 2f;
 
             return EditorGUIUtility.singleLineHeight;

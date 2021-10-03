@@ -15,7 +15,7 @@ namespace UnityUtility.Shooting
         [field: SerializeField]
         public bool UseGravity { get; set; }
         [SerializeField]
-        private RicochetInfo _ricochets;
+        private RicochetOptions _ricochets;
 
         public float StartSpeed
         {
@@ -26,7 +26,7 @@ namespace UnityUtility.Shooting
         public int Ricochets
         {
             get => _ricochets.Count;
-            set => _ricochets.Count = value.CutBefore(-1);
+            set => _ricochets.Count = value.CutBefore(0);
         }
 
         public float SpeedRemainder
