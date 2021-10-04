@@ -121,6 +121,9 @@ namespace UnityUtilityEditor.Window
 
             for (int i = 0; i < displayedOptions.Length; i++)
             {
+                if (displayedOptions[i].IsNullOrWhiteSpace())
+                    continue;
+
                 int index = i;
                 Data item = Data.CreateItem(i, displayedOptions[i], false, () => flags.Switch(index));
                 popup._items.Add(item);

@@ -100,7 +100,6 @@ namespace UnityUtilityEditor.Window
                 var drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
                 drawer.Names = _layers.EnumerateArrayElements()
                                       .Select(item => item.stringValue)
-                                      .Where(item => item.HasUsefulData())
                                       .ToArray();
 
                 _altConfigVersion.LayerMasks = _listDrawer.Draw(config.LayerMasks);
