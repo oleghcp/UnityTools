@@ -30,53 +30,49 @@ namespace UnityUtility.Controls
     public sealed class BindLayout
     {
         [SerializeField]
-        internal readonly string Name;
+        private int[] _keys;
+        [SerializeField]
+        private int[] _axes;
 
         [SerializeField]
-        private readonly int[] _keys;
+        private KeyAxes _keyAxes;
         [SerializeField]
-        private readonly int[] _axes;
-
-        [SerializeField]
-        internal readonly KeyAxes KeyAxes;
-        [SerializeField]
-        internal readonly InputType InputType;
+        private InputType _inputType;
 
         private int? _tmpButton;
 
         internal IReadOnlyList<int> Keys => _keys;
         internal IReadOnlyList<int> Axes => _axes;
+        internal KeyAxes KeyAxes => _keyAxes;
+        public InputType InputType => _inputType;
 
         /// <summary>
         /// Constructor for gamepad layout.
         /// </summary>
-        public BindLayout(string name, int[] keyIndices, int[] axisIndices)
+        public BindLayout(int[] keyIndices, int[] axisIndices)
         {
-            Name = name;
             _keys = keyIndices.GetCopy();
             _axes = axisIndices;
-            InputType = InputType.Gamepad;
+            _inputType = InputType.Gamepad;
         }
 
         /// <summary>
         /// Constructor for keyboard+mouse layout.
         /// </summary>
-        public BindLayout(string name, int[] keyIndices, int[] axisIndices, in KeyAxes keyAxes)
+        public BindLayout(int[] keyIndices, int[] axisIndices, in KeyAxes keyAxes)
         {
-            Name = name;
             _keys = keyIndices.GetCopy();
             _axes = axisIndices;
-            KeyAxes = keyAxes;
-            InputType = InputType.KeyMouse;
+            _keyAxes = keyAxes;
+            _inputType = InputType.KeyMouse;
         }
 
         public BindLayout(LayoutConfig config)
         {
-            Name = config.name;
             _keys = config.KeyIndices.GetCopy();
             _axes = config.AxisIndices;
-            KeyAxes = config.KeyAxes;
-            InputType = config.InputType;
+            _keyAxes = config.KeyAxes;
+            _inputType = config.InputType;
         }
 
         internal void AddTmpButton(int func, int keyCode)
