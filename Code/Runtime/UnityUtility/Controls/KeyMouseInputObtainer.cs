@@ -1,8 +1,8 @@
-using UnityEngine;
-using System.Collections.Generic;
-using UnityUtility.Controls.ControlStuff;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
+using UnityUtility.Controls.ControlStuff;
 
 namespace UnityUtility.Controls
 {
@@ -22,7 +22,7 @@ namespace UnityUtility.Controls
             CheckAndThrow(bindLayout);
 
             _curLayout = bindLayout;
-            _buttonStates = new ButtonState[bindLayout.Keys.Length];
+            _buttonStates = new ButtonState[bindLayout.Keys.Count];
             _axisStates = new float[InputEnumUtility.KMAxisCodeCount];
         }
 

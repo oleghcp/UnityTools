@@ -1,7 +1,7 @@
-﻿using UnityUtility.Controls.ControlStuff;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.Controls.ControlStuff;
 
 namespace UnityUtility.Controls
 {
@@ -30,69 +30,70 @@ namespace UnityUtility.Controls
     public sealed class BindLayout
     {
         [SerializeField]
-        internal int[] Keys;
-        [SerializeField]
-        internal int[] Axes;
+        internal readonly string Name;
 
         [SerializeField]
-        internal KeyAxes KeyAxes;
+        private readonly int[] _keys;
+        [SerializeField]
+        private readonly int[] _axes;
 
         [SerializeField]
-        internal InputType InputType;
+        internal readonly KeyAxes KeyAxes;
+        [SerializeField]
+        internal readonly InputType InputType;
 
-        private List<int> _tmpButtons;
+        private int? _tmpButton;
+
+        internal IReadOnlyList<int> Keys => _keys;
+        internal IReadOnlyList<int> Axes => _axes;
 
         /// <summary>
         /// Constructor for gamepad layout.
         /// </summary>
-        public BindLayout(int[] keyIndices, int[] axisIndices)
+        public BindLayout(string name, int[] keyIndices, int[] axisIndices)
         {
-            Keys = keyIndices.GetCopy();
-            Axes = axisIndices.GetCopy();
+            Name = name;
+            _keys = keyIndices.GetCopy();
+            _axes = axisIndices;
             InputType = InputType.Gamepad;
         }
 
         /// <summary>
         /// Constructor for keyboard+mouse layout.
         /// </summary>
-        public BindLayout(int[] keyIndices, int[] axisIndices, in KeyAxes keyAxes)
+        public BindLayout(string name, int[] keyIndices, int[] axisIndices, in KeyAxes keyAxes)
         {
-            Keys = keyIndices.GetCopy();
-            Axes = axisIndices.GetCopy();
+            Name = name;
+            _keys = keyIndices.GetCopy();
+            _axes = axisIndices;
             KeyAxes = keyAxes;
             InputType = InputType.KeyMouse;
         }
 
         public BindLayout(LayoutConfig config)
         {
-            Keys = config.KeyIndices.GetCopy();
-            Axes = config.AxisIndices.GetCopy();
+            Name = config.name;
+            _keys = config.KeyIndices.GetCopy();
+            _axes = config.AxisIndices;
             KeyAxes = config.KeyAxes;
             InputType = config.InputType;
         }
 
         internal void AddTmpButton(int func, int keyCode)
         {
-            if (Keys[func] == (int)KeyCode.None)
+            if (_keys[func] == (int)KeyCode.None)
             {
-                if (_tmpButtons == null)
-                    _tmpButtons = new List<int>();
-
-                _tmpButtons.Add(func);
-                Keys[func] = keyCode;
+                _tmpButton = func;
+                _keys[func] = keyCode;
             }
         }
 
         internal void RemoveTmpButton()
         {
-            if (_tmpButtons != null && _tmpButtons.Count > 0)
+            if (_tmpButton.HasValue)
             {
-                for (int i = 0; i < _tmpButtons.Count; i++)
-                {
-                    Keys[_tmpButtons[i]] = (int)KeyCode.None;
-                }
-
-                _tmpButtons.Clear();
+                _keys[_tmpButton.Value] = (int)KeyCode.None;
+                _tmpButton = null;
             }
         }
     }
