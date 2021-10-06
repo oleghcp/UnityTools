@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityUtility.NodeBased;
 
 namespace UnityUtility.Collections
 {
@@ -10,24 +11,24 @@ namespace UnityUtility.Collections
     }
 
     [Serializable]
-    public class StateMachine<TState, TData> where TState : class, IState where TData : class
+    public class StateMachine<TState, TData> where TState : class, IState
     {
+        public event Action OnFinished_Event;
+        public event Action<TState, TState> OnStateChanging_Event;
+
         private Node _startNode;
         private Node _currentNode;
-        private TData _data;
-        private Dictionary<TState, Node> _nodes;
-        private Action<TState, TState> _onStateChanging;
-        private Action _final;
+        private Dictionary<TState, Node> _nodes = new Dictionary<TState, Node>();
 
         public TState CurrentState => _currentNode?.State;
         public bool IsAlive => _currentNode != null;
+        public bool AtStart => _startNode == _currentNode;
 
-        public StateMachine(TData data, Action<TState, TState> onStateChanging = null, Action finalCallback = null)
+        public StateMachine() { }
+
+        public StateMachine(RawGraph graph)
         {
-            _data = data;
-            _nodes = new Dictionary<TState, Node>();
-            _onStateChanging = onStateChanging;
-            _final = finalCallback;
+            graph.InitializeMachine(this);
         }
 
         public void Start()
@@ -68,14 +69,14 @@ namespace UnityUtility.Collections
             _startNode = _nodes[startState];
         }
 
-        public void CheckConditions()
+        public void CheckConditions(TData data)
         {
             if (_currentNode == null)
                 return;
 
             foreach (Transition transition in _currentNode.Transitions)
             {
-                if (transition.Condition(_currentNode.State, _data))
+                if (transition.Condition(_currentNode.State, data))
                 {
                     _currentNode.State.End();
                     Node prevNode = _currentNode;
@@ -83,11 +84,11 @@ namespace UnityUtility.Collections
 
                     if (_currentNode == null)
                     {
-                        _final?.Invoke();
+                        OnFinished_Event?.Invoke();
                         break;
                     }
 
-                    _onStateChanging?.Invoke(prevNode.State, _currentNode.State);
+                    OnStateChanging_Event?.Invoke(prevNode.State, _currentNode.State);
                     _currentNode.State.Begin();
                     break;
                 }

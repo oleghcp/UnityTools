@@ -45,6 +45,9 @@ namespace UnityUtility.NodeBased
             return null;
         }
 
+        internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
+
+
 #if UNITY_EDITOR
         [SerializeField]
         internal int LastId;
@@ -96,12 +99,8 @@ namespace UnityUtility.NodeBased
             }
         }
 
-        public StateMachine<TState, TData> CreateStateMachine<TState, TData>(TData data,
-                                                                             Action<TState, TState> onStateChanging = null,
-                                                                             Action finalCallback = null)
-            where TState : class, IState where TData : class
+        internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
         {
-            var stateMachine = new StateMachine<TState, TData>(data, onStateChanging, finalCallback);
             var states = new Dictionary<RawNode, TState>(_nodes.Length);
 
             RawNode rootNode = RootNode;
@@ -137,8 +136,6 @@ namespace UnityUtility.NodeBased
                                                states[transition.NextNode]);
                 }
             }
-
-            return stateMachine;
         }
 
 #if UNITY_EDITOR

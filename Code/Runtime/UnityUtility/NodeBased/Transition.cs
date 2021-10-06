@@ -47,7 +47,7 @@ namespace UnityUtility.NodeBased
             return _condition == null || _condition.Satisfied(_owner, data);
         }
 
-        public Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
+        public Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState
         {
             return _condition.CreateCondition<TState, TData>();
         }
@@ -58,7 +58,7 @@ namespace UnityUtility.NodeBased
     {
         public abstract bool Satisfied(RawNode from, object data);
 
-        public virtual Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState where TData : class
+        public virtual Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState
         {
             throw new NotImplementedException();
         }
