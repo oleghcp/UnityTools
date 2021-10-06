@@ -129,7 +129,7 @@ namespace UnityUtility
             return true;
         }
 
-        public static bool Intersects(int mask1, int mask2, int length = SIZE)
+        public static bool Overlaps(int mask1, int mask2, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));

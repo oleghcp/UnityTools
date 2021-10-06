@@ -5,6 +5,11 @@ namespace UnityUtilityTools
 {
     internal static class Errors
     {
+        public static NotSupportedException ReadOnlyBitList()
+        {
+            return new NotSupportedException("BitList is read only.");
+        }
+
         public static InvalidOperationException NoElements()
         {
             return new InvalidOperationException("Collection is empty.");

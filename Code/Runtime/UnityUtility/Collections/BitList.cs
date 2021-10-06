@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.Scripting;
 using UnityUtilityTools;
 
 namespace UnityUtility.Collections
@@ -19,6 +18,8 @@ namespace UnityUtility.Collections
         private int[] _array;
         [SerializeField, HideInInspector]
         private int _length;
+        [SerializeField, HideInInspector]
+        private bool _mutable;
 
         private int _version;
 
@@ -26,6 +27,8 @@ namespace UnityUtility.Collections
         internal static string ArrayFieldName => nameof(_array);
         internal static string LengthFieldName => nameof(_length);
 #endif
+
+        public bool IsReadOnly => !_mutable;
 
         public int Count
         {
@@ -45,8 +48,11 @@ namespace UnityUtility.Collections
 
         internal IReadOnlyList<int> IntBlocks => _array;
 
-        [Preserve]
-        private BitList() { }
+        public BitList()
+        {
+            _array = Array.Empty<int>();
+            _mutable = true;
+        }
 
         public BitList(int length, bool defaultValue = false)
         {
@@ -60,6 +66,7 @@ namespace UnityUtility.Collections
             {
                 _array[i] = num;
             }
+            _mutable = true;
         }
 
         #region constructor with flag indices
@@ -71,6 +78,7 @@ namespace UnityUtility.Collections
             _array = new int[GetArraySize(length)];
             _length = length;
             Set(flagIndex0, true);
+            _mutable = true;
         }
 
         public BitList(int length, int flagIndex0, int flagIndex1)
@@ -82,6 +90,7 @@ namespace UnityUtility.Collections
             _length = length;
             Set(flagIndex0, true);
             Set(flagIndex1, true);
+            _mutable = true;
         }
 
         public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2)
@@ -94,6 +103,7 @@ namespace UnityUtility.Collections
             Set(flagIndex0, true);
             Set(flagIndex1, true);
             Set(flagIndex2, true);
+            _mutable = true;
         }
 
         public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
@@ -107,6 +117,7 @@ namespace UnityUtility.Collections
             Set(flagIndex1, true);
             Set(flagIndex2, true);
             Set(flagIndex3, true);
+            _mutable = true;
         }
 
         public BitList(int length, params int[] indices)
@@ -120,6 +131,7 @@ namespace UnityUtility.Collections
             {
                 Set(indices[i], true);
             }
+            _mutable = true;
         }
         #endregion
 
@@ -143,6 +155,7 @@ namespace UnityUtility.Collections
             }
 
             _length = i;
+            _mutable = true;
         }
 
         public BitList(ICollection<bool> values)
@@ -162,6 +175,7 @@ namespace UnityUtility.Collections
 
                 i++;
             }
+            _mutable = true;
         }
 
         public BitList(ICollection<int> intBlocks)
@@ -174,6 +188,7 @@ namespace UnityUtility.Collections
 
             _length = intBlocks.Count * BitMask.SIZE;
             _array = intBlocks.ToArray();
+            _mutable = true;
         }
 
         public BitList(Span<int> intBlocks)
@@ -186,6 +201,7 @@ namespace UnityUtility.Collections
 
             _length = intBlocks.Length * BitMask.SIZE;
             _array = intBlocks.ToArray();
+            _mutable = true;
         }
 
         public BitList(BitList bits)
@@ -198,6 +214,7 @@ namespace UnityUtility.Collections
             _length = bits._length;
             Array.Copy(bits._array, _array, arrayLength);
             _version = bits._version;
+            _mutable = true;
         }
 
         public bool Get(int index)
@@ -210,6 +227,9 @@ namespace UnityUtility.Collections
 
         public void Set(int index, bool value)
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             if (index >= 0 && index < _length)
             {
                 if (value)
@@ -222,6 +242,7 @@ namespace UnityUtility.Collections
             throw new ArgumentOutOfRangeException(nameof(index));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Switch(int index)
         {
             Set(index, !Get(index));
@@ -229,6 +250,9 @@ namespace UnityUtility.Collections
 
         public void SetAll(bool value)
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             int num = value ? (-1) : 0;
             int arrayLength = GetArraySize(_length);
 
@@ -242,6 +266,9 @@ namespace UnityUtility.Collections
 
         public void And(BitList other)
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
@@ -258,6 +285,9 @@ namespace UnityUtility.Collections
 
         public void Or(BitList other)
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
@@ -274,6 +304,9 @@ namespace UnityUtility.Collections
 
         public void Xor(BitList other)
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
@@ -290,6 +323,9 @@ namespace UnityUtility.Collections
 
         public void Not()
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
             {
@@ -330,8 +366,11 @@ namespace UnityUtility.Collections
             return BitMask.AllFor(_array[lastElement], GetAppendixLength());
         }
 
-        public bool Intersects(BitList other)
+        public bool Overlaps(BitList other)
         {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
             if (_length != other._length)
                 throw Errors.DifferentArrayLengths();
 
@@ -346,7 +385,33 @@ namespace UnityUtility.Collections
                     return false;
             }
 
-            return BitMask.Intersects(_array[lastElement], other._array[lastElement], GetAppendixLength());
+            return BitMask.Overlaps(_array[lastElement], other._array[lastElement], GetAppendixLength());
+        }
+
+        public void IntersectWith(BitList other)
+        {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            if (_length != other._length)
+                throw Errors.DifferentArrayLengths();
+
+            int lastElement = GetArraySize(_length) - 1;
+
+            if (lastElement < 0)
+                return;
+
+            for (int i = 0; i < lastElement; i++)
+            {
+                _array[i] &= other._array[i];
+            }
+
+            _array[lastElement] = BitMask.GetIntersection(_array[lastElement], other._array[lastElement], GetAppendixLength());
+
+            _version++;
         }
 
         public bool Coincides(BitList other)
@@ -406,7 +471,8 @@ namespace UnityUtility.Collections
             return new BitList(_array)
             {
                 _version = _version,
-                _length = _length
+                _length = _length,
+                _mutable = _mutable,
             };
         }
 
@@ -447,6 +513,9 @@ namespace UnityUtility.Collections
 
         private void SetLength(int value)
         {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
             if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value), "Value cannot be negative.");
 
