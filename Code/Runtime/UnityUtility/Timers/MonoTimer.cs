@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Async;
 using UnityUtility.MathExt;
@@ -8,8 +9,10 @@ namespace UnityUtility.Timers
 {
     public sealed class MonoTimer : ITimer
     {
+        public event Action<ITimer> Elapsed_Event;
+
         private readonly bool _local;
-        private readonly Enumerator _routine = new Enumerator();
+        private readonly Enumerator _routine;
         private TaskInfo _task;
 
         public bool IsRunning => _task.IsAlive;
@@ -32,11 +35,7 @@ namespace UnityUtility.Timers
         public MonoTimer(bool withinCurrentScene = true)
         {
             _local = withinCurrentScene;
-        }
-
-        public void InitCallback(Action callback)
-        {
-            _routine.Callback = callback;
+            _routine = new Enumerator(this);
         }
 
         public void Prolong(float extraTime)
@@ -44,24 +43,30 @@ namespace UnityUtility.Timers
             _routine.WaitTime += extraTime;
         }
 
-        public void StartCountdown(float time, float timeScale = 1f)
+        public void Start(float time, float timeScale)
         {
             _routine.TimeScale = timeScale;
             StartInternal(time);
         }
 
-        public void StartCountdown(float time, Action callback)
+        public void Start(float time)
         {
-            InitCallback(callback);
+            _routine.TimeScale = 1f;
             StartInternal(time);
         }
 
-        public void StopCountdown()
+        public void Stop()
         {
             _task.Stop();
         }
 
         // -- //
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void InvokeEvent()
+        {
+            Elapsed_Event?.Invoke(this);
+        }
 
         private void StartInternal(float time)
         {
@@ -77,28 +82,31 @@ namespace UnityUtility.Timers
             }
             else
             {
-                _routine.Callback?.Invoke();
+                InvokeEvent();
             }
         }
 
         #region IEnumerator impelementation
         private class Enumerator : IEnumerator
         {
-            public Action Callback;
             public bool GlobalScale = true;
             public float WaitTime = 1f;
             public float CurrentTime;
             public float TimeScale = 1f;
-
-            //IEnumerator//
+            private MonoTimer _owner;
 
             public object Current => null;
+
+            public Enumerator(MonoTimer owner)
+            {
+                _owner = owner;
+            }
 
             public bool MoveNext()
             {
                 if (CurrentTime >= WaitTime)
                 {
-                    Callback?.Invoke();
+                    _owner.InvokeEvent();
                     return false;
                 }
 

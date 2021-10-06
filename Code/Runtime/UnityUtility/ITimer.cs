@@ -4,19 +4,19 @@ namespace UnityUtility
 {
     public interface ITimer
     {
+        public event Action<ITimer> Elapsed_Event;
+
         bool IsRunning { get; }
         float TargetTime { get; }
         float CurrentTime { get; }
         float Progress { get; }
         float TimeScale { get; set; }
 
-        void InitCallback(Action callback);
-
-        void StartCountdown(float time, float timeScale = 1f);
-        void StartCountdown(float time, Action callback);
+        void Start(float time, float timeScale);
+        void Start(float time);
 
         void Prolong(float extraTime);
 
-        void StopCountdown();
+        void Stop();
     }
 }
