@@ -406,8 +406,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             void renameAsset()
             {
                 string defaultName = GraphAssetEditor.GetDefaultNodeName(_systemType);
+                _nodeProp.serializedObject.Update();
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
                 nameProperty.stringValue = defaultName;
+                _nodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
 

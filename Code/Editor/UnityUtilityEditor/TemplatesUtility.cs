@@ -42,7 +42,7 @@ namespace Project
 
             if (!File.Exists(templatePath))
             {
-                string text = @"System;
+                string text = @"using System;
 using UnityUtility.NodeBased;
 
 namespace Project
