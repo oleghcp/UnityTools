@@ -77,7 +77,7 @@ namespace UnityUtility.Async
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsAliveInternal()
         {
-            return UnityObjectUtility.IsAlive(_task) && _task.Id == _id;
+            return _task != null && _task.Id == _id;
         }
 
         // -- //

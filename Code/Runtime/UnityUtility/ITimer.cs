@@ -15,7 +15,7 @@ namespace UnityUtility
         void StartCountdown(float time, float timeScale = 1f);
         void StartCountdown(float time, Action callback);
 
-        void Prolong(float time);
+        void Prolong(float extraTime);
 
         void StopCountdown();
     }
