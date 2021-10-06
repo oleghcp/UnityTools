@@ -118,9 +118,11 @@ namespace UnityUtility
             if (length == SIZE)
                 return mask1 == mask2;
 
+            int xorMask = mask1 ^ mask2;
+
             for (int i = 0; i < SIZE; i++)
             {
-                if (HasFlag(mask2, i) && !HasFlag(mask1, i))
+                if (HasFlag(xorMask, i))
                     return false;
             }
 
@@ -132,16 +134,39 @@ namespace UnityUtility
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
+            int intersection = mask1 & mask2;
+
             if (length == SIZE)
-                return (mask1 & mask2) != 0;
+                return intersection != 0;
 
             for (int i = 0; i < length; i++)
             {
-                if (HasFlag(mask2, i) && HasFlag(mask1, i))
+                if (HasFlag(intersection, i))
                     return true;
             }
 
             return false;
+        }
+
+        public static int GetIntersection(int mask1, int mask2, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            int intersection = mask1 & mask2;
+
+            if (length == SIZE)
+                return intersection;
+
+            int newMask = 0;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (HasFlag(intersection, i))
+                    AddFlag(ref newMask, i);
+            }
+
+            return newMask;
         }
 
         public static bool AllFor(int mask, int length = SIZE)
@@ -157,6 +182,7 @@ namespace UnityUtility
                 if (!HasFlag(mask, i))
                     return false;
             }
+
             return true;
         }
 
@@ -173,6 +199,7 @@ namespace UnityUtility
                 if (HasFlag(mask, i))
                     return true;
             }
+
             return false;
         }
 
@@ -207,6 +234,7 @@ namespace UnityUtility
                 if (HasFlag(mask, i))
                     count++;
             }
+
             return count;
         }
 
