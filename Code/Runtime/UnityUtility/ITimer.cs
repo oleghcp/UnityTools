@@ -4,7 +4,7 @@ namespace UnityUtility
 {
     public interface ITimer
     {
-        public event Action<ITimer> Elapsed_Event;
+        event Action<ITimer> Elapsed_Event;
 
         bool IsRunning { get; }
         float TargetTime { get; }
