@@ -6,13 +6,13 @@ namespace UnityUtility
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class ReferenceSelectionAttribute : PropertyAttribute
     {
-        internal bool PrettyButton;
+        internal bool ShortButtonText;
 
         public ReferenceSelectionAttribute() { }
 
-        public ReferenceSelectionAttribute(bool prettyButton)
+        public ReferenceSelectionAttribute(bool shortButtonText)
         {
-            PrettyButton = prettyButton;
+            ShortButtonText = shortButtonText;
         }
     }
 }

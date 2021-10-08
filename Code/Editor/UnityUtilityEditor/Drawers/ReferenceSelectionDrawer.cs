@@ -28,7 +28,7 @@ namespace UnityUtilityEditor.Drawers
 
             string ButtonLabel()
             {
-                if (attribute.PrettyButton)
+                if (attribute.ShortButtonText)
                 {
                     Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
                     return assignedType.Name;
@@ -36,7 +36,7 @@ namespace UnityUtilityEditor.Drawers
 
                 return assignedTypeName;
             }
-        }        
+        }
 
         private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
         {
