@@ -503,7 +503,16 @@ namespace System.Collections.Generic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<T>(this T[] self, T item)
         {
-            return (self as IList).Contains(item);
+            return (self as IList<T>).Contains(item);
+        }
+
+        /// <summary>
+        /// Returns whether array contains the specified item.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<T>(this IList<T> self, Predicate<T> condition)
+        {
+            return self.IndexOf(condition) >= 0;
         }
 
         /// <summary>
