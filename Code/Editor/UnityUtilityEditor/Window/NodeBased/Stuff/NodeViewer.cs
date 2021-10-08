@@ -417,7 +417,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             if (_heightVersion != _window.OnGuiCounter)
             {
-                _height = SMALL_NODE_HEIGHT + EditorGuiUtility.GetDrawHeight(_nodeProp, IsServiceField).CutBefore(EditorGUIUtility.singleLineHeight);
+                _height = SMALL_NODE_HEIGHT + EditorGuiUtility.GetDrawHeight(_nodeProp, IsServiceField);
                 _heightVersion = _window.OnGuiCounter;
             }
 

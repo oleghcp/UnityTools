@@ -9,13 +9,15 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(InitToggleAttribute))]
     internal class InitToggleDrawer : SerializeReferenceDrawer<InitToggleAttribute>
     {
-        protected override void DrawContent(Rect position, SerializedProperty property)
+        protected override void DrawContent(in Rect position, SerializedProperty property)
         {
-            float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
+            Type type = EditorUtilityExt.GetFieldType(this);
 
-            position.x += shift;
-            position.width -= shift;
-            position.height = EditorGUIUtility.singleLineHeight;
+            if (type.IsAbstract)
+            {
+                GUI.Label(position, "Use non-abstract type.");
+                return;
+            }
 
             bool inited = !property.managedReferenceFullTypename.IsNullOrEmpty();
 
@@ -24,17 +26,7 @@ namespace UnityUtilityEditor.Drawers
             if (switched != inited)
             {
                 property.serializedObject.Update();
-
-                if (switched)
-                {
-                    Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
-                    property.managedReferenceValue = Activator.CreateInstance(fieldType);
-                }
-                else
-                {
-                    property.managedReferenceValue = null;
-                }
-
+                property.managedReferenceValue = switched ? Activator.CreateInstance(type) : null;
                 property.serializedObject.ApplyModifiedProperties();
             }
         }

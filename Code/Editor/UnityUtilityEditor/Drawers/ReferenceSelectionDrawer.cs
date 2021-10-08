@@ -12,17 +12,11 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]
     internal class ReferenceSelectionDrawer : SerializeReferenceDrawer<ReferenceSelectionAttribute>
     {
-        protected override void DrawContent(Rect position, SerializedProperty property)
+        protected override void DrawContent(in Rect position, SerializedProperty property)
         {
-            float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
-
-            position.x += shift;
-            position.width -= shift;
-            position.height = EditorGUIUtility.singleLineHeight;
-
-            string typeName = property.managedReferenceFullTypename;
-            bool nullRef = typeName.IsNullOrEmpty();
-            string label = nullRef ? "Select Type" : typeName;
+            string assignedTypeName = property.managedReferenceFullTypename;
+            bool nullRef = assignedTypeName.IsNullOrEmpty();
+            string label = nullRef ? "Null" : ButtonLabel();
 
             if (nullRef)
                 GUI.color = Colours.Orange;
@@ -31,7 +25,18 @@ namespace UnityUtilityEditor.Drawers
                 ShowContextMenu(position, property);
 
             GUI.color = Colours.White;
-        }
+
+            string ButtonLabel()
+            {
+                if (attribute.PrettyButton)
+                {
+                    Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
+                    return assignedType.Name;
+                }
+
+                return assignedTypeName;
+            }
+        }        
 
         private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
         {
@@ -62,8 +67,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 if (isValidType(type))
                 {
-                    string assemblyName = type.Assembly.ToString().Split('(', ',')[0];
-                    string entryName = $"{type}  ({assemblyName})";
+                    string entryName = $"{type.Name}  ({type.Namespace})";
                     menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
                 }
             }

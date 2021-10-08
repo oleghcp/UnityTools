@@ -29,16 +29,25 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-            DrawContent(position, property);
+            Rect rect = position;
+            float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
+            rect.x += shift;
+            rect.width -= shift;
+            rect.height = EditorGUIUtility.singleLineHeight;
+
+            DrawContent(rect, property);
             EditorGUI.PropertyField(position, property, label, true);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            if (property.managedReferenceFullTypename.IsNullOrEmpty() || !property.isExpanded)
+                return EditorGUIUtility.singleLineHeight;
+
             return EditorGUI.GetPropertyHeight(property, label, true);
         }
 
-        protected abstract void DrawContent(Rect position, SerializedProperty property);
+        protected abstract void DrawContent(in Rect position, SerializedProperty property);
     }
 }
 #endif

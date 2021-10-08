@@ -33,31 +33,27 @@ namespace UnityEditor
             _clearFunc.Invoke(null, null);
         }
 
-        public static (string assemblyName, string alassName) SplitSerializedPropertyTypename(string typename)
-        {
-            if (typename.IsNullOrEmpty())
-                return (null, null);
-
-            string[] typeSplitString = typename.Split(' ');
-            return (typeSplitString[0], typeSplitString[1]);
-        }
-
         public static string ConvertToSystemTypename(string managedReferenceFieldTypename)
         {
-            (string assemblyName, string className) = SplitSerializedPropertyTypename(managedReferenceFieldTypename);
-            return $"{className}, {assemblyName}";
+            if (managedReferenceFieldTypename.IsNullOrEmpty())
+                return string.Empty;
+
+            string[] typeSplitString = managedReferenceFieldTypename.Split(' ');
+            return $"{typeSplitString[1]}, {typeSplitString[0]}";
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Type GetTypeFromSerializedPropertyTypename(string managedReferenceTypename)
         {
+            if (managedReferenceTypename.IsNullOrEmpty())
+                return null;
+
             return Type.GetType(ConvertToSystemTypename(managedReferenceTypename));
         }
 
         public static Type GetFieldType(PropertyDrawer drawer)
         {
-            Type drawnType = drawer.fieldInfo.FieldType;
-            return drawnType.IsArray ? drawnType.GetElementType() : drawnType;
+            Type fieldType = drawer.fieldInfo.FieldType;
+            return fieldType.IsArray ? fieldType.GetElementType() : fieldType;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

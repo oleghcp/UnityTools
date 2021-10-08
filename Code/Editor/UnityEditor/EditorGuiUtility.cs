@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityEditor
 {
@@ -91,7 +92,7 @@ namespace UnityEditor
 
         private static float GetDrawHeight(IEnumerable<SerializedProperty> properties, Predicate<SerializedProperty> ignoreCondition)
         {
-            float height = 0;
+            float height = 0f;
 
             foreach (SerializedProperty item in properties)
             {
@@ -99,7 +100,7 @@ namespace UnityEditor
                     height += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
             }
 
-            return height;
+            return height.CutBefore(EditorGUIUtility.singleLineHeight);
         }
     }
 }
