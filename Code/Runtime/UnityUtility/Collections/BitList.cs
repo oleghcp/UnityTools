@@ -219,10 +219,10 @@ namespace UnityUtility.Collections
 
         public bool Get(int index)
         {
-            if (index >= 0 && index < _length)
-                return (_array[index / BitMask.SIZE] & 1 << index % BitMask.SIZE) != 0;
+            if ((uint)index >= (uint)_length)
+                throw new ArgumentOutOfRangeException(nameof(index));
 
-            throw new ArgumentOutOfRangeException(nameof(index));
+            return (_array[index / BitMask.SIZE] & 1 << index % BitMask.SIZE) != 0;
         }
 
         public void Set(int index, bool value)
@@ -230,16 +230,15 @@ namespace UnityUtility.Collections
             if (!_mutable)
                 throw Errors.ReadOnlyBitList();
 
-            if (index >= 0 && index < _length)
-            {
-                if (value)
-                    _array[index / BitMask.SIZE] |= 1 << index % BitMask.SIZE;
-                else
-                    _array[index / BitMask.SIZE] &= ~(1 << index % BitMask.SIZE);
-                _version++;
-                return;
-            }
-            throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)_length)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (value)
+                _array[index / BitMask.SIZE] |= 1 << index % BitMask.SIZE;
+            else
+                _array[index / BitMask.SIZE] &= ~(1 << index % BitMask.SIZE);
+            _version++;
+            return;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -496,7 +495,7 @@ namespace UnityUtility.Collections
 
         public static BitList CreateFromBitMask(int bitMask, int length = BitMask.SIZE)
         {
-            if (length > BitMask.SIZE || length < 0)
+            if ((uint)length > BitMask.SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length), $"Length cannot be negative or more than {BitMask.SIZE}.");
 
             return new BitList()

@@ -284,7 +284,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
         {
-            if (startIndex < 0 || startIndex >= self.Count)
+            if ((uint)startIndex >= (uint)self.Count)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             if (startIndex + length > self.Count)
@@ -310,7 +310,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static IEnumerable<T> EnumerateBack<T>(this IList<T> self, int startReverseIndex, int length)
         {
-            if (startReverseIndex < 0 || startReverseIndex >= self.Count)
+            if ((uint)startReverseIndex >= (uint)self.Count)
                 throw new ArgumentOutOfRangeException(nameof(startReverseIndex), "Index was out of range.");
 
             if (startReverseIndex + length > self.Count)
@@ -358,7 +358,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static void CopyTo<T>(this IList<T> self, Span<T> target, int index) where T : unmanaged
         {
-            if (index < 0 || index >= self.Count)
+            if ((uint)index >= (uint)self.Count)
                 throw Errors.IndexOutOfRange();
 
             int length = Math.Min(self.Count - index, target.Length);

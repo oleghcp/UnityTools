@@ -29,14 +29,14 @@ namespace UnityUtility
         {
             get
             {
-                if (index < 0 || index > SIZE - 1)
+                if ((uint)index >= SIZE)
                     throw Errors.IndexOutOfRange();
 
                 return GetByteByIndex(_field, index);
             }
             set
             {
-                if (index < 0 || index > SIZE - 1)
+                if ((uint)index >= SIZE)
                     throw Errors.IndexOutOfRange();
 
                 unsafe

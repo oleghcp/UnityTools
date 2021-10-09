@@ -24,7 +24,7 @@ namespace System
         {
             get
             {
-                if (index < 0 || index >= _length)
+                if ((uint)index >= (uint)_length)
                     throw new IndexOutOfRangeException();
 
                 if (_ptr == null)
@@ -97,7 +97,7 @@ namespace System
 
         public Span<T> Slice(int startIndex, int length)
         {
-            if (startIndex < 0 || startIndex >= _length)
+            if ((uint)startIndex >= (uint)_length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             if (startIndex + length > _length)
@@ -108,7 +108,7 @@ namespace System
 
         public Span<T> Slice(int startIndex)
         {
-            if (startIndex < 0 || startIndex >= _length)
+            if ((uint)startIndex >= (uint)_length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             return new Span<T>(_ptr + startIndex, _length - startIndex);
