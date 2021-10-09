@@ -124,24 +124,29 @@ namespace UnityEditor
             #endregion
         }
 
-        public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self)
+        public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self, bool copyIterationState = true)
         {
             SerializedProperty iterator = self.GetIterator();
 
             for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
             {
-                yield return iterator;
+                yield return copyIterationState ? iterator.Copy()
+                                                : iterator;
             }
         }
 
-        public static IEnumerable<SerializedProperty> EnumerateInnerProperties(this SerializedProperty self)
+        public static IEnumerable<SerializedProperty> EnumerateInnerProperties(this SerializedProperty self, bool copyIterationState = true)
         {
             SerializedProperty iterator = self.Copy();
             SerializedProperty end = iterator.GetEndProperty();
 
             if (moveNext(true))
             {
-                do { yield return iterator; } while (moveNext(false));
+                do
+                {
+                    yield return copyIterationState ? iterator.Copy()
+                                                    : iterator;
+                } while (moveNext(false));
             }
 
             bool moveNext(bool enterChildren)
@@ -166,15 +171,12 @@ namespace UnityEditor
 
             for (int i = 0; i < count; i++)
             {
-                SerializedProperty element = self.GetArrayElementAtIndex(i);
+                result = self.GetArrayElementAtIndex(i);
 
-                if (condition(element))
-                {
-                    result = element;
+                if (condition(result))
                     return i;
-                }
 
-                element.Dispose();
+                result.Dispose();
             }
 
             result = null;
@@ -196,9 +198,7 @@ namespace UnityEditor
                     T b = selector(self.GetArrayElementAtIndex(j + 1));
 
                     if (defComp.Compare(a, b) > 0)
-                    {
                         self.MoveArrayElement(j, j + 1);
-                    }
                 }
                 len--;
             }

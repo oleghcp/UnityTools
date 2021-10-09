@@ -73,12 +73,12 @@ namespace UnityEditor
 
         public static float GetDrawHeight(SerializedObject serializedObject, Predicate<SerializedProperty> ignoreCondition = null)
         {
-            return GetDrawHeight(serializedObject.EnumerateProperties(), ignoreCondition);
+            return GetDrawHeight(serializedObject.EnumerateProperties(false), ignoreCondition);
         }
 
         public static float GetDrawHeight(SerializedProperty property, Predicate<SerializedProperty> ignoreCondition = null)
         {
-            return GetDrawHeight(property.EnumerateInnerProperties(), ignoreCondition);
+            return GetDrawHeight(property.EnumerateInnerProperties(false), ignoreCondition);
         }
 
         public static string GetTypeDisplayName(Type type)
