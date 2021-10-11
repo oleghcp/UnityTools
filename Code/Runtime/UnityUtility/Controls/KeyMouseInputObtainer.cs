@@ -135,8 +135,6 @@ namespace UnityUtility.Controls
             if (Input.GetKey((KeyCode)_curLayout.Keys[keyAxes.Up]))
                 ++cross.y;
 
-            cross.Normalize();
-
             _axisStates[(int)KMAxisCode.Horizontal] = cross.x;
             _axisStates[(int)KMAxisCode.Vertical] = cross.y;
         }
