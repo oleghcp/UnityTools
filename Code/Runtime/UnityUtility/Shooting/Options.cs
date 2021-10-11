@@ -19,7 +19,7 @@ namespace UnityUtility.Shooting
     internal struct CastOptions
     {
         [Min(0f)]
-        public float CastBounds;
+        public float CastRadius;
         public bool HighPrecision;
     }
 }

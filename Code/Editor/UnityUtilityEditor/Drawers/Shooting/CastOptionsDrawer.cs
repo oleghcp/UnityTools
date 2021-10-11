@@ -10,14 +10,14 @@ namespace UnityUtilityEditor.Drawers.Shooting
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty bounds = property.FindPropertyRelative(nameof(CastOptions.CastBounds));
+            SerializedProperty radius = property.FindPropertyRelative(nameof(CastOptions.CastRadius));
             SerializedProperty highPrecision = property.FindPropertyRelative(nameof(CastOptions.HighPrecision));
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
-            bounds.floatValue = EditorGUI.FloatField(linePos, label, bounds.floatValue).CutBefore(0f);
+            radius.floatValue = EditorGUI.FloatField(linePos, label, radius.floatValue).CutBefore(0f);
 
-            if (bounds.floatValue > 0f)
+            if (radius.floatValue > 0f)
             {
                 linePos = EditorGuiUtility.GetLinePosition(position, 1);
                 EditorGUI.PropertyField(linePos, highPrecision);
@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.FindPropertyRelative(nameof(CastOptions.CastBounds)).floatValue > 0f)
+            if (property.FindPropertyRelative(nameof(CastOptions.CastRadius)).floatValue > 0f)
                 return EditorGUIUtility.singleLineHeight * 2f + EditorGUIUtility.standardVerticalSpacing;
 
             return EditorGUIUtility.singleLineHeight;

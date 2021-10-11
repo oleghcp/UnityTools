@@ -142,6 +142,9 @@ namespace UnityUtility.Shooting
 
             await Task.Delay((_lifeTime * 1000).ToInt());
 
+            if (this == null)
+                return;
+
             _canMove = false;
 
             if (_autodestruct)
