@@ -12,7 +12,6 @@ namespace UnityUtilityEditor.CodeGenerating
         {
             bool needEmptyLine = false;
 
-            const string tab = "    ";
             StringBuilder builder = new StringBuilder();
 
             GeneratingTools.GenerateBanner(builder);
@@ -22,8 +21,8 @@ namespace UnityUtilityEditor.CodeGenerating
                    .AppendLine()
                    .Append("namespace ").AppendLine(config.Namespace)
                    .AppendLine("{")
-                   .Append(tab).Append("public static class ").AppendLine(config.ClassName)
-                   .Append(tab).Append('{').AppendLine();
+                   .Append(GeneratingTools.TAB).Append("public static class ").AppendLine(config.ClassName)
+                   .Append(GeneratingTools.TAB).Append('{').AppendLine();
 
             if (config.TagFields)
             {
@@ -31,8 +30,8 @@ namespace UnityUtilityEditor.CodeGenerating
 
                 foreach (var item in tags.EnumerateArrayElements())
                 {
-                    builder.Append(tab)
-                           .Append(tab)
+                    builder.Append(GeneratingTools.TAB)
+                           .Append(GeneratingTools.TAB)
                            .Append("public ")
                            .Append("const ")
                            .Append("string ")
@@ -56,8 +55,8 @@ namespace UnityUtilityEditor.CodeGenerating
 
                 foreach (var layer in SortingLayer.layers)
                 {
-                    builder.Append(tab)
-                           .Append(tab)
+                    builder.Append(GeneratingTools.TAB)
+                           .Append(GeneratingTools.TAB)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
@@ -84,8 +83,8 @@ namespace UnityUtilityEditor.CodeGenerating
                     if (item.stringValue.IsNullOrWhiteSpace())
                         continue;
 
-                    builder.Append(tab)
-                           .Append(tab)
+                    builder.Append(GeneratingTools.TAB)
+                           .Append(GeneratingTools.TAB)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
@@ -102,8 +101,8 @@ namespace UnityUtilityEditor.CodeGenerating
 
                 foreach (var item in config.LayerMasks)
                 {
-                    builder.Append(tab)
-                           .Append(tab)
+                    builder.Append(GeneratingTools.TAB)
+                           .Append(GeneratingTools.TAB)
                            .Append("public ");
 
                     if (config.MaskFieldType == LayerSetConfig.LayerMaskFieldType.LayerMask)
@@ -129,8 +128,11 @@ namespace UnityUtilityEditor.CodeGenerating
                 needEmptyLine = true;
             }
 
-            builder.Append(tab).Append('}').AppendLine()
-                   .Append('}').AppendLine();
+            builder.Append(GeneratingTools.TAB)
+                   .Append('}')
+                   .AppendLine()
+                   .Append('}')
+                   .AppendLine();
 
             return builder.ToString();
         }

@@ -10,7 +10,6 @@ namespace UnityUtilityEditor.CodeGenerating
                                       IEnumerable<(string name, int intValue)> enumValues,
                                       EnumType enumType = EnumType.Int)
         {
-            const string tab = "    ";
             StringBuilder builder = new StringBuilder();
 
             GeneratingTools.GenerateBanner(builder);
@@ -19,7 +18,7 @@ namespace UnityUtilityEditor.CodeGenerating
                    .Append("namespace ")
                    .AppendLine(nameSpace)
                    .AppendLine("{")
-                   .Append(tab)
+                   .Append(GeneratingTools.TAB)
                    .Append("public enum ")
                    .Append(enumName);
 
@@ -28,14 +27,14 @@ namespace UnityUtilityEditor.CodeGenerating
             else
                 builder.Append(" : ").AppendLine(enumType.GetName().ToLower());
 
-            builder.Append(tab)
+            builder.Append(GeneratingTools.TAB)
                    .Append('{')
                    .AppendLine();
 
             foreach (var (name, intValue) in enumValues)
             {
-                builder.Append(tab)
-                       .Append(tab)
+                builder.Append(GeneratingTools.TAB)
+                       .Append(GeneratingTools.TAB)
                        .Append(name)
                        .Append(" = ")
                        .Append(intValue)
@@ -43,7 +42,7 @@ namespace UnityUtilityEditor.CodeGenerating
                        .AppendLine();
             }
 
-            builder.Append(tab)
+            builder.Append(GeneratingTools.TAB)
                    .Append('}')
                    .AppendLine()
                    .Append('}')
