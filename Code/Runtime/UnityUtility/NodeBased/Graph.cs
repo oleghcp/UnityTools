@@ -13,19 +13,6 @@ namespace UnityUtility.NodeBased
         [SerializeReference]
         private protected RawNode[] _nodes;
 
-        private Dictionary<int, RawNode> _dict;
-
-        private protected Dictionary<int, RawNode> Dict
-        {
-            get
-            {
-                if (_dict == null)
-                    _dict = _nodes.ToDictionary(key => key.Id, value => value);
-
-                return _dict;
-            }
-        }
-
         public RawNode RootNode
         {
             get
@@ -35,14 +22,6 @@ namespace UnityUtility.NodeBased
 
                 return _nodes.Find(item => item.RealNode());
             }
-        }
-
-        public RawNode GetNodeById(int id)
-        {
-            if (Dict.TryGetValue(id, out RawNode value) && value.RealNode())
-                return value;
-
-            return null;
         }
 
         internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
@@ -61,24 +40,35 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
+    public abstract class Graph<TNode> : RawGraph, ISerializationCallbackReceiver where TNode : Node<TNode>
     {
+        private Dictionary<int, TNode> _dict;
+
         public new TNode RootNode
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => (TNode)base.RootNode;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public new TNode GetNodeById(int id)
+        public TNode GetNodeById(int id)
         {
-            return base.GetNodeById(id) as TNode;
+            if (_dict.TryGetValue(id, out TNode value) && value.RealNode())
+                return value;
+
+            return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IReadOnlyCollection<TNode> GetNodes()
+        public Dictionary<int, TNode>.ValueCollection GetNodes()
         {
-            return Dict.Values.Select(item => (TNode)item).ToArray();
+            return _dict.Values;
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            _dict = _nodes.ToDictionary(key => key.Id, value => (TNode)value);
         }
 
         internal IEnumerator<Transition<TNode>> GetEnumeratorFor(RawNode node)
@@ -87,7 +77,7 @@ namespace UnityUtility.NodeBased
 
             for (int i = 0; i < next.Length; i++)
             {
-                RawNode nextNode = Dict[next[i].NextNodeId];
+                RawNode nextNode = _dict[next[i].NextNodeId];
 
                 if (nextNode is HubNode)
                 {
