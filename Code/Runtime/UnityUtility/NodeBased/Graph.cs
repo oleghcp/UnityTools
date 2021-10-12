@@ -1,6 +1,7 @@
 #if UNITY_2019_3_OR_NEWER
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -11,7 +12,22 @@ namespace UnityUtility.NodeBased
     public abstract class RawGraph : ScriptableObject
     {
         [SerializeReference]
-        private protected RawNode[] _nodes;
+        private RawNode[] _nodes;
+
+        private Dictionary<int, RawNode> _dict;
+
+        internal Dictionary<int, RawNode> Dict
+        {
+            get => _dict ?? (_dict = _nodes.ToDictionary(key => key.Id, value => value));
+        }
+
+        public RawNode GetNodeById(int id)
+        {
+            if (Dict.TryGetValue(id, out RawNode value) && value.RealNode())
+                return value;
+
+            return null;
+        }
 
         public RawNode RootNode
         {
@@ -40,9 +56,9 @@ namespace UnityUtility.NodeBased
 #endif
     }
 
-    public abstract class Graph<TNode> : RawGraph, ISerializationCallbackReceiver where TNode : Node<TNode>
+    public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
     {
-        private Dictionary<int, TNode> _dict;
+        private ReadOnlyCollection<TNode> _nodes;
 
         public new TNode RootNode
         {
@@ -50,61 +66,35 @@ namespace UnityUtility.NodeBased
             get => (TNode)base.RootNode;
         }
 
-        public TNode GetNodeById(int id)
+        public ReadOnlyCollection<TNode> Nodes
         {
-            if (_dict.TryGetValue(id, out TNode value) && value.RealNode())
-                return value;
-
-            return null;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Dictionary<int, TNode>.ValueCollection GetNodes()
-        {
-            return _dict.Values;
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            _dict = _nodes.ToDictionary(key => key.Id, value => (TNode)value);
-        }
-
-        internal IEnumerator<Transition<TNode>> GetEnumeratorFor(RawNode node)
-        {
-            Transition[] next = node.Next;
-
-            for (int i = 0; i < next.Length; i++)
+            get
             {
-                RawNode nextNode = _dict[next[i].NextNodeId];
-
-                if (nextNode is HubNode)
+                if (_nodes == null)
                 {
-                    var enumerator = GetEnumeratorFor(nextNode);
+                    TNode[] nodes = Dict.Values.Where(item => item.RealNode())
+                                               .Select(item => (TNode)item)
+                                               .ToArray();
+                    _nodes = new ReadOnlyCollection<TNode>(nodes);
+                }
 
-                    while (enumerator.MoveNext())
-                    {
-                        yield return enumerator.Current;
-                    }
-                }
-                else
-                {
-                    yield return new Transition<TNode>(next[i].Condition, node, nextNode);
-                }
+                return _nodes;
             }
+        }
+
+        public new TNode GetNodeById(int id)
+        {
+            return base.GetNodeById(id) as TNode;
         }
 
         internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
         {
-            var states = new Dictionary<RawNode, TState>(_nodes.Length);
+            Dictionary<RawNode, TState> states = new Dictionary<RawNode, TState>(Dict.Count);
 
             RawNode rootNode = RootNode;
 
-            for (int i = 0; i < _nodes.Length; i++)
+            foreach (RawNode node in Dict.Values)
             {
-                RawNode node = _nodes[i];
-
                 if (node is HubNode)
                     continue;
 
@@ -114,19 +104,13 @@ namespace UnityUtility.NodeBased
                     stateMachine.AddState(state, node == rootNode);
             }
 
-            for (int i = 0; i < _nodes.Length; i++)
+            foreach (RawNode node in Dict.Values)
             {
-                RawNode node = _nodes[i];
-
                 if (node.ServiceNode())
                     continue;
 
-                var enumerator = GetEnumeratorFor(node);
-
-                while (enumerator.MoveNext())
+                foreach (Transition<TNode> transition in node as TNode)
                 {
-                    Transition<TNode> transition = enumerator.Current;
-
                     stateMachine.AddTransition(states[node],
                                                transition.CreateCondition<TState, TData>(),
                                                states[transition.NextNode]);
