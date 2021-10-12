@@ -201,7 +201,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
                 Rect nodeRect = ScreenRect;
 
-                GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.SelectedNode : GraphEditorStyles.Styles.Node);
+                GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.NodeSelected : GraphEditorStyles.Styles.NodeRegular);
 
                 nodeRect.position += UI_OFFSET;
                 nodeRect.size -= UI_SHRINK;
@@ -248,7 +248,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                             throw new UnsupportedValueException(_type);
                     }
 
-                    EditorGUILayout.LabelField(nameProperty.stringValue, GraphEditorStyles.Styles.NodeHeader);
+                    EditorGUILayout.LabelField(nameProperty.stringValue, EditorStylesExt.Rect);
                     GUI.color = Colours.White;
                 }
             }

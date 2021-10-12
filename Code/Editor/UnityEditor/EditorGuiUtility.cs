@@ -10,6 +10,12 @@ namespace UnityEditor
     {
         private static GUIContent _commonContent;
 
+        public static string BuiltInSkinsPath
+        {
+            get => EditorGUIUtility.isProSkin ? "builtin skins/darkskin/images/"
+                                              : "builtin skins/lightskin/images/";
+        }
+
         public static float SmallButtonWidth
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

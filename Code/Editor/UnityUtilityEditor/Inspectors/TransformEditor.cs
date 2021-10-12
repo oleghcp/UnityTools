@@ -18,11 +18,10 @@ namespace UnityUtilityEditor.Inspectors
         private const float LABEL_WIDTH = 40f;
 
         private string[] _toolbarNames = new string[] { "Local", "World" };
-#if UNITY_2019_1_OR_NEWER
+
         private string _pivotModeWarning = $"→ {PivotMode.Center}";
         private string _pivotRotationWarning = $"→ {PivotRotation.Global}";
-        private Rect _sceneGuiArea = new Rect(5f, 0f, 60f, 40f);
-#endif
+        private Rect _sceneGuiArea = new Rect(5f, 5f, 65f, 100f);
 
         private static bool _world;
 
@@ -47,9 +46,6 @@ namespace UnityUtilityEditor.Inspectors
             Tools.pivotModeChanged += SceneView.RepaintAll;
             Tools.pivotRotationChanged += SceneView.RepaintAll;
 #endif
-#if UNITY_2019_1_OR_NEWER
-            SceneView.beforeSceneGui += DarwSceneGUI;
-#endif
         }
 
         private void OnDisable()
@@ -57,9 +53,6 @@ namespace UnityUtilityEditor.Inspectors
 #if UNITY_2021_1_OR_NEWER
             Tools.pivotModeChanged -= SceneView.RepaintAll;
             Tools.pivotRotationChanged -= SceneView.RepaintAll;
-#endif
-#if UNITY_2019_1_OR_NEWER
-            SceneView.beforeSceneGui -= DarwSceneGUI;
 #endif
         }
 
@@ -118,34 +111,9 @@ namespace UnityUtilityEditor.Inspectors
 #endif
         }
 
-#if UNITY_2019_1_OR_NEWER
-        private void DarwSceneGUI(SceneView sceneView)
-        {
-            if (sceneView.in2DMode)
-                return;
-
-            GUILayout.BeginArea(_sceneGuiArea);
-
-            if (Tools.pivotMode != PivotMode.Pivot)
-            {
-                GUI.color = Colours.Cyan;
-                EditorGUILayout.HelpBox(_pivotModeWarning, MessageType.None);
-            }
-
-            if (Tools.pivotRotation != PivotRotation.Local)
-            {
-                GUI.color = Colours.Yellow;
-                EditorGUILayout.HelpBox(_pivotRotationWarning, MessageType.None);
-            }
-
-            GUI.color = Colours.White;
-            GUILayout.EndArea();
-        }
-#endif
-
-#if !UNITY_2019_3_OR_NEWER
         private void OnSceneGUI()
         {
+#if !UNITY_2019_3_OR_NEWER
             if (!_grid)
                 return;
 
@@ -207,8 +175,27 @@ namespace UnityUtilityEditor.Inspectors
                     Handles.DrawSolidDisc(circlePos, n, HandleUtility.GetHandleSize(Vector3.zero) * CIRCLE_SIZE);
                 }
             }
-        }
 #endif
+
+            Handles.BeginGUI();
+            GUILayout.BeginArea(_sceneGuiArea);
+
+            if (Tools.pivotMode != PivotMode.Pivot)
+            {
+                GUI.color = Colours.Cyan;
+                GUILayout.Label(_pivotModeWarning, EditorStylesExt.Rect, GUILayout.Height(25f));
+            }
+
+            if (Tools.pivotRotation != PivotRotation.Local)
+            {
+                GUI.color = Colours.Yellow;
+                GUILayout.Label(_pivotRotationWarning, EditorStylesExt.Rect, GUILayout.Height(25f));
+            }
+
+            GUI.color = Colours.White;
+            GUILayout.EndArea();
+            Handles.EndGUI();
+        }
 
         private static Vector3 DrawLineForLocal(string label, in Vector3 curValue, in Vector3 defVal = default)
         {
