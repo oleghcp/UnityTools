@@ -74,9 +74,7 @@ namespace UnityUtilityEditor.Drawers
 
             bool isValidType(Type type)
             {
-                return !type.IsAbstract &&
-                       !type.IsInterface &&
-                       type.IsDefined(typeof(SerializableAttribute), false);
+                return !type.IsAbstract && !type.IsInterface;
             }
 
             void assignField(SerializedProperty prop, object newValue)

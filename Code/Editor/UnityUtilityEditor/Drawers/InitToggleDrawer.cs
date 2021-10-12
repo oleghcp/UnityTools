@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Drawers
         {
             Type type = EditorUtilityExt.GetFieldType(this);
 
-            if (type.IsAbstract)
+            if (type.IsAbstract || type.IsInterface)
             {
                 GUI.Label(position, "Use non-abstract type.");
                 return;
