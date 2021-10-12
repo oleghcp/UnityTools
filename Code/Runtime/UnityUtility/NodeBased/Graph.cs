@@ -75,6 +75,12 @@ namespace UnityUtility.NodeBased
             return base.GetNodeById(id) as TNode;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public IReadOnlyCollection<TNode> GetNodes()
+        {
+            return Dict.Values.Select(item => (TNode)item).ToArray();
+        }
+
         internal IEnumerator<Transition<TNode>> GetEnumeratorFor(RawNode node)
         {
             Transition[] next = node.Next;

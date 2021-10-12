@@ -273,6 +273,11 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             for (int i = 0; i < _nodeViewers.Count; i++)
             {
+                _nodeViewers[i].DrawTransitions();
+            }
+
+            for (int i = 0; i < _nodeViewers.Count; i++)
+            {
                 _nodeViewers[i].Draw();
             }
         }
@@ -337,13 +342,13 @@ namespace UnityUtilityEditor.Window.NodeBased
                     _selectionRectOn = false;
                     break;
 
-                //case EventType.KeyDown:
-                //    if (e.keyCode == KeyCode.D)
-                //    {
-                //        CopySelectedNode();
-                //        GUI.changed = true;
-                //    }
-                //    break;
+                    //case EventType.KeyDown:
+                    //    if (e.keyCode == KeyCode.D)
+                    //    {
+                    //        CopySelectedNode();
+                    //        GUI.changed = true;
+                    //    }
+                    //    break;
             }
         }
 

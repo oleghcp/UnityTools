@@ -187,11 +187,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            for (int i = 0; i < _transitionViewers.Count; i++)
-            {
-                _transitionViewers[i].Draw();
-            }
-
             if (IsInCamera)
             {
                 _in.Draw();
@@ -283,6 +278,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     default:
                         throw new UnsupportedValueException(_type);
                 }
+            }
+        }
+
+        public void DrawTransitions()
+        {
+            for (int i = 0; i < _transitionViewers.Count; i++)
+            {
+                _transitionViewers[i].Draw();
             }
         }
 
