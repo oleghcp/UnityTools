@@ -84,6 +84,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
+            if (!(_source.Node.IsInCamera || _destination.Node.IsInCamera))
+                return;
+
             Color targetColor = GraphEditorStyles.GetLineColor();
 
             Vector2 outPoint = _source.ScreenRect.center;

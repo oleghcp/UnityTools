@@ -187,27 +187,27 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            if (IsInCamera)
+            if (!IsInCamera)
+                return;
+
+            _in.Draw();
+
+            if (_type != NodeType.Exit)
+                _out.Draw();
+
+            Rect nodeRect = ScreenRect;
+
+            GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.NodeSelected : GraphEditorStyles.Styles.NodeRegular);
+
+            nodeRect.position += UI_OFFSET;
+            nodeRect.size -= UI_SHRINK;
+
+            using (new GUILayout.AreaScope(nodeRect))
             {
-                _in.Draw();
+                DrawHeader();
 
-                if (_type != NodeType.Exit)
-                    _out.Draw();
-
-                Rect nodeRect = ScreenRect;
-
-                GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.NodeSelected : GraphEditorStyles.Styles.NodeRegular);
-
-                nodeRect.position += UI_OFFSET;
-                nodeRect.size -= UI_SHRINK;
-
-                using (new GUILayout.AreaScope(nodeRect))
-                {
-                    DrawHeader();
-
-                    if (_window.Camera.Size <= 1f)
-                        DrawContent(nodeRect.width);
-                }
+                if (_window.Camera.Size <= 1f)
+                    DrawContent(nodeRect.width);
             }
 
             void DrawHeader()
