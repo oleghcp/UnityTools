@@ -377,31 +377,38 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             GenericMenu genericMenu = new GenericMenu();
 
-            if (_type.ServiceNode())
+            switch (_type)
             {
-                genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                case NodeType.Real:
+                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
+                    genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
+                    genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
-                if (_type == NodeType.Hub)
-                {
+                    if (_window.RootNodeId == Id && _type.RealNode())
+                        genericMenu.AddDisabledItem(new GUIContent("Set as root"));
+                    else
+                        genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
+
+                    //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
+                    //genericMenu.AddSeparator(null);
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
-                }
-            }
-            else
-            {
-                genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
-                genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
+                    break;
 
-                if (_window.RootNodeId == Id && _type.RealNode())
-                    genericMenu.AddDisabledItem(new GUIContent("Set as root"));
-                else
-                    genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
+                case NodeType.Hub:
+                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    genericMenu.AddSeparator(null);
+                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                    break;
 
-                //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
-                //genericMenu.AddSeparator(null);
-                genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
-                genericMenu.AddSeparator(null);
-                genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                case NodeType.Exit:
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    break;
+
+                default:
+                    throw new UnsupportedValueException(_type);
             }
 
             genericMenu.ShowAsContext();
