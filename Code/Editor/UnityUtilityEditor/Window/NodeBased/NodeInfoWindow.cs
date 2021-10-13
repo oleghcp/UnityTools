@@ -1,6 +1,5 @@
 #if UNITY_2019_3_OR_NEWER
 using System;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.NodeBased;
@@ -12,7 +11,6 @@ namespace UnityUtilityEditor.Window.NodeBased
     {
         private NodeViewer _nodeEditor;
         private GraphEditorWindow _mainWindow;
-        private string[] _nextNodeNames;
         private Type _nodeType;
 
         private Vector2 _scrollPosition;
@@ -35,17 +33,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             _nodeEditor = nodeEditor;
             _mainWindow = mainWindow;
             _nodeType = nodeEditor.SystemType;
-
-            var dict = mainWindow.GraphAssetEditor
-                                 .NodesProperty
-                                 .EnumerateArrayElements()
-                                 .Select(item => (item.FindPropertyRelative(RawNode.IdFieldName).intValue, item.FindPropertyRelative(RawNode.NameFieldName).stringValue))
-                                 .ToDictionary(key => key.Item1, value => value.Item2);
-
-            _nextNodeNames = nodeEditor.FindSubProperty(RawNode.ArrayFieldName)
-                                       .EnumerateArrayElements()
-                                       .Select(item => dict[item.FindPropertyRelative(Transition.NodeIdFieldName).intValue])
-                                       .ToArray();
         }
 
         private void OnDestroy()
@@ -56,6 +43,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnGUI()
         {
+            _nodeEditor.NodeProp.serializedObject.Update();
+
             EditorGUILayout.Space(2f);
             _scrollPosition.y = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox).y;
 
@@ -67,15 +56,36 @@ namespace UnityUtilityEditor.Window.NodeBased
                 EditorGUILayout.Space(10f);
             }
 
-            EditorGUILayout.LabelField($"Connected Nodes: {_nextNodeNames.Length}");
+            EditorGUILayout.LabelField($"Connections ( {_nodeEditor.TransitionViewers.Count} ):");
 
-            for (int i = 0; i < _nextNodeNames.Length; i++)
+            GUILayoutOption width = GUILayout.Width(70f);
+
+            EditorGUI.indentLevel++;
+            foreach (TransitionViewer item in _nodeEditor.TransitionViewers)
             {
-                EditorGUILayout.LabelField($" - {_nextNodeNames[i]}");
+                bool stop = false;
+
+                using (var nameProp = item.Destination.Node.FindSubProperty(RawNode.NameFieldName))
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label(nameProp.stringValue);
+                    if (GUILayout.Button("Remove", width))
+                    {
+                        _nodeEditor.RemoveTransition(item);
+                        stop = true;
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                if (stop)
+                    break;
             }
+            EditorGUI.indentLevel--;
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.Space(2f);
+
+            _nodeEditor.NodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }

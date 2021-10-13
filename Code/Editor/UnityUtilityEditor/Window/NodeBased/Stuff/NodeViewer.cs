@@ -46,6 +46,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public PortViewer In => _in;
         public PortViewer Out => _out;
         public bool IsSelected => _isSelected;
+        public int Id => _id;
+        public NodeType Type => _type;
+        public Type SystemType => _systemType;
+
+        public IReadOnlyList<TransitionViewer> TransitionViewers => _transitionViewers;
+        public SerializedProperty NodeProp => _nodeProp;
 
         public Vector2 Position
         {
@@ -99,10 +105,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 return _isInCamera;
             }
         }
-
-        public int Id => _id;
-        public NodeType Type => _type;
-        public Type SystemType => _systemType;
 
         public NodeViewer(SerializedProperty nodeProp, GraphEditorWindow window)
         {
@@ -301,33 +303,31 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 case EventType.MouseDown:
                     Rect nodeRect = ScreenRect;
 
-                    if (e.button == 0)
+                    if (nodeRect.Contains(e.mousePosition))
                     {
-                        if (nodeRect.Contains(e.mousePosition))
+                        if (e.button == 0)
                         {
                             _dragedPosition = _position;
                             _isBeingDragged = true;
                             _isSelected = true;
                             needLock = true;
+                            GUI.changed = true;
                         }
-                        else
-                        {
-                            _renaming = false;
-                            if (!(_isSelected && e.control))
-                                _isSelected = false;
-                            GUI.FocusControl(null);
-                        }
-                        GUI.changed = true;
-                    }
-                    else if (e.button == 1)
-                    {
-                        if (nodeRect.Contains(e.mousePosition))
+                        else if (e.button == 1)
                         {
                             _isSelected = true;
-                            GUI.changed = true;
                             needLock = true;
                             ProcessContextMenu();
+                            GUI.changed = true;
                         }
+                    }
+                    else
+                    {
+                        _renaming = false;
+                        if (!(_isSelected && e.control))
+                            _isSelected = false;
+                        GUI.FocusControl(null);
+                        GUI.changed = true;
                     }
                     break;
 
@@ -384,7 +384,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
-                    if (_window.RootNodeId == Id && _type.RealNode())
+                    if (_window.RootNodeId == _id && _type.RealNode())
                         genericMenu.AddDisabledItem(new GUIContent("Set as root"));
                     else
                         genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
@@ -415,7 +415,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             void renameAsset()
             {
-                string defaultName = GraphAssetEditor.GetDefaultNodeName(_systemType);
+                string defaultName = GraphAssetEditor.GetDefaultNodeName(_systemType, _id);
                 _nodeProp.serializedObject.Update();
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
                 nameProperty.stringValue = defaultName;
