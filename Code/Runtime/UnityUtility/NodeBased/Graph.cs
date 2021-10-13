@@ -58,7 +58,7 @@ namespace UnityUtility.NodeBased
 
     public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
     {
-        private ReadOnlyCollection<TNode> _nodes;
+        private ReadOnlyCollection<TNode> _nodeList;
 
         public new TNode RootNode
         {
@@ -70,15 +70,15 @@ namespace UnityUtility.NodeBased
         {
             get
             {
-                if (_nodes == null)
+                if (_nodeList == null)
                 {
                     TNode[] nodes = Dict.Values.Where(item => item.RealNode())
                                                .Select(item => (TNode)item)
                                                .ToArray();
-                    _nodes = new ReadOnlyCollection<TNode>(nodes);
+                    _nodeList = new ReadOnlyCollection<TNode>(nodes);
                 }
 
-                return _nodes;
+                return _nodeList;
             }
         }
 
