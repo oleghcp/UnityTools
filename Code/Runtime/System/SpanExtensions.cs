@@ -8,6 +8,17 @@ namespace System
 {
     public static class SpanExtensions
     {
+        public static void CopyTo<T>(this in Span<T> self, T[] destination) where T : unmanaged
+        {
+            if (self.Length > destination.Length)
+                throw new ArgumentException("Destination too short.");
+
+            for (int i = 0; i < self.Length; i++)
+            {
+                destination[i] = self[i];
+            }
+        }
+
         public static List<T> ToList<T>(this in Span<T> self) where T : unmanaged
         {
             List<T> dest = new List<T>(self.Length * 2);
