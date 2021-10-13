@@ -25,6 +25,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private readonly List<TransitionViewer> _transitionViewers;
 
         private SerializedProperty _nodeProp;
+        private SerializedProperty _nameProp;
 
         private bool _isBeingDragged;
         private bool _isSelected;
@@ -52,6 +53,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public IReadOnlyList<TransitionViewer> TransitionViewers => _transitionViewers;
         public SerializedProperty NodeProp => _nodeProp;
+        public string Name => _nameProp.stringValue;
 
         public Vector2 Position
         {
@@ -112,8 +114,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             UI_SHRINK = new Vector2(20f, 22f);
             SMALL_NODE_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
 
-            _nodeProp = nodeProp;
             _window = window;
+            SetSerializedProperty(nodeProp);
 
             _id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
             _systemType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(nodeProp.managedReferenceFullTypename);
@@ -126,9 +128,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _out = new PortViewer(this, PortType.Out, window);
         }
 
-        public void ReinitSerializedProperty(SerializedProperty nodeProp)
+        public void SetSerializedProperty(SerializedProperty nodeProp)
         {
             _nodeProp = nodeProp;
+            _nameProp = nodeProp.FindPropertyRelative(RawNode.NameFieldName);
         }
 
         public SerializedProperty FindSubProperty(string name)

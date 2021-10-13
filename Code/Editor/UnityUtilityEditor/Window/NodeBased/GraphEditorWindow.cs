@@ -196,7 +196,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
             {
                 int id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
-                _nodeViewers.Find(item => item.Id == id).ReinitSerializedProperty(nodeProp);
+                _nodeViewers.Find(item => item.Id == id).SetSerializedProperty(nodeProp);
             }
 
             if (node.Type == NodeType.Exit)

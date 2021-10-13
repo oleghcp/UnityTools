@@ -65,17 +65,14 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 bool stop = false;
 
-                using (var nameProp = item.Destination.Node.FindSubProperty(RawNode.NameFieldName))
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(item.Destination.Node.Name);
+                if (GUILayout.Button("Remove", width))
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    GUILayout.Label(nameProp.stringValue);
-                    if (GUILayout.Button("Remove", width))
-                    {
-                        _nodeEditor.RemoveTransition(item);
-                        stop = true;
-                    }
-                    EditorGUILayout.EndHorizontal();
+                    _nodeEditor.RemoveTransition(item);
+                    stop = true;
                 }
+                EditorGUILayout.EndHorizontal();
 
                 if (stop)
                     break;

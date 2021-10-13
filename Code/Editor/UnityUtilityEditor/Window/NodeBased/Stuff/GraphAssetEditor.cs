@@ -90,7 +90,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
             else
             {
-                newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType());
+                newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType(), newNodeAsset.Id);
             }
 
             _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
@@ -124,9 +124,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDefaultNodeName(Type type)
+        public static string GetDefaultNodeName(Type type, int id)
         {
-            return type.Name;
+            return $"{type.Name} {id}";
         }
 
         private bool IsServiceField(SerializedProperty property)
