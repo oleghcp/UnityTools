@@ -58,16 +58,18 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             EditorGUILayout.LabelField($"Connections ( {_nodeEditor.TransitionViewers.Count} ):");
 
-            GUILayoutOption width = GUILayout.Width(70f);
+            string tab = " -";
+            GUILayoutOption tabWidth = GUILayout.Width(10f);
+            GUILayoutOption buttonWidth = GUILayout.Width(70f);
 
-            EditorGUI.indentLevel++;
             foreach (TransitionViewer item in _nodeEditor.TransitionViewers)
             {
                 bool stop = false;
 
                 EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(tab, tabWidth);
                 GUILayout.Label(item.Destination.Node.Name);
-                if (GUILayout.Button("Remove", width))
+                if (GUILayout.Button("Remove", buttonWidth))
                 {
                     _nodeEditor.RemoveTransition(item);
                     stop = true;
@@ -77,7 +79,6 @@ namespace UnityUtilityEditor.Window.NodeBased
                 if (stop)
                     break;
             }
-            EditorGUI.indentLevel--;
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.Space(2f);
