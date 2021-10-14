@@ -20,20 +20,28 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private GUIContent _alignButton = new GUIContent("■ □ ■", "Align Selected");
         private GUIContent _moveButton = new GUIContent("● ←", "Move to Root");
         private GUIContent _snapButton = new GUIContent("#", "Grid Snapping");
+        private GUIContent _transitionsButton = new GUIContent("Hide", "Hide/Show Transitions");
         private GUIContent _leftWidthButton = new GUIContent("<", "Node Width");
         private GUIContent _rightWidthButton = new GUIContent(">", "Node Width");
+        private string[] _transitionViewNames = Enum.GetNames(typeof(TransitionViewType));
 
         private bool _hintToggle;
         private bool _propertiesToggle;
         private bool _gridToggle;
+        private bool _hideTransitions;
+        private int _transitionViewType;
 
         public bool GridToggle => _gridToggle;
         public bool PropertiesToggle => _propertiesToggle;
+        public bool HideTransitions => _hideTransitions;
+        public TransitionViewType TransitionView => (TransitionViewType)_transitionViewType;
 
         public GraphToolbar(GraphEditorWindow window)
         {
             _window = window;
             _gridToggle = EditorPrefs.GetBool(PrefsConstants.GRID_SNAPING_KEY);
+            _hideTransitions = EditorPrefs.GetBool(PrefsConstants.HIDE_TRANSITIONS_KEY);
+            _transitionViewType = EditorPrefs.GetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY);
         }
 
         public void Draw()
@@ -63,6 +71,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Save()
         {
             EditorPrefs.SetBool(PrefsConstants.GRID_SNAPING_KEY, _gridToggle);
+            EditorPrefs.SetBool(PrefsConstants.HIDE_TRANSITIONS_KEY, _hideTransitions);
+            EditorPrefs.SetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY, _transitionViewType);
         }
 
         private void DrawLeft()
@@ -74,6 +84,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             const float buttonWidth = 50f;
             IReadOnlyList<NodeViewer> nodeViewers = _window.NodeViewers;
+
+            GUILayoutOption nodeWidthButtonSize = GUILayout.Width(30f);
+
+            if (GUILayout.RepeatButton(_leftWidthButton, nodeWidthButtonSize))
+            {
+                _window.GraphAssetEditor.ChangeNodeWidth(-1);
+                GUI.changed = true;
+            }
+
+            GUILayout.Space(5f);
 
             GUI.enabled = nodeViewers.Count > 0;
 
@@ -108,31 +128,32 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
 
             GUI.enabled = true;
+
+            GUILayout.Space(5f);
+
+            if (GUILayout.RepeatButton(_rightWidthButton, nodeWidthButtonSize))
+            {
+                _window.GraphAssetEditor.ChangeNodeWidth(1);
+                GUI.changed = true;
+            }
         }
 
         private void DrawRigt()
         {
+            if (!_hideTransitions)
+                _transitionViewType = GUILayout.Toolbar(_transitionViewType, _transitionViewNames);
+
+            GUILayout.Space(10f);
+
+            _hideTransitions = GUILayout.Toggle(_hideTransitions, _transitionsButton, GUI.skin.button);
+
             GUILayout.Space(10f);
 
             _gridToggle = GUILayout.Toggle(_gridToggle, _snapButton, GUI.skin.button, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             GUILayout.Space(10f);
 
-            bool minusBtn = GUILayout.RepeatButton(_leftWidthButton, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
-            bool plusBtn = GUILayout.RepeatButton(_rightWidthButton, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
-
-            if (minusBtn)
-                _window.GraphAssetEditor.ChangeNodeWidth(-1);
-
-            if (plusBtn)
-                _window.GraphAssetEditor.ChangeNodeWidth(1);
-
-            GUILayout.Space(10f);
-
             _hintToggle = GUILayout.Toggle(_hintToggle, "?", GUI.skin.button, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
-
-            if (minusBtn || plusBtn)
-                GUI.changed = true;
         }
 
         private void DrawHint(Vector2 winSize)

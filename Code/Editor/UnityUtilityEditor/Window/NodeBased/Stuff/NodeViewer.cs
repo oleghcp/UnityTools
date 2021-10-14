@@ -27,7 +27,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedProperty _nodeProp;
         private SerializedProperty _nameProp;
 
-        private bool _isBeingDragged;
         private bool _isSelected;
         private bool _renaming;
         private float _height;
@@ -195,10 +194,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (!IsInCamera)
                 return;
 
-            _in.Draw();
-
-            if (_type != NodeType.Exit)
-                _out.Draw();
+            drawPorts();
 
             Rect nodeRect = ScreenRect;
 
@@ -207,26 +203,45 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             nodeRect.position += UI_OFFSET;
             nodeRect.size -= UI_SHRINK;
 
-            using (new GUILayout.AreaScope(nodeRect))
-            {
-                DrawHeader();
+            GUILayout.BeginArea(nodeRect);
+            drawHeader();
+            drawContent(nodeRect.width);
+            GUILayout.EndArea();
 
-                if (_window.Camera.Size <= 1f)
-                    DrawContent(nodeRect.width);
+            void drawPorts()
+            {
+                if (_window.HideTransitions)
+                {
+                    //_out.DrawList(_transitionViewers);
+                    return;
+                }
+
+                switch (_window.TransitionView)
+                {
+                    case TransitionViewType.Spline:
+                        _in.Draw();
+                        _out.Draw();
+                        break;
+
+                    case TransitionViewType.Direction:
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(_window.TransitionView);
+                }
             }
 
-            void DrawHeader()
+            void drawHeader()
             {
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
 
                 if (_renaming)
                 {
-                    using (new EditorGUILayout.HorizontalScope())
-                    {
-                        nameProperty.stringValue = EditorGUILayout.TextField(nameProperty.stringValue);
-                        if (GUILayout.Button("V", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
-                            _renaming = false;
-                    }
+                    GUILayout.BeginHorizontal();
+                    nameProperty.stringValue = EditorGUILayout.TextField(nameProperty.stringValue);
+                    if (GUILayout.Button("V", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                        _renaming = false;
+                    GUILayout.EndHorizontal();
                 }
                 else
                 {
@@ -253,8 +268,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 }
             }
 
-            void DrawContent(float width)
+            void drawContent(float width)
             {
+                if (_window.Camera.Size > 1f)
+                    return;
+
                 switch (_type)
                 {
                     case NodeType.Real:
@@ -288,9 +306,27 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void DrawTransitions()
         {
-            for (int i = 0; i < _transitionViewers.Count; i++)
+            if (_window.HideTransitions)
+                return;
+
+            switch (_window.TransitionView)
             {
-                _transitionViewers[i].Draw();
+                case TransitionViewType.Spline:
+                    for (int i = 0; i < _transitionViewers.Count; i++)
+                    {
+                        _transitionViewers[i].DrawSpline();
+                    }
+                    break;
+
+                case TransitionViewType.Direction:
+                    for (int i = 0; i < _transitionViewers.Count; i++)
+                    {
+                        _transitionViewers[i].DrawArrow();
+                    }
+                    break;
+
+                default:
+                    throw new UnsupportedValueException(_window.TransitionView);
             }
         }
 
@@ -311,7 +347,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         if (e.button == 0)
                         {
                             _dragedPosition = _position;
-                            _isBeingDragged = true;
                             _isSelected = true;
                             needLock = true;
                             GUI.changed = true;
@@ -334,12 +369,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     }
                     break;
 
-                case EventType.MouseUp:
-                    _isBeingDragged = false;
-                    break;
-
                 case EventType.MouseDrag:
-                    if (e.button == 0 && (_isBeingDragged || _isSelected))
+                    if (e.button == 0 && _isSelected)
                     {
                         Drag(e.delta);
                         GUI.changed = true;
@@ -383,7 +414,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             switch (_type)
             {
                 case NodeType.Real:
-                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
+                    //genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
@@ -400,7 +431,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     break;
 
                 case NodeType.Hub:
-                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
+                    //genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
                     genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));

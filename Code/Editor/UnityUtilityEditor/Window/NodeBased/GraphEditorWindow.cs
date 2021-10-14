@@ -40,6 +40,8 @@ namespace UnityUtilityEditor.Window.NodeBased
         public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
         public bool GridSnapping => _toolbar.GridToggle;
+        public bool HideTransitions => _toolbar.HideTransitions;
+        public TransitionViewType TransitionView => _toolbar.TransitionView;
 
         public Vector2 WinSize
         {
@@ -304,15 +306,20 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (_selectedPort == null)
                 return;
 
-            switch (_selectedPort.Type)
+            switch (_toolbar.TransitionView)
             {
-                case PortType.In:
-                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, e.mousePosition, Vector2.left, Vector2.right);
+                case TransitionViewType.Spline:
+                    Vector2 startTangentDir = _selectedPort.Type == PortType.In ? Vector2.left : Vector2.right;
+                    Vector2 endTangentDir = _selectedPort.Type == PortType.In ? Vector2.right : Vector2.left;
+                    TransitionViewer.DrawSpline(_selectedPort.ScreenRect.center, e.mousePosition, startTangentDir, endTangentDir);
                     break;
 
-                case PortType.Out:
-                    TransitionViewer.DrawLine(_selectedPort.ScreenRect.center, e.mousePosition, Vector2.right, Vector2.left);
+                case TransitionViewType.Direction:
+                    TransitionViewer.DrawDirection(_selectedPort.Node.ScreenRect.center, e.mousePosition);
                     break;
+
+                default:
+                    throw new UnsupportedValueException(_toolbar.TransitionView);
             }
 
             GUI.changed = true;
@@ -323,33 +330,51 @@ namespace UnityUtilityEditor.Window.NodeBased
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    if (e.button == 0)
-                    {
-                        if (!_selectionRectOn)
-                        {
-                            _selectionRectOn = true;
-                            _downPoint = e.mousePosition;
-                            _selectedPort = null;
-                        }
-                    }
-                    else if (e.button == 1)
-                    {
-                        ProcessContextMenu(e.mousePosition);
-                    }
+                    mouseDown();
                     break;
 
                 case EventType.MouseUp:
-                    _selectionRectOn = false;
+                    mouseUp();
                     break;
 
                     //case EventType.KeyDown:
-                    //    if (e.keyCode == KeyCode.D)
-                    //    {
-                    //        CopySelectedNode();
-                    //        GUI.changed = true;
-                    //    }
+                    //    keyDown();
                     //    break;
             }
+
+            void mouseDown()
+            {
+                if (e.button == 0)
+                {
+                    if (!_selectionRectOn)
+                    {
+                        _selectionRectOn = true;
+                        _downPoint = e.mousePosition;
+                        _selectedPort = null;
+                    }
+                }
+                else if (e.button == 1)
+                {
+                    ProcessContextMenu(e.mousePosition);
+                }
+            }
+
+            void mouseUp()
+            {
+                if (e.button == 0)
+                {
+                    _selectionRectOn = false;
+                }
+            }
+
+            //void keyDown()
+            //{
+            //    if (e.keyCode == KeyCode.D)
+            //    {
+            //        CopySelectedNode();
+            //        GUI.changed = true;
+            //    }
+            //}
         }
 
         private void ProcessNodeEvents(Event e)
