@@ -3,7 +3,6 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
 using UnityUtility.IdGenerating;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
@@ -78,20 +77,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             newNodeAsset.Id = _idGenerator.GetNewId();
             newNodeAsset.Owner = _graphAsset;
             newNodeAsset.Position = position;
-
-            if (newNodeAsset.ServiceNode())
-            {
-                if (newNodeAsset is HubNode)
-                    newNodeAsset.NodeName = "Hub";
-                else if (newNodeAsset is ExitNode)
-                    newNodeAsset.NodeName = "Exit";
-                else
-                    throw new UnsupportedValueException(newNodeAsset.GetType().Name);
-            }
-            else
-            {
-                newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType(), newNodeAsset.Id);
-            }
+            newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType(), newNodeAsset.Id);
 
             _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
             SerializedProperty nodeProp = _nodesProperty.AddArrayElement();
@@ -126,6 +112,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDefaultNodeName(Type type, int id)
         {
+            if (type.Is(typeof(ExitNode)))
+                return "Exit";
+
+            if (type.Is(typeof(HubNode)))
+                return $"Hub {id}";
+
             return $"{type.Name} {id}";
         }
 

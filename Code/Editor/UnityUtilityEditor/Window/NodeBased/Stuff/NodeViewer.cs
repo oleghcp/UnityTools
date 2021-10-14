@@ -387,6 +387,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                             GUI.changed = true;
                         }
                     }
+                    else if (e.keyCode == KeyCode.Return)
+                    {
+                        _renaming = false;
+                        GUI.changed = true;
+                    }
 
                     break;
             }

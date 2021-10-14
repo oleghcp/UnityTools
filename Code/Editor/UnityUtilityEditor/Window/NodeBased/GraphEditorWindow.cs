@@ -32,7 +32,6 @@ namespace UnityUtilityEditor.Window.NodeBased
         private int _rootNodeVersion;
 
         private int _onGuiCounter;
-        private bool _hasExitNode;
         private int _rootNodeId;
 
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
@@ -172,9 +171,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
             {
-                NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
-                if (viewer.Type == NodeType.Exit)
-                    _hasExitNode = true;
+                _nodeViewers.Add(new NodeViewer(nodeProp, this));
             }
 
             _nodeViewers.ForEach(item => item.CreateConnections());
@@ -200,9 +197,6 @@ namespace UnityUtilityEditor.Window.NodeBased
                 int id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
                 _nodeViewers.Find(item => item.Id == id).SetSerializedProperty(nodeProp);
             }
-
-            if (node.Type == NodeType.Exit)
-                _hasExitNode = false;
 
             if (_nodeViewers.Count == 0)
                 _camera.Position = default;
@@ -235,28 +229,28 @@ namespace UnityUtilityEditor.Window.NodeBased
             _selectedPort = null;
         }
 
-        public void CopySelectedNode()
-        {
-            _graphAssetEditor.SerializedObject.Update();
+        //public void CopySelectedNode()
+        //{
+        //    _graphAssetEditor.SerializedObject.Update();
 
-            List<NodeViewer> newNodes = new List<NodeViewer>();
+        //    List<NodeViewer> newNodes = new List<NodeViewer>();
 
-            foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
-            {
-                if (item.Type.ServiceNode())
-                    continue;
+        //    foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
+        //    {
+        //        if (item.Type.ServiceNode())
+        //            continue;
 
-                Rect rect = item.WorldRect;
-                SerializedProperty nodeProp = _graphAssetEditor.CloneNode(rect.position + Vector2.up * (rect.height + 30f), item.Id);
-                NodeViewer newNodeEditor = newNodes.Place(new NodeViewer(nodeProp, this));
-                item.Select(false);
-                newNodeEditor.Select(true);
-            }
+        //        Rect rect = item.WorldRect;
+        //        SerializedProperty nodeProp = _graphAssetEditor.CloneNode(rect.position + Vector2.up * (rect.height + 30f), item.Id);
+        //        newNodes.Place(new NodeViewer(nodeProp, this))
+        //                .Select(true);
+        //        item.Select(false);
+        //    }
 
-            _nodeViewers.AddRange(newNodes);
+        //    _nodeViewers.AddRange(newNodes);
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
-        }
+        //    _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+        //}
 
         private void CreateNode(Vector2 mousePosition, Type type)
         {
@@ -264,9 +258,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             Vector2 position = _camera.ScreenToWorld(mousePosition);
             SerializedProperty nodeProp = _graphAssetEditor.CreateNode(position, type);
-            NodeViewer viewer = _nodeViewers.Place(new NodeViewer(nodeProp, this));
-            if (viewer.Type == NodeType.Exit)
-                _hasExitNode = true;
+            _nodeViewers.Add(new NodeViewer(nodeProp, this));
 
             _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -408,7 +400,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             menu.AddSeparator(string.Empty);
 
             addServiceMenuItem(typeof(HubNode), false);
-            addServiceMenuItem(typeof(ExitNode), _hasExitNode);
+            addServiceMenuItem(typeof(ExitNode), _nodeViewers.Contains(item => item.Type == NodeType.Exit));
 
             menu.ShowAsContext();
 
