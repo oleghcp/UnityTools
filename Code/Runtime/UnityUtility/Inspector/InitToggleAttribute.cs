@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace UnityUtility
+namespace UnityUtility.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class InitToggleAttribute : PropertyAttribute

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
+using UnityUtility.Inspector;
 using UnityUtility.MathExt;
 using static UnityEngine.SortingLayer;
 

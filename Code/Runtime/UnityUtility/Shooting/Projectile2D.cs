@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityUtility.Inspector;
 using UnityUtility.MathExt;
 
 #if UNITY_2019_3_OR_NEWER

@@ -2,7 +2,6 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
 
 namespace UnityUtilityEditor.Drawers
 {
@@ -16,7 +15,7 @@ namespace UnityUtilityEditor.Drawers
 
             if (type.IsValueType)
             {
-                EditorGui.ErrorLabel(position, label, $"Use {nameof(ReferenceSelectionAttribute)} only with reference types.");
+                EditorGui.ErrorLabel(position, label, $"Use attribute only with reference types.");
                 return;
             }
 
