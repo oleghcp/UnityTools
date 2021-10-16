@@ -117,15 +117,13 @@ namespace UnityUtilityEditor.CodeGenerating
                                .Append("int ");
                     }
 
-                    builder.Append(item.Name)
+                    builder.Append(item.Name.Replace(" ", string.Empty))
                            .Append("Mask")
                            .Append(" = ")
                            .Append(item.Mask)
                            .Append(';')
                            .AppendLine();
                 }
-
-                needEmptyLine = true;
             }
 
             builder.Append(GeneratingTools.TAB)
