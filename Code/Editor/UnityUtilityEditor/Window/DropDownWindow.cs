@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -103,7 +102,7 @@ namespace UnityUtilityEditor.Window
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CreateForFlags(BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            CreateForFlags(GetButtonRect(), flags, displayedOptions, onClose);
+            CreateForFlags(GetButtonRect(Event.current.mousePosition), flags, displayedOptions, onClose);
         }
 
         public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
@@ -139,7 +138,13 @@ namespace UnityUtilityEditor.Window
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ShowMenu()
         {
-            ShowMenu(GetButtonRect());
+            ShowMenu(GetButtonRect(Event.current.mousePosition));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ShowMenu(Vector2 position)
+        {
+            ShowMenu(GetButtonRect(position));
         }
 
         public void ShowMenu(in Rect buttonRect)
@@ -359,13 +364,20 @@ namespace UnityUtilityEditor.Window
 
             float getWidth()
             {
-                GUIStyle labelStyle = GUI.skin.label;
-
                 if (items.Count == 0)
                     return MIN_WINDOW_WIDTH;
 
-                _maxLineLength = items.Where(item => !item.IsSeparator)
-                                      .Max(item => labelStyle.CalcSize(EditorGuiUtility.TempContent(item.Text)).x);
+                Data longestLine = items.Where(item => !item.IsSeparator)
+                                        .GetWithMax(item => item.Text.Length);
+                try
+                {
+                    Vector2 size = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(longestLine.Text));
+                    _maxLineLength = size.x;
+                }
+                catch (ArgumentException)
+                {
+                    _maxLineLength = longestLine.Text.Length * 10f;
+                }
 
                 float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLineLength + 2f;
                 return (lineWidth + lineWidth * 0.12f).Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
@@ -378,16 +390,16 @@ namespace UnityUtilityEditor.Window
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Rect GetButtonRect()
+        private static Rect GetButtonRect(Vector2 position)
         {
-            return new Rect(Event.current.mousePosition, Vector2.zero);
+            return new Rect(position, Vector2.zero);
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+
         private struct Data
         {
-            public string Text;
             public Action OnSelected;
+            public string Text;
             public int Id;
             public bool On;
             public bool Disabled;

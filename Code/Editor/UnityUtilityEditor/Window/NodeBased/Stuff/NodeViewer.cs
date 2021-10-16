@@ -28,6 +28,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedProperty _nameProp;
 
         private bool _isSelected;
+        private bool _isDragging;
         private bool _renaming;
         private float _height;
 
@@ -348,6 +349,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         {
                             _dragedPosition = _position;
                             _isSelected = true;
+                            _isDragging = true;
                             needLock = true;
                             GUI.changed = true;
                         }
@@ -370,12 +372,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     break;
 
                 case EventType.MouseDrag:
-                    if (e.button == 0 && _isSelected)
+                    if (e.button == 0 && _isSelected && _isDragging)
                     {
                         Drag(e.delta);
                         GUI.changed = true;
                         needLock = true;
                     }
+                    break;
+
+                case EventType.MouseUp:
+                    if (e.button == 0)
+                        _isDragging = false;
                     break;
 
                 case EventType.KeyDown:
@@ -414,12 +421,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void ProcessContextMenu()
         {
+            Vector2 clickPosition = Event.current.mousePosition;
             GenericMenu genericMenu = new GenericMenu();
 
             switch (_type)
             {
                 case NodeType.Real:
-                    //genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
+                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
@@ -436,7 +444,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     break;
 
                 case NodeType.Hub:
-                    //genericMenu.AddItem(new GUIContent("Add Transition"), false, () => _window.OnClickOnPort(_out));
+                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
                     genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
@@ -458,6 +466,28 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 _nodeProp.serializedObject.Update();
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
                 nameProperty.stringValue = defaultName;
+                _nodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            }
+        }
+
+        private void ProcessDropdownList(Vector2 clickPosition)
+        {
+            DropDownWindow list = ScriptableObject.CreateInstance<DropDownWindow>();
+
+            foreach (NodeViewer item in _window.NodeViewers)
+            {
+                if (item == this)
+                    continue;
+
+                list.AddItem(item.Name, false, () => createTransition(item.In));
+            }
+
+            list.ShowMenu(clickPosition);
+
+            void createTransition(PortViewer port)
+            {
+                _nodeProp.serializedObject.Update();
+                CreateTransition(port);
                 _nodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }

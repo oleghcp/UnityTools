@@ -18,6 +18,11 @@ namespace UnityEditor
             _window.ShowMenu();
         }
 
+        public void ShowMenu(Vector2 position)
+        {
+            _window.ShowMenu(position);
+        }
+
         public void ShowMenu(in Rect buttonRect)
         {
             _window.ShowMenu(buttonRect);
