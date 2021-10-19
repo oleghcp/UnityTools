@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace UnityUtilityEditor.CodeGenerating
 {
     public static class EnumGenerator
     {
+        public static string Generate(string nameSpace, string enumName,
+                                      IEnumerable<string> enumValues,
+                                      EnumType enumType = EnumType.Int)
+        {
+            int i = 0;
+            return Generate(nameSpace, enumName, enumValues.Select(item => (item, i++)), enumType);
+        }
+
         public static string Generate(string nameSpace, string enumName,
                                       IEnumerable<(string name, int intValue)> enumValues,
                                       EnumType enumType = EnumType.Int)
