@@ -35,7 +35,7 @@ namespace UnityUtilityEditor.CodeGenerating
                            .Append("public ")
                            .Append("const ")
                            .Append("string ")
-                           .Append(item.stringValue.Replace(" ", string.Empty))
+                           .Append(item.stringValue.RemoveWhiteSpaces())
                            .Append("Tag")
                            .Append(" = ")
                            .Append('"')
@@ -60,7 +60,7 @@ namespace UnityUtilityEditor.CodeGenerating
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
-                           .Append(layer.name.Replace(" ", string.Empty))
+                           .Append(layer.name.RemoveWhiteSpaces())
                            .Append("Id")
                            .Append(" = ")
                            .Append(layer.id)
@@ -88,7 +88,7 @@ namespace UnityUtilityEditor.CodeGenerating
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
-                           .Append(item.stringValue.Replace(" ", string.Empty))
+                           .Append(item.stringValue.RemoveWhiteSpaces())
                            .Append("Layer")
                            .Append(" = ")
                            .Append(LayerMask.NameToLayer(item.stringValue))
@@ -117,7 +117,7 @@ namespace UnityUtilityEditor.CodeGenerating
                                .Append("int ");
                     }
 
-                    builder.Append(item.Name.Replace(" ", string.Empty))
+                    builder.Append(item.Name.RemoveWhiteSpaces())
                            .Append("Mask")
                            .Append(" = ")
                            .Append(item.Mask)

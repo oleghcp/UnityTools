@@ -79,6 +79,12 @@ namespace System
             return !string.IsNullOrWhiteSpace(self);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string RemoveWhiteSpaces(this string self)
+        {
+            return self.Replace(" ", string.Empty);
+        }
+
         /// <summary>
         /// Returns the underlying type code of the specified Type.
         /// </summary>
