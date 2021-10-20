@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
 {
@@ -82,6 +83,23 @@ namespace UnityUtilityEditor
         private static void GetScriptableObjectWindow()
         {
             EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");
+        }
+
+        [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Destroy (ext.)", false, 20)]
+        private static void DestroySubobject()
+        {
+            UnityObject.DestroyImmediate(Selection.activeObject, true);
+            AssetDatabase.SaveAssets();
+        }
+
+        [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Destroy (ext.)", true)]
+        private static bool DestroySubobjectValidation()
+        {
+            if (Selection.objects.Length != 1)
+                return false;
+
+            UnityObject obj = AssetDatabaseExt.LoadAssetByGuid(Selection.assetGUIDs[0]);
+            return Selection.activeObject != obj;
         }
 
         // ------------- //
