@@ -3,7 +3,6 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
-using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window.GamepadAxes
 {
@@ -22,9 +21,7 @@ namespace UnityUtilityEditor.Window.GamepadAxes
 
         public GamepadAxesDrawer()
         {
-            string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}InputManager{AssetDatabaseExt.ASSET_EXTENSION}";
-            UnityObject inputSettings = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
-            _inputSettings = new SerializedObject(inputSettings);
+            _inputSettings = new SerializedObject(Managers.GetInputManager());
             _axesArray = _inputSettings.FindProperty("m_Axes");
             RefreshAxes();
         }

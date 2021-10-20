@@ -9,7 +9,6 @@ using UnityUtilityEditor.CodeGenerating;
 using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Gui;
 using UnityUtilityTools;
-using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window
 {
@@ -49,9 +48,7 @@ namespace UnityUtilityEditor.Window
                 _configWrapper.Config = new LayerSetConfig();
             }
 
-            string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}TagManager{AssetDatabaseExt.ASSET_EXTENSION}";
-            UnityObject tagManager = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
-            _tagManager = new SerializedObject(tagManager);
+            _tagManager = new SerializedObject(Managers.GetTagManager());
             _tags = _tagManager.FindProperty("tags");
             _layers = _tagManager.FindProperty("layers");
 
