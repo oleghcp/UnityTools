@@ -86,14 +86,14 @@ namespace UnityUtilityEditor
         }
 
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Destroy (ext.)", false, 20)]
-        private static void DestroySubobject()
+        private static void DestroySubasset()
         {
             UnityObject.DestroyImmediate(Selection.activeObject, true);
             AssetDatabase.SaveAssets();
         }
 
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Destroy (ext.)", true)]
-        private static bool DestroySubobjectValidation()
+        private static bool DestroySubassetValidation()
         {
             if (Selection.objects.Length != 1)
                 return false;
