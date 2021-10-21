@@ -8,12 +8,13 @@ namespace UnityUtilityEditor.CodeGenerating
     {
         public const string TAB = "    ";
 
-        public static void CreateCsFile(string text, string rootFolder, string className, string nameSpace)
+        public static void CreateCsFile(string text, string rootFolder, string className, string nameSpace, bool refreshAssets = true)
         {
             string dirPath = Path.Combine(rootFolder, $"{nameSpace.Replace('.', '/')}");
             Directory.CreateDirectory(dirPath);
             File.WriteAllText(dirPath + $"/{className}.cs", text);
-            AssetDatabase.Refresh();
+            if (refreshAssets)
+                AssetDatabase.Refresh();
         }
 
         public static void GenerateBanner(StringBuilder builder)
