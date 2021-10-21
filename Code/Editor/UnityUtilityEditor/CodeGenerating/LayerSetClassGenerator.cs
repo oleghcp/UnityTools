@@ -2,6 +2,7 @@
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility;
 using UnityUtilityEditor.Configs;
 
 namespace UnityUtilityEditor.CodeGenerating
@@ -99,7 +100,7 @@ namespace UnityUtilityEditor.CodeGenerating
                 if (config.LayerMasks.Length > 0)
                     builder.AppendLine();
 
-                foreach (var item in config.LayerMasks)
+                foreach (var maskInfo in config.LayerMasks)
                 {
                     builder.Append(GeneratingTools.TAB)
                            .Append(GeneratingTools.TAB)
@@ -117,11 +118,20 @@ namespace UnityUtilityEditor.CodeGenerating
                                .Append("int ");
                     }
 
-                    builder.Append(item.Name.RemoveWhiteSpaces())
+                    builder.Append(maskInfo.Name.RemoveWhiteSpaces())
                            .Append("Mask")
                            .Append(" = ")
-                           .Append(item.Mask)
+                           .Append(maskInfo.Mask)
                            .Append(';')
+                           .Append(" // ");
+
+                    foreach (int layerIndex in BitMask.EnumerateIndices(maskInfo.Mask))
+                    {
+                        builder.Append(LayerMask.LayerToName(layerIndex).RemoveWhiteSpaces())
+                               .Append(" | ");
+                    }
+
+                    builder.Remove(builder.Length - 3, 2)
                            .AppendLine();
                 }
             }
