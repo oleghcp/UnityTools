@@ -64,7 +64,7 @@ namespace UnityEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetLayer(this Collision collision)
         {
-            return collision.gameObject.layer;
+            return collision.collider.gameObject.layer;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace UnityEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetLayer(this Collision2D collision)
         {
-            return collision.gameObject.layer;
+            return collision.collider.gameObject.layer;
         }
     }
 }
