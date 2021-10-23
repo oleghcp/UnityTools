@@ -8,15 +8,17 @@ namespace UnityUtility
     [Serializable]
     public sealed class FpsCounter
     {
+        private const float DEFAULT_REFRESH_TIME = 0.5f;
+
         private int _frameCounter;
         private float _timeCounter;
         private float _curFps;
 
-        public float RefreshTime;
+        public float RefreshTime = DEFAULT_REFRESH_TIME;
 
         public float FrameRate => _curFps;
 
-        public FpsCounter(float refreshTime = 0.5f)
+        public FpsCounter(float refreshTime = DEFAULT_REFRESH_TIME)
         {
             RefreshTime = refreshTime;
         }
