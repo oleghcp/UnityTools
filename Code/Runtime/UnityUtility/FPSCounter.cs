@@ -1,8 +1,11 @@
-﻿namespace UnityUtility
+﻿using System;
+
+namespace UnityUtility
 {
     /// <summary>
     /// Counts FPS.
     /// </summary>
+    [Serializable]
     public sealed class FpsCounter
     {
         private int _frameCounter;
