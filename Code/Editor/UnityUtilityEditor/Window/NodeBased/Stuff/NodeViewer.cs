@@ -527,7 +527,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        private static NodeType GetNodeType(Type type)
+        public static NodeType GetNodeType(Type type)
         {
             if (type.Is(typeof(ExitNode)))
                 return NodeType.Exit;

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Collections;
 
@@ -13,8 +12,12 @@ namespace UnityUtility.NodeBased
     {
         [SerializeReference]
         private RawNode[] _nodes;
+        [SerializeField]
+        private int _rootNodeId;
 
         private Dictionary<int, RawNode> _dict;
+
+        public RawNode RootNode => GetNodeById(_rootNodeId);
 
         internal Dictionary<int, RawNode> Dict
         {
@@ -27,17 +30,6 @@ namespace UnityUtility.NodeBased
                 return value;
 
             return null;
-        }
-
-        public RawNode RootNode
-        {
-            get
-            {
-                if (_nodes.Length == 0)
-                    return null;
-
-                return _nodes.Find(item => item.RealNode());
-            }
         }
 
         internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
@@ -53,6 +45,7 @@ namespace UnityUtility.NodeBased
         internal static string IdGeneratorFieldName => nameof(LastId);
         internal static string WidthFieldName => nameof(_nodeWidth);
         internal static string NodesFieldName => nameof(_nodes);
+        internal static string RootNodeFieldName => nameof(_rootNodeId);
 #endif
     }
 
@@ -60,11 +53,7 @@ namespace UnityUtility.NodeBased
     {
         private ReadOnlyCollection<TNode> _nodeList;
 
-        public new TNode RootNode
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => (TNode)base.RootNode;
-        }
+        public new TNode RootNode => (TNode)base.RootNode;
 
         public ReadOnlyCollection<TNode> Nodes
         {

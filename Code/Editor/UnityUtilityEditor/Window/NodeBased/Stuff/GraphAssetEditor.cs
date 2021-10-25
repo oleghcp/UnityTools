@@ -66,8 +66,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void SetAsRoot(NodeViewer node)
         {
-            int index = _nodesProperty.GetArrayElement(out _, item => item.FindPropertyRelative(RawNode.IdFieldName).intValue == node.Id);
-            _nodesProperty.MoveArrayElement(index, 0);
+            _serializedObject.FindProperty(RawGraph.RootNodeFieldName).intValue = node.Id;
         }
 
         public SerializedProperty CreateNode(Vector2 position, Type type)
@@ -77,11 +76,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             newNodeAsset.Id = _idGenerator.GetNewId();
             newNodeAsset.Owner = _graphAsset;
             newNodeAsset.Position = position;
-            newNodeAsset.NodeName = GetDefaultNodeName(newNodeAsset.GetType(), newNodeAsset.Id);
+            newNodeAsset.NodeName = GetDefaultNodeName(type, newNodeAsset.Id);
 
             _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
             SerializedProperty nodeProp = _nodesProperty.AddArrayElement();
             nodeProp.managedReferenceValue = newNodeAsset;
+
+            SerializedProperty rootNodeIdProp = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
+            if (rootNodeIdProp.intValue == 0 && NodeViewer.GetNodeType(type).RealNode())
+                rootNodeIdProp.intValue = newNodeAsset.Id;
 
             return nodeProp;
         }
@@ -91,7 +94,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             throw new NotImplementedException();
         }
 
-        public void DestroyNode(int nodeId)
+        public void RemoveNode(int nodeId)
         {
             int index = _nodesProperty.GetArrayElement(out var element, item => item.FindPropertyRelative(RawNode.IdFieldName).intValue == nodeId);
             element.managedReferenceValue = null;
@@ -99,8 +102,31 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             if (_nodesProperty.arraySize == 0)
             {
+                _serializedObject.FindProperty(RawGraph.RootNodeFieldName).intValue = 0;
                 _idGenerator = new IntIdGenerator();
                 _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = 0;
+            }
+            else
+            {
+                SerializedProperty rootNodeIdProp = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
+                if (nodeId == rootNodeIdProp.intValue)
+                {
+                    bool replaced = false;
+
+                    foreach (SerializedProperty item in _nodesProperty.EnumerateArrayElements())
+                    {
+                        Type type = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(item.managedReferenceFullTypename);
+                        if (NodeViewer.GetNodeType(type).RealNode())
+                        {
+                            rootNodeIdProp.intValue = item.FindPropertyRelative(RawNode.IdFieldName).intValue;
+                            replaced = true;
+                            break;
+                        }
+                    }
+
+                    if (!replaced)
+                        rootNodeIdProp.intValue = 0;
+                }
             }
         }
 

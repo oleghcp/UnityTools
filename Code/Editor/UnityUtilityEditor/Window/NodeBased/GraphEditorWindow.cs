@@ -80,7 +80,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 if (_rootNodeVersion != _onGuiCounter)
                 {
-                    _rootNodeId = _graphAssetEditor.GraphAsset.RootNode.Id;
+                    _rootNodeId = _graphAssetEditor.SerializedObject.FindProperty(RawGraph.RootNodeFieldName).intValue;
                     _rootNodeVersion = _onGuiCounter;
                 }
 
@@ -190,7 +190,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
-            _graphAssetEditor.DestroyNode(node.Id);
+            _graphAssetEditor.RemoveNode(node.Id);
 
             foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
             {
