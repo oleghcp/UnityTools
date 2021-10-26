@@ -153,6 +153,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
                    fieldName == RawGraph.NodesFieldName ||
+                   fieldName == RawGraph.RootNodeFieldName ||
                    fieldName == RawGraph.IdGeneratorFieldName ||
                    fieldName == RawGraph.WidthFieldName;
         }

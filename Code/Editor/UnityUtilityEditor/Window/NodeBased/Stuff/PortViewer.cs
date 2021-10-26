@@ -60,9 +60,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Draw()
         {
-            if (_node.Type == NodeType.Exit)
-                return;
-
             if (GUI.Button(ScreenRect, GraphEditorStyles.Styles.RightTriangle, _style))
                 _window.OnClickOnPort(this);
         }

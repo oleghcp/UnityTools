@@ -221,7 +221,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 {
                     case TransitionViewType.Spline:
                         _in.Draw();
-                        _out.Draw();
+                        if (_type != NodeType.Exit)
+                            _out.Draw();
                         break;
 
                     case TransitionViewType.Direction:

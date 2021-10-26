@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Async;
 using UnityUtility.MathExt;
@@ -62,12 +61,6 @@ namespace UnityUtility.Timers
 
         // -- //
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void InvokeEvent()
-        {
-            Elapsed_Event?.Invoke(this);
-        }
-
         private void StartInternal(float time)
         {
             _routine.Reset();
@@ -82,7 +75,7 @@ namespace UnityUtility.Timers
             }
             else
             {
-                InvokeEvent();
+                Elapsed_Event?.Invoke(this);
             }
         }
 
@@ -106,7 +99,7 @@ namespace UnityUtility.Timers
             {
                 if (CurrentTime >= WaitTime)
                 {
-                    _owner.InvokeEvent();
+                    _owner.Elapsed_Event?.Invoke(_owner);
                     return false;
                 }
 
