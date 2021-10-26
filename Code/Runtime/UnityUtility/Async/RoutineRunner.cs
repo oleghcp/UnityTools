@@ -14,6 +14,7 @@ namespace UnityUtility.Async
         private TaskFactory _owner;
 
         private long _id;
+        private bool _isRunning;
 
         public bool IsPaused => _iterator.IsPaused;
         public long Id => _id;
@@ -31,6 +32,12 @@ namespace UnityUtility.Async
 
             if (_owner.CanBeStoppedGlobally)
                 _owner.StopTasks_Event += OnGloballyStoped;
+        }
+
+        private void Update()
+        {
+            if (!_isRunning)
+                _owner.Release(this);
         }
 
         private void OnDestroy()
@@ -79,14 +86,6 @@ namespace UnityUtility.Async
 
         // - - //
 
-        public void OnCoroutineEnded()
-        {
-            if (_queue.Count > 0)
-                RunAsyncInternal(_queue.Dequeue());
-            else
-                _owner.Release(this);
-        }
-
         public void OnCoroutineInterrupted(bool byToken)
         {
             if (!_owner.CanBeStopped)
@@ -96,6 +95,14 @@ namespace UnityUtility.Async
                 _queue.Clear();
 
             OnCoroutineEnded();
+        }
+
+        public void OnCoroutineEnded()
+        {
+            if (_queue.Count > 0)
+                RunAsyncInternal(_queue.Dequeue());
+            else
+                _isRunning = false;
         }
 
         // - - //
@@ -108,6 +115,7 @@ namespace UnityUtility.Async
 
         private void RunAsyncInternal(IEnumerator routine)
         {
+            _isRunning = true;
             _iterator.Fill(routine);
             StartCoroutine(_iterator);
         }
@@ -116,12 +124,14 @@ namespace UnityUtility.Async
         void IPoolable.Reinit()
         {
             _id = _owner.IdProvider.GetNewId();
+            enabled = true;
         }
 
         void IPoolable.CleanUp()
         {
             _id = 0L;
             _iterator.Reset();
+            enabled = false;
         }
         #endregion
     }
