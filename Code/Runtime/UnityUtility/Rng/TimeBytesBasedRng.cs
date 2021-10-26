@@ -50,9 +50,10 @@ namespace UnityUtility.Rng
 
         public unsafe double NextDouble()
         {
-            Span<byte> bytes = stackalloc byte[8];
-            NextBytes(bytes);
-            ulong rn = *(ulong*)bytes.Ptr;
+            const int count = 8;
+            byte* bytes = stackalloc byte[count];
+            NextBytes(bytes, count);
+            ulong rn = *(ulong*)bytes;
             rn %= 1000000000000000ul;
             return rn * 0.000000000000001d;
         }
@@ -78,6 +79,14 @@ namespace UnityUtility.Rng
             }
         }
 
+        private unsafe void NextBytes(byte* buffer, int length)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                buffer[i] = RandomByte();
+            }
+        }
+
         private unsafe int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
@@ -89,16 +98,18 @@ namespace UnityUtility.Rng
             }
             else if (length <= 65536L)
             {
-                Span<byte> bytes = stackalloc byte[2];
-                NextBytes(bytes);
-                ushort rn = *(ushort*)bytes.Ptr;
+                const int count = 2;
+                byte* bytes = stackalloc byte[count];
+                NextBytes(bytes, count);
+                ushort rn = *(ushort*)bytes;
                 return rn % (int)length + minValue;
             }
             else
             {
-                Span<byte> bytes = stackalloc byte[4];
-                NextBytes(bytes);
-                uint rn = *(uint*)bytes.Ptr;
+                const int count = 4;
+                byte* bytes = stackalloc byte[count];
+                NextBytes(bytes, count);
+                uint rn = *(uint*)bytes;
                 return (int)(rn % length + minValue);
             }
         }

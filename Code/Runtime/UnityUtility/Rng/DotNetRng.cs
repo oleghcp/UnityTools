@@ -31,12 +31,14 @@ namespace UnityUtility.Rng
             return (byte)base.Next(256);
         }
 
+#if !UNITY_2021_2_OR_NEWER
         public void NextBytes(Span<byte> buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
                 buffer[i] = (byte)base.Next(256);
             }
-        }
+        } 
+#endif
     }
 }

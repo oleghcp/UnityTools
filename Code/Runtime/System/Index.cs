@@ -2,7 +2,7 @@
 // Based on real System.Index from .net core library. //
 ////////////////////////////////////////////////////////
 
-#if UNITY_2020_2_OR_NEWER
+#if UNITY_2020_2_OR_NEWER && !UNITY_2021_2_OR_NEWER
 using System.Runtime.CompilerServices;
 using UnityUtilityTools;
 

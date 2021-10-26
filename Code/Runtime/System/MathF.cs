@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if !UNITY_2021_2_OR_NEWER
+using System.Runtime.CompilerServices;
 
 namespace System
 {
@@ -186,3 +187,4 @@ namespace System
         }
     }
 }
+#endif

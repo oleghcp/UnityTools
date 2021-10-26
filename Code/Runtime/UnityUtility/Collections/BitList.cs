@@ -467,7 +467,7 @@ namespace UnityUtility.Collections
 
         public BitList Clone()
         {
-            return new BitList(_array)
+            return new BitList(_array as ICollection<int>)
             {
                 _version = _version,
                 _length = _length,
