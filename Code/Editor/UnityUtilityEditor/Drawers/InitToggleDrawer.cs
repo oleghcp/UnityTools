@@ -20,9 +20,10 @@ namespace UnityUtilityEditor.Drawers
             }
 
             bool inited = !property.managedReferenceFullTypename.IsNullOrEmpty();
-
+            int level = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
             bool switched = EditorGUI.Toggle(position, inited);
-
+            EditorGUI.indentLevel = level;
             if (switched != inited)
             {
                 property.serializedObject.Update();
