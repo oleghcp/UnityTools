@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityUtility.Collections;
@@ -10,7 +9,6 @@ namespace UnityUtility.Async
     internal class RoutineRunner : MonoBehaviour, IPoolable
     {
         private RoutineIterator _iterator;
-        private Queue<IEnumerator> _queue;
         private TaskFactory _owner;
 
         private long _id;
@@ -18,19 +16,16 @@ namespace UnityUtility.Async
         public bool IsPaused => _iterator.IsPaused;
         public long Id => _id;
 
-        private void Awake()
+        public RoutineRunner SetUp(TaskFactory owner)
         {
             _iterator = new RoutineIterator(this);
-            _queue = new Queue<IEnumerator>();
-        }
-
-        public void SetUp(TaskFactory owner)
-        {
             _owner = owner;
             _id = _owner.IdProvider.GetNewId();
 
             if (_owner.CanBeStoppedGlobally)
                 _owner.StopTasks_Event += OnGloballyStoped;
+
+            return this;
         }
 
         private void Update()
@@ -65,44 +60,24 @@ namespace UnityUtility.Async
             _iterator.Pause(false);
         }
 
-        public void Add(IEnumerator routine)
-        {
-            _queue.Enqueue(routine);
-
-            if (_iterator.IsEmpty)
-                RunAsyncInternal(_queue.Dequeue());
-        }
-
-        public void SkipCurrent()
-        {
-            _iterator.Stop();
-        }
-
         public void Stop()
         {
-            _queue.Clear();
             _iterator.Stop();
         }
 
         // - - //
 
-        public void OnCoroutineInterrupted(bool byToken)
+        public void OnCoroutineInterrupted()
         {
             if (!_owner.CanBeStopped)
                 throw Errors.CannotStopTask();
-
-            if (byToken)
-                _queue.Clear();
 
             OnCoroutineEnded();
         }
 
         public void OnCoroutineEnded()
         {
-            if (_queue.Count > 0)
-                RunAsyncInternal(_queue.Dequeue());
-            else
-                _id = 0L;
+            _id = 0L;
         }
 
         // - - //

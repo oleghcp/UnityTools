@@ -77,9 +77,8 @@ namespace UnityUtility.Async
 
         private RoutineRunner Create()
         {
-            var taskRunner = _gameObject.AddComponent<RoutineRunner>();
-            taskRunner.SetUp(this);
-            return taskRunner;
+            return _gameObject.AddComponent<RoutineRunner>()
+                              .SetUp(this);
         }
 
         private RoutineRunner CreateLocal()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace UnityUtility.Async
@@ -43,36 +42,12 @@ namespace UnityUtility.Async
         }
 
         /// <summary>
-        /// Skips the current coroutine at the queue.
-        /// </summary>
-        public void SkipCurrent()
-        {
-            if (IsAliveInternal()) { _task.SkipCurrent(); }
-        }
-
-        /// <summary>
         /// Stops the task and marks it as non-alive.
         /// </summary>
         public void Stop()
         {
             if (IsAliveInternal()) { _task.Stop(); }
         }
-
-        /// <summary>
-        /// Adds new routine to the queue. It is allowed if the current task is alive.
-        /// </summary>
-        public void Add(IEnumerator routine)
-        {
-            if (IsAliveInternal())
-            {
-                _task.Add(routine);
-                return;
-            }
-
-            throw new InvalidOperationException("Task is not alive.");
-        }
-
-        // - - //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsAliveInternal()

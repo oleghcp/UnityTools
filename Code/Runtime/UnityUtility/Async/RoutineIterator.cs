@@ -52,15 +52,9 @@ namespace UnityUtility.Async
 
         bool IEnumerator.MoveNext()
         {
-            if (_isStopped)
+            if (_isStopped || _token.IsCancellationRequested)
             {
-                _owner.OnCoroutineInterrupted(false);
-                return false;
-            }
-
-            if (_token.IsCancellationRequested)
-            {
-                _owner.OnCoroutineInterrupted(true);
+                _owner.OnCoroutineInterrupted();
                 return false;
             }
 

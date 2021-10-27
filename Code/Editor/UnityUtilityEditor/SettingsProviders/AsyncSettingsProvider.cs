@@ -13,7 +13,6 @@ namespace UnityUtilityEditor.SettingsProviders
 
         private readonly GUIContent _labelForStopField;
         private readonly GUIContent _labelForGlobalStopField;
-        private readonly GUIContent _labelForDestoryField;
 
         private SerializedObject _serializedObject;
 
@@ -21,16 +20,11 @@ namespace UnityUtilityEditor.SettingsProviders
         {
             _settingsPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}/{nameof(AsyncSystemSettings)}{AssetDatabaseExt.ASSET_EXTENSION}";
 
-            string typeName = nameof(TaskInfo);
-
             _labelForStopField = new GUIContent("Allow stop tasks",
-                $"Option for providing possibility to stop each task manually using {typeName}.{nameof(TaskInfo.Stop)}() or {typeName}.{nameof(TaskInfo.SkipCurrent)}()");
+                $"Option for providing possibility to stop each task manually using {nameof(TaskInfo)}.{nameof(TaskInfo.Stop)}()");
 
             _labelForGlobalStopField = new GUIContent("Allow stop all tasks",
                 "Option for providing possibility to stop all tasks globally by registering object with global stopping event.");
-
-            _labelForDestoryField = new GUIContent("Don't destroy on load",
-                "Whether task runners should be destroyed when scene is unloaded.");
         }
 
         [SettingsProvider]
