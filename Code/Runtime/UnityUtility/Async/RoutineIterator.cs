@@ -12,30 +12,27 @@ namespace UnityUtility.Async
         private bool _isStopped;
         private CancellationToken _token;
 
-        internal bool IsEmpty => _curRoutine == null;
-        internal bool IsPaused => _isPaused;
+        public bool IsEmpty => _curRoutine == null;
+        public bool IsPaused => _isPaused;
 
-        internal RoutineIterator(RoutineRunner owner)
+        public RoutineIterator(RoutineRunner owner)
         {
             _owner = owner;
         }
 
-        internal void Fill(IEnumerator routine)
+        public void Initialize(IEnumerator routine, in CancellationToken token, bool paused)
         {
             _curRoutine = routine;
-        }
-
-        internal void AddToken(in CancellationToken token)
-        {
             _token = token;
+            _isPaused = paused;
         }
 
-        internal void Pause(bool value)
+        public void Pause(bool value)
         {
             _isPaused = value;
         }
 
-        internal void Stop()
+        public void Stop()
         {
             _isStopped = true;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityUtility.Collections;
@@ -10,9 +11,11 @@ namespace UnityUtility.Async
     {
         private RoutineIterator _iterator;
         private TaskFactory _owner;
+        private List<TaskInfo> _continues = new List<TaskInfo>();
 
         private long _id;
 
+        internal TaskFactory Owner => _owner;
         public bool IsPaused => _iterator.IsPaused;
         public long Id => _id;
 
@@ -42,12 +45,18 @@ namespace UnityUtility.Async
 
         // - - //
 
-        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token)
+        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool paused = false)
         {
             _id = _owner.IdProvider.GetNewId();
-            _iterator.AddToken(token);
-            RunAsyncInternal(routine);
+            _iterator.Initialize(routine, token, paused);
+            StartCoroutine(_iterator);
             return new TaskInfo(this);
+        }
+
+        public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)
+        {
+            TaskInfo task = _owner.GetRunner().RunAsync(routine, token, true);
+            return _continues.Place(task);
         }
 
         public void Pause()
@@ -78,6 +87,13 @@ namespace UnityUtility.Async
         public void OnCoroutineEnded()
         {
             _id = 0L;
+
+            if (_continues.Count > 0)
+            {
+                foreach (TaskInfo item in _continues)
+                    item.Resume();
+                _continues.Clear();
+            }
         }
 
         // - - //
@@ -86,12 +102,6 @@ namespace UnityUtility.Async
         {
             if (_id != 0L)
                 Stop();
-        }
-
-        private void RunAsyncInternal(IEnumerator routine)
-        {
-            _iterator.Fill(routine);
-            StartCoroutine(_iterator);
         }
 
         #region IPoolable

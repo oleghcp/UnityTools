@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace UnityUtility.Async
 {
@@ -23,6 +25,20 @@ namespace UnityUtility.Async
         internal TaskInfo(RoutineRunner runner)
         {
             _id = (_task = runner).Id;
+        }
+
+        /// <summary>
+        /// Creates a continuation that executes when the target task completes.
+        /// </summary>
+        public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token = default)
+        {
+            if (IsAliveInternal())
+                return _task.ContinueWith(routine, token);
+
+            if (_task != null)
+                return _task.Owner.GetRunner().RunAsync(routine, token);
+
+            return TaskSystem.StartAsyncLocally(routine, token);
         }
 
         /// <summary>
