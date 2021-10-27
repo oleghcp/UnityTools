@@ -14,7 +14,6 @@ namespace UnityUtility.Async
         private TaskFactory _owner;
 
         private long _id;
-        private bool _isRunning;
 
         public bool IsPaused => _iterator.IsPaused;
         public long Id => _id;
@@ -36,7 +35,7 @@ namespace UnityUtility.Async
 
         private void Update()
         {
-            if (!_isRunning)
+            if (_id == 0L)
                 _owner.Release(this);
         }
 
@@ -50,6 +49,7 @@ namespace UnityUtility.Async
 
         public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token)
         {
+            _id = _owner.IdProvider.GetNewId();
             _iterator.AddToken(token);
             RunAsyncInternal(routine);
             return new TaskInfo(this);
@@ -102,7 +102,7 @@ namespace UnityUtility.Async
             if (_queue.Count > 0)
                 RunAsyncInternal(_queue.Dequeue());
             else
-                _isRunning = false;
+                _id = 0L;
         }
 
         // - - //
@@ -115,7 +115,6 @@ namespace UnityUtility.Async
 
         private void RunAsyncInternal(IEnumerator routine)
         {
-            _isRunning = true;
             _iterator.Fill(routine);
             StartCoroutine(_iterator);
         }
@@ -123,13 +122,11 @@ namespace UnityUtility.Async
         #region IPoolable
         void IPoolable.Reinit()
         {
-            _id = _owner.IdProvider.GetNewId();
             enabled = true;
         }
 
         void IPoolable.CleanUp()
         {
-            _id = 0L;
             _iterator.Reset();
             enabled = false;
         }
