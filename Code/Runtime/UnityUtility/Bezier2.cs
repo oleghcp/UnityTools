@@ -60,9 +60,9 @@ namespace UnityUtility
             return EvaluateInternal(ratio, tmp);
         }
 
-        public static Vector2 Evaluate(float ratio, Vector2[] points)
+        public static Vector2 Evaluate(float ratio, IList<Vector2> points)
         {
-            Span<Vector2> tmp = stackalloc Vector2[points.Length];
+            Span<Vector2> tmp = stackalloc Vector2[points.Count];
             points.CopyTo(tmp);
             return EvaluateInternal(ratio, tmp);
         }

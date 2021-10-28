@@ -346,8 +346,8 @@ namespace System.Collections.Generic
         /// </summary>
         public static void CopyTo<T>(this IList<T> self, Span<T> target) where T : unmanaged
         {
-            int length = Math.Min(self.Count, target.Length);
-            for (int i = 0; i < length; i++)
+            int count = Math.Min(self.Count, target.Length);
+            for (int i = 0; i < count; i++)
             {
                 target[i] = self[i];
             }
@@ -356,15 +356,16 @@ namespace System.Collections.Generic
         /// <summary>
         /// Copies all the elements of the current collection to the specified Span`1.
         /// </summary>
+        /// <param name="index">The starting index of the target span.</param>
         public static void CopyTo<T>(this IList<T> self, Span<T> target, int index) where T : unmanaged
         {
-            if ((uint)index >= (uint)self.Count)
+            if ((uint)index >= (uint)target.Length)
                 throw Errors.IndexOutOfRange();
 
-            int length = Math.Min(self.Count - index, target.Length);
-            for (int i = 0; i < length; i++)
+            int count = Math.Min(self.Count, target.Length - index);
+            for (int i = 0; i < count; i++)
             {
-                target[i] = self[i + index];
+                target[i + index] = self[i];
             }
         }
 
