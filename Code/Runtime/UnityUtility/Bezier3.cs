@@ -27,22 +27,7 @@ namespace UnityUtility
         {
             Span<Vector3> tmp = stackalloc Vector3[_points.Length];
             _points.CopyTo(tmp);
-
-            ratio = ratio.Clamp01();
-            int counter = _points.Length - 1;
-            int times = counter;
-
-            for (int i = 0; i < times; i++)
-            {
-                for (int j = 0; j < counter; j++)
-                {
-                    tmp[j] = Vector3.LerpUnclamped(tmp[j], tmp[j + 1], ratio);
-                }
-
-                counter--;
-            }
-
-            return tmp[0];
+            return EvaluateInternal(tmp, ratio);
         }
 
         public static Vector3 Evaluate(Vector3 orig, Vector3 dest, Vector3 helpPoint, float ratio)
@@ -53,28 +38,28 @@ namespace UnityUtility
             return Vector3.LerpUnclamped(p1, p2, ratio);
         }
 
-        public static Vector3 Evaluate(float ratio, Span<Vector3> points)
+        public static Vector3 Evaluate(Span<Vector3> points, float ratio)
         {
             Span<Vector3> tmp = stackalloc Vector3[points.Length];
             points.CopyTo(tmp);
-            return EvaluateInternal(ratio, tmp);
+            return EvaluateInternal(tmp, ratio);
         }
 
-        public static Vector3 Evaluate(float ratio, Vector3[] points)
+        public static Vector3 Evaluate(Vector3[] points, float ratio)
         {
             Span<Vector3> tmp = stackalloc Vector3[points.Length];
             points.CopyTo(tmp);
-            return EvaluateInternal(ratio, tmp);
+            return EvaluateInternal(tmp, ratio);
         }
 
-        public static Vector3 Evaluate(float ratio, IList<Vector3> points)
+        public static Vector3 Evaluate(IList<Vector3> points, float ratio)
         {
             Span<Vector3> tmp = stackalloc Vector3[points.Count];
             points.CopyTo(tmp);
-            return EvaluateInternal(ratio, tmp);
+            return EvaluateInternal(tmp, ratio);
         }
 
-        private static Vector3 EvaluateInternal(float ratio, Span<Vector3> tmp)
+        private static Vector3 EvaluateInternal(Span<Vector3> tmp, float ratio)
         {
             ratio = ratio.Clamp01();
             int counter = tmp.Length - 1;
