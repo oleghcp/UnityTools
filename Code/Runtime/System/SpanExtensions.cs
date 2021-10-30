@@ -67,6 +67,30 @@ namespace System
         }
 
 #if !UNITY_2021_2_OR_NEWER
+        public static void CopyTo<T>(this in Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
+        {
+            if (self.Length > destination.Length)
+                throw new ArgumentException("Destination too short.");
+
+            for (int i = 0; i < self.Length; i++)
+            {
+                destination[i] = self[i];
+            }
+        }
+
+        public static bool TryCopyTo<T>(this in Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
+        {
+            if ((uint)self.Length <= (uint)destination.Length)
+            {
+                for (int i = 0; i < self.Length; i++)
+                {
+                    destination[i] = self[i];
+                }
+                return true;
+            }
+            return false;
+        }
+
         public static int IndexOf<T>(this in Span<T> self, T item) where T : unmanaged, IEquatable<T>
         {
             for (int i = 0; i < self.Length; i++)

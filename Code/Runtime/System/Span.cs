@@ -59,30 +59,6 @@ namespace System
             }
         }
 
-        public void CopyTo(Span<T> destination)
-        {
-            if (_length > destination.Length)
-                throw new ArgumentException("Destination too short.");
-
-            for (int i = 0; i < _length; i++)
-            {
-                destination[i] = _ptr[i];
-            }
-        }
-
-        public bool TryCopyTo(Span<T> destination)
-        {
-            if ((uint)_length <= (uint)destination.Length)
-            {
-                for (int i = 0; i < _length; i++)
-                {
-                    destination[i] = _ptr[i];
-                }
-                return true;
-            }
-            return false;
-        }
-
         public T[] ToArray()
         {
             T[] newArray = new T[_length];
