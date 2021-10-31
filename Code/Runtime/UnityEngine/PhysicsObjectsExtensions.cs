@@ -8,72 +8,81 @@ namespace UnityEngine
         /// Returns true if any object was hit. Otherwise returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Hit(this in RaycastHit hit)
+        public static bool Hit(this in RaycastHit self)
         {
-            return hit.collider != null;
+            return self.collider != null;
         }
 
         /// <summary>
         /// Calls GetComponent() on the game object that was hit.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T GetComponent<T>(this in RaycastHit hit)
+        public static T GetComponent<T>(this in RaycastHit self)
         {
-            return hit.collider.GetComponent<T>();
+            return self.collider.GetComponent<T>();
         }
 
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this in RaycastHit hit)
+        public static int GetLayer(this in RaycastHit self)
         {
-            return hit.collider.gameObject.layer;
+            return self.collider.gameObject.layer;
         }
 
         /// <summary>
         /// Returns true if any object was hit. Otherwise returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Hit(this in RaycastHit2D hit)
+        public static bool Hit(this in RaycastHit2D self)
         {
-            return hit.collider != null;
+            return self.collider != null;
         }
 
         /// <summary>
         /// Calls GetComponent() on the game object that was hit.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T GetComponent<T>(this in RaycastHit2D hit)
+        public static T GetComponent<T>(this in RaycastHit2D self)
         {
-            return hit.collider.GetComponent<T>();
+            return self.collider.GetComponent<T>();
         }
 
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this in RaycastHit2D hit)
+        public static int GetLayer(this in RaycastHit2D self)
         {
-            return hit.collider.gameObject.layer;
+            return self.collider.gameObject.layer;
         }
 
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this Collision collision)
+        public static int GetLayer(this Collision self)
         {
-            return collision.collider.gameObject.layer;
+            return self.collider.gameObject.layer;
         }
 
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this Collision2D collision)
+        public static int GetLayer(this Collision2D self)
         {
-            return collision.collider.gameObject.layer;
+            return self.collider.gameObject.layer;
+        }
+
+        /// <summary>
+        /// Returns the layer in which the game object that was hit is.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetLayer(this ControllerColliderHit self)
+        {
+            return self.collider.gameObject.layer;
         }
     }
 }
