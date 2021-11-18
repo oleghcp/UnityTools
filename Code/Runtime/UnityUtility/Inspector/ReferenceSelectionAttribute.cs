@@ -8,9 +8,7 @@ namespace UnityUtility.Inspector
     {
         internal bool ShortButtonText;
 
-        public ReferenceSelectionAttribute() { }
-
-        public ReferenceSelectionAttribute(bool shortButtonText)
+        public ReferenceSelectionAttribute(bool shortButtonText = true)
         {
             ShortButtonText = shortButtonText;
         }
