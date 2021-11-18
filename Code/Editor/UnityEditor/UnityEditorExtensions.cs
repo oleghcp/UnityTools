@@ -124,6 +124,17 @@ namespace UnityEditor
             #endregion
         }
 
+#if UNITY_2019_3_OR_NEWER
+        public static bool HasManagedReferenceValue(this SerializedProperty self)
+        {
+#if UNITY_2021_2_OR_NEWER
+            return self.managedReferenceValue != null;
+#else
+            return self.managedReferenceFullTypename.HasAnyData();
+#endif
+        }
+#endif
+
         public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self, bool copyIterationState = true)
         {
             SerializedProperty iterator = self.GetIterator();
