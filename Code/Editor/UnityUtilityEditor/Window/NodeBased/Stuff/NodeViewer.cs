@@ -119,7 +119,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             _id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
             _systemType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(nodeProp.managedReferenceFullTypename);
-            _type = GetNodeType(_systemType);
+            _type = RawNode.GetNodeType(_systemType);
             _position = nodeProp.FindPropertyRelative(RawNode.PositionFieldName).vector2Value;
 
             _transitionViewers = new List<TransitionViewer>();
@@ -217,19 +217,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     return;
                 }
 
-                switch (_window.TransitionView)
+                if (_window.TransitionView == TransitionViewType.Spline)
                 {
-                    case TransitionViewType.Spline:
-                        _in.Draw();
-                        if (_type != NodeType.Exit)
-                            _out.Draw();
-                        break;
-
-                    case TransitionViewType.Direction:
-                        break;
-
-                    default:
-                        throw new UnsupportedValueException(_window.TransitionView);
+                    if (_type != NodeType.Common) _in.Draw();
+                    if (_type != NodeType.Exit) _out.Draw();
                 }
             }
 
@@ -247,24 +238,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 }
                 else
                 {
-                    switch (_type)
-                    {
-                        case NodeType.Real:
-                            GUI.color = _window.RootNodeId == _id ? Colours.Orange : Colours.Cyan;
-                            break;
-
-                        case NodeType.Hub:
-                            GUI.color = Colours.Silver;
-                            break;
-
-                        case NodeType.Exit:
-                            GUI.color = Colours.Yellow;
-                            break;
-
-                        default:
-                            throw new UnsupportedValueException(_type);
-                    }
-
+                    GUI.color = GetHeaderColor();
                     EditorGUILayout.LabelField(nameProperty.stringValue, EditorStylesExt.Rect);
                     GUI.color = Colours.White;
                 }
@@ -294,6 +268,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
                     case NodeType.Hub:
                         EditorGUILayout.LabelField("► ► ►");
+                        break;
+
+                    case NodeType.Common:
+                        EditorGUILayout.LabelField("[ . . . ]");
                         break;
 
                     case NodeType.Exit:
@@ -451,6 +429,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
                     break;
 
+                case NodeType.Common:
+                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    genericMenu.AddSeparator(null);
+                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                    break;
+
                 case NodeType.Exit:
                     genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
                     break;
@@ -477,7 +462,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             foreach (NodeViewer item in _window.NodeViewers)
             {
-                if (item == this)
+                if (item == this || item.Type == NodeType.Common)
                     continue;
 
                 list.AddItem(item.Name, false, () => createTransition(item.In));
@@ -528,14 +513,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public static NodeType GetNodeType(Type type)
+        private Color GetHeaderColor()
         {
-            if (type.Is(typeof(ExitNode)))
-                return NodeType.Exit;
-            else if (type.Is(typeof(HubNode)))
-                return NodeType.Hub;
-            else
-                return NodeType.Real;
+            switch (_type)
+            {
+                case NodeType.Real: return _window.RootNodeId == _id ? Colours.Orange : Colours.Cyan;
+                case NodeType.Common: return Colours.Yellow;
+                case NodeType.Hub: return Colours.Silver;
+                case NodeType.Exit: return Colours.Red;
+                default: throw new UnsupportedValueException(_type);
+            }
         }
     }
 }

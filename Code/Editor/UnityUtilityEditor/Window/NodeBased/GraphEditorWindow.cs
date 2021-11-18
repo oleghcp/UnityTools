@@ -174,6 +174,11 @@ namespace UnityUtilityEditor.Window.NodeBased
                 _nodeViewers.Add(new NodeViewer(nodeProp, this));
             }
 
+            if (_graphAssetEditor.CommonNodeProperty.HasManagedReferenceValue())
+            {
+                _nodeViewers.Add(new NodeViewer(_graphAssetEditor.CommonNodeProperty, this));
+            }
+
             _nodeViewers.ForEach(item => item.CreateConnections());
         }
 
@@ -190,7 +195,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
-            _graphAssetEditor.RemoveNode(node.Id);
+            _graphAssetEditor.RemoveNode(node);
 
             foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
             {
@@ -390,26 +395,27 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             GenericMenu menu = new GenericMenu();
 
-            addNodeMenuItem(_graphAssetEditor.NodeType);
+            addServiceMenuItem(typeof(CommonNode), "Common", _graphAssetEditor.CommonNodeProperty.HasManagedReferenceValue());
+            addServiceMenuItem(typeof(HubNode), "Hub", false);
+            addServiceMenuItem(typeof(ExitNode), "Exit", _nodeViewers.Contains(item => item.Type == NodeType.Exit));
 
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(_graphAssetEditor.NodeType))
+            menu.AddSeparator(string.Empty);
+
+            addNodeMenuItem(_graphAssetEditor.GraphNodeType);
+
+            foreach (Type type in TypeCache.GetTypesDerivedFrom(_graphAssetEditor.GraphNodeType))
             {
                 addNodeMenuItem(type);
             }
 
-            menu.AddSeparator(string.Empty);
-
-            addServiceMenuItem(typeof(HubNode), false);
-            addServiceMenuItem(typeof(ExitNode), _nodeViewers.Contains(item => item.Type == NodeType.Exit));
-
             menu.ShowAsContext();
 
-            void addServiceMenuItem(Type type, bool disabled)
+            void addServiceMenuItem(Type type, string name, bool disabled)
             {
                 if (disabled)
-                    menu.AddDisabledItem(new GUIContent(type.Name));
+                    menu.AddDisabledItem(new GUIContent(name));
                 else
-                    menu.AddItem(new GUIContent(type.Name), false, () => CreateNode(mousePosition, type));
+                    menu.AddItem(new GUIContent(name), false, () => CreateNode(mousePosition, type));
             }
 
             void addNodeMenuItem(Type type)

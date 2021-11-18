@@ -3,6 +3,7 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility;
 using UnityUtility.IdGenerating;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
@@ -20,6 +21,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private RawGraph _graphAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nodesProperty;
+        private SerializedProperty _commonNodeProperty;
 
         private float _nodeWidth;
         private Vector2 _scrollPos;
@@ -27,7 +29,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public RawGraph GraphAsset => _graphAsset;
         public SerializedProperty NodesProperty => _nodesProperty;
-        public Type NodeType => _graphAsset.GetNodeType();
+        public SerializedProperty CommonNodeProperty => _commonNodeProperty;
+        public Type GraphNodeType => _graphAsset.GetNodeType();
         public float NodeWidth => _nodeWidth;
         public SerializedObject SerializedObject => _serializedObject;
 
@@ -36,6 +39,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _graphAsset = graphAsset;
             _serializedObject = new SerializedObject(graphAsset);
             _nodesProperty = _serializedObject.FindProperty(RawGraph.NodesFieldName);
+            _commonNodeProperty = _serializedObject.FindProperty(RawGraph.CommonNodeFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
         }
@@ -71,6 +75,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public SerializedProperty CreateNode(Vector2 position, Type type)
         {
+            NodeType nodeType = RawNode.GetNodeType(type);
+
             RawNode newNodeAsset = Activator.CreateInstance(type) as RawNode;
 
             newNodeAsset.Id = _idGenerator.GetNewId();
@@ -79,11 +85,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             newNodeAsset.NodeName = GetDefaultNodeName(type, newNodeAsset.Id);
 
             _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
-            SerializedProperty nodeProp = _nodesProperty.AddArrayElement();
+
+            SerializedProperty nodeProp = nodeType == NodeType.Common ? _commonNodeProperty : _nodesProperty.AddArrayElement();
             nodeProp.managedReferenceValue = newNodeAsset;
 
             SerializedProperty rootNodeIdProp = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
-            if (rootNodeIdProp.intValue == 0 && NodeViewer.GetNodeType(type).RealNode())
+            if (rootNodeIdProp.intValue == 0 && nodeType.RealNode())
                 rootNodeIdProp.intValue = newNodeAsset.Id;
 
             return nodeProp;
@@ -94,10 +101,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             throw new NotImplementedException();
         }
 
-        public void RemoveNode(int nodeId)
+        public void RemoveNode(NodeViewer node)
         {
-            int index = _nodesProperty.GetArrayElement(out var element, item => item.FindPropertyRelative(RawNode.IdFieldName).intValue == nodeId);
-            element.managedReferenceValue = null;
+            if (node.Type == NodeType.Common)
+            {
+                _commonNodeProperty.managedReferenceValue = null;
+                return;
+            }
+
+            int index = _nodesProperty.GetArrayElement(out var deletedNode, item => item.FindPropertyRelative(RawNode.IdFieldName).intValue == node.Id);
+            deletedNode.managedReferenceValue = null;
             _nodesProperty.DeleteArrayElementAtIndex(index);
 
             if (_nodesProperty.arraySize == 0)
@@ -109,14 +122,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             else
             {
                 SerializedProperty rootNodeIdProp = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
-                if (nodeId == rootNodeIdProp.intValue)
+                if (node.Id == rootNodeIdProp.intValue)
                 {
                     bool replaced = false;
 
                     foreach (SerializedProperty item in _nodesProperty.EnumerateArrayElements())
                     {
                         Type type = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(item.managedReferenceFullTypename);
-                        if (NodeViewer.GetNodeType(type).RealNode())
+                        if (RawNode.GetNodeType(type).RealNode())
                         {
                             rootNodeIdProp.intValue = item.FindPropertyRelative(RawNode.IdFieldName).intValue;
                             replaced = true;
@@ -138,13 +151,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDefaultNodeName(Type type, int id)
         {
-            if (type.Is(typeof(ExitNode)))
-                return "Exit";
+            NodeType nodeType = RawNode.GetNodeType(type);
 
-            if (type.Is(typeof(HubNode)))
-                return $"Hub {id}";
-
-            return $"{type.Name} {id}";
+            switch (nodeType)
+            {
+                case NodeType.Real: return $"{type.Name} {id}";
+                case NodeType.Hub: return $"{nodeType.GetName()} {id}";
+                case NodeType.Common: return "Any";
+                case NodeType.Exit: return nodeType.GetName();
+                default: throw new UnsupportedValueException(nodeType);
+            }
         }
 
         private bool IsServiceField(SerializedProperty property)

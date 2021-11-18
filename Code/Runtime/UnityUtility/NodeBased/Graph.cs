@@ -1,5 +1,6 @@
 #if UNITY_2019_3_OR_NEWER
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,17 +15,20 @@ namespace UnityUtility.NodeBased
         private RawNode[] _nodes;
         [SerializeField]
         private int _rootNodeId;
+        [SerializeReference]
+        private RawNode _commonNode;
 
         private Dictionary<int, RawNode> _dict;
 
-        public RawNode RootNode => GetNodeById(_rootNodeId);
+        internal RawNode RootNode => GetNodeById(_rootNodeId);
+        internal RawNode CommonNode => _commonNode;
 
         internal Dictionary<int, RawNode> Dict
         {
             get => _dict ?? (_dict = _nodes.ToDictionary(key => key.Id, value => value));
         }
 
-        public RawNode GetNodeById(int id)
+        internal RawNode GetNodeById(int id)
         {
             if (Dict.TryGetValue(id, out RawNode value) && value.RealNode())
                 return value;
@@ -33,7 +37,6 @@ namespace UnityUtility.NodeBased
         }
 
         internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
-
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -46,12 +49,14 @@ namespace UnityUtility.NodeBased
         internal static string WidthFieldName => nameof(_nodeWidth);
         internal static string NodesFieldName => nameof(_nodes);
         internal static string RootNodeFieldName => nameof(_rootNodeId);
+        internal static string CommonNodeFieldName => nameof(_commonNode);
 #endif
     }
 
     public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
     {
         private ReadOnlyCollection<TNode> _nodeList;
+        private CommonNodeWrapper _commonNodeWrapper;
 
         public new TNode RootNode => (TNode)base.RootNode;
 
@@ -74,6 +79,11 @@ namespace UnityUtility.NodeBased
         public new TNode GetNodeById(int id)
         {
             return base.GetNodeById(id) as TNode;
+        }
+
+        public IEnumerableNode<TNode> EnumerateFromAny()
+        {
+            return _commonNodeWrapper ?? (_commonNodeWrapper = new CommonNodeWrapper(CommonNode));
         }
 
         internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
@@ -100,16 +110,51 @@ namespace UnityUtility.NodeBased
 
                 foreach (Transition<TNode> transition in node as TNode)
                 {
-                    stateMachine.AddTransition(states[node],
-                                               transition.CreateCondition<TState, TData>(),
-                                               states[transition.NextNode]);
+                    addTransition(node, transition);
                 }
+
+                foreach (Transition<TNode> transition in EnumerateFromAny())
+                {
+                    addTransition(node, transition);
+                }
+            }
+
+            void addTransition(RawNode node, in Transition<TNode> transition)
+            {
+                stateMachine.AddTransition(states[node],
+                                           transition.CreateCondition<TState, TData>(),
+                                           states[transition.NextNode]);
             }
         }
 
 #if UNITY_EDITOR
         internal sealed override Type GetNodeType() => typeof(TNode);
 #endif
+
+        private class CommonNodeWrapper : IEnumerableNode<TNode>
+        {
+            private RawNode _commonNode;
+
+            public CommonNodeWrapper(RawNode commonNode)
+            {
+                _commonNode = commonNode;
+            }
+
+            public NodeEnumerator<TNode> GetEnumerator()
+            {
+                return new NodeEnumerator<TNode>(_commonNode);
+            }
+
+            IEnumerator<Transition<TNode>> IEnumerable<Transition<TNode>>.GetEnumerator()
+            {
+                return new NodeEnumerator<TNode>(_commonNode);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return new NodeEnumerator<TNode>(_commonNode);
+            }
+        }
     }
 }
 #endif
