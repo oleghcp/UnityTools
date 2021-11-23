@@ -491,13 +491,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private bool IsServiceField(SerializedProperty property)
         {
-            string fieldName = property.name;
-
-            return fieldName == RawNode.NameFieldName ||
-                   fieldName == RawNode.ArrayFieldName ||
-                   fieldName == RawNode.GraphFieldName ||
-                   fieldName == RawNode.IdFieldName ||
-                   fieldName == RawNode.PositionFieldName;
+            return _window.NodeIgnoredFields.Contains(property.name);
         }
 
         private void Drag(Vector2 mouseDelta)

@@ -1,5 +1,6 @@
 #if UNITY_2019_3_OR_NEWER
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -23,6 +24,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedProperty _nodesProperty;
         private SerializedProperty _commonNodeProperty;
 
+        private HashSet<string> _ignoredFields;
+
         private float _nodeWidth;
         private Vector2 _scrollPos;
         private IntIdGenerator _idGenerator;
@@ -42,6 +45,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _commonNodeProperty = _serializedObject.FindProperty(RawGraph.CommonNodeFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
+            _ignoredFields = new HashSet<string>
+            {
+                EditorUtilityExt.SCRIPT_FIELD,
+                RawGraph.NodesFieldName,
+                RawGraph.RootNodeFieldName,
+                RawGraph.IdGeneratorFieldName,
+                RawGraph.WidthFieldName,
+                RawGraph.CommonNodeFieldName,
+            };
         }
 
         public void Draw(in Rect position)
@@ -55,7 +67,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
             {
-                if (!IsServiceField(item))
+                if (!_ignoredFields.Contains(item.name))
                     EditorGUILayout.PropertyField(item, true);
             }
 
@@ -161,17 +173,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 case NodeType.Exit: return nodeType.GetName();
                 default: throw new UnsupportedValueException(nodeType);
             }
-        }
-
-        private bool IsServiceField(SerializedProperty property)
-        {
-            string fieldName = property.propertyPath;
-
-            return fieldName == EditorUtilityExt.SCRIPT_FIELD ||
-                   fieldName == RawGraph.NodesFieldName ||
-                   fieldName == RawGraph.RootNodeFieldName ||
-                   fieldName == RawGraph.IdGeneratorFieldName ||
-                   fieldName == RawGraph.WidthFieldName;
         }
     }
 }

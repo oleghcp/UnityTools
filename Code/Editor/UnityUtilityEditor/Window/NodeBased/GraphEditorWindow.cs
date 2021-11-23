@@ -34,6 +34,8 @@ namespace UnityUtilityEditor.Window.NodeBased
         private int _onGuiCounter;
         private int _rootNodeId;
 
+        private HashSet<string> _nodeIgnoredFields;
+
         public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int OnGuiCounter => _onGuiCounter;
@@ -88,9 +90,19 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
         }
 
+        public HashSet<string> NodeIgnoredFields => _nodeIgnoredFields;
+
         private void OnEnable()
         {
             minSize = new Vector2(800f, 600f);
+            _nodeIgnoredFields = new HashSet<string>
+            {
+                RawNode.NameFieldName,
+                RawNode.ArrayFieldName,
+                RawNode.GraphFieldName,
+                RawNode.IdFieldName,
+                RawNode.PositionFieldName,
+            };
         }
 
         private void OnGUI()
