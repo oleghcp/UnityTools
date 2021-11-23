@@ -155,43 +155,10 @@ namespace UnityUtilityEditor.Window.NodeBased
             Save();
         }
 
-        //private void OnLostFocus()
-        //{
-        //    Save();
-        //}
-
-        public void SetUp(RawGraph graphAsset)
+        public static void Open(RawGraph graphAsset)
         {
-            if (_graphAssetEditor?.GraphAsset == graphAsset)
-                return;
-
-            if (_graphAssetEditor != null)
-            {
-                _nodeViewers.Clear();
-            }
-            else
-            {
-                _grid = new GraphGrid(this);
-                _toolbar = new GraphToolbar(this);
-                _nodeViewers = new List<NodeViewer>();
-                _camera = new GraphCamera(this);
-            }
-
-            _settings = LoadSettings(graphAsset);
-            _graphAssetEditor = new GraphAssetEditor(graphAsset);
-            _camera.Position = _settings.CameraPosition;
-
-            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
-            {
-                _nodeViewers.Add(new NodeViewer(nodeProp, this));
-            }
-
-            if (_graphAssetEditor.CommonNodeProperty.HasManagedReferenceValue())
-            {
-                _nodeViewers.Add(new NodeViewer(_graphAssetEditor.CommonNodeProperty, this));
-            }
-
-            _nodeViewers.ForEach(item => item.CreateConnections());
+            GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, "Graph Editor");
+            window.SetUp(graphAsset);
         }
 
         public void SetAsRoot(NodeViewer node)
@@ -268,6 +235,40 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         //    _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         //}
+
+        private void SetUp(RawGraph graphAsset)
+        {
+            if (_graphAssetEditor?.GraphAsset == graphAsset)
+                return;
+
+            if (_graphAssetEditor != null)
+            {
+                _nodeViewers.Clear();
+            }
+            else
+            {
+                _grid = new GraphGrid(this);
+                _toolbar = new GraphToolbar(this);
+                _nodeViewers = new List<NodeViewer>();
+                _camera = new GraphCamera(this);
+            }
+
+            _settings = LoadSettings(graphAsset);
+            _graphAssetEditor = new GraphAssetEditor(graphAsset);
+            _camera.Position = _settings.CameraPosition;
+
+            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
+            {
+                _nodeViewers.Add(new NodeViewer(nodeProp, this));
+            }
+
+            if (_graphAssetEditor.CommonNodeProperty.HasManagedReferenceValue())
+            {
+                _nodeViewers.Add(new NodeViewer(_graphAssetEditor.CommonNodeProperty, this));
+            }
+
+            _nodeViewers.ForEach(item => item.CreateConnections());
+        }
 
         private void CreateNode(Vector2 mousePosition, Type type)
         {

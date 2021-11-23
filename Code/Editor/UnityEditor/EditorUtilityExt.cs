@@ -113,5 +113,18 @@ namespace UnityEditor
             result = null;
             return false;
         }
+
+        public static void OpenScriptableObjectCode(UnityObject obj)
+        {
+            EditorApplication.ExecuteMenuItem("Assets/Open C# Project");
+
+            using (SerializedObject serializedObject = new SerializedObject(obj))
+            {
+                SerializedProperty prop = serializedObject.FindProperty(SCRIPT_FIELD);
+                string filePath = AssetDatabase.GetAssetPath(prop.objectReferenceValue);
+                System.Diagnostics.Process.Start("devenv", "/edit " + filePath);
+                prop.Dispose();
+            }
+        }
     }
 }

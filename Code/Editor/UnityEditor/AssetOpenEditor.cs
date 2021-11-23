@@ -1,6 +1,8 @@
 using System.IO;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityUtility.NodeBased;
+using UnityUtilityEditor.Window.NodeBased;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor
@@ -12,15 +14,15 @@ namespace UnityEditor
         {
             UnityObject obj = EditorUtility.InstanceIDToObject(instanceID);
 
+            if (obj is RawGraph graphAsset)
+            {
+                GraphEditorWindow.Open(graphAsset);
+                return true;
+            }
+
             if (obj is ScriptableObject)
             {
-                using (SerializedObject serializedObject = new SerializedObject(obj))
-                {
-                    SerializedProperty prop = serializedObject.FindProperty(EditorUtilityExt.SCRIPT_FIELD);
-                    string filePath = AssetDatabase.GetAssetPath(prop.objectReferenceValue);
-                    System.Diagnostics.Process.Start("devenv", "/edit " + filePath);
-                    prop.Dispose();
-                }
+                EditorUtilityExt.OpenScriptableObjectCode(obj);
                 return true;
             }
 

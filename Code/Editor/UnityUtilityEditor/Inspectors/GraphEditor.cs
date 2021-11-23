@@ -1,11 +1,10 @@
 #if UNITY_2019_3_OR_NEWER
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased;
 
-namespace UnityUtilityEditor.Inspectors.NodeBased
+namespace UnityUtilityEditor.Inspectors
 {
     [CustomEditor(typeof(RawGraph), true)]
     internal class GraphEditor : Editor<RawGraph>
@@ -14,19 +13,19 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
 
         public override void OnInspectorGUI()
         {
+            bool buttonPressed = false;
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.Space();
 
-                GUI.color = Colours.Lime;
-                bool buttonPressed = GUILayout.Button(OPEN_ITEM_NAME, GUILayout.Height(30f));
-                GUI.color = Colours.White;
-
-                if (buttonPressed)
-                    OpenWindow(target);
+                buttonPressed = GUILayout.Button("Edit Script", GUILayout.Height(30f));
 
                 EditorGUILayout.Space();
             }
+
+            if (buttonPressed)
+                EditorUtilityExt.OpenScriptableObjectCode(target);
         }
 
         [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItems.RESET_ITEM_NAME)]
@@ -38,13 +37,7 @@ namespace UnityUtilityEditor.Inspectors.NodeBased
         [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
         private static void OpenMenuItem(MenuCommand command)
         {
-            OpenWindow(command.context as RawGraph);
-        }
-
-        private static void OpenWindow(RawGraph graphAsset)
-        {
-            GraphEditorWindow window = EditorWindow.GetWindow<GraphEditorWindow>(true, "Graph Editor");
-            window.SetUp(graphAsset);
+            GraphEditorWindow.Open(command.context as RawGraph);
         }
     }
 }
