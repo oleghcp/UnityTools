@@ -95,11 +95,12 @@ namespace UnityUtilityEditor
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Destroy (ext.)", true)]
         private static bool DestroySubassetValidation()
         {
-            if (Selection.objects.Length != 1)
+            string[] selectedGuids = Selection.assetGUIDs;
+
+            if (Selection.objects.Length != 1 || selectedGuids.Length != 1)
                 return false;
 
-            UnityObject obj = AssetDatabaseExt.LoadAssetByGuid(Selection.assetGUIDs[0]);
-            return Selection.activeObject != obj;
+            return AssetDatabaseExt.LoadAssetByGuid(selectedGuids[0]) != Selection.activeObject;
         }
 
         // ------------- //
