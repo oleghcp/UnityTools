@@ -33,7 +33,7 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// Returns random index of collection contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
         public static int Random(this IRng self, IList<float> weights, float weightOfNone = 0f)
         {
@@ -55,9 +55,17 @@ namespace UnityUtility
             return -1;
         }
 
+        /// <summary>
+        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// </summary>
+        public static int Random(this IRng self, float[] weights, int weightOfNone = 0)
+        {
+            return self.Random(weights as IList<float>, weightOfNone);
+        }
+
 #if UNITY_2018_3_OR_NEWER
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
         public static int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
         {
@@ -81,7 +89,7 @@ namespace UnityUtility
 #endif
 
         /// <summary>
-        /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// Returns random index of collection contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
         public static int Random(this IRng self, IList<int> weights, int weightOfNone = 0)
         {
@@ -103,9 +111,17 @@ namespace UnityUtility
             return -1;
         }
 
+        /// <summary>
+        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// </summary>
+        public static int Random(this IRng self, int[] weights, int weightOfNone = 0)
+        {
+            return self.Random(weights as IList<int>, weightOfNone);
+        }
+
 #if UNITY_2018_3_OR_NEWER
         /// <summary>
-        /// Returns random index of an array contains chance weights.
+        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
         public static int Random(this IRng self, Span<int> weights, int weightOfNone = 0)
         {
@@ -342,10 +358,19 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random point on the surface of a sphere with radius 1.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetOnUnitSphere(this IRng _)
+        public static Vector3 GetOnUnitSphere(this IRng self)
         {
-            return UnityEngine.Random.onUnitSphere;
+            Vector3 vector;
+            float magnitude;
+
+            do
+            {
+                vector = new Vector3(self.Range(1f), self.Range(1f), self.Range(1f));
+                magnitude = vector.magnitude;
+
+            } while (magnitude <= Vector3.kEpsilon || magnitude > 1f);
+
+            return vector / magnitude;
         }
 
         /// <summary>
