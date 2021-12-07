@@ -10,7 +10,6 @@ namespace System
     {
         public const float E = 2.71828183f;
         public const float PI = 3.14159265f;
-        public const float TAU = 6.283185307f;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Abs(float value)

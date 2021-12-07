@@ -6,7 +6,7 @@ namespace System
 {
     internal static class SpanUtility
     {
-        public static unsafe void Shuffle<T>(Span<T> span, IRng generator) where T : unmanaged
+        public static void Shuffle<T>(Span<T> span, IRng generator) where T : unmanaged
         {
             int last = span.Length;
 
@@ -17,7 +17,7 @@ namespace System
             }
         }
 
-        public static unsafe void Shuffle<T>(Span<T> span) where T : unmanaged
+        public static void Shuffle<T>(Span<T> span) where T : unmanaged
         {
             int last = span.Length;
 
@@ -28,7 +28,7 @@ namespace System
             }
         }
 
-        public static unsafe T Min<T>(Span<T> span) where T : unmanaged, IComparable<T>
+        public static T Min<T>(Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw Errors.NoElements();
@@ -44,7 +44,7 @@ namespace System
             return num;
         }
 
-        public static unsafe T Max<T>(Span<T> span) where T : unmanaged, IComparable<T>
+        public static T Max<T>(Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw Errors.NoElements();

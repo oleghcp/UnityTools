@@ -137,22 +137,28 @@ namespace System
 #endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void Shuffle<T>(this in Span<T> self, IRng generator) where T : unmanaged
+        public static void Shuffle<T>(this in Span<T> self, IRng generator) where T : unmanaged
         {
 #if UNITY_2021_2_OR_NEWER
             SpanUtility.Shuffle(self, generator);
 #else
-            UnsafeArrayUtility.Shuffle(self.Ptr, self.Length, generator);
+            unsafe
+	        {
+		        UnsafeArrayUtility.Shuffle(self.Ptr, self.Length, generator); 
+	        }
 #endif
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void Shuffle<T>(this in Span<T> self) where T : unmanaged
+        public static void Shuffle<T>(this in Span<T> self) where T : unmanaged
         {
 #if UNITY_2021_2_OR_NEWER
             SpanUtility.Shuffle(self);
 #else
-            UnsafeArrayUtility.Shuffle(self.Ptr, self.Length);
+            unsafe
+	        {
+		        UnsafeArrayUtility.Shuffle(self.Ptr, self.Length); 
+	        }
 #endif
         }
 
@@ -185,22 +191,28 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe T Min<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
+        public static T Min<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
 #if UNITY_2021_2_OR_NEWER
             return SpanUtility.Min(self);
 #else
-            return UnsafeArrayUtility.Min(self.Ptr, self.Length);
+            unsafe
+	        {
+		        return UnsafeArrayUtility.Min(self.Ptr, self.Length); 
+	        }
 #endif
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe T Max<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
+        public static T Max<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
 #if UNITY_2021_2_OR_NEWER
             return SpanUtility.Max(self);
 #else
-            return UnsafeArrayUtility.Max(self.Ptr, self.Length);
+            unsafe
+	        {
+		        return UnsafeArrayUtility.Max(self.Ptr, self.Length); 
+	        }
 #endif
         }
 

@@ -55,7 +55,7 @@ namespace UnityUtility
             return -1;
         }
 
-#if UNITY_2020_2_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
         /// <summary>
         /// Returns random index of an array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
@@ -103,7 +103,7 @@ namespace UnityUtility
             return -1;
         }
 
-#if UNITY_2020_2_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
         /// <summary>
         /// Returns random index of an array contains chance weights.
         /// </summary>
@@ -331,30 +331,12 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns a random point inside a circle with radius 1.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetInsideUnitCircle(this IRng _)
-        {
-            return UnityEngine.Random.insideUnitCircle;
-        }
-
-        /// <summary>
         /// Returns a random point on the circle line with radius 1.
         /// </summary>
         public static Vector2 GetOnUnitCircle(this IRng self)
         {
-            double angle = self.NextDouble() * Math.PI * 2d;
-            return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-        }
-
-        /// <summary>
-        /// Returns a random point inside a sphere with radius 1.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetInsideUnitSphere(this IRng _)
-        {
-            return UnityEngine.Random.insideUnitSphere;
+            float angle = self.Next(MathF.PI * 2f);
+            return new Vector2(MathF.Cos(angle), MathF.Sin(angle));
         }
 
         /// <summary>
@@ -370,9 +352,9 @@ namespace UnityUtility
         /// Returns a random rotation.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion GetRandomRot(this IRng _, bool uniformDistribution = false)
+        public static Quaternion GetRandomRotation(this IRng self)
         {
-            return uniformDistribution ? UnityEngine.Random.rotationUniform : UnityEngine.Random.rotation;
+            return MathUtility.LookRotation(self.GetOnUnitSphere(), self.Next(360f));
         }
 
         /// <summary>
