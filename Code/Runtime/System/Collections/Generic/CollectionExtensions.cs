@@ -181,11 +181,13 @@ namespace System.Collections.Generic
             return !self.IsNullOrEmpty();
         }
 
+#if !UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
         {
             return new HashSet<T>(self);
         }
+#endif
 
         /// <summary>
         /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
