@@ -141,7 +141,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             Vector2 destPoint = _linePoints[1] = _destination.Node.ScreenRect.center;
 
             Handles.DrawAAPolyLine(LINE_THICKNESS, _linePoints);
-            Vector2 pos = Vector2.LerpUnclamped(sourcePoint, destPoint, 0.55f);
+            Vector2 pos = (sourcePoint + destPoint) * 0.5f;
             Quaternion rot = Quaternion.LookRotation(Vector3.forward, destPoint - sourcePoint);
             DrawArrowButon(pos, rot, targetColor);
         }
