@@ -7,7 +7,7 @@ namespace UnityUtility.Rng
 {
     public class CryptoBytesBasedRng : IRng
     {
-        private RNGCryptoServiceProvider _rng;
+        private RandomNumberGenerator _rng;
 
         private byte[] _bytes8;
         private byte[] _bytes4;
@@ -80,11 +80,15 @@ namespace UnityUtility.Rng
 
         public void NextBytes(Span<byte> buffer)
         {
+#if UNITY_2021_2_OR_NEWER
+            _rng.GetBytes(buffer);
+#else
             for (int i = 0; i < buffer.Length; i++)
             {
                 _rng.GetBytes(_bytes1);
                 buffer[i] = _bytes1[0];
             }
+#endif
         }
 
         // -- //

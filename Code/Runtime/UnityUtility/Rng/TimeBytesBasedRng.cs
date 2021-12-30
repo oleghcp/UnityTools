@@ -4,7 +4,6 @@ using UnityUtilityTools;
 
 namespace UnityUtility.Rng
 {
-    [Serializable]
     public class TimeBytesBasedRng : IRng
     {
         private readonly byte MULT;

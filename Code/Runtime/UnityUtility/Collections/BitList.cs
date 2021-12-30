@@ -54,7 +54,7 @@ namespace UnityUtility.Collections
             _mutable = true;
         }
 
-        public BitList(int length, bool defaultValue = false)
+        public BitList(int length, bool defaultValue)
         {
             if (length < 0)
                 throw Errors.NegativeParameter(nameof(length));
