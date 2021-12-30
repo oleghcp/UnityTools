@@ -1,6 +1,7 @@
 #if UNITY_2019_3_OR_NEWER
 using UnityEditor;
 using UnityEngine;
+using UnityUtility;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased;
 
@@ -13,18 +14,18 @@ namespace UnityUtilityEditor.Inspectors
 
         public override void OnInspectorGUI()
         {
-            bool buttonPressed = false;
+            GUI.color = Colours.Lime;
+            bool openPressed = EditorGuiLayout.CenterButton("Open Graph", GUILayout.Height(40f), GUILayout.Width(200f));
+            GUI.color = Colours.White;
 
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.Space();
+            EditorGUILayout.Space();
 
-                buttonPressed = GUILayout.Button("Edit Script", GUILayout.Height(30f));
+            bool editPressed = EditorGuiLayout.CenterButton("Edit Script", GUILayout.Height(30f), GUILayout.Width(150f));
 
-                EditorGUILayout.Space();
-            }
+            if (openPressed)
+                GraphEditorWindow.Open(target);
 
-            if (buttonPressed)
+            if (editPressed)
                 EditorUtilityExt.OpenScriptableObjectCode(target);
         }
 
