@@ -49,12 +49,13 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        internal (Vector3 newDest, Vector3 newDir) Reflect(in RaycastHit hitInfo, in Vector3 dest, in Vector3 direction)
+        internal (Vector3 newDest, Vector3 newDir) Reflect(in RaycastHit hitInfo, in Vector3 dest, in Vector3 direction, float castRadius)
         {
             Vector3 newDirection = Vector3.Reflect(direction, hitInfo.normal);
-            float distanceAfterHit = Vector3.Distance(hitInfo.point, dest) * _ricochets.SpeedRemainder;
+            Vector3 hitPosition = hitInfo.point + hitInfo.normal * castRadius;
+            float distanceAfterHit = Vector3.Distance(hitPosition, dest) * _ricochets.SpeedRemainder;
 
-            return (hitInfo.point + newDirection * distanceAfterHit, newDirection);
+            return (hitPosition + newDirection * distanceAfterHit, newDirection);
         }
 
         internal Vector2 GetNextPos(in Vector2 curPos, ref Vector2 velocity, in Vector2 gravity, float deltaTime, float speedScale)
@@ -65,12 +66,13 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        internal (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction)
+        internal (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
-            float distanceAfterHit = Vector2.Distance(hitInfo.point, dest) * _ricochets.SpeedRemainder;
+            Vector2 hitPosition = hitInfo.point + hitInfo.normal * castRadius;
+            float distanceAfterHit = Vector2.Distance(hitPosition, dest) * _ricochets.SpeedRemainder;
 
-            return (hitInfo.point + newDirection * distanceAfterHit, newDirection);
+            return (hitPosition + newDirection * distanceAfterHit, newDirection);
         }
     }
 }

@@ -175,7 +175,7 @@ namespace UnityUtility.Shooting
                     {
                         _ricochetsLeft--;
 
-                        var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction);
+                        var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius);
                         _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
 
                         _events?.OnReflect.Invoke(_hitInfo);
