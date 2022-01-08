@@ -385,24 +385,15 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random color32 with the specified alfa.
         /// </summary>
-        public static Color32 GetRandomColor(this IRng self, byte alfa)
+        public static Color GetRandomColor(this IRng self)
         {
-            Bytes bytes = default;
-            int channel1 = self.Next(0, 3);
-            int channel2 = self.Random(0, 3, channel1);
-            bytes[channel1] = byte.MaxValue;
-            bytes[channel2] = self.NextByte();
-            bytes[3] = alfa;
-            return (Color32)bytes;
-        }
-
-        /// <summary>
-        /// Returns a random color32 with random alfa.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color32 GetRandomColor(this IRng self)
-        {
-            return self.GetRandomColor(self.NextByte());
+            return new Color32
+            {
+                r = self.NextByte(),
+                g = self.NextByte(),
+                b = self.NextByte(),
+                a = byte.MaxValue,
+            };
         }
 
         /// <summary>
