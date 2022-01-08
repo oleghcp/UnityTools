@@ -329,24 +329,6 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Fills a byte array with random values.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RandomByteArray(this IRng self, byte[] buffer)
-        {
-            self.NextBytes(buffer);
-        }
-
-        /// <summary>
-        /// Fills a byte array with random values.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RandomByteArray(this IRng self, Span<byte> buffer)
-        {
-            self.NextBytes(buffer);
-        }
-
-        /// <summary>
         /// Returns a random point on the circle line with radius 1.
         /// </summary>
         public static Vector2 GetOnUnitCircle(this IRng self)
