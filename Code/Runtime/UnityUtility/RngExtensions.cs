@@ -369,12 +369,12 @@ namespace UnityUtility
         /// </summary>
         public static Color GetRandomColor(this IRng self)
         {
-            return new Color32
+            return new Color
             {
-                r = self.NextByte(),
-                g = self.NextByte(),
-                b = self.NextByte(),
-                a = byte.MaxValue,
+                r = self.Next(1f),
+                g = self.Next(1f),
+                b = self.Next(1f),
+                a = 1f,
             };
         }
 
