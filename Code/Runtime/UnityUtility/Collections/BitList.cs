@@ -48,12 +48,6 @@ namespace UnityUtility.Collections
 
         internal IReadOnlyList<int> IntBlocks => _array;
 
-        public BitList()
-        {
-            _array = Array.Empty<int>();
-            _mutable = true;
-        }
-
         public BitList(int length, bool defaultValue)
         {
             if (length < 0)
@@ -498,9 +492,8 @@ namespace UnityUtility.Collections
             if ((uint)length > BitMask.SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length), $"Length cannot be negative or more than {BitMask.SIZE}.");
 
-            return new BitList()
+            return new BitList(stackalloc[] { bitMask })
             {
-                _array = new[] { bitMask },
                 _length = length
             };
         }
