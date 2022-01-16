@@ -82,6 +82,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 prop.serializedObject.Update();
                 prop.managedReferenceValue = newValue;
+                prop.isExpanded = false;
                 prop.serializedObject.ApplyModifiedProperties();
             }
         }

@@ -28,6 +28,7 @@ namespace UnityUtilityEditor.Window
 
         private BitList _flags;
         private Action<BitList> _onClose;
+        private EditorWindow _prevWindow;
 
         public int ItemsCount => _items.Count;
 
@@ -45,12 +46,9 @@ namespace UnityUtilityEditor.Window
         private void OnDestroy()
         {
             if (MultiSelectable())
-            {
                 _onClose?.Invoke(_flags);
 
-                if (focusedWindow != null)
-                    focusedWindow.Repaint();
-            }
+            _prevWindow?.Repaint();
         }
 
         private void OnGUI()
@@ -149,6 +147,8 @@ namespace UnityUtilityEditor.Window
 
         public void ShowMenu(in Rect buttonRect)
         {
+            _prevWindow = mouseOverWindow;
+
             if (_items.Count == 0)
                 return;
 

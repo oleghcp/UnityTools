@@ -28,6 +28,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 property.serializedObject.Update();
                 property.managedReferenceValue = switched ? Activator.CreateInstance(type) : null;
+                property.isExpanded = false;
                 property.serializedObject.ApplyModifiedProperties();
             }
         }
