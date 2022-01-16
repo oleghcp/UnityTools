@@ -17,13 +17,17 @@ namespace System
 
         public static object SendMsg(this object self, string methodName, params object[] arg)
         {
-            if (!_dataTable.TryGetValue(self, out ObjectData data))
-                _dataTable.Add(self, data = new ObjectData { Type = self.GetType() });
+            ObjectData data = _dataTable.GetValue(self, CreateValue);
 
-            if (!data.Methods.TryGetValue(methodName, out var method))
+            if (!data.Methods.TryGetValue(methodName, out MethodInfo method))
                 data.Methods[methodName] = method = data.Type.GetMethod(methodName, MASK);
 
             return method?.Invoke(self, arg);
+        }
+
+        private static ObjectData CreateValue(object key)
+        {
+            return new ObjectData { Type = key.GetType() };
         }
 
         private class ObjectData

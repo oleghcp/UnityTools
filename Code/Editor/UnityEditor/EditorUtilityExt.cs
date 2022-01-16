@@ -80,7 +80,7 @@ namespace UnityEditor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
-            DisplayMultiSelectableList(position, flags, displayedOptions, onClose);
+            DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onClose);
         }
 
         public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
