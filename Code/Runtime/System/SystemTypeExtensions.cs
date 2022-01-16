@@ -118,7 +118,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Is(this Type self, Type familyType)
         {
-            return self.IsSubclassOf(familyType) || self == familyType;
+            return self == familyType || self.IsSubclassOf(familyType);
         }
 
         public static T GetTarget<T>(this WeakReference<T> self) where T : class
