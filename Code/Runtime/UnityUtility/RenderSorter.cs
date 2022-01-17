@@ -7,10 +7,11 @@ namespace UnityUtility
     [DisallowMultipleComponent]
     public sealed class RenderSorter : MonoBehaviour
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private Renderer _renderer;
 
 #if UNITY_EDITOR
+        internal Renderer Renderer => _renderer;
         internal static string RendererFieldName => nameof(_renderer);
 #endif
     }

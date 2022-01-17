@@ -42,5 +42,18 @@ namespace UnityUtilityEditor.Inspectors
                 EditorUtility.SetDirty(_renderer);
             }
         }
+
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + MenuItems.RESET_ITEM_NAME)]
+        private static void ResetMenuItem(MenuCommand command)
+        {
+            Renderer renderer = (command.context as RenderSorter).Renderer;
+
+            Undo.RegisterCompleteObjectUndo(renderer, "Renderer sorting");
+
+            renderer.sortingLayerID = 0;
+            renderer.sortingOrder = 0;
+
+            EditorUtility.SetDirty(renderer);
+        }
     }
 }
