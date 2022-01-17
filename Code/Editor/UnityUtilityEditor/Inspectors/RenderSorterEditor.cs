@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.Inspectors
         private DrawTool _drawer;
         private Renderer _renderer;
 
-        private void Awake()
+        private void OnEnable()
         {
             _drawer = new DrawTool();
 
