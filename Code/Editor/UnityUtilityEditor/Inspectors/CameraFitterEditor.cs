@@ -8,6 +8,8 @@ namespace UnityUtilityEditor.Inspectors
     [CustomEditor(typeof(CameraFitter))]
     internal class CameraFitterEditor : Editor<CameraFitter>
     {
+        private Camera _camera;
+
         private SerializedProperty _mode;
         private SerializedProperty _vertical;
         private SerializedProperty _horizontal;
@@ -16,6 +18,15 @@ namespace UnityUtilityEditor.Inspectors
 
         private void OnEnable()
         {
+            SerializedProperty cameraProp = serializedObject.FindProperty(CameraFitter.CameraFieldName);
+            if (cameraProp.objectReferenceValue == null)
+            {
+                cameraProp.objectReferenceValue = target.GetComponent<Camera>();
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            _camera = (Camera)cameraProp.objectReferenceValue;
+
             _mode = serializedObject.FindProperty(CameraFitter.ModeFieldName);
             _vertical = serializedObject.FindProperty(CameraFitter.VerticalFieldName);
             _horizontal = serializedObject.FindProperty(CameraFitter.HorizontalFieldName);
@@ -36,38 +47,32 @@ namespace UnityUtilityEditor.Inspectors
 
         private void OnSceneGUI()
         {
-            if (target.Camera.orthographic)
-            {
-                Transform transform = target.Camera.transform;
-                Handles.color = Colours.Red;
-                if (_mode.enumValueIndex == ((int)AspectMode.FixedHeight))
-                {
-                    DrawLine(transform.up, transform.position, _vertical.floatValue);
-                }
-                else if (_mode.enumValueIndex == ((int)AspectMode.FixedWidth))
-                {
-                    DrawLine(transform.right, transform.position, _horizontal.floatValue);
-                }
-                else
-                {
-                    Vector3 upVector = transform.up * _vertical.floatValue;
-                    Vector3 rightVector = transform.right * _horizontal.floatValue;
+            if (!target.Camera.orthographic)
+                return;
 
-                    Vector3 left = transform.position - rightVector;
-                    Vector3 right = transform.position + rightVector;
+            if (_mode.enumValueIndex != ((int)AspectMode.EnvelopeAspect))
+                return;
 
-                    Vector3 a = left - upVector;
-                    Vector3 b = left + upVector;
-                    Vector3 c = right + upVector;
-                    Vector3 d = right - upVector;
+            Transform transform = target.Camera.transform;
+            Handles.color = Colours.Red;
 
-                    Handles.DrawLine(a, b);
-                    Handles.DrawLine(b, c);
-                    Handles.DrawLine(c, d);
-                    Handles.DrawLine(d, a);
-                }
-                Handles.color = Colours.White;
-            }
+            Vector3 upVector = transform.up * _vertical.floatValue;
+            Vector3 rightVector = transform.right * _horizontal.floatValue;
+
+            Vector3 left = transform.position - rightVector;
+            Vector3 right = transform.position + rightVector;
+
+            Vector3 a = left - upVector;
+            Vector3 b = left + upVector;
+            Vector3 c = right + upVector;
+            Vector3 d = right - upVector;
+
+            Handles.DrawLine(a, b);
+            Handles.DrawLine(b, c);
+            Handles.DrawLine(c, d);
+            Handles.DrawLine(d, a);
+
+            Handles.color = Colours.White;
         }
 
         private void Draw()
@@ -93,11 +98,7 @@ namespace UnityUtilityEditor.Inspectors
             {
                 float calculatedRatio = GetRatio(_horizontal.floatValue, _vertical.floatValue);
 
-                EditorGUILayout.BeginHorizontal();
-                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
-                if (GUILayout.Button("*", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
-                    _widthToHeight = !_widthToHeight;
-                EditorGUILayout.EndHorizontal();
+                float ratio = drawRatio(calculatedRatio);
 
                 if (calculatedRatio != ratio)
                     _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
@@ -111,17 +112,23 @@ namespace UnityUtilityEditor.Inspectors
                 float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
                 float calculatedRatio = GetRatio(hTan, vTan);
 
-                EditorGUILayout.BeginHorizontal();
-                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
-                if (GUILayout.Button("*", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
-                    _widthToHeight = !_widthToHeight;
-                EditorGUILayout.EndHorizontal();
+                float ratio = drawRatio(calculatedRatio);
 
                 if (calculatedRatio != ratio)
                     _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
 
                 DrawFov(_horizontal, "Target Horizontal Fov");
                 DrawFov(_vertical, "Target Vertical Fov");
+            }
+
+            float drawRatio(float calculatedRatio)
+            {
+                EditorGUILayout.BeginHorizontal();
+                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
+                if (GUILayout.Button("*", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                    _widthToHeight = !_widthToHeight;
+                EditorGUILayout.EndHorizontal();
+                return ratio;
             }
         }
 
@@ -160,6 +167,12 @@ namespace UnityUtilityEditor.Inspectors
         private string GetRatioLabel()
         {
             return _widthToHeight ? "Width / Height" : "Height / Width";
+        }
+
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItems.RESET_ITEM_NAME)]
+        private static void ResetMenuItem()
+        {
+
         }
     }
 }

@@ -15,7 +15,7 @@ namespace UnityUtility
     [DisallowMultipleComponent]
     public sealed class CameraFitter : MonoBehaviour
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private Camera _camera;
         [SerializeField]
         private AspectMode _aspectMode;
@@ -27,12 +27,14 @@ namespace UnityUtility
         private float _currentAspect;
 
 #if UNITY_EDITOR
+        internal static string CameraFieldName => nameof(_camera);
         internal static string ModeFieldName => nameof(_aspectMode);
         internal static string VerticalFieldName => nameof(_targetVertical);
         internal static string HorizontalFieldName => nameof(_targetHorizontal);
 #endif
 
         public Camera Camera => _camera;
+
         public AspectMode AspectMode
         {
             get => _aspectMode;
@@ -52,9 +54,6 @@ namespace UnityUtility
 
         private void Awake()
         {
-            if (_camera == null)
-                _camera = GetComponent<Camera>();
-
             if (_aspectMode == AspectMode.FixedHeight)
                 return;
 
@@ -64,26 +63,6 @@ namespace UnityUtility
                 OrthoInit();
             else
                 PerspInit();
-        }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (_camera.orthographic)
-                OrthoInit();
-            else
-                PerspInit();
-        }
-#endif
-
-        public float GetEnvelopeRatio()
-        {
-            if (_camera.orthographic)
-                return _targetHorizontal / _targetVertical;
-
-            float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
-            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
-            return hTan / vTan;
         }
 
         private void LateUpdate()
@@ -102,6 +81,16 @@ namespace UnityUtility
                 else
                     PerspInit();
             }
+        }
+
+        public float GetEnvelopeRatio()
+        {
+            if (_camera.orthographic)
+                return _targetHorizontal / _targetVertical;
+
+            float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
+            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
+            return hTan / vTan;
         }
 
         private void OrthoInit()
