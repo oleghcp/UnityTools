@@ -7,6 +7,36 @@ namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
+        public static void DisplaceLeft<T>(this IList<T> self)
+        {
+            if (self.Count <= 1)
+                return;
+
+            T tmp = self[0];
+
+            for (int i = 1; i < self.Count; i++)
+            {
+                self[i - 1] = self[i];
+            }
+
+            self[self.Count - 1] = tmp;
+        }
+
+        public static void DisplaceRight<T>(this IList<T> self)
+        {
+            if (self.Count <= 1)
+                return;
+
+            T tmp = self.FromEnd(0);
+
+            for (int i = self.Count - 2; i >= 0; i--)
+            {
+                self[i + 1] = self[i];
+            }
+
+            self[0] = tmp;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Swap<T>(this T[] self, int i, int j)
         {
