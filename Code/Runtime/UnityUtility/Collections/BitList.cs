@@ -459,19 +459,19 @@ namespace UnityUtility.Collections
             return count;
         }
 
-        public BitList Clone()
+        public BitList GetCopy(bool mutable)
         {
             return new BitList(_array as ICollection<int>)
             {
                 _version = _version,
                 _length = _length,
-                _mutable = _mutable,
+                _mutable = mutable,
             };
         }
 
         object ICloneable.Clone()
         {
-            return Clone();
+            return GetCopy(_mutable);
         }
 
         public int ToIntBitMask(bool throwIfOutOfRange = true)
