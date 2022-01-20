@@ -137,12 +137,18 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             Color targetColor = GraphEditorStyles.GetLineColor();
 
-            Vector2 sourcePoint = _linePoints[0] = _source.Node.ScreenRect.center;
-            Vector2 destPoint = _linePoints[1] = _destination.Node.ScreenRect.center;
+            Vector2 sourcePoint = _source.Node.ScreenRect.center;
+            Vector2 destPoint = _destination.Node.ScreenRect.center;
+
+            Vector2 vector = destPoint - sourcePoint;
+            Vector2 shift = new Vector2(vector.y, -vector.x).normalized * 5f;
+
+            _linePoints[0] = sourcePoint + shift;
+            _linePoints[1] = destPoint + shift;
 
             Handles.DrawAAPolyLine(LINE_THICKNESS, _linePoints);
-            Vector2 pos = (sourcePoint + destPoint) * 0.5f;
-            Quaternion rot = Quaternion.LookRotation(Vector3.forward, destPoint - sourcePoint);
+            Vector2 pos = (_linePoints[0] + _linePoints[1]) * 0.5f;
+            Quaternion rot = Quaternion.LookRotation(Vector3.forward, vector);
             DrawArrowButon(pos, rot, targetColor);
         }
 
@@ -248,18 +254,20 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     break;
 
                 case EventType.Repaint:
+                    Vector2 pos = position;
                     float angle = rotation.eulerAngles.z + 90f;
-                    Vector3 vector0 = MathUtility.AngleToVector2(angle) * size;
-                    Vector3 vector1 = MathUtility.AngleToVector2(angle + 120f) * size;
-                    Vector3 vector2 = MathUtility.AngleToVector2(angle - 120f) * size;
-                    Vector3 lookVector = position + vector0;
 
-                    _trianglePoints[0] = position + vector1;
+                    Vector2 vector0 = MathUtility.AngleToVector2(angle) * size;
+                    Vector2 vector1 = MathUtility.AngleToVector2(angle + 120f) * size;
+                    Vector2 vector2 = MathUtility.AngleToVector2(angle - 120f) * size;
+                    Vector2 lookVector = pos + vector0;
+
+                    _trianglePoints[0] = pos + vector1;
                     _trianglePoints[1] = lookVector;
                     _trianglePoints[2] = lookVector;
-                    _trianglePoints[3] = position + vector2;
+                    _trianglePoints[3] = pos + vector2;
 
-                    Handles.DrawSolidRectangleWithOutline(_trianglePoints, Colours.White, new Color());
+                    Handles.DrawSolidRectangleWithOutline(_trianglePoints, Colours.White, default);
                     break;
             }
         }
