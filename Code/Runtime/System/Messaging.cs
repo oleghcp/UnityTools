@@ -15,17 +15,17 @@ namespace System
 #endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static object SendMsg<T>(this T self, string methodName)
+        public static object SendMsg(this object self, string methodName)
         {
             return SendMsg(self, methodName, null);
         }
 
-        public static object SendMsg<T>(this T self, string methodName, params object[] arg)
+        public static object SendMsg(this object self, string methodName, params object[] arg)
         {
 #if UNITY_EDITOR
-            return typeof(T).GetMethod(methodName, MASK)?.Invoke(self, arg);
+            return self.GetType().GetMethod(methodName, MASK)?.Invoke(self, arg);
 #else
-            return _dataTable.GetValue(self, key => new ObjectData(typeof(T)))
+            return _dataTable.GetValue(self, key => new ObjectData(key.GetType()))
                              .GetMethod(methodName)?
                              .Invoke(self, arg);
 #endif
