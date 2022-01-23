@@ -7,12 +7,10 @@ namespace UnityUtility.Controls
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Input/Layout Config", fileName = "LayoutConfig")]
     public sealed class LayoutConfig : ScriptableObject
     {
-#if UNITY_EDITOR
         [SerializeField, HideInInspector]
         private string _keyEnumType;
         [SerializeField, HideInInspector]
         private string _axisEnumType;
-#endif
 
         [SerializeField]
         internal InputType InputType;

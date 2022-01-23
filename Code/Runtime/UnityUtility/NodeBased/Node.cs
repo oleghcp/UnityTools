@@ -19,6 +19,8 @@ namespace UnityUtility.NodeBased
     public abstract class RawNode
     {
         [SerializeField]
+        internal Vector2 Position;
+        [SerializeField]
         internal string NodeName;
         [SerializeField]
         internal int Id;
@@ -37,9 +39,6 @@ namespace UnityUtility.NodeBased
         }
 
 #if UNITY_EDITOR
-        [SerializeField]
-        internal Vector2 Position;
-
         internal static string PositionFieldName => nameof(Position);
         internal static string IdFieldName => nameof(Id);
         internal static string NameFieldName => nameof(NodeName);

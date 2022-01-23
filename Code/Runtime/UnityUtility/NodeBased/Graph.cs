@@ -11,6 +11,10 @@ namespace UnityUtility.NodeBased
 {
     public abstract class RawGraph : ScriptableObject
     {
+        [SerializeField]
+        internal int LastId;
+        [SerializeField]
+        private float _nodeWidth;
         [SerializeReference]
         private RawNode[] _nodes;
         [SerializeField]
@@ -39,11 +43,6 @@ namespace UnityUtility.NodeBased
         internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
 
 #if UNITY_EDITOR
-        [SerializeField]
-        internal int LastId;
-        [SerializeField]
-        private float _nodeWidth;
-
         internal abstract Type GetNodeType();
         internal static string IdGeneratorFieldName => nameof(LastId);
         internal static string WidthFieldName => nameof(_nodeWidth);
