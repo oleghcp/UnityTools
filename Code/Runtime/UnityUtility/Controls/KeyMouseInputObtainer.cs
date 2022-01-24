@@ -99,10 +99,12 @@ namespace UnityUtility.Controls
 
         private void UpdateBtnStates()
         {
-            KeyCode keyCode;
             for (int i = 0; i < _buttonStates.Length; i++)
             {
-                keyCode = (KeyCode)_curLayout.Keys[i];
+                KeyCode keyCode = (KeyCode)_curLayout.Keys[i];
+
+                if (keyCode == KeyCode.None)
+                    continue;
 
                 if (keyCode < KeyCode.JoystickButton0)
                 {
