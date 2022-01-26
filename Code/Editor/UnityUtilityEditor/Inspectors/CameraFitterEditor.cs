@@ -108,27 +108,21 @@ namespace UnityUtilityEditor.Inspectors
                 case AspectMode.EnvelopeAspect:
                     if (ortho)
                     {
-                        float calculatedRatio = GetRatio(_horizontal.floatValue, _vertical.floatValue);
-                        float ratio = drawRatio(calculatedRatio);
-
-                        if (calculatedRatio != ratio)
-                            _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
-
+                        float ratio = drawRatio(_horizontal.floatValue, _vertical.floatValue);
                         drawSize(_vertical, "Target Vertical Size");
+
+                        _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
                         drawSize(_horizontal, "Target Horizontal Size");
                     }
                     else
                     {
                         float hTan = ScreenUtility.GetHalfFovTan(_horizontal.floatValue);
                         float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
-
-                        float calculatedRatio = GetRatio(hTan, vTan);
-                        float ratio = drawRatio(calculatedRatio);
-
-                        if (calculatedRatio != ratio)
-                            _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
-
+                        float ratio = drawRatio(hTan, vTan);
                         drawFov(_vertical, "Target Vertical Fov");
+
+                        vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
+                        _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
                         drawFov(_horizontal, "Target Horizontal Fov");
                     }
                     break;
@@ -155,13 +149,12 @@ namespace UnityUtilityEditor.Inspectors
                 property.floatValue = EditorGUILayout.Slider(label, property.floatValue, 1f, 179f);
             }
 
-            float drawRatio(float calculatedRatio)
+            float drawRatio(float width, float height)
             {
-                EditorGUILayout.BeginHorizontal();
-                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
-                if (GUILayout.Button("-/-", GUILayout.Width(30f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                if (GUILayout.Button("- / -", GUILayout.Width(60f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
                     _widthToHeight = !_widthToHeight;
-                EditorGUILayout.EndHorizontal();
+                float calculatedRatio = GetRatio(width, height);
+                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
                 return ratio;
             }
         }
