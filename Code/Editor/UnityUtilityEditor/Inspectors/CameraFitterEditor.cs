@@ -87,9 +87,9 @@ namespace UnityUtilityEditor.Inspectors
             if (_mode.enumValueIndex == ((int)AspectMode.FixedWidth))
             {
                 if (ortho)
-                    DrawSize(_horizontal, "Horizontal Size");
+                    drawSize(_horizontal, "Horizontal Size");
                 else
-                    DrawFov(_horizontal, "Horizontal Fov");
+                    drawFov(_horizontal, "Horizontal Fov");
 
                 return;
             }
@@ -98,13 +98,9 @@ namespace UnityUtilityEditor.Inspectors
             {
                 float calculatedRatio = GetRatio(_horizontal.floatValue, _vertical.floatValue);
 
-                float ratio = drawRatio(calculatedRatio);
-
-                if (calculatedRatio != ratio)
-                    _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
-
-                DrawSize(_horizontal, "Target Horizontal Size");
-                DrawSize(_vertical, "Target Vertical Size");
+                drawSize(_vertical, "Target Vertical Size");
+                drawSize(_horizontal, "Target Horizontal Size");
+                drawRatio(calculatedRatio);
             }
             else
             {
@@ -112,34 +108,29 @@ namespace UnityUtilityEditor.Inspectors
                 float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
                 float calculatedRatio = GetRatio(hTan, vTan);
 
-                float ratio = drawRatio(calculatedRatio);
-
-                if (calculatedRatio != ratio)
-                    _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
-
-                DrawFov(_horizontal, "Target Horizontal Fov");
-                DrawFov(_vertical, "Target Vertical Fov");
+                drawFov(_vertical, "Target Vertical Fov");
+                drawFov(_horizontal, "Target Horizontal Fov");
+                drawRatio(calculatedRatio);
             }
 
-            float drawRatio(float calculatedRatio)
+            void drawSize(SerializedProperty property, string label)
+            {
+                property.floatValue = EditorGUILayout.FloatField(label, property.floatValue).CutBefore(0f);
+            }
+
+            void drawFov(SerializedProperty property, string label)
+            {
+                property.floatValue = EditorGUILayout.Slider(label, property.floatValue, 1f, 179f);
+            }
+
+            void drawRatio(float calculatedRatio)
             {
                 EditorGUILayout.BeginHorizontal();
-                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
-                if (GUILayout.Button("*", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+                EditorGUILayout.LabelField(GetRatioLabel(), calculatedRatio.ToString());
+                if (GUILayout.Button("-/-", GUILayout.Width(30f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
                     _widthToHeight = !_widthToHeight;
                 EditorGUILayout.EndHorizontal();
-                return ratio;
             }
-        }
-
-        private static void DrawSize(SerializedProperty property, string label)
-        {
-            property.floatValue = EditorGUILayout.FloatField(label, property.floatValue).CutBefore(0f);
-        }
-
-        private static void DrawFov(SerializedProperty property, string label)
-        {
-            property.floatValue = EditorGUILayout.Slider(label, property.floatValue, 1f, 179f);
         }
 
         private static void DrawLine(Vector3 axis, Vector3 center, float size)
