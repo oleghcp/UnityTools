@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnityUtility
 {
@@ -10,7 +9,6 @@ namespace UnityUtility
         EnvelopeAspect,
     }
 
-    [ExecuteInEditMode]
     [RequireComponent(typeof(Camera))]
     [DisallowMultipleComponent]
     public sealed class CameraFitter : MonoBehaviour
@@ -45,36 +43,20 @@ namespace UnityUtility
 
                 _aspectMode = value;
 
-                if (_camera.orthographic)
-                    OrthoInit();
-                else
-                    PerspInit();
+                ApplyChanges(_currentAspect);
             }
         }
 
         private void Awake()
         {
-            _currentAspect = GetCurrentRatio();
-
-            if (_camera.orthographic)
-                OrthoInit();
-            else
-                PerspInit();
+            RatioChanged();
+            ApplyChanges(_currentAspect);
         }
 
         private void LateUpdate()
         {
-            float newRatio = GetCurrentRatio();
-
-            if (_currentAspect != newRatio)
-            {
-                _currentAspect = newRatio;
-
-                if (_camera.orthographic)
-                    OrthoInit();
-                else
-                    PerspInit();
-            }
+            if (RatioChanged())
+                ApplyChanges(_currentAspect);
         }
 
         public float GetEnvelopeRatio()
@@ -87,51 +69,75 @@ namespace UnityUtility
             return hTan / vTan;
         }
 
-        private void OrthoInit()
+        internal void ApplyChanges(float currentAspect)
         {
-            if (_aspectMode == AspectMode.FixedHeight)
-                return;
+            if (_camera.orthographic)
+                orthoInit();
+            else
+                perspInit();
 
-            if (_aspectMode == AspectMode.FixedWidth)
+            bool ortho = _camera.orthographic;
+
+            switch (_aspectMode)
             {
-                _camera.orthographicSize = _targetVertical = _targetHorizontal * _currentAspect;
-                return;
+                case AspectMode.FixedHeight:
+                    if (ortho)
+                        _camera.orthographicSize = _targetVertical;
+                    else
+                        _camera.fieldOfView = _targetVertical;
+                    break;
+
+                case AspectMode.FixedWidth:
+                    if (ortho)
+                        _camera.orthographicSize = _targetVertical = _targetHorizontal * currentAspect;
+                    else
+                        _camera.fieldOfView = _targetVertical = ScreenUtility.GetAspectAngle(_targetHorizontal, currentAspect);
+                    break;
+
+                case AspectMode.EnvelopeAspect:
+                    if (ortho)
+                        orthoInit();
+                    else
+                        perspInit();
+                    break;
+
+                default:
+                    throw new UnsupportedValueException(_aspectMode);
             }
 
-            float targetRatio = _targetVertical / _targetHorizontal;
-
-            if (targetRatio >= _currentAspect)
-                _camera.orthographicSize = _targetVertical;
-            else
-                _camera.orthographicSize = _targetHorizontal * _currentAspect;
-        }
-
-        private void PerspInit()
-        {
-            if (_aspectMode == AspectMode.FixedHeight)
-                return;
-
-            if (_aspectMode == AspectMode.FixedWidth)
+            void orthoInit()
             {
-                _camera.fieldOfView = _targetVertical = ScreenUtility.GetAspectAngle(_targetHorizontal, _currentAspect);
-                return;
+                float targetRatio = _targetVertical / _targetHorizontal;
+
+                if (targetRatio >= currentAspect)
+                    _camera.orthographicSize = _targetVertical;
+                else
+                    _camera.orthographicSize = _targetHorizontal * currentAspect;
             }
 
-            float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
-            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
+            void perspInit()
+            {
+                float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
+                float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
 
-            float targetRatio = vTan / hTan;
+                float targetRatio = vTan / hTan;
 
-            if (targetRatio >= _currentAspect)
-                _camera.fieldOfView = _targetVertical;
-            else
-                _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontal, _currentAspect);
+                if (targetRatio >= currentAspect)
+                    _camera.fieldOfView = _targetVertical;
+                else
+                    _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontal, currentAspect);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float GetCurrentRatio()
+        private bool RatioChanged()
         {
-            return (float)Screen.height / Screen.width;
+            float newRatio = (float)Screen.height / Screen.width;
+
+            if (_currentAspect == newRatio)
+                return false;
+
+            _currentAspect = newRatio;
+            return true;
         }
     }
 }

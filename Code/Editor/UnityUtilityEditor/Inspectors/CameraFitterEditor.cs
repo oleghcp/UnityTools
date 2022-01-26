@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
@@ -14,6 +15,8 @@ namespace UnityUtilityEditor.Inspectors
         private SerializedProperty _vertical;
         private SerializedProperty _horizontal;
 
+        private Func<Vector2> _getSizeOfMainGameView;
+        private float _currentViewRatio;
         private bool _widthToHeight;
 
         private void OnEnable()
@@ -31,6 +34,9 @@ namespace UnityUtilityEditor.Inspectors
             _vertical = serializedObject.FindProperty(CameraFitter.VerticalFieldName);
             _horizontal = serializedObject.FindProperty(CameraFitter.HorizontalFieldName);
             _widthToHeight = EditorPrefs.GetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY);
+
+            _getSizeOfMainGameView = Delegate.CreateDelegate(typeof(Func<Vector2>), Type.GetType("UnityEditor.GameView,UnityEditor"), "GetSizeOfMainGameView") as Func<Vector2>;
+            _currentViewRatio = GetGeameViewRatio();
         }
 
         private void OnDisable()
@@ -43,6 +49,14 @@ namespace UnityUtilityEditor.Inspectors
             serializedObject.Update();
             Draw();
             serializedObject.ApplyModifiedProperties();
+
+            float ratio = GetGeameViewRatio();
+            if (ratio != _currentViewRatio || GUI.changed)
+            {
+                _currentViewRatio = ratio;
+                target.ApplyChanges(ratio);
+                EditorUtility.SetDirty(_camera);
+            }
         }
 
         private void OnSceneGUI()
@@ -79,38 +93,56 @@ namespace UnityUtilityEditor.Inspectors
         {
             EditorGUILayout.PropertyField(_mode);
 
-            if (_mode.enumValueIndex == ((int)AspectMode.FixedHeight))
-                return;
-
             bool ortho = target.Camera.orthographic;
 
-            if (_mode.enumValueIndex == ((int)AspectMode.FixedWidth))
+            switch ((AspectMode)_mode.enumValueIndex)
+            {
+                case AspectMode.FixedHeight:
+                    drawFixedSide(_vertical, "Vertical");
+                    break;
+
+                case AspectMode.FixedWidth:
+                    drawFixedSide(_horizontal, "Horizontal");
+                    break;
+
+                case AspectMode.EnvelopeAspect:
+                    if (ortho)
+                    {
+                        float calculatedRatio = GetRatio(_horizontal.floatValue, _vertical.floatValue);
+                        float ratio = drawRatio(calculatedRatio);
+
+                        if (calculatedRatio != ratio)
+                            _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
+
+                        drawSize(_vertical, "Target Vertical Size");
+                        drawSize(_horizontal, "Target Horizontal Size");
+                    }
+                    else
+                    {
+                        float hTan = ScreenUtility.GetHalfFovTan(_horizontal.floatValue);
+                        float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
+
+                        float calculatedRatio = GetRatio(hTan, vTan);
+                        float ratio = drawRatio(calculatedRatio);
+
+                        if (calculatedRatio != ratio)
+                            _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
+
+                        drawFov(_vertical, "Target Vertical Fov");
+                        drawFov(_horizontal, "Target Horizontal Fov");
+                    }
+                    break;
+
+                default:
+                    throw new UnsupportedValueException((AspectMode)_mode.enumValueIndex);
+            }
+
+            void drawFixedSide(SerializedProperty property, string side)
             {
                 if (ortho)
-                    drawSize(_horizontal, "Horizontal Size");
+                    drawSize(property, $"{side} Size");
                 else
-                    drawFov(_horizontal, "Horizontal Fov");
-
-                return;
-            }
-
-            if (ortho)
-            {
-                float calculatedRatio = GetRatio(_horizontal.floatValue, _vertical.floatValue);
-
-                drawSize(_vertical, "Target Vertical Size");
-                drawSize(_horizontal, "Target Horizontal Size");
-                drawRatio(calculatedRatio);
-            }
-            else
-            {
-                float hTan = ScreenUtility.GetHalfFovTan(_horizontal.floatValue);
-                float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
-                float calculatedRatio = GetRatio(hTan, vTan);
-
-                drawFov(_vertical, "Target Vertical Fov");
-                drawFov(_horizontal, "Target Horizontal Fov");
-                drawRatio(calculatedRatio);
+                    drawFov(property, $"{side} Fov");
             }
 
             void drawSize(SerializedProperty property, string label)
@@ -123,13 +155,14 @@ namespace UnityUtilityEditor.Inspectors
                 property.floatValue = EditorGUILayout.Slider(label, property.floatValue, 1f, 179f);
             }
 
-            void drawRatio(float calculatedRatio)
+            float drawRatio(float calculatedRatio)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(GetRatioLabel(), calculatedRatio.ToString());
+                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
                 if (GUILayout.Button("-/-", GUILayout.Width(30f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
                     _widthToHeight = !_widthToHeight;
                 EditorGUILayout.EndHorizontal();
+                return ratio;
             }
         }
 
@@ -143,6 +176,12 @@ namespace UnityUtilityEditor.Inspectors
 #else
             Handles.DrawLine(p1, p2);
 #endif
+        }
+
+        private float GetGeameViewRatio()
+        {
+            Vector2 res = _getSizeOfMainGameView();
+            return res.y / res.x;
         }
 
         private float GetRatio(float width, float height)
