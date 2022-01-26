@@ -54,9 +54,6 @@ namespace UnityUtility
 
         private void Awake()
         {
-            if (_aspectMode == AspectMode.FixedHeight)
-                return;
-
             _currentAspect = GetCurrentRatio();
 
             if (_camera.orthographic)
@@ -67,9 +64,6 @@ namespace UnityUtility
 
         private void LateUpdate()
         {
-            if (_aspectMode == AspectMode.FixedHeight)
-                return;
-
             float newRatio = GetCurrentRatio();
 
             if (_currentAspect != newRatio)
@@ -95,6 +89,9 @@ namespace UnityUtility
 
         private void OrthoInit()
         {
+            if (_aspectMode == AspectMode.FixedHeight)
+                return;
+
             if (_aspectMode == AspectMode.FixedWidth)
             {
                 _camera.orthographicSize = _targetVertical = _targetHorizontal * _currentAspect;
@@ -111,6 +108,9 @@ namespace UnityUtility
 
         private void PerspInit()
         {
+            if (_aspectMode == AspectMode.FixedHeight)
+                return;
+
             if (_aspectMode == AspectMode.FixedWidth)
             {
                 _camera.fieldOfView = _targetVertical = ScreenUtility.GetAspectAngle(_targetHorizontal, _currentAspect);
