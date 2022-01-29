@@ -21,7 +21,7 @@ namespace UnityUtility.Collections
     /// </summary>
     public sealed class ObjectPool<T> where T : class, IPoolable
     {
-        private Stack<T> _stack;
+        private Queue<T> _storage;
         private Func<T> _createFunc;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace UnityUtility.Collections
             if (creator == null)
                 throw new ArgumentNullException(nameof(creator));
 
-            _stack = new Stack<T>();
+            _storage = new Queue<T>();
             _createFunc = creator;
         }
 
@@ -65,9 +65,9 @@ namespace UnityUtility.Collections
         /// </summary>
         public T Get()
         {
-            if (_stack.Count == 0) { return _createFunc(); }
+            if (_storage.Count == 0) { return _createFunc(); }
 
-            T obj = _stack.Pop();
+            T obj = _storage.Dequeue();
             obj.Reinit();
             return obj;
         }
@@ -78,7 +78,7 @@ namespace UnityUtility.Collections
         public void Release(T obj)
         {
             obj.CleanUp();
-            _stack.Push(obj);
+            _storage.Enqueue(obj);
         }
 
         public void Release(IEnumerable<T> range)
@@ -94,7 +94,7 @@ namespace UnityUtility.Collections
         /// </summary>
         public void Clear()
         {
-            _stack.Clear();
+            _storage.Clear();
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace UnityUtility.Collections
         /// </summary>
         public void Clear(Action<T> disposer)
         {
-            while (_stack.Count > 0)
+            while (_storage.Count > 0)
             {
-                disposer(_stack.Pop());
+                disposer(_storage.Dequeue());
             }
         }
     }
