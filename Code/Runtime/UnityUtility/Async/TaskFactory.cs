@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityUtility.Collections;
 using UnityUtility.IdGenerating;
 using UnityUtilityTools;
@@ -23,33 +23,17 @@ namespace UnityUtility.Async
 
         private readonly bool _canBeStopped;
         private readonly bool _canBeStoppedGlobally;
-        private readonly bool _dontDestroyOnLoad;
 
         public bool CanBeStopped => _canBeStopped;
         public bool CanBeStoppedGlobally => _canBeStoppedGlobally;
         public IIdGenerator<long> IdProvider => _idProvider;
 
-        public TaskFactory(IAsyncSettings settings, IIdGenerator<long> idProvider, bool doNotDestroyOnLoad)
+        public TaskFactory(IAsyncSettings settings, IIdGenerator<long> idProvider, bool global)
         {
             _canBeStopped = settings.CanBeStopped;
             _canBeStoppedGlobally = settings.CanBeStoppedGlobally;
-            _dontDestroyOnLoad = doNotDestroyOnLoad;
             _idProvider = idProvider;
-
-            if (_dontDestroyOnLoad)
-            {
-                (_gameObject = new GameObject("Tasks")).Immortalize();
-                _runnersPool = new ObjectPool<RoutineRunner>(Create);
-            }
-            else
-            {
-                _runnersPool = new ObjectPool<RoutineRunner>(CreateLocal);
-                SceneManager.sceneUnloaded += _ =>
-                {
-                    _runnersPool.Clear();
-                    _gameObject = null;
-                };
-            }
+            _runnersPool = new ObjectPool<RoutineRunner>(global ? CreateGlobal : CreateLocal);
         }
 
         public void RegisterStopper(ITaskStopper stopper)
@@ -75,18 +59,29 @@ namespace UnityUtility.Async
 
         // -- //
 
-        private RoutineRunner Create()
+        private RoutineRunner CreateGlobal()
         {
-            return _gameObject.AddComponent<RoutineRunner>()
-                              .SetUp(this);
+            if (_gameObject == null)
+                (_gameObject = new GameObject("Tasks")).Immortalize();
+
+            return Create();
         }
 
         private RoutineRunner CreateLocal()
         {
             if (_gameObject == null)
+            {
                 _gameObject = new GameObject("LocalTasks");
+                _runnersPool.Clear();
+            }
 
             return Create();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private RoutineRunner Create()
+        {
+            return _gameObject.AddComponent<RoutineRunner>().SetUp(this);
         }
     }
 }
