@@ -22,19 +22,38 @@ namespace UnityUtility.Collections
     public sealed class ObjectPool<T> where T : class, IPoolable
     {
         private Queue<T> _storage;
-        private Func<T> _createFunc;
+        private Func<T> _factory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="creator">Reference to creating function.</param>
+        /// <param name="creator">Reference to factory function.</param>
         public ObjectPool(Func<T> creator)
         {
             if (creator == null)
                 throw new ArgumentNullException(nameof(creator));
 
-            _storage = new Queue<T>();
-            _createFunc = creator;
+            _storage = new Queue<T>(16);
+            _factory = creator;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="creator">Reference to factory function.</param>
+        /// <param name="preCount">Count of precreated objects.</param>
+        public ObjectPool(Func<T> creator, int preCount)
+        {
+            if (creator == null)
+                throw new ArgumentNullException(nameof(creator));
+
+            _storage = new Queue<T>(preCount);
+            _factory = creator;
+
+            for (int i = 0; i < preCount; i++)
+            {
+                Release(_factory());
+            }
         }
 
         /// <summary>
@@ -45,19 +64,7 @@ namespace UnityUtility.Collections
             if (creator == null)
                 throw new ArgumentNullException(nameof(creator));
 
-            _createFunc = creator;
-        }
-
-        /// <summary>
-        /// Creates objects and put them to pool.
-        /// </summary>
-        /// <param name="preCount">Number of objects.</param>
-        public void Precreate(int preCount)
-        {
-            for (int i = 0; i < preCount; i++)
-            {
-                Release(_createFunc());
-            }
+            _factory = creator;
         }
 
         /// <summary>
@@ -65,11 +72,13 @@ namespace UnityUtility.Collections
         /// </summary>
         public T Get()
         {
-            if (_storage.Count == 0) { return _createFunc(); }
+            if (_storage.TryDequeue(out T value))
+            {
+                value.Reinit();
+                return value;
+            }
 
-            T obj = _storage.Dequeue();
-            obj.Reinit();
-            return obj;
+            return _factory();
         }
 
         /// <summary>
