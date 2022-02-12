@@ -32,19 +32,8 @@ namespace UnityUtility
 
             _sceneLoaderIndex = SceneUtility.GetBuildIndexByScenePath(transitionalSceneName);
 
-            SceneManager.sceneUnloaded += scene =>
-            {
-                if (scene.buildIndex != _sceneLoaderIndex)
-                    Unloaded_Event?.Invoke();
-            };
-
-            SceneManager.sceneLoaded += (scene, _) =>
-            {
-                if (_configurator == null && scene.buildIndex != _sceneLoaderIndex)
-                {
-                    Loaded_Event?.Invoke();
-                }
-            };
+            SceneManager.sceneUnloaded += SceneUnloaded;
+            SceneManager.activeSceneChanged += ActiveSceneChanged;
 
 #if UNITY_EDITOR
             ApplicationUtility.OnApplicationQuit_Event += delegate
@@ -53,6 +42,9 @@ namespace UnityUtility
                 Unloaded_Event = null;
                 Interim_Event = null;
                 Loaded_Event = null;
+
+                SceneManager.sceneUnloaded -= SceneUnloaded;
+                SceneManager.activeSceneChanged -= ActiveSceneChanged;
             };
 #endif
         }
@@ -75,7 +67,7 @@ namespace UnityUtility
 
             _configurator = sceneConfigurator;
 
-            IEnumerator WaitForConfigurator()
+            IEnumerator waitForConfigurator()
             {
                 while (!_configurator.Done)
                 {
@@ -86,7 +78,7 @@ namespace UnityUtility
                 Loaded_Event?.Invoke();
             }
 
-            TaskSystem.StartAsync(WaitForConfigurator());
+            TaskSystem.StartAsync(waitForConfigurator());
         }
 
         public static void LoadScene(T sceneInfo)
@@ -96,6 +88,20 @@ namespace UnityUtility
             _sceneInfo = sceneInfo;
 
             SceneManager.LoadScene(_sceneLoaderIndex);
+        }
+
+        private static void SceneUnloaded(Scene scene)
+        {
+            if (scene.buildIndex == _sceneLoaderIndex || scene.isSubScene)
+                return;
+
+            Unloaded_Event?.Invoke();
+        }
+
+        private static void ActiveSceneChanged(Scene prevScene, Scene newScene)
+        {
+            if (_configurator == null && newScene.buildIndex != _sceneLoaderIndex)
+                Loaded_Event?.Invoke();
         }
     }
 }
