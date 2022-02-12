@@ -30,6 +30,14 @@ namespace UnityUtility.Async
 
             _globals = new TaskFactory(settings, idProvider, true);
             _locals = new TaskFactory(settings, idProvider, false);
+
+#if UNITY_EDITOR
+            ApplicationUtility.OnApplicationQuit_Event += delegate
+            {
+                _globals.CleanUp();
+                _locals.CleanUp();
+            };
+#endif
         }
 
         public static void RegisterStopper(ITaskStopper stopper)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityUtility.Collections;
 using UnityUtility.IdGenerating;
 using UnityUtilityTools;
@@ -18,6 +19,7 @@ namespace UnityUtility.Async
 
         private readonly ObjectPool<RoutineRunner> _runnersPool;
         private readonly IIdGenerator<long> _idProvider;
+        private readonly bool _global;
         private ITaskStopper _stopper;
         private GameObject _gameObject;
 
@@ -33,8 +35,26 @@ namespace UnityUtility.Async
             _canBeStopped = settings.CanBeStopped;
             _canBeStoppedGlobally = settings.CanBeStoppedGlobally;
             _idProvider = idProvider;
-            _runnersPool = new ObjectPool<RoutineRunner>(global ? CreateGlobal : CreateLocal);
+            _global = global;
+
+            if (global)
+            {
+                _runnersPool = new ObjectPool<RoutineRunner>(CreateGlobal);
+            }
+            else
+            {
+                _runnersPool = new ObjectPool<RoutineRunner>(CreateLocal);
+                SceneManager.activeSceneChanged += ActiveSceneChanged;
+            }
         }
+
+#if UNITY_EDITOR
+        public void CleanUp()
+        {
+            if (!_global)
+                SceneManager.activeSceneChanged -= ActiveSceneChanged;
+        }
+#endif
 
         public void RegisterStopper(ITaskStopper stopper)
         {
@@ -70,10 +90,7 @@ namespace UnityUtility.Async
         private RoutineRunner CreateLocal()
         {
             if (_gameObject == null)
-            {
                 _gameObject = new GameObject("LocalTasks");
-                _runnersPool.Clear();
-            }
 
             return Create();
         }
@@ -82,6 +99,12 @@ namespace UnityUtility.Async
         private RoutineRunner Create()
         {
             return _gameObject.AddComponent<RoutineRunner>().SetUp(this);
+        }
+
+        private void ActiveSceneChanged(Scene arg0, Scene arg1)
+        {
+            _gameObject = null;
+            _runnersPool.Clear();
         }
     }
 }
