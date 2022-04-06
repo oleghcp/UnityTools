@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityUtility.Inspector;
 using UnityUtility.MathExt;
@@ -118,7 +118,7 @@ namespace UnityUtility.Shooting
         }
 #endif
 
-        public async void Play()
+        public void Play()
         {
             if (_canMove)
                 return;
@@ -138,21 +138,30 @@ namespace UnityUtility.Shooting
                 return;
             }
 
-            if (_lifeTime.IsPosInfinity())
-                return;
+            if (_lifeTime < float.PositiveInfinity)
+                StartCoroutine(waitLifeTimeRoutine());
 
-            await Task.Delay((_lifeTime * 1000).ToInt());
+            IEnumerator waitLifeTimeRoutine()
+            {
+                float time = _lifeTime;
 
-            if (this == null)
-                return;
+                while (time > 0f)
+                {
+                    yield return null;
+                    time -= Time.deltaTime;
+                }
 
-            _canMove = false;
+                if (!_canMove)
+                    yield break;
 
-            if (_autodestruct)
-                gameObject.Destroy();
+                _canMove = false;
 
-            _events?.OnTimeOut.Invoke();
-            _listener?.OnTimeOut();
+                if (_autodestruct)
+                    gameObject.Destroy();
+
+                _events?.OnTimeOut.Invoke();
+                _listener?.OnTimeOut();
+            }
         }
 
         public void Stop()
