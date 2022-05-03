@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility.MathExt;
 using UnityUtilityEditor.Window;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
 {
@@ -139,6 +140,67 @@ namespace UnityUtilityEditor
                        extension != ".spriteatlas" &&
                        extension != ".scenetemplate" &&
                        !extension.Contains("override");
+            }
+        }
+
+        public static void FindHugeFiles(long minSizeInBytes, Action<List<(UnityObject, long)>> succes)
+        {
+            List<(UnityObject, long)> foundObjects = new List<(UnityObject, long)>();
+            bool isCanseled = false;
+            IEnumerator<float> iterator = SearchFilesBySize(minSizeInBytes, foundObjects);
+
+            EditorApplication.update += Proceed;
+
+            void Proceed()
+            {
+                if (!isCanseled && iterator.MoveNext())
+                {
+                    isCanseled = EditorUtility.DisplayCancelableProgressBar("Searching assets",
+                                                                            "That could take a while...",
+                                                                            iterator.Current);
+                    return;
+                }
+
+                EditorApplication.update -= Proceed;
+                EditorUtility.ClearProgressBar();
+                succes(foundObjects);
+            }
+        }
+
+        private static IEnumerator<float> SearchFilesBySize(long minSizeInBytes, List<(UnityObject, long)> foundObjects)
+        {
+            string assetsFolderPath = Application.dataPath;
+            string[] files = Directory.GetFiles(assetsFolderPath, "*", SearchOption.AllDirectories);
+
+            yield return 0f;
+
+            string projectFolderPath = PathUtility.GetParentPath(assetsFolderPath);
+            int count = files.Length;
+            int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
+
+            yield return 0f;
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                string filePath = files[i];
+
+                if (Path.GetExtension(filePath) == ".meta")
+                    continue;
+
+                FileInfo info = new FileInfo(filePath);
+
+                if (info.Length >= minSizeInBytes)
+                {
+                    string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
+                    string guid = AssetDatabase.AssetPathToGUID(assetPath);
+                    UnityObject asset = AssetDatabaseExt.LoadAssetByGuid<UnityObject>(guid);
+                    foundObjects.Add((asset, info.Length));
+                }
+
+                if (i % actionsPerFrame == 0)
+                {
+                    yield return (i + 1f) / count;
+                }
             }
         }
     }

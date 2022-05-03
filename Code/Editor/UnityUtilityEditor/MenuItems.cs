@@ -55,6 +55,12 @@ namespace UnityUtilityEditor
         }
 #endif
 
+        [MenuItem(nameof(UnityUtility) + "/Find Huge Files")]
+        private static void FindHugeFiles()
+        {
+            SearchHugeFilesWindow.Create();
+        }
+
         [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]
         private static void RemoveEmptyFolders()
         {
