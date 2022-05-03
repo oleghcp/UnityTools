@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -55,6 +56,35 @@ namespace UnityEditor
             return Directory.GetFiles(@"Library\ScriptAssemblies\", "*.dll", SearchOption.AllDirectories)
                             .Select(file => Assembly.LoadFrom(file))
                             .ToArray();
+        }
+
+        public static string[] GetFilesFromAssetFolder(string searchPattern, SearchOption searchOption)
+        {
+            List<string> list = new List<string>();
+            search(Application.dataPath);
+            return list.ToArray();
+
+            void search(string path)
+            {
+                const char forbiddenChar = '.';
+
+                foreach (string directory in Directory.EnumerateDirectories(path))
+                {
+                    if (Path.GetFileName(directory)[0] == forbiddenChar)
+                        continue;
+
+                    foreach (string file in Directory.EnumerateFiles(directory, searchPattern))
+                    {
+                        if (Path.GetFileName(file)[0] == forbiddenChar)
+                            continue;
+
+                        list.Add(file);
+                    }
+
+                    if (searchOption == SearchOption.AllDirectories)
+                        search(directory);
+                }
+            }
         }
     }
 }
