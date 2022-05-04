@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using UnityEngine;
 
 namespace UnityUtility.Async
 {
@@ -97,6 +98,11 @@ namespace UnityUtility.Async
         public static bool operator !=(TaskInfo a, TaskInfo b)
         {
             return a._id != b._id;
+        }
+
+        public static implicit operator CustomYieldInstruction(TaskInfo task)
+        {
+            return new TaskYieldInstruction(task);
         }
     }
 }
