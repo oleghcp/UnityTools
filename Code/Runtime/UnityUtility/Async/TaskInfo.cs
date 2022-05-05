@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using UnityEngine;
 
 namespace UnityUtility.Async
 {
-    public struct TaskInfo : IEquatable<TaskInfo>
+    public struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
     {
         private readonly long _id;
         private readonly RoutineRunner _task;
@@ -22,6 +21,8 @@ namespace UnityUtility.Async
         public bool IsAlive => IsAliveInternal();
 
         public bool IsPaused => IsAliveInternal() && _task.IsPaused;
+
+        object IEnumerator.Current => null;
 
         internal TaskInfo(RoutineRunner runner)
         {
@@ -90,6 +91,16 @@ namespace UnityUtility.Async
             return _id.GetHashCode();
         }
 
+        bool IEnumerator.MoveNext()
+        {
+            return IsAliveInternal();
+        }
+
+        void IEnumerator.Reset()
+        {
+            throw new NotImplementedException();
+        }
+
         public static bool operator ==(TaskInfo a, TaskInfo b)
         {
             return a._id == b._id;
@@ -98,11 +109,6 @@ namespace UnityUtility.Async
         public static bool operator !=(TaskInfo a, TaskInfo b)
         {
             return a._id != b._id;
-        }
-
-        public static implicit operator CustomYieldInstruction(TaskInfo task)
-        {
-            return new TaskYieldInstruction(task);
         }
     }
 }
