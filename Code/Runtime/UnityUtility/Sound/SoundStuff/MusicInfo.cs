@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityUtility.Collections;
 using UnityUtility.MathExt;
+using UnityUtility.Pool;
 using UnityUtilityTools;
 
 namespace UnityUtility.Sound.SoundStuff

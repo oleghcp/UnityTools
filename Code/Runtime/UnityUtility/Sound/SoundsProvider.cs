@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.Collections;
 using UnityUtility.MathExt;
+using UnityUtility.Pool;
 using UnityUtility.SaveLoad;
 using UnityUtility.Sound.SoundStuff;
 using UnityUtilityTools;
@@ -13,9 +13,6 @@ namespace UnityUtility.Sound
     public class SoundsProvider
     {
         private readonly SPreset _defaultPreset = new SPreset { Volume = 1f, Pitch = 1f, MinDist = 1f, MaxDist = 500f };
-
-        private static IObjectCreator<SoundInfo> _creator;
-        private static ObjectPool<SoundInfo> _pool;
 
         private bool _locked;
 
@@ -29,6 +26,7 @@ namespace UnityUtility.Sound
 
         private Dictionary<SoundKey, SoundInfo> _keyedSounds;
         private HashSet<SoundInfo> _freeSounds;
+        private ObjectPool<SoundInfo> _pool;
         private IClipLoader _loader;
         private Dictionary<string, SPreset> _presetList;
 
@@ -37,30 +35,13 @@ namespace UnityUtility.Sound
         public float Pitch => _pitch;
         public bool Paused => _paused;
 
-        static SoundsProvider()
-        {
-            _creator = new DynamicSndSourceCreator();
-            _pool = new ObjectPool<SoundInfo>(_creator.Create);
-        }
-
-        public SoundsProvider(SoundsPreset presetList = null) : this(new DefaultClipLoader("Sounds/"), presetList)
-        {
-
-        }
-
-        public SoundsProvider(IClipLoader loader, SoundsPreset presetList = null)
+        public SoundsProvider(IClipLoader loader, IObjectFactory<SoundInfo> factory, SoundsPreset presetList = null)
         {
             _keyedSounds = new Dictionary<SoundKey, SoundInfo>();
             _freeSounds = new HashSet<SoundInfo>();
-
+            _pool = new ObjectPool<SoundInfo>(factory.Create);
             _loader = loader;
             _presetList = presetList == null ? new Dictionary<string, SPreset>() : presetList.CreateDict();
-        }
-
-        public static void OverrideAudioSourceCreator(IObjectCreator<SoundInfo> newCreator)
-        {
-            _creator = newCreator;
-            _pool.ChangeCreator(_creator.Create);
         }
 
         public void SetVolume(float value)

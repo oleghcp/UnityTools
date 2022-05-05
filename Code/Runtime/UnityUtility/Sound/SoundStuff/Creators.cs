@@ -1,6 +1,8 @@
-﻿namespace UnityUtility.Sound.SoundStuff
+﻿using UnityUtility.Pool;
+
+namespace UnityUtility.Sound.SoundStuff
 {
-    public class DynamicMusSourceCreator : IObjectCreator<MusicInfo>
+    public class DynamicMusSourceCreator : IObjectFactory<MusicInfo>
     {
         public MusicInfo Create()
         {
@@ -8,7 +10,7 @@
         }
     }
 
-    public class DynamicSndSourceCreator : IObjectCreator<SoundInfo>
+    public class DynamicSndSourceCreator : IObjectFactory<SoundInfo>
     {
         public SoundInfo Create()
         {

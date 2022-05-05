@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityUtility.Collections;
 using UnityUtility.MathExt;
+using UnityUtility.Pool;
 using UnityUtility.SaveLoad;
 using UnityUtility.Sound.SoundStuff;
 
@@ -9,9 +9,6 @@ namespace UnityUtility.Sound
     public class MusicProvider
     {
         private readonly MPreset _defaultPreset = new MPreset { Volume = 1f, Pitch = 1f, Looped = true, RisingDur = 0.5f };
-
-        private static IObjectCreator<MusicInfo> _creator;
-        private static ObjectPool<MusicInfo> _pool;
 
         private bool _locked;
 
@@ -26,6 +23,7 @@ namespace UnityUtility.Sound
         private Dictionary<string, MusicInfo> _music;
 
         private IClipLoader _loader;
+        private ObjectPool<MusicInfo> _pool;
         private Dictionary<string, MPreset> _presetList;
 
         public bool Muted => _isMuted;
@@ -33,29 +31,12 @@ namespace UnityUtility.Sound
         public float Pitch => _pitch;
         public bool Paused => _paused;
 
-        static MusicProvider()
-        {
-            _creator = new DynamicMusSourceCreator();
-            _pool = new ObjectPool<MusicInfo>(_creator.Create);
-        }
-
-        public MusicProvider(MusicPreset presetList = null) : this(new DefaultClipLoader("Music/"), presetList)
-        {
-
-        }
-
-        public MusicProvider(IClipLoader loader, MusicPreset presetList = null)
+        public MusicProvider(IClipLoader loader, IObjectFactory<MusicInfo> factory, MusicPreset presetList = null)
         {
             _music = new Dictionary<string, MusicInfo>();
-
+            _pool = new ObjectPool<MusicInfo>(factory.Create);
             _loader = loader;
             _presetList = presetList == null ? new Dictionary<string, MPreset>() : presetList.CreateDict();
-        }
-
-        public static void OverrideAudioSourceCreator(IObjectCreator<MusicInfo> newCreator)
-        {
-            _creator = newCreator;
-            _pool.ChangeCreator(_creator.Create);
         }
 
         public void SetVolume(float value)
