@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Window;
@@ -45,6 +46,13 @@ namespace UnityUtilityEditor
         private static void GenerateLayerSetClass()
         {
             LayerSetWindow.CreateWindow();
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Open Persistent Data Folder")]
+        private static void OpenPersistentDataFolder()
+        {
+            DirectoryInfo dir = Directory.CreateDirectory(Application.persistentDataPath);
+            System.Diagnostics.Process.Start(dir.FullName);
         }
 
 #if !UNITY_2018_3_OR_NEWER
