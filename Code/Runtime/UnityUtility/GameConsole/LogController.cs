@@ -6,7 +6,7 @@ using UnityUtility.Pool;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
-    internal class LogController : UiMonoBehaviour
+    internal class LogController : UiMonoBehaviour, IObjectFactory<LogLine>
     {
         [SerializeField]
         private LogLine _prefab;
@@ -21,7 +21,7 @@ namespace UnityUtility.GameConsole
 
         private void Awake()
         {
-            _pool = new ObjectPool<LogLine>(CreateLine);
+            _pool = new ObjectPool<LogLine>(this);
             _lines = new List<LogLine>();
         }
 
@@ -50,14 +50,6 @@ namespace UnityUtility.GameConsole
             _border.SetActive(newPos.y < 0f);
         }
 
-        private LogLine CreateLine()
-        {
-            LogLine newLine = _prefab.Install(_root);
-            newLine.gameObject.SetActive(true);
-
-            return newLine;
-        }
-
         private LogLine GetLine()
         {
             if (_root.childCount < _terminal.Options.LinesLimit)
@@ -66,6 +58,14 @@ namespace UnityUtility.GameConsole
             return _root.GetChild(0)
                         .GetComponent<LogLine>()
                         .Reuse();
+        }
+
+        LogLine IObjectFactory<LogLine>.Create()
+        {
+            LogLine newLine = _prefab.Install(_root);
+            newLine.gameObject.SetActive(true);
+
+            return newLine;
         }
     }
 }

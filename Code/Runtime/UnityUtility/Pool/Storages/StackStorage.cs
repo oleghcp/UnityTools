@@ -1,11 +1,14 @@
-using System;
 using System.Collections.Generic;
 
 namespace UnityUtility.Pool.Storages
 {
-    [Serializable]
     public class StackStorage<T> : Stack<T>, IPoolStorage<T> where T : class, IPoolable
     {
+        public StackStorage()
+        {
+
+        }
+
         public StackStorage(int capacity) : base(capacity)
         {
 

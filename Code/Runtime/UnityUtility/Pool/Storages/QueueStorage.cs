@@ -1,11 +1,14 @@
-using System;
 using System.Collections.Generic;
 
 namespace UnityUtility.Pool.Storages
 {
-    [Serializable]
     public class QueueStorage<T> : Queue<T>, IPoolStorage<T> where T : class, IPoolable
     {
+        public QueueStorage()
+        {
+
+        }
+
         public QueueStorage(int capacity) : base(capacity)
         {
 

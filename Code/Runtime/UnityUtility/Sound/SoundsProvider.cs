@@ -39,7 +39,7 @@ namespace UnityUtility.Sound
         {
             _keyedSounds = new Dictionary<SoundKey, SoundInfo>();
             _freeSounds = new HashSet<SoundInfo>();
-            _pool = new ObjectPool<SoundInfo>(factory.Create);
+            _pool = new ObjectPool<SoundInfo>(factory);
             _loader = loader;
             _presetList = presetList == null ? new Dictionary<string, SPreset>() : presetList.CreateDict();
         }

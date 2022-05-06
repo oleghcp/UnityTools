@@ -34,7 +34,7 @@ namespace UnityUtility.Sound
         public MusicProvider(IClipLoader loader, IObjectFactory<MusicInfo> factory, MusicPreset presetList = null)
         {
             _music = new Dictionary<string, MusicInfo>();
-            _pool = new ObjectPool<MusicInfo>(factory.Create);
+            _pool = new ObjectPool<MusicInfo>(factory);
             _loader = loader;
             _presetList = presetList == null ? new Dictionary<string, MPreset>() : presetList.CreateDict();
         }
