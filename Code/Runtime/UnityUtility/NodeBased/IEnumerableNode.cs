@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_2019_3_OR_NEWER
+using System.Collections.Generic;
 
 namespace UnityUtility.NodeBased
 {
@@ -7,3 +8,4 @@ namespace UnityUtility.NodeBased
         new NodeEnumerator<TNode> GetEnumerator();
     }
 }
+#endif

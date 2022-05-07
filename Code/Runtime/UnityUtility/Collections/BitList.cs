@@ -185,11 +185,13 @@ namespace UnityUtility.Collections
             _mutable = true;
         }
 
+        public BitList(int[] intBlocks) : this(intBlocks as ICollection<int>)
+        {
+
+        }
+
         public BitList(Span<int> intBlocks)
         {
-            if (intBlocks == null)
-                throw new ArgumentNullException(nameof(intBlocks));
-
             if (intBlocks.Length > MAX_LENGTH)
                 throw new ArgumentException("Array is too large.", nameof(intBlocks));
 
@@ -461,7 +463,7 @@ namespace UnityUtility.Collections
 
         public BitList GetCopy(bool mutable)
         {
-            return new BitList(_array as ICollection<int>)
+            return new BitList(_array)
             {
                 _version = _version,
                 _length = _length,
@@ -492,10 +494,8 @@ namespace UnityUtility.Collections
             if ((uint)length > BitMask.SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length), $"Length cannot be negative or more than {BitMask.SIZE}.");
 
-            return new BitList(stackalloc[] { bitMask })
-            {
-                _length = length
-            };
+            Span<int> intBlocks = stackalloc[] { bitMask };
+            return new BitList(intBlocks) { _length = length };
         }
 
         internal static int GetArraySize(int bitsCount)
