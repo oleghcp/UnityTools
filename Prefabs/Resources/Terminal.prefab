@@ -945,7 +945,7 @@ GameObject:
   - component: {fileID: 8614577478796120313}
   - component: {fileID: 1777511113787660730}
   m_Layer: 5
-  m_Name: TerminalCanvas
+  m_Name: Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
