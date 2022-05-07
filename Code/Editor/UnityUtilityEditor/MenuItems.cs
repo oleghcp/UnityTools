@@ -13,33 +13,15 @@ namespace UnityUtilityEditor
         public const string RESET_ITEM_NAME = "Reset";
         public const string CREATE_ASSET_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + "/Asset";
 
-#if UNITY_2019_3_OR_NEWER
-        private const string FULL_MENU_GRAPH_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + "/Graph/";
-
-        [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
-        private static void CreateNodeScript()
+        [MenuItem(nameof(UnityUtility) + "/Terminal/Create Terminal Prefab")]
+        private static void CreateTerminal()
         {
-            TemplatesUtility.CreateNodeScript();
-        }
+            string assetPath = AssetDatabase.GUIDToAssetPath("7537be9dac6f69045a2656580dc951f0");
+            string newFolderPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}";
 
-        [MenuItem(FULL_MENU_GRAPH_PATH + "Graph C# Script")]
-        private static void CreateGraphScript()
-        {
-            TemplatesUtility.CreateGraphScript();
-        }
-#endif
-
-        [MenuItem(CREATE_ASSET_PATH)]
-        private static void CreateAsset()
-        {
-            ScriptableObjectWindow window = EditorWindow.GetWindow<ScriptableObjectWindow>(true, "Scriptable Objects");
-            window.SetParent(Selection.activeObject);
-        }
-
-        [MenuItem(CREATE_ASSET_PATH, true)]
-        private static bool CreateAssetValidation()
-        {
-            return Selection.objects.Length == 1;
+            Directory.CreateDirectory(newFolderPath);
+            AssetDatabase.CopyAsset(assetPath, $"{newFolderPath}/Terminal.prefab");
+            AssetDatabase.SaveAssets();
         }
 
         [MenuItem(nameof(UnityUtility) + "/Code/Generate Layer Set Class")]
@@ -99,6 +81,45 @@ namespace UnityUtilityEditor
             EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");
         }
 
+        // ------------- //
+
+        [MenuItem(nameof(UnityUtility) + "/About", false, 1)]
+        private static void GetAboutWindow()
+        {
+            EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
+        }
+
+        // ------------- //
+
+#if UNITY_2019_3_OR_NEWER
+        private const string FULL_MENU_GRAPH_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + "/Graph/";
+
+        [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
+        private static void CreateNodeScript()
+        {
+            TemplatesUtility.CreateNodeScript();
+        }
+
+        [MenuItem(FULL_MENU_GRAPH_PATH + "Graph C# Script")]
+        private static void CreateGraphScript()
+        {
+            TemplatesUtility.CreateGraphScript();
+        }
+#endif
+
+        [MenuItem(CREATE_ASSET_PATH)]
+        private static void CreateAsset()
+        {
+            ScriptableObjectWindow window = EditorWindow.GetWindow<ScriptableObjectWindow>(true, "Scriptable Objects");
+            window.SetParent(Selection.activeObject);
+        }
+
+        [MenuItem(CREATE_ASSET_PATH, true)]
+        private static bool CreateAssetValidation()
+        {
+            return Selection.objects.Length == 1;
+        }
+
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Destroy (ext.)", false, 20)]
         private static void DestroySubasset()
         {
@@ -116,16 +137,6 @@ namespace UnityUtilityEditor
 
             return AssetDatabaseExt.LoadAssetByGuid(selectedGuids[0]) != Selection.activeObject;
         }
-
-        // ------------- //
-
-        [MenuItem(nameof(UnityUtility) + "/About", false, 1)]
-        private static void GetAboutWindow()
-        {
-            EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
-        }
-
-        // ------------- //
 
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Find References In Project (ext.)", false, 25)]
         private static void FindReferences()
