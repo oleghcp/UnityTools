@@ -130,7 +130,7 @@ namespace UnityUtility
 
 #if UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Clamp(long value, long min, long max)
+        public static long Clamp(double value, double min, double max)
         {
             Math.Clamp(value, min, max);
 #else
