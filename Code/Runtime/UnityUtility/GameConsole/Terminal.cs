@@ -351,7 +351,7 @@ namespace UnityUtility.GameConsole
 
         private static void CreateTerminalInternal()
         {
-            Resources.Load<GameObject>("TerminalCanvas")
+            Resources.Load<GameObject>("Terminal")
                      .Install()
                      .Immortalize();
         }
