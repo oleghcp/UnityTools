@@ -354,6 +354,13 @@ namespace UnityUtility.GameConsole
             Resources.Load<GameObject>("Terminal")
                      .Install()
                      .Immortalize();
+
+            if (EventSystem.current == null)
+            {
+                GameObject eventSystemRoot = ComponentUtility.CreateInstance<EventSystem>().gameObject;
+                eventSystemRoot.AddComponent<StandaloneInputModule>();
+                eventSystemRoot.Immortalize();
+            }
         }
 
         private bool NoCommands()
