@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityUtility.Async;
-using UnityUtility.SceneLoading;
 
 namespace UnityUtility
 {
@@ -21,7 +18,6 @@ namespace UnityUtility
 
         private static T _sceneInfo;
         private static int _sceneLoaderIndex = -1;
-        private static ILoadDependency _configurator;
 
         public static T SceneInfo => _sceneInfo;
 
@@ -55,32 +51,6 @@ namespace UnityUtility
             SceneManager.LoadScene(_sceneInfo.SceneName);
         }
 
-        /// <summary>
-        /// Scene configurator should be registered on awake when target scene already loaded but you need to call Loaded_Event after some preparations.
-        /// </summary>
-        public static void WaitForConfigurator(ILoadDependency sceneConfigurator)
-        {
-            if (_configurator != null)
-            {
-                throw new InvalidOperationException("Configurator already set for this scene instance.");
-            }
-
-            _configurator = sceneConfigurator;
-
-            IEnumerator waitForConfigurator()
-            {
-                while (!_configurator.Done)
-                {
-                    yield return null;
-                }
-
-                _configurator = null;
-                Loaded_Event?.Invoke();
-            }
-
-            TaskSystem.StartAsync(waitForConfigurator());
-        }
-
         public static void LoadScene(T sceneInfo)
         {
             BeginUnload_Event?.Invoke();
@@ -92,7 +62,7 @@ namespace UnityUtility
 
         private static void SceneUnloaded(Scene scene)
         {
-            if (scene.buildIndex == _sceneLoaderIndex || scene.isSubScene)
+            if (scene.buildIndex == _sceneLoaderIndex && SceneManager.GetActiveScene() == scene)
                 return;
 
             Unloaded_Event?.Invoke();
@@ -100,7 +70,7 @@ namespace UnityUtility
 
         private static void ActiveSceneChanged(Scene prevScene, Scene newScene)
         {
-            if (_configurator == null && newScene.buildIndex != _sceneLoaderIndex)
+            if (newScene.buildIndex != _sceneLoaderIndex)
                 Loaded_Event?.Invoke();
         }
     }
