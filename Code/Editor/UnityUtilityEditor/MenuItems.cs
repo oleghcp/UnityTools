@@ -20,7 +20,8 @@ namespace UnityUtilityEditor
             string newFolderPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}";
 
             Directory.CreateDirectory(newFolderPath);
-            AssetDatabase.CopyAsset(assetPath, $"{newFolderPath}/Terminal.prefab");
+            GameObject prefab = PrefabUtility.LoadPrefabContents(assetPath);
+            PrefabUtility.SaveAsPrefabAsset(prefab, $"{newFolderPath}/Terminal.prefab");
             AssetDatabase.SaveAssets();
         }
 
