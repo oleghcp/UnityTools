@@ -351,9 +351,15 @@ namespace UnityUtility.GameConsole
 
         private static void CreateTerminalInternal()
         {
-            Resources.Load<GameObject>("Terminal")
-                     .Install()
-                     .Immortalize();
+            GameObject terminal = Resources.Load<GameObject>("Terminal");
+
+            if (terminal == null)
+            {
+                Debug.LogError($"No Terminal.prefab found. Create terminal prefab using {nameof(UnityUtility)} menu item.");
+                return;
+            }
+
+            terminal.Install().Immortalize();
 
             if (EventSystem.current == null)
             {
