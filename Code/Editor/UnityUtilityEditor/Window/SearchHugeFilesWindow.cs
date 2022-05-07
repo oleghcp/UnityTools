@@ -38,15 +38,15 @@ namespace UnityUtilityEditor.Window
                 switch (_sizeToolbarIndex)
                 {
                     case 0:
-                        _fileSize = Math.Clamp(EditorGUILayout.LongField(label, _fileSize), 0L, long.MaxValue);
+                        _fileSize = MathUtility.Clamp(EditorGUILayout.LongField(label, _fileSize), 0L, long.MaxValue);
                         break;
 
                     case 1:
-                        _fileSize = (long)Math.Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d) * 1024d, 0d, double.MaxValue);
+                        _fileSize = (long)MathUtility.Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d) * 1024d, 0d, double.MaxValue);
                         break;
 
                     case 2:
-                        _fileSize = (long)Math.Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d / 1024d) * 1024d * 1024d, 0d, double.MaxValue);
+                        _fileSize = (long)MathUtility.Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d / 1024d) * 1024d * 1024d, 0d, double.MaxValue);
                         break;
 
                     default:

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿#if UNITY_2021_2_OR_NEWER
+using System.Runtime.CompilerServices;
+#endif
+using UnityEngine;
 using UnityUtility.MathExt;
 using static System.MathF;
 
@@ -105,6 +108,42 @@ namespace UnityUtility
             float ch1 = (ratio * 2f).Clamp01();
             float ch2 = (2f - ratio * 2f).Clamp01();
             return (ch1, ch2);
+        }
+
+#if UNITY_2021_2_OR_NEWER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Clamp(long value, long min, long max)
+        {
+            Math.Clamp(value, min, max);
+#else
+        public static long Clamp(long value, long min, long max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+#endif
+        }
+
+#if UNITY_2021_2_OR_NEWER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Clamp(long value, long min, long max)
+        {
+            Math.Clamp(value, min, max);
+#else
+        public static double Clamp(double value, double min, double max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+#endif
         }
     }
 }
