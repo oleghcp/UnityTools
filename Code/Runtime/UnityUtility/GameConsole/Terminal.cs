@@ -25,8 +25,8 @@ namespace UnityUtility.GameConsole
 
     public sealed class Terminal : SingleUiBehaviour<Terminal>
     {
-        private readonly Color CMD_COLOR = Colours.White;
-        private readonly Color CMD_ERROR_COLOR = Colours.Orange;
+        private readonly Color _cmdColor = Colours.White;
+        private readonly Color _cmdErrorColor = Colours.Orange;
 
         public static event Action<bool> Switched_Event;
 
@@ -34,6 +34,8 @@ namespace UnityUtility.GameConsole
         private InputField _field;
         [SerializeField]
         private LogController _log;
+        [SerializeField]
+        private GameObject _closeButton;
 
         private bool _isOn;
         private PointerEventData _pointerEventData;
@@ -179,6 +181,9 @@ namespace UnityUtility.GameConsole
             FindCmd(string.Empty);
         }
 
+        /// <summary>
+        /// Show or hide terminal.
+        /// </summary>
         public void Switch()
         {
             SwitchInternal();
@@ -199,6 +204,9 @@ namespace UnityUtility.GameConsole
             _log.Clear();
         }
 
+        /// <summary>
+        /// This method is called by input field. Don't use it.
+        /// </summary>
         public void OnDone(string _)
         {
             _field.OnPointerClick(_pointerEventData);
@@ -230,13 +238,13 @@ namespace UnityUtility.GameConsole
                     object cmdKeysParseError = method.Invoke(_cmdRun, keys);
 
                     if (cmdKeysParseError == null)
-                        _log.WriteLine(CMD_COLOR, text);
+                        _log.WriteLine(_cmdColor, text);
                     else
-                        _log.WriteLine(CMD_ERROR_COLOR, "cmd options error: " + cmdKeysParseError);
+                        _log.WriteLine(_cmdErrorColor, "cmd options error: " + cmdKeysParseError);
                 }
                 else
                 {
-                    _log.WriteLine(CMD_ERROR_COLOR, "unknown: " + command);
+                    _log.WriteLine(_cmdErrorColor, "unknown: " + command);
                 }
 
                 _cmdHistory.Add(text);
@@ -272,7 +280,7 @@ namespace UnityUtility.GameConsole
                 string line = _stringBuilder.ToString();
                 _stringBuilder.Clear();
 
-                _log.WriteLine(CMD_COLOR, line);
+                _log.WriteLine(_cmdColor, line);
                 _field.text = text + getCommon(cmds, text.Length);
                 _field.caretPosition = _field.text.Length;
             }
@@ -318,7 +326,7 @@ namespace UnityUtility.GameConsole
         private void SwitchInternal()
         {
             StopAllCoroutines();
-            StartCoroutine(Switch(!_isOn));
+            StartCoroutine(SwitchRoutine());
         }
 
         private Color GetTextColor(LogType logType)
@@ -384,19 +392,23 @@ namespace UnityUtility.GameConsole
         //Routines//
         ////////////
 
-        private IEnumerator Switch(bool on)
+        private IEnumerator SwitchRoutine()
         {
+            _isOn = !_isOn;
             float targetHeight = 720f * _options.TargetHeight;
 
-            _field.gameObject.SetActive(_isOn = on);
+            _field.gameObject.SetActive(_isOn);
 
-            if (on)
+            if (_closeButton != null)
+                _closeButton.SetActive(_isOn);
+
+            if (_isOn)
                 _field.text = string.Empty;
             else
                 _curHistoryIndex = 0;
 
-            float hStart = on ? 0f : targetHeight;
-            float hEnd = on ? targetHeight : 0f;
+            float hStart = _isOn ? 0f : targetHeight;
+            float hEnd = _isOn ? targetHeight : 0f;
 
             float ratio = 0f;
 
@@ -408,7 +420,7 @@ namespace UnityUtility.GameConsole
                 yield return null;
             }
 
-            if (on)
+            if (_isOn)
                 _field.OnPointerClick(_pointerEventData);
         }
     }
