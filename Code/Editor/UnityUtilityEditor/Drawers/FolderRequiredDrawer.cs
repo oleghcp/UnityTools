@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityUtility.Inspector;
 
-namespace Project
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(FolderRequiredAttribute))]
     public class FolderRequiredDrawer : PropertyDrawer
