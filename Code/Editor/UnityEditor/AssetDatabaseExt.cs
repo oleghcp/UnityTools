@@ -58,16 +58,16 @@ namespace UnityEditor
                             .ToArray();
         }
 
-        public static string[] GetFilesFromAssetFolder(string searchPattern, SearchOption searchOption)
+        public static IReadOnlyList<string> GetFilesFromAssetFolder(string searchPattern, SearchOption searchOption)
         {
+            const char forbiddenChar = '.';
+
             List<string> list = new List<string>();
             search(Application.dataPath);
-            return list.ToArray();
+            return list;
 
             void search(string path)
             {
-                const char forbiddenChar = '.';
-
                 foreach (string directory in Directory.EnumerateDirectories(path))
                 {
                     if (Path.GetFileName(directory)[0] == forbiddenChar)

@@ -93,12 +93,12 @@ namespace UnityUtilityEditor
 
         public static IEnumerator<float> SearchReferencesByText(string targetGuid, List<string> foundObjects)
         {
-            string[] files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
+            IReadOnlyList<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
 
             yield return 0f;
 
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            int count = files.Length;
+            int count = files.Count;
             int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 
             yield return 0f;
@@ -166,17 +166,17 @@ namespace UnityUtilityEditor
 
         private static IEnumerator<float> SearchFilesBySize(long minSizeInBytes, List<(UnityObject, long)> foundObjects)
         {
-            string[] files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
+            IReadOnlyList<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
 
             yield return 0f;
 
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            int count = files.Length;
+            int count = files.Count;
             int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 
             yield return 0f;
 
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < count; i++)
             {
                 string filePath = files[i];
 
