@@ -1,6 +1,7 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityUtilityEditor.Inspectors;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
 using UnityObject = UnityEngine.Object;
@@ -34,8 +35,7 @@ namespace UnityUtilityEditor
         [MenuItem(nameof(UnityUtility) + "/Switch Transform Editor")]
         private static void SwitchTransformEditor()
         {
-            bool builtInType = EditorPrefs.GetBool(PrefsConstants.BUILTIN_TRANSFORM_EDITOR_KEY);
-            EditorPrefs.SetBool(PrefsConstants.BUILTIN_TRANSFORM_EDITOR_KEY, !builtInType);
+            TransformEditor.SwitchType();
         }
 
         [MenuItem(nameof(UnityUtility) + "/Open Persistent Data Folder")]
