@@ -5,6 +5,7 @@ using UnityEngine.UI;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
+    [DisallowMultipleComponent]
     public class InfoPanel : UiMonoBehaviour, IPointerClickHandler
     {
         [SerializeField]

@@ -23,6 +23,7 @@ namespace UnityUtility.GameConsole
         public bool ShowDebugLogs = true;
     }
 
+    [DisallowMultipleComponent]
     public sealed class Terminal : SingleUiBehaviour<Terminal>
     {
         private readonly Color _cmdColor = Colours.White;

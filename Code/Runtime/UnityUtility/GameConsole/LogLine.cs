@@ -7,6 +7,7 @@ using UnityUtility.Pool;
 #pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
+    [DisallowMultipleComponent]
     internal class LogLine : UiMonoBehaviour, IPoolable, IPointerClickHandler
     {
         [SerializeField]
