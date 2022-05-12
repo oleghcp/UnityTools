@@ -31,6 +31,13 @@ namespace UnityUtilityEditor
             LayerSetWindow.CreateWindow();
         }
 
+        [MenuItem(nameof(UnityUtility) + "/Switch Transform Editor")]
+        private static void SwitchTransformEditor()
+        {
+            bool builtInType = EditorPrefs.GetBool(PrefsConstants.BUILTIN_TRANSFORM_EDITOR_KEY);
+            EditorPrefs.SetBool(PrefsConstants.BUILTIN_TRANSFORM_EDITOR_KEY, !builtInType);
+        }
+
         [MenuItem(nameof(UnityUtility) + "/Open Persistent Data Folder")]
         private static void OpenPersistentDataFolder()
         {
