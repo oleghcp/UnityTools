@@ -110,6 +110,20 @@ namespace UnityUtility
             mask = ~mask;
         }
 
+        public static void InvertFor(ref int mask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+                InvertAll(ref mask);
+
+            for (int i = 0; i < length; i++)
+            {
+                SwitchFlag(ref mask, i);
+            }
+        }
+
         public static bool Equals(int mask1, int mask2, int length = SIZE)
         {
             if (length > SIZE)
