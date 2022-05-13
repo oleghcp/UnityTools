@@ -39,7 +39,6 @@ namespace UnityEditor
                 case SerializedPropertyType.ExposedReference:
                     self.exposedReferenceValue = null;
                     break;
-
 #if UNITY_2019_3_OR_NEWER
                 case SerializedPropertyType.ManagedReference:
                     self.managedReferenceValue = null;
@@ -117,7 +116,11 @@ namespace UnityEditor
                 case SerializedPropertyType.BoundsInt:
                     self.boundsIntValue = default;
                     break;
-
+#if UNITY_2021_1_OR_NEWER
+                case SerializedPropertyType.Hash128:
+                    self.hash128Value = default;
+                    break;
+#endif
                 default:
                     throw new UnsupportedValueException(self.propertyType);
             }
