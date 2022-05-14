@@ -106,31 +106,58 @@ namespace UnityUtilityEditor.Window
         public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
             DropDownWindow popup = CreateInstance<DropDownWindow>();
+            popup.CreateForFlagsInternal(buttonRect, flags, displayedOptions, onClose);
+        }
 
+        private void CreateForFlagsInternal(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        {
             if (flags.Count != displayedOptions.Length)
             {
                 Debug.LogError($"Flags count ({flags.Count}) != displayed options count ({displayedOptions.Length}).");
                 return;
             }
 
-            popup._flags = flags;
-            popup._onClose = onClose;
+            _flags = flags;
+            _onClose = onClose;
 
             for (int i = 0; i < displayedOptions.Length; i++)
             {
-                if (displayedOptions[i].IsNullOrWhiteSpace())
+                if (displayedOptions[i].IsNullOrEmpty())
                     continue;
 
                 int index = i;
-                Data item = Data.CreateItem(i, displayedOptions[i], false, () => flags.Switch(index));
-                popup._items.Add(item);
+                Data item = Data.CreateItem(i, displayedOptions[i], false, () => _flags.Switch(index));
+                _items.Add(item);
             }
 
-            popup._items.Insert(0, Data.CreateItem(popup._items.Count, NOTHING_ITEM, false, () => flags.SetAll(false)));
-            popup._items.Insert(1, Data.CreateItem(popup._items.Count, EVERYTHING_ITEM, false, () => flags.SetAll(true)));
-            popup._items.Insert(2, Data.CreateSeparator());
+            _items.Insert(0, Data.CreateItem(_flags.Count, NOTHING_ITEM, flags.IsEmpty(), () => _flags.SetAll(false)));
+            _items.Insert(1, Data.CreateItem(_flags.Count, EVERYTHING_ITEM, allFor(), setAllTrue));
+            _items.Insert(2, Data.CreateSeparator());
 
-            popup.ShowMenu(buttonRect);
+            ShowMenu(buttonRect);
+
+            bool allFor()
+            {
+                for (int i = 0; i < displayedOptions.Length; i++)
+                {
+                    if (displayedOptions[i].HasAnyData() && !flags[i])
+                        return false;
+                }
+
+                return true;
+            }
+
+            void setAllTrue()
+            {
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    if ((uint)_items[i].Id >= (uint)_flags.Count)
+                        continue;
+
+                    if (_items[i].Text.HasAnyData())
+                        _flags[_items[i].Id] = true;
+                }
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -294,12 +321,26 @@ namespace UnityUtilityEditor.Window
                 switch (item.Text)
                 {
                     case NOTHING_ITEM: return _flags.IsEmpty();
-                    case EVERYTHING_ITEM: return _flags.All();
+                    case EVERYTHING_ITEM: return all();
                     default: return _flags[item.Id];
                 }
             }
 
             return item.On;
+
+            bool all()
+            {
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    if ((uint)_items[i].Id >= (uint)_flags.Count)
+                        continue;
+
+                    if (_items[i].Text.HasAnyData() && !_flags[_items[i].Id])
+                        return false;
+                }
+
+                return true;
+            }
         }
 
         private void TryInvokeItem()

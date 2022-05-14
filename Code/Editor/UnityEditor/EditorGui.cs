@@ -142,15 +142,26 @@ namespace UnityEditor
 
             string getContentText()
             {
-                if (BitMask.AllFor(mask, bitsCount))
-                    return DropDownWindow.EVERYTHING_ITEM;
-
                 if (BitMask.EmptyFor(mask, bitsCount))
                     return DropDownWindow.NOTHING_ITEM;
+
+                if (allFor())
+                    return DropDownWindow.EVERYTHING_ITEM;
 
                 return BitMask.EnumerateIndices(mask, bitsCount)
                               .Select(item => displayedOptions[item])
                               .ConcatToString(", ");
+            }
+
+            bool allFor()
+            {
+                for (int i = 0; i < bitsCount; i++)
+                {
+                    if (displayedOptions[i].HasAnyData() && !BitMask.HasFlag(mask, i))
+                        return false;
+                }
+
+                return true;
             }
         }
 

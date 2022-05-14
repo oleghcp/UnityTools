@@ -489,6 +489,11 @@ namespace UnityUtility.Collections
             return new BitArray(_array) { Length = _length };
         }
 
+        public static BitList CreateFromBitMask(IntMask bitMask, int length = BitMask.SIZE)
+        {
+            return CreateFromBitMask((int)bitMask, length);
+        }
+
         public static BitList CreateFromBitMask(int bitMask, int length = BitMask.SIZE)
         {
             if ((uint)length > BitMask.SIZE)
