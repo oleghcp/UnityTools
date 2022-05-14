@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility;
@@ -259,6 +260,34 @@ namespace UnityEditor
         public static bool IsFolder(this UnityObject self)
         {
             return ProjectWindowUtil.IsFolder(self.GetInstanceID());
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DestroyImmediate(this UnityObject self)
+        {
+            UnityObject.DestroyImmediate(self);
+        }
+
+        public static void DestroyChildrenImmediate(this Transform self)
+        {
+            Transform[] children = self.GetTopChildren();
+
+            for (int i = 0; i < children.Length; i++)
+            {
+                children[i].gameObject.DestroyImmediate();
+            }
+        }
+
+        public static void DestroyChildren(this Transform self, Predicate<Transform> predicate)
+        {
+            Transform[] children = self.EnumerateChildren(false)
+                                       .Where(item => predicate(item))
+                                       .ToArray();
+
+            for (int i = 0; i < children.Length; i++)
+            {
+                children[i].gameObject.DestroyImmediate();
+            }
         }
     }
 }
