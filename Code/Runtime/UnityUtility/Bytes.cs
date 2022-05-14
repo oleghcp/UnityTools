@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
+using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace UnityUtility
@@ -147,6 +148,8 @@ namespace UnityUtility
 
         public static explicit operator LayerMask(Bytes bytes) { return bytes._field; }
 
+        public static explicit operator IntMask(Bytes bytes) { return bytes._field; }
+
         public static unsafe explicit operator Color32(Bytes bytes)
         {
             int val = bytes._field;
@@ -156,20 +159,22 @@ namespace UnityUtility
 
         // -- //
 
-        public static implicit operator Bytes(float val) { return new Bytes { _floatField = val }; }
+        public static implicit operator Bytes(float value) { return new Bytes { _floatField = value }; }
 
-        public static implicit operator Bytes(int val) { return new Bytes { _field = val }; }
+        public static implicit operator Bytes(int value) { return new Bytes { _field = value }; }
 
-        public static implicit operator Bytes(uint val) { return new Bytes { _field = (int)val }; }
+        public static implicit operator Bytes(uint value) { return new Bytes { _field = (int)value }; }
 
-        public static implicit operator Bytes(short val) { return new Bytes { _field = val }; }
+        public static implicit operator Bytes(short value) { return new Bytes { _field = value }; }
 
-        public static implicit operator Bytes(ushort val) { return new Bytes { _field = val }; }
+        public static implicit operator Bytes(ushort value) { return new Bytes { _field = value }; }
 
-        public static implicit operator Bytes(bool val) { return new Bytes { _field = val ? 1 : 0 }; }
+        public static implicit operator Bytes(bool value) { return new Bytes { _field = value.ToInt() }; }
 
-        public static implicit operator Bytes(LayerMask val) { return new Bytes { _field = val }; }
+        public static implicit operator Bytes(LayerMask value) { return new Bytes { _field = value }; }
 
-        public static implicit operator Bytes(Color32 val) { return new Bytes(val.r, val.g, val.b, val.a); }
+        public static implicit operator Bytes(IntMask value) { return new Bytes { _field = (int)value }; }
+
+        public static implicit operator Bytes(Color32 value) { return new Bytes(value.r, value.g, value.b, value.a); }
     }
 }

@@ -22,6 +22,11 @@ namespace UnityUtility
             _mask = defaultValue ? -1 : 0;
         }
 
+        public IntMask(int mask)
+        {
+            _mask = mask;
+        }
+
         public void SwitchFlag(int index)
         {
             BitMask.SwitchFlag(ref _mask, index);
@@ -97,12 +102,22 @@ namespace UnityUtility
 
         public static implicit operator IntMask(int value)
         {
-            return new IntMask() { _mask = value };
+            return new IntMask(value);
         }
 
         public static explicit operator int(IntMask mask)
         {
             return mask._mask;
+        }
+
+        public static implicit operator LayerMask(IntMask intMask)
+        {
+            return intMask._mask;
+        }
+
+        public static implicit operator IntMask(LayerMask layerMask)
+        {
+            return new IntMask(layerMask);
         }
         #endregion
     }

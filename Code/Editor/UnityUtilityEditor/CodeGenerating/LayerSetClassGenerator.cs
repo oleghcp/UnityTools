@@ -106,16 +106,27 @@ namespace UnityUtilityEditor.CodeGenerating
                            .Append(GeneratingTools.TAB)
                            .Append("public ");
 
-                    if (config.MaskFieldType == LayerSetConfig.LayerMaskFieldType.LayerMask)
+                    switch (config.MaskFieldType)
                     {
-                        builder.Append("static ")
-                               .Append("readonly ")
-                               .Append("LayerMask ");
-                    }
-                    else
-                    {
-                        builder.Append("const ")
-                               .Append("int ");
+                        case LayerSetConfig.LayerMaskFieldType.LayerMask:
+                            builder.Append("static ")
+                                   .Append("readonly ")
+                                   .Append("LayerMask ");
+                            break;
+
+                        case LayerSetConfig.LayerMaskFieldType.Int:
+                            builder.Append("const ")
+                                   .Append("int ");
+                            break;
+
+                        case LayerSetConfig.LayerMaskFieldType.IntMask:
+                            builder.Append("static ")
+                                   .Append("readonly ")
+                                   .Append("IntMask ");
+                            break;
+
+                        default:
+                            throw new UnsupportedValueException(config.MaskFieldType);
                     }
 
                     builder.Append(maskInfo.Name.RemoveWhiteSpaces())

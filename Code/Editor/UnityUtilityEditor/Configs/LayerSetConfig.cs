@@ -26,6 +26,7 @@ namespace UnityUtilityEditor.Configs
         {
             LayerMask,
             Int,
+            IntMask,
         }
     }
 }
