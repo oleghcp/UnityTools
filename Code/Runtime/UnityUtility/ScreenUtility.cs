@@ -78,26 +78,12 @@ namespace UnityUtility
 
         /// <summary>
         /// Returns horizontal field of view for known vertical one and vice versa.
-        /// </summary>
-        /// <param name="fieldOfViewA">Horizontal or vertical field of view.</param>
-        /// <param name="sizeA">Screen height if <paramref name="fieldOfViewA"/> is vertical and width for horizontal.</param>
-        /// <param name="sizeB">Oppsite to <paramref name="sizeA"/></param>
-        /// <returns>Field of view B.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetAspectAngle(float fieldOfViewA, float sizeA, float sizeB)
-        {
-            return GetAspectAngle(fieldOfViewA, sizeB / sizeA);
-        }
-
-        /// <summary>
-        /// Returns horizontal field of view for known vertical one and vice versa.
         /// </summary>        
-        /// <param name="ratio">Value is width/height for vertical fov and vice versa.</param>
-        public static float GetAspectAngle(float fieldOfView, float ratio)
+        /// <param name="aspectRatio">Value is width/height for converting vertical fov to horizontal one and vice versa.</param>
+        public static float GetAspectAngle(float fieldOfView, float aspectRatio)
         {
-            float tan1 = GetHalfFovTan(fieldOfView);
-            float tan2 = ratio * tan1;
-            return GetFovFromHalfTan(tan2);
+            float halfTan = GetHalfFovTan(fieldOfView) * aspectRatio;
+            return GetFovFromHalfTan(halfTan);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -305,7 +305,7 @@ namespace UnityEngine
         /// <summary>
         /// Returns IEnumerable collection of all children;
         /// </summary>
-        public static IEnumerable<Transform> EnumerateChildren(this Transform self, bool recursive = true)
+        public static IEnumerable<Transform> EnumerateChildren(this Transform self, bool recursive)
         {
             int length = self.childCount;
 
@@ -315,7 +315,7 @@ namespace UnityEngine
 
                 if (recursive)
                 {
-                    foreach (var subChild in child.EnumerateChildren())
+                    foreach (var subChild in child.EnumerateChildren(true))
                         yield return subChild;
                 }
 
@@ -623,12 +623,14 @@ namespace UnityEngine
             return ScreenUtility.GetCameraViewRadius(self.fieldOfView, distance);
         }
 
-#if UNITY_2019_1_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetHorizontalFov(this Camera self)
         {
+#if UNITY_2019_1_OR_NEWER
             return Camera.VerticalToHorizontalFieldOfView(self.fieldOfView, (float)Screen.width / Screen.height);
-        }
+#else
+            return ScreenUtility.GetAspectAngle(self.fieldOfView, (float)Screen.width / Screen.height);
 #endif
+        }
     }
 }
