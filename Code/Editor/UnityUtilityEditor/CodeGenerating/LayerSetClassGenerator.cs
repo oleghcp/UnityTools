@@ -17,9 +17,29 @@ namespace UnityUtilityEditor.CodeGenerating
 
             GeneratingTools.GenerateBanner(builder);
 
+            if (config.LayerMasks.Length > 0)
+            {
+                switch (config.MaskFieldType)
+                {
+                    case LayerSetConfig.LayerMaskFieldType.LayerMask:
+                        builder.AppendLine()
+                               .AppendLine("using UnityEngine;");
+                        break;
+
+                    case LayerSetConfig.LayerMaskFieldType.Int:
+                        break;
+
+                    case LayerSetConfig.LayerMaskFieldType.IntMask:
+                        builder.AppendLine()
+                               .AppendLine("using UnityUtility;");
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(config.MaskFieldType);
+                }
+            }
+
             builder.AppendLine()
-                   .AppendLine("using UnityEngine;")
-                   .AppendLine()
                    .Append("namespace ").AppendLine(config.Namespace)
                    .AppendLine("{")
                    .Append(GeneratingTools.TAB).Append("public static class ").AppendLine(config.ClassName)
