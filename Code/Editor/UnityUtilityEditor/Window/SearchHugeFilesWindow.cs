@@ -86,7 +86,9 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Search", GUILayout.Height(30f)))
-                MenuItemsUtility.FindHugeFiles(_fileSize, done);
+            {
+                FindHugeFiles(_fileSize, done);
+            }
 
             void done(List<(UnityObject asset, long size)> list)
             {
@@ -94,6 +96,17 @@ namespace UnityUtilityEditor.Window
                 _result.Sort(item => -item.size);
                 Repaint();
             }
+        }
+
+        private static void FindHugeFiles(long minSizeInBytes, Action<List<(UnityObject, long)>> succes)
+        {
+            List<(UnityObject, long)> foundObjects = new List<(UnityObject, long)>();
+            IEnumerator<float> iterator = MenuItemsUtility.SearchFilesBySize(minSizeInBytes, foundObjects);
+
+            EditorUtilityExt.ShowProgressBarCancelable("Searching assets",
+                                                       "That could take a while...",
+                                                       iterator,
+                                                       () => succes(foundObjects));
         }
     }
 }

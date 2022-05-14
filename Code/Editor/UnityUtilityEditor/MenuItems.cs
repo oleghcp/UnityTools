@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -149,10 +150,25 @@ namespace UnityUtilityEditor
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Find References In Project (ext.)", false, 25)]
         private static void FindReferences()
         {
-            if (EditorSettings.serializationMode == SerializationMode.ForceText)
-                MenuItemsUtility.FindReferences(MenuItemsUtility.SearchReferencesByText);
-            else
-                MenuItemsUtility.FindReferences(MenuItemsUtility.SearchReferencesByDataBase);
+            string targetGuid = Selection.assetGUIDs[0];
+            List<string> foundObjects = new List<string>();
+            IEnumerator<float> iterator;
+
+            switch (EditorSettings.serializationMode)
+            {
+                case SerializationMode.ForceText:
+                    iterator = MenuItemsUtility.SearchReferencesByText(targetGuid, foundObjects);
+                    break;
+
+                default:
+                    iterator = MenuItemsUtility.SearchReferencesByDataBase(targetGuid, foundObjects);
+                    break;
+            }
+
+            EditorUtilityExt.ShowProgressBarCancelable("Searching references",
+                                                       "That could take a while...",
+                                                       iterator,
+                                                       () => ReferencesWindow.Create(targetGuid, foundObjects));
         }
 
         [MenuItem(AssetDatabaseExt.ASSET_FOLDER + "Find References In Project (ext.)", true)]

@@ -126,5 +126,51 @@ namespace UnityEditor
                 prop.Dispose();
             }
         }
+
+        public static void ShowProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess, Action onCansel = null)
+        {
+            EditorApplication.update += proceed;
+
+            void proceed()
+            {
+                if (iterator.MoveNext())
+                {
+                    if (EditorUtility.DisplayCancelableProgressBar(title, info, iterator.Current))
+                        finish(onCansel);
+
+                    return;
+                }
+
+                finish(onSuccess);
+            }
+
+            void finish(Action onFin)
+            {
+                EditorApplication.update -= proceed;
+                EditorUtility.ClearProgressBar();
+
+                onFin?.Invoke();
+            }
+        }
+
+        public static void ShowProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess)
+        {
+            EditorApplication.update += proceed;
+
+            void proceed()
+            {
+                if (iterator.MoveNext())
+                {
+                    EditorUtility.DisplayProgressBar(title, info, iterator.Current);
+
+                    return;
+                }
+
+                EditorApplication.update -= proceed;
+                EditorUtility.ClearProgressBar();
+
+                onSuccess?.Invoke();
+            }
+        }
     }
 }

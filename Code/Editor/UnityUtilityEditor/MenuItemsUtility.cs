@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.MathExt;
-using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
@@ -33,31 +31,6 @@ namespace UnityUtilityEditor
                 AssetDatabase.DeleteAsset(relativePath);
 
                 Debug.Log("Deleted: " + relativePath);
-            }
-        }
-
-        public static void FindReferences(Func<string, List<string>, IEnumerator<float>> searchingFunc)
-        {
-            string targetGuid = Selection.assetGUIDs[0];
-            List<string> foundObjects = new List<string>();
-            bool isCanseled = false;
-            IEnumerator<float> iterator = searchingFunc(targetGuid, foundObjects);
-
-            EditorApplication.update += Proceed;
-
-            void Proceed()
-            {
-                if (!isCanseled && iterator.MoveNext())
-                {
-                    isCanseled = EditorUtility.DisplayCancelableProgressBar("Searching references",
-                                                                            "That could take a while...",
-                                                                            iterator.Current);
-                    return;
-                }
-
-                EditorApplication.update -= Proceed;
-                EditorUtility.ClearProgressBar();
-                ReferencesWindow.Create(targetGuid, foundObjects);
             }
         }
 
@@ -140,31 +113,7 @@ namespace UnityUtilityEditor
             }
         }
 
-        public static void FindHugeFiles(long minSizeInBytes, Action<List<(UnityObject, long)>> succes)
-        {
-            List<(UnityObject, long)> foundObjects = new List<(UnityObject, long)>();
-            bool isCanseled = false;
-            IEnumerator<float> iterator = SearchFilesBySize(minSizeInBytes, foundObjects);
-
-            EditorApplication.update += Proceed;
-
-            void Proceed()
-            {
-                if (!isCanseled && iterator.MoveNext())
-                {
-                    isCanseled = EditorUtility.DisplayCancelableProgressBar("Searching assets",
-                                                                            "That could take a while...",
-                                                                            iterator.Current);
-                    return;
-                }
-
-                EditorApplication.update -= Proceed;
-                EditorUtility.ClearProgressBar();
-                succes(foundObjects);
-            }
-        }
-
-        private static IEnumerator<float> SearchFilesBySize(long minSizeInBytes, List<(UnityObject, long)> foundObjects)
+        public static IEnumerator<float> SearchFilesBySize(long minSizeInBytes, List<(UnityObject, long)> foundObjects)
         {
             IReadOnlyList<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
 
