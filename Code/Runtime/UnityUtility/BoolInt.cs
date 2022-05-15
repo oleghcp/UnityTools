@@ -11,11 +11,6 @@ namespace UnityUtility
         [SerializeField, HideInInspector]
         private int _value;
 
-        public BoolInt(bool defaultValue)
-        {
-            _value = defaultValue.ToInt();
-        }
-
         public BoolInt(int defaultValue)
         {
             _value = defaultValue;
