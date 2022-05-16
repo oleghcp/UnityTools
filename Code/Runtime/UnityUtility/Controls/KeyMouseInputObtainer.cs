@@ -109,7 +109,7 @@ namespace UnityUtility.Controls
                 if (keyCode < KeyCode.JoystickButton0)
                 {
                     if (Input.GetKeyDown(keyCode)) { _buttonStates[i] = ButtonState.Down; }
-                    else if (Input.GetKey(keyCode)) { _buttonStates[i] = ButtonState.Stay; }
+                    else if (Input.GetKey(keyCode)) { _buttonStates[i] = ButtonState.Hold; }
                     else if (Input.GetKeyUp(keyCode)) { _buttonStates[i] = ButtonState.Up; }
                     else { _buttonStates[i] = ButtonState.None; }
                 }

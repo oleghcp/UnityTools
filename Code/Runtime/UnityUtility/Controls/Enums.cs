@@ -12,7 +12,7 @@ namespace UnityUtility.Controls
         GoogleAndroid
     }
 
-    public enum ButtonState : byte { None = 0, Down, Stay, Up }
+    public enum ButtonState : byte { None = 0, Down, Hold, Up }
 
     //DO NOT CHANGE THE ORDER!
     public enum GPKeyCode : sbyte

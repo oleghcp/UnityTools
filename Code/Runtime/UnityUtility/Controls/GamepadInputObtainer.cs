@@ -127,7 +127,7 @@ namespace UnityUtility.Controls
                 if (keyCode != KeyCode.None)
                 {
                     if (Input.GetKeyDown(keyCode)) { _buttonStates[i] = ButtonState.Down; }
-                    else if (Input.GetKey(keyCode)) { _buttonStates[i] = ButtonState.Stay; }
+                    else if (Input.GetKey(keyCode)) { _buttonStates[i] = ButtonState.Hold; }
                     else if (Input.GetKeyUp(keyCode)) { _buttonStates[i] = ButtonState.Up; }
                     else { _buttonStates[i] = ButtonState.None; }
                 }
@@ -154,11 +154,11 @@ namespace UnityUtility.Controls
             if (axisValue > 0f)
             {
                 bool prev = _buttonStates[btnCode] == ButtonState.Up || _buttonStates[btnCode] == ButtonState.None;
-                _buttonStates[btnCode] = prev ? ButtonState.Down : ButtonState.Stay;
+                _buttonStates[btnCode] = prev ? ButtonState.Down : ButtonState.Hold;
             }
             else
             {
-                bool prev = _buttonStates[btnCode] == ButtonState.Down || _buttonStates[btnCode] == ButtonState.Stay;
+                bool prev = _buttonStates[btnCode] == ButtonState.Down || _buttonStates[btnCode] == ButtonState.Hold;
                 _buttonStates[btnCode] = prev ? ButtonState.Up : ButtonState.None;
             }
         }
