@@ -127,7 +127,7 @@ namespace UnityEditor
             }
         }
 
-        public static void ExecuteWithProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess, Action onCansel = null)
+        public static void ExecuteWithProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess = null, Action onCansel = null)
         {
             while (iterator.MoveNext())
             {
@@ -147,7 +147,7 @@ namespace UnityEditor
             }
         }
 
-        public static void ExecuteWithProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess)
+        public static void ExecuteWithProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess = null)
         {
             while (iterator.MoveNext())
             {
@@ -158,7 +158,7 @@ namespace UnityEditor
             onSuccess?.Invoke();
         }
 
-        public static void ExecuteWithProgressBarCancelable(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess, Action onCansel = null)
+        public static void ExecuteWithProgressBarCancelable(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess = null, Action onCansel = null)
         {
             while (iterator.MoveNext())
             {
@@ -180,7 +180,7 @@ namespace UnityEditor
             }
         }
 
-        public static void ExecuteWithProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess)
+        public static void ExecuteWithProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess = null)
         {
             while (iterator.MoveNext())
             {
