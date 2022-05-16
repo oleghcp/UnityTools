@@ -153,7 +153,7 @@ namespace UnityUtilityEditor
             string targetGuid = Selection.assetGUIDs[0];
             List<string> foundObjects = new List<string>();
 
-            EditorUtilityExt.ShowProgressBarCancelable("Searching references",
+            EditorUtilityExt.ExecuteWithProgressBarCancelable("Searching references",
                                                        "That could take a while...",
                                                        getIterator(),
                                                        () => ReferencesWindow.Create(targetGuid, foundObjects));

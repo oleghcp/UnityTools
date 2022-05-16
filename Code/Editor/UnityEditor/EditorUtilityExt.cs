@@ -127,98 +127,69 @@ namespace UnityEditor
             }
         }
 
-        public static void ShowProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess, Action onCansel = null)
+        public static void ExecuteWithProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess, Action onCansel = null)
         {
-            EditorApplication.update += proceed;
-
-            void proceed()
+            while (iterator.MoveNext())
             {
-                if (iterator.MoveNext())
+                if (EditorUtility.DisplayCancelableProgressBar(title, info, iterator.Current))
                 {
-                    if (EditorUtility.DisplayCancelableProgressBar(title, info, iterator.Current))
-                        finish(onCansel);
-
-                    return;
+                    finish(onCansel);
+                    break;
                 }
-
-                finish(onSuccess);
             }
+
+            finish(onSuccess);
 
             void finish(Action onFin)
             {
-                EditorApplication.update -= proceed;
                 EditorUtility.ClearProgressBar();
-
                 onFin?.Invoke();
             }
         }
 
-        public static void ShowProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess)
+        public static void ExecuteWithProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess)
         {
-            EditorApplication.update += proceed;
-
-            void proceed()
+            while (iterator.MoveNext())
             {
-                if (iterator.MoveNext())
-                {
-                    EditorUtility.DisplayProgressBar(title, info, iterator.Current);
-
-                    return;
-                }
-
-                EditorApplication.update -= proceed;
-                EditorUtility.ClearProgressBar();
-
-                onSuccess?.Invoke();
+                EditorUtility.DisplayProgressBar(title, info, iterator.Current);
             }
+
+            EditorUtility.ClearProgressBar();
+            onSuccess?.Invoke();
         }
 
-        public static void ShowProgressBarCancelable(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess, Action onCansel = null)
+        public static void ExecuteWithProgressBarCancelable(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess, Action onCansel = null)
         {
-            EditorApplication.update += proceed;
-
-            void proceed()
+            while (iterator.MoveNext())
             {
-                if (iterator.MoveNext())
+                var (info, progress) = iterator.Current;
+
+                if (EditorUtility.DisplayCancelableProgressBar(title, info, progress))
                 {
-                    var (info, progress) = iterator.Current;
-                    if (EditorUtility.DisplayCancelableProgressBar(title, info, progress))
-                        finish(onCansel);
-
-                    return;
+                    finish(onCansel);
+                    break;
                 }
-
-                finish(onSuccess);
             }
+
+            finish(onSuccess);
 
             void finish(Action onFin)
             {
-                EditorApplication.update -= proceed;
                 EditorUtility.ClearProgressBar();
-
                 onFin?.Invoke();
             }
         }
 
-        public static void ShowProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess)
+        public static void ExecuteWithProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess)
         {
-            EditorApplication.update += proceed;
-
-            void proceed()
+            while (iterator.MoveNext())
             {
-                if (iterator.MoveNext())
-                {
-                    var (info, progress) = iterator.Current;
-                    EditorUtility.DisplayProgressBar(title, info, progress);
-
-                    return;
-                }
-
-                EditorApplication.update -= proceed;
-                EditorUtility.ClearProgressBar();
-
-                onSuccess?.Invoke();
+                var (info, progress) = iterator.Current;
+                EditorUtility.DisplayProgressBar(title, info, progress);
             }
+
+            EditorUtility.ClearProgressBar();
+            onSuccess?.Invoke();
         }
     }
 }

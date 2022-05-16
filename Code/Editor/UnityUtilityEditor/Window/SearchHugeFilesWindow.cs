@@ -102,7 +102,7 @@ namespace UnityUtilityEditor.Window
         {
             List<(UnityObject, long)> foundObjects = new List<(UnityObject, long)>();
             IEnumerator<float> iterator = MenuItemsUtility.SearchFilesBySize(_fileSize, foundObjects);
-            EditorUtilityExt.ShowProgressBarCancelable("Searching assets", "That could take a while...", iterator, () => succes(foundObjects));
+            EditorUtilityExt.ExecuteWithProgressBarCancelable("Searching assets", "That could take a while...", iterator, () => succes(foundObjects));
         }
     }
 }
