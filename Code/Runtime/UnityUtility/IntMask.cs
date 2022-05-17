@@ -32,7 +32,7 @@ namespace UnityUtility
             BitMask.SwitchFlag(ref _mask, index);
         }
 
-        public void InvertFor(int length = SIZE)
+        public void Invert(int length = SIZE)
         {
             BitMask.InvertFor(ref _mask, length);
         }
@@ -52,17 +52,17 @@ namespace UnityUtility
             return BitMask.GetIntersection(_mask, other._mask, length);
         }
 
-        public bool AllFor(int length = SIZE)
+        public bool All(int length = SIZE)
         {
             return BitMask.AllFor(_mask, length);
         }
 
-        public bool AnyFor(int length = SIZE)
+        public bool Any(int length = SIZE)
         {
             return BitMask.AnyFor(_mask, length);
         }
 
-        public bool EmptyFor(int length = SIZE)
+        public bool Empty(int length = SIZE)
         {
             return BitMask.EmptyFor(_mask, length);
         }
