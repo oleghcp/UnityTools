@@ -31,8 +31,7 @@ namespace UnityEditor
 
             if (ProjectWindowUtil.IsFolder(instanceID))
             {
-                DirectoryInfo dir = Directory.CreateDirectory(AssetDatabase.GetAssetPath(obj));
-                System.Diagnostics.Process.Start(dir.FullName);
+                EditorUtilityExt.OpenFolder(AssetDatabase.GetAssetPath(obj));
                 return true;
             }
 

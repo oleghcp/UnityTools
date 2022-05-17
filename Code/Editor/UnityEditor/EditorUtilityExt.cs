@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -125,6 +126,17 @@ namespace UnityEditor
                 System.Diagnostics.Process.Start("devenv", "/edit " + filePath);
                 prop.Dispose();
             }
+        }
+
+        public static void OpenFolder(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                System.Diagnostics.Process.Start(Directory.CreateDirectory(path).FullName);
+                return;
+            }
+
+            Debug.LogError("Folder not found.");
         }
 
         public static void ExecuteWithProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess = null, Action onCansel = null)

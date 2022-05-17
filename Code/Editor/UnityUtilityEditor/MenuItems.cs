@@ -15,57 +15,6 @@ namespace UnityUtilityEditor
         public const string RESET_ITEM_NAME = "Reset";
         public const string CREATE_ASSET_PATH = AssetDatabaseExt.ASSET_FOLDER + "Create/" + nameof(UnityUtility) + "/Asset";
 
-        [MenuItem(nameof(UnityUtility) + "/Terminal/Create Terminal Prefab")]
-        private static void CreateTerminal()
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath("7537be9dac6f69045a2656580dc951f0");
-            string newFolderPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}";
-
-            Directory.CreateDirectory(newFolderPath);
-            GameObject prefab = PrefabUtility.LoadPrefabContents(assetPath);
-            PrefabUtility.SaveAsPrefabAsset(prefab, $"{newFolderPath}/Terminal.prefab");
-            AssetDatabase.SaveAssets();
-        }
-
-        [MenuItem(nameof(UnityUtility) + "/Code/Generate Layer Set Class")]
-        private static void GenerateLayerSetClass()
-        {
-            LayerSetWindow.CreateWindow();
-        }
-
-        [MenuItem(nameof(UnityUtility) + "/Switch Transform Editor")]
-        private static void SwitchTransformEditor()
-        {
-            TransformEditor.SwitchType();
-        }
-
-        [MenuItem(nameof(UnityUtility) + "/Open Persistent Data Folder")]
-        private static void OpenPersistentDataFolder()
-        {
-            DirectoryInfo dir = Directory.CreateDirectory(Application.persistentDataPath);
-            System.Diagnostics.Process.Start(dir.FullName);
-        }
-
-#if !UNITY_2018_3_OR_NEWER
-        [MenuItem(nameof(UnityUtility) + "/Gamepad Axes")]
-        private static void GamepadAxes()
-        {
-            GamepadAxesWindow.Create();
-        }
-#endif
-
-        [MenuItem(nameof(UnityUtility) + "/Find Huge Files")]
-        private static void FindHugeFiles()
-        {
-            SearchHugeFilesWindow.Create();
-        }
-
-        [MenuItem(nameof(UnityUtility) + "/Remove Empty Folders")]
-        private static void RemoveEmptyFolders()
-        {
-            MenuItemsUtility.RemoveEmptyFolders();
-        }
-
         [MenuItem(nameof(UnityUtility) + "/Objects/Meshes/Create Rect Plane")]
         private static void GetCreateRectPlaneWizard()
         {
@@ -88,6 +37,63 @@ namespace UnityUtilityEditor
         private static void GetScriptableObjectWindow()
         {
             EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Terminal/Create Terminal Prefab")]
+        private static void CreateTerminal()
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath("7537be9dac6f69045a2656580dc951f0");
+            string newFolderPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}";
+
+            Directory.CreateDirectory(newFolderPath);
+            GameObject prefab = PrefabUtility.LoadPrefabContents(assetPath);
+            PrefabUtility.SaveAsPrefabAsset(prefab, $"{newFolderPath}/Terminal.prefab");
+            AssetDatabase.SaveAssets();
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Code/Generate Layer Set Class")]
+        private static void GenerateLayerSetClass()
+        {
+            LayerSetWindow.CreateWindow();
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Folders/Open Project Settings Folder")]
+        private static void OpenProjectSettingsFolder()
+        {
+            string projectFolder = PathUtility.GetParentPath(Application.dataPath);
+            EditorUtilityExt.OpenFolder(Path.Combine(projectFolder, "ProjectSettings"));
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Folders/Open Persistent Data Folder")]
+        private static void OpenPersistentDataFolder()
+        {
+            EditorUtilityExt.OpenFolder(Application.persistentDataPath);
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Folders/Remove Empty Folders")]
+        private static void RemoveEmptyFolders()
+        {
+            MenuItemsUtility.RemoveEmptyFolders();
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Switch Transform Editor")]
+        private static void SwitchTransformEditor()
+        {
+            TransformEditor.SwitchType();
+        }
+
+#if !UNITY_2018_3_OR_NEWER
+        [MenuItem(nameof(UnityUtility) + "/Gamepad Axes")]
+        private static void GamepadAxes()
+        {
+            GamepadAxesWindow.Create();
+        }
+#endif
+
+        [MenuItem(nameof(UnityUtility) + "/Find Huge Files")]
+        private static void FindHugeFiles()
+        {
+            SearchHugeFilesWindow.Create();
         }
 
         // ------------- //
