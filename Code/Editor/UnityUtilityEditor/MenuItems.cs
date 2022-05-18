@@ -61,7 +61,7 @@ namespace UnityUtilityEditor
         private static void OpenProjectSettingsFolder()
         {
             string projectFolder = PathUtility.GetParentPath(Application.dataPath);
-            EditorUtilityExt.OpenFolder(Path.Combine(projectFolder, "ProjectSettings"));
+            EditorUtilityExt.OpenFolder(Path.Combine(projectFolder, AssetDatabaseExt.PROJECT_SETTINGS_FOLDER));
         }
 
         [MenuItem(nameof(UnityUtility) + "/Folders/Open Persistent Data Folder")]

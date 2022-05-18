@@ -58,7 +58,7 @@ namespace UnityEditor
                             .ToArray();
         }
 
-        public static IReadOnlyList<string> GetFilesFromAssetFolder(string searchPattern, SearchOption searchOption)
+        public static List<string> GetFilesFromAssetFolder(string searchPattern, SearchOption searchOption)
         {
             const char forbiddenChar = '.';
 

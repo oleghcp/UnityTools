@@ -146,7 +146,7 @@ namespace UnityEditor
                 if (EditorUtility.DisplayCancelableProgressBar(title, info, iterator.Current))
                 {
                     finish(onCansel);
-                    break;
+                    return;
                 }
             }
 
@@ -179,7 +179,7 @@ namespace UnityEditor
                 if (EditorUtility.DisplayCancelableProgressBar(title, info, progress))
                 {
                     finish(onCansel);
-                    break;
+                    return;
                 }
             }
 

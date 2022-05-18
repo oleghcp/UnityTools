@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.MathExt;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
@@ -36,13 +35,12 @@ namespace UnityUtilityEditor
 
         public static IEnumerator<float> SearchReferencesByDataBase(string targetGuid, List<string> foundObjects)
         {
+            float progress = 0f;
             string[] assetGuids = AssetDatabase.FindAssets(string.Empty);
-            int count = assetGuids.Length;
-            int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 
-            yield return 0f;
+            yield return progress += 0.1f;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < assetGuids.Length; i++)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
                 string[] dependencies = AssetDatabase.GetDependencies(assetPath);
@@ -57,28 +55,27 @@ namespace UnityUtilityEditor
                     }
                 }
 
-                if (i % actionsPerFrame == 0)
-                {
-                    yield return (i + 1f) / count;
-                }
+                yield return Mathf.Lerp(progress, 1f, (i + 1f) / assetGuids.Length);
             }
         }
 
         public static IEnumerator<float> SearchReferencesByText(string targetGuid, List<string> foundObjects)
         {
-            IReadOnlyList<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
-
-            yield return 0f;
+            float progress = 0f;
 
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            int count = files.Count;
-            int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
+            List<string> assets = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
 
-            yield return 0f;
+            yield return progress += 0.1f;
 
-            for (int i = 0; i < count; i++)
+            string projectSettingsPath = Path.Combine(projectFolderPath, AssetDatabaseExt.PROJECT_SETTINGS_FOLDER);
+            assets.AddRange(Directory.EnumerateFiles(projectSettingsPath, $"*{AssetDatabaseExt.ASSET_EXTENSION}"));
+
+            yield return progress += 0.1f;
+
+            for (int i = 0; i < assets.Count; i++)
             {
-                string filePath = files[i];
+                string filePath = assets[i];
 
                 if (invalidExtension(Path.GetExtension(filePath)))
                     continue;
@@ -87,15 +84,12 @@ namespace UnityUtilityEditor
 
                 if (text.Contains(targetGuid))
                 {
-                    string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
+                    string assetPath = filePath.Substring(projectFolderPath.Length + 1);
                     string guid = AssetDatabase.AssetPathToGUID(assetPath);
                     foundObjects.Add(guid);
                 }
 
-                if (i % actionsPerFrame == 0)
-                {
-                    yield return (i + 1f) / count;
-                }
+                yield return Mathf.Lerp(progress, 1f, (i + 1f) / assets.Count);
             }
 
             bool invalidExtension(string extension)
@@ -115,17 +109,14 @@ namespace UnityUtilityEditor
 
         public static IEnumerator<float> SearchFilesBySize(long minSizeInBytes, List<(UnityObject, long)> foundObjects)
         {
-            IReadOnlyList<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
+            float progress = 0f;
 
-            yield return 0f;
-
+            List<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            int count = files.Count;
-            int actionsPerFrame = count.Cbrt().ToInt().CutBefore(1);
 
-            yield return 0f;
+            yield return progress += 0.1f;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < files.Count; i++)
             {
                 string filePath = files[i];
 
@@ -142,10 +133,7 @@ namespace UnityUtilityEditor
                     foundObjects.Add((asset, info.Length));
                 }
 
-                if (i % actionsPerFrame == 0)
-                {
-                    yield return (i + 1f) / count;
-                }
+                yield return Mathf.Lerp(progress, 1f, (i + 1f) / files.Count);
             }
         }
     }
