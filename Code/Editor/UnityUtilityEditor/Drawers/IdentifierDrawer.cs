@@ -20,9 +20,22 @@ namespace UnityUtilityEditor.Drawers
                 property.stringValue = Guid.NewGuid().ToString();
 
             if (attribute.Editable)
+            {
                 EditorGUI.PropertyField(position, property, label);
+            }
             else
-                EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(property.stringValue));
+            {
+                position = EditorGUI.PrefixLabel(position, label);
+
+                Rect buttonRect = position;
+                buttonRect.width = EditorGuiUtility.SmallButtonWidth;
+                buttonRect.x -= EditorGuiUtility.SmallButtonWidth + EditorGuiUtility.StandardHorizontalSpacing;
+
+                if (GUI.Button(buttonRect, EditorGuiUtility.TempContent("*", "Copy to clipboard")))
+                    GUIUtility.systemCopyBuffer = property.stringValue;
+
+                GUI.Label(position, EditorGuiUtility.TempContent(property.stringValue));
+            }
         }
     }
 }
