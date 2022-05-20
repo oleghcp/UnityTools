@@ -126,22 +126,10 @@ namespace UnityUtility.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
-        public static void CreateTerminal()
-        {
-            CreateTerminalInternal();
-            I.SetOptions(new TerminalOptions());
-        }
-
-        /// <summary>
-        /// Creates a command line (aka console/terminal). Takes command container.
-        /// Commands are just functions of the view:
-        /// public string commandname(string[] options).
-        /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
-        /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands)
+        public static void CreateTerminal(object commands, bool createEventSystem = false)
         {
-            CreateTerminalInternal();
+            CreateTerminalInternal(createEventSystem);
             I.SetOptions(new TerminalOptions());
             I.SetCommands(commands);
         }
@@ -153,9 +141,9 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands, TerminalOptions options)
+        public static void CreateTerminal(object commands, TerminalOptions options, bool createEventSystem = false)
         {
-            CreateTerminalInternal();
+            CreateTerminalInternal(createEventSystem);
             I.SetCommands(commands);
             I.SetOptions(options);
         }
@@ -358,7 +346,7 @@ namespace UnityUtility.GameConsole
             }
         }
 
-        private static void CreateTerminalInternal()
+        private static void CreateTerminalInternal(bool createEventSystem)
         {
             GameObject terminal = Resources.Load<GameObject>("Terminal");
 
@@ -370,7 +358,7 @@ namespace UnityUtility.GameConsole
 
             terminal.Install().Immortalize();
 
-            if (EventSystem.current == null)
+            if (createEventSystem && EventSystem.current == null)
             {
                 GameObject eventSystemRoot = ComponentUtility.CreateInstance<EventSystem>().gameObject;
                 eventSystemRoot.AddComponent<StandaloneInputModule>();
