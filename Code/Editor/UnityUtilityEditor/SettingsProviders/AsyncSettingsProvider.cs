@@ -30,7 +30,7 @@ namespace UnityUtilityEditor.SettingsProviders
         [SettingsProvider]
         private static SettingsProvider CreateProvider()
         {
-            return new AsyncSettingsProvider($"{nameof(UnityUtility)}/{TaskSystem.SYSTEM_NAME}",
+            return new AsyncSettingsProvider($"{SettingsScope.Project}/{nameof(UnityUtility)}/{TaskSystem.SYSTEM_NAME}",
                                              SettingsScope.Project,
                                              new[] { "Async", "System", "Stop", "Allow", "Task" });
         }
