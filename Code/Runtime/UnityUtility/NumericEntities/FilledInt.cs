@@ -9,24 +9,24 @@ namespace UnityUtility.NumericEntities
     public struct FilledInt : IFilledEntity<int>, IEquatable<FilledInt>
     {
         [SerializeField, HideInInspector]
-        private int m_threshold;
+        private int _threshold;
         [SerializeField, HideInInspector]
-        private int m_filler;
+        private int _filler;
 
-        public int CurValue => m_filler.Clamp(0, m_threshold);
-        public int Threshold => m_threshold;
-        public bool FilledFully => m_filler >= m_threshold;
-        public bool IsEmpty => m_filler == 0;
-        public float Ratio => (float)m_filler.CutAfter(m_threshold) / m_threshold;
-        public int Excess => (m_filler - m_threshold).CutBefore(0);
+        public int CurValue => _filler.Clamp(0, _threshold);
+        public int Threshold => _threshold;
+        public bool FilledFully => _filler >= _threshold;
+        public bool IsEmpty => _filler == 0;
+        public float Ratio => (float)_filler.CutAfter(_threshold) / _threshold;
+        public int Excess => (_filler - _threshold).CutBefore(0);
 
         public FilledInt(int threshold)
         {
             if (threshold < 0)
                 throw Errors.NegativeParameter(nameof(threshold));
 
-            m_threshold = threshold;
-            m_filler = 0;
+            _threshold = threshold;
+            _filler = 0;
         }
 
         public void Fill(int addValue)
@@ -34,13 +34,13 @@ namespace UnityUtility.NumericEntities
             if (addValue < 0)
                 throw Errors.NegativeParameter(nameof(addValue));
 
-            m_filler += addValue;
+            _filler += addValue;
         }
 
         public void FillFully()
         {
-            if (m_filler < m_threshold)
-                m_filler = m_threshold;
+            if (_filler < _threshold)
+                _filler = _threshold;
         }
 
         public void Remove(int removeValue)
@@ -48,17 +48,17 @@ namespace UnityUtility.NumericEntities
             if (removeValue < 0)
                 throw Errors.NegativeParameter(nameof(removeValue));
 
-            m_filler -= removeValue.CutAfter(m_filler);
+            _filler -= removeValue.CutAfter(_filler);
         }
 
         public void RemoveAll()
         {
-            m_filler = 0;
+            _filler = 0;
         }
 
         public void RemoveTillExcess()
         {
-            m_filler = Excess;
+            _filler = Excess;
         }
 
         public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
@@ -68,11 +68,11 @@ namespace UnityUtility.NumericEntities
                 case ResizeType.NewValue:
                     if (value < 0)
                         throw Errors.NegativeParameter(nameof(value));
-                    m_threshold = value;
+                    _threshold = value;
                     break;
 
                 case ResizeType.Delta:
-                    m_threshold = (m_threshold + value).CutBefore(0);
+                    _threshold = (_threshold + value).CutBefore(0);
                     break;
 
                 default:
@@ -89,12 +89,12 @@ namespace UnityUtility.NumericEntities
 
         public bool Equals(FilledInt other)
         {
-            return m_filler == other.m_filler && m_threshold == other.m_threshold;
+            return _filler == other._filler && _threshold == other._threshold;
         }
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(m_filler.GetHashCode(), m_threshold.GetHashCode());
+            return Helper.GetHashCode(_filler.GetHashCode(), _threshold.GetHashCode());
         }
     }
 }

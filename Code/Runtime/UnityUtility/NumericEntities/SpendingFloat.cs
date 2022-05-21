@@ -9,24 +9,24 @@ namespace UnityUtility.NumericEntities
     public struct SpendingFloat : ISpendingEntity<float>, IEquatable<SpendingFloat>
     {
         [SerializeField, HideInInspector]
-        private float m_capacity;
+        private float _capacity;
         [SerializeField, HideInInspector]
-        private float m_curValue;
+        private float _curValue;
 
-        public float Capacity => m_capacity;
-        public float CurValue => m_curValue.CutBefore(0f);
-        public float Shortage => (m_capacity - m_curValue).CutAfter(m_capacity);
-        public float ReducingExcess => m_curValue.CutAfter(0f).Abs();
-        public float Ratio => CurValue / m_capacity;
-        public bool IsFull => m_curValue == m_capacity;
-        public bool IsEmpty => m_curValue <= 0f;
+        public float Capacity => _capacity;
+        public float CurValue => _curValue.CutBefore(0f);
+        public float Shortage => (_capacity - _curValue).CutAfter(_capacity);
+        public float ReducingExcess => _curValue.CutAfter(0f).Abs();
+        public float Ratio => CurValue / _capacity;
+        public bool IsFull => _curValue == _capacity;
+        public bool IsEmpty => _curValue <= 0f;
 
         public SpendingFloat(float capacity)
         {
             if (capacity < 0f)
                 throw Errors.NegativeParameter(nameof(capacity));
 
-            m_curValue = m_capacity = capacity;
+            _curValue = _capacity = capacity;
         }
 
         public void Spend(float value)
@@ -34,13 +34,13 @@ namespace UnityUtility.NumericEntities
             if (value < 0f)
                 throw Errors.NegativeParameter(nameof(value));
 
-            m_curValue -= value;
+            _curValue -= value;
         }
 
         public void RemoveExcess()
         {
-            if (m_curValue < 0f)
-                m_curValue = 0f;
+            if (_curValue < 0f)
+                _curValue = 0f;
         }
 
         public void Restore(float value)
@@ -48,12 +48,12 @@ namespace UnityUtility.NumericEntities
             if (value < 0f)
                 throw Errors.NegativeParameter(nameof(value));
 
-            m_curValue = (m_curValue + value).CutAfter(m_capacity);
+            _curValue = (_curValue + value).CutAfter(_capacity);
         }
 
         public void RestoreFull()
         {
-            m_curValue = m_capacity;
+            _curValue = _capacity;
         }
 
         public void Resize(float value, ResizeType resizeType = ResizeType.NewValue)
@@ -63,14 +63,14 @@ namespace UnityUtility.NumericEntities
                 case ResizeType.NewValue:
                     if (value < 0f)
                         throw Errors.NegativeParameter(nameof(value));
-                    m_capacity = value;
-                    m_curValue = m_curValue.CutAfter(m_capacity);
+                    _capacity = value;
+                    _curValue = _curValue.CutAfter(_capacity);
                     break;
 
                 case ResizeType.Delta:
-                    float newValue = m_capacity += value;
-                    m_capacity = newValue.CutBefore(0f);
-                    m_curValue = m_curValue.CutAfter(m_capacity);
+                    float newValue = _capacity += value;
+                    _capacity = newValue.CutBefore(0f);
+                    _curValue = _curValue.CutAfter(_capacity);
                     break;
 
                 default:
@@ -92,12 +92,12 @@ namespace UnityUtility.NumericEntities
 
         public bool Equals(SpendingFloat other)
         {
-            return m_curValue == other.m_curValue && m_capacity == other.m_capacity;
+            return _curValue == other._curValue && _capacity == other._capacity;
         }
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(m_capacity.GetHashCode(), m_curValue.GetHashCode());
+            return Helper.GetHashCode(_capacity.GetHashCode(), _curValue.GetHashCode());
         }
 
         public static implicit operator float(SpendingFloat entity)

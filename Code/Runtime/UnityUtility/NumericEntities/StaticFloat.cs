@@ -14,9 +14,8 @@ namespace UnityUtility.NumericEntities
 
         private HashSet<IAbsoluteModifier<float>> _absMods;
         private HashSet<IRelativeModifier<float>> _relMods;
-        private Func<float> _getValue;
 
-        public float PureValue => _getValue();
+        public float PureValue => _value;
         public float MinValue => _min;
         public float MaxValue => _max;
         public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
@@ -35,15 +34,6 @@ namespace UnityUtility.NumericEntities
                 throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));
 
             _value = pureValue;
-            _getValue = () => _value;
-        }
-
-        public StaticFloat(Func<float> valueDefiner, float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : this(minValue, maxValue)
-        {
-            if (valueDefiner == null)
-                throw new ArgumentNullException(nameof(valueDefiner));
-
-            _getValue = valueDefiner;
         }
 
         public void AddModifier(IAbsoluteModifier<float> modifier)
@@ -68,7 +58,7 @@ namespace UnityUtility.NumericEntities
 
         public float GetCurValue()
         {
-            return (_getValue() + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
+            return (_value + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
         }
 
         public void Revalue(float value, ResizeType resizeType = ResizeType.NewValue)
@@ -124,7 +114,7 @@ namespace UnityUtility.NumericEntities
                 return 0f;
 
             float sum = 0f;
-            float value = _getValue();
+            float value = _value;
 
             foreach (var item in _relMods)
             {

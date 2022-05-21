@@ -8,22 +8,22 @@ namespace UnityUtility.NumericEntities
     public struct AccumInt : IAccumEntity<int>, IEquatable<AccumInt>
     {
         [SerializeField, HideInInspector]
-        private int m_got;
+        private int _got;
         [SerializeField, HideInInspector]
-        private int m_spent;
+        private int _spent;
 
-        public int Value => m_got - m_spent;
-        public bool IsEmpty => m_got == m_spent;
-        public int Got => m_got;
-        public int Spent => m_spent;
+        public int Value => _got - _spent;
+        public bool IsEmpty => _got == _spent;
+        public int Got => _got;
+        public int Spent => _spent;
 
         public AccumInt(int got, int spent)
         {
             if (spent > got)
                 throw Errors.MinMax(nameof(spent), nameof(got));
 
-            m_got = got;
-            m_spent = spent;
+            _got = got;
+            _spent = spent;
         }
 
         public void Add(int addValue)
@@ -31,7 +31,7 @@ namespace UnityUtility.NumericEntities
             if (addValue < 0)
                 throw Errors.NegativeParameter(nameof(addValue));
 
-            checked { m_got += addValue; }
+            checked { _got += addValue; }
         }
 
         public bool Spend(int spendValue)
@@ -41,7 +41,7 @@ namespace UnityUtility.NumericEntities
 
             if (spendValue <= Value)
             {
-                checked { m_spent += spendValue; }
+                checked { _spent += spendValue; }
                 return true;
             }
 
@@ -50,8 +50,8 @@ namespace UnityUtility.NumericEntities
 
         public void Merge(AccumInt other)
         {
-            m_got = Math.Max(m_got, other.m_got);
-            m_spent = Math.Max(m_spent, other.m_spent);
+            _got = Math.Max(_got, other._got);
+            _spent = Math.Max(_spent, other._spent);
         }
 
         // -- //
@@ -68,7 +68,7 @@ namespace UnityUtility.NumericEntities
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(m_got.GetHashCode(), m_spent.GetHashCode());
+            return Helper.GetHashCode(_got.GetHashCode(), _spent.GetHashCode());
         }
 
         public static implicit operator int(AccumInt entity)
@@ -80,7 +80,7 @@ namespace UnityUtility.NumericEntities
 
         public static bool operator ==(AccumInt a, AccumInt b)
         {
-            return a.m_got == b.m_got && a.m_spent == b.m_spent;
+            return a._got == b._got && a._spent == b._spent;
         }
 
         public static bool operator !=(AccumInt a, AccumInt b)
@@ -93,7 +93,7 @@ namespace UnityUtility.NumericEntities
             if (value2 < 0)
                 throw Errors.NegativeParameter(nameof(value2));
 
-            checked { value1.m_got += value2; }
+            checked { value1._got += value2; }
             return value1;
         }
 
@@ -102,7 +102,7 @@ namespace UnityUtility.NumericEntities
             if (value2 < 0)
                 throw Errors.NegativeParameter(nameof(value2));
 
-            checked { value1.m_spent += value2; }
+            checked { value1._spent += value2; }
             return value1;
         }
     }
