@@ -6,7 +6,7 @@ using UnityUtilityTools;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public struct AccumFloat : IAccumEntity<float>, IEquatable<AccumFloat>, IMergeable<AccumFloat>
+    public struct AccumFloat : IAccumEntity<float>, IEquatable<AccumFloat>
     {
         [SerializeField, HideInInspector]
         private float _got;

@@ -12,8 +12,8 @@ namespace UnityUtility.NumericEntities
         private int _max;
         private int _value;
 
-        private HashSet<IAbsoluteModifier<int>> _absMods;
-        private HashSet<IRelativeModifier<int>> _relMods;
+        private HashSet<IModifier<int>> _absMods;
+        private HashSet<IModifier<int>> _relMods;
 
         public int PureValue => _value;
         public int MinValue => _min;
@@ -24,8 +24,8 @@ namespace UnityUtility.NumericEntities
         {
             Resize(minValue, maxValue);
 
-            _absMods = new HashSet<IAbsoluteModifier<int>>();
-            _relMods = new HashSet<IRelativeModifier<int>>();
+            _absMods = new HashSet<IModifier<int>>();
+            _relMods = new HashSet<IModifier<int>>();
         }
 
         public StaticInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
@@ -36,27 +36,25 @@ namespace UnityUtility.NumericEntities
             _value = pureValue;
         }
 
-        public void AddModifier(IAbsoluteModifier<int> modifier)
+        public void AddModifier(IModifier<int> modifier)
         {
-            _absMods.Add(modifier);
+            var collection = modifier.Relative ? _relMods : _absMods;
+
+            if (collection.Add(modifier))
+                return;
+
+            throw new InvalidOperationException("Modifier already added.");
         }
 
-        public void AddModifier(IRelativeModifier<int> modifier)
+        public void RemoveModifier(IModifier<int> modifier)
         {
-            _relMods.Add(modifier);
+            if (modifier.Relative)
+                _relMods.Remove(modifier);
+            else
+                _absMods.Remove(modifier);
         }
 
-        public void RemoveModifier(IAbsoluteModifier<int> modifier)
-        {
-            _absMods.Remove(modifier);
-        }
-
-        public void RemoveModifier(IRelativeModifier<int> modifier)
-        {
-            _relMods.Remove(modifier);
-        }
-
-        public int GetCurValue()
+        public int GetModifiedValue()
         {
             return (_value + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
         }

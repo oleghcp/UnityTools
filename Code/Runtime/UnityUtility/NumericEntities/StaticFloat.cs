@@ -12,8 +12,8 @@ namespace UnityUtility.NumericEntities
         private float _max;
         private float _value;
 
-        private HashSet<IAbsoluteModifier<float>> _absMods;
-        private HashSet<IRelativeModifier<float>> _relMods;
+        private HashSet<IModifier<float>> _absMods;
+        private HashSet<IModifier<float>> _relMods;
 
         public float PureValue => _value;
         public float MinValue => _min;
@@ -24,8 +24,8 @@ namespace UnityUtility.NumericEntities
         {
             Resize(minValue, maxValue);
 
-            _absMods = new HashSet<IAbsoluteModifier<float>>();
-            _relMods = new HashSet<IRelativeModifier<float>>();
+            _absMods = new HashSet<IModifier<float>>();
+            _relMods = new HashSet<IModifier<float>>();
         }
 
         public StaticFloat(float pureValue, float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : this(minValue, maxValue)
@@ -36,27 +36,25 @@ namespace UnityUtility.NumericEntities
             _value = pureValue;
         }
 
-        public void AddModifier(IAbsoluteModifier<float> modifier)
+        public void AddModifier(IModifier<float> modifier)
         {
-            _absMods.Add(modifier);
+            if (modifier.Relative)
+                _relMods.Add(modifier);
+            else
+                _absMods.Add(modifier);
         }
 
-        public void AddModifier(IRelativeModifier<float> modifier)
+        public void RemoveModifier(IModifier<float> modifier)
         {
-            _relMods.Add(modifier);
+            var collection = modifier.Relative ? _relMods : _absMods;
+
+            if (collection.Add(modifier))
+                return;
+
+            throw new InvalidOperationException("Modifier already added.");
         }
 
-        public void RemoveModifier(IAbsoluteModifier<float> modifier)
-        {
-            _absMods.Remove(modifier);
-        }
-
-        public void RemoveModifier(IRelativeModifier<float> modifier)
-        {
-            _relMods.Remove(modifier);
-        }
-
-        public float GetCurValue()
+        public float GetModifiedValue()
         {
             return (_value + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
         }

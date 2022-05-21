@@ -4,11 +4,6 @@ namespace UnityUtility.NumericEntities
 {
     public enum ResizeType : byte { NewValue, Delta }
 
-    public interface IMergeable<T>
-    {
-        void Merge(T other);
-    }
-
     public interface ISpendingEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T Capacity { get; }
@@ -54,13 +49,9 @@ namespace UnityUtility.NumericEntities
         bool Spend(T value);
     }
 
-    public interface IAbsoluteModifier<T> where T : struct, IComparable<T>, IEquatable<T>
+    public interface IModifier<T> where T : struct, IComparable<T>, IEquatable<T>
     {
-        T Value { get; }
-    }
-
-    public interface IRelativeModifier<T> where T : struct, IComparable<T>, IEquatable<T>
-    {
+        bool Relative { get; }
         T Value { get; }
     }
 
@@ -71,11 +62,9 @@ namespace UnityUtility.NumericEntities
         T MaxValue { get; }
         bool Modified { get; }
 
-        void AddModifier(IAbsoluteModifier<T> modifier);
-        void AddModifier(IRelativeModifier<T> modifier);
-        void RemoveModifier(IAbsoluteModifier<T> modifier);
-        void RemoveModifier(IRelativeModifier<T> modifier);
-        T GetCurValue();
+        void AddModifier(IModifier<T> modifier);
+        void RemoveModifier(IModifier<T> modifier);
+        T GetModifiedValue();
         void Revalue(T value, ResizeType resizeType = ResizeType.NewValue);
         void Resize(T min, T max);
     }
