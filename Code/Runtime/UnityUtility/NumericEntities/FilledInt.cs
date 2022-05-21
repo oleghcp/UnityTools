@@ -13,8 +13,13 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private int _filler;
 
+        public int Threshold
+        {
+            get => _threshold;
+            set => _threshold = value.CutBefore(0);
+        }
+
         public int CurValue => _filler.Clamp(0, _threshold);
-        public int Threshold => _threshold;
         public bool FilledFully => _filler >= _threshold;
         public bool IsEmpty => _filler == 0;
         public float Ratio => (float)_filler.CutAfter(_threshold) / _threshold;
@@ -59,25 +64,6 @@ namespace UnityUtility.NumericEntities
         public void RemoveTillExcess()
         {
             _filler = Excess;
-        }
-
-        public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
-        {
-            switch (resizeType)
-            {
-                case ResizeType.NewValue:
-                    if (value < 0)
-                        throw Errors.NegativeParameter(nameof(value));
-                    _threshold = value;
-                    break;
-
-                case ResizeType.Delta:
-                    _threshold = (_threshold + value).CutBefore(0);
-                    break;
-
-                default:
-                    throw new UnsupportedValueException(resizeType);
-            }
         }
 
         // -- //

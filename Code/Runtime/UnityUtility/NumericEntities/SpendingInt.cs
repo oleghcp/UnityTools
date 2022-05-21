@@ -13,13 +13,29 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private int _curValue;
 
-        public int Capacity => _capacity;
-        public int CurValue => _curValue.CutBefore(0);
+        public int Capacity
+        {
+            get => _capacity;
+            set
+            {
+                _capacity = value.CutBefore(0);
+
+                if (_curValue > _capacity)
+                    _curValue = _capacity;
+            }
+        }
+
+        public int CurValue
+        {
+            get => _curValue.CutBefore(0);
+            set => _curValue = value.Clamp(0, _capacity);
+        }
+
         public int Shortage => (_capacity - _curValue).CutAfter(_capacity);
         public int ReducingExcess => _curValue.CutAfter(0).Abs();
+        public float Ratio => (float)CurValue / _capacity;
         public bool IsEmpty => _curValue <= 0;
         public bool IsFull => _curValue == _capacity;
-        public float Ratio => (float)CurValue / _capacity;
 
         public SpendingInt(int capacity)
         {
@@ -54,28 +70,6 @@ namespace UnityUtility.NumericEntities
         public void RestoreFull()
         {
             _curValue = _capacity;
-        }
-
-        public void Resize(int value, ResizeType resizeType = ResizeType.NewValue)
-        {
-            switch (resizeType)
-            {
-                case ResizeType.NewValue:
-                    if (value < 0)
-                        throw Errors.NegativeParameter(nameof(value));
-                    _capacity = value;
-                    _curValue = _curValue.CutAfter(_capacity);
-                    break;
-
-                case ResizeType.Delta:
-                    int newValue = _capacity += value;
-                    _capacity = newValue.CutBefore(0);
-                    _curValue = _curValue.CutAfter(_capacity);
-                    break;
-
-                default:
-                    throw new UnsupportedValueException(resizeType);
-            }
         }
 
         // -- //

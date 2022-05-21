@@ -13,8 +13,24 @@ namespace UnityUtility.NumericEntities
         [SerializeField, HideInInspector]
         private float _curValue;
 
-        public float Capacity => _capacity;
-        public float CurValue => _curValue.CutBefore(0f);
+        public float Capacity
+        {
+            get => _capacity;
+            set
+            {
+                _capacity = value.CutBefore(0f);
+
+                if (_curValue > _capacity)
+                    _curValue = _capacity;
+            }
+        }
+
+        public float CurValue
+        {
+            get => _curValue.CutBefore(0f);
+            set => _curValue = value.Clamp(0f, _capacity);
+        }
+
         public float Shortage => (_capacity - _curValue).CutAfter(_capacity);
         public float ReducingExcess => _curValue.CutAfter(0f).Abs();
         public float Ratio => CurValue / _capacity;
@@ -54,28 +70,6 @@ namespace UnityUtility.NumericEntities
         public void RestoreFull()
         {
             _curValue = _capacity;
-        }
-
-        public void Resize(float value, ResizeType resizeType = ResizeType.NewValue)
-        {
-            switch (resizeType)
-            {
-                case ResizeType.NewValue:
-                    if (value < 0f)
-                        throw Errors.NegativeParameter(nameof(value));
-                    _capacity = value;
-                    _curValue = _curValue.CutAfter(_capacity);
-                    break;
-
-                case ResizeType.Delta:
-                    float newValue = _capacity += value;
-                    _capacity = newValue.CutBefore(0f);
-                    _curValue = _curValue.CutAfter(_capacity);
-                    break;
-
-                default:
-                    throw new UnsupportedValueException(resizeType);
-            }
         }
 
         // -- //

@@ -15,7 +15,12 @@ namespace UnityUtility.NumericEntities
         private HashSet<IModifier<int>> _absMods;
         private HashSet<IModifier<int>> _relMods;
 
-        public int PureValue => _value;
+        public int PureValue
+        {
+            get => _value;
+            set => _value = value.Clamp(_min, _max);
+        }
+
         public int MinValue => _min;
         public int MaxValue => _max;
         public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
@@ -59,25 +64,6 @@ namespace UnityUtility.NumericEntities
             return (_value + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
         }
 
-        public void Revalue(int value, ResizeType resizeType = ResizeType.NewValue)
-        {
-            switch (resizeType)
-            {
-                case ResizeType.NewValue:
-                    if (value < _min || value > _max)
-                        throw Errors.OutOfRange(nameof(value), nameof(MinValue), nameof(MaxValue));
-                    _value = value;
-                    break;
-
-                case ResizeType.Delta:
-                    _value = (_value + value).Clamp(_min, _max);
-                    break;
-
-                default:
-                    throw new UnsupportedValueException(resizeType);
-            }
-        }
-
         public void Resize(int minValue, int maxValue)
         {
             if (minValue > maxValue)
@@ -86,7 +72,7 @@ namespace UnityUtility.NumericEntities
             _min = minValue;
             _max = maxValue;
 
-            _value = _value.Clamp(_min, _max);
+            _value = _value.Clamp(minValue, maxValue);
         }
 
         //--//
