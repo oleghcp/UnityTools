@@ -71,7 +71,7 @@ namespace UnityUtilityEditor
             string projectSettingsPath = Path.Combine(projectFolderPath, AssetDatabaseExt.PROJECT_SETTINGS_FOLDER);
             assets.AddRange(Directory.EnumerateFiles(projectSettingsPath, $"*{AssetDatabaseExt.ASSET_EXTENSION}"));
 
-            yield return progress += 0.1f;
+            yield return progress += 0.05f;
 
             for (int i = 0; i < assets.Count; i++)
             {
@@ -101,9 +101,17 @@ namespace UnityUtilityEditor
                        extension != ".preset" &&
                        extension != ".anim" &&
                        extension != ".controller" &&
+                       extension != ".overrideController" &&
+                       extension != ".mask" &&
                        extension != ".spriteatlas" &&
+                       extension != ".playable" &&
                        extension != ".scenetemplate" &&
-                       !extension.Contains("override");
+                       extension != ".asmdef" &&
+                       extension != ".terrainlayer" &&
+                       extension != ".mixer" &&
+                       extension != ".shadervariants" &&
+                       extension != ".guiskin" &&
+                       extension != ".scenetemplate";
             }
         }
 
