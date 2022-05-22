@@ -9,6 +9,7 @@ using UnityUtilityEditor.CodeGenerating;
 using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Gui;
 using UnityUtilityTools;
+using static UnityUtilityEditor.Configs.LayerSetConfig;
 
 namespace UnityUtilityEditor.Window
 {
@@ -19,7 +20,7 @@ namespace UnityUtilityEditor.Window
         private LayerSetConfigWrapper _configWrapper;
         private LayerSetConfig _altConfigVersion = new LayerSetConfig();
 
-        private ListDrawer<LayerSetConfig.MaskField> _listDrawer;
+        private ListDrawer<MaskField> _listDrawer;
         private SerializedObject _tagManager;
         private SerializedProperty _tags;
         private SerializedProperty _layers;
@@ -52,8 +53,8 @@ namespace UnityUtilityEditor.Window
             _tags = _tagManager.FindProperty("tags");
             _layers = _tagManager.FindProperty("layers");
 
-            _listDrawer = new ListDrawer<LayerSetConfig.MaskField>(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks)),
-                                                                   new LayerMaskFieldDrawer());
+            _listDrawer = new ListDrawer<MaskField>(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks)),
+                                                    new LayerMaskFieldDrawer());
         }
 
         private void OnGUI()
@@ -93,7 +94,7 @@ namespace UnityUtilityEditor.Window
 
             if (_altConfigVersion.LayerFields)
             {
-                _altConfigVersion.MaskFieldType = (LayerSetConfig.LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.MaskFieldType)), config.MaskFieldType);
+                _altConfigVersion.MaskFieldType = (LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.MaskFieldType)), config.MaskFieldType);
                 var drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
                 drawer.Names = _layers.EnumerateArrayElements()
                                       .Select(item => item.stringValue)
@@ -155,11 +156,12 @@ namespace UnityUtilityEditor.Window
             return $"- {item}";
         }
 
-        private class LayerMaskFieldDrawer : IListElementDrawer<LayerSetConfig.MaskField>
+        #region Entities
+        private class LayerMaskFieldDrawer : IListElementDrawer<MaskField>
         {
             public string[] Names;
 
-            LayerSetConfig.MaskField IListElementDrawer<LayerSetConfig.MaskField>.OnDrawElement(Rect position, LayerSetConfig.MaskField element, bool isActive, bool isFocused)
+            MaskField IListElementDrawer<MaskField>.OnDrawElement(Rect position, int index, MaskField element, bool isActive, bool isFocused)
             {
                 Rect halfPos = position;
                 halfPos.width = halfPos.width * 0.5f - EditorGuiUtility.StandardHorizontalSpacing;
@@ -173,7 +175,7 @@ namespace UnityUtilityEditor.Window
                 return element;
             }
 
-            float IListElementDrawer<LayerSetConfig.MaskField>.OnElementHeight(int index)
+            float IListElementDrawer<MaskField>.OnElementHeight(int index)
             {
                 return EditorGUIUtility.singleLineHeight;
             }
@@ -183,5 +185,6 @@ namespace UnityUtilityEditor.Window
         {
             public LayerSetConfig Config;
         }
+        #endregion
     }
 }

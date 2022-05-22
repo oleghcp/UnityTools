@@ -11,7 +11,7 @@ namespace UnityUtilityEditor.Gui
 {
     public interface IListElementDrawer<T>
     {
-        T OnDrawElement(Rect position, T element, bool isActive, bool isFocused);
+        T OnDrawElement(Rect position, int index, T element, bool isActive, bool isFocused);
         float OnElementHeight(int index);
     }
 
@@ -98,7 +98,6 @@ namespace UnityUtilityEditor.Gui
             _drawer.DoList(position);
 
             return GetChanges(list);
-
         }
 
         private IList<T> DrawInternal(IList<T> list)
@@ -111,7 +110,7 @@ namespace UnityUtilityEditor.Gui
 #if !UNITY_2020_3_OR_NEWER
             using (new EditorGUILayout.VerticalScope())
 #endif
-                _drawer.DoLayoutList();
+            _drawer.DoLayoutList();
 
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             EditorGUILayout.EndHorizontal();
@@ -189,7 +188,7 @@ namespace UnityUtilityEditor.Gui
 
             EditorGUI.BeginChangeCheck();
 
-            _drawer.list[index] = _elementDrawer.OnDrawElement(position, (T)_drawer.list[index], isActive, isFocused);
+            _drawer.list[index] = _elementDrawer.OnDrawElement(position, index, (T)_drawer.list[index], isActive, isFocused);
 
             if (EditorGUI.EndChangeCheck())
                 _changed = true;
