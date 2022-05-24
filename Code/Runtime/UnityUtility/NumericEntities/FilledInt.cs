@@ -24,6 +24,7 @@ namespace UnityUtility.NumericEntities
         public bool IsEmpty => _filler == 0;
         public float Ratio => (float)_filler.CutAfter(_threshold) / _threshold;
         public int Excess => (_filler - _threshold).CutBefore(0);
+        public int Shortage => (_threshold - _filler).Clamp(0, _threshold);
 
         public FilledInt(int threshold)
         {

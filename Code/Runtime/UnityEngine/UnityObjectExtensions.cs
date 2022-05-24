@@ -406,7 +406,6 @@ namespace UnityEngine
         public static void DestroyChildren(this Transform self)
         {
             Transform[] children = self.GetTopChildren();
-            self.DetachChildren();
 
             for (int i = 0; i < children.Length; i++)
             {
@@ -420,7 +419,6 @@ namespace UnityEngine
 
             for (int i = 0; i < children.Length; i++)
             {
-                children[i].SetParent(null);
                 children[i].gameObject.Destroy();
             }
         }

@@ -37,6 +37,7 @@ namespace UnityUtility.NumericEntities
         bool IsEmpty { get; }
         float Ratio { get; }
         T Excess { get; }
+        T Shortage { get; }
 
         void Fill(T delta);
         void FillFully();
