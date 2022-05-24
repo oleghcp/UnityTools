@@ -45,12 +45,12 @@ namespace UnityUtility.NumericEntities
             _curValue = _capacity = capacity;
         }
 
-        public void Spend(float value)
+        public void Spend(float delta)
         {
-            if (value < 0f)
-                throw Errors.NegativeParameter(nameof(value));
+            if (delta < 0f)
+                throw Errors.NegativeParameter(nameof(delta));
 
-            _curValue -= value;
+            _curValue -= delta;
         }
 
         public void RemoveExcess()
@@ -59,12 +59,12 @@ namespace UnityUtility.NumericEntities
                 _curValue = 0f;
         }
 
-        public void Restore(float value)
+        public void Restore(float delta)
         {
-            if (value < 0f)
-                throw Errors.NegativeParameter(nameof(value));
+            if (delta < 0f)
+                throw Errors.NegativeParameter(nameof(delta));
 
-            _curValue = (_curValue + value).CutAfter(_capacity);
+            _curValue = (_curValue + delta).CutAfter(_capacity);
         }
 
         public void RestoreFull()

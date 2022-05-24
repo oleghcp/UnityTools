@@ -34,12 +34,12 @@ namespace UnityUtility.NumericEntities
             _filler = 0;
         }
 
-        public void Fill(int addValue)
+        public void Fill(int delta)
         {
-            if (addValue < 0)
-                throw Errors.NegativeParameter(nameof(addValue));
+            if (delta < 0)
+                throw Errors.NegativeParameter(nameof(delta));
 
-            _filler += addValue;
+            _filler += delta;
         }
 
         public void FillFully()
@@ -48,12 +48,12 @@ namespace UnityUtility.NumericEntities
                 _filler = _threshold;
         }
 
-        public void Remove(int removeValue)
+        public void Remove(int delta)
         {
-            if (removeValue < 0)
-                throw Errors.NegativeParameter(nameof(removeValue));
+            if (delta < 0)
+                throw Errors.NegativeParameter(nameof(delta));
 
-            _filler -= removeValue.CutAfter(_filler);
+            _filler -= delta.CutAfter(_filler);
         }
 
         public void RemoveAll()

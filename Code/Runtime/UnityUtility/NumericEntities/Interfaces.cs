@@ -23,9 +23,9 @@ namespace UnityUtility.NumericEntities
         bool IsFull { get; }
         bool IsEmpty { get; }
 
-        void Spend(T value);
+        void Spend(T delta);
         void RemoveExcess();
-        void Restore(T value);
+        void Restore(T delta);
         void RestoreFull();
     }
 
@@ -38,9 +38,9 @@ namespace UnityUtility.NumericEntities
         float Ratio { get; }
         T Excess { get; }
 
-        void Fill(T addValue);
+        void Fill(T delta);
         void FillFully();
-        void Remove(T removeValue);
+        void Remove(T delta);
         void RemoveAll();
         void RemoveTillExcess();
     }
