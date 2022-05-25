@@ -16,13 +16,19 @@ namespace UnityUtility.NumericEntities
         public float Threshold
         {
             get => _threshold;
-            set => _threshold = value.CutBefore(0f);
+            set
+            {
+                if (value < 0f)
+                    throw Errors.NegativeParameter(nameof(Threshold));
+
+                _threshold = value;
+            }
         }
 
-        public float CurValue => _filler.Clamp(0f, _threshold);
+        public float CurValue => _filler.CutAfter(_threshold);
         public bool FilledFully => _filler >= _threshold;
         public bool IsEmpty => _filler == 0f;
-        public float Ratio => _filler.CutAfter(_threshold) / _threshold;
+        public float Ratio => CurValue / _threshold;
         public float Excess => (_filler - _threshold).CutBefore(0f);
         public float Shortage => (_threshold - _filler).Clamp(0f, _threshold);
 

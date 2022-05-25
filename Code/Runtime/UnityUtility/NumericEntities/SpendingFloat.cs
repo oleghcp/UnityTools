@@ -18,7 +18,10 @@ namespace UnityUtility.NumericEntities
             get => _capacity;
             set
             {
-                _capacity = value.CutBefore(0f);
+                if (value < 0f)
+                    throw Errors.NegativeParameter(nameof(Capacity));
+
+                _capacity = value;
 
                 if (_curValue > _capacity)
                     _curValue = _capacity;
@@ -28,7 +31,7 @@ namespace UnityUtility.NumericEntities
         public float CurValue
         {
             get => _curValue.CutBefore(0f);
-            set => _curValue = value.Clamp(0f, _capacity);
+            set => _curValue = value.CutAfter(_capacity);
         }
 
         public float Shortage => (_capacity - _curValue).CutAfter(_capacity);
