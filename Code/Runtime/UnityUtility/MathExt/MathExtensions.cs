@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace UnityUtility.MathExt
 {
+    public enum RoundingWay
+    {
+        ToNearest,
+        Ceiling,
+        Floor,
+    }
+
     public static class MathExtensions
     {
         /// <summary>
@@ -434,9 +441,22 @@ namespace UnityUtility.MathExt
         /// Casts float value to integer.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ToInt(this float value)
+        public static int ToInt(this float value, RoundingWay rounding)
         {
-            return (int)value;
+            switch (rounding)
+            {
+                case RoundingWay.ToNearest:
+                    return value.Round();
+
+                case RoundingWay.Ceiling:
+                    return (int)MathF.Ceiling(value);
+
+                case RoundingWay.Floor:
+                    return (int)MathF.Floor(value);
+
+                default:
+                    throw new UnsupportedValueException(rounding);
+            }
         }
 
         /// <summary>
