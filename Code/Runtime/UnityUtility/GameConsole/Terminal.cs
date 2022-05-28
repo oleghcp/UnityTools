@@ -106,13 +106,6 @@ namespace UnityUtility.GameConsole
 
                 float axis = Input.GetAxis("Mouse ScrollWheel");
                 if (axis != 0) { _log.Scroll(axis); }
-
-                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-                {
-                    EnterCmd(_field.text);
-                    _field.text = string.Empty;
-                    _field.OnPointerClick(_pointerEventData);
-                }
             }
         }
 
@@ -198,6 +191,8 @@ namespace UnityUtility.GameConsole
         /// </summary>
         public void OnDone(string _)
         {
+            EnterCmd(_field.text);
+            _field.text = string.Empty;
             _field.OnPointerClick(_pointerEventData);
         }
 
@@ -207,38 +202,35 @@ namespace UnityUtility.GameConsole
 
         private void EnterCmd(string text)
         {
-            if (NoCommands())
+            if (NoCommands() || text.IsNullOrWhiteSpace())
                 return;
 
-            if (text.HasUsefulData())
+            text = text.ToLower();
+
+            string[] words = text.Split(' ');
+            string command = words[0];
+
+            if (_commands.TryGetValue(command, out MethodInfo method))
             {
-                text = text.ToLower();
+                string[][] keys = null;
 
-                string[] words = text.Split(' ');
-                string command = words[0];
+                if (method.GetParameters().Length > 0)
+                    keys = new[] { words.Length > 1 ? words.GetSubArray(1) : new string[0] };
 
-                if (_commands.TryGetValue(command, out MethodInfo method))
-                {
-                    string[][] keys = null;
+                object cmdKeysParseError = method.Invoke(_cmdRun, keys);
 
-                    if (method.GetParameters().Length > 0)
-                        keys = new[] { words.Length > 1 ? words.GetSubArray(1) : new string[0] };
-
-                    object cmdKeysParseError = method.Invoke(_cmdRun, keys);
-
-                    if (cmdKeysParseError == null)
-                        _log.WriteLine(_cmdColor, text);
-                    else
-                        _log.WriteLine(_cmdErrorColor, "cmd options error: " + cmdKeysParseError);
-                }
+                if (cmdKeysParseError == null)
+                    _log.WriteLine(_cmdColor, text);
                 else
-                {
-                    _log.WriteLine(_cmdErrorColor, "unknown: " + command);
-                }
-
-                _cmdHistory.Add(text);
-                _curHistoryIndex = 0;
+                    _log.WriteLine(_cmdErrorColor, "cmd options error: " + cmdKeysParseError);
             }
+            else
+            {
+                _log.WriteLine(_cmdErrorColor, "unknown: " + command);
+            }
+
+            _cmdHistory.Add(text);
+            _curHistoryIndex = 0;
         }
 
         private void FindCmd(string text)
