@@ -323,7 +323,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6201096755251969138}
   - component: {fileID: 5201949175874938687}
-  - component: {fileID: 5620151272810257869}
+  - component: {fileID: 7850104632697098630}
   m_Layer: 5
   m_Name: LineRoot
   m_TagString: Untagged
@@ -347,7 +347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -34.699993}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &5201949175874938687
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 0
---- !u!114 &5620151272810257869
+--- !u!114 &7850104632697098630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -631,7 +631,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6091110506197548940}
         m_MethodName: OnDone
-        m_Mode: 5
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -846,6 +846,7 @@ GameObject:
   - component: {fileID: 7579252630571546167}
   - component: {fileID: 3208446284249708467}
   - component: {fileID: 7151799847601243776}
+  - component: {fileID: 6792369193605161123}
   - component: {fileID: 6091571194127111330}
   m_Layer: 5
   m_Name: Log
@@ -924,6 +925,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &6792369193605161123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131486796104070834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 6201096755251969138}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 2
+  m_Elasticity: 0.05
+  m_Inertia: 1
+  m_DecelerationRate: 0.05
+  m_ScrollSensitivity: 25
+  m_Viewport: {fileID: 6200736253814726980}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6091571194127111330
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.MathExt;
 using UnityUtility.Pool;
 
 #pragma warning disable CS0649
@@ -33,7 +32,17 @@ namespace UnityUtility.GameConsole
 
         public void WriteLine(Color color, string text, string info = null)
         {
-            GetLine().SetText(text, info, color);
+            getLine().SetText(text, info, color);
+
+            LogLine getLine()
+            {
+                if (_root.childCount < _terminal.Options.LinesLimit)
+                    return _lines.Place(_pool.Get());
+
+                return _root.GetChild(0)
+                            .GetComponent<LogLine>()
+                            .Reuse();
+            }
         }
 
         public void Clear()
@@ -42,24 +51,10 @@ namespace UnityUtility.GameConsole
             _lines.Clear();
         }
 
-        public void Scroll(float dir)
-        {
-            Vector2 newPos = _root.anchoredPosition + new Vector2(0f, dir * -100f);
-            newPos.y = newPos.y.Clamp(-_root.rect.size.y, 0f);
-            _root.anchoredPosition = newPos;
-
-            _border.SetActive(newPos.y < 0f);
-        }
-
-        private LogLine GetLine()
-        {
-            if (_root.childCount < _terminal.Options.LinesLimit)
-                return _lines.Place(_pool.Get());
-
-            return _root.GetChild(0)
-                        .GetComponent<LogLine>()
-                        .Reuse();
-        }
+        //public void OnScroll(Vector2 position)
+        //{
+        //    _border.SetActive(position.y > 0.1f);
+        //}
 
         LogLine IObjectFactory<LogLine>.Create()
         {

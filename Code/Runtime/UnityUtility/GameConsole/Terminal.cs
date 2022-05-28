@@ -103,9 +103,6 @@ namespace UnityUtility.GameConsole
                 {
                     SwitchHistoryLine(false);
                 }
-
-                float axis = Input.GetAxis("Mouse ScrollWheel");
-                if (axis != 0) { _log.Scroll(axis); }
             }
         }
 
@@ -189,9 +186,11 @@ namespace UnityUtility.GameConsole
         /// <summary>
         /// This method is called by input field. Don't use it.
         /// </summary>
-        public void OnDone(string _)
+        public void OnDone()
         {
-            EnterCmd(_field.text);
+            if (!Input.GetKey(KeyCode.BackQuote))
+                EnterCmd(_field.text);
+
             _field.text = string.Empty;
             _field.OnPointerClick(_pointerEventData);
         }
