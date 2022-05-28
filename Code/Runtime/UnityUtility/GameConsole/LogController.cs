@@ -51,10 +51,10 @@ namespace UnityUtility.GameConsole
             _lines.Clear();
         }
 
-        //public void OnScroll(Vector2 position)
-        //{
-        //    _border.SetActive(position.y > 0.1f);
-        //}
+        public void OnScroll()
+        {
+            _border.SetActive(_root.anchoredPosition.y < -0.1f);
+        }
 
         LogLine IObjectFactory<LogLine>.Create()
         {

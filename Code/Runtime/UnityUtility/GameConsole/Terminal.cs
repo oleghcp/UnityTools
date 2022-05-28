@@ -195,6 +195,14 @@ namespace UnityUtility.GameConsole
             _field.OnPointerClick(_pointerEventData);
         }
 
+        /// <summary>
+        /// This method is called by input field. Don't use it.
+        /// </summary>
+        public void OnScroll()
+        {
+            _log.OnScroll();
+        }
+
         ///////////////
         //Inner funcs//
         ///////////////
