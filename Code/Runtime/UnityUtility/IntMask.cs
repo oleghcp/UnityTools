@@ -32,9 +32,29 @@ namespace UnityUtility
             BitMask.SwitchFlag(ref _mask, index);
         }
 
-        public void Invert(int length = SIZE)
+        public void Or(IntMask other, int length = SIZE)
         {
-            BitMask.InvertFor(ref _mask, length);
+            BitMask.OrFor(ref _mask, other._mask, length);
+        }
+
+        public void And(IntMask other, int length = SIZE)
+        {
+            BitMask.AndFor(ref _mask, other._mask, length);
+        }
+
+        public void Not(int length = SIZE)
+        {
+            BitMask.NotFor(ref _mask, length);
+        }
+
+        public void Xor(IntMask other, int length = SIZE)
+        {
+            BitMask.XorFor(ref _mask, other._mask, length);
+        }
+
+        public void Except(IntMask other, int length = SIZE)
+        {
+            BitMask.ExceptFor(ref _mask, other._mask, length);
         }
 
         public bool Equals(IntMask other, int length = SIZE)
@@ -42,14 +62,9 @@ namespace UnityUtility
             return BitMask.Equals(_mask, other._mask, length);
         }
 
-        public bool Overlaps(IntMask other, int length = SIZE)
+        public bool Intersects(IntMask other, int length = SIZE)
         {
-            return BitMask.Overlaps(_mask, other._mask, length);
-        }
-
-        public IntMask GetIntersection(IntMask other, int length = SIZE)
-        {
-            return BitMask.GetIntersection(_mask, other._mask, length);
+            return BitMask.Intersects(_mask, other._mask, length);
         }
 
         public bool All(int length = SIZE)

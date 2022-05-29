@@ -57,24 +57,12 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddFlags(ref int destinationMask, int sourceMask)
+        public static void Except(ref int targetMask, int otherMask)
         {
-            destinationMask |= sourceMask;
+            targetMask ^= targetMask & otherMask;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RemoveFlags(ref int destinationMask, int sourceMask)
-        {
-            destinationMask ^= destinationMask & sourceMask;
-        }
-
-        public static void SetFlags(ref int destinationMask, int sourceMask, bool flagValue)
-        {
-            if (flagValue) { AddFlags(ref destinationMask, sourceMask); }
-            else { RemoveFlags(ref destinationMask, sourceMask); }
-        }
-
-        public static void AddAll(ref int mask, int length = SIZE)
+        public static void AddFor(ref int mask, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
@@ -92,35 +80,100 @@ namespace UnityUtility
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Clear(ref int mask)
+        public static void SetFor(ref int mask, bool flagValue, int length = SIZE)
         {
-            mask = 0;
+            if (flagValue) { AddFor(ref mask, length); }
+            else { mask = 0; }
         }
 
-        public static void SetAll(ref int mask, bool flagValue, int length = SIZE)
-        {
-            if (flagValue) { AddAll(ref mask, length); }
-            else { Clear(ref mask); }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void InvertAll(ref int mask)
-        {
-            mask = ~mask;
-        }
-
-        public static void InvertFor(ref int mask, int length = SIZE)
+        public static void AndFor(ref int targetMask, int otherMask, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             if (length == SIZE)
-                InvertAll(ref mask);
+            {
+                targetMask &= otherMask;
+                return;
+            }
+
+            int tmpMask = targetMask & otherMask;
+            for (int i = 0; i < length; i++)
+            {
+                SetFlag(ref targetMask, i, HasFlag(tmpMask, i));
+            }
+        }
+
+        public static void OrFor(ref int targetMask, int otherMask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+            {
+                targetMask |= otherMask;
+                return;
+            }
+
+            int tmpMask = targetMask | otherMask;
+            for (int i = 0; i < length; i++)
+            {
+                SetFlag(ref targetMask, i, HasFlag(tmpMask, i));
+            }
+        }
+
+        public static void XorFor(ref int targetMask, int otherMask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+            {
+                targetMask ^= otherMask;
+                return;
+            }
+
+            int tmpMask = targetMask ^ otherMask;
+            for (int i = 0; i < length; i++)
+            {
+                SetFlag(ref targetMask, i, HasFlag(tmpMask, i));
+            }
+        }
+
+        public static void NotFor(ref int mask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+            {
+                mask = ~mask;
+                return;
+            }
 
             for (int i = 0; i < length; i++)
             {
                 SwitchFlag(ref mask, i);
+            }
+        }
+
+        public static void ExceptFor(ref int targetMask, int otherMask, int length = SIZE)
+        {
+            if (length > SIZE)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            if (length == SIZE)
+            {
+                Except(ref targetMask, otherMask);
+                return;
+            }
+
+            int tmpMask = targetMask;
+            Except(ref tmpMask, otherMask);
+
+            for (int i = 0; i < length; i++)
+            {
+                SetFlag(ref targetMask, i, HasFlag(tmpMask, i));
             }
         }
 
@@ -143,7 +196,7 @@ namespace UnityUtility
             return true;
         }
 
-        public static bool Overlaps(int mask1, int mask2, int length = SIZE)
+        public static bool Intersects(int mask1, int mask2, int length = SIZE)
         {
             if (length > SIZE)
                 throw new ArgumentOutOfRangeException(nameof(length));
@@ -160,27 +213,6 @@ namespace UnityUtility
             }
 
             return false;
-        }
-
-        public static int GetIntersection(int mask1, int mask2, int length = SIZE)
-        {
-            if (length > SIZE)
-                throw new ArgumentOutOfRangeException(nameof(length));
-
-            int intersection = mask1 & mask2;
-
-            if (length == SIZE)
-                return intersection;
-
-            int newMask = 0;
-
-            for (int i = 0; i < length; i++)
-            {
-                if (HasFlag(intersection, i))
-                    AddFlag(ref newMask, i);
-            }
-
-            return newMask;
         }
 
         public static bool AllFor(int mask, int length = SIZE)

@@ -259,6 +259,25 @@ namespace UnityUtility.Collections
             _version++;
         }
 
+        public void Except(BitList other)
+        {
+            if (!_mutable)
+                throw Errors.ReadOnlyBitList();
+
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            if (_length != other._length)
+                throw Errors.DifferentArrayLengths();
+
+            int arrayLength = GetArraySize(_length);
+            for (int i = 0; i < arrayLength; i++)
+            {
+                BitMask.Except(ref _array[i], other._array[i]);
+            }
+            _version++;
+        }
+
         public void And(BitList other)
         {
             if (!_mutable)
@@ -361,7 +380,7 @@ namespace UnityUtility.Collections
             return BitMask.AllFor(_array[lastElement], GetAppendixLength());
         }
 
-        public bool Overlaps(BitList other)
+        public bool Intersects(BitList other)
         {
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
@@ -380,33 +399,7 @@ namespace UnityUtility.Collections
                     return false;
             }
 
-            return BitMask.Overlaps(_array[lastElement], other._array[lastElement], GetAppendixLength());
-        }
-
-        public void IntersectWith(BitList other)
-        {
-            if (!_mutable)
-                throw Errors.ReadOnlyBitList();
-
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
-
-            if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
-
-            int lastElement = GetArraySize(_length) - 1;
-
-            if (lastElement < 0)
-                return;
-
-            for (int i = 0; i < lastElement; i++)
-            {
-                _array[i] &= other._array[i];
-            }
-
-            _array[lastElement] = BitMask.GetIntersection(_array[lastElement], other._array[lastElement], GetAppendixLength());
-
-            _version++;
+            return BitMask.Intersects(_array[lastElement], other._array[lastElement], GetAppendixLength());
         }
 
         public bool Coincides(BitList other)
