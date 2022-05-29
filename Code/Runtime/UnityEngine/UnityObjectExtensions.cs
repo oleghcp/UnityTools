@@ -242,22 +242,22 @@ namespace UnityEngine
                 self.localScale = source.localScale;
         }
 
-        /// <summary>
-        /// Returns transform of gameobject as RectTransform if posible. Otherwise returns null.
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RectTransform GetRectTransform(this GameObject self)
+        public static void SetParent(this Transform self, GameObject parent)
         {
-            return self.transform as RectTransform;
+            self.SetParent(parent.transform);
         }
 
-        /// <summary>
-        /// Set the parent of the rectTransform with locating to the specified anchored position.
-        /// </summary>
-        public static void SetParent(this RectTransform self, RectTransform parent, in Vector2 targetAnchPos)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetParent(this GameObject self, GameObject parent)
         {
-            self.SetParent(parent);
-            self.anchoredPosition = targetAnchPos;
+            self.transform.SetParent(parent.transform);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetParent(this GameObject self, Transform parent)
+        {
+            self.transform.SetParent(parent);
         }
 
         /// <summary>
@@ -265,15 +265,22 @@ namespace UnityEngine
         /// </summary>
         public static Transform GetParent(this Transform self, int level)
         {
-            Transform parent = self;
+            Transform target = self;
 
-            for (int i = 0; i < level; i++)
+            for (int i = 0; i < level && target != null; i++)
             {
-                if (parent.parent == null) { break; }
-                parent = parent.parent;
+                target = target.parent;
             }
 
-            return parent;
+            return target;
+        }
+
+        /// <summary>
+        /// Returns an ancestor from the transform's hierarchy on the specified hierarchy level.
+        /// </summary>
+        public static GameObject GetParent(this GameObject self, int level = 1)
+        {
+            return self.transform.GetParent(level)?.gameObject;
         }
 
         /// <summary>
@@ -307,19 +314,45 @@ namespace UnityEngine
         /// </summary>
         public static IEnumerable<Transform> EnumerateChildren(this Transform self, bool recursive)
         {
-            int length = self.childCount;
+            int count = self.childCount;
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < count; i++)
             {
                 Transform child = self.GetChild(i);
 
+                yield return child;
+
                 if (recursive)
                 {
-                    foreach (var subChild in child.EnumerateChildren(true))
+                    foreach (Transform subChild in child.EnumerateChildren(true))
+                    {
                         yield return subChild;
+                    }
                 }
+            }
+        }
 
-                yield return child;
+        /// <summary>
+        /// Returns IEnumerable collection of all children;
+        /// </summary>
+        public static IEnumerable<GameObject> EnumerateChildren(this GameObject self, bool recursive)
+        {
+            Transform root = self.transform;
+            int count = root.childCount;
+
+            for (int i = 0; i < count; i++)
+            {
+                Transform child = root.GetChild(i);
+
+                yield return child.gameObject;
+
+                if (recursive)
+                {
+                    foreach (Transform subChild in child.EnumerateChildren(true))
+                    {
+                        yield return subChild.gameObject;
+                    }
+                }
             }
         }
 
@@ -341,6 +374,24 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Returns children of the top level of the hierarchy.
+        /// </summary>
+        public static GameObject[] GetTopChildren(this GameObject self)
+        {
+            Transform root = self.transform;
+            int count = root.childCount;
+
+            GameObject[] children = new GameObject[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                children[i] = root.GetChild(i).gameObject;
+            }
+
+            return children;
+        }
+
+        /// <summary>
         /// Finds all children.
         /// </summary>
         public static List<Transform> GetAllChildren(this Transform self)
@@ -355,13 +406,43 @@ namespace UnityEngine
         /// <summary>
         /// Finds all children.
         /// </summary>
+        public static List<GameObject> GetAllChildren(this GameObject self)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            GetAllChildren(self, list);
+
+            return list;
+        }
+
+        /// <summary>
+        /// Finds all children.
+        /// </summary>
         public static void GetAllChildren(this Transform self, List<Transform> list)
         {
-            int length = self.childCount;
+            int count = self.childCount;
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < count; i++)
             {
                 Transform ch = self.GetChild(i);
+
+                list.Add(ch);
+
+                GetAllChildren(ch, list);
+            }
+        }
+
+        /// <summary>
+        /// Finds all children.
+        /// </summary>
+        public static void GetAllChildren(this GameObject self, List<GameObject> list)
+        {
+            Transform root = self.transform;
+            int count = root.childCount;
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject ch = root.GetChild(i).gameObject;
 
                 list.Add(ch);
 
@@ -376,6 +457,7 @@ namespace UnityEngine
             TransformUtility.OrderSiblingsByList(children);
         }
 
+#if !UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponentInParent<T>(this Component self, bool includeInactive)
         {
@@ -395,13 +477,41 @@ namespace UnityEngine
 
             for (var p = self; p != null; p = p.parent)
             {
-                var component = p.GetComponent<T>();
+                T component = p.GetComponent<T>();
                 if (component != null)
                     return component;
             }
 
             return default;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetComponentInChildren<T>(this Component self, bool includeInactive)
+        {
+            return self.transform.GetComponentInChildren<T>(includeInactive);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetComponentInChildren<T>(this GameObject self, bool includeInactive)
+        {
+            return self.transform.GetComponentInChildren<T>(includeInactive);
+        }
+
+        public static T GetComponentInChildren<T>(this Transform self, bool includeInactive)
+        {
+            if (!includeInactive)
+                return self.GetComponentInChildren<T>();
+
+            foreach (var child in self.EnumerateChildren(true))
+            {
+                T component = child.GetComponent<T>();
+                if (component != null)
+                    return component;
+            }
+
+            return default;
+        }
+#endif
 
         public static void DestroyChildren(this Transform self)
         {
@@ -482,6 +592,24 @@ namespace UnityEngine
             self.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
             self.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
             self.pivot = rect.GetPivot();
+        }
+
+        /// <summary>
+        /// Returns transform of gameobject as RectTransform if posible. Otherwise returns null.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static RectTransform GetRectTransform(this GameObject self)
+        {
+            return self.transform as RectTransform;
+        }
+
+        /// <summary>
+        /// Set the parent of the rectTransform with locating to the specified anchored position.
+        /// </summary>
+        public static void SetParent(this RectTransform self, RectTransform parent, in Vector2 targetAnchPos)
+        {
+            self.SetParent(parent);
+            self.anchoredPosition = targetAnchPos;
         }
 
         /// <summary>
