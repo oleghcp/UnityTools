@@ -33,10 +33,10 @@ namespace UnityUtilityEditor
             ScriptableWizard.DisplayWizard("Create Shape", typeof(CreateShapeWizard));
         }
 
-        [MenuItem(nameof(UnityUtility) + "/Objects/Create Scriptable Object")]
+        [MenuItem(nameof(UnityUtility) + "/Objects/Create Scriptable Object Asset")]
         private static void GetScriptableObjectWindow()
         {
-            EditorWindow.GetWindow(typeof(ScriptableObjectWindow), true, "Scriptable Objects");
+            EditorWindow.GetWindow(typeof(CreateAssetWindow), true, "Create Asset");
         }
 
         [MenuItem(nameof(UnityUtility) + "/Terminal/Create Terminal Prefab")]
@@ -124,7 +124,7 @@ namespace UnityUtilityEditor
         [MenuItem(CREATE_ASSET_PATH)]
         private static void CreateAsset()
         {
-            ScriptableObjectWindow window = EditorWindow.GetWindow<ScriptableObjectWindow>(true, "Scriptable Objects");
+            CreateAssetWindow window = EditorWindow.GetWindow<CreateAssetWindow>(true, "Scriptable Objects");
             window.SetParent(Selection.activeObject);
         }
 

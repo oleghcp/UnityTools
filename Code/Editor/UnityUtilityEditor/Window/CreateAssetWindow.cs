@@ -8,7 +8,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window
 {
-    internal class ScriptableObjectWindow : EditorWindow
+    internal class CreateAssetWindow : EditorWindow
     {
         private UnityObject _targetRoot;
 
@@ -48,6 +48,7 @@ namespace UnityUtilityEditor.Window
             {
                 return type.IsSubclassOf(typeof(ScriptableObject)) &&
                        !type.IsAbstract &&
+                       !type.IsSubclassOf(typeof(StateMachineBehaviour)) &&
                        !type.IsSubclassOf(typeof(Editor)) &&
                        !type.IsSubclassOf(typeof(EditorWindow));
             }
