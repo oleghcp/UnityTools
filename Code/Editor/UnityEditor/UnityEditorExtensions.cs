@@ -232,6 +232,14 @@ namespace UnityEditor
             return self.GetArrayElementAtIndex(index);
         }
 
+        public static Bytes GetBytesValue(this SerializedProperty self)
+        {
+            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
+            {
+                return inner.intValue;
+            }
+        }
+
         public static void SetBytesValue(this SerializedProperty self, Bytes value)
         {
             using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
@@ -240,13 +248,21 @@ namespace UnityEditor
             }
         }
 
-        public static Bytes GetBytesValue(this SerializedProperty self)
+        public static IntMask GetIntMaskValue(this SerializedProperty self)
         {
-            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
+            using (SerializedProperty inner = self.FindPropertyRelative(IntMask.FieldName))
             {
                 return inner.intValue;
             }
         }
+
+        public static void SetIntMaskValue(this SerializedProperty self, IntMask value)
+        {
+            using (SerializedProperty inner = self.FindPropertyRelative(IntMask.FieldName))
+            {
+                inner.intValue = (int)value;
+            }
+        }        
 
         public static bool Disposed(this SerializedObject self)
         {

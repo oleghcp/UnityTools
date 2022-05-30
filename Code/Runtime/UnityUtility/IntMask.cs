@@ -11,6 +11,10 @@ namespace UnityUtility
         [SerializeField, HideInInspector]
         private int _mask;
 
+#if UNITY_EDITOR
+        internal static string FieldName => nameof(_mask);
+#endif
+
         public bool this[int index]
         {
             get => BitMask.HasFlag(_mask, index);
@@ -25,6 +29,11 @@ namespace UnityUtility
         public IntMask(int mask)
         {
             _mask = mask;
+        }
+
+        public void SetAll(bool flagValue, int length = SIZE)
+        {
+            BitMask.SetFor(ref _mask, flagValue, length);
         }
 
         public void SwitchFlag(int index)
