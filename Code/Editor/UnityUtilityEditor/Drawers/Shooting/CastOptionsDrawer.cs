@@ -1,3 +1,4 @@
+#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.MathExt;
@@ -33,3 +34,4 @@ namespace UnityUtilityEditor.Drawers.Shooting
         }
     }
 }
+#endif
