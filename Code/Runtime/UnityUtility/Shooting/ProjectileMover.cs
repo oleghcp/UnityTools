@@ -66,6 +66,7 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
+#if INCLUDE_PHYSICS_2D
         internal (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
@@ -74,6 +75,7 @@ namespace UnityUtility.Shooting
 
             return (hitPosition + newDirection * distanceAfterHit, newDirection);
         }
+#endif
     }
 }
 #endif

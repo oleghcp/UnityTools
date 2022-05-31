@@ -50,6 +50,7 @@ namespace UnityUtility.Shooting
             return Physics.Raycast(source, direction, out hitInfo, distance, HitMask);
         }
 
+#if INCLUDE_PHYSICS_2D
         internal bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
         {
             if (_castRadius.CastRadius > float.Epsilon)
@@ -65,6 +66,7 @@ namespace UnityUtility.Shooting
             hitInfo = Physics2D.Raycast(source, direction, distance, HitMask);
             return hitInfo.Hit();
         }
+#endif
     }
 }
 #endif

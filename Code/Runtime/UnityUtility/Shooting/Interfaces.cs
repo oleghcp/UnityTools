@@ -25,11 +25,13 @@ namespace UnityUtility.Shooting
         void OnReflect(in RaycastHit hitInfo);
     }
 
+#if INCLUDE_PHYSICS_2D
     public interface IEventListener2D
     {
         void OnHit(in RaycastHit2D hitInfo);
         void OnTimeOut();
         void OnReflect(in RaycastHit2D hitInfo);
     }
-} 
+#endif
+}
 #endif

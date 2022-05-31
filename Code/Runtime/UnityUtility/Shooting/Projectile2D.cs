@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility.Inspector;
 using UnityUtility.MathExt;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS_2D
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]

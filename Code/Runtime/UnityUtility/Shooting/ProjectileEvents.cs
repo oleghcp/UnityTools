@@ -16,6 +16,7 @@ namespace UnityUtility.Shooting
         public UnityEvent<RaycastHit> OnReflect { get; private set; }
     }
 
+#if INCLUDE_PHYSICS_2D
     [Serializable]
     public sealed class ProjectileEvents2D
     {
@@ -26,5 +27,6 @@ namespace UnityUtility.Shooting
         [field: SerializeField]
         public UnityEvent<RaycastHit2D> OnReflect { get; private set; }
     }
-} 
+#endif
+}
 #endif

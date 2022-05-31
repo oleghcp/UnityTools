@@ -103,11 +103,13 @@ namespace UnityUtility.Shooting
 #if UNITY_EDITOR
         private void Reset()
         {
+#if INCLUDE_PHYSICS_2D
             if (GetComponent<Projectile2D>() != null)
             {
                 DestroyImmediate(this);
                 return;
             }
+#endif
 
             _moving.SpeedRemainder = 1f;
             _moving.RicochetMask = LayerMask.GetMask("Default");

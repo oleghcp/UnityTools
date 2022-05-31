@@ -31,6 +31,16 @@ namespace UnityEngine
             return self.collider.gameObject.layer;
         }
 
+#if INCLUDE_PHYSICS_2D
+        /// <summary>
+        /// Returns the layer in which the game object that was hit is.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetLayer(this Collision2D self)
+        {
+            return self.collider.gameObject.layer;
+        }
+
         /// <summary>
         /// Returns true if any object was hit. Otherwise returns false.
         /// </summary>
@@ -57,21 +67,13 @@ namespace UnityEngine
         {
             return self.collider.gameObject.layer;
         }
+#endif
 
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetLayer(this Collision self)
-        {
-            return self.collider.gameObject.layer;
-        }
-
-        /// <summary>
-        /// Returns the layer in which the game object that was hit is.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this Collision2D self)
         {
             return self.collider.gameObject.layer;
         }
