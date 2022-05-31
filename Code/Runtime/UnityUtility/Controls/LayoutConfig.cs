@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using UnityUtility.Controls.ControlStuff;
 
 #pragma warning disable CS0169, CS0649
@@ -39,3 +40,10 @@ namespace UnityUtility.Controls
         }
     }
 }
+#else
+namespace UnityUtility.Controls
+{
+    public sealed class LayoutConfig : ScriptableObject
+    { }
+}
+#endif

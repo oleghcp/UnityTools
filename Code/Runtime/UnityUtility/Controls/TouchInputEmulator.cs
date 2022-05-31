@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 namespace UnityUtility.Controls
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -169,3 +170,4 @@ namespace UnityUtility.Controls
         }
     }
 }
+#endif

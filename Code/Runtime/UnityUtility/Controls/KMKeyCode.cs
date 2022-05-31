@@ -1,3 +1,4 @@
+#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 namespace UnityUtility.Controls
 {
     public enum KMKeyCode : short
@@ -145,3 +146,4 @@ namespace UnityUtility.Controls
         MouseWheelDown = 331
     }
 }
+#endif

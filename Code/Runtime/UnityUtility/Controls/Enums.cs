@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
+using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
 
 namespace UnityUtility.Controls
@@ -92,3 +93,4 @@ namespace UnityUtility.Controls
         }
     }
 }
+#endif

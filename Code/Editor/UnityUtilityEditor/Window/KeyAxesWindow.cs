@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Controls;
@@ -71,3 +72,4 @@ namespace UnityUtilityEditor.Window
         }
     }
 }
+#endif

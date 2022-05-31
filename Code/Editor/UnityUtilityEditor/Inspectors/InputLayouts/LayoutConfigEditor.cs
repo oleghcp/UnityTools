@@ -5,8 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.Controls;
-using UnityUtility.Controls.ControlStuff;
 using UnityUtilityEditor.Window;
+#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
+using UnityUtility.Controls.ControlStuff;
 
 namespace UnityUtilityEditor.Inspectors.InputLayouts
 {
@@ -303,3 +304,16 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
         }
     }
 }
+#else
+namespace UnityUtilityEditor.Inspectors.InputLayouts
+{
+    [CustomEditor(typeof(LayoutConfig))]
+    internal class LayoutConfigEditor : Editor<LayoutConfig>
+    {
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("Legacy Input Manager is disabled.", MessageType.Warning);
+        }
+    }
+}
+#endif
