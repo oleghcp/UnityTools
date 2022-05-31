@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
+#if INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     public sealed class DefaultClipLoader : IClipLoader
@@ -23,3 +24,4 @@ namespace UnityUtility.Sound.SoundStuff
         }
     }
 }
+#endif

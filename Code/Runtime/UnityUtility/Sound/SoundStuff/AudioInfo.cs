@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+#if INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     public abstract class AudioInfo : MonoBehaviour
@@ -9,3 +10,4 @@ namespace UnityUtility.Sound.SoundStuff
         internal abstract void Stop();
     }
 }
+#endif

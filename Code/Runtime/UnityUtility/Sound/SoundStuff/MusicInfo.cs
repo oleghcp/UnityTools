@@ -5,6 +5,7 @@ using UnityUtility.MathExt;
 using UnityUtility.Pool;
 using UnityUtilityTools;
 
+#if INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     [DisallowMultipleComponent]
@@ -212,3 +213,4 @@ namespace UnityUtility.Sound.SoundStuff
         }
     }
 }
+#endif

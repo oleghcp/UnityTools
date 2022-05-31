@@ -1,3 +1,4 @@
+#if INCLUDE_AUDIO
 using System.Collections.Generic;
 using UnityUtility.MathExt;
 using UnityUtility.Pool;
@@ -146,3 +147,4 @@ namespace UnityUtility.Sound
         }
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if INCLUDE_AUDIO
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -240,3 +241,4 @@ namespace UnityUtility.Sound
         }
     }
 }
+#endif

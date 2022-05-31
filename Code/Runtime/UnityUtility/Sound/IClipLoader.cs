@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+#if INCLUDE_AUDIO
 namespace UnityUtility.Sound
 {
     public interface IClipLoader
@@ -7,3 +8,4 @@ namespace UnityUtility.Sound
         AudioClip LoadClip(string name);
     }
 }
+#endif

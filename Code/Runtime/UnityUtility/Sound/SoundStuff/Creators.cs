@@ -1,5 +1,6 @@
 ﻿using UnityUtility.Pool;
 
+#if INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     public class DynamicMusSourceCreator : IObjectFactory<MusicInfo>
@@ -18,3 +19,4 @@ namespace UnityUtility.Sound.SoundStuff
         }
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if INCLUDE_AUDIO
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Sound.SoundStuff;
@@ -47,7 +48,7 @@ namespace UnityUtilityEditor.Inspectors.Sound
                 _lengthInfo = null;
             }
         }
-        
+
 
         private void InitLengthInfo()
         {
@@ -60,3 +61,4 @@ namespace UnityUtilityEditor.Inspectors.Sound
         }
     }
 }
+#endif
