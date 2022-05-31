@@ -11,7 +11,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_2018_1_OR_NEWER"
+    ],
     "versionDefines": [
         {
             "name": "com.unity.modules.physics",
