@@ -23,6 +23,11 @@
             "name": "com.unity.modules.audio",
             "expression": "",
             "define": "INCLUDE_AUDIO"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "2019.3",
+            "define": "INCLUDE_UNITY_UI"
         }
     ],
     "noEngineReferences": false

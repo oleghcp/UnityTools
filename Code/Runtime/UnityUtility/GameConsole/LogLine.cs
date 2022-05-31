@@ -1,3 +1,4 @@
+#if INCLUDE_UNITY_UI
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -52,3 +53,4 @@ namespace UnityUtility.GameConsole
         }
     }
 }
+#endif

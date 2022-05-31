@@ -1,3 +1,4 @@
+#if INCLUDE_UNITY_UI
 using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Pool;
@@ -65,3 +66,4 @@ namespace UnityUtility.GameConsole
         }
     }
 }
+#endif

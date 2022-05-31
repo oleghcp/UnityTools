@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿#if INCLUDE_UNITY_UI
+using UnityEngine.UI;
 using UnityEngine;
 
 #pragma warning disable CS0649
@@ -22,3 +23,4 @@ namespace UnityUtility.UI
         }
     }
 }
+#endif

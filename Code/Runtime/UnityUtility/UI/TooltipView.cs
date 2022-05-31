@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if INCLUDE_UNITY_UI
+using UnityEngine;
 using UnityEngine.UI;
 using UnityUtility.SingleScripts;
 
@@ -62,3 +63,4 @@ namespace UnityUtility.UI
         }
     }
 }
+#endif
