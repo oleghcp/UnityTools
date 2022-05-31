@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Inspector;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]

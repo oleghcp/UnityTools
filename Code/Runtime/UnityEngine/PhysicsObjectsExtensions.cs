@@ -1,9 +1,29 @@
 ﻿using System.Runtime.CompilerServices;
 
+#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 namespace UnityEngine
 {
     public static class PhysicsObjectsExtensions
     {
+#if INCLUDE_PHYSICS
+        /// <summary>
+        /// Returns the layer in which the game object that was hit is.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetLayer(this ControllerColliderHit self)
+        {
+            return self.collider.gameObject.layer;
+        }
+
+        /// <summary>
+        /// Returns the layer in which the game object that was hit is.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetLayer(this Collision self)
+        {
+            return self.collider.gameObject.layer;
+        }
+
         /// <summary>
         /// Returns true if any object was hit. Otherwise returns false.
         /// </summary>
@@ -30,6 +50,7 @@ namespace UnityEngine
         {
             return self.collider.gameObject.layer;
         }
+#endif
 
 #if INCLUDE_PHYSICS_2D
         /// <summary>
@@ -68,23 +89,6 @@ namespace UnityEngine
             return self.collider.gameObject.layer;
         }
 #endif
-
-        /// <summary>
-        /// Returns the layer in which the game object that was hit is.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this Collision self)
-        {
-            return self.collider.gameObject.layer;
-        }
-
-        /// <summary>
-        /// Returns the layer in which the game object that was hit is.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetLayer(this ControllerColliderHit self)
-        {
-            return self.collider.gameObject.layer;
-        }
     }
 }
+#endif

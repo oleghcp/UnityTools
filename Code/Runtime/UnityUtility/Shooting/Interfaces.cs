@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
 namespace UnityUtility.Shooting
 {
     public interface ITimeProvider
@@ -18,12 +18,14 @@ namespace UnityUtility.Shooting
         Vector2 GetGravity();
     }
 
+#if INCLUDE_PHYSICS
     public interface IEventListener
     {
         void OnHit(in RaycastHit hitInfo);
         void OnTimeOut();
         void OnReflect(in RaycastHit hitInfo);
     }
+#endif
 
 #if INCLUDE_PHYSICS_2D
     public interface IEventListener2D

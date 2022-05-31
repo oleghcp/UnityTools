@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
 namespace UnityUtility.Shooting
 {
     [Serializable]
@@ -49,6 +49,7 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
+#if INCLUDE_PHYSICS
         internal (Vector3 newDest, Vector3 newDir) Reflect(in RaycastHit hitInfo, in Vector3 dest, in Vector3 direction, float castRadius)
         {
             Vector3 newDirection = Vector3.Reflect(direction, hitInfo.normal);
@@ -57,6 +58,7 @@ namespace UnityUtility.Shooting
 
             return (hitPosition + newDirection * distanceAfterHit, newDirection);
         }
+#endif
 
         internal Vector2 GetNextPos(in Vector2 curPos, ref Vector2 velocity, in Vector2 gravity, float deltaTime, float speedScale)
         {

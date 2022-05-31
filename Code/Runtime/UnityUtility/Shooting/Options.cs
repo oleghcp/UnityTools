@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 namespace UnityUtility.Shooting
 {
     [Serializable]
@@ -23,3 +24,4 @@ namespace UnityUtility.Shooting
         public bool HighPrecision;
     }
 }
+#endif

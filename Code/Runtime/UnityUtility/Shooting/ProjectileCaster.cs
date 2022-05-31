@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
 namespace UnityUtility.Shooting
 {
     [Serializable]
@@ -35,6 +35,7 @@ namespace UnityUtility.Shooting
             set => _reflectedCastNear = value.Clamp01();
         }
 
+#if INCLUDE_PHYSICS
         internal bool Cast(in Vector3 source, in Vector3 direction, float distance, out RaycastHit hitInfo)
         {
             if (_castRadius.CastRadius > float.Epsilon)
@@ -49,6 +50,7 @@ namespace UnityUtility.Shooting
 
             return Physics.Raycast(source, direction, out hitInfo, distance, HitMask);
         }
+#endif
 
 #if INCLUDE_PHYSICS_2D
         internal bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
 namespace UnityUtility.Shooting
 {
     [Serializable]
