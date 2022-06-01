@@ -286,12 +286,15 @@ namespace UnityEngine
         /// <summary>
         /// Finds an ancestor in the transform's hierarchy satisfying the specified condition.
         /// </summary>
-        public static Transform GetParent(this Transform self, Func<Transform, bool> condition)
+        public static Transform GetParent(this Transform self, Predicate<Transform> condition)
         {
-            Transform parent = self;
+            Transform parent = self.parent;
 
-            while (parent != null && !condition(parent))
+            while (parent != null)
             {
+                if (condition(parent))
+                    return parent;
+
                 parent = parent.parent;
             }
 
@@ -307,6 +310,18 @@ namespace UnityEngine
             {
                 yield return p;
             }
+        }
+
+        public static Transform GetRootTransform(this Transform self)
+        {
+            Transform root = self;
+
+            for (Transform p = self.parent; p != null; p = p.parent)
+            {
+                root = p;
+            }
+
+            return root;
         }
 
         /// <summary>

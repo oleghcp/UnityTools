@@ -24,5 +24,27 @@ namespace UnityUtility
             GameObject go = new GameObject(gameObjectName);
             return go.AddComponent(typeof(T)) as T;
         }
+
+        /// <summary>
+        /// Creates and returns an instance of GameObject with Component of T type.
+        /// </summary>
+        /// <typeparam name="T">Type of component.</typeparam>
+        public static T CreateInstance<T>(Transform parent) where T : Component
+        {
+            T component = CreateInstance<T>();
+            component.transform.SetParent(parent);
+            return component;
+        }
+
+        /// <summary>
+        /// Creates and returns an instance of GameObject with Component of T type.
+        /// </summary>
+        /// <typeparam name="T">Type of component.</typeparam>
+        public static T CreateInstance<T>(string gameObjectName, Transform parent) where T : Component
+        {
+            T component = CreateInstance<T>(gameObjectName);
+            component.transform.SetParent(parent);
+            return component;
+        }
     }
 }
