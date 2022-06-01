@@ -90,7 +90,7 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Creates a rotation with the specified forward and upwards directions.
+        /// Creates a rotation with the specified forward direction and angle around it.
         /// </summary>
         /// <param name="forward">The direction to look in.</param>
         /// <param name="angle">The angle in degrees around forward vector.</param>

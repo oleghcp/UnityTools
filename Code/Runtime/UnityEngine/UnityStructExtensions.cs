@@ -301,6 +301,24 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Creates a rotation with the specified forward and upwards directions.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion ToLookRotation(this in Vector3 value, Vector3 upwards)
+        {
+            return Quaternion.LookRotation(value, upwards);
+        }
+
+        /// <summary>
+        /// Creates a rotation with the specified forward direction and angle around it.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion ToLookRotation(this in Vector3 value, float angle)
+        {
+            return MathUtility.LookRotation(value, angle);
+        }
+
+        /// <summary>
         /// Returns the diagonal length of the rect.
         /// </summary>
         public static float GetDiagonal(this in Rect value)
