@@ -1,11 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
 
-#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 namespace UnityEngine
 {
-    public static class PhysicsObjectsExtensions
+#if !UNITY_2019_1_OR_NEWER || INCLUDE_PHYSICS
+    public static partial class PhysicsObjectsExtensions
     {
-#if INCLUDE_PHYSICS
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
@@ -50,9 +49,12 @@ namespace UnityEngine
         {
             return self.collider.gameObject.layer;
         }
+    }
 #endif
 
-#if INCLUDE_PHYSICS_2D
+#if !UNITY_2019_1_OR_NEWER || INCLUDE_PHYSICS_2D
+    public static partial class PhysicsObjectsExtensions
+    {
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
@@ -88,7 +90,6 @@ namespace UnityEngine
         {
             return self.collider.gameObject.layer;
         }
-#endif
     }
-}
 #endif
+}
