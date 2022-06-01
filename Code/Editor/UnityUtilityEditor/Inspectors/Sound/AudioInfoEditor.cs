@@ -1,4 +1,4 @@
-﻿#if INCLUDE_AUDIO
+﻿#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 using System;
 using UnityEditor;
 using UnityEngine;
