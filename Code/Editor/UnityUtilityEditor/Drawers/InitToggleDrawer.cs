@@ -19,7 +19,7 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-            bool inited = !property.managedReferenceFullTypename.IsNullOrEmpty();
+            bool inited = property.HasManagedReferenceValue();
             int level = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
             bool switched = EditorGUI.Toggle(position, inited);

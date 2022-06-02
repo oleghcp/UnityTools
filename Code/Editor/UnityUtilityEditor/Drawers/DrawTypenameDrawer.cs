@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Drawers
         protected override void DrawContent(in Rect position, SerializedProperty property)
         {
             string assignedTypeName = property.managedReferenceFullTypename;
-            bool nullRef = assignedTypeName.IsNullOrEmpty();
+            bool nullRef = !property.HasManagedReferenceValue();
             string label = nullRef ? "Null" : ButtonLabel();
 
             GUI.color = nullRef ? Colours.Orange : Colours.Lime;

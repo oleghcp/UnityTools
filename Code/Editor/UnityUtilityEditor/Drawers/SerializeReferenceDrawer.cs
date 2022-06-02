@@ -40,7 +40,7 @@ namespace UnityUtilityEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.managedReferenceFullTypename.IsNullOrEmpty() || !property.isExpanded)
+            if (!property.HasManagedReferenceValue() || !property.isExpanded)
                 return EditorGUIUtility.singleLineHeight;
 
             return EditorGUI.GetPropertyHeight(property, label, true);
