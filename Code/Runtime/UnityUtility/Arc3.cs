@@ -84,7 +84,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Vector3 AngleToDir(float hor, float vert)
         {
-            return Vector3.right.GetRotated(0f, hor, vert);
+            return Quaternion.Euler(0f, hor, vert) * Vector3.right;
         }
 
         private static void DirToAngle(Vector3 dir, out float hor, out float vert)

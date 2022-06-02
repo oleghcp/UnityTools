@@ -205,25 +205,6 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Returns vector3 rotated in space.
-        /// </summary>
-        /// <param name="euler">Euler engles for rotation in degrees.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetRotated(this in Vector3 value, in Vector3 euler)
-        {
-            return Quaternion.Euler(euler) * value;
-        }
-
-        /// <summary>
-        /// Returns vector3 rotated in space.
-        /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetRotated(this in Vector3 value, float xAngle, float yAngle, float zAngle)
-        {
-            return Quaternion.Euler(xAngle, yAngle, zAngle) * value;
-        }
-
-        /// <summary>
         /// Returns vector3 rotated around specified axis.
         /// </summary>
         /// <param name="angle">Rotation angle in degrees.</param>
