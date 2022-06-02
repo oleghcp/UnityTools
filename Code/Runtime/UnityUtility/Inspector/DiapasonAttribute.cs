@@ -7,12 +7,18 @@ namespace UnityUtility.Inspector
     public sealed class DiapasonAttribute : PropertyAttribute
     {
         internal float MinValue { get; }
+        internal float MaxValue { get; }
 
-        public DiapasonAttribute() { }
+        public DiapasonAttribute()
+        {
+            MinValue = float.NegativeInfinity;
+            MaxValue = float.PositiveInfinity;
+        }
 
-        public DiapasonAttribute(float minValue)
+        public DiapasonAttribute(float minValue, float maxValue)
         {
             MinValue = minValue;
+            MaxValue = maxValue;
         }
     }
 }

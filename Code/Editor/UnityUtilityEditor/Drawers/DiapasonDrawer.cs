@@ -14,34 +14,29 @@ namespace UnityUtilityEditor.Drawers
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            position = EditorGUI.PrefixLabel(position, label);
+
+            if (attribute.MinValue > attribute.MaxValue)
+            {
+                EditorGUI.LabelField(position, "Max value cannot be less than min value.");
+                return;
+            }
+
             Type type = EditorUtilityExt.GetFieldType(this);
 
             SerializedProperty min = property.FindPropertyRelative("x");
             SerializedProperty max = property.FindPropertyRelative("y");
 
-            if (type.Is(typeof(Vector2)))
+            if (!type.Is(typeof(Vector2)))
             {
-                var array = new[] { min.floatValue, max.floatValue };
-                position = EditorGUI.PrefixLabel(position, label);
-                EditorGUI.MultiFloatField(position, _floatSubLabels, array);
-                min.floatValue = array[0].CutBefore(attribute.MinValue);
-                max.floatValue = array[1].CutBefore(array[0]);
+                EditorGUI.LabelField(position, $"Use for {nameof(Vector2)}.");
                 return;
             }
 
-            if (type.Is(typeof(Vector2Int)))
-            {
-                var array = new[] { min.intValue, max.intValue };
-                position = EditorGUI.PrefixLabel(position, label);
-                EditorGUI.MultiIntField(position, _intSubLabels, array);
-                min.intValue = array[0].CutBefore((int)attribute.MinValue);
-                max.intValue = array[1].CutBefore(array[0] + 1);
-                return;
-            }
-
-            Rect rect = EditorGUI.PrefixLabel(position, label);
-            EditorGUI.LabelField(rect, $"Use for {nameof(Vector2)} or {nameof(Vector2Int)}.");
-            return;
+            float[] array = new[] { min.floatValue, max.floatValue };
+            EditorGUI.MultiFloatField(position, _floatSubLabels, array);
+            min.floatValue = array[0].Clamp(attribute.MinValue, attribute.MaxValue);
+            max.floatValue = array[1].Clamp(array[0], attribute.MaxValue);
         }
     }
 }

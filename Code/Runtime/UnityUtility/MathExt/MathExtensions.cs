@@ -276,6 +276,15 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Clamps the value between a minimum float and maximum float value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Clamp(this float value, in (float min, float max) range)
+        {
+            return Mathf.Clamp(value, range.min, range.max);
+        }
+
+        /// <summary>
         /// Clamps the value between the specified minimum float value and float.PositiveInfinity.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
