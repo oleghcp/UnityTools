@@ -1,6 +1,4 @@
-﻿#if UNITY_2021_2_OR_NEWER
-using System.Runtime.CompilerServices;
-#endif
+﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 using static System.MathF;
@@ -144,6 +142,15 @@ namespace UnityUtility
 
             return value;
 #endif
+        }
+
+        /// <summary>
+        /// 1f - MathF.Exp(-value)
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float InvExp(float value)
+        {
+            return 1f - Exp(-value);
         }
     }
 }
