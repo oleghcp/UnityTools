@@ -1,4 +1,4 @@
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
+﻿#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 using System.Collections.Generic;
 using UnityUtility.MathExt;
 using UnityUtility.Pool;

@@ -1,4 +1,4 @@
-namespace UnityUtility.Pool
+﻿namespace UnityUtility.Pool
 {
     public interface IPoolStorage<T> where T : class, IPoolable
     {

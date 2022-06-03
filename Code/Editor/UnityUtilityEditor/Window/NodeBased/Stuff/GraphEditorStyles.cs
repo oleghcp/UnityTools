@@ -1,4 +1,4 @@
-#if UNITY_2019_3_OR_NEWER
+﻿#if UNITY_2019_3_OR_NEWER
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;

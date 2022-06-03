@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using UnityEditor.Callbacks;
 using UnityEngine;
 #if UNITY_2019_3_OR_NEWER

@@ -1,4 +1,4 @@
-#pragma warning disable CS0649
+﻿#pragma warning disable CS0649
 using UnityEngine;
 
 namespace UnityUtility

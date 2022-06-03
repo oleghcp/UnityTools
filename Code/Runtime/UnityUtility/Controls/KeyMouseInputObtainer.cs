@@ -1,4 +1,4 @@
-#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
+﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
