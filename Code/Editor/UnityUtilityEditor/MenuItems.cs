@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Inspectors;
@@ -75,6 +76,23 @@ namespace UnityUtilityEditor
             MenuItemsUtility.RemoveEmptyFolders();
         }
 
+        [MenuItem(nameof(UnityUtility) + "/Files/Convert .cs Files to UTF8")]
+        private static void ConvertToUtf8()
+        {
+            foreach (var filePath in Directory.EnumerateFiles(Application.dataPath, "*.cs", SearchOption.AllDirectories))
+            {
+                string text = File.ReadAllText(filePath);
+                File.WriteAllText(filePath, text, Encoding.UTF8);
+            }
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem(nameof(UnityUtility) + "/Files/Find Huge Files")]
+        private static void FindHugeFiles()
+        {
+            SearchHugeFilesWindow.Create();
+        }
+
         [MenuItem(nameof(UnityUtility) + "/Switch Transform Editor")]
         private static void SwitchTransformEditor()
         {
@@ -88,12 +106,6 @@ namespace UnityUtilityEditor
             GamepadAxesWindow.Create();
         }
 #endif
-
-        [MenuItem(nameof(UnityUtility) + "/Find Huge Files")]
-        private static void FindHugeFiles()
-        {
-            SearchHugeFilesWindow.Create();
-        }
 
         // ------------- //
 
