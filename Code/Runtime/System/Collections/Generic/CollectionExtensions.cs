@@ -137,7 +137,7 @@ namespace System.Collections.Generic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector)
         {
-            return CollectionUtility.Min(self, selector, out _);
+            return CollectionUtility.Min(self, selector, out _, out _);
         }
 
         /// <summary>
@@ -146,7 +146,25 @@ namespace System.Collections.Generic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector)
         {
-            return CollectionUtility.Max(self, selector, out _);
+            return CollectionUtility.Max(self, selector, out _, out _);
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the minimum parameter value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector, out TKey min)
+        {
+            return CollectionUtility.Min(self, selector, out _, out min);
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the maximum parameter value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector, out TKey max)
+        {
+            return CollectionUtility.Max(self, selector, out _, out max);
         }
 
         /// <summary>
@@ -154,7 +172,7 @@ namespace System.Collections.Generic
         /// </summary>
         public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector)
         {
-            CollectionUtility.Min(self, selector, out TSource res);
+            CollectionUtility.Min(self, selector, out TSource res, out _);
             return res;
         }
 
@@ -163,7 +181,25 @@ namespace System.Collections.Generic
         /// </summary>
         public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector)
         {
-            CollectionUtility.Max(self, selector, out TSource res);
+            CollectionUtility.Max(self, selector, out TSource res, out _);
+            return res;
+        }
+
+        /// <summary>
+        /// Returns an element with the minimum parameter value.
+        /// </summary>
+        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector, out TKey min)
+        {
+            CollectionUtility.Min(self, selector, out TSource res, out min);
+            return res;
+        }
+
+        /// <summary>
+        /// Returns an element with the maximum parameter value.
+        /// </summary>
+        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector, out TKey max)
+        {
+            CollectionUtility.Max(self, selector, out TSource res, out max);
             return res;
         }
 

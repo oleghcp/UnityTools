@@ -1,83 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using UnityUtility;
 
 namespace System.Collections.Generic
 {
-    public static class CollectionUtility
+    internal static class CollectionUtility
     {
-        public static T[] GetSubArray<T>(IReadOnlyList<T> self, int startIndex, int length)
-        {
-            T[] subArray = new T[length];
-            for (int i = 0; i < length; i++) { subArray[i] = self[i + startIndex]; }
-            return subArray;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] GetSubArray<T>(IReadOnlyList<T> self, int startIndex)
-        {
-            return GetSubArray(self, startIndex, self.Count - startIndex);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int IndexOf<T>(ReadOnlyCollection<T> collection, T item)
-        {
-            return collection.IndexOf(item);
-        }
-
-        public static int IndexOf<T>(IReadOnlyList<T> collection, T item)
-        {
-            EqualityComparer<T> comparer = EqualityComparer<T>.Default;
-
-            for (int i = 0; i < collection.Count; i++)
-            {
-                if (comparer.Equals(collection[i], item))
-                    return i;
-            }
-
-            return -1;
-        }
-
-        public static int IndexOf<T>(IReadOnlyList<T> collection, Predicate<T> condition)
-        {
-            for (int i = 0; i < collection.Count; i++)
-            {
-                if (condition(collection[i]))
-                    return i;
-            }
-
-            return -1;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int IndexOfMin<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector)
-        {
-            return Min(collection, selector, out _);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int IndexOfMax<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> selector)
-        {
-            return Max(collection, selector, out _);
-        }
-
-        public static T GetRandomItem<T>(IReadOnlyList<T> collection, IRng generator)
-        {
-            int index = generator.Next(collection.Count);
-            return collection[index];
-        }
-
-        public static T GetRandomItem<T>(IReadOnlyList<T> collection)
-        {
-            int index = UnityEngine.Random.Range(0, collection.Count);
-            return collection[index];
-        }
-
-        ///////////////
-        // Internals //
-        ///////////////
-
-        internal static void Shuffle<T>(IList<T> collection, IRng generator)
+        public static void Shuffle<T>(IList<T> collection, IRng generator)
         {
             int last = collection.Count;
 
@@ -88,7 +16,7 @@ namespace System.Collections.Generic
             }
         }
 
-        internal static void Shuffle<T>(IList<T> collection)
+        public static void Shuffle<T>(IList<T> collection)
         {
             int last = collection.Count;
 
@@ -99,37 +27,37 @@ namespace System.Collections.Generic
             }
         }
 
-        internal static T GetRandomItem<T>(IList<T> collection, IRng generator)
+        public static T GetRandomItem<T>(IList<T> collection, IRng generator)
         {
             int index = generator.Next(collection.Count);
             return collection[index];
         }
 
-        internal static T GetRandomItem<T>(IList<T> collection)
+        public static T GetRandomItem<T>(IList<T> collection)
         {
             int index = UnityEngine.Random.Range(0, collection.Count);
             return collection[index];
         }
 
-        internal static T PullOutRandomItem<T>(IList<T> collection, IRng generator)
+        public static T PullOutRandomItem<T>(IList<T> collection, IRng generator)
         {
             int index = generator.Next(collection.Count);
             return collection.PullOut(index);
         }
 
-        internal static T PullOutRandomItem<T>(IList<T> collection)
+        public static T PullOutRandomItem<T>(IList<T> collection)
         {
             int index = UnityEngine.Random.Range(0, collection.Count);
             return collection.PullOut(index);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void QuickSort<T>(IList<T> collection, int left, int right, IComparer<T> comparer)
+        public static void QuickSort<T>(IList<T> collection, int left, int right, IComparer<T> comparer)
         {
             QuickSort(collection, left, right, comparer.Compare);
         }
 
-        internal static void QuickSort<T>(IList<T> collection, int left, int right, Comparison<T> comparison)
+        public static void QuickSort<T>(IList<T> collection, int left, int right, Comparison<T> comparison)
         {
             int i = left, j = right;
             T pivot = collection[(left + right) / 2];
@@ -150,7 +78,7 @@ namespace System.Collections.Generic
                 QuickSort(collection, i, right, comparison);
         }
 
-        internal static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
+        public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
         {
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));
@@ -161,7 +89,7 @@ namespace System.Collections.Generic
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
             int index = -1;
-            TKey minKey = default;
+            minKey = default;
             result = default;
 
             bool nonFirstIteration = false;
@@ -194,7 +122,7 @@ namespace System.Collections.Generic
             return index;
         }
 
-        internal static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result)
+        public static int Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey maxKey)
         {
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));
@@ -205,7 +133,7 @@ namespace System.Collections.Generic
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
             int index = -1;
-            TKey maxKey = default;
+            maxKey = default;
             result = default;
 
             bool nonFirstIteration = false;
