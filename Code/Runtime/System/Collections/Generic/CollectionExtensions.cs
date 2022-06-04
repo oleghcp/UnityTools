@@ -719,11 +719,6 @@ namespace System.Collections.Generic
             return value;
         }
 
-        public static (TKey key, TValue value) ToTuple<TKey, TValue>(in this KeyValuePair<TKey, TValue> self)
-        {
-            return (self.Key, self.Value);
-        }
-
 #if !UNITY_2021_2_OR_NEWER
         public static bool TryPeek<T>(this Stack<T> self, out T item)
         {
