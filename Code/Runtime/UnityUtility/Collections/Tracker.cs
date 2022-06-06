@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityUtilityTools;
-using static UnityUtility.Collections.TrackerNodes;
 
 namespace UnityUtility.Collections
 {
@@ -22,6 +21,14 @@ namespace UnityUtility.Collections
             for (int i = 0; i < _nodes.Count; i++)
             {
                 _nodes[i].Force();
+            }
+        }
+
+        public void Cache()
+        {
+            for (int i = 0; i < _nodes.Count; i++)
+            {
+                _nodes[i].Cache();
             }
         }
 
