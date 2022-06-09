@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.CodeGenerating
         {
             string dirPath = Path.Combine(rootFolder, $"{nameSpace.Replace('.', '/')}");
             Directory.CreateDirectory(dirPath);
-            File.WriteAllText(dirPath + $"/{className}.cs", text);
+            File.WriteAllText(dirPath + $"/{className}.cs", text, Encoding.UTF8);
             if (refreshAssets)
                 AssetDatabase.Refresh();
         }
