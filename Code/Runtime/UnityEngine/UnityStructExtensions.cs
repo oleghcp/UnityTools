@@ -427,5 +427,51 @@ namespace UnityEngine
         {
             return new Color(color.r, color.g, color.b, a);
         }
+
+        // -- //
+
+#if UNITY_2018_3_OR_NEWER
+        public static void Deconstruct(this in Vector2 vector, out float x, out float y)
+        {
+            x = vector.x;
+            y = vector.y;
+        }
+
+        public static void Deconstruct(this in Vector3 vector, out float x, out float y, out float z)
+        {
+            x = vector.x;
+            y = vector.y;
+            z = vector.z;
+        }
+
+        public static void Deconstruct(this in Vector2Int vector, out int x, out int y)
+        {
+            x = vector.x;
+            y = vector.y;
+        }
+
+        public static void Deconstruct(this in Vector3Int vector, out int x, out int y, out int z)
+        {
+            x = vector.x;
+            y = vector.y;
+            z = vector.z;
+        }
+
+        public static void Deconstruct(this in Color color, out float r, out float g, out float b, out float a)
+        {
+            r = color.r;
+            g = color.g;
+            b = color.b;
+            a = color.a;
+        }
+
+        public static void Deconstruct(this in Color32 color, out byte r, out byte g, out byte b, out byte a)
+        {
+            r = color.r;
+            g = color.g;
+            b = color.b;
+            a = color.a;
+        }
+#endif
     }
 }

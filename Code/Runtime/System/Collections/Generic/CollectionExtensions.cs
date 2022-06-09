@@ -720,6 +720,14 @@ namespace System.Collections.Generic
         }
 
 #if !UNITY_2021_2_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
+        public static void Deconstruct<TKey, TValue>(this in KeyValuePair<TKey, TValue> self, out TKey key, out TValue value)
+        {
+            key = self.Key;
+            value = self.Value;
+        }
+#endif
+
         public static bool TryPeek<T>(this Stack<T> self, out T item)
         {
             if (self.Count > 0)
