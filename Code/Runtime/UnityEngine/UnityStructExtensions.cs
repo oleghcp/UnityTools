@@ -276,7 +276,7 @@ namespace UnityEngine
         /// Returns a rotation that rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion ToRotation(this in Vector3 value)
+        public static Quaternion ToEuler(this in Vector3 value)
         {
             return Quaternion.Euler(value);
         }
@@ -294,7 +294,7 @@ namespace UnityEngine
         /// Creates a rotation with the specified forward direction and angle around it.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion ToLookRotation(this in Vector3 value, float angle)
+        public static Quaternion ToLookRotation(this in Vector3 value, float angle = 0f)
         {
             return MathUtility.LookRotation(value, angle);
         }

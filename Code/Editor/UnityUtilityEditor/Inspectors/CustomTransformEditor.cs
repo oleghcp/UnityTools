@@ -82,7 +82,7 @@ namespace UnityUtilityEditor.Inspectors
                 serializedObject.Update();
 
                 _posProp.vector3Value = DrawLineForLocal("Pos", _posProp.vector3Value);
-                _rotProp.quaternionValue = DrawLineForLocal("Rot", _rotProp.quaternionValue.eulerAngles).ToRotation();
+                _rotProp.quaternionValue = DrawLineForLocal("Rot", _rotProp.quaternionValue.eulerAngles).ToEuler();
                 _sclProp.vector3Value = DrawLineForLocal("Scl", _sclProp.vector3Value, Vector3.one);
 
                 serializedObject.ApplyModifiedProperties();
