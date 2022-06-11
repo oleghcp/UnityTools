@@ -31,7 +31,7 @@ namespace UnityUtility.Shooting
 
         private ITimeProvider _timeProvider;
         private IGravityProvider2D _gravityProvider;
-        private IEventListener2D _listener;
+        private IProjectile2DEventListener _listener;
 
         private bool _canMove;
         private int _ricochetsLeft;
@@ -69,7 +69,7 @@ namespace UnityUtility.Shooting
         public ProjectileEvents2D Events { get => _events; set => _events = value; }
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider2D GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
-        public IEventListener2D Listener { get => _listener; set => _listener = value; }
+        public IProjectile2DEventListener Listener { get => _listener; set => _listener = value; }
 
         private void Start()
         {

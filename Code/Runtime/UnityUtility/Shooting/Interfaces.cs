@@ -19,7 +19,7 @@ namespace UnityUtility.Shooting
     }
 
 #if INCLUDE_PHYSICS
-    public interface IEventListener
+    public interface IProjectileEventListener
     {
         void OnHit(in RaycastHit hitInfo);
         void OnTimeOut();
@@ -28,7 +28,7 @@ namespace UnityUtility.Shooting
 #endif
 
 #if INCLUDE_PHYSICS_2D
-    public interface IEventListener2D
+    public interface IProjectile2DEventListener
     {
         void OnHit(in RaycastHit2D hitInfo);
         void OnTimeOut();

@@ -28,7 +28,7 @@ namespace UnityUtility.Shooting
 
         private ITimeProvider _timeProvider;
         private IGravityProvider _gravityProvider;
-        private IEventListener _listener;
+        private IProjectileEventListener _listener;
 
         private bool _canMove;
         private int _ricochetsLeft;
@@ -66,7 +66,7 @@ namespace UnityUtility.Shooting
         public ProjectileEvents Events => _events;
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
-        public IEventListener Listener { get => _listener; set => _listener = value; }
+        public IProjectileEventListener Listener { get => _listener; set => _listener = value; }
 
         private void Start()
         {
