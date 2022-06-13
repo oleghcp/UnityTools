@@ -294,9 +294,9 @@ namespace UnityEngine
         /// Creates a rotation with the specified forward direction and angle around it.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion ToLookRotation(this in Vector3 value, float angle = 0f)
+        public static Quaternion ToLookRotation(this in Vector3 value)
         {
-            return MathUtility.LookRotation(value, angle);
+            return Quaternion.LookRotation(value);
         }
 
         /// <summary>

@@ -87,19 +87,6 @@ namespace UnityUtility
             return new Vector2(Cos(angle), Sin(angle));
         }
 
-        /// <summary>
-        /// Creates a rotation with the specified forward direction and angle around it.
-        /// </summary>
-        /// <param name="forward">The direction to look in.</param>
-        /// <param name="angle">The angle in degrees around forward vector.</param>
-        /// <returns></returns>
-        public static Quaternion LookRotation(Vector3 forward, float angle)
-        {
-            float halfAngle = angle.ToRadians() * 0.5f;
-            Vector3 xyz = forward.normalized * Sin(halfAngle);
-            return new Quaternion(xyz.x, xyz.y, xyz.z, Cos(halfAngle));
-        }
-
         public static (float ch1, float ch2) LerpColorChannels(float ratio)
         {
             ratio = 1f - ratio.Clamp01();

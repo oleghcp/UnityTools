@@ -361,7 +361,18 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion GetRandomRotation(this IRng self)
         {
-            return MathUtility.LookRotation(self.GetOnUnitSphere(), self.Next(360f));
+            Vector3 up = self.GetOnUnitCircle();
+            Vector3 forward = self.GetOnUnitSphere();
+
+            Vector3 axis = Vector3.Cross(Vector3.forward, forward).normalized;
+
+            if (axis.magnitude > Vector3.kEpsilon)
+            {
+                float angle = Vector3.Angle(Vector3.forward, forward);
+                up = up.GetRotated(axis, angle);
+            }
+
+            return Quaternion.LookRotation(forward, up);
         }
 
         /// <summary>
