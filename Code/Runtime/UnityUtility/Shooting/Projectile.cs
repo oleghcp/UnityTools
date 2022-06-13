@@ -11,6 +11,8 @@ namespace UnityUtility.Shooting
     {
         [SerializeField]
         private bool _playOnAwake;
+        [SerializeField]
+        private bool _moveInFirstFrame;
         [SerializeField, Min(0f)]
         private float _lifeTime = float.PositiveInfinity;
         [SerializeField]
@@ -126,17 +128,20 @@ namespace UnityUtility.Shooting
             _canMove = true;
             _ricochetsLeft = _moving.Ricochets;
             _velocity = transform.forward * _moving.StartSpeed;
+            _prevPos = transform.position;
 
-            Vector3 newPos = _moving.GetNextPos(_prevPos = transform.position, ref _velocity, GetGravity(), GetDeltaTime(), 0.5f);
-            UpdateState(_prevPos, newPos, out _prevPos, out newPos);
-            Quaternion newRot = Quaternion.LookRotation(UpdateDirection());
-
-            transform.SetPositionAndRotation(newPos, newRot);
-
-            if (!_canMove)
+            if (_moveInFirstFrame)
             {
-                InvokeHit();
-                return;
+                Vector3 newPos = _moving.GetNextPos(_prevPos, ref _velocity, GetGravity(), GetDeltaTime(), 0.5f);
+                UpdateState(_prevPos, newPos, out _prevPos, out newPos);
+                Quaternion newRot = Quaternion.LookRotation(UpdateDirection());
+                transform.SetPositionAndRotation(newPos, newRot);
+
+                if (!_canMove)
+                {
+                    InvokeHit();
+                    return;
+                }
             }
 
             if (_lifeTime < float.PositiveInfinity)
