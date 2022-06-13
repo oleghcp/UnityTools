@@ -24,6 +24,7 @@ namespace UnityUtilityEditor.Drawers
             EditorGUI.indentLevel = 0;
             bool switched = EditorGUI.Toggle(position, inited);
             EditorGUI.indentLevel = level;
+
             if (switched != inited)
             {
                 property.serializedObject.Update();

@@ -47,11 +47,11 @@ namespace UnityUtility.NodeBased
 
         internal static NodeType GetNodeType(Type type)
         {
-            if (type.Is(typeof(ExitNode)))
+            if (type == typeof(ExitNode))
                 return NodeType.Exit;
-            else if (type.Is(typeof(HubNode)))
+            else if (type == typeof(HubNode))
                 return NodeType.Hub;
-            else if (type.Is(typeof(CommonNode)))
+            else if (type == typeof(CommonNode))
                 return NodeType.Common;
             else
                 return NodeType.Real;

@@ -21,7 +21,7 @@ namespace UnityUtilityEditor.Drawers
             SerializedProperty min = property.FindPropertyRelative("x");
             SerializedProperty max = property.FindPropertyRelative("y");
 
-            if (type.Is(typeof(Vector2)))
+            if (type == typeof(Vector2))
             {
                 if (attribute.MinValue > attribute.MaxValue)
                 {
@@ -36,7 +36,7 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-            if (type.Is(typeof(Vector2Int)))
+            if (type == typeof(Vector2Int))
             {
                 if (attribute.MinValue >= attribute.MaxValue)
                 {

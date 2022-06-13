@@ -112,13 +112,12 @@ namespace System
             return Helper.GetDefaultValue(self);
         }
 
-        /// <summary>
-        /// Returns true if type is the specified type or subclass of the specified type.
-        /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Is(this Type self, Type familyType)
+        public static bool IsAssignableTo(this Type self, Type targetType)
         {
-            return self == familyType || self.IsSubclassOf(familyType);
+            if (targetType == null)
+                return false;
+
+            return targetType.IsAssignableFrom(self);
         }
 
         public static T GetTarget<T>(this WeakReference<T> self) where T : class
