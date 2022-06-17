@@ -14,6 +14,8 @@ namespace UnityUtility.Shooting
         private float _startSpeed;
         [field: SerializeField]
         public bool UseGravity { get; set; }
+        [SerializeField, Range(0f, 1f)]
+        private float _moveInInitialFrame;
         [SerializeField]
         private RicochetOptions _ricochets;
 
@@ -33,6 +35,12 @@ namespace UnityUtility.Shooting
         {
             get => _ricochets.SpeedRemainder;
             set => _ricochets.SpeedRemainder = value.Clamp01();
+        }
+
+        public float MoveInInitialFrame
+        {
+            get => _moveInInitialFrame;
+            set => _moveInInitialFrame = value.Clamp01();
         }
 
         public LayerMask RicochetMask

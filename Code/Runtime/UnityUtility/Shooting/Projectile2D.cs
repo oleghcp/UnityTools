@@ -12,10 +12,8 @@ namespace UnityUtility.Shooting
     {
         [SerializeField]
         private bool _playOnAwake;
-        [SerializeField]
-        private bool _moveInFirstFrame;
         [SerializeField, Min(0f)]
-        private float _lifeTime = float.PositiveInfinity;
+        private float _timer = float.PositiveInfinity;
         [SerializeField]
         private bool _autodestruct;
         [SerializeField]
@@ -24,10 +22,6 @@ namespace UnityUtility.Shooting
         private ProjectileMover _moving;
         [SerializeField]
         private ProjectileCaster _casting;
-#if UNITY_EDITOR
-        [SerializeReference, InitToggle]
-        private Debugger _debugging;
-#endif
         [SerializeReference, InitToggle]
         private ProjectileEvents2D _events;
 
@@ -98,10 +92,6 @@ namespace UnityUtility.Shooting
 
             if (!_canMove)
                 InvokeHit();
-
-#if UNITY_EDITOR
-            _debugging?.Draw(_prevPos.To_XYz(transform.position.z), transform.position);
-#endif
         }
 
 #if UNITY_EDITOR
@@ -129,12 +119,12 @@ namespace UnityUtility.Shooting
 
             _canMove = true;
             _ricochetsLeft = _moving.Ricochets;
-            _velocity = transform.right * _moving.StartSpeed;
             _prevPos = transform.position;
+            _velocity = transform.right * _moving.StartSpeed;
 
-            if (_moveInFirstFrame)
+            if (_moving.MoveInInitialFrame > 0f)
             {
-                Vector2 newPos = _moving.GetNextPos(_prevPos, ref _velocity, GetGravity(), GetDeltaTime(), 0.5f);
+                Vector2 newPos = _moving.GetNextPos(_prevPos, ref _velocity, GetGravity(), GetDeltaTime(), _moving.MoveInInitialFrame);
                 UpdateState(_prevPos, newPos, out _prevPos, out newPos);
                 transform.SetPositionAndRotation(newPos.To_XYz(transform.position.z), GetRotation());
 
@@ -145,12 +135,12 @@ namespace UnityUtility.Shooting
                 }
             }
 
-            if (_lifeTime < float.PositiveInfinity)
+            if (_timer < float.PositiveInfinity)
                 StartCoroutine(waitLifeTimeRoutine());
 
             IEnumerator waitLifeTimeRoutine()
             {
-                float time = _lifeTime;
+                float time = _timer;
 
                 while (time > 0f)
                 {
