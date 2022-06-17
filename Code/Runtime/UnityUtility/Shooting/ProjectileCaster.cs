@@ -14,6 +14,8 @@ namespace UnityUtility.Shooting
         public LayerMask HitMask { get; set; }
         [SerializeField]
         private CastOptions _castRadius;
+        [SerializeField]
+        private float _initialPrecastOffset;
         [SerializeField, Range(0f, 1f)]
         private float _reflectedCastNear;
 
@@ -33,6 +35,12 @@ namespace UnityUtility.Shooting
         {
             get => _reflectedCastNear;
             set => _reflectedCastNear = value.Clamp01();
+        }
+
+        public float InitialPrecastOffset
+        {
+            get => _initialPrecastOffset;
+            set => _initialPrecastOffset = value.CutAfter(0f);
         }
 
 #if INCLUDE_PHYSICS

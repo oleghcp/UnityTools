@@ -75,23 +75,18 @@ namespace UnityUtility.Shooting
             if (!_canMove)
                 return;
 
-            Vector3 curPos = transform.position;
-            UpdateState(_prevPos, curPos, out _prevPos, out curPos);
-
-            if (_canMove)
-            {
-                Vector3 newPos = _moving.GetNextPos(curPos, ref _velocity, GetGravity(), GetDeltaTime(), 1f);
-                UpdateState(curPos, newPos, out _prevPos, out newPos);
-                curPos = newPos;
-            }
-
-            transform.SetPositionAndRotation(curPos, UpdateDirection().ToLookRotation());
+            UpdateState(transform.position);
 
             if (!_canMove)
                 InvokeHit();
         }
 
 #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            _casting.InitialPrecastOffset = _casting.InitialPrecastOffset;
+        }
+
         private void Reset()
         {
 #if INCLUDE_PHYSICS_2D
@@ -106,6 +101,7 @@ namespace UnityUtility.Shooting
             _moving.RicochetMask = LayerMask.GetMask("Default");
             _casting.HitMask = LayerMask.GetMask("Default");
             _casting.ReflectedCastNear = 0.1f;
+            _casting.InitialPrecastOffset = 0f;
         }
 #endif
 
@@ -116,14 +112,16 @@ namespace UnityUtility.Shooting
 
             _canMove = true;
             _ricochetsLeft = _moving.Ricochets;
-            _prevPos = transform.position;
-            _velocity = transform.forward * _moving.StartSpeed;
+
+            Vector3 currentPosition = transform.position;
+            Vector3 currentDirection = transform.forward;
+
+            _prevPos = currentPosition + currentDirection * _casting.InitialPrecastOffset;
+            _velocity = currentDirection * _moving.StartSpeed;
 
             if (_moving.MoveInInitialFrame > 0f)
             {
-                Vector3 newPos = _moving.GetNextPos(_prevPos, ref _velocity, GetGravity(), GetDeltaTime(), _moving.MoveInInitialFrame);
-                UpdateState(_prevPos, newPos, out _prevPos, out newPos);
-                transform.SetPositionAndRotation(newPos, UpdateDirection().ToLookRotation());
+                UpdateState(currentPosition, _moving.MoveInInitialFrame);
 
                 if (!_canMove)
                 {
@@ -133,9 +131,9 @@ namespace UnityUtility.Shooting
             }
 
             if (_timer < float.PositiveInfinity)
-                StartCoroutine(waitLifeTimeRoutine());
+                StartCoroutine(timerRoutine());
 
-            IEnumerator waitLifeTimeRoutine()
+            IEnumerator timerRoutine()
             {
                 float time = _timer;
 
@@ -163,7 +161,20 @@ namespace UnityUtility.Shooting
             _canMove = false;
         }
 
-        private void UpdateState(in Vector3 source, in Vector3 dest, out Vector3 newSource, out Vector3 newDest)
+        private void UpdateState(Vector3 currentPosition, float speedScale = 1f)
+        {
+            CheckMovement(_prevPos, currentPosition, out _prevPos, out currentPosition);
+
+            if (_canMove)
+            {
+                Vector3 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), GetDeltaTime(), speedScale);
+                CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
+            }
+
+            transform.SetPositionAndRotation(currentPosition, UpdateDirection().ToLookRotation());
+        }
+
+        private void CheckMovement(in Vector3 source, in Vector3 dest, out Vector3 newSource, out Vector3 newDest)
         {
             Vector3 vector = dest - source;
             float magnitude = vector.magnitude;
@@ -174,7 +185,7 @@ namespace UnityUtility.Shooting
 
                 if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    if (_ricochetsLeft != 0 && _moving.RicochetMask.HasLayer(_hitInfo.GetLayer()))
+                    if (_ricochetsLeft > 0 && _moving.RicochetMask.HasLayer(_hitInfo.GetLayer()))
                     {
                         _ricochetsLeft--;
 
@@ -188,7 +199,7 @@ namespace UnityUtility.Shooting
                         Vector3 from = near == 0f ? _hitInfo.point
                                                   : Vector3.LerpUnclamped(_hitInfo.point, reflectionInfo.newDest, near);
 
-                        UpdateState(from, reflectionInfo.newDest, out newSource, out newDest);
+                        CheckMovement(from, reflectionInfo.newDest, out newSource, out newDest);
                         return;
                     }
 
