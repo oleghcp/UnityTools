@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -38,15 +39,15 @@ namespace UnityUtilityEditor.Window
                 switch (_sizeToolbarIndex)
                 {
                     case 0:
-                        _fileSize = MathUtility.Clamp(EditorGUILayout.LongField(label, _fileSize), 0L, long.MaxValue);
+                        _fileSize = Clamp(EditorGUILayout.LongField(label, _fileSize), 0L, long.MaxValue);
                         break;
 
                     case 1:
-                        _fileSize = (long)MathUtility.Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d) * 1024d, 0d, double.MaxValue);
+                        _fileSize = (long)Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d) * 1024d, 0d, double.MaxValue);
                         break;
 
                     case 2:
-                        _fileSize = (long)MathUtility.Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d / 1024d) * 1024d * 1024d, 0d, double.MaxValue);
+                        _fileSize = (long)Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d / 1024d) * 1024d * 1024d, 0d, double.MaxValue);
                         break;
 
                     default:
@@ -103,6 +104,42 @@ namespace UnityUtilityEditor.Window
             List<(UnityObject, long)> foundObjects = new List<(UnityObject, long)>();
             IEnumerator<float> iterator = MenuItemsUtility.SearchFilesBySize(_fileSize, foundObjects);
             EditorUtilityExt.ExecuteWithProgressBarCancelable("Searching assets", "That could take a while...", iterator, () => succes(foundObjects));
+        }
+
+#if UNITY_2021_2_OR_NEWER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Clamp(long value, long min, long max)
+        {
+            return Math.Clamp(value, min, max);
+#else
+        public static long Clamp(long value, long min, long max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+#endif
+        }
+
+#if UNITY_2021_2_OR_NEWER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Clamp(double value, double min, double max)
+        {
+            return Math.Clamp(value, min, max);
+#else
+        public static double Clamp(double value, double min, double max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+#endif
         }
     }
 }
