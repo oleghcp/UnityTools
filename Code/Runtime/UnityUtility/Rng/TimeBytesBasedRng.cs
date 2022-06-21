@@ -70,6 +70,7 @@ namespace UnityUtility.Rng
             }
         }
 
+#if UNITY_2018_3_OR_NEWER 
         public void NextBytes(Span<byte> buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
@@ -77,6 +78,7 @@ namespace UnityUtility.Rng
                 buffer[i] = RandomByte();
             }
         }
+#endif
 
         private unsafe void NextBytes(byte* buffer, int length)
         {

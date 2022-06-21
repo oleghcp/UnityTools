@@ -11,6 +11,8 @@ namespace UnityUtility
         double NextDouble();
         byte NextByte();
         void NextBytes(byte[] buffer);
+#if UNITY_2018_3_OR_NEWER
         void NextBytes(Span<byte> buffer);
+#endif
     }
 }
