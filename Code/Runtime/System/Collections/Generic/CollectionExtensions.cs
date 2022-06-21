@@ -7,6 +7,12 @@ namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] ToArray<T>(this Array self)
+        {
+            return (T[])self;
+        }
+
         public static void DisplaceLeft<T>(this IList<T> self)
         {
             if (self.Count <= 1)
