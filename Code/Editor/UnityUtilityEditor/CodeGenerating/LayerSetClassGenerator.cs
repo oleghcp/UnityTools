@@ -42,6 +42,7 @@ namespace UnityUtilityEditor.CodeGenerating
             builder.AppendLine()
                    .Append("namespace ").AppendLine(config.Namespace)
                    .AppendLine("{")
+                   .AppendLine("#pragma warning disable IDE1006")
                    .Append(GeneratingTools.TAB).Append("public static class ").AppendLine(config.ClassName)
                    .Append(GeneratingTools.TAB).Append('{').AppendLine();
 
