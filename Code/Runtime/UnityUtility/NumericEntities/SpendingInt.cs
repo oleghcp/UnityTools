@@ -36,7 +36,7 @@ namespace UnityUtility.NumericEntities
 
         public int Shortage => (_capacity - _curValue).CutAfter(_capacity);
         public int ReducingExcess => _curValue.CutAfter(0).Abs();
-        public float Ratio => (float)CurValue / _capacity;
+        public float Ratio => Helper.GetRatio(CurValue, _capacity);
         public bool IsEmpty => _curValue <= 0;
         public bool IsFull => _curValue == _capacity;
 

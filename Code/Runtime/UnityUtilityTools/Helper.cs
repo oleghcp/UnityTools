@@ -6,6 +6,14 @@ namespace UnityUtilityTools
 {
     public static class Helper
     {
+        internal static float GetRatio(float numerator, float denominator)
+        {
+            if (denominator == 0f)
+                return 1f;
+
+            return numerator / denominator;
+        }
+
         public static void Swap<T>(ref T a, ref T b)
         {
             T temp = a;
