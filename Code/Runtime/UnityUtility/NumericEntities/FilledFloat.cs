@@ -60,6 +60,7 @@ namespace UnityUtility.NumericEntities
             if (delta < 0f)
                 throw Errors.NegativeParameter(nameof(delta));
 
+            _filler = _filler.CutAfter(_threshold);
             _filler -= delta.CutAfter(_filler);
         }
 
