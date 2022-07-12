@@ -14,8 +14,20 @@ namespace UnityUtility
     /// </summary>
     public static class RngExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Range(this IRng self, in (int minValue, int maxValue) range)
+        {
+            return self.Next(range.minValue, range.maxValue);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Range(this IRng self, in (float minValue, float maxValue) range)
+        {
+            return self.Next(range.minValue, range.maxValue);
+        }
+
         /// <summary>
-        /// Returns a random float number between -range [inclusive] and range [inclusive].
+        /// Returns a random float number between -<paramref name="range"/> [inclusive] and <paramref name="range"/> [inclusive].
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Range(this IRng self, float range)
