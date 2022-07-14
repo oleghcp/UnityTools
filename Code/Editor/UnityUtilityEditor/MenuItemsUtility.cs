@@ -61,6 +61,26 @@ namespace UnityUtilityEditor
 
         public static IEnumerator<float> SearchReferencesByText(string targetGuid, List<string> foundObjects)
         {
+            HashSet<string> extensions = new HashSet<string>()
+            {
+                AssetDatabaseExt.ASSET_EXTENSION,
+                ".prefab",
+                ".unity",
+                ".mat",
+                ".preset",
+                ".controller",
+                ".overrideController",
+                ".mask",
+                ".spriteatlas",
+                ".playable",
+                ".scenetemplate",
+                ".asmdef",
+                ".terrainlayer",
+                ".mixer",
+                ".shadervariants",
+                ".guiskin",
+            };
+
             float progress = 0f;
 
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
@@ -77,41 +97,19 @@ namespace UnityUtilityEditor
             {
                 string filePath = assets[i];
 
-                if (invalidExtension(Path.GetExtension(filePath)))
-                    continue;
-
-                string text = File.ReadAllText(filePath);
-
-                if (text.Contains(targetGuid))
+                if (extensions.Contains(Path.GetExtension(filePath)))
                 {
-                    string assetPath = filePath.Substring(projectFolderPath.Length + 1);
-                    string guid = AssetDatabase.AssetPathToGUID(assetPath);
-                    foundObjects.Add(guid);
+                    string text = File.ReadAllText(filePath);
+
+                    if (text.Contains(targetGuid))
+                    {
+                        string assetPath = filePath.Substring(projectFolderPath.Length + 1);
+                        string guid = AssetDatabase.AssetPathToGUID(assetPath);
+                        foundObjects.Add(guid);
+                    }
+
+                    yield return Mathf.Lerp(progress, 1f, (i + 1f) / assets.Count);
                 }
-
-                yield return Mathf.Lerp(progress, 1f, (i + 1f) / assets.Count);
-            }
-
-            bool invalidExtension(string extension)
-            {
-                return extension != AssetDatabaseExt.ASSET_EXTENSION &&
-                       extension != ".prefab" &&
-                       extension != ".unity" &&
-                       extension != ".mat" &&
-                       extension != ".preset" &&
-                       extension != ".anim" &&
-                       extension != ".controller" &&
-                       extension != ".overrideController" &&
-                       extension != ".mask" &&
-                       extension != ".spriteatlas" &&
-                       extension != ".playable" &&
-                       extension != ".scenetemplate" &&
-                       extension != ".asmdef" &&
-                       extension != ".terrainlayer" &&
-                       extension != ".mixer" &&
-                       extension != ".shadervariants" &&
-                       extension != ".guiskin" &&
-                       extension != ".scenetemplate";
             }
         }
 
