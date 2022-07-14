@@ -10,7 +10,6 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(SortingLayerIDAttribute))]
     internal class SortingLayerIDDrawer : PropertyDrawer
     {
-        private string[] _names;
         private DrawTool _tool;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
