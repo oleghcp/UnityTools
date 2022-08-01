@@ -1,10 +1,12 @@
-﻿using System;
+﻿#if UNITY_2019_3_OR_NEWER
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Inspector;
 
 namespace UnityUtility.AiSimulation
 {
+    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/Behavior Set")]
     public class AiBehaviorSet : ScriptableObject
     {
         #region Inspector
@@ -26,26 +28,13 @@ namespace UnityUtility.AiSimulation
         internal void SetUp(GameObject gameObject)
         {
             _gameObject = gameObject;
+            _permanentState?.SetUp(this);
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (_permanentState == null)
-            {
-                Debug.LogError("Permanent State not set.");
-                return;
-            }
-#endif
-
-            _permanentState.SetUp(this);
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (_states.Length == 0)
-            {
-                Debug.LogError("State list is empty.");
                 return;
-            }
-#endif
+
             _states.ForEach(item => item.SetUp(this));
-            _currentState = _states[^1];
+            _currentState = _states.FromEnd(0);
             _currentState.OnBegin();
         }
 
@@ -56,7 +45,7 @@ namespace UnityUtility.AiSimulation
 
         internal void Refresh(float deltaTime)
         {
-            _permanentState.Refresh(deltaTime);
+            _permanentState?.Refresh(deltaTime);
 
             for (int i = 0; i < _states.Length; i++)
             {
@@ -73,7 +62,7 @@ namespace UnityUtility.AiSimulation
                 }
             }
 
-            _currentState.Refresh(deltaTime);
+            _currentState?.Refresh(deltaTime);
         }
 
         public T GetComponent<T>()
@@ -82,3 +71,4 @@ namespace UnityUtility.AiSimulation
         }
     }
 }
+#endif

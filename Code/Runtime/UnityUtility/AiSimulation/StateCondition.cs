@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_2019_3_OR_NEWER
+using System;
 
 namespace UnityUtility.AiSimulation
 {
@@ -8,3 +9,4 @@ namespace UnityUtility.AiSimulation
         public abstract bool Satisfy(AiBehaviorSet owner);
     }
 }
+#endif
