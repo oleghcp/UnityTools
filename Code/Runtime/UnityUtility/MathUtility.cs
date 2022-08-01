@@ -7,6 +7,25 @@ namespace UnityUtility
 {
     public static class MathUtility
     {
+        public static bool Equals(in Vector3 value, in Vector3 other, float precision)
+        {
+            float num1 = value.x - other.x;
+            float num2 = value.y - other.y;
+            float num3 = value.z - other.z;
+
+            float result = num1 * num1 + num2 * num2 + num3 * num3;
+
+            return result < precision;
+        }
+
+        public static bool Equals(in Vector2 value, in Vector2 other, float precision)
+        {
+            float num1 = value.x - other.x;
+            float num2 = value.y - other.y;
+
+            return (num1 * num1 + num2 * num2) < precision;
+        }
+
         /// <summary>
         /// Rotates an array cell position.
         /// </summary>

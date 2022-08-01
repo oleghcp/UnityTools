@@ -7,6 +7,20 @@ namespace UnityEngine
     public static class UnityStructExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Equals(this in Vector3 value, in Vector3 other, float precision)
+        {
+            return MathUtility.Equals(value, other, precision);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Equals(this in Vector2 value, in Vector2 other, float precision)
+        {
+            return MathUtility.Equals(value, other, precision);
+        }
+
+        //--//
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 AlterX(this in Vector3 value, float x)
         {
             return new Vector3(x, value.y, value.z);
