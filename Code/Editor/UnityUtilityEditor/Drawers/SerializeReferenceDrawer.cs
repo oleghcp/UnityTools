@@ -28,8 +28,9 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
+            const float factor = 1f / 3f;
             Rect rect = position;
-            float shift = EditorGUIUtility.labelWidth + EditorGUIUtility.standardVerticalSpacing;
+            float shift = Math.Max(EditorGUIUtility.labelWidth, position.width * factor) + EditorGUIUtility.standardVerticalSpacing;
             rect.x += shift;
             rect.width -= shift;
             rect.height = EditorGUIUtility.singleLineHeight;
