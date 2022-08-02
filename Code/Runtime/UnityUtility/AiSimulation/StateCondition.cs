@@ -6,7 +6,7 @@ namespace UnityUtility.AiSimulation
     [Serializable]
     public abstract class StateCondition
     {
-        public abstract bool Satisfy(AiBehaviorSet owner);
+        public abstract bool Satisfied(AiBehaviorSet owner);
     }
 }
 #endif

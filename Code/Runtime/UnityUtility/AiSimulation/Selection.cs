@@ -11,11 +11,11 @@ namespace UnityUtility.AiSimulation
         [SerializeReference, ReferenceSelection]
         private StateCondition[] _conditions;
 
-        public override bool Satisfy(AiBehaviorSet owner)
+        public override bool Satisfied(AiBehaviorSet owner)
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (_conditions[i].Satisfy(owner))
+                if (_conditions[i].Satisfied(owner))
                     return true;
             }
 

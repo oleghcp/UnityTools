@@ -27,7 +27,7 @@ namespace UnityUtility.AiSimulation
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (!_conditions[i].Satisfy(Owner))
+                if (!_conditions[i].Satisfied(Owner))
                     return false;
             }
 
