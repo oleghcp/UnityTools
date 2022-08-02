@@ -10,7 +10,8 @@ namespace UnityUtility.AiSimulation
         private AiBehaviorSet _behaviorSet;
 
         public AiBehaviorSet Owner => _behaviorSet;
-        public GameObject GameObject => _behaviorSet.GameObject;
+        public GameObject gameObject => _behaviorSet.gameObject;
+        public Transform transform => _behaviorSet.transform;
 
         internal void SetUp(AiBehaviorSet behaviorSet)
         {

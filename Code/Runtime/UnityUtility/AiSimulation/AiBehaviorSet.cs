@@ -19,15 +19,19 @@ namespace UnityUtility.AiSimulation
         #endregion
 
         private GameObject _gameObject;
+        private Transform _transform;
         private BehaviorState _currentState;
 
         public PermanentState PermanentState => _permanentState;
 
-        public GameObject GameObject => _gameObject;
+        public GameObject gameObject => _gameObject;
+        public Transform transform => _transform;
 
         internal void SetUp(GameObject gameObject)
         {
             _gameObject = gameObject;
+            _transform = gameObject.transform;
+
             _permanentState?.SetUp(this);
 
             if (_states.Length == 0)
