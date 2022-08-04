@@ -275,7 +275,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         break;
 
                     case NodeType.Exit:
-                        EditorGUILayout.LabelField("→ → →");
+                        EditorGUILayout.LabelField("→ █");
                         break;
 
                     default:
