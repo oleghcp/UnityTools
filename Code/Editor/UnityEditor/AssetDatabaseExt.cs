@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -39,13 +38,11 @@ namespace UnityEditor
             return AssetDatabase.LoadAssetAtPath(path, type);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T LoadAssetByGuid<T>(string guid) where T : UnityObject
         {
             return LoadAssetByGuid(guid, typeof(T)) as T;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UnityObject LoadAssetByGuid(string guid)
         {
             return LoadAssetByGuid(guid, typeof(UnityObject));

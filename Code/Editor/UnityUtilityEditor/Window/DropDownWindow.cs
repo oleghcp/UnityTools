@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -97,7 +96,6 @@ namespace UnityUtilityEditor.Window
         }
 
         #region List functions
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CreateForFlags(BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
             CreateForFlags(GetButtonRect(Event.current.mousePosition), flags, displayedOptions, onClose);
@@ -160,13 +158,11 @@ namespace UnityUtilityEditor.Window
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ShowMenu()
         {
             ShowMenu(GetButtonRect(Event.current.mousePosition));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ShowMenu(Vector2 position)
         {
             ShowMenu(GetButtonRect(position));
@@ -377,7 +373,6 @@ namespace UnityUtilityEditor.Window
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool Hovered(in Rect uiElementPos)
         {
             return uiElementPos.Contains(Event.current.mousePosition);
@@ -430,7 +425,6 @@ namespace UnityUtilityEditor.Window
             return _flags != null;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Rect GetButtonRect(Vector2 position)
         {
             return new Rect(position, Vector2.zero);
@@ -475,7 +469,6 @@ namespace UnityUtilityEditor.Window
                 };
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static Data CreateSeparator()
             {
                 return new Data { Id = -1, };

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtilityEditor.Window;
@@ -17,7 +16,6 @@ namespace UnityEditor
 
         private static MethodInfo _clearFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SaveProject()
         {
             EditorApplication.ExecuteMenuItem("File/Save Project");
@@ -59,7 +57,6 @@ namespace UnityEditor
             return fieldType.IsArray ? fieldType.GetElementType() : fieldType;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DisplayDropDownList(Vector2 position, string[] displayedOptions, Predicate<int> checkEnabled, Action<int> onItemSelected)
         {
             DisplayDropDownList(new Rect(position, Vector2.zero), displayedOptions, checkEnabled, onItemSelected);
@@ -78,7 +75,6 @@ namespace UnityEditor
             list.ShowMenu(buttonRect);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
         {
             DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onClose);

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -194,7 +193,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 ShowTransitionInfoWindow();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DrawSpline(in Vector2 start, in Vector2 end, in Vector2 startTangentDir, in Vector2 endTangentDir)
         {
             DrawSpline(start, end, startTangentDir, endTangentDir, GraphEditorStyles.GetLineColor());
@@ -206,7 +204,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             DrawSpline(start, end, factor, factor, startTangentDir, endTangentDir, color);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void DrawSpline(in Vector2 start, in Vector2 end,
                                        float startTangentFactor, float endTangentFactor,
                                        in Vector2 startTangentdir, in Vector2 endTangentdir,

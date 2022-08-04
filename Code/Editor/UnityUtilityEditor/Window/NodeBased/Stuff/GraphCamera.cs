@@ -1,5 +1,4 @@
 ﻿#if UNITY_2019_3_OR_NEWER
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
@@ -88,7 +87,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Vector2 GetWindowHalfSize()
         {
             return _window.MapSize * 0.5f;

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -253,9 +252,7 @@ namespace UnityUtilityEditor.Gui
         {
             public IList<T> List
             {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => (IList<T>)list;
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 set => list = (IList)value;
             }
 

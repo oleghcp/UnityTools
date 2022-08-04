@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility;
 using UnityObject = UnityEngine.Object;
@@ -219,7 +218,6 @@ namespace UnityEditor
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SerializedProperty AddArrayElement(this SerializedProperty self)
         {
             int index = self.arraySize++;
@@ -262,7 +260,7 @@ namespace UnityEditor
             {
                 inner.intValue = (int)value;
             }
-        }        
+        }
 
         public static bool Disposed(this SerializedObject self)
         {
@@ -272,13 +270,11 @@ namespace UnityEditor
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsFolder(this UnityObject self)
         {
             return ProjectWindowUtil.IsFolder(self.GetInstanceID());
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DestroyImmediate(this UnityObject self)
         {
             UnityObject.DestroyImmediate(self);

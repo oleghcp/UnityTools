@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
@@ -10,23 +9,11 @@ namespace UnityEditor
     {
         private static GUIContent _commonContent;
 
-        public static string BuiltInSkinsPath
-        {
-            get => EditorGUIUtility.isProSkin ? "builtin skins/darkskin/images/"
-                                              : "builtin skins/lightskin/images/";
-        }
+        public static string BuiltInSkinsPath => EditorGUIUtility.isProSkin ? "builtin skins/darkskin/images/"
+                                                                            : "builtin skins/lightskin/images/";
 
-        public static float SmallButtonWidth
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => EditorGUIUtility.singleLineHeight + 2f;
-        }
-
-        public static float StandardHorizontalSpacing
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => EditorGUIUtility.standardVerticalSpacing + 1f;
-        }
+        public static float SmallButtonWidth => EditorGUIUtility.singleLineHeight + 2f;
+        public static float StandardHorizontalSpacing => EditorGUIUtility.standardVerticalSpacing + 1f;
 
         public static GUIContent TempContent(string t, string tooltip = null)
         {
@@ -39,7 +26,6 @@ namespace UnityEditor
             return _commonContent;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
         {
             return GetLinePosition(basePosition, lineIndex, EditorGUIUtility.singleLineHeight);

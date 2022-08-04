@@ -1,5 +1,4 @@
 ﻿#if UNITY_2019_3_OR_NEWER
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -59,13 +58,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             RightTriangle = new GUIContent(Load($"{path}trianglepointingright15px.png"));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color GetLineColor()
         {
             return EditorGUIUtility.isProSkin ? Colours.White : Colours.Black;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Texture2D Load(string path)
         {
             return EditorGUIUtility.Load(path) as Texture2D;

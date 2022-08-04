@@ -1,7 +1,6 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -160,7 +159,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue = _nodeWidth;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDefaultNodeName(Type type, int id)
         {
             NodeType nodeType = RawNode.GetNodeType(type);

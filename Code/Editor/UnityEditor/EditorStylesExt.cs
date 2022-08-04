@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnityEditor
 {
@@ -34,7 +33,6 @@ namespace UnityEditor
             Rect.contentOffset = new Vector2(2f, 0f);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Texture2D Load(string path)
         {
             return EditorGUIUtility.Load(path) as Texture2D;

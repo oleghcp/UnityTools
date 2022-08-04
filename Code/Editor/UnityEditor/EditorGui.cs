@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Collections;
@@ -13,13 +12,11 @@ namespace UnityEditor
 {
     public static class EditorGui
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UnityObject[] DropArea(in Rect position)
         {
             return DropArea(position, null);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UnityObject[] DropArea(in Rect position, string text)
         {
             return DropArea(position, text, EditorStylesExt.DropArea);
@@ -41,13 +38,11 @@ namespace UnityEditor
             return objects;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void ErrorLabel(in Rect position, GUIContent label, string message)
         {
             EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int DropDown(in Rect propertyRect, int selectedIndex, string[] displayedOptions)
         {
             return DropDown(propertyRect, null, selectedIndex, displayedOptions);
@@ -74,7 +69,6 @@ namespace UnityEditor
             return selectedIndex;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IntDropDown(in Rect propertyRect, int selectedValue, string[] displayedOptions, int[] optionValues)
         {
             return IntDropDown(propertyRect, null, selectedValue, displayedOptions, optionValues);
@@ -93,7 +87,6 @@ namespace UnityEditor
             return optionValues[index];
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Enum EnumDropDown(in Rect propertyRect, Enum selected)
         {
             return EnumDropDown(propertyRect, null, selected);
@@ -114,7 +107,6 @@ namespace UnityEditor
             return selected;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions)
         {
             return MaskDropDown(propertyRect, null, mask, displayedOptions);
@@ -165,7 +157,6 @@ namespace UnityEditor
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Enum FlagsDropDown(in Rect propertyRect, Enum flags)
         {
             return FlagsDropDown(propertyRect, null, flags);

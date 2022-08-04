@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -107,7 +106,6 @@ namespace UnityUtilityEditor.Window
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Clamp(long value, long min, long max)
         {
             return Math.Clamp(value, min, max);
@@ -125,7 +123,6 @@ namespace UnityUtilityEditor.Window
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Clamp(double value, double min, double max)
         {
             return Math.Clamp(value, min, max);

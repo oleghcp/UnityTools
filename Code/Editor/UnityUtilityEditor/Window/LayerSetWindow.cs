@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.CodeGenerating;
@@ -150,7 +149,6 @@ namespace UnityUtilityEditor.Window
             EditorGUILayout.Space();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string CreateItemString<T>(T item)
         {
             return $"- {item}";
