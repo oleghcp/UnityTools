@@ -28,9 +28,8 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-            const float factor = 1f / 3f;
             Rect rect = position;
-            rect.xMin += Math.Max(EditorGUIUtility.labelWidth, position.width * factor) + EditorGUIUtility.standardVerticalSpacing;
+            rect.xMin += Math.Max(EditorGUIUtility.labelWidth, position.width * 0.33333f) + EditorGUIUtility.standardVerticalSpacing;
             rect.height = EditorGUIUtility.singleLineHeight;
 
             DrawContent(rect, property);

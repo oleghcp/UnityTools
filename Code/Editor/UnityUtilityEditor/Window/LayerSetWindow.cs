@@ -168,8 +168,7 @@ namespace UnityUtilityEditor.Window
                 element.Name = EditorGUI.TextField(halfPos, element.Name);
 
                 halfPos = position;
-                halfPos.width *= 0.5f;
-                halfPos.x += position.width * 0.5f;
+                halfPos.xMin += position.width * 0.5f;
 
                 element.Mask = EditorGui.MaskDropDown(halfPos, element.Mask, Names);
                 return element;

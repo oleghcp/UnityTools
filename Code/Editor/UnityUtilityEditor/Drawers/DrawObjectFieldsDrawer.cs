@@ -41,8 +41,7 @@ namespace UnityUtilityEditor.Drawers
             labelPos.width = EditorGUIUtility.labelWidth;
 
             Rect fieldRect = position;
-            fieldRect.x += labelPos.width + EditorGuiUtility.StandardHorizontalSpacing;
-            fieldRect.width -= labelPos.width + EditorGuiUtility.StandardHorizontalSpacing;
+            fieldRect.xMin += labelPos.width + EditorGuiUtility.StandardHorizontalSpacing;
 
             property.isExpanded = GUI.Toggle(labelPos, property.isExpanded, label, EditorStylesExt.DropDown);
             property.objectReferenceValue = EditorGUI.ObjectField(fieldRect, property.objectReferenceValue, typeof(ScriptableObject), false);
