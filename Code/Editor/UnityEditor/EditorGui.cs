@@ -34,7 +34,7 @@ namespace UnityEditor
 
         public static UnityObject[] DropArea(in Rect position)
         {
-            return DropArea(position, null);
+            return DropArea(position, (string)null);
         }
 
         public static UnityObject[] DropArea(in Rect position, string text)
@@ -42,12 +42,22 @@ namespace UnityEditor
             return DropArea(position, text, EditorStylesExt.DropArea);
         }
 
+        public static UnityObject[] DropArea(in Rect position, GUIContent content)
+        {
+            return DropArea(position, content, EditorStylesExt.DropArea);
+        }
+
         public static UnityObject[] DropArea(in Rect position, string text, GUIStyle style)
+        {
+            return DropArea(position, EditorGuiUtility.TempContent(text), style);
+        }
+
+        public static UnityObject[] DropArea(in Rect position, GUIContent content, GUIStyle style)
         {
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
             UnityObject[] objects = DragAndDropData.GetObjectsById(controlId);
 
-            GUI.Box(position, text, style);
+            GUI.Box(position, content, style);
 
             if (EditorUtilityExt.GetDroppedObjects(position, out var result))
             {

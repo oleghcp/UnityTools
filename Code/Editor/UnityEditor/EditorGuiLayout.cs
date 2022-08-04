@@ -28,7 +28,7 @@ namespace UnityEditor
 
         public static UnityObject[] DropArea(params GUILayoutOption[] options)
         {
-            return DropArea(null, options);
+            return DropArea((string)null, options);
         }
 
         public static UnityObject[] DropArea(string text, params GUILayoutOption[] options)
@@ -36,10 +36,20 @@ namespace UnityEditor
             return DropArea(text, EditorStylesExt.DropArea, options);
         }
 
+        public static UnityObject[] DropArea(GUIContent content, params GUILayoutOption[] options)
+        {
+            return DropArea(content, EditorStylesExt.DropArea, options);
+        }
+
         public static UnityObject[] DropArea(string text, GUIStyle style, params GUILayoutOption[] options)
         {
+            return DropArea(EditorGuiUtility.TempContent(text), style, options);
+        }
+
+        public static UnityObject[] DropArea(GUIContent content, GUIStyle style, params GUILayoutOption[] options)
+        {
             Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
-            return EditorGui.DropArea(position, text, style);
+            return EditorGui.DropArea(position, content, style);
         }
 
         public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
