@@ -1,5 +1,4 @@
 ﻿#if UNITY_2019_3_OR_NEWER
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Inspector;
@@ -43,14 +42,23 @@ namespace UnityUtility.AiSimulation
             if (_states.Length == 0)
                 return;
 
-            _states.ForEach(item => item.SetUp(this));
+            for (int i = 0; i < _states.Length; i++)
+            {
+                _states[i].SetUp(this);
+            }
+
             _currentState = _states.FromEnd(0);
             _currentState.OnBegin();
         }
 
         private void OnDestroy()
         {
-            _states.ForEach(item => item.OnDestroy());
+            _permanentState?.OnDestroy();
+
+            for (int i = 0; i < _states.Length; i++)
+            {
+                _states[i].OnDestroy();
+            }
         }
 
         internal void Refresh(float deltaTime)

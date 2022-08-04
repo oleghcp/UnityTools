@@ -19,7 +19,8 @@ namespace UnityUtility.AiSimulation
             OnSetUp();
         }
 
-        protected abstract void OnSetUp();
+        protected virtual void OnSetUp() { }
+        public virtual void OnDestroy() { }
         public abstract void Refresh(float deltaTime);
 
         public T GetComponent<T>()
