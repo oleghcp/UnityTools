@@ -9,6 +9,7 @@ namespace UnityUtility.AiSimulation
         private AiBehaviorSet _behaviorSet;
 
         private bool _raw = true;
+        private AiBehaviorSet _behaviorSetInstance;
 
         public AiBehaviorSet BehaviorSet
         {
@@ -16,27 +17,24 @@ namespace UnityUtility.AiSimulation
             {
                 if (_raw)
                 {
-                    _behaviorSet = _behaviorSet.Install();
+                    _behaviorSetInstance = _behaviorSet.Install();
+                    _behaviorSetInstance.SetUp(gameObject);
                     _raw = false;
                 }
 
-                return _behaviorSet;
+                return _behaviorSetInstance;
             }
-        }
-
-        private void Awake()
-        {
-            BehaviorSet.SetUp(gameObject);
         }
 
         private void OnDestroy()
         {
-            _behaviorSet.Destroy();
+            if (_behaviorSetInstance != null)
+                _behaviorSetInstance.Destroy();
         }
 
         private void Update()
         {
-            _behaviorSet.Refresh(Time.deltaTime);
+            BehaviorSet.Refresh(Time.deltaTime);
         }
     }
 }

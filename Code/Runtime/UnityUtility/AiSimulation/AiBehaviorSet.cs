@@ -9,23 +9,29 @@ namespace UnityUtility.AiSimulation
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/Behavior Set")]
     public class AiBehaviorSet : ScriptableObject
     {
-        #region Inspector
         [SerializeReference, ReferenceSelection]
         private PermanentState _permanentState;
 
         [Space]
         [SerializeReference, ReferenceSelection]
         private BehaviorState[] _states;
-        #endregion
 
         private GameObject _gameObject;
         private Transform _transform;
         private BehaviorState _currentState;
+#if UNITY_EDITOR
+        private BehaviorState _prevState;
+#endif
 
         public PermanentState PermanentState => _permanentState;
 
         public GameObject gameObject => _gameObject;
         public Transform transform => _transform;
+
+#if UNITY_EDITOR
+        internal BehaviorState CurrentState => _currentState;
+        internal BehaviorState PrevState => _prevState;
+#endif
 
         internal void SetUp(GameObject gameObject)
         {
@@ -57,6 +63,9 @@ namespace UnityUtility.AiSimulation
                 {
                     if (_states[i] != _currentState)
                     {
+#if UNITY_EDITOR
+                        _prevState = _currentState;
+#endif
                         _currentState.OnEnd();
                         _currentState = _states[i];
                         _currentState.OnBegin();
