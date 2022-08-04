@@ -8,27 +8,29 @@ using UnityUtility.Inspector;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(InitListAttribute))]
-    internal class InitListDrawer : SerializeReferenceDrawer<InitListAttribute>
+    internal class InitListDrawer : SerializeReferenceDrawer
     {
         private FieldInfo[] _enumValues;
 
         protected override void DrawContent(in Rect position, SerializedProperty property)
         {
-            if (!attribute.EnumType.IsEnum)
+            InitListAttribute a = attribute as InitListAttribute;
+
+            if (!a.EnumType.IsEnum)
             {
                 GUI.Label(position, "Specify enum type.");
                 return;
             }
 
             if (_enumValues == null)
-                _enumValues = attribute.EnumType.GetFields(BindingFlags.Static | BindingFlags.Public);
+                _enumValues = a.EnumType.GetFields(BindingFlags.Static | BindingFlags.Public);
 
             object enumValue = getEnumValue();
 
             if (enumValue == null)
             {
-                enumValue = attribute.EnumType.GetDefaultValue();
-                enumValue = Enum.ToObject(attribute.EnumType, enumValue);
+                enumValue = a.EnumType.GetDefaultValue();
+                enumValue = Enum.ToObject(a.EnumType, enumValue);
                 InitFiled(property, enumValue);
             }
 

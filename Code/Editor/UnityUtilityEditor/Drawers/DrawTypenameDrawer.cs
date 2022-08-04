@@ -8,7 +8,7 @@ using UnityUtility.Inspector;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(DrawTypenameAttribute))]
-    internal class DrawTypenameDrawer : SerializeReferenceDrawer<DrawTypenameAttribute>
+    internal class DrawTypenameDrawer : SerializeReferenceDrawer
     {
         protected override void DrawContent(in Rect position, SerializedProperty property)
         {

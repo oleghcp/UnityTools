@@ -11,13 +11,13 @@ namespace UnityUtilityEditor.Drawers
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]
-    internal class ReferenceSelectionDrawer : SerializeReferenceDrawer<ReferenceSelectionAttribute>
+    internal class ReferenceSelectionDrawer : SerializeReferenceDrawer
     {
         protected override void DrawContent(in Rect position, SerializedProperty property)
         {
             string assignedTypeName = property.managedReferenceFullTypename;
             bool nullRef = assignedTypeName.IsNullOrEmpty();
-            string label = nullRef ? "Null" : ButtonLabel();
+            string label = nullRef ? "Null" : buttonLabel();
 
             if (nullRef)
                 GUI.color = Colours.Orange;
@@ -27,15 +27,10 @@ namespace UnityUtilityEditor.Drawers
 
             GUI.color = Colours.White;
 
-            string ButtonLabel()
+            string buttonLabel()
             {
-                if (attribute.ShortButtonText)
-                {
-                    Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
-                    return assignedType.Name;
-                }
-
-                return assignedTypeName;
+                Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
+                return assignedType.Name;
             }
         }
 

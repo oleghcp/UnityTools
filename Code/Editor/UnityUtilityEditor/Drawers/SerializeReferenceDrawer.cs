@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UnityUtilityEditor.Drawers
 {
-    internal abstract class SerializeReferenceDrawer<TAttribute> : AttributeDrawer<TAttribute> where TAttribute : PropertyAttribute
+    internal abstract class SerializeReferenceDrawer : PropertyDrawer
     {
         private Attribute[] _attributes;
 
@@ -30,9 +30,7 @@ namespace UnityUtilityEditor.Drawers
 
             const float factor = 1f / 3f;
             Rect rect = position;
-            float shift = Math.Max(EditorGUIUtility.labelWidth, position.width * factor) + EditorGUIUtility.standardVerticalSpacing;
-            rect.x += shift;
-            rect.width -= shift;
+            rect.xMin += Math.Max(EditorGUIUtility.labelWidth, position.width * factor) + EditorGUIUtility.standardVerticalSpacing;
             rect.height = EditorGUIUtility.singleLineHeight;
 
             DrawContent(rect, property);

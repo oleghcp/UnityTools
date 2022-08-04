@@ -1,21 +1,20 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
 using UnityEngine;
-using UnityUtility.Inspector;
 
 namespace UnityUtility.AiSimulation
 {
     [Serializable]
     public class Selection : StateCondition
     {
-        [SerializeReference, ReferenceSelection]
+        [SerializeReference]
         private StateCondition[] _conditions;
 
-        public override bool Satisfied(AiBehaviorSet owner)
+        protected override bool Satisfied(AiBehaviorSet owner)
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (_conditions[i].Satisfied(owner))
+                if (_conditions[i].Check(owner))
                     return true;
             }
 

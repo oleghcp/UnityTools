@@ -8,7 +8,7 @@ namespace UnityUtility.AiSimulation
     [Serializable]
     public abstract class BehaviorState
     {
-        [SerializeReference, ReferenceSelection]
+        [SerializeReference]
         private StateCondition[] _conditions;
 
         private AiBehaviorSet _behaviorSet;
@@ -27,7 +27,7 @@ namespace UnityUtility.AiSimulation
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (!_conditions[i].Satisfied(Owner))
+                if (!_conditions[i].Check(Owner))
                     return false;
             }
 

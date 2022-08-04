@@ -7,7 +7,7 @@ using UnityUtility.Inspector;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(InitToggleAttribute))]
-    internal class InitToggleDrawer : SerializeReferenceDrawer<InitToggleAttribute>
+    internal class InitToggleDrawer : SerializeReferenceDrawer
     {
         protected override void DrawContent(in Rect position, SerializedProperty property)
         {
