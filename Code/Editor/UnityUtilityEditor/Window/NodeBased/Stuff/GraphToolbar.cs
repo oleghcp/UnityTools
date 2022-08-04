@@ -123,8 +123,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             if (GUILayout.Button(_moveButton, GUILayout.Width(buttonWidth)))
             {
-                NodeViewer viewer = _window.NodeViewers.First(item => item.Id == _window.RootNodeId);
-                _window.Camera.Position = viewer.WorldRect.center;
+                NodeViewer viewer = _window.NodeViewers.FirstOrDefault(item => item.Id == _window.RootNodeId);
+                if (viewer != null)
+                    _window.Camera.Position = viewer.WorldRect.center;
             }
 
             GUI.enabled = true;
