@@ -25,14 +25,21 @@ namespace UnityUtilityEditor.Window
 
         private void OnGUI()
         {
-            GUILayout.Space(10f);
+            using (new EditorGuiLayout.HorizontalCenteringScope())
+            {
+                EditorGUILayout.BeginVertical();
 
-            EditorGuiLayout.CenterLabel(_description1);
-            EditorGuiLayout.CenterLabel(_description2);
+                GUILayout.Space(20f);
 
-            EditorGUILayout.Space();
+                GUILayout.Label(_description1);
+                GUILayout.Label(_description2);
 
-            EditorGuiLayout.CenterLabel(_copyright);
+                EditorGUILayout.Space();
+
+                GUILayout.Label(_copyright);
+
+                EditorGUILayout.EndVertical();
+            }
         }
     }
 }

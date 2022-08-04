@@ -14,13 +14,19 @@ namespace UnityUtilityEditor.Inspectors
 
         public override void OnInspectorGUI()
         {
+            EditorGuiLayout.BeginHorizontalCentering();
+            EditorGUILayout.BeginVertical();
+
             GUI.color = Colours.Lime;
-            bool openPressed = EditorGuiLayout.CenterButton("Open Graph", GUILayout.Height(40f), GUILayout.Width(200f));
+            bool openPressed = GUILayout.Button("Open Graph", GUILayout.Height(40f), GUILayout.Width(200f));
             GUI.color = Colours.White;
 
             EditorGUILayout.Space();
 
-            bool editPressed = EditorGuiLayout.CenterButton("Edit Script", GUILayout.Height(30f), GUILayout.Width(150f));
+            bool editPressed = GUILayout.Button("Edit Script", GUILayout.Height(30f), GUILayout.Width(150f));
+
+            EditorGUILayout.EndVertical();
+            EditorGuiLayout.EndHorizontalCentering();
 
             if (openPressed)
                 GraphEditorWindow.Open(target);

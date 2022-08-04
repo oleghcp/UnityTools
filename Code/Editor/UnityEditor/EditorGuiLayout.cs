@@ -107,33 +107,84 @@ namespace UnityEditor
             return EditorGui.FlagsDropDown(propertyRect, label, flags);
         }
 
-        public static bool CenterButton(string text, params GUILayoutOption[] options)
+        public static Rect BeginHorizontalCentering(params GUILayoutOption[] options)
         {
-            return CenterButton(text, GUI.skin.button, options);
+            Rect rect = EditorGUILayout.BeginHorizontal(options);
+            GUILayout.FlexibleSpace();
+            return rect;
         }
 
-        public static bool CenterButton(string text, GUIStyle style, params GUILayoutOption[] options)
+        public static Rect BeginHorizontalCentering(GUIStyle style, params GUILayoutOption[] options)
         {
-            EditorGUILayout.BeginHorizontal();
+            Rect rect = EditorGUILayout.BeginHorizontal(style, options);
             GUILayout.FlexibleSpace();
-            bool pressed = GUILayout.Button(text, style, options);
+            return rect;
+        }
+
+        public static void EndHorizontalCentering()
+        {
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-            return pressed;
         }
 
-        public static void CenterLabel(string text, params GUILayoutOption[] options)
+        public static Rect BeginVerticalCentering(params GUILayoutOption[] options)
         {
-            CenterLabel(text, EditorStyles.label, options);
+            Rect rect = EditorGUILayout.BeginVertical(options);
+            GUILayout.FlexibleSpace();
+            return rect;
         }
 
-        public static void CenterLabel(string text, GUIStyle style, params GUILayoutOption[] options)
+        public static Rect BeginVerticalCentering(GUIStyle style, params GUILayoutOption[] options)
         {
-            EditorGUILayout.BeginHorizontal();
+            Rect rect = EditorGUILayout.BeginVertical(style, options);
             GUILayout.FlexibleSpace();
-            GUILayout.Label(text, style, options);
+            return rect;
+        }
+
+        public static void EndVerticalCentering()
+        {
             GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+        }
+
+        public class HorizontalCenteringScope : GUI.Scope
+        {
+            public Rect Rect { get; private set; }
+
+            public HorizontalCenteringScope(params GUILayoutOption[] options)
+            {
+                Rect = BeginHorizontalCentering(options);
+            }
+
+            public HorizontalCenteringScope(GUIStyle style, params GUILayoutOption[] options)
+            {
+                Rect = BeginHorizontalCentering(style, options);
+            }
+
+            protected override void CloseScope()
+            {
+                EndHorizontalCentering();
+            }
+        }
+
+        public class VerticalCenteringScope : GUI.Scope
+        {
+            public Rect Rect { get; private set; }
+
+            public VerticalCenteringScope(params GUILayoutOption[] options)
+            {
+                Rect = BeginVerticalCentering(options);
+            }
+
+            public VerticalCenteringScope(GUIStyle style, params GUILayoutOption[] options)
+            {
+                Rect = BeginVerticalCentering(style, options);
+            }
+
+            protected override void CloseScope()
+            {
+                EndVerticalCentering();
+            }
         }
     }
 }

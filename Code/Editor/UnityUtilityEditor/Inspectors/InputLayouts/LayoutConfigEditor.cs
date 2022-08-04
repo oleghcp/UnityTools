@@ -131,16 +131,24 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
         private void DrawTypeChoice()
         {
             GUILayout.Space(10f);
-            EditorGuiLayout.CenterLabel("Choose control type:", EditorStyles.boldLabel);
+            EditorGuiLayout.BeginHorizontalCentering();
+            GUILayout.Label("Choose control type:", EditorStyles.boldLabel);
+            EditorGuiLayout.EndHorizontalCentering();
             GUILayout.Space(5f);
 
-            if (EditorGuiLayout.CenterButton("Keyboard and Mouse", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
+            EditorGuiLayout.BeginHorizontalCentering();
+            EditorGUILayout.BeginVertical();
+
+            if (GUILayout.Button("Keyboard and Mouse", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
                 _inputType.enumValueIndex = (int)InputType.KeyMouse;
 
             GUILayout.Space(5f);
 
-            if (EditorGuiLayout.CenterButton("Gamepad", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
+            if (GUILayout.Button("Gamepad", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
                 _inputType.enumValueIndex = (int)InputType.Gamepad;
+
+            EditorGUILayout.EndVertical();
+            EditorGuiLayout.EndHorizontalCentering();
         }
 
         private void DrawEnumChoice(ref TypeSelector selector, TypeValue typeValue, string label)
@@ -171,12 +179,16 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
             {
                 selector.Selected = EditorGuiLayout.DropDown(selector.Selected, selector.TypeNames);
                 GUILayout.Space(5f);
-                if (EditorGuiLayout.CenterButton("Apply", GUILayout.Height(30f), GUILayout.MinWidth(100f)))
+
+                using (new EditorGuiLayout.HorizontalCenteringScope())
                 {
-                    typeValue.SetValue(selector.Types[selector.Selected]);
-                    string typeName = typeValue.EnumType.GetTypeName();
-                    serializedObject.FindProperty(typeValue.PropName).stringValue = typeName;
-                    selector = null;
+                    if (GUILayout.Button("Apply", GUILayout.Height(30f), GUILayout.MinWidth(100f)))
+                    {
+                        typeValue.SetValue(selector.Types[selector.Selected]);
+                        string typeName = typeValue.EnumType.GetTypeName();
+                        serializedObject.FindProperty(typeValue.PropName).stringValue = typeName;
+                        selector = null;
+                    }
                 }
             }
             else

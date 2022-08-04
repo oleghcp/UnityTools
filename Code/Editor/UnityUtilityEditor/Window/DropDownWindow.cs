@@ -262,7 +262,9 @@ namespace UnityUtilityEditor.Window
             if (_searchResult.Count == 0)
             {
                 GUI.enabled = false;
-                EditorGuiLayout.CenterLabel("No Results", EditorStyles.boldLabel);
+                EditorGuiLayout.BeginHorizontalCentering();
+                GUILayout.Label("No Results", EditorStyles.boldLabel);
+                EditorGuiLayout.EndHorizontalCentering();
                 GUI.enabled = true;
                 return;
             }

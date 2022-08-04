@@ -38,8 +38,11 @@ namespace UnityUtilityEditor.Inspectors.Sound
                 EditorGUILayout.Slider(audioSource.time, 0f, audioSource.clip.length);
                 GUI.enabled = true;
 
-                if (EditorGuiLayout.CenterButton("Stop", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
-                    target.Stop();
+                using (new EditorGuiLayout.HorizontalCenteringScope())
+                {
+                    if (GUILayout.Button("Stop", GUILayout.Height(30f), GUILayout.MinWidth(150f)))
+                        target.Stop();
+                }
 
                 GUILayout.Space(10f);
             }
