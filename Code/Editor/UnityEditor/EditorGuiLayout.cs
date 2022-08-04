@@ -6,6 +6,26 @@ namespace UnityEditor
 {
     public static class EditorGuiLayout
     {
+        public static bool ToggleButton(string text, bool value, params GUILayoutOption[] options)
+        {
+            return ToggleButton(text, value, GUI.skin.button, options);
+        }
+
+        public static bool ToggleButton(string text, bool value, GUIStyle style, params GUILayoutOption[] options)
+        {
+            return GUILayout.Toggle(value, text, style, options);
+        }
+
+        public static bool ToggleButton(GUIContent content, bool value, params GUILayoutOption[] options)
+        {
+            return ToggleButton(content, value, GUI.skin.button, options);
+        }
+
+        public static bool ToggleButton(GUIContent content, bool value, GUIStyle style, params GUILayoutOption[] options)
+        {
+            return GUILayout.Toggle(value, content, style, options);
+        }
+
         public static UnityObject[] DropArea(params GUILayoutOption[] options)
         {
             return DropArea(null, options);
@@ -20,35 +40,6 @@ namespace UnityEditor
         {
             Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DropArea(position, text, style);
-        }
-
-        public static bool CenterButton(string text, params GUILayoutOption[] options)
-        {
-            return CenterButton(text, GUI.skin.button, options);
-        }
-
-        public static bool CenterButton(string text, GUIStyle style, params GUILayoutOption[] options)
-        {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            bool pressed = GUILayout.Button(text, style, options);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            return pressed;
-        }
-
-        public static void CenterLabel(string text, params GUILayoutOption[] options)
-        {
-            CenterLabel(text, EditorStyles.label, options);
-        }
-
-        public static void CenterLabel(string text, GUIStyle style, params GUILayoutOption[] options)
-        {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label(text, style, options);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
         }
 
         public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
@@ -104,6 +95,35 @@ namespace UnityEditor
         {
             Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.FlagsDropDown(propertyRect, label, flags);
+        }
+
+        public static bool CenterButton(string text, params GUILayoutOption[] options)
+        {
+            return CenterButton(text, GUI.skin.button, options);
+        }
+
+        public static bool CenterButton(string text, GUIStyle style, params GUILayoutOption[] options)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            bool pressed = GUILayout.Button(text, style, options);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            return pressed;
+        }
+
+        public static void CenterLabel(string text, params GUILayoutOption[] options)
+        {
+            CenterLabel(text, EditorStyles.label, options);
+        }
+
+        public static void CenterLabel(string text, GUIStyle style, params GUILayoutOption[] options)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(text, style, options);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

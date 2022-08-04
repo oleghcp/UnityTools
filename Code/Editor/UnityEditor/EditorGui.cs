@@ -12,6 +12,26 @@ namespace UnityEditor
 {
     public static class EditorGui
     {
+        public static bool ToggleButton(in Rect position, string text, bool value)
+        {
+            return ToggleButton(position, text, value, GUI.skin.button);
+        }
+
+        public static bool ToggleButton(in Rect position, string text, bool value, GUIStyle style)
+        {
+            return GUI.Toggle(position, value, text, style);
+        }
+
+        public static bool ToggleButton(in Rect position, GUIContent content, bool value)
+        {
+            return ToggleButton(position, content, value, GUI.skin.button);
+        }
+
+        public static bool ToggleButton(in Rect position, GUIContent content, bool value, GUIStyle style)
+        {
+            return GUI.Toggle(position, value, content, style);
+        }
+
         public static UnityObject[] DropArea(in Rect position)
         {
             return DropArea(position, null);

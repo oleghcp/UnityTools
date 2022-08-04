@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.Drawers
 
             rect.x += rect.width;
             rect.width = position.width * (1f - weight);
-            notProp.boolValue = GUI.Toggle(rect, notProp.boolValue, "Not", GUI.skin.button);
+            notProp.boolValue = EditorGui.ToggleButton(rect, "Not", notProp.boolValue);
         }
     }
 }

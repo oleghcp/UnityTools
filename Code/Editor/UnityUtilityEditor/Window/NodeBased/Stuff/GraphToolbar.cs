@@ -77,7 +77,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void DrawLeft()
         {
-            _propertiesToggle = GUILayout.Toggle(_propertiesToggle, "Properties", GUI.skin.button, GUILayout.Width(100f));
+            _propertiesToggle = EditorGuiLayout.ToggleButton("Properties", _propertiesToggle, GUILayout.Width(100f));
         }
 
         private void DrawMiddle()
@@ -146,15 +146,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             GUILayout.Space(10f);
 
-            _hideTransitions = GUILayout.Toggle(_hideTransitions, _transitionsButton, GUI.skin.button);
+            _hideTransitions = EditorGuiLayout.ToggleButton(_transitionsButton, _hideTransitions);
 
             GUILayout.Space(10f);
 
-            _gridToggle = GUILayout.Toggle(_gridToggle, _snapButton, GUI.skin.button, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+            _gridToggle = EditorGuiLayout.ToggleButton(_snapButton, _gridToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             GUILayout.Space(10f);
 
-            _hintToggle = GUILayout.Toggle(_hintToggle, "?", GUI.skin.button, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+            _hintToggle = EditorGuiLayout.ToggleButton("?", _hintToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
         }
 
         private void DrawHint(Vector2 winSize)
