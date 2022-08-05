@@ -26,6 +26,10 @@ namespace UnityUtility.AiSimulation
             }
         }
 
+#if UNITY_EDITOR
+        internal AiBehaviorSet BehaviorSetInstance => _behaviorSetInstance;
+#endif
+
         private void OnDestroy()
         {
             if (_behaviorSetInstance != null)
