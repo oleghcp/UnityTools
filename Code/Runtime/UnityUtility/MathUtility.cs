@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 using UnityUtility.MathExt;
 using static System.MathF;
 
@@ -7,6 +8,29 @@ namespace UnityUtility
 {
     public static class MathUtility
     {
+        public const float kEpsilon = FloatComparer.kEpsilon;
+        public const float kEpsilonNormalSqrt = Vector3.kEpsilonNormalSqrt;
+
+        public static Vector2 Normalize(in Vector2 value, out float prevMagnitude)
+        {
+            prevMagnitude = value.magnitude;
+
+            if (prevMagnitude > kEpsilon)
+                return value / prevMagnitude;
+
+            return Vector2.zero;
+        }
+
+        public static Vector3 Normalize(in Vector3 value, out float prevMagnitude)
+        {
+            prevMagnitude = value.magnitude;
+
+            if (prevMagnitude > kEpsilon)
+                return value / prevMagnitude;
+
+            return Vector3.zero;
+        }
+
         public static bool Equals(in Vector3 value, in Vector3 other, float precision)
         {
             float num1 = value.x - other.x;
@@ -121,6 +145,12 @@ namespace UnityUtility
         public static float InvExp(float value)
         {
             return 1f - Exp(-value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static RectInt MinMaxRect(int xMin, int yMin, int xMax, int yMax)
+        {
+            return new RectInt(xMin, yMin, xMax - xMin, yMax - yMin);
         }
     }
 }

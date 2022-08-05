@@ -96,7 +96,7 @@ namespace UnityUtility
 
             Vector3 floorProj = startDir2D.To_XyZ();
 
-            float vertAngle = startDir2D.magnitude <= Vector2.kEpsilon ? 90f : Vector3.Angle(floorProj, dir);
+            float vertAngle = startDir2D.magnitude <= MathUtility.kEpsilon ? 90f : Vector3.Angle(floorProj, dir);
             vert = dir.y < 0f ? -vertAngle : vertAngle;
         }
     }

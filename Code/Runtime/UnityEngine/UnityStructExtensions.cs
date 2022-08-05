@@ -18,8 +18,6 @@ namespace UnityEngine
             return MathUtility.Equals(value, other, precision);
         }
 
-        //--//
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 AlterX(this in Vector3 value, float x)
         {
@@ -37,8 +35,6 @@ namespace UnityEngine
         {
             return new Vector3(value.x, value.y, z);
         }
-
-        //--//
 
         /// <summary>
         /// Creates vector2 based on X and Y of vector3 value.
@@ -67,8 +63,6 @@ namespace UnityEngine
             return new Vector2(value.z, value.y);
         }
 
-        //--//
-
         /// <summary>
         /// Converts vector2 params to vector3 X and Y with custom Z
         /// </summary>
@@ -96,8 +90,6 @@ namespace UnityEngine
             return new Vector3(x, value.y, value.x);
         }
 
-        //--//
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int AlterX(this in Vector3Int value, int x)
         {
@@ -115,8 +107,6 @@ namespace UnityEngine
         {
             return new Vector3Int(value.x, value.y, z);
         }
-
-        //--//
 
         /// <summary>
         /// Creates vector2 based on X and Y of vector3 value.
@@ -144,8 +134,6 @@ namespace UnityEngine
         {
             return new Vector2Int(value.z, value.y);
         }
-
-        //--//
 
         /// <summary>
         /// Converts vector2 params to vector3 X and Y with custom Z
@@ -194,6 +182,18 @@ namespace UnityEngine
             return bounds.Contains(pos.XY());
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetNormalized(this in Vector2 value, out float prevMagnitude)
+        {
+            return MathUtility.Normalize(value, out prevMagnitude);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 GetNormalized(this in Vector3 value, out float prevMagnitude)
+        {
+            return MathUtility.Normalize(value, out prevMagnitude);
+        }
+
         /// <summary>
         /// Returns vector2 value clamped between values represented by the bounds.
         /// </summary>
@@ -205,40 +205,6 @@ namespace UnityEngine
                 y = value.y.Clamp(bounds.yMin, bounds.yMax)
             };
         }
-
-        //--//
-
-        /// <summary>
-        /// Returns vector2 rotated in XY-plane.
-        /// </summary>
-        /// <param name="angle">Rotation angle in degrees.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetRotated(this in Vector2 value, float angle)
-        {
-            return MathUtility.RotateVector(value, angle);
-        }
-
-        /// <summary>
-        /// Returns vector3 rotated around specified axis.
-        /// </summary>
-        /// <param name="angle">Rotation angle in degrees.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetRotated(this in Vector3 value, in Vector3 axis, float angle)
-        {
-            return MathUtility.RotateVector(value, axis, angle);
-        }
-
-        /// <summary>
-        /// Returns vector2int rotated right angles (90, 180, etc.).
-        /// </summary>
-        /// <param name="rotations">Defines a rotation angle by multiplying by 90 degrees. If the value is positive returns rotated counterclockwise.</param>
-        public static Vector2Int GetRotated(this in Vector2Int localPos, int rotations)
-        {
-            (int y, int x) = MathUtility.RotateCellPos(localPos.y, localPos.x, rotations);
-            return new Vector2Int(x, y);
-        }
-
-        //--//
 
         /// <summary>
         /// Returns vector2 position clamped in bounds.
@@ -284,6 +250,36 @@ namespace UnityEngine
         public static Vector3 GetClamped(this in Vector3 value, float maxLength)
         {
             return Vector3.ClampMagnitude(value, maxLength);
+        }
+
+        /// <summary>
+        /// Returns vector2 rotated in XY-plane.
+        /// </summary>
+        /// <param name="angle">Rotation angle in degrees.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetRotated(this in Vector2 value, float angle)
+        {
+            return MathUtility.RotateVector(value, angle);
+        }
+
+        /// <summary>
+        /// Returns vector3 rotated around specified axis.
+        /// </summary>
+        /// <param name="angle">Rotation angle in degrees.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 GetRotated(this in Vector3 value, in Vector3 axis, float angle)
+        {
+            return MathUtility.RotateVector(value, axis, angle);
+        }
+
+        /// <summary>
+        /// Returns vector2int rotated right angles (90, 180, etc.).
+        /// </summary>
+        /// <param name="rotations">Defines a rotation angle by multiplying by 90 degrees. If the value is positive returns rotated counterclockwise.</param>
+        public static Vector2Int GetRotated(this in Vector2Int localPos, int rotations)
+        {
+            (int y, int x) = MathUtility.RotateCellPos(localPos.y, localPos.x, rotations);
+            return new Vector2Int(x, y);
         }
 
         /// <summary>
@@ -402,8 +398,6 @@ namespace UnityEngine
             return new Rect(value.xMin * xFactor, value.yMin * yFactor, value.width * xFactor, value.height * yFactor);
         }
 
-        //--//
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasLayer(this LayerMask mask, int layer)
         {
@@ -415,8 +409,6 @@ namespace UnityEngine
         {
             return BitMask.HasFlag(mask, LayerMask.NameToLayer(layer));
         }
-
-        // -- //
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color AlterR(this in Color color, float r)
@@ -442,8 +434,7 @@ namespace UnityEngine
             return new Color(color.r, color.g, color.b, a);
         }
 
-        // -- //
-
+        #region Deconstructors
 #if UNITY_2018_3_OR_NEWER
         public static void Deconstruct(this in Vector2 vector, out float x, out float y)
         {
@@ -486,6 +477,23 @@ namespace UnityEngine
             b = color.b;
             a = color.a;
         }
+
+        public static void Deconstruct(this in Rect rect, out float x, out float y, out float width, out float height)
+        {
+            x = rect.x;
+            y = rect.y;
+            width = rect.width;
+            height = rect.height;
+        }
+
+        public static void Deconstruct(this in RectInt rect, out int x, out int y, out int width, out int height)
+        {
+            x = rect.x;
+            y = rect.y;
+            width = rect.width;
+            height = rect.height;
+        }
 #endif
+        #endregion
     }
 }

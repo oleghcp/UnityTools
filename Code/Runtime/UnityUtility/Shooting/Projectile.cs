@@ -179,7 +179,7 @@ namespace UnityUtility.Shooting
             Vector3 vector = dest - source;
             float magnitude = vector.magnitude;
 
-            if (magnitude > Vector2.kEpsilon)
+            if (magnitude > MathUtility.kEpsilon)
             {
                 Vector3 direction = vector / magnitude;
 
@@ -228,7 +228,7 @@ namespace UnityUtility.Shooting
         {
             float length = _velocity.magnitude;
 
-            if (length > Vector3.kEpsilon)
+            if (length > MathUtility.kEpsilon)
                 return _velocity / length;
 
             return transform.forward;

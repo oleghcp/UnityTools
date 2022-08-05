@@ -182,7 +182,7 @@ namespace UnityUtility.Shooting
             Vector2 vector = dest - source;
             float magnitude = vector.magnitude;
 
-            if (magnitude > Vector2.kEpsilon)
+            if (magnitude > MathUtility.kEpsilon)
             {
                 Vector2 direction = vector / magnitude;
 
@@ -220,8 +220,8 @@ namespace UnityUtility.Shooting
 
         private Quaternion GetRotation()
         {
-            Vector2 right = _velocity.magnitude > Vector2.kEpsilon ? _velocity
-                                                                   : transform.right.XY();
+            Vector2 right = _velocity.magnitude > MathUtility.kEpsilon ? _velocity
+                                                                       : transform.right.XY();
 
             Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign())
                                              : Vector3.forward;

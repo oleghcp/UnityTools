@@ -362,7 +362,7 @@ namespace UnityUtility
                 vector = new Vector3(self.Range(1f), self.Range(1f), self.Range(1f));
                 magnitude = vector.magnitude;
 
-            } while (magnitude <= Vector3.kEpsilon || magnitude > 1f);
+            } while (magnitude <= MathUtility.kEpsilon || magnitude > 1f);
 
             return vector / magnitude;
         }
@@ -378,7 +378,7 @@ namespace UnityUtility
 
             Vector3 axis = Vector3.Cross(Vector3.forward, forward).normalized;
 
-            if (axis.magnitude > Vector3.kEpsilon)
+            if (axis.magnitude > MathUtility.kEpsilon)
             {
                 float angle = Vector3.Angle(Vector3.forward, forward);
                 up = up.GetRotated(axis, angle);
