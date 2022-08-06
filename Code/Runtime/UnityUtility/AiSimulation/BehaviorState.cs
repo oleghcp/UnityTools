@@ -25,13 +25,7 @@ namespace UnityUtility.AiSimulation
 
         public bool Available()
         {
-            for (int i = 0; i < _conditions.Length; i++)
-            {
-                if (!_conditions[i].Check(Owner))
-                    return false;
-            }
-
-            return true;
+            return ConditionUtility.All(_conditions, Owner);
         }
 
         protected virtual void OnSetUp() { }
