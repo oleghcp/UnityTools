@@ -7,6 +7,7 @@ using UnityUtility.Inspector;
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Projectile")]
     public sealed class Projectile : MonoBehaviour
     {
         [SerializeField]

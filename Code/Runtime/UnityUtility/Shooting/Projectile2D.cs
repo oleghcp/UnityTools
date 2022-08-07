@@ -8,6 +8,7 @@ using UnityUtility.MathExt;
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Projectile2D")]
     public sealed class Projectile2D : MonoBehaviour
     {
         [SerializeField]

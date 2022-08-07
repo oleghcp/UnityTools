@@ -8,7 +8,7 @@ using UnityUtilityTools;
 #if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
-    [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Sound Info")]
     public sealed class SoundInfo : AudioInfo, IPoolable
     {
         internal object Sender;

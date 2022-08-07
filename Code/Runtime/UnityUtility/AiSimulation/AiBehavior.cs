@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace UnityUtility.AiSimulation
 {
+    [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Ai Behavior")]
     public class AiBehavior : MonoBehaviour
     {
         [SerializeField]

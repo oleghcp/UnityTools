@@ -11,6 +11,7 @@ namespace UnityUtility
 
     [RequireComponent(typeof(Camera))]
     [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Camera Fitter")]
     public sealed class CameraFitter : MonoBehaviour
     {
         [SerializeField]

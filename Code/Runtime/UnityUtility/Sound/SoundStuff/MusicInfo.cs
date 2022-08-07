@@ -8,7 +8,7 @@ using UnityUtilityTools;
 #if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
-    [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Music Info")]
     public sealed class MusicInfo : AudioInfo, IPoolable
     {
         [SerializeField]

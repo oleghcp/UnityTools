@@ -5,6 +5,7 @@ namespace UnityUtility
 {
     [RequireComponent(typeof(Renderer))]
     [DisallowMultipleComponent]
+    [AddComponentMenu(nameof(UnityUtility) + "/Render Sorter")]
     public sealed class RenderSorter : MonoBehaviour
     {
         [SerializeField]
