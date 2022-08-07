@@ -7,23 +7,24 @@ using UnityUtilityTools;
 
 namespace UnityUtility.Async
 {
-    internal class RoutineRunner : MonoBehaviour, IPoolable
+    internal class TaskRunner : MonoBehaviour, IPoolable
     {
         private RoutineIterator _iterator;
         private TaskFactory _owner;
         private List<TaskInfo> _continues = new List<TaskInfo>();
 
+        private bool _enabled = true;
         private long _id;
 
         internal TaskFactory Owner => _owner;
         public bool IsPaused => _iterator.IsPaused;
         public long Id => _id;
 
-        public RoutineRunner SetUp(TaskFactory owner)
+        public TaskRunner SetUp(TaskFactory owner)
         {
             _iterator = new RoutineIterator(this);
             _owner = owner;
-            _id = _owner.IdProvider.GetNewId();
+            owner.TaskDispatcher.AddTaskRunner(this);
 
             if (_owner.CanBeStoppedGlobally)
                 _owner.StopTasks_Event += OnGloballyStoped;
@@ -31,10 +32,13 @@ namespace UnityUtility.Async
             return this;
         }
 
-        private void Update()
+        public void Refresh()
         {
-            if (_id == 0L)
-                _owner.Release(this);
+            if (_enabled)
+            {
+                if (_id == 0L)
+                    _owner.Release(this);
+            }
         }
 
         private void OnDestroy()
@@ -107,13 +111,13 @@ namespace UnityUtility.Async
         #region IPoolable
         void IPoolable.Reinit()
         {
-            enabled = true;
+            _enabled = true;
         }
 
         void IPoolable.CleanUp()
         {
             _iterator.Reset();
-            enabled = false;
+            _enabled = false;
         }
         #endregion
     }

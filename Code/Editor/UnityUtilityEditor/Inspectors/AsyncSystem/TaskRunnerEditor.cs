@@ -3,8 +3,8 @@ using UnityUtility.Async;
 
 namespace UnityUtilityEditor.Inspectors.AsyncSystem
 {
-    [CustomEditor(typeof(RoutineRunner))]
-    internal class RoutineRunnerEditor : Editor<RoutineRunner>
+    [CustomEditor(typeof(TaskRunner))]
+    internal class TaskRunnerEditor : Editor<TaskRunner>
     {
         private long _id;
         private bool _paused;

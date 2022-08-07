@@ -8,7 +8,7 @@ namespace UnityUtility.Async
     public struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
     {
         private readonly long _id;
-        private readonly RoutineRunner _task;
+        private readonly TaskRunner _task;
 
         /// <summary>
         /// Provides task ID.
@@ -24,7 +24,7 @@ namespace UnityUtility.Async
 
         object IEnumerator.Current => null;
 
-        internal TaskInfo(RoutineRunner runner)
+        internal TaskInfo(TaskRunner runner)
         {
             _id = (_task = runner).Id;
         }
