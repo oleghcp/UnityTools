@@ -15,17 +15,14 @@ namespace UnityUtility.Async
         private readonly ObjectPool<TaskRunner> _taskPool;
         private readonly bool _global;
         private readonly string _dispatcherName;
-        private readonly bool _canBeStopped;
         private TaskDispatcher _taskDispatcher;
 
-        public bool CanBeStopped => _canBeStopped;
         public IIdGenerator<long> IdProvider { get; }
 
-        public TaskFactory(IIdGenerator<long> idProvider, bool canBeStopped, bool global, string dispatcherName)
+        public TaskFactory(IIdGenerator<long> idProvider, bool global, string dispatcherName)
         {
             _global = global;
             _dispatcherName = dispatcherName;
-            _canBeStopped = canBeStopped;
             IdProvider = idProvider;
             _taskPool = new ObjectPool<TaskRunner>(this);
         }

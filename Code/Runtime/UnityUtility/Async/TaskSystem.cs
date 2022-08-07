@@ -3,44 +3,30 @@ using System.Collections;
 using System.Threading;
 using UnityEngine;
 using UnityUtility.IdGenerating;
-using UnityUtilityTools;
 
 namespace UnityUtility.Async
 {
-    internal interface IAsyncSettings
-    {
-        bool CanBeStopped { get; }
-        bool CanBeStoppedGlobally { get; }
-    }
-
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.
     /// </summary>
     public static class TaskSystem
     {
-        internal const string SYSTEM_NAME = "Async System";
-
         private static Data _data;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void SetUp()
         {
-            IAsyncSettings settings = AsyncSettings.GetSettings();
             LongIdGenerator idProvider = new LongIdGenerator();
 
             _data = new Data
             {
-                CanBeStoppedGlobally = settings.CanBeStoppedGlobally,
-                Globals = new TaskFactory(idProvider, settings.CanBeStopped, true, "Tasks"),
-                Locals = new TaskFactory(idProvider, settings.CanBeStopped, false, "LocalTasks")
+                Globals = new TaskFactory(idProvider, true, "Tasks"),
+                Locals = new TaskFactory(idProvider, false, "LocalTasks")
             };
         }
 
         public static void RegisterStopper(ITaskStopper stopper)
         {
-            if (!_data.CanBeStoppedGlobally)
-                throw Errors.CannotStopTask();
-
             if (_data.Stopper != null)
                 throw new InvalidOperationException("Stoping object is already set.");
 
@@ -132,26 +118,9 @@ namespace UnityUtility.Async
 
         private class Data
         {
-            public bool CanBeStoppedGlobally;
             public TaskFactory Globals;
             public TaskFactory Locals;
             public ITaskStopper Stopper;
-        }
-
-        private class AsyncSettings : IAsyncSettings
-        {
-            bool IAsyncSettings.CanBeStopped => true;
-            bool IAsyncSettings.CanBeStoppedGlobally => false;
-
-            public static IAsyncSettings GetSettings()
-            {
-                AsyncSystemSettings settings = Resources.Load<AsyncSystemSettings>(nameof(AsyncSystemSettings));
-
-                if (settings != null)
-                    return settings;
-
-                return new AsyncSettings();
-            }
         }
     }
 }

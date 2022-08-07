@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityUtility.Pool;
-using UnityUtilityTools;
 
 namespace UnityUtility.Async
 {
@@ -67,17 +66,9 @@ namespace UnityUtility.Async
             _iterator.Stop();
         }
 
-        // - - //
-
         public void OnCoroutineInterrupted()
         {
-            if (_owner.CanBeStopped)
-            {
-                OnCoroutineEnded();
-                return;
-            }
-
-            throw Errors.CannotStopTask();
+            OnCoroutineEnded();
         }
 
         public void OnCoroutineEnded()

@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityUtility.Async;
 
 namespace UnityUtilityTools
 {
@@ -53,11 +52,6 @@ namespace UnityUtilityTools
         public static IndexOutOfRangeException IndexOutOfRange()
         {
             return new IndexOutOfRangeException("The index is out of range.");
-        }
-
-        public static InvalidOperationException CannotStopTask()
-        {
-            return new InvalidOperationException($"Task cannot be stopped. Check {TaskSystem.SYSTEM_NAME} settings.");
         }
 
         public static ArgumentOutOfRangeException NegativeTime(string paramName)
