@@ -23,6 +23,8 @@ namespace UnityUtilityEditor.Inspectors.Sound
 
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+
             AudioSource audioSource = target.AudioSource;
 
             if (audioSource != null && (audioSource.isPlaying || audioSource.time != 0f))
