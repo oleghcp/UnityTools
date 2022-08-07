@@ -138,11 +138,14 @@ namespace UnityUtility
             return (ch1, ch2);
         }
 
-        /// <summary>
-        /// 1f - MathF.Exp(-value)
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float InvExp(float value)
+        public static float ApproachZero(float value)
+        {
+            return Exp(-value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float ApproachOne(float value)
         {
             return 1f - Exp(-value);
         }
