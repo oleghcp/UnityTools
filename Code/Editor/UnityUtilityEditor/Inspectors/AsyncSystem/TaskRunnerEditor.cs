@@ -1,4 +1,6 @@
 ﻿using UnityEditor;
+using UnityEngine;
+using UnityUtility;
 using UnityUtility.Async;
 
 namespace UnityUtilityEditor.Inspectors.AsyncSystem
@@ -31,7 +33,9 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
             }
 
             EditorGUILayout.LabelField($"Task ID: {target.Id}");
+            GUI.color = target.IsPaused ? Colours.Blue : Colours.Lime;
             EditorGUILayout.LabelField(target.IsPaused ? "Paused" : "Running");
+            GUI.color = Colours.White;
         }
 
         private void Update()
