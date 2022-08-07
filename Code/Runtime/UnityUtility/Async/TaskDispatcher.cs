@@ -31,13 +31,5 @@ namespace UnityUtility.Async
         {
             _tasks.Add(runner);
         }
-
-        public void StopAllTasks()
-        {
-            for (int i = 0; i < _tasks.Count; i++)
-            {
-                _tasks[i].Stop();
-            }
-        }
     }
 }

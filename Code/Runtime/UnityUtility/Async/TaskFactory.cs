@@ -1,15 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityUtility.IdGenerating;
 using UnityUtility.Pool;
 
 namespace UnityUtility.Async
 {
-    public interface ITaskStopper
-    {
-        event Action StopAllTasks_Event;
-    }
-
     internal class TaskFactory : IObjectFactory<TaskRunner>
     {
         private readonly ObjectPool<TaskRunner> _taskPool;
@@ -27,21 +21,12 @@ namespace UnityUtility.Async
             _taskPool = new ObjectPool<TaskRunner>(this);
         }
 
-        public void RegisterStopper(ITaskStopper stopper)
-        {
-            stopper.StopAllTasks_Event += () =>
-            {
-                if (_taskDispatcher != null)
-                    _taskDispatcher.StopAllTasks();
-            };
-        }
-
         public void Release(TaskRunner runner)
         {
             _taskPool.Release(runner);
         }
 
-        public TaskRunner GetRunner()
+        public TaskRunner Get()
         {
             return _taskPool.Get();
         }

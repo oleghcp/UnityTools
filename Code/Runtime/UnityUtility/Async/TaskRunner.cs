@@ -47,7 +47,7 @@ namespace UnityUtility.Async
 
         public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)
         {
-            TaskInfo task = _owner.GetRunner().RunAsync(routine, token, true);
+            TaskInfo task = _owner.Get().RunAsync(routine, token, true);
             return _continues.Place(task);
         }
 

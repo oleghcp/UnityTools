@@ -38,7 +38,7 @@ namespace UnityUtility.Async
                 return _task.ContinueWith(routine, token);
 
             if (_task != null)
-                return _task.Owner.GetRunner().RunAsync(routine, token);
+                return _task.Owner.Get().RunAsync(routine, token);
 
             return TaskSystem.StartAsyncLocally(routine, token);
         }
