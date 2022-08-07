@@ -31,7 +31,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
             }
 
             EditorGUILayout.LabelField($"Task ID: {target.Id}");
-            EditorGUILayout.LabelField("Status: " + (target.IsPaused ? "Paused" : "Running"));
+            EditorGUILayout.LabelField(target.IsPaused ? "Paused" : "Running");
         }
 
         private void Update()

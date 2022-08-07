@@ -24,11 +24,6 @@ namespace UnityUtility.Async
         {
             _iterator = new RoutineIterator(this);
             _owner = owner;
-            owner.TaskDispatcher.AddTaskRunner(this);
-
-            if (_owner.CanBeStoppedGlobally)
-                _owner.StopTasks_Event += OnGloballyStoped;
-
             return this;
         }
 
@@ -39,12 +34,6 @@ namespace UnityUtility.Async
                 if (_id == 0L)
                     _owner.Release(this);
             }
-        }
-
-        private void OnDestroy()
-        {
-            if (_owner.CanBeStoppedGlobally)
-                _owner.StopTasks_Event -= OnGloballyStoped;
         }
 
         // - - //
@@ -82,10 +71,13 @@ namespace UnityUtility.Async
 
         public void OnCoroutineInterrupted()
         {
-            if (!_owner.CanBeStopped)
-                throw Errors.CannotStopTask();
+            if (_owner.CanBeStopped)
+            {
+                OnCoroutineEnded();
+                return;
+            }
 
-            OnCoroutineEnded();
+            throw Errors.CannotStopTask();
         }
 
         public void OnCoroutineEnded()
@@ -100,15 +92,6 @@ namespace UnityUtility.Async
             }
         }
 
-        // - - //
-
-        private void OnGloballyStoped()
-        {
-            if (_id != 0L)
-                Stop();
-        }
-
-        #region IPoolable
         void IPoolable.Reinit()
         {
             _enabled = true;
@@ -119,6 +102,5 @@ namespace UnityUtility.Async
             _iterator.Reset();
             _enabled = false;
         }
-        #endregion
     }
 }
