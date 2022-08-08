@@ -434,6 +434,18 @@ namespace UnityEngine
             return new Color(color.r, color.g, color.b, a);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetVolume(this in BoundingSphere sphere)
+        {
+            return MathUtility.GetSphereVolume(sphere.radius);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetSurface(this in BoundingSphere sphere)
+        {
+            return MathUtility.GetSphereSurface(sphere.radius);
+        }
+
         #region Deconstructors
 #if UNITY_2018_3_OR_NEWER
         public static void Deconstruct(this in Vector2 vector, out float x, out float y)
@@ -492,6 +504,12 @@ namespace UnityEngine
             y = rect.y;
             width = rect.width;
             height = rect.height;
+        }
+
+        public static void Deconstruct(this in BoundingSphere sphere, out Vector3 position, out float radius)
+        {
+            position = sphere.position;
+            radius = sphere.radius;
         }
 #endif
         #endregion

@@ -151,9 +151,29 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RectInt MinMaxRect(int xMin, int yMin, int xMax, int yMax)
+        public static RectInt MinMaxRectInt(int xMin, int yMin, int xMax, int yMax)
         {
             return new RectInt(xMin, yMin, xMax - xMin, yMax - yMin);
+        }
+
+        public static float GetCircleArea(float radius)
+        {
+            return PI * radius * radius;
+        }
+
+        public static float GetCircumference(float radius)
+        {
+            return PI * radius * 2f;
+        }
+
+        public static float GetSphereVolume(float radius)
+        {
+            return PI * radius * radius * radius * 4f / 3f;
+        }
+
+        public static float GetSphereSurface(float radius)
+        {
+            return PI * radius * radius * 4f;
         }
     }
 }
