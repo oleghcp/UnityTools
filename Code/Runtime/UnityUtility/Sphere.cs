@@ -34,6 +34,16 @@ namespace UnityUtility
             radius = Radius;
         }
 
+        public bool Contains(in Vector3 point)
+        {
+            return Vector3.Distance(point, Position) < Radius;
+        }
+
+        public bool Overlaps(in Sphere other)
+        {
+            return Vector3.Distance(Position, other.Position) < Radius + other.Radius;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float GetVolume()
         {

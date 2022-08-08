@@ -162,26 +162,6 @@ namespace UnityEngine
             return new Vector3Int(x, value.y, value.x);
         }
 
-        /// <summary>
-        /// Is position in bounds.
-        /// </summary>
-        /// <param name="bounds">Checked bounds</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InBounds(this in Vector2Int pos, in RectInt bounds)
-        {
-            return bounds.Contains(pos);
-        }
-
-        /// <summary>
-        /// Is position in bounds.
-        /// </summary>
-        /// <param name="bounds">Checked bounds</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InBounds(this in Vector3Int pos, in RectInt bounds)
-        {
-            return bounds.Contains(pos.XY());
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetNormalized(this in Vector2 value, out float prevMagnitude)
         {
@@ -434,18 +414,6 @@ namespace UnityEngine
             return new Color(color.r, color.g, color.b, a);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetVolume(this in BoundingSphere sphere)
-        {
-            return MathUtility.GetSphereVolume(sphere.radius);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetSurface(this in BoundingSphere sphere)
-        {
-            return MathUtility.GetSphereSurface(sphere.radius);
-        }
-
         #region Deconstructors
 #if UNITY_2018_3_OR_NEWER
         public static void Deconstruct(this in Vector2 vector, out float x, out float y)
@@ -504,12 +472,6 @@ namespace UnityEngine
             y = rect.y;
             width = rect.width;
             height = rect.height;
-        }
-
-        public static void Deconstruct(this in BoundingSphere sphere, out Vector3 position, out float radius)
-        {
-            position = sphere.position;
-            radius = sphere.radius;
         }
 #endif
         #endregion

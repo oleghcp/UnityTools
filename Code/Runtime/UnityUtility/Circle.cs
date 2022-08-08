@@ -28,6 +28,16 @@ namespace UnityUtility
             radius = Radius;
         }
 
+        public bool Contains(Vector2 point)
+        {
+            return Vector2.Distance(point, Position) < Radius;
+        }
+
+        public bool Overlaps(in Circle other)
+        {
+            return Vector2.Distance(Position, other.Position) < Radius + other.Radius;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float GetArea()
         {
