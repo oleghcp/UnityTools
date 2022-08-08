@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtilityTools;
 
 namespace UnityUtility
 {
     [Serializable]
-    public struct Sphere
+    public struct Sphere : IEquatable<Sphere>
     {
         public Vector3 Position;
         public float Radius;
@@ -54,6 +55,31 @@ namespace UnityUtility
         public float GetSurface()
         {
             return MathUtility.GetSphereSurface(Radius);
+        }
+
+        public override int GetHashCode()
+        {
+            return Helper.GetHashCode(Position.GetHashCode(), Radius.GetHashCode());
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Sphere sphere && sphere.Equals(this);
+        }
+
+        public bool Equals(Sphere other)
+        {
+            return this == other;
+        }
+
+        public static bool operator !=(Sphere a, Sphere b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator ==(Sphere a, Sphere b)
+        {
+            return a.Radius == b.Radius && a.Position == b.Position;
         }
 
         public static implicit operator Sphere(BoundingSphere sphere)

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtilityTools;
 
 namespace UnityUtility
 {
     [Serializable]
-    public struct Circle
+    public struct Circle : IEquatable<Circle>
     {
         public Vector2 Position;
         public float Radius;
@@ -48,6 +49,31 @@ namespace UnityUtility
         public float GetLength()
         {
             return MathUtility.GetCircumference(Radius);
+        }
+
+        public override int GetHashCode()
+        {
+            return Helper.GetHashCode(Position.GetHashCode(), Radius.GetHashCode());
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Circle circle && circle.Equals(this);
+        }
+
+        public bool Equals(Circle other)
+        {
+            return this == other;
+        }
+
+        public static bool operator !=(Circle a, Circle b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator ==(Circle a, Circle b)
+        {
+            return a.Radius == b.Radius && a.Position == b.Position;
         }
     }
 }
