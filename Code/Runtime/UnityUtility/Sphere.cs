@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtilityTools;
@@ -6,7 +7,7 @@ using UnityUtilityTools;
 namespace UnityUtility
 {
     [Serializable]
-    public struct Sphere : IEquatable<Sphere>
+    public struct Sphere : IEquatable<Sphere>, IFormattable
     {
         public Vector3 Position;
         public float Radius;
@@ -90,6 +91,27 @@ namespace UnityUtility
         public static implicit operator BoundingSphere(Sphere sphere)
         {
             return new BoundingSphere(sphere.Position, sphere.Radius);
+        }
+
+        public override string ToString()
+        {
+            return ToString(null, null);
+        }
+
+        public string ToString(string format)
+        {
+            return ToString(format, null);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format.IsNullOrEmpty())
+                format = "F2";
+
+            if (formatProvider == null)
+                formatProvider = CultureInfo.InvariantCulture.NumberFormat;
+
+            return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", Position.ToString(format, formatProvider), Radius.ToString(format, formatProvider));
         }
     }
 }
