@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Inspector;
 
@@ -28,6 +27,7 @@ namespace UnityUtility.Shooting
         private IProjectileEventListener _listener;
 
         private bool _canMove;
+        private float _currentTime;
         private int _ricochetsLeft;
         private Vector3 _prevPos;
         private Vector3 _velocity;
@@ -75,10 +75,21 @@ namespace UnityUtility.Shooting
         {
             if (_canMove)
             {
-                UpdateState(transform.position);
+                if (_currentTime >= _timer)
+                {
+                    _canMove = false;
+                    InvokeTimeOut();
+                }
+                else
+                {
+                    float deltaTime = GetDeltaTime();
+                    _currentTime += deltaTime;
 
-                if (!_canMove)
-                    InvokeHit();
+                    UpdateState(transform.position, deltaTime, 1f);
+
+                    if (!_canMove)
+                        InvokeHit();
+                }
             }
 
             _listener.OnUpdate();
@@ -124,7 +135,7 @@ namespace UnityUtility.Shooting
 
             if (_moving.MoveInInitialFrame > 0f)
             {
-                UpdateState(currentPosition, _moving.MoveInInitialFrame);
+                UpdateState(currentPosition, GetDeltaTime(), _moving.MoveInInitialFrame);
 
                 if (!_canMove)
                 {
@@ -132,45 +143,21 @@ namespace UnityUtility.Shooting
                     return;
                 }
             }
-
-            if (_timer < float.PositiveInfinity)
-                StartCoroutine(timerRoutine());
-
-            IEnumerator timerRoutine()
-            {
-                float time = _timer;
-
-                while (time > 0f)
-                {
-                    yield return null;
-                    time -= Time.deltaTime;
-                }
-
-                if (!_canMove)
-                    yield break;
-
-                _canMove = false;
-
-                if (_autodestruct)
-                    gameObject.Destroy();
-
-                _events?.OnTimeOut.Invoke();
-                _listener?.OnTimeOut();
-            }
         }
 
         public void Stop()
         {
             _canMove = false;
+            _currentTime = 0f;
         }
 
-        private void UpdateState(Vector3 currentPosition, float speedScale = 1f)
+        private void UpdateState(Vector3 currentPosition, float deltaTime, float speedScale)
         {
             CheckMovement(_prevPos, currentPosition, out _prevPos, out currentPosition);
 
             if (_canMove)
             {
-                Vector3 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), GetDeltaTime(), speedScale);
+                Vector3 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
                 CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
             }
 
@@ -220,11 +207,24 @@ namespace UnityUtility.Shooting
 
         private void InvokeHit()
         {
+            _currentTime = 0f;
+
             if (_autodestruct)
                 gameObject.Destroy();
 
             _events?.OnHit.Invoke(_hitInfo);
             _listener?.OnHit(_hitInfo);
+        }
+
+        private void InvokeTimeOut()
+        {
+            _currentTime = 0f;
+
+            if (_autodestruct)
+                gameObject.Destroy();
+
+            _events?.OnTimeOut.Invoke();
+            _listener?.OnTimeOut();
         }
 
         private Vector3 UpdateDirection()
