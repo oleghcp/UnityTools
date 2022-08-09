@@ -24,6 +24,7 @@ namespace UnityUtility.Shooting
         void OnHit(in RaycastHit hitInfo);
         void OnTimeOut();
         void OnReflect(in RaycastHit hitInfo);
+        void OnUpdate();
     }
 #endif
 
@@ -33,6 +34,7 @@ namespace UnityUtility.Shooting
         void OnHit(in RaycastHit2D hitInfo);
         void OnTimeOut();
         void OnReflect(in RaycastHit2D hitInfo);
+        void OnUpdate();
     }
 #endif
 }

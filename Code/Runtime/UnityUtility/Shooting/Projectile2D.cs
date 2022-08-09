@@ -76,13 +76,15 @@ namespace UnityUtility.Shooting
 
         private void Update()
         {
-            if (!_canMove)
-                return;
+            if (_canMove)
+            {
+                UpdateState(transform.position);
 
-            UpdateState(transform.position);
+                if (!_canMove)
+                    InvokeHit();
+            }
 
-            if (!_canMove)
-                InvokeHit();
+            _listener.OnUpdate();
         }
 
 #if UNITY_EDITOR
