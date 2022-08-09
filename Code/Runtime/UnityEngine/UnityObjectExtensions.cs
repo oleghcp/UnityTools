@@ -28,130 +28,11 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Instantiates unity object of defined type.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T self) where T : UnityObject
-        {
-            return UnityObject.Instantiate(self);
-        }
-
-        /// <summary>
-        /// Instantiates unity object of defined type.
-        /// </summary>
-        public static T Install<T>(this T self, HideFlags hideFlags) where T : UnityObject
-        {
-            T obj = UnityObject.Instantiate(self);
-            obj.hideFlags = hideFlags;
-            return obj;
-        }
-
-        /// <summary>
-        /// Instantiates gameobject as a child of the specified parent.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GameObject Install(this GameObject self, Transform parent, bool worldPositionStays)
-        {
-            return UnityObject.Instantiate(self, parent, worldPositionStays);
-        }
-
-        /// <summary>
-        /// Instantiates gameobject as a child with default local position and rotation.
-        /// </summary>
-        public static GameObject Install(this GameObject self, Transform parent)
-        {
-            return UnityObject.Instantiate(self, parent, false);
-        }
-
-        /// <summary>
-        /// Instantiates gameobject as a child of the specified parent.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T self, Transform parent, bool worldPositionStays) where T : Component
-        {
-            return UnityObject.Instantiate(self, parent, worldPositionStays);
-        }
-
-        /// <summary>
-        /// Instantiates defined component as a child with default local position and rotation.
-        /// </summary>
-        public static T Install<T>(this T self, Transform parent) where T : Component
-        {
-            return UnityObject.Instantiate(self, parent, false);
-        }
-
-        /// <summary>
-        /// Instantiates gameobject to the specified position with the specified rotation.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GameObject Install(this GameObject self, in Vector3 position)
-        {
-            return UnityObject.Instantiate(self, position, Quaternion.identity);
-        }
-
-        /// <summary>
-        /// Instantiates gameobject to the specified position with the specified rotation.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GameObject Install(this GameObject self, in Vector3 position, in Quaternion rotation)
-        {
-            return UnityObject.Instantiate(self, position, rotation);
-        }
-
-        /// <summary>
-        /// Instantiates gameobject as a child with the specified position and rotation.
-        /// </summary>
-        /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static GameObject Install(this GameObject self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local = true)
-        {
-            if (local)
-            {
-                targetPos = parent.TransformPoint(targetPos);
-                targetRot = parent.rotation * targetRot;
-            }
-
-            return UnityObject.Instantiate(self, targetPos, targetRot, parent);
-        }
-
-        /// <summary>
-        /// Instantiates defined component to specified position with specified rotation.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T self, in Vector3 position) where T : Component
-        {
-            return UnityObject.Instantiate(self, position, Quaternion.identity);
-        }
-
-        /// <summary>
-        /// Instantiates defined component to specified position with specified rotation.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Install<T>(this T self, in Vector3 position, in Quaternion rotation) where T : Component
-        {
-            return UnityObject.Instantiate(self, position, rotation);
-        }
-
-        /// <summary>
-        /// Instantiates gameobject as a child with the specified position and rotation.
-        /// </summary>
-        /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static T Install<T>(this T self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local = true) where T : Component
-        {
-            if (local)
-            {
-                targetPos = parent.TransformPoint(targetPos);
-                targetRot = parent.rotation * targetRot;
-            }
-
-            return UnityObject.Instantiate(self, targetPos, targetRot, parent);
-        }
-
-        /// <summary>
         /// Returns existing component or adds and returns new one.
         /// </summary>
         public static T GetOrAddComponent<T>(this GameObject self) where T : Component
         {
-            var component = self.GetComponent<T>();
+            T component = self.GetComponent<T>();
             if (component == null)
                 return self.AddComponent<T>();
             return component;
@@ -162,7 +43,7 @@ namespace UnityEngine
         /// </summary>
         public static Component GetOrAddComponent(this GameObject self, Type type)
         {
-            var component = self.GetComponent(type);
+            Component component = self.GetComponent(type);
             if (component == null)
                 return self.AddComponent(type);
             return component;
@@ -287,7 +168,7 @@ namespace UnityEngine
             if (!includeInactive)
                 return self.GetComponentInParent<T>();
 
-            for (var p = self; p != null; p = p.parent)
+            for (Transform p = self; p != null; p = p.parent)
             {
                 T component = p.GetComponent<T>();
                 if (component != null)
@@ -314,7 +195,7 @@ namespace UnityEngine
             if (!includeInactive)
                 return self.GetComponentInChildren<T>();
 
-            foreach (var child in self.EnumerateChildren(true))
+            foreach (Transform child in self.EnumerateChildren(true))
             {
                 T component = child.GetComponent<T>();
                 if (component != null)
@@ -332,6 +213,28 @@ namespace UnityEngine
         public static RectTransform GetRectTransform(this GameObject self)
         {
             return self.transform as RectTransform;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetOrthographicSize(this Camera self)
+        {
+            return ScreenUtility.GetOrthographicSize(self.orthographicSize);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 GetPerspectiveSize(this Camera self, float remoteness)
+        {
+            return ScreenUtility.GetPerspectiveSize(self.fieldOfView, remoteness);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetHorizontalFov(this Camera self)
+        {
+#if UNITY_2019_1_OR_NEWER
+            return Camera.VerticalToHorizontalFieldOfView(self.fieldOfView, (float)Screen.width / Screen.height);
+#else
+            return ScreenUtility.GetAspectAngle(self.fieldOfView, (float)Screen.width / Screen.height);
+#endif
         }
 
         /// <summary>
@@ -354,45 +257,10 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Returns triangles count of the mesh;
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetTriangleCount(this Mesh self)
-        {
-            return self.triangles.Length / 3;
-        }
-
-        /// <summary>
-        /// Returns vertex indices of the triangle of the mesh.
-        /// </summary>
-        public static (int i0, int i1, int i2) GetTriangleIndices(this Mesh self, int triangleNum)
-        {
-            int trIndex = triangleNum * 3;
-
-            return
-            (
-                self.triangles[trIndex],
-                self.triangles[++trIndex],
-                self.triangles[++trIndex]
-            );
-        }
-
-        /// <summary>
-        /// Returns the triangle of the mesh.
-        /// </summary>
-        public static Plane GetTriangle(this Mesh self, int triangleNum)
-        {
-            (int i0, int i1, int i2) = self.GetTriangleIndices(triangleNum);
-            Vector3[] vertices = self.vertices;
-
-            return new Plane(vertices[i0], vertices[i1], vertices[i2]);
-        }
-
-        /// <summary>
         /// Returns true if a game object is prefab reference. For scene objects returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPrefab(this GameObject self)
+        public static bool IsAsset(this GameObject self)
         {
             return !self.scene.IsValid();
         }
@@ -404,28 +272,6 @@ namespace UnityEngine
         public static bool IsAsset(this UnityObject self)
         {
             return self.GetInstanceID() > 0;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetOrthographicSize(this Camera self)
-        {
-            return ScreenUtility.GetCameraViewRadius(self.orthographicSize);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetPerspectiveSize(this Camera self, float distance)
-        {
-            return ScreenUtility.GetCameraViewRadius(self.fieldOfView, distance);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float GetHorizontalFov(this Camera self)
-        {
-#if UNITY_2019_1_OR_NEWER
-            return Camera.VerticalToHorizontalFieldOfView(self.fieldOfView, (float)Screen.width / Screen.height);
-#else
-            return ScreenUtility.GetAspectAngle(self.fieldOfView, (float)Screen.width / Screen.height);
-#endif
         }
     }
 }

@@ -61,7 +61,7 @@ namespace UnityUtility
         /// </summary>
         /// <param name="cameraOrthographicSize">Camera orthographic size.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetCameraViewRadius(float cameraOrthographicSize)
+        public static Vector2 GetOrthographicSize(float cameraOrthographicSize)
         {
             return new Vector2(cameraOrthographicSize * Screen.width / Screen.height, cameraOrthographicSize);
         }
@@ -69,11 +69,11 @@ namespace UnityUtility
         /// <summary>
         /// Returns distances from point lying on perspective camera forward axis to vertical and horizontal sides.
         /// </summary>
-        /// <param name="distance">Distance from the camera along forward axis.</param>
+        /// <param name="remoteness">Distance from the camera along forward axis.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 GetCameraViewRadius(float verticalFieldOfView, float distance)
+        public static Vector2 GetPerspectiveSize(float verticalFieldOfView, float remoteness)
         {
-            return GetCameraViewRadius(distance * GetHalfFovTan(verticalFieldOfView));
+            return GetOrthographicSize(remoteness * GetHalfFovTan(verticalFieldOfView));
         }
 
         /// <summary>

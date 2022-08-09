@@ -63,7 +63,7 @@ namespace UnityUtility.SingleScripts
 
         public void Dispose()
         {
-            if (gameObject.IsPrefab())
+            if (gameObject.IsAsset())
                 throw Errors.DisposingNonEditable();
 
             hideFlags = HideFlags.None;
