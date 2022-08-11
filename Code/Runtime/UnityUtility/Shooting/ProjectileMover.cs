@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
@@ -7,17 +6,22 @@ using UnityUtility.MathExt;
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ProjectileMover
     {
         [SerializeField]
+        private bool _useGravity;
+        [SerializeField, Min(0f)]
         private float _startSpeed;
-        [field: SerializeField]
-        public bool UseGravity { get; set; }
         [SerializeField, Range(0f, 1f)]
         private float _moveInInitialFrame;
         [SerializeField]
         private RicochetOptions _ricochets;
+
+        public bool UseGravity
+        {
+            get => _useGravity;
+            set => _useGravity = value;
+        }
 
         public float StartSpeed
         {
@@ -51,7 +55,7 @@ namespace UnityUtility.Shooting
 
         internal Vector3 GetNextPos(in Vector3 curPos, ref Vector3 velocity, in Vector3 gravity, float deltaTime, float speedScale)
         {
-            if (UseGravity)
+            if (_useGravity)
                 velocity += gravity * deltaTime;
 
             return curPos + velocity * (deltaTime * speedScale);
@@ -70,7 +74,7 @@ namespace UnityUtility.Shooting
 
         internal Vector2 GetNextPos(in Vector2 curPos, ref Vector2 velocity, in Vector2 gravity, float deltaTime, float speedScale)
         {
-            if (UseGravity)
+            if (_useGravity)
                 velocity += gravity * deltaTime;
 
             return curPos + velocity * (deltaTime * speedScale);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
 
@@ -7,13 +6,12 @@ using UnityUtility.MathExt;
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ProjectileCaster
     {
-        [field: SerializeField]
-        public LayerMask HitMask { get; set; }
         [SerializeField]
         private CastOptions _castRadius;
+        [SerializeField]
+        private LayerMask _hitMask;
         [SerializeField]
         private float _initialPrecastOffset;
         [SerializeField, Range(0f, 1f)]
@@ -29,6 +27,12 @@ namespace UnityUtility.Shooting
         {
             get => _castRadius.HighPrecision;
             set => _castRadius.HighPrecision = value;
+        }
+
+        public LayerMask HitMask
+        {
+            get => _hitMask;
+            set => _hitMask = value;
         }
 
         public float ReflectedCastNear
@@ -48,7 +52,7 @@ namespace UnityUtility.Shooting
         {
             if (_castRadius.CastRadius > float.Epsilon)
             {
-                bool hit = Physics.SphereCast(source, _castRadius.CastRadius, direction, out hitInfo, distance, HitMask);
+                bool hit = Physics.SphereCast(source, _castRadius.CastRadius, direction, out hitInfo, distance, _hitMask);
 
                 if (!_castRadius.HighPrecision)
                     return hit;
@@ -56,7 +60,7 @@ namespace UnityUtility.Shooting
                     return true;
             }
 
-            return Physics.Raycast(source, direction, out hitInfo, distance, HitMask);
+            return Physics.Raycast(source, direction, out hitInfo, distance, _hitMask);
         }
 #endif
 
@@ -65,7 +69,7 @@ namespace UnityUtility.Shooting
         {
             if (_castRadius.CastRadius > float.Epsilon)
             {
-                hitInfo = Physics2D.CircleCast(source, _castRadius.CastRadius, direction, distance, HitMask);
+                hitInfo = Physics2D.CircleCast(source, _castRadius.CastRadius, direction, distance, _hitMask);
 
                 if (!_castRadius.HighPrecision)
                     return hitInfo.Hit();
@@ -73,7 +77,7 @@ namespace UnityUtility.Shooting
                     return true;
             }
 
-            hitInfo = Physics2D.Raycast(source, direction, distance, HitMask);
+            hitInfo = Physics2D.Raycast(source, direction, distance, _hitMask);
             return hitInfo.Hit();
         }
 #endif

@@ -36,6 +36,12 @@ namespace UnityUtility.Shooting
         public Vector3 PrevPos => _prevPos;
         public int RicochetsLeft => _ricochetsLeft;
 
+        public float Timer
+        {
+            get => _timer;
+            set => _timer = value;
+        }
+
         public Vector3 Velocity
         {
             get => _velocity;
