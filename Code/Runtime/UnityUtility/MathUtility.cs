@@ -39,7 +39,7 @@ namespace UnityUtility
 
             float result = num1 * num1 + num2 * num2 + num3 * num3;
 
-            return result < precision;
+            return result <= precision;
         }
 
         public static bool Equals(in Vector2 value, in Vector2 other, float precision)
@@ -47,7 +47,7 @@ namespace UnityUtility
             float num1 = value.x - other.x;
             float num2 = value.y - other.y;
 
-            return (num1 * num1 + num2 * num2) < precision;
+            return (num1 * num1 + num2 * num2) <= precision;
         }
 
         /// <summary>
