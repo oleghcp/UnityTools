@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityUtilityTools;
 using UnityEngine;
+using UnityUtilityTools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -10,8 +10,9 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class SingleBehaviour<T> : MonoBehaviour, IDisposable where T : SingleBehaviour<T>
     {
-        private static T _inst;
-        private static bool _locked;
+        private static T _instance;
+
+        private bool _locked;
 
         /// <summary>
         /// Static instance of SingleScript`1.
@@ -20,46 +21,44 @@ namespace UnityUtility.SingleScripts
         {
             get
             {
-                if (_inst == null)
+                if (_instance == null)
                 {
-                    if (_locked)
-                        throw new InvalidOperationException($"The instance of {typeof(T).Name} is being configured. Avoid recursive calls.");
+                    T instance = FindObjectOfType<T>();
 
-                    if ((_inst = FindObjectOfType<T>()) == null)
+                    if (instance == null)
                         throw new ObjectNotFoundException($"There is no any instance of {typeof(T).Name}.");
 
-                    _inst.Construct();
+                    if (instance._locked)
+                        throw new InvalidOperationException($"The instance of {typeof(T).Name} is being configured. Avoid recursive calls.");
+
+                    (_instance = instance).Construct();
                 }
 
-                return _inst;
+                return _instance;
             }
         }
 
         /// <summary>
         /// Returns true if the instance is not null.
         /// </summary>
-        public static bool Exists => _inst != null;
-
-        // Unity Callbacks //
+        public static bool Exists => _instance != null;
 
         private void Awake()
         {
-            if (_inst == null)
+            if (_instance == null)
             {
                 _locked = true;
                 Construct();
-                _inst = this as T;
+                _instance = this as T;
                 _locked = false;
             }
         }
 
         private void OnDestroy()
         {
-            if (_inst != null)
+            if (_instance != null)
                 DisposeInternal();
         }
-
-        // -- //
 
         public void Dispose()
         {
@@ -71,11 +70,9 @@ namespace UnityUtility.SingleScripts
             DisposeInternal();
         }
 
-        // -- //
-
         private void DisposeInternal()
         {
-            _inst = null;
+            _instance = null;
             CleanUp();
         }
 

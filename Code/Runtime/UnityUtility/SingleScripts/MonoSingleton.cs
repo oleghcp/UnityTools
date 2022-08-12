@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityUtilityTools;
 using UnityEngine;
+using UnityUtilityTools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -9,7 +9,7 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSingleton<T>
     {
-        private static T _inst;
+        private static T _instance;
 
         /// <summary>
         /// Static instance of MonoSingleton`1.
@@ -18,17 +18,26 @@ namespace UnityUtility.SingleScripts
         {
             get
             {
-                if (_inst == null)
-                    _inst = SingletonUtility.CreateInstance(ComponentUtility.CreateInstance<T>);
+                if (_instance == null)
+                {
+                    if (!SingletonUtility.TryUseAttribute(out _instance))
+                        _instance = ComponentUtility.CreateInstance<T>();
+                }
 
-                return _inst;
+                return _instance;
             }
         }
 
         /// <summary>
         /// Returns true if the instance is not null.
         /// </summary>
-        public static bool Exists => _inst != null;
+        public static bool Exists => _instance != null;
+
+        private void OnDestroy()
+        {
+            if (_instance != null)
+                DisposeInternal();
+        }
 
         public void Dispose()
         {
@@ -40,15 +49,9 @@ namespace UnityUtility.SingleScripts
             DisposeInternal();
         }
 
-        private void OnDestroy()
-        {
-            if (_inst != null)
-                DisposeInternal();
-        }
-
         private void DisposeInternal()
         {
-            _inst = null;
+            _instance = null;
             CleanUp();
         }
 

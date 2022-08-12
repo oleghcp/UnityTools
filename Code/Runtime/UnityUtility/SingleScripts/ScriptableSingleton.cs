@@ -7,7 +7,7 @@ namespace UnityUtility.SingleScripts
     /// </summary>
     public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
     {
-        private static T _inst;
+        private static T _instance;
 
         /// <summary>
         /// Static instance of ScriptableSingleton`1.
@@ -16,16 +16,19 @@ namespace UnityUtility.SingleScripts
         {
             get
             {
-                if (_inst == null)
-                    _inst = SingletonUtility.CreateInstance(CreateInstance<T>);
+                if (_instance == null)
+                {
+                    if (!SingletonUtility.TryUseAttribute(out _instance))
+                        _instance = CreateInstance<T>();
+                }
 
-                return _inst;
+                return _instance;
             }
         }
 
         /// <summary>
         /// Returns true if the instance is not null.
         /// </summary>
-        public static bool Exists => _inst != null;
+        public static bool Exists => _instance != null;
     }
 }

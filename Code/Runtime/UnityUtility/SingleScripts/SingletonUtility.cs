@@ -1,14 +1,21 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace UnityUtility.SingleScripts
 {
     internal static class SingletonUtility
     {
-        public static T CreateInstance<T>(Func<T> alteredCreater) where T : class
+        public static bool TryUseAttribute<T>(out T value) where T : class
         {
-            var attribute = typeof(T).GetCustomAttribute<CreateInstanceAttribute>(true);
-            return attribute != null ? attribute.Create() as T : alteredCreater();
+            CreateInstanceAttribute attribute = typeof(T).GetCustomAttribute<CreateInstanceAttribute>(true);
+
+            if (attribute == null)
+            {
+                value = default;
+                return false;
+            }
+
+            value = (T)attribute.Create();
+            return true;
         }
     }
 }
