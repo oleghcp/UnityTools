@@ -9,17 +9,17 @@ namespace UnityUtility.Async
     internal class TaskRunner : MonoBehaviour, IPoolable
     {
         private RoutineIterator _iterator;
-        private TaskFactory _owner;
+        private TaskDispatcher _owner;
         private List<TaskInfo> _continues = new List<TaskInfo>();
 
         private bool _enabled = true;
         private long _id;
 
-        internal TaskFactory Owner => _owner;
+        internal TaskDispatcher Owner => _owner;
         public bool IsPaused => _iterator.IsPaused;
         public long Id => _id;
 
-        public TaskRunner SetUp(TaskFactory owner)
+        public TaskRunner SetUp(TaskDispatcher owner)
         {
             _iterator = new RoutineIterator(this);
             _owner = owner;
@@ -31,7 +31,7 @@ namespace UnityUtility.Async
             if (_enabled)
             {
                 if (_id == 0L)
-                    _owner.Release(this);
+                    _owner.ReleaseRunner(this);
             }
         }
 
@@ -39,7 +39,7 @@ namespace UnityUtility.Async
 
         public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool paused = false)
         {
-            _id = _owner.IdProvider.GetNewId();
+            _id = TaskSystem.IdProvider.GetNewId();
             _iterator.Initialize(routine, token, paused);
             StartCoroutine(_iterator);
             return new TaskInfo(this);
@@ -47,7 +47,7 @@ namespace UnityUtility.Async
 
         public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)
         {
-            TaskInfo task = _owner.Get().RunAsync(routine, token, true);
+            TaskInfo task = _owner.GetRunner().RunAsync(routine, token, true);
             return _continues.Place(task);
         }
 

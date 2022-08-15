@@ -19,7 +19,10 @@ namespace UnityUtility.Async
 
         public static IEnumerator RunByConditionRoutine(Func<bool> condition, Action run)
         {
-            while (!condition()) { yield return null; }
+            while (!condition())
+            {
+                yield return null;
+            }
 
             run();
         }

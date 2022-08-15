@@ -11,24 +11,17 @@ namespace UnityUtility.Async
     /// </summary>
     public static class TaskSystem
     {
-        private static TaskFactory _globals;
-        private static TaskFactory _locals;
+        private static TaskDispatcher _globals;
+        private static TaskDispatcher _locals;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void SetUp()
-        {
-            LongIdGenerator idProvider = new LongIdGenerator();
-
-            _globals = new TaskFactory(idProvider, true, "Tasks");
-            _locals = new TaskFactory(idProvider, false, "LocalTasks");
-        }
+        internal static LongIdGenerator IdProvider { get; } = new LongIdGenerator();
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator run, in CancellationToken token = default)
         {
-            return _globals.Get().RunAsync(run, token);
+            return GetGlobal().GetRunner().RunAsync(run, token);
         }
 
         /// <summary>
@@ -36,7 +29,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator run, in CancellationToken token = default)
         {
-            return _locals.Get().RunAsync(run, token);
+            return GetLocal().GetRunner().RunAsync(run, token);
         }
 
         /// <summary>
@@ -44,7 +37,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return _globals.Get().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
+            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
         }
 
         /// <summary>
@@ -52,7 +45,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return _locals.Get().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
+            return GetLocal().GetRunner().RunAsync(CoroutineUtility.RunDelayedRoutine(time, run, scaledTime), token);
         }
 
         /// <summary>
@@ -60,7 +53,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run, in CancellationToken token = default)
         {
-            return _globals.Get().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
+            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
         }
 
         /// <summary>
@@ -68,7 +61,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunAfterFramesLocally(int frames, Action run, in CancellationToken token = default)
         {
-            return _locals.Get().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
+            return GetLocal().GetRunner().RunAsync(CoroutineUtility.RunAfterFramesRoutine(frames, run), token);
         }
 
         /// <summary>
@@ -76,7 +69,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return _globals.Get().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
+            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
         }
 
         /// <summary>
@@ -84,7 +77,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return _locals.Get().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
+            return GetLocal().GetRunner().RunAsync(CoroutineUtility.RunByConditionRoutine(condition, run), token);
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo Repeat(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return _globals.Get().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
+            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
         }
 
         /// <summary>
@@ -100,7 +93,26 @@ namespace UnityUtility.Async
         /// </summary>
         public static TaskInfo RepeatLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return _locals.Get().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
+            return GetLocal().GetRunner().RunAsync(CoroutineUtility.RunWhileRoutine(condition, run), token);
+        }
+
+        private static TaskDispatcher GetGlobal()
+        {
+            if (_globals == null)
+            {
+                _globals = ComponentUtility.CreateInstance<TaskDispatcher>();
+                _globals.Immortalize();
+            }
+
+            return _globals;
+        }
+
+        private static TaskDispatcher GetLocal()
+        {
+            if (_locals == null)
+                _locals = ComponentUtility.CreateInstance<TaskDispatcher>();
+
+            return _locals;
         }
     }
 }

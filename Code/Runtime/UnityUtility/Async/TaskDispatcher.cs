@@ -4,10 +4,15 @@ using UnityUtility.Pool;
 
 namespace UnityUtility.Async
 {
-    internal class TaskDispatcher : MonoBehaviour
+    internal class TaskDispatcher : MonoBehaviour, IObjectFactory<TaskRunner>
     {
         private ObjectPool<TaskRunner> _taskPool;
         private List<TaskRunner> _tasks = new List<TaskRunner>();
+
+        private void Awake()
+        {
+            _taskPool = new ObjectPool<TaskRunner>(this);
+        }
 
         private void Update()
         {
@@ -17,19 +22,20 @@ namespace UnityUtility.Async
             }
         }
 
-        private void OnDestroy()
+        public void ReleaseRunner(TaskRunner runner)
         {
-            _taskPool?.Clear();
+            _taskPool.Release(runner);
         }
 
-        public void SetUp(ObjectPool<TaskRunner> taskPool)
+        public TaskRunner GetRunner()
         {
-            _taskPool = taskPool;
+            return _taskPool.Get();
         }
 
-        public void AddTaskRunner(TaskRunner runner)
+        TaskRunner IObjectFactory<TaskRunner>.Create()
         {
-            _tasks.Add(runner);
+            TaskRunner taskRunner = _tasks.Place(gameObject.AddComponent<TaskRunner>());
+            return taskRunner.SetUp(this);
         }
     }
 }
