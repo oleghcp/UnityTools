@@ -107,9 +107,7 @@ namespace UnityUtility.SaveLoad
         /// <param name="deleteSaves">Removes key-value data of the object from the storage if true. You should call ApplyAll Function to save changes.</param>
         public void UnregMember(object client, UnregOption option = UnregOption.None)
         {
-            List<SaveLoadFieldAttribute> aList = _fields.PullOut(client);
-
-            if (option == UnregOption.None || aList == null)
+            if (!_fields.Remove(client, out var aList) || option == UnregOption.None)
                 return;
 
             foreach (var attribute in aList)

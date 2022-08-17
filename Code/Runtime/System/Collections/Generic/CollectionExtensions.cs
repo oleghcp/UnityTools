@@ -656,15 +656,21 @@ namespace System.Collections.Generic
             return newItem;
         }
 
+#if !UNITY_2021_2_OR_NEWER
         /// <summary>
         /// Removes the element with the specified key from the dictionary and returns it or default value.
         /// </summary>
-        public static TValue PullOut<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key)
+        public static bool Remove<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, out TValue value)
         {
-            if (self.TryGetValue(key, out TValue value))
+            if (self.TryGetValue(key, out value))
+            {
                 self.Remove(key);
-            return value;
+                return true;
+            }
+
+            return false;
         }
+#endif
 
         /// <summary>
         /// Returns a read-only System.Collections.ObjectModel.ReadOnlyDictionary`2 wrapper for the current dictionary.
