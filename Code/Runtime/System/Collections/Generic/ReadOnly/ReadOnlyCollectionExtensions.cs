@@ -67,16 +67,10 @@ namespace System.Collections.Generic.ReadOnly
             return CollectionUtility.Max(self, selector, out _, out max);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetRandomItem_<T>(this IReadOnlyList<T> self, IRng generator)
         {
-            int index = generator.Next(self.Count);
-            return self[index];
-        }
-
-        public static T GetRandomItem_<T>(this IReadOnlyList<T> self)
-        {
-            int index = UnityEngine.Random.Range(0, self.Count);
-            return self[index];
+            return CollectionUtility.GetRandomItem(self, generator);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

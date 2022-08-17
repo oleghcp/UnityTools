@@ -452,15 +452,6 @@ namespace System.Collections.Generic
             CollectionUtility.Shuffle(self, generator);
         }
 
-        /// <summary>
-        /// Shuffles the elements of an entire collection.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Shuffle<T>(this IList<T> self)
-        {
-            CollectionUtility.Shuffle(self);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetRandomItem<T>(this IList<T> self, IRng generator)
         {
@@ -468,21 +459,9 @@ namespace System.Collections.Generic
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T GetRandomItem<T>(this IList<T> self)
-        {
-            return CollectionUtility.GetRandomItem(self);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T PullOutRandomItem<T>(this IList<T> self, IRng generator)
         {
             return CollectionUtility.PullOutRandomItem(self, generator);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T PullOutRandomItem<T>(this IList<T> self)
-        {
-            return CollectionUtility.PullOutRandomItem(self);
         }
 
         /// <summary>

@@ -16,38 +16,21 @@ namespace System.Collections.Generic
             }
         }
 
-        public static void Shuffle<T>(IList<T> collection)
-        {
-            int last = collection.Count;
-
-            while (last > 1)
-            {
-                int cur = UnityEngine.Random.Range(0, last--);
-                collection.Swap(cur, last);
-            }
-        }
-
         public static T GetRandomItem<T>(IList<T> collection, IRng generator)
         {
             int index = generator.Next(collection.Count);
             return collection[index];
         }
 
-        public static T GetRandomItem<T>(IList<T> collection)
+        public static T GetRandomItem<T>(IReadOnlyList<T> collection, IRng generator)
         {
-            int index = UnityEngine.Random.Range(0, collection.Count);
+            int index = generator.Next(collection.Count);
             return collection[index];
         }
 
         public static T PullOutRandomItem<T>(IList<T> collection, IRng generator)
         {
             int index = generator.Next(collection.Count);
-            return collection.PullOut(index);
-        }
-
-        public static T PullOutRandomItem<T>(IList<T> collection)
-        {
-            int index = UnityEngine.Random.Range(0, collection.Count);
             return collection.PullOut(index);
         }
 
