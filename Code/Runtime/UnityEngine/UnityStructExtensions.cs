@@ -46,6 +46,15 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Creates vector2 based on X and Y of vector3 value.
+        /// </summary>
+        public static Vector2 XY(this in Vector3 value, out float z)
+        {
+            z = value.z;
+            return new Vector2(value.x, value.y);
+        }
+
+        /// <summary>
         /// Creates vector2 based on X and Z of vector3 value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -55,11 +64,29 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Creates vector2 based on X and Z of vector3 value.
+        /// </summary>
+        public static Vector2 XZ(this in Vector3 value, out float y)
+        {
+            y = value.y;
+            return new Vector2(value.x, value.z);
+        }
+
+        /// <summary>
         /// Creates vector2 based on Y and Z of vector3 value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 YZ(this in Vector3 value)
         {
+            return new Vector2(value.z, value.y);
+        }
+
+        /// <summary>
+        /// Creates vector2 based on Y and Z of vector3 value.
+        /// </summary>
+        public static Vector2 YZ(this in Vector3 value, out float x)
+        {
+            x = value.x;
             return new Vector2(value.z, value.y);
         }
 
