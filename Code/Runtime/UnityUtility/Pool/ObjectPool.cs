@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityUtility.Pool.Storages;
 
 namespace UnityUtility.Pool
@@ -27,19 +26,19 @@ namespace UnityUtility.Pool
             _factory = factory;
         }
 
+        public ObjectPool(IPoolStorage<T> storage, IObjectFactory<T> factory, int preCount) : this(storage, factory)
+        {
+            for (int i = 0; i < preCount; i++)
+            {
+                Release(factory.Create());
+            }
+        }
+
         public ObjectPool(IPoolStorage<T> storage, Func<T> creator) : this(storage, new DefaultFactory(creator)) { }
 
         public ObjectPool(IObjectFactory<T> factory) : this(new QueueStorage<T>(16), factory) { }
 
         public ObjectPool(Func<T> creator) : this(new DefaultFactory(creator)) { }
-
-        public ObjectPool(IPoolStorage<T> storage, IObjectFactory<T> factory, int preCount) : this(storage, factory)
-        {
-            for (int i = 0; i < preCount; i++)
-            {
-                Release(_factory.Create());
-            }
-        }
 
         public ObjectPool(IPoolStorage<T> storage, Func<T> creator, int preCount) : this(storage, new DefaultFactory(creator), preCount) { }
 
@@ -111,11 +110,16 @@ namespace UnityUtility.Pool
 
             public DefaultFactory(Func<T> creator)
             {
+                if (creator == null)
+                    throw new ArgumentNullException(nameof(creator));
+
                 _create = creator;
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public T Create() => _create.Invoke();
+            T IObjectFactory<T>.Create()
+            {
+                return _create.Invoke();
+            }
         }
     }
 }
