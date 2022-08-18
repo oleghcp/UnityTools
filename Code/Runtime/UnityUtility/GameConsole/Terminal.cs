@@ -17,11 +17,24 @@ namespace UnityUtility.GameConsole
 {
     public class TerminalOptions
     {
-        /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
-        public float TargetHeight = 0.75f;
-        public int LinesLimit = 100;
+        private float _targetHeight = 0.75f;
+        private int _linesLimit = 100;
+
         public bool AddSpaceAfterName = true;
         public bool ShowDebugLogs = true;
+
+        /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
+        public float TargetHeight
+        {
+            get => _targetHeight;
+            set => _targetHeight = value.Clamp01();
+        }
+
+        public int LinesLimit
+        {
+            get => _linesLimit;
+            set => _linesLimit = value.CutBefore(0);
+        }
     }
 
     [DisallowMultipleComponent]
@@ -41,14 +54,11 @@ namespace UnityUtility.GameConsole
 
         private bool _isOn;
         private PointerEventData _pointerEventData;
-        private StringBuilder _stringBuilder;
-
+        private StringBuilder _stringBuilder = new StringBuilder();
         private object _cmdRun;
         private Dictionary<string, MethodInfo> _commands;
-
-        private List<string> _cmdHistory;
+        private List<string> _cmdHistory = new List<string>();
         private int _curHistoryIndex;
-
         private TerminalOptions _options;
 
         public bool IsOn => _isOn;
@@ -60,25 +70,25 @@ namespace UnityUtility.GameConsole
 
         protected override void Construct()
         {
+            _cmdHistory.Add(string.Empty);
             _log.SetUp(this);
 
-            _pointerEventData = new PointerEventData(EventSystem.current);
-            _stringBuilder = new StringBuilder();
-
-            _cmdHistory = new List<string>() { string.Empty };
-
 #if UNITY_EDITOR
-            if (Application.isPlaying)
+            if (!UnityEditor.EditorApplication.isPlaying)
+                return;
 #endif
-                Application.logMessageReceived += OnDebugLogMessageReceived;
+            Application.logMessageReceived += OnDebugLogMessageReceived;
+        }
+
+        private void Start()
+        {
+            _pointerEventData = new PointerEventData(EventSystem.current);
         }
 
         protected override void CleanUp()
         {
-#if UNITY_EDITOR
             Switched_Event = null;
             Application.logMessageReceived -= OnDebugLogMessageReceived;
-#endif
         }
 
         private void Update()
@@ -356,14 +366,14 @@ namespace UnityUtility.GameConsole
                 return;
             }
 
-            terminal.Install().Immortalize();
-
             if (createEventSystem && EventSystem.current == null)
             {
-                GameObject eventSystemRoot = ComponentUtility.CreateInstance<EventSystem>().gameObject;
-                eventSystemRoot.AddComponent<StandaloneInputModule>();
-                eventSystemRoot.Immortalize();
+                EventSystem eventSystem = ComponentUtility.CreateInstance<EventSystem>();
+                eventSystem.gameObject.AddComponent<StandaloneInputModule>();
+                eventSystem.Immortalize();
             }
+
+            terminal.Install().Immortalize();
         }
 
         private bool NoCommands()
@@ -392,9 +402,14 @@ namespace UnityUtility.GameConsole
                 _closeButton.SetActive(_isOn);
 
             if (_isOn)
+            {
                 _field.text = string.Empty;
+                _field.OnPointerClick(_pointerEventData);
+            }
             else
+            {
                 _curHistoryIndex = 0;
+            }
 
             float hStart = _isOn ? 0f : targetHeight;
             float hEnd = _isOn ? targetHeight : 0f;
@@ -408,9 +423,6 @@ namespace UnityUtility.GameConsole
 
                 yield return null;
             }
-
-            if (_isOn)
-                _field.OnPointerClick(_pointerEventData);
         }
     }
 }
