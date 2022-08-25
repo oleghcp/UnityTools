@@ -41,8 +41,8 @@ namespace UnityUtility
 
         public IntervalChecker(float interval)
         {
-            if (interval <= 0f)
-                throw Errors.ZeroParameter(nameof(interval));
+            if (interval < 0f)
+                throw Errors.NegativeParameter(nameof(interval));
 
             _interval = interval;
             _currentValue = 0f;
@@ -50,8 +50,8 @@ namespace UnityUtility
 
         public IntervalChecker(float interval, float startValue)
         {
-            if (interval <= 0f)
-                throw Errors.ZeroParameter(nameof(interval));
+            if (interval < 0f)
+                throw Errors.NegativeParameter(nameof(interval));
 
             _interval = interval;
             _currentValue = startValue.CutAfter(interval);
