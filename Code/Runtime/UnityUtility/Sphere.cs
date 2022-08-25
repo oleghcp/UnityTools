@@ -38,12 +38,12 @@ namespace UnityUtility
 
         public bool Contains(in Vector3 point)
         {
-            return Vector3.Distance(point, Position) < Radius;
+            return Vector3.Distance(point, Position) <= Radius;
         }
 
         public bool Overlaps(in Sphere other)
         {
-            return Vector3.Distance(Position, other.Position) < Radius + other.Radius;
+            return Vector3.Distance(Position, other.Position) <= Radius + other.Radius;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
