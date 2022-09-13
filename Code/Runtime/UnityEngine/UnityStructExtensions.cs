@@ -363,18 +363,6 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Returns pivot in zero coordinates relative to the rect.
-        /// </summary>
-        public static Vector2 GetPivot(this in Rect rect)
-        {
-            return new Vector2
-            {
-                x = (0f - rect.xMin) / rect.width,
-                y = (0f - rect.yMin) / rect.height,
-            };
-        }
-
-        /// <summary>
         /// Returns rect expanded multiplicatively relative to zero coordinates.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -416,7 +404,7 @@ namespace UnityEngine
 
         /// <summary>
         /// Returns additively expanded rect without preserving pivot.
-        /// </summary>        
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetExpanded(this in Rect value, in Vector2 expandSize)
         {

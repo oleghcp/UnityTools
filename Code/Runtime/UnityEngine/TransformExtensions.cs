@@ -328,14 +328,6 @@ namespace UnityEngine
             self.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
         }
 
-        public static void SetSizeWithCurrentAnchors(this RectTransform self, in Rect rect)
-        {
-            Vector2 size = rect.size;
-            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
-            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
-            self.pivot = rect.GetPivot();
-        }
-
         /// <summary>
         /// Set the parent of the rectTransform with locating to the specified anchored position.
         /// </summary>
