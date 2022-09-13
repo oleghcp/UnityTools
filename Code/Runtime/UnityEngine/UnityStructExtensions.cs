@@ -316,6 +316,42 @@ namespace UnityEngine
             return Quaternion.LookRotation(value);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Up(this in Quaternion value)
+        {
+            return value * Vector3.up;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Down(this in Quaternion value)
+        {
+            return value * Vector3.down;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Right(this in Quaternion value)
+        {
+            return value * Vector3.right;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Left(this in Quaternion value)
+        {
+            return value * Vector3.left;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Forward(this in Quaternion value)
+        {
+            return value * Vector3.forward;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Back(this in Quaternion value)
+        {
+            return value * Vector3.back;
+        }
+
         /// <summary>
         /// Returns the diagonal length of the rect.
         /// </summary>
