@@ -83,5 +83,10 @@ namespace UnityUtilityTools
         {
             return new InvalidOperationException("Tracker does not yet contain nodes.");
         }
+
+        public static InvalidOperationException ContainsModifier()
+        {
+            return new InvalidOperationException("Modifier already added.");
+        }
     }
 }

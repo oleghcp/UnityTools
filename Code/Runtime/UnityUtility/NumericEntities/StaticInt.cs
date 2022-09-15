@@ -43,12 +43,12 @@ namespace UnityUtility.NumericEntities
 
         public void AddModifier(IModifier<int> modifier)
         {
-            var collection = modifier.Relative ? _relMods : _absMods;
+            HashSet<IModifier<int>> collection = modifier.Relative ? _relMods : _absMods;
 
             if (collection.Add(modifier))
                 return;
 
-            throw new InvalidOperationException("Modifier already added.");
+            throw Errors.ContainsModifier();
         }
 
         public void RemoveModifier(IModifier<int> modifier)
@@ -84,7 +84,7 @@ namespace UnityUtility.NumericEntities
 
             int sum = 0;
 
-            foreach (var item in _absMods)
+            foreach (IModifier<int> item in _absMods)
             {
                 sum += item.Value;
             }
@@ -99,7 +99,7 @@ namespace UnityUtility.NumericEntities
 
             int sum = 0;
 
-            foreach (var item in _relMods)
+            foreach (IModifier<int> item in _relMods)
             {
                 sum += _value * item.Value;
             }

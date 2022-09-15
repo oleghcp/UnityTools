@@ -43,20 +43,20 @@ namespace UnityUtility.NumericEntities
 
         public void AddModifier(IModifier<float> modifier)
         {
-            if (modifier.Relative)
-                _relMods.Add(modifier);
-            else
-                _absMods.Add(modifier);
-        }
-
-        public void RemoveModifier(IModifier<float> modifier)
-        {
-            var collection = modifier.Relative ? _relMods : _absMods;
+            HashSet<IModifier<float>> collection = modifier.Relative ? _relMods : _absMods;
 
             if (collection.Add(modifier))
                 return;
 
-            throw new InvalidOperationException("Modifier already added.");
+            throw Errors.ContainsModifier();
+        }
+
+        public void RemoveModifier(IModifier<float> modifier)
+        {
+            if (modifier.Relative)
+                _relMods.Remove(modifier);
+            else
+                _absMods.Remove(modifier);
         }
 
         public float GetModifiedValue()
@@ -84,7 +84,7 @@ namespace UnityUtility.NumericEntities
 
             float sum = 0f;
 
-            foreach (var item in _absMods)
+            foreach (IModifier<float> item in _absMods)
             {
                 sum += item.Value;
             }
@@ -100,7 +100,7 @@ namespace UnityUtility.NumericEntities
             float sum = 0f;
             float value = _value;
 
-            foreach (var item in _relMods)
+            foreach (IModifier<float> item in _relMods)
             {
                 sum += value * item.Value;
             }
