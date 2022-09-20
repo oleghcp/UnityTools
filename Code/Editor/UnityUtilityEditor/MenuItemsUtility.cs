@@ -134,8 +134,7 @@ namespace UnityUtilityEditor
                 if (info.Length >= minSizeInBytes)
                 {
                     string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
-                    string guid = AssetDatabase.AssetPathToGUID(assetPath);
-                    UnityObject asset = AssetDatabaseExt.LoadAssetByGuid<UnityObject>(guid);
+                    UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
                     foundObjects.Add((asset, info.Length));
                 }
 
