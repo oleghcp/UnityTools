@@ -96,28 +96,23 @@ namespace UnityUtilityEditor.Window
         private static (UnityObject asset, long size)[] SearchFilesBySize(long minSizeInBytes)
         {
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            List<(string assetPath, long size)> foundObjects = new List<(string, long)>();
 
-            AssetDatabaseExt.EnumerateAssetFiles("*")
-                            .AsParallel()
-                            .ForAll(run);
+            var result = AssetDatabaseExt.EnumerateAssetFiles("*")
+                                         .AsParallel()
+                                         .Where(item => Path.GetExtension(item) != ".meta")
+                                         .Select(selector)
+                                         .Where(item => item.size >= minSizeInBytes)
+                                         .ToArray();
 
-            return foundObjects.OrderByDescending(item => item.size)
-                               .Select(item => (AssetDatabase.LoadAssetAtPath<UnityObject>(item.assetPath), item.size))
-                               .ToArray();
+            return result.OrderByDescending(item => item.size)
+                         .Select(item => (AssetDatabase.LoadAssetAtPath<UnityObject>(item.path), item.size))
+                         .ToArray();
 
-            void run(string filePath)
+            (string path, long size) selector(string filePath)
             {
-                if (Path.GetExtension(filePath) == ".meta")
-                    return;
-
                 FileInfo info = new FileInfo(filePath);
-
-                if (info.Length >= minSizeInBytes)
-                {
-                    string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
-                    foundObjects.Add((assetPath, info.Length));
-                }
+                string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
+                return (assetPath, info.Length);
             }
         }
 
