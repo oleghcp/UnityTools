@@ -135,6 +135,17 @@ namespace UnityEditor
             Debug.LogError("Folder not found.");
         }
 
+        public static void ExecuteWithProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess = null)
+        {
+            while (iterator.MoveNext())
+            {
+                EditorUtility.DisplayProgressBar(title, info, iterator.Current);
+            }
+
+            EditorUtility.ClearProgressBar();
+            onSuccess?.Invoke();
+        }
+
         public static void ExecuteWithProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess = null, Action onCansel = null)
         {
             while (iterator.MoveNext())
@@ -155,11 +166,12 @@ namespace UnityEditor
             }
         }
 
-        public static void ExecuteWithProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess = null)
+        public static void ExecuteWithProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess = null)
         {
             while (iterator.MoveNext())
             {
-                EditorUtility.DisplayProgressBar(title, info, iterator.Current);
+                var (info, progress) = iterator.Current;
+                EditorUtility.DisplayProgressBar(title, info, progress);
             }
 
             EditorUtility.ClearProgressBar();
@@ -186,18 +198,6 @@ namespace UnityEditor
                 EditorUtility.ClearProgressBar();
                 onFin?.Invoke();
             }
-        }
-
-        public static void ExecuteWithProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess = null)
-        {
-            while (iterator.MoveNext())
-            {
-                var (info, progress) = iterator.Current;
-                EditorUtility.DisplayProgressBar(title, info, progress);
-            }
-
-            EditorUtility.ClearProgressBar();
-            onSuccess?.Invoke();
         }
     }
 }
