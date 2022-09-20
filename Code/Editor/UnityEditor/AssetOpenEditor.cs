@@ -23,9 +23,9 @@ namespace UnityEditor
                 return true;
             }
 #endif
-            if (obj is ScriptableObject)
+            if (obj is ScriptableObject scriptableObject)
             {
-                EditorUtilityExt.OpenScriptableObjectCode(obj);
+                EditorUtilityExt.OpenScriptableObjectCode(scriptableObject);
                 return true;
             }
 

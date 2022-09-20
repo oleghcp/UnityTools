@@ -21,6 +21,11 @@ namespace UnityEditor
             EditorApplication.ExecuteMenuItem("File/Save Project");
         }
 
+        public static void OpenCsProject()
+        {
+            EditorApplication.ExecuteMenuItem("Assets/Open C# Project");
+        }
+
         public static void ClearConsoleWindow()
         {
             if (_clearFunc == null)
@@ -111,16 +116,16 @@ namespace UnityEditor
             return false;
         }
 
-        public static void OpenScriptableObjectCode(UnityObject obj)
+        public static void OpenScriptableObjectCode(ScriptableObject scriptableObject)
         {
-            EditorApplication.ExecuteMenuItem("Assets/Open C# Project");
+            OpenCsProject();
 
-            using (SerializedObject serializedObject = new SerializedObject(obj))
+            using (SerializedObject serializedObject = new SerializedObject(scriptableObject))
             {
-                SerializedProperty prop = serializedObject.FindProperty(SCRIPT_FIELD);
-                string filePath = AssetDatabase.GetAssetPath(prop.objectReferenceValue);
-                System.Diagnostics.Process.Start("devenv", "/edit " + filePath);
-                prop.Dispose();
+                using (SerializedProperty prop = serializedObject.FindProperty(SCRIPT_FIELD))
+                {
+                    AssetDatabase.OpenAsset(prop.objectReferenceValue);
+                }
             }
         }
 
