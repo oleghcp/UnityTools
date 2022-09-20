@@ -62,10 +62,10 @@ namespace UnityUtilityEditor
         private static void FindReferences()
         {
             string targetGuid = Selection.assetGUIDs[0];
-            IEnumerable<string> foundAssets = searchAssets(targetGuid);
+            IEnumerable<string> foundAssets = searchAssets();
             ReferencesWindow.Create(targetGuid, foundAssets);
 
-            static IEnumerable<string> searchAssets(string targetGuid)
+            IEnumerable<string> searchAssets()
             {
                 switch (EditorSettings.serializationMode)
                 {
