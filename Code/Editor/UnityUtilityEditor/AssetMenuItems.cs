@@ -65,9 +65,9 @@ namespace UnityUtilityEditor
             List<string> foundObjects = new List<string>();
 
             EditorUtilityExt.ExecuteWithProgressBarCancelable("Searching references",
-                                                       "That could take a while...",
-                                                       getIterator(),
-                                                       () => ReferencesWindow.Create(targetGuid, foundObjects));
+                                                              "That could take a while...",
+                                                              getIterator(),
+                                                              () => ReferencesWindow.Create(targetGuid, foundObjects));
             IEnumerator<float> getIterator()
             {
                 if (EditorSettings.serializationMode == SerializationMode.ForceText)

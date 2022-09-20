@@ -55,31 +55,29 @@ namespace UnityEditor
                             .ToArray();
         }
 
-        public static List<string> GetFilesFromAssetFolder(string searchPattern, SearchOption searchOption)
+        public static IEnumerable<string> EnumerateAssetFiles(string searchPattern)
         {
             const char forbiddenChar = '.';
 
-            List<string> list = new List<string>();
-            search(Application.dataPath);
-            return list;
+            return enumerate(Application.dataPath);
 
-            void search(string path)
+            IEnumerable<string> enumerate(string directoryPath)
             {
-                foreach (string directory in Directory.EnumerateDirectories(path))
+                foreach (string filePath in Directory.EnumerateFiles(directoryPath, searchPattern))
                 {
-                    if (Path.GetFileName(directory)[0] == forbiddenChar)
+                    if (Path.GetFileName(filePath)[0] != forbiddenChar)
+                        yield return filePath;
+                }
+
+                foreach (string dirPath in Directory.EnumerateDirectories(directoryPath))
+                {
+                    if (Path.GetFileName(dirPath)[0] == forbiddenChar)
                         continue;
 
-                    foreach (string file in Directory.EnumerateFiles(directory, searchPattern))
+                    foreach (string filePath in enumerate(dirPath))
                     {
-                        if (Path.GetFileName(file)[0] == forbiddenChar)
-                            continue;
-
-                        list.Add(file);
+                        yield return filePath;
                     }
-
-                    if (searchOption == SearchOption.AllDirectories)
-                        search(directory);
                 }
             }
         }

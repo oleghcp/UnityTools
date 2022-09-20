@@ -84,7 +84,7 @@ namespace UnityUtilityEditor
             float progress = 0f;
 
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            List<string> assets = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
+            List<string> assets = AssetDatabaseExt.EnumerateAssetFiles("*").ToList();
 
             yield return progress += 0.1f;
 
@@ -117,12 +117,12 @@ namespace UnityUtilityEditor
         {
             float progress = 0f;
 
-            List<string> files = AssetDatabaseExt.GetFilesFromAssetFolder("*", SearchOption.AllDirectories);
+            string[] files = AssetDatabaseExt.EnumerateAssetFiles("*").ToArray();
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
 
             yield return progress += 0.1f;
 
-            for (int i = 0; i < files.Count; i++)
+            for (int i = 0; i < files.Length; i++)
             {
                 string filePath = files[i];
 
@@ -139,7 +139,7 @@ namespace UnityUtilityEditor
                     foundObjects.Add((asset, info.Length));
                 }
 
-                yield return Mathf.Lerp(progress, 1f, (i + 1f) / files.Count);
+                yield return Mathf.Lerp(progress, 1f, (i + 1f) / files.Length);
             }
         }
     }
