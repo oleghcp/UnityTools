@@ -111,7 +111,13 @@ namespace UnityUtility
             if (formatProvider == null)
                 formatProvider = CultureInfo.InvariantCulture.NumberFormat;
 
-            return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", Position.ToString(format, formatProvider), Radius.ToString(format, formatProvider));
+#if UNITY_2020_1_OR_NEWER
+            string stringPosition = Position.ToString(format, formatProvider);
+#else
+            string stringPosition = Position.ToString(format);
+#endif
+
+            return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", stringPosition, Radius.ToString(format, formatProvider));
         }
     }
 }
