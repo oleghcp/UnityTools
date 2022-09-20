@@ -62,18 +62,19 @@ namespace UnityUtilityEditor
         private static void FindReferences()
         {
             string targetGuid = Selection.assetGUIDs[0];
-            List<string> foundAssets = new List<string>();
+            IEnumerable<string> foundAssets = searchAssets(targetGuid);
+            ReferencesWindow.Create(targetGuid, foundAssets);
 
-            EditorUtilityExt.ExecuteWithProgressBarCancelable("Searching references",
-                                                              "That could take a while...",
-                                                              getIterator(),
-                                                              () => ReferencesWindow.Create(targetGuid, foundAssets));
-            IEnumerator<float> getIterator()
+            static IEnumerable<string> searchAssets(string targetGuid)
             {
-                if (EditorSettings.serializationMode == SerializationMode.ForceText)
-                    return MenuItemsUtility.SearchReferencesByText(targetGuid, foundAssets);
+                switch (EditorSettings.serializationMode)
+                {
+                    case SerializationMode.ForceText:
+                        return MenuItemsUtility.SearchReferencesByText(targetGuid);
 
-                return MenuItemsUtility.SearchReferencesByDataBase(targetGuid, foundAssets);
+                    default:
+                        return MenuItemsUtility.SearchReferencesByDataBase(targetGuid);
+                }
             }
         }
 

@@ -17,7 +17,7 @@ namespace UnityUtilityEditor.Window
             minSize = new Vector2(250f, 200f);
         }
 
-        public static void Create(string targetObjectGuid, List<string> referingObjectPaths)
+        public static void Create(string targetObjectGuid, IEnumerable<string> referingObjectPaths)
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
