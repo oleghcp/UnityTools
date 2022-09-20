@@ -137,9 +137,17 @@ namespace UnityEditor
 
         public static void ExecuteWithProgressBar(string title, string info, IEnumerator<float> iterator, Action onSuccess = null)
         {
-            while (iterator.MoveNext())
+            try
             {
-                EditorUtility.DisplayProgressBar(title, info, iterator.Current);
+                while (iterator.MoveNext())
+                {
+                    EditorUtility.DisplayProgressBar(title, info, iterator.Current);
+                }
+            }
+            catch (Exception)
+            {
+                EditorUtility.ClearProgressBar();
+                throw;
             }
 
             EditorUtility.ClearProgressBar();
@@ -148,13 +156,21 @@ namespace UnityEditor
 
         public static void ExecuteWithProgressBarCancelable(string title, string info, IEnumerator<float> iterator, Action onSuccess = null, Action onCansel = null)
         {
-            while (iterator.MoveNext())
+            try
             {
-                if (EditorUtility.DisplayCancelableProgressBar(title, info, iterator.Current))
+                while (iterator.MoveNext())
                 {
-                    finish(onCansel);
-                    return;
+                    if (EditorUtility.DisplayCancelableProgressBar(title, info, iterator.Current))
+                    {
+                        finish(onCansel);
+                        return;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                EditorUtility.ClearProgressBar();
+                throw;
             }
 
             finish(onSuccess);
@@ -168,10 +184,18 @@ namespace UnityEditor
 
         public static void ExecuteWithProgressBar(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess = null)
         {
-            while (iterator.MoveNext())
+            try
             {
-                var (info, progress) = iterator.Current;
-                EditorUtility.DisplayProgressBar(title, info, progress);
+                while (iterator.MoveNext())
+                {
+                    var (info, progress) = iterator.Current;
+                    EditorUtility.DisplayProgressBar(title, info, progress);
+                }
+            }
+            catch (Exception)
+            {
+                EditorUtility.ClearProgressBar();
+                throw;
             }
 
             EditorUtility.ClearProgressBar();
@@ -180,15 +204,23 @@ namespace UnityEditor
 
         public static void ExecuteWithProgressBarCancelable(string title, IEnumerator<(string info, float progress)> iterator, Action onSuccess = null, Action onCansel = null)
         {
-            while (iterator.MoveNext())
+            try
             {
-                var (info, progress) = iterator.Current;
-
-                if (EditorUtility.DisplayCancelableProgressBar(title, info, progress))
+                while (iterator.MoveNext())
                 {
-                    finish(onCansel);
-                    return;
+                    var (info, progress) = iterator.Current;
+
+                    if (EditorUtility.DisplayCancelableProgressBar(title, info, progress))
+                    {
+                        finish(onCansel);
+                        return;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                EditorUtility.ClearProgressBar();
+                throw;
             }
 
             finish(onSuccess);
