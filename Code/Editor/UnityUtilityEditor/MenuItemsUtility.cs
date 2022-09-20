@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
 {
@@ -110,35 +109,6 @@ namespace UnityUtilityEditor
 
                     yield return Mathf.Lerp(progress, 1f, (i + 1f) / assets.Count);
                 }
-            }
-        }
-
-        public static IEnumerator<float> SearchFilesBySize(long minSizeInBytes, List<(UnityObject, long)> foundObjects)
-        {
-            float progress = 0f;
-
-            string[] files = AssetDatabaseExt.EnumerateAssetFiles("*").ToArray();
-            string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-
-            yield return progress += 0.1f;
-
-            for (int i = 0; i < files.Length; i++)
-            {
-                string filePath = files[i];
-
-                if (Path.GetExtension(filePath) == ".meta")
-                    continue;
-
-                FileInfo info = new FileInfo(filePath);
-
-                if (info.Length >= minSizeInBytes)
-                {
-                    string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
-                    UnityObject asset = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
-                    foundObjects.Add((asset, info.Length));
-                }
-
-                yield return Mathf.Lerp(progress, 1f, (i + 1f) / files.Length);
             }
         }
     }

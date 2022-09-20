@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -15,7 +17,7 @@ namespace UnityUtilityEditor.Window
         private Vector2 _scrollPosition;
 
         private long _fileSize = 100L * 1024 * 1024;
-        private List<(UnityObject asset, long size)> _result;
+        private (UnityObject asset, long size)[] _result;
 
         private void OnEnable()
         {
@@ -62,7 +64,7 @@ namespace UnityUtilityEditor.Window
             if (_result != null)
             {
                 GUI.enabled = false;
-                for (int i = 0; i < _result.Count; i++)
+                for (int i = 0; i < _result.Length; i++)
                 {
                     string sizeLabel;
                     long size = _result[i].size;
@@ -78,40 +80,52 @@ namespace UnityUtilityEditor.Window
                 }
                 GUI.enabled = true;
 
-                if (_result.Count == 0)
+                if (_result.Length == 0)
                     GUILayout.Label("No files found.");
             }
             EditorGUILayout.EndScrollView();
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button("Search", GUILayout.Height(30f)))
-            {
-                FindHugeFiles(done);
-            }
+            bool search = GUILayout.Button("Search", GUILayout.Height(30f));
 
-            void done(List<(UnityObject asset, long size)> list)
-            {
-                _result = list;
-                _result.Sort(item => -item.size);
-                Repaint();
-            }
+            if (search)
+                _result = SearchFilesBySize(_fileSize);
         }
 
-        private void FindHugeFiles(Action<List<(UnityObject, long)>> succes)
+        private static (UnityObject asset, long size)[] SearchFilesBySize(long minSizeInBytes)
         {
-            List<(UnityObject, long)> foundObjects = new List<(UnityObject, long)>();
-            IEnumerator<float> iterator = MenuItemsUtility.SearchFilesBySize(_fileSize, foundObjects);
-            EditorUtilityExt.ExecuteWithProgressBarCancelable("Searching assets", "That could take a while...", iterator, () => succes(foundObjects));
+            string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
+            List<(string assetPath, long size)> foundObjects = new List<(string, long)>();
+
+            AssetDatabaseExt.EnumerateAssetFiles("*")
+                            .AsParallel()
+                            .ForAll(run);
+
+            return foundObjects.OrderByDescending(item => item.size)
+                               .Select(item => (AssetDatabase.LoadAssetAtPath<UnityObject>(item.assetPath), item.size))
+                               .ToArray();
+
+            void run(string filePath)
+            {
+                if (Path.GetExtension(filePath) == ".meta")
+                    return;
+
+                FileInfo info = new FileInfo(filePath);
+
+                if (info.Length >= minSizeInBytes)
+                {
+                    string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
+                    foundObjects.Add((assetPath, info.Length));
+                }
+            }
         }
 
+        private static long Clamp(long value, long min, long max)
+        {
 #if UNITY_2021_2_OR_NEWER
-        public static long Clamp(long value, long min, long max)
-        {
             return Math.Clamp(value, min, max);
 #else
-        public static long Clamp(long value, long min, long max)
-        {
             if (value < min)
                 return min;
 
@@ -122,13 +136,11 @@ namespace UnityUtilityEditor.Window
 #endif
         }
 
-#if UNITY_2021_2_OR_NEWER
-        public static double Clamp(double value, double min, double max)
+        private static double Clamp(double value, double min, double max)
         {
+#if UNITY_2021_2_OR_NEWER
             return Math.Clamp(value, min, max);
 #else
-        public static double Clamp(double value, double min, double max)
-        {
             if (value < min)
                 return min;
 
