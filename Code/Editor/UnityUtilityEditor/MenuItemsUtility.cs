@@ -35,26 +35,23 @@ namespace UnityUtilityEditor
         public static IEnumerator<float> SearchReferencesByDataBase(string targetGuid, List<string> foundObjects)
         {
             float progress = 0f;
-            string[] assetGuids = AssetDatabase.FindAssets(string.Empty);
+
+            string targetAssetPath = AssetDatabase.GUIDToAssetPath(targetGuid);
+            string[] assetsGuids = AssetDatabase.FindAssets(string.Empty);
 
             yield return progress += 0.1f;
 
-            for (int i = 0; i < assetGuids.Length; i++)
+            for (int i = 0; i < assetsGuids.Length; i++)
             {
-                string assetPath = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
-                string[] dependencies = AssetDatabase.GetDependencies(assetPath);
+                string assetPath = AssetDatabase.GUIDToAssetPath(assetsGuids[i]);
 
-                foreach (string dependency in dependencies)
+                foreach (string dependencyPath in AssetDatabase.GetDependencies(assetPath, false))
                 {
-                    string dependencyGuid = AssetDatabase.AssetPathToGUID(dependency);
-
-                    if (dependencyGuid == targetGuid && dependencyGuid != assetGuids[i])
-                    {
-                        foundObjects.Add(AssetDatabase.GUIDToAssetPath(assetGuids[i]));
-                    }
+                    if (dependencyPath == targetAssetPath && dependencyPath != assetPath)
+                        foundObjects.Add(assetPath);
                 }
 
-                yield return Mathf.Lerp(progress, 1f, (i + 1f) / assetGuids.Length);
+                yield return Mathf.Lerp(progress, 1f, (i + 1f) / assetsGuids.Length);
             }
         }
 
