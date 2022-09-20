@@ -17,15 +17,13 @@ namespace UnityUtilityEditor.Window
             minSize = new Vector2(250f, 200f);
         }
 
-        public static void Create(string targetObjectGuid, List<string> referingObjectGuids)
+        public static void Create(string targetObjectGuid, List<string> referingObjectPaths)
         {
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
             window._target = AssetDatabaseExt.LoadAssetByGuid<UnityObject>(targetObjectGuid);
-
-            if (referingObjectGuids.Count > 0)
-                window._objects = referingObjectGuids.Select(AssetDatabaseExt.LoadAssetByGuid)
-                                                     .ToArray();
+            window._objects = referingObjectPaths.Select(AssetDatabase.LoadAssetAtPath<UnityObject>)
+                                                 .ToArray();
         }
 
         private void OnGUI()
@@ -44,7 +42,7 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(5f);
 
-            if (_objects == null)
+            if (_objects.IsNullOrEmpty())
             {
                 EditorGUILayout.LabelField("There are no references.");
                 return;

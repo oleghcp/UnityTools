@@ -50,7 +50,7 @@ namespace UnityUtilityEditor
 
                     if (dependencyGuid == targetGuid && dependencyGuid != assetGuids[i])
                     {
-                        foundObjects.Add(assetGuids[i]);
+                        foundObjects.Add(AssetDatabase.GUIDToAssetPath(assetGuids[i]));
                     }
                 }
 
@@ -80,36 +80,25 @@ namespace UnityUtilityEditor
                 ".guiskin",
             };
 
-            float progress = 0f;
-
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            List<string> assets = AssetDatabaseExt.EnumerateAssetFiles("*").ToList();
-
-            yield return progress += 0.1f;
-
             string projectSettingsPath = Path.Combine(projectFolderPath, AssetDatabaseExt.PROJECT_SETTINGS_FOLDER);
-            assets.AddRange(Directory.EnumerateFiles(projectSettingsPath, $"*{AssetDatabaseExt.ASSET_EXTENSION}"));
 
-            yield return progress += 0.05f;
+            IEnumerable<string> assets = AssetDatabaseExt.EnumerateAssetFiles("*");
+            IEnumerable<string> settingsAssets = Directory.EnumerateFiles(projectSettingsPath, $"*{AssetDatabaseExt.ASSET_EXTENSION}");
 
-            for (int i = 0; i < assets.Count; i++)
-            {
-                string filePath = assets[i];
+            yield return 0.1f;
 
-                if (extensions.Contains(Path.GetExtension(filePath)))
-                {
-                    string text = File.ReadAllText(filePath);
+            string[] result = assets.Concat(settingsAssets)
+                                    .AsParallel()
+                                    .Where(item => extensions.Contains(Path.GetExtension(item)) && File.ReadAllText(item).Contains(targetGuid))
+                                    .Select(item => item.Substring(projectFolderPath.Length + 1))
+                                    .ToArray();
 
-                    if (text.Contains(targetGuid))
-                    {
-                        string assetPath = filePath.Substring(projectFolderPath.Length + 1);
-                        string guid = AssetDatabase.AssetPathToGUID(assetPath);
-                        foundObjects.Add(guid);
-                    }
+            yield return 0.9f;
 
-                    yield return Mathf.Lerp(progress, 1f, (i + 1f) / assets.Count);
-                }
-            }
+            foundObjects.AddRange(result);
+
+            yield return 1f;
         }
     }
 }
