@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
@@ -58,23 +57,26 @@ namespace UnityUtilityEditor
             return AssetDatabaseExt.LoadAssetByGuid(selectedGuids[0]) != Selection.activeObject;
         }
 
-        [MenuItem(MENU_PARENT + "Find References In Project (ext.)", false, 25)]
-        private static void FindReferences()
+        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Asset Database", false, 25)]
+        private static void FindReferencesViaAssetDatabase()
         {
             string targetGuid = Selection.assetGUIDs[0];
-            ReferencesWindow.Create(targetGuid, searchAssets());
+            var collection = MenuItemsUtility.SearchReferencesViaDataBase(targetGuid);
+            ReferencesWindow.Create(targetGuid, collection);
+        }
 
-            IEnumerable<string> searchAssets()
-            {
-                switch (EditorSettings.serializationMode)
-                {
-                    case SerializationMode.ForceText:
-                        return MenuItemsUtility.SearchReferencesByText(targetGuid);
+        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Text Searching", false, 25)]
+        private static void FindReferencesViaTextSearching()
+        {
+            string targetGuid = Selection.assetGUIDs[0];
+            var collection = MenuItemsUtility.SearchReferencesViaText(targetGuid);
+            ReferencesWindow.Create(targetGuid, collection);
+        }
 
-                    default:
-                        return MenuItemsUtility.SearchReferencesByDataBase(targetGuid);
-                }
-            }
+        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Text Searching", true)]
+        private static bool FindReferencesViaTextSearchingValidate()
+        {
+            return EditorSettings.serializationMode == SerializationMode.ForceText;
         }
 
         [MenuItem(MENU_PARENT + "Find References In Project (ext.)", true)]

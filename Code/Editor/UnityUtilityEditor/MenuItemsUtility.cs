@@ -32,41 +32,42 @@ namespace UnityUtilityEditor
             }
         }
 
-        public static IEnumerable<string> SearchReferencesByDataBase(string targetGuid)
+        public static IEnumerable<string> SearchReferencesViaDataBase(string targetGuid)
         {
             List<string> foundObjects = new List<string>();
 
             string targetAssetPath = AssetDatabase.GUIDToAssetPath(targetGuid);
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
 
-            IEnumerable<string> assets = AssetDatabaseExt.EnumerateAssetFiles()
-                                                         .Where(item => IsValidExtension(Path.GetExtension(item)))
-                                                         .Select(item => item.Substring(projectFolderPath.Length + 1));
-            foreach (string assetPath in assets)
+            AssetDatabaseExt.EnumerateAssetFiles()
+                            .Where(fullPath => IsValidExtension(Path.GetExtension(fullPath)))
+                            .Select(fullPath => fullPath.Substring(projectFolderPath.Length + 1))
+                            .ForEach(checkDependencies);
+
+            void checkDependencies(string assetPath)
             {
                 foreach (string dependencyPath in AssetDatabase.GetDependencies(assetPath, false))
                 {
                     if (dependencyPath == targetAssetPath && dependencyPath != assetPath)
+                    {
                         foundObjects.Add(assetPath);
+                        return;
+                    }
                 }
             }
 
             return foundObjects;
         }
 
-        public static IEnumerable<string> SearchReferencesByText(string targetGuid)
+        public static IEnumerable<string> SearchReferencesViaText(string targetGuid)
         {
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
-            string projectSettingsPath = Path.Combine(projectFolderPath, AssetDatabaseExt.PROJECT_SETTINGS_FOLDER);
 
-            IEnumerable<string> assets = AssetDatabaseExt.EnumerateAssetFiles();
-            IEnumerable<string> settingsAssets = Directory.EnumerateFiles(projectSettingsPath, $"*{AssetDatabaseExt.ASSET_EXTENSION}");
-
-            return assets.Concat(settingsAssets)
-                         .AsParallel()
-                         .Where(item => IsValidExtension(Path.GetExtension(item)) && File.ReadAllText(item).Contains(targetGuid))
-                         .Select(item => item.Substring(projectFolderPath.Length + 1))
-                         .ToArray();
+            return AssetDatabaseExt.EnumerateAssetFiles()
+                                   .AsParallel()
+                                   .Where(fullPath => IsValidExtension(Path.GetExtension(fullPath)) && File.ReadAllText(fullPath).Contains(targetGuid))
+                                   .Select(fullPath => fullPath.Substring(projectFolderPath.Length + 1))
+                                   .ToArray();
         }
 
         private static bool IsValidExtension(string extension)
