@@ -34,15 +34,16 @@ namespace UnityUtilityEditor
 
         public static IEnumerable<string> SearchReferencesByDataBase(string targetGuid)
         {
-            string targetAssetPath = AssetDatabase.GUIDToAssetPath(targetGuid);
-            string[] assetsGuids = AssetDatabase.FindAssets(string.Empty);
-
             List<string> foundObjects = new List<string>();
 
-            for (int i = 0; i < assetsGuids.Length; i++)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(assetsGuids[i]);
+            string targetAssetPath = AssetDatabase.GUIDToAssetPath(targetGuid);
+            string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
 
+            IEnumerable<string> assets = AssetDatabaseExt.EnumerateAssetFiles()
+                                                         .Where(item => IsValidExtension(Path.GetExtension(item)))
+                                                         .Select(item => item.Substring(projectFolderPath.Length + 1));
+            foreach (string assetPath in assets)
+            {
                 foreach (string dependencyPath in AssetDatabase.GetDependencies(assetPath, false))
                 {
                     if (dependencyPath == targetAssetPath && dependencyPath != assetPath)
@@ -55,35 +56,35 @@ namespace UnityUtilityEditor
 
         public static IEnumerable<string> SearchReferencesByText(string targetGuid)
         {
-            HashSet<string> extensions = new HashSet<string>()
-            {
-                AssetDatabaseExt.ASSET_EXTENSION,
-                ".unity",
-                ".prefab",
-                ".mat",
-                ".spriteatlas",
-                ".controller",
-                ".overrideController",
-                ".preset",
-                ".mask",
-                ".playable",
-                ".guiskin",
-                ".scenetemplate",
-                ".terrainlayer",
-                ".shadervariants",
-            };
-
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
             string projectSettingsPath = Path.Combine(projectFolderPath, AssetDatabaseExt.PROJECT_SETTINGS_FOLDER);
 
-            IEnumerable<string> assets = AssetDatabaseExt.EnumerateAssetFiles("*");
+            IEnumerable<string> assets = AssetDatabaseExt.EnumerateAssetFiles();
             IEnumerable<string> settingsAssets = Directory.EnumerateFiles(projectSettingsPath, $"*{AssetDatabaseExt.ASSET_EXTENSION}");
 
             return assets.Concat(settingsAssets)
                          .AsParallel()
-                         .Where(item => extensions.Contains(Path.GetExtension(item)) && File.ReadAllText(item).Contains(targetGuid))
+                         .Where(item => IsValidExtension(Path.GetExtension(item)) && File.ReadAllText(item).Contains(targetGuid))
                          .Select(item => item.Substring(projectFolderPath.Length + 1))
                          .ToArray();
+        }
+
+        private static bool IsValidExtension(string extension)
+        {
+            return extension == AssetDatabaseExt.ASSET_EXTENSION ||
+                   extension == ".unity" ||
+                   extension == ".prefab" ||
+                   extension == ".mat" ||
+                   extension == ".spriteatlas" ||
+                   extension == ".controller" ||
+                   extension == ".overrideController" ||
+                   extension == ".preset" ||
+                   extension == ".mask" ||
+                   extension == ".playable" ||
+                   extension == ".guiskin" ||
+                   extension == ".scenetemplate" ||
+                   extension == ".terrainlayer" ||
+                   extension == ".shadervariants";
         }
     }
 }

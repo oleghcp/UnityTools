@@ -62,8 +62,7 @@ namespace UnityUtilityEditor
         private static void FindReferences()
         {
             string targetGuid = Selection.assetGUIDs[0];
-            IEnumerable<string> foundAssets = searchAssets();
-            ReferencesWindow.Create(targetGuid, foundAssets);
+            ReferencesWindow.Create(targetGuid, searchAssets());
 
             IEnumerable<string> searchAssets()
             {

@@ -55,6 +55,11 @@ namespace UnityEditor
                             .ToArray();
         }
 
+        public static IEnumerable<string> EnumerateAssetFiles()
+        {
+            return EnumerateAssetFiles("*");
+        }
+
         public static IEnumerable<string> EnumerateAssetFiles(string searchPattern)
         {
             const char forbiddenChar = '.';
