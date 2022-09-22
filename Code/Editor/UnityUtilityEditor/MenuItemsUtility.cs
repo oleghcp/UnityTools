@@ -58,21 +58,19 @@ namespace UnityUtilityEditor
             HashSet<string> extensions = new HashSet<string>()
             {
                 AssetDatabaseExt.ASSET_EXTENSION,
-                ".prefab",
                 ".unity",
+                ".prefab",
                 ".mat",
-                ".preset",
+                ".spriteatlas",
                 ".controller",
                 ".overrideController",
+                ".preset",
                 ".mask",
-                ".spriteatlas",
                 ".playable",
-                ".scenetemplate",
-                ".asmdef",
-                ".terrainlayer",
-                ".mixer",
-                ".shadervariants",
                 ".guiskin",
+                ".scenetemplate",
+                ".terrainlayer",
+                ".shadervariants",
             };
 
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
