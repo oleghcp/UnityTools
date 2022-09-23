@@ -32,20 +32,15 @@ namespace UnityEditor
             AssetDatabase.SaveAssets();
         }
 
-        public static UnityObject LoadAssetByGuid(string guid, Type type)
-        {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            return AssetDatabase.LoadAssetAtPath(path, type);
-        }
-
         public static T LoadAssetByGuid<T>(string guid) where T : UnityObject
         {
             return LoadAssetByGuid(guid, typeof(T)) as T;
         }
 
-        public static UnityObject LoadAssetByGuid(string guid)
+        public static UnityObject LoadAssetByGuid(string guid, Type type)
         {
-            return LoadAssetByGuid(guid, typeof(UnityObject));
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            return AssetDatabase.LoadAssetAtPath(path, type);
         }
 
         public static Assembly[] LoadScriptAssemblies()

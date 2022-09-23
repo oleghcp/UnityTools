@@ -54,7 +54,7 @@ namespace UnityUtilityEditor
             if (Selection.objects.Length != 1 || selectedGuids.Length != 1)
                 return false;
 
-            return AssetDatabaseExt.LoadAssetByGuid(selectedGuids[0]) != Selection.activeObject;
+            return AssetDatabaseExt.LoadAssetByGuid<UnityObject>(selectedGuids[0]) != Selection.activeObject;
         }
 
         [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Asset Database", false, 25)]
