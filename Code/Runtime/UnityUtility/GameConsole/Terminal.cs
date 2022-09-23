@@ -85,7 +85,7 @@ namespace UnityUtility.GameConsole
             _pointerEventData = new PointerEventData(EventSystem.current);
         }
 
-        protected override void CleanUp()
+        protected override void Destruct()
         {
             Switched_Event = null;
             Application.logMessageReceived -= OnDebugLogMessageReceived;

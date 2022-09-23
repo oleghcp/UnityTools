@@ -31,7 +31,7 @@ namespace UnityUtility.SingleScripts
                     if (instance._locked)
                         throw new InvalidOperationException($"The instance of {typeof(T).Name} is being configured. Avoid recursive calls.");
 
-                    (_instance = instance).Construct();
+                    instance.Initialize();
                 }
 
                 return _instance;
@@ -46,18 +46,13 @@ namespace UnityUtility.SingleScripts
         private void Awake()
         {
             if (_instance == null)
-            {
-                _locked = true;
-                Construct();
-                _instance = this as T;
-                _locked = false;
-            }
+                Initialize();
         }
 
         private void OnDestroy()
         {
             if (_instance != null)
-                DisposeInternal();
+                CleanUp();
         }
 
         public void Dispose()
@@ -65,15 +60,22 @@ namespace UnityUtility.SingleScripts
             if (gameObject.IsAsset())
                 throw Errors.DisposingNonEditable();
 
-            hideFlags = HideFlags.None;
             gameObject.Destroy();
-            DisposeInternal();
+            CleanUp();
         }
 
-        private void DisposeInternal()
+        private void Initialize()
+        {
+            _locked = true;
+            Construct();
+            _instance = this as T;
+            _locked = false;
+        }
+
+        private void CleanUp()
         {
             _instance = null;
-            CleanUp();
+            Destruct();
         }
 
         /// <summary>
@@ -84,6 +86,6 @@ namespace UnityUtility.SingleScripts
         /// <summary>
         /// Used it instead of OnDestroy.
         /// </summary>
-        protected abstract void CleanUp();
+        protected abstract void Destruct();
     }
 }

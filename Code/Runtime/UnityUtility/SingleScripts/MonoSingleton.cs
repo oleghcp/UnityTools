@@ -44,7 +44,6 @@ namespace UnityUtility.SingleScripts
             if (gameObject.IsAsset())
                 throw Errors.DisposingNonEditable();
 
-            hideFlags = HideFlags.None;
             gameObject.Destroy();
             DisposeInternal();
         }
@@ -52,12 +51,12 @@ namespace UnityUtility.SingleScripts
         private void DisposeInternal()
         {
             _instance = null;
-            CleanUp();
+            Destruct();
         }
 
         /// <summary>
         /// Use it instead of OnDestroy.
         /// </summary>
-        protected abstract void CleanUp();
+        protected abstract void Destruct();
     }
 }
