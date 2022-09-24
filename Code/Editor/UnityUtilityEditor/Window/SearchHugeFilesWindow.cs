@@ -11,17 +11,19 @@ namespace UnityUtilityEditor.Window
 {
     internal class SearchHugeFilesWindow : EditorWindow
     {
-        private readonly string[] _sizeToolbarNames = new string[] { "Bytes", "Kb", "Mb" };
+        private const float WIDTH = 100f;
+
+        private readonly string[] _sizeToolbarNames = new string[] { "Bytes", "KiB", "MiB", "GiB" };
         private int _sizeToolbarIndex = 2;
 
         private Vector2 _scrollPosition;
 
         private long _fileSize = 100L * 1024 * 1024;
-        private (UnityObject asset, long size)[] _result;
+        private (UnityObject asset, string folder, long size)[] _result;
 
         private void OnEnable()
         {
-            minSize = new Vector2(250f, 200f);
+            minSize = new Vector2(450f, 200f);
         }
 
         public static void Create()
@@ -31,31 +33,17 @@ namespace UnityUtilityEditor.Window
 
         private void OnGUI()
         {
+            bool search;
+
             EditorGUILayout.Space();
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                const string label = "Min File Size";
-
-                switch (_sizeToolbarIndex)
-                {
-                    case 0:
-                        _fileSize = Clamp(EditorGUILayout.LongField(label, _fileSize), 0L, long.MaxValue);
-                        break;
-
-                    case 1:
-                        _fileSize = (long)Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d) * 1024d, 0d, double.MaxValue);
-                        break;
-
-                    case 2:
-                        _fileSize = (long)Clamp(EditorGUILayout.DoubleField(label, _fileSize / 1024d / 1024d) * 1024d * 1024d, 0d, double.MaxValue);
-                        break;
-
-                    default:
-                        throw new UnsupportedValueException(_sizeToolbarIndex);
-                }
-
-                _sizeToolbarIndex = EditorGUILayout.Popup(_sizeToolbarIndex, _sizeToolbarNames, GUILayout.Width(100f));
+                GUILayout.Label("Min File Size: ");
+                _fileSize = SizeField(_fileSize, _sizeToolbarIndex);
+                _sizeToolbarIndex = EditorGUILayout.Popup(_sizeToolbarIndex, _sizeToolbarNames, GUILayout.Width(80f));
+                GUILayout.FlexibleSpace();
+                search = GUILayout.Button("Search", GUILayout.Height(EditorGUIUtility.singleLineHeight), GUILayout.Width(150f));
             }
 
             EditorGUILayout.Space();
@@ -66,17 +54,14 @@ namespace UnityUtilityEditor.Window
                 GUI.enabled = false;
                 for (int i = 0; i < _result.Length; i++)
                 {
-                    string sizeLabel;
-                    long size = _result[i].size;
+                    EditorGUILayout.BeginHorizontal();
 
-                    if (size <= 1024)
-                        sizeLabel = $"{size} {_sizeToolbarNames[0]}";
-                    else if (size <= 1024 * 1024)
-                        sizeLabel = $"{size / 1024d:F} {_sizeToolbarNames[1]}";
-                    else
-                        sizeLabel = $"{size / 1024d / 1024d:F} {_sizeToolbarNames[2]}";
+                    GUILayout.Label(SizeToLable(_result[i].size, _sizeToolbarNames), GUILayout.Width(100f));
+                    GUILayout.Label(_result[i].folder);
+                    EditorGUILayout.ObjectField(_result[i].asset, typeof(UnityObject), false);
+                    GUILayout.FlexibleSpace();
 
-                    EditorGUILayout.ObjectField(sizeLabel, _result[i].asset, typeof(UnityObject), false);
+                    EditorGUILayout.EndHorizontal();
                 }
                 GUI.enabled = true;
 
@@ -87,32 +72,62 @@ namespace UnityUtilityEditor.Window
 
             EditorGUILayout.Space();
 
-            bool search = GUILayout.Button("Search", GUILayout.Height(30f));
-
             if (search)
-                _result = SearchFilesBySize(_fileSize);
+                SearchFilesBySize(_fileSize);
         }
 
-        private static (UnityObject asset, long size)[] SearchFilesBySize(long minSizeInBytes)
+        private void SearchFilesBySize(long minSizeInBytes)
         {
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
 
-            var result = AssetDatabaseExt.EnumerateAssetFiles("*")
-                                         .AsParallel()
-                                         .Where(item => Path.GetExtension(item) != ".meta")
-                                         .Select(selector)
-                                         .Where(item => item.size >= minSizeInBytes)
-                                         .ToArray();
-
-            return result.OrderByDescending(item => item.size)
-                         .Select(item => (AssetDatabase.LoadAssetAtPath<UnityObject>(item.path), item.size))
-                         .ToArray();
+            _result = AssetDatabaseExt.EnumerateAssetFiles("*")
+                                      .AsParallel()
+                                      .Where(item => Path.GetExtension(item) != ".meta")
+                                      .Select(selector)
+                                      .Where(item => item.size >= minSizeInBytes)
+                                      .OrderByDescending(item => item.size)
+                                      .AsSequential()
+                                      .Select(createTuple)
+                                      .ToArray();
 
             (string path, long size) selector(string filePath)
             {
                 FileInfo info = new FileInfo(filePath);
                 string assetPath = filePath.Remove(0, projectFolderPath.Length + 1);
                 return (assetPath, info.Length);
+            }
+
+            (UnityObject, string, long) createTuple((string path, long size) item)
+            {
+                const string slash = " ∕ ";
+                string prettyPath = PathUtility.GetParentPath(item.path).Replace("/", slash).Replace("\\", slash) + " ∕";
+                return (AssetDatabase.LoadAssetAtPath<UnityObject>(item.path), prettyPath, item.size);
+            }
+        }
+
+        private string SizeToLable(long size, string[] sizeToolbarNames)
+        {
+            if (size <= 1024)
+                return $"{size} {sizeToolbarNames[0]}";
+
+            if (size <= 1024L * 1024L)
+                return $"{size / 1024d:F} {sizeToolbarNames[1]}";
+
+            if (size <= 1024L * 1024L * 1024L)
+                return $"{size / 1024d / 1024d:F} {sizeToolbarNames[2]}";
+
+            return $"{size / 1024d / 1024d / 1024d:F} {sizeToolbarNames[3]}";
+        }
+
+        private static long SizeField(long size, int sizeToolbarIndex)
+        {
+            switch (sizeToolbarIndex)
+            {
+                case 0: return Clamp(EditorGUILayout.LongField(size, GUILayout.Width(WIDTH)), 0L, long.MaxValue);
+                case 1: return (long)Clamp(EditorGUILayout.DoubleField(size / 1024d, GUILayout.Width(WIDTH)) * 1024d, 0d, double.MaxValue);
+                case 2: return (long)Clamp(EditorGUILayout.DoubleField(size / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d, 0d, double.MaxValue);
+                case 3: return (long)Clamp(EditorGUILayout.DoubleField(size / 1024d / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d * 1024d, 0d, double.MaxValue);
+                default: throw new UnsupportedValueException(sizeToolbarIndex);
             }
         }
 

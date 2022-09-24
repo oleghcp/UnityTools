@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Window
     internal class ReferencesWindow : EditorWindow
     {
         private UnityObject _target;
-        private (UnityObject obj, string path)[] _objects;
+        private (UnityObject obj, string folder)[] _objects;
         private Vector2 _scrollPosition;
 
         private void OnEnable()
@@ -60,7 +60,7 @@ namespace UnityUtilityEditor.Window
             for (int i = 0; i < _objects.Length; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(_objects[i].path);
+                GUILayout.Label(_objects[i].folder);
                 GUI.enabled = false;
                 EditorGUILayout.ObjectField(_objects[i].obj, typeof(UnityObject), false);
                 GUI.enabled = true;
