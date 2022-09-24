@@ -14,7 +14,9 @@ namespace UnityUtilityEditor.Window
         private const float WIDTH = 100f;
 
         private readonly string[] _sizeToolbarNames = new string[] { "Bytes", "KiB", "MiB", "GiB" };
+        private readonly string[] _sortWays = new string[] { "Path", "Size ▲", "Size ▼" };
         private int _sizeToolbarIndex = 2;
+        private int _sortWayIndex = 2;
 
         private Vector2 _scrollPosition;
 
@@ -23,7 +25,7 @@ namespace UnityUtilityEditor.Window
 
         private void OnEnable()
         {
-            minSize = new Vector2(450f, 200f);
+            minSize = new Vector2(550f, 200f);
         }
 
         public static void Create()
@@ -42,28 +44,38 @@ namespace UnityUtilityEditor.Window
                 GUILayout.Label("Min File Size: ");
                 _fileSize = SizeField(_fileSize, _sizeToolbarIndex);
                 _sizeToolbarIndex = EditorGUILayout.Popup(_sizeToolbarIndex, _sizeToolbarNames, GUILayout.Width(80f));
+
                 GUILayout.FlexibleSpace();
-                search = GUILayout.Button("Search", GUILayout.Height(EditorGUIUtility.singleLineHeight), GUILayout.Width(150f));
+
+                GUILayout.Label("Sorting: ");
+                int prevSortIndex = _sortWayIndex;
+                _sortWayIndex = EditorGUILayout.Popup(_sortWayIndex, _sortWays, GUILayout.Width(80f));
+                if (_sortWayIndex != prevSortIndex)
+                    Sort();
+
+                GUILayout.FlexibleSpace();
+
+                search = GUILayout.Button("Search", GUILayout.Height(EditorGUIUtility.singleLineHeight), GUILayout.Width(120f));
             }
 
             EditorGUILayout.Space();
 
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox);
             if (_result != null)
             {
-                GUI.enabled = false;
                 for (int i = 0; i < _result.Length; i++)
                 {
                     EditorGUILayout.BeginHorizontal();
 
                     GUILayout.Label(SizeToLable(_result[i].size, _sizeToolbarNames), GUILayout.Width(100f));
                     GUILayout.Label(_result[i].folder);
+                    GUI.enabled = false;
                     EditorGUILayout.ObjectField(_result[i].asset, typeof(UnityObject), false);
+                    GUI.enabled = true;
                     GUILayout.FlexibleSpace();
 
                     EditorGUILayout.EndHorizontal();
                 }
-                GUI.enabled = true;
 
                 if (_result.Length == 0)
                     GUILayout.Label("No files found.");
@@ -85,10 +97,10 @@ namespace UnityUtilityEditor.Window
                                       .Where(item => Path.GetExtension(item) != ".meta")
                                       .Select(selector)
                                       .Where(item => item.size >= minSizeInBytes)
-                                      .OrderByDescending(item => item.size)
                                       .AsSequential()
                                       .Select(createTuple)
                                       .ToArray();
+            Sort();
 
             (string path, long size) selector(string filePath)
             {
@@ -102,6 +114,27 @@ namespace UnityUtilityEditor.Window
                 const string slash = " ∕ ";
                 string prettyPath = PathUtility.GetParentPath(item.path).Replace("/", slash).Replace("\\", slash) + " ∕";
                 return (AssetDatabase.LoadAssetAtPath<UnityObject>(item.path), prettyPath, item.size);
+            }
+        }
+
+        private void Sort()
+        {
+            switch (_sortWayIndex)
+            {
+                case 0:
+                    _result.Sort(item => AssetDatabase.GetAssetPath(item.asset));
+                    break;
+
+                case 1:
+                    _result.Sort(item => item.size);
+                    break;
+
+                case 2:
+                    _result.Sort(item => -item.size);
+                    break;
+
+                default:
+                    throw new UnsupportedValueException(_sortWayIndex);
             }
         }
 
