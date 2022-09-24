@@ -55,7 +55,7 @@ namespace UnityUtilityEditor.Window
                 return;
             }
 
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox);
 
             for (int i = 0; i < _objects.Length; i++)
             {

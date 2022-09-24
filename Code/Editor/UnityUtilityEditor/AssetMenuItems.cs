@@ -57,7 +57,7 @@ namespace UnityUtilityEditor
             return AssetDatabaseExt.LoadAssetByGuid<UnityObject>(selectedGuids[0]) != Selection.activeObject;
         }
 
-        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Asset Database", false, 25)]
+        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Asset Database", false, 26)]
         private static void FindReferencesViaAssetDatabase()
         {
             string targetGuid = Selection.assetGUIDs[0];
@@ -65,7 +65,7 @@ namespace UnityUtilityEditor
             ReferencesWindow.Create(targetGuid, collection);
         }
 
-        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Text Searching", false, 25)]
+        [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Text Searching", false, 26)]
         private static void FindReferencesViaTextSearching()
         {
             string targetGuid = Selection.assetGUIDs[0];
