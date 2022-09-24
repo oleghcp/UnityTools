@@ -57,9 +57,27 @@ namespace UnityEditor
 
         public static IEnumerable<string> EnumerateAssetFiles(string searchPattern)
         {
+            return EnumerateFiles(Application.dataPath, searchPattern);
+        }
+
+        public static IEnumerable<string> EnumerateSettingsFiles()
+        {
+            return EnumerateSettingsFiles("*");
+        }
+
+        public static IEnumerable<string> EnumerateSettingsFiles(string searchPattern)
+        {
+            string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
+            string projectSettingsPath = Path.Combine(projectFolderPath, PROJECT_SETTINGS_FOLDER);
+
+            return EnumerateFiles(projectSettingsPath, searchPattern);
+        }
+
+        private static IEnumerable<string> EnumerateFiles(string path, string searchPattern)
+        {
             const char forbiddenChar = '.';
 
-            return enumerate(Application.dataPath);
+            return enumerate(path);
 
             IEnumerable<string> enumerate(string directoryPath)
             {

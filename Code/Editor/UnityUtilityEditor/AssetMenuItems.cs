@@ -69,11 +69,20 @@ namespace UnityUtilityEditor
         private static void FindReferencesViaTextSearching()
         {
             string targetGuid = Selection.assetGUIDs[0];
-            var collection = MenuItemsUtility.SearchReferencesViaText(targetGuid);
+            var collection = MenuItemsUtility.SearchReferencesInAssetsViaText(targetGuid);
+            ReferencesWindow.Create(targetGuid, collection);
+        }
+
+        [MenuItem(MENU_PARENT + "Find References In Settings (ext.)", false, 26)]
+        private static void FindReferencesInSettingsViaTextSearching()
+        {
+            string targetGuid = Selection.assetGUIDs[0];
+            var collection = MenuItemsUtility.SearchReferencesInSettingsViaText(targetGuid);
             ReferencesWindow.Create(targetGuid, collection);
         }
 
         [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Text Searching", true)]
+        [MenuItem(MENU_PARENT + "Find References In Settings (ext.)", true)]
         private static bool FindReferencesViaTextSearchingValidate()
         {
             return EditorSettings.serializationMode == SerializationMode.ForceText;

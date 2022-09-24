@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace UnityUtilityEditor.Window
     internal class ReferencesWindow : EditorWindow
     {
         private UnityObject _target;
-        private UnityObject[] _objects;
+        private (UnityObject obj, string path)[] _objects;
         private Vector2 _scrollPosition;
 
         private void OnEnable()
@@ -22,8 +23,14 @@ namespace UnityUtilityEditor.Window
             ReferencesWindow window = GetWindow<ReferencesWindow>(true, "References");
 
             window._target = AssetDatabaseExt.LoadAssetByGuid<UnityObject>(targetObjectGuid);
-            window._objects = referingObjectPaths.Select(AssetDatabase.LoadAssetAtPath<UnityObject>)
-                                                 .ToArray();
+            window._objects = referingObjectPaths.Select(createTuple).ToArray();
+
+            (UnityObject, string) createTuple(string path)
+            {
+                const string slash = " ∕ ";
+                string prettyPath = PathUtility.GetParentPath(path).Replace("/", slash).Replace("\\", slash) + " ∕";
+                return (AssetDatabase.LoadAssetAtPath<UnityObject>(path), prettyPath);
+            }
         }
 
         private void OnGUI()
@@ -50,12 +57,17 @@ namespace UnityUtilityEditor.Window
 
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
-            GUI.enabled = false;
             for (int i = 0; i < _objects.Length; i++)
             {
-                EditorGUILayout.ObjectField(_objects[i], typeof(UnityObject), false);
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(_objects[i].path);
+                GUI.enabled = false;
+                EditorGUILayout.ObjectField(_objects[i].obj, typeof(UnityObject), false);
+                GUI.enabled = true;
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+
             }
-            GUI.enabled = true;
 
             EditorGUILayout.EndScrollView();
         }

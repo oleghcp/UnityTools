@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -59,15 +60,30 @@ namespace UnityUtilityEditor
             return foundObjects;
         }
 
-        public static IEnumerable<string> SearchReferencesViaText(string targetGuid)
+        public static IEnumerable<string> SearchReferencesInAssetsViaText(string targetGuid)
+        {
+            return SearchReferencesViaText(AssetDatabaseExt.EnumerateAssetFiles(), targetGuid, IsValidExtension);
+        }
+
+        public static IEnumerable<string> SearchReferencesInSettingsViaText(string targetGuid)
+        {
+            return SearchReferencesViaText(AssetDatabaseExt.EnumerateSettingsFiles(), targetGuid, isValidExtension);
+
+            bool isValidExtension(string extension)
+            {
+                return extension == AssetDatabaseExt.ASSET_EXTENSION ||
+                       extension == ".json";
+            }
+        }
+
+        private static IEnumerable<string> SearchReferencesViaText(IEnumerable<string> enumerable, string targetGuid, Predicate<string> extensionChecker)
         {
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
 
-            return AssetDatabaseExt.EnumerateAssetFiles()
-                                   .AsParallel()
-                                   .Where(fullPath => IsValidExtension(Path.GetExtension(fullPath)) && File.ReadAllText(fullPath).Contains(targetGuid))
-                                   .Select(fullPath => fullPath.Substring(projectFolderPath.Length + 1))
-                                   .ToArray();
+            return enumerable.AsParallel()
+                             .Where(fullPath => extensionChecker(Path.GetExtension(fullPath)) && File.ReadAllText(fullPath).Contains(targetGuid))
+                             .Select(fullPath => fullPath.Substring(projectFolderPath.Length + 1))
+                             .ToArray();
         }
 
         private static bool IsValidExtension(string extension)
