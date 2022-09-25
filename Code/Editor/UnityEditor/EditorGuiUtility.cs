@@ -15,15 +15,21 @@ namespace UnityEditor
         public static float SmallButtonWidth => EditorGUIUtility.singleLineHeight + 2f;
         public static float StandardHorizontalSpacing => EditorGUIUtility.standardVerticalSpacing + 1f;
 
-        public static GUIContent TempContent(string t, string tooltip = null)
+        public static string NicifyPathLabel(string path)
         {
-            if (_commonContent == null)
-                _commonContent = new GUIContent();
+            const string slash = " ∕ ";
+            return path.Replace("/", slash)
+                       .Replace("\\", slash);
+        }
 
-            _commonContent.text = t;
-            _commonContent.tooltip = tooltip;
-            _commonContent.image = null;
-            return _commonContent;
+        public static GUIContent TempContent(string label, string tooltip = null)
+        {
+            return TempContent(label, null, tooltip);
+        }
+
+        public static GUIContent TempContent(Texture2D image, string tooltip = null)
+        {
+            return TempContent(null, image, tooltip);
         }
 
         public static Rect GetLinePosition(in Rect basePosition, int lineIndex)
@@ -93,6 +99,17 @@ namespace UnityEditor
             }
 
             return height.CutBefore(EditorGUIUtility.singleLineHeight);
+        }
+
+        private static GUIContent TempContent(string label, Texture2D image, string tooltip)
+        {
+            if (_commonContent == null)
+                _commonContent = new GUIContent();
+
+            _commonContent.text = label;
+            _commonContent.image = image;
+            _commonContent.tooltip = tooltip;
+            return _commonContent;
         }
     }
 }
