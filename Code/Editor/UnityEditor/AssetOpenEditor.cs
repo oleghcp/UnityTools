@@ -1,5 +1,4 @@
-﻿using System.IO;
-using UnityEditor.Callbacks;
+﻿using UnityEditor.Callbacks;
 using UnityEngine;
 #if UNITY_2019_3_OR_NEWER
 using UnityUtility.NodeBased;
@@ -31,7 +30,7 @@ namespace UnityEditor
 
             if (ProjectWindowUtil.IsFolder(instanceID))
             {
-                EditorUtilityExt.OpenFolder(AssetDatabase.GetAssetPath(obj));
+                EditorUtilityExt.OpenFolder(obj.GetAssetPath());
                 return true;
             }
 

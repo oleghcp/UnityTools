@@ -124,7 +124,7 @@ namespace UnityUtilityEditor.Window
             _targetRoot = parent;
 
             if (parent.IsFolder())
-                _defaultFolder = AssetDatabase.GetAssetPath(parent);
+                _defaultFolder = parent.GetAssetPath();
         }
     }
 }

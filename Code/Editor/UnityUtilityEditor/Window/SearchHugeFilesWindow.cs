@@ -122,7 +122,7 @@ namespace UnityUtilityEditor.Window
             switch (_sortWayIndex)
             {
                 case 0:
-                    _result.Sort(item => AssetDatabase.GetAssetPath(item.asset));
+                    _result.Sort(item => item.asset.GetAssetPath());
                     break;
 
                 case 1:

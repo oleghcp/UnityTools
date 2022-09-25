@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -9,8 +8,14 @@ namespace UnityUtilityEditor.Window
 {
     internal class ReferencesWindow : EditorWindow
     {
+        private readonly GUILayoutOption[] _buttonOptions = new[]
+        {
+            GUILayout.Width(EditorGUIUtility.singleLineHeight),
+            GUILayout.Height(EditorGUIUtility.singleLineHeight),
+        };
+
         private UnityObject _target;
-        private (UnityObject obj, string folder)[] _objects;
+        private (UnityObject asset, string path)[] _objects;
         private Vector2 _scrollPosition;
 
         private void OnEnable()
@@ -27,9 +32,7 @@ namespace UnityUtilityEditor.Window
 
             (UnityObject, string) createTuple(string path)
             {
-                const string slash = " ∕ ";
-                string prettyPath = PathUtility.GetParentPath(path).Replace("/", slash).Replace("\\", slash) + " ∕";
-                return (AssetDatabase.LoadAssetAtPath<UnityObject>(path), prettyPath);
+                return (AssetDatabase.LoadAssetAtPath<UnityObject>(path), EditorGuiUtility.NicifyPathLabel(path));
             }
         }
 
@@ -59,14 +62,16 @@ namespace UnityUtilityEditor.Window
 
             for (int i = 0; i < _objects.Length; i++)
             {
+                var (asset, path) = _objects[i];
+
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(_objects[i].folder);
-                GUI.enabled = false;
-                EditorGUILayout.ObjectField(_objects[i].obj, typeof(UnityObject), false);
-                GUI.enabled = true;
+                bool clicked = GUILayout.Button(asset.GetAssetIcon(), EditorStyles.label, _buttonOptions);
+                clicked |= GUILayout.Button(path, EditorStyles.label);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
 
+                if (clicked)
+                    EditorGUIUtility.PingObject(asset);
             }
 
             EditorGUILayout.EndScrollView();
