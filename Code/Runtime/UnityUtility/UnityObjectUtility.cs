@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtility
@@ -29,6 +30,33 @@ namespace UnityUtility
         private static T CreateDelegate<T>(Type classType, string methodName) where T : Delegate
         {
             return Delegate.CreateDelegate(typeof(T), classType, methodName) as T;
+        }
+
+        /// <summary>
+        /// Returns true if a game object is asset reference. For scene objects returns false.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAsset(GameObject self)
+        {
+            return !self.scene.IsValid();
+        }
+
+        /// <summary>
+        /// Returns true if a Component is asset reference. For scene objects returns false.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAsset(Component self)
+        {
+            return IsAsset(self.gameObject);
+        }
+
+        /// <summary>
+        /// Returns true if UnityEngine.Object is asset reference.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAsset(UnityObject self)
+        {
+            return self.GetInstanceID() > 0;
         }
     }
 }

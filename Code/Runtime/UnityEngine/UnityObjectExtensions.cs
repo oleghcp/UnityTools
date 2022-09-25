@@ -257,21 +257,21 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Returns true if a game object is prefab reference. For scene objects returns false.
+        /// Returns true if a game object is asset reference. For scene objects returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAsset(this GameObject self)
         {
-            return !self.scene.IsValid();
+            return UnityObjectUtility.IsAsset(self);
         }
 
         /// <summary>
-        /// Returns true if a game object is prefab reference. For scene objects returns false.
+        /// Returns true if a Component is asset reference. For scene objects returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAsset(this Component self)
         {
-            return !self.gameObject.scene.IsValid();
+            return UnityObjectUtility.IsAsset(self);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace UnityEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAsset(this UnityObject self)
         {
-            return self.GetInstanceID() > 0;
+            return UnityObjectUtility.IsAsset(self);
         }
     }
 }
