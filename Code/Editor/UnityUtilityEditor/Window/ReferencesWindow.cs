@@ -67,7 +67,6 @@ namespace UnityUtilityEditor.Window
                 EditorGUILayout.BeginHorizontal();
                 bool clicked = GUILayout.Button(asset.GetAssetIcon(), EditorStyles.label, _buttonOptions);
                 clicked |= GUILayout.Button(path, EditorStyles.label);
-                GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
 
                 if (clicked)
