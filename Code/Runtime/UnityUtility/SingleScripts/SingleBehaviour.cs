@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtilityTools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -51,17 +50,14 @@ namespace UnityUtility.SingleScripts
 
         private void OnDestroy()
         {
-            if (_instance != null)
-                CleanUp();
+            _instance = null;
+            Destruct();
         }
 
         public void Dispose()
         {
-            if (gameObject.IsAsset())
-                throw Errors.DisposingNonEditable();
-
             gameObject.Destroy();
-            CleanUp();
+            _instance = null;
         }
 
         private void Initialize()
@@ -70,12 +66,6 @@ namespace UnityUtility.SingleScripts
             Construct();
             _instance = this as T;
             _locked = false;
-        }
-
-        private void CleanUp()
-        {
-            _instance = null;
-            Destruct();
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtilityTools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -35,23 +34,14 @@ namespace UnityUtility.SingleScripts
 
         private void OnDestroy()
         {
-            if (_instance != null)
-                DisposeInternal();
+            _instance = null;
+            Destruct();
         }
 
         public void Dispose()
         {
-            if (gameObject.IsAsset())
-                throw Errors.DisposingNonEditable();
-
             gameObject.Destroy();
-            DisposeInternal();
-        }
-
-        private void DisposeInternal()
-        {
             _instance = null;
-            Destruct();
         }
 
         /// <summary>
