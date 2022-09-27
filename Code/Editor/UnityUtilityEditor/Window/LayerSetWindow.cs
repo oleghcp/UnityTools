@@ -28,7 +28,7 @@ namespace UnityUtilityEditor.Window
 
         public static void CreateWindow()
         {
-            LayerSetWindow window = GetWindow<LayerSetWindow>(true, "Layer Set");
+            LayerSetWindow window = GetWindow<LayerSetWindow>("Layer Set", true);
             window.minSize = new Vector2(350f, 500f);
         }
 
