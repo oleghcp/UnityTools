@@ -48,7 +48,8 @@ namespace UnityUtility.Async
         /// </summary>
         public void Pause()
         {
-            if (IsAliveInternal()) { _task.Pause(); }
+            if (IsAliveInternal())
+                _task.Pause();
         }
 
         /// <summary>
@@ -56,7 +57,8 @@ namespace UnityUtility.Async
         /// </summary>
         public void Resume()
         {
-            if (IsAliveInternal()) { _task.Resume(); }
+            if (IsAliveInternal())
+                _task.Resume();
         }
 
         /// <summary>
@@ -64,7 +66,8 @@ namespace UnityUtility.Async
         /// </summary>
         public void Stop()
         {
-            if (IsAliveInternal()) { _task.Stop(); }
+            if (IsAliveInternal())
+                _task.Stop();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -96,10 +99,7 @@ namespace UnityUtility.Async
             return IsAliveInternal();
         }
 
-        void IEnumerator.Reset()
-        {
-            throw new NotImplementedException();
-        }
+        void IEnumerator.Reset() { }
 
         public static bool operator ==(TaskInfo a, TaskInfo b)
         {
