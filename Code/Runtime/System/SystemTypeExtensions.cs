@@ -100,7 +100,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetTypeName(this Type self)
         {
-            return Helper.CutAssemblyQualifiedName(self.AssemblyQualifiedName);
+            return Helper.SimplifyTypeName(self.AssemblyQualifiedName);
         }
 
         /// <summary>

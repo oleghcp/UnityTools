@@ -42,15 +42,15 @@ namespace UnityUtilityTools
             return hc0 ^ hc1 << 2 ^ hc2 >> 2 ^ hc3 >> 1;
         }
 
-        internal static string CutAssemblyQualifiedName(string assemblyQualifiedName)
+        internal static string SimplifyTypeName(string assemblyQualifiedName)
         {
-            const char DEVIDER = ',';
+            const char devider = ',';
 
             bool first = false;
 
             for (int i = 0; i < assemblyQualifiedName.Length; i++)
             {
-                if (assemblyQualifiedName[i] != DEVIDER) { continue; }
+                if (assemblyQualifiedName[i] != devider) { continue; }
                 if (!first) { first = true; }
                 else { return assemblyQualifiedName.Substring(0, i); }
             }
