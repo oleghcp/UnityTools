@@ -69,9 +69,10 @@ namespace UnityUtility.NumericEntities
             _filler = 0;
         }
 
-        public void RemoveTillExcess()
+        public void RemoveExcess()
         {
-            _filler = Excess;
+            if (_filler > _threshold)
+                _filler = _threshold;
         }
 
         // -- //

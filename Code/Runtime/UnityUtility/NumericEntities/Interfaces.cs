@@ -43,7 +43,7 @@ namespace UnityUtility.NumericEntities
         void FillFully();
         void Remove(T delta);
         void RemoveAll();
-        void RemoveTillExcess();
+        void RemoveExcess();
     }
 
     public interface IModifier<T> where T : struct, IComparable<T>, IEquatable<T>
