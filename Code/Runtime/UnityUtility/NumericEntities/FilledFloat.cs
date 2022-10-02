@@ -28,7 +28,7 @@ namespace UnityUtility.NumericEntities
         public float CurValue => _filler.CutAfter(_threshold);
         public bool FilledFully => _filler >= _threshold;
         public bool IsEmpty => _filler == 0f;
-        public float Ratio => Helper.GetRatio(CurValue, _threshold);
+        public float Ratio => NumericHelper.GetRatio(CurValue, _threshold);
         public float Excess => (_filler - _threshold).CutBefore(0f);
         public float Shortage => (_threshold - _filler).Clamp(0f, _threshold);
 
