@@ -2,25 +2,28 @@
 using System.Runtime.CompilerServices;
 using UnityUtilityTools;
 
-namespace UnityUtility.Rng.BytesBased
+namespace UnityUtility.Rng
 {
-    public class BytesBasedRng : IRng
+    [Serializable]
+    public class XorshiftRng : IRng
     {
-        private IRandomBytesProvider _rbp;
+        private uint _a32;
+        private ulong _a64;
 
-        private byte[] _bytes64;
-        private byte[] _bytes32;
-        private byte[] _bytes16;
-        private byte[] _bytes8;
-
-        public BytesBasedRng(IRandomBytesProvider randomBytesGenerator)
+        public XorshiftRng()
         {
-            _rbp = randomBytesGenerator;
+            int seed = RngHelper.GenerateSeed();
+            _a32 = (uint)seed;
+            _a64 = (ulong)seed;
+        }
 
-            _bytes64 = new byte[sizeof(ulong)];
-            _bytes32 = new byte[sizeof(uint)];
-            _bytes16 = new byte[sizeof(ushort)];
-            _bytes8 = new byte[sizeof(byte)];
+        public XorshiftRng(int seed)
+        {
+            if (seed == 0)
+                throw new ArgumentException($"Parameter cannot be equal zero.", nameof(seed));
+
+            _a32 = (uint)seed;
+            _a64 = (ulong)seed;
         }
 
         public int Next(int minValue, int maxValue)
@@ -57,25 +60,28 @@ namespace UnityUtility.Rng.BytesBased
 
         public double NextDouble()
         {
-            _rbp.GetBytes(_bytes64);
-            ulong rn = BitConverter.ToUInt64(_bytes64, 0);
-            return RngHelper.NextDouble(rn);
+            return RngHelper.NextDouble(Xorshift64());
         }
 
         public byte NextByte()
         {
-            _rbp.GetBytes(_bytes8);
-            return _bytes8[0];
+            return (byte)NextInternal(0, 256);
         }
 
         public void NextBytes(byte[] buffer)
         {
-            _rbp.GetBytes(buffer);
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = (byte)NextInternal(0, 256);
+            }
         }
 
         public void NextBytes(Span<byte> buffer)
         {
-            _rbp.GetBytes(buffer);
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = (byte)NextInternal(0, 256);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,25 +93,26 @@ namespace UnityUtility.Rng.BytesBased
         private int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
+            uint rn = Xorshift32();
+            return (int)(rn % length + minValue);
+        }
 
-            if (length <= 256L)
-            {
-                _rbp.GetBytes(_bytes8);
-                byte rn = _bytes8[0];
-                return rn % (int)length + minValue;
-            }
-            else if (length <= 65536L)
-            {
-                _rbp.GetBytes(_bytes16);
-                ushort rn = BitConverter.ToUInt16(_bytes16, 0);
-                return rn % (int)length + minValue;
-            }
-            else
-            {
-                _rbp.GetBytes(_bytes32);
-                uint rn = BitConverter.ToUInt32(_bytes32, 0);
-                return (int)(rn % length + minValue);
-            }
+        private uint Xorshift32()
+        {
+            uint x = _a32;
+            x ^= x << 13;
+            x ^= x >> 17;
+            x ^= x << 5;
+            return _a32 = x;
+        }
+
+        private ulong Xorshift64()
+        {
+            ulong x = _a64;
+            x ^= x << 13;
+            x ^= x >> 7;
+            x ^= x << 17;
+            return _a64 = x;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace UnityUtility.Rng.BytesBased
 
         public TimeBytes()
         {
-            _seed = (uint)Environment.TickCount;
+            _seed = (uint)RngHelper.GenerateSeed();
             _multiplier = (byte)(_seed % 8 + 2);
         }
 
