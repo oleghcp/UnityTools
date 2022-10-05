@@ -78,7 +78,6 @@ namespace UnityUtility.Rng
             _rng.GetBytes(buffer);
         }
 
-#if UNITY_2018_3_OR_NEWER
         public void NextBytes(Span<byte> buffer)
         {
 #if UNITY_2021_2_OR_NEWER
@@ -91,7 +90,6 @@ namespace UnityUtility.Rng
             }
 #endif
         }
-#endif
 
         // -- //
 

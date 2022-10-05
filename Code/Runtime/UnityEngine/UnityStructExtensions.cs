@@ -466,7 +466,6 @@ namespace UnityEngine
         }
 
         #region Deconstructors
-#if UNITY_2018_3_OR_NEWER
         public static void Deconstruct(this in Vector2 vector, out float x, out float y)
         {
             x = vector.x;
@@ -524,7 +523,6 @@ namespace UnityEngine
             width = rect.width;
             height = rect.height;
         }
-#endif
         #endregion
     }
 }

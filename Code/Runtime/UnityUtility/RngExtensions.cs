@@ -75,7 +75,6 @@ namespace UnityUtility
             return self.Random(weights as IList<float>, weightOfNone);
         }
 
-#if UNITY_2018_3_OR_NEWER
         /// <summary>
         /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
@@ -98,7 +97,6 @@ namespace UnityUtility
 
             return -1;
         }
-#endif
 
         /// <summary>
         /// Returns random index of collection contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
@@ -131,7 +129,6 @@ namespace UnityUtility
             return self.Random(weights as IList<int>, weightOfNone);
         }
 
-#if UNITY_2018_3_OR_NEWER
         /// <summary>
         /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
@@ -154,7 +151,6 @@ namespace UnityUtility
 
             return -1;
         }
-#endif
 
         /// <summary>
         /// Returns a random flag contains in the specified mask. Returns -1 if mask is empty.

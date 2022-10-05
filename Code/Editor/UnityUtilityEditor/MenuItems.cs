@@ -96,14 +96,6 @@ namespace UnityUtilityEditor
             TransformEditor.SwitchType();
         }
 
-#if !UNITY_2018_3_OR_NEWER
-        [MenuItem(nameof(UnityUtility) + "/Gamepad Axes")]
-        private static void GamepadAxes()
-        {
-            GamepadAxesWindow.Create();
-        }
-#endif
-
         [MenuItem(nameof(UnityUtility) + "/About", false, 1)]
         private static void GetAboutWindow()
         {

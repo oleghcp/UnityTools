@@ -1,5 +1,4 @@
-﻿#if UNITY_2018_3_OR_NEWER
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,4 +22,3 @@ namespace UnityUtilityEditor.SettingsProviders
         }
     }
 }
-#endif

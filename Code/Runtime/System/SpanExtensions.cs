@@ -1,5 +1,4 @@
-﻿#if UNITY_2018_3_OR_NEWER
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityUtility;
 using UnityUtilityTools;
@@ -143,9 +142,9 @@ namespace System
             SpanUtility.Shuffle(self, generator);
 #else
             unsafe
-	        {
-		        UnsafeArrayUtility.Shuffle(self.Ptr, self.Length, generator); 
-	        }
+            {
+                UnsafeArrayUtility.Shuffle(self.Ptr, self.Length, generator);
+            }
 #endif
         }
 
@@ -156,9 +155,9 @@ namespace System
             SpanUtility.Shuffle(self);
 #else
             unsafe
-	        {
-		        UnsafeArrayUtility.Shuffle(self.Ptr, self.Length); 
-	        }
+            {
+                UnsafeArrayUtility.Shuffle(self.Ptr, self.Length);
+            }
 #endif
         }
 
@@ -197,9 +196,9 @@ namespace System
             return SpanUtility.Min(self);
 #else
             unsafe
-	        {
-		        return UnsafeArrayUtility.Min(self.Ptr, self.Length); 
-	        }
+            {
+                return UnsafeArrayUtility.Min(self.Ptr, self.Length);
+            }
 #endif
         }
 
@@ -210,9 +209,9 @@ namespace System
             return SpanUtility.Max(self);
 #else
             unsafe
-	        {
-		        return UnsafeArrayUtility.Max(self.Ptr, self.Length); 
-	        }
+            {
+                return UnsafeArrayUtility.Max(self.Ptr, self.Length);
+            }
 #endif
         }
 
@@ -234,4 +233,3 @@ namespace System
         }
     }
 }
-#endif

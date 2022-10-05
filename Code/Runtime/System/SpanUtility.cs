@@ -1,5 +1,4 @@
-﻿#if UNITY_2018_3_OR_NEWER
-using UnityUtility;
+﻿using UnityUtility;
 using UnityUtilityTools;
 
 namespace System
@@ -61,4 +60,3 @@ namespace System
         }
     }
 }
-#endif

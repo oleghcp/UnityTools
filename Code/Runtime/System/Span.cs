@@ -2,7 +2,7 @@
 // Analogue of real System.Span`1 from .net core library. //
 ////////////////////////////////////////////////////////////
 
-#if UNITY_2018_3_OR_NEWER && !UNITY_2021_2_OR_NEWER
+#if !UNITY_2021_2_OR_NEWER
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityUtilityTools;
