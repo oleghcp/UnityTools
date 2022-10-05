@@ -4,15 +4,12 @@ namespace UnityUtility.Rng.BytesBased
 {
     internal class TimeBytes : IRandomBytesProvider
     {
-        private readonly byte _multiplier;
-
-        private uint _seed;
         private uint _ticks;
+        private uint _a;
 
         public TimeBytes()
         {
-            _seed = (uint)RngHelper.GenerateSeed();
-            _multiplier = (byte)(_seed % 8 + 2);
+            _a = (uint)RngHelper.GenerateSeed();
         }
 
         public void GetBytes(byte[] buffer)
@@ -35,8 +32,8 @@ namespace UnityUtility.Rng.BytesBased
         {
             uint newTicks = (uint)Environment.TickCount;
             _ticks = _ticks != newTicks ? newTicks : newTicks + 1;
-            _seed = _multiplier * _seed + _ticks;
-            return (byte)(_seed % 256);
+            _a += _ticks * 3;
+            return (byte)(_a % 256);
         }
     }
 }
