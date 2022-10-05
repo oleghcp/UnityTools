@@ -5,7 +5,7 @@ namespace UnityUtility.Rng.BytesBased
 {
     internal class CryptoBytes : IRandomBytesProvider
     {
-        private RandomNumberGenerator _rng;
+        private RNGCryptoServiceProvider _rng;
         private byte[] _buf;
 
         public CryptoBytes()

@@ -27,12 +27,6 @@ namespace UnityUtility.Rng
             return Next(0f, maxValue);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public byte NextByte()
-        {
-            return (byte)base.Next(256);
-        }
-
 #if !UNITY_2021_2_OR_NEWER
         public void NextBytes(Span<byte> buffer)
         {
@@ -40,7 +34,7 @@ namespace UnityUtility.Rng
             {
                 buffer[i] = (byte)base.Next(256);
             }
-        } 
+        }
 #endif
     }
 }

@@ -34,7 +34,7 @@ namespace UnityUtility.Rng.BytesBased
         private byte RandomByte()
         {
             uint newTicks = (uint)Environment.TickCount;
-            _ticks = _ticks < newTicks ? newTicks : _ticks + 1;
+            _ticks = _ticks != newTicks ? newTicks : newTicks + 1;
             _seed = _multiplier * _seed + _ticks;
             return (byte)(_seed % 256);
         }
