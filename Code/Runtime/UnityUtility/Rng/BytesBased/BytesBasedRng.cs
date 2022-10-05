@@ -1,32 +1,26 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using UnityUtilityTools;
 
-namespace UnityUtility.Rng
+namespace UnityUtility.Rng.BytesBased
 {
-    public class CryptoBytesBasedRng : IRng
+    public class BytesBasedRng : IRng
     {
-        private RandomNumberGenerator _rng;
+        private IRandomBytesProvider _rbp;
 
+        private byte[] _bytes64;
+        private byte[] _bytes32;
+        private byte[] _bytes16;
         private byte[] _bytes8;
-        private byte[] _bytes4;
-        private byte[] _bytes2;
-        private byte[] _bytes1;
 
-        public CryptoBytesBasedRng()
+        public BytesBasedRng(IRandomBytesProvider randomBytesGenerator)
         {
-            _rng = new RNGCryptoServiceProvider();
+            _rbp = randomBytesGenerator;
 
-            _bytes8 = new byte[sizeof(ulong)];
-            _bytes4 = new byte[sizeof(uint)];
-            _bytes2 = new byte[sizeof(ushort)];
-            _bytes1 = new byte[sizeof(byte)];
-        }
-
-        ~CryptoBytesBasedRng()
-        {
-            _rng.Dispose();
+            _bytes64 = new byte[sizeof(ulong)];
+            _bytes32 = new byte[sizeof(uint)];
+            _bytes16 = new byte[sizeof(ushort)];
+            _bytes8 = new byte[sizeof(byte)];
         }
 
         public int Next(int minValue, int maxValue)
@@ -61,37 +55,27 @@ namespace UnityUtility.Rng
 
         public double NextDouble()
         {
-            _rng.GetBytes(_bytes8);
-            ulong rn = BitConverter.ToUInt64(_bytes8, 0);
+            _rbp.GetBytes(_bytes64);
+            ulong rn = BitConverter.ToUInt64(_bytes64, 0);
             rn %= 1000000000000000ul;
             return rn * 0.000000000000001d;
         }
 
         public byte NextByte()
         {
-            _rng.GetBytes(_bytes1);
-            return _bytes1[0];
+            _rbp.GetBytes(_bytes8);
+            return _bytes8[0];
         }
 
         public void NextBytes(byte[] buffer)
         {
-            _rng.GetBytes(buffer);
+            _rbp.GetBytes(buffer);
         }
 
         public void NextBytes(Span<byte> buffer)
         {
-#if UNITY_2021_2_OR_NEWER
-            _rng.GetBytes(buffer);
-#else
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                _rng.GetBytes(_bytes1);
-                buffer[i] = _bytes1[0];
-            }
-#endif
+            _rbp.GetBytes(buffer);
         }
-
-        // -- //
 
         private int NextInternal(int minValue, int maxValue)
         {
@@ -99,20 +83,20 @@ namespace UnityUtility.Rng
 
             if (length <= 256L)
             {
-                _rng.GetBytes(_bytes1);
-                byte rn = _bytes1[0];
+                _rbp.GetBytes(_bytes8);
+                byte rn = _bytes8[0];
                 return rn % (int)length + minValue;
             }
             else if (length <= 65536L)
             {
-                _rng.GetBytes(_bytes2);
-                ushort rn = BitConverter.ToUInt16(_bytes2, 0);
+                _rbp.GetBytes(_bytes16);
+                ushort rn = BitConverter.ToUInt16(_bytes16, 0);
                 return rn % (int)length + minValue;
             }
             else
             {
-                _rng.GetBytes(_bytes4);
-                uint rn = BitConverter.ToUInt32(_bytes4, 0);
+                _rbp.GetBytes(_bytes32);
+                uint rn = BitConverter.ToUInt32(_bytes32, 0);
                 return (int)(rn % length + minValue);
             }
         }
