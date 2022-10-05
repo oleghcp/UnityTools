@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using UnityUtilityTools;
 
 namespace UnityUtility.Rng.BytesBased
 {
-    public class BytesBasedRng : IRng
+    public class BytesBasedRng : RandomNumberGenerator
     {
         private IRandomBytesProvider _rbp;
 
@@ -23,68 +21,29 @@ namespace UnityUtility.Rng.BytesBased
             _bytes8 = new byte[sizeof(byte)];
         }
 
-        public int Next(int minValue, int maxValue)
+        public override void NextBytes(byte[] buffer)
         {
-            if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
-
-            return NextInternal(minValue, maxValue);
+            _rbp.GetBytes(buffer);
         }
 
-        public int Next(int maxValue)
+        public override void NextBytes(Span<byte> buffer)
         {
-            if (maxValue < 0)
-                throw Errors.NegativeParameter(nameof(maxValue));
-
-            return NextInternal(0, maxValue);
+            _rbp.GetBytes(buffer);
         }
 
-        public float Next(float minValue, float maxValue)
-        {
-            if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
-
-            return NextInternal(minValue, maxValue);
-        }
-
-        public float Next(float maxValue)
-        {
-            if (maxValue < 0f)
-                throw Errors.NegativeParameter(nameof(maxValue));
-
-            return NextInternal(0f, maxValue);
-        }
-
-        public double NextDouble()
+        protected override double NextInternal()
         {
             _rbp.GetBytes(_bytes64);
             ulong rn = BitConverter.ToUInt64(_bytes64, 0);
-            return RngHelper.NextDouble(rn);
+            return RngHelper.ConvertToDouble(rn);
         }
 
-        public byte NextByte()
+        protected override float NextInternal(float minValue, float maxValue)
         {
-            _rbp.GetBytes(_bytes8);
-            return _bytes8[0];
+            return (float)(NextInternal() * ((double)maxValue - minValue) + minValue);
         }
 
-        public void NextBytes(byte[] buffer)
-        {
-            _rbp.GetBytes(buffer);
-        }
-
-        public void NextBytes(Span<byte> buffer)
-        {
-            _rbp.GetBytes(buffer);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private float NextInternal(float minValue, float maxValue)
-        {
-            return (float)(NextDouble() * ((double)maxValue - minValue) + minValue);
-        }
-
-        private int NextInternal(int minValue, int maxValue)
+        protected override int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
 

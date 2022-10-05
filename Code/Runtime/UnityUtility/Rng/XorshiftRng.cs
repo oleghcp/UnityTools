@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using UnityUtilityTools;
 
 namespace UnityUtility.Rng
 {
     [Serializable]
-    public class XorshiftRng : IRng
+    public class XorshiftRng : RandomNumberGenerator
     {
         private uint _a32;
         private ulong _a64;
@@ -26,49 +24,7 @@ namespace UnityUtility.Rng
             _a64 = (ulong)seed;
         }
 
-        public int Next(int minValue, int maxValue)
-        {
-            if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
-
-            return NextInternal(minValue, maxValue);
-        }
-
-        public int Next(int maxValue)
-        {
-            if (maxValue < 0)
-                throw Errors.NegativeParameter(nameof(maxValue));
-
-            return NextInternal(0, maxValue);
-        }
-
-        public float Next(float minValue, float maxValue)
-        {
-            if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
-
-            return NextInternal(minValue, maxValue);
-        }
-
-        public float Next(float maxValue)
-        {
-            if (maxValue < 0f)
-                throw Errors.NegativeParameter(nameof(maxValue));
-
-            return NextInternal(0f, maxValue);
-        }
-
-        public double NextDouble()
-        {
-            return RngHelper.NextDouble(Xorshift64());
-        }
-
-        public byte NextByte()
-        {
-            return (byte)NextInternal(0, 256);
-        }
-
-        public void NextBytes(byte[] buffer)
+        public override void NextBytes(byte[] buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -76,7 +32,7 @@ namespace UnityUtility.Rng
             }
         }
 
-        public void NextBytes(Span<byte> buffer)
+        public override void NextBytes(Span<byte> buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -84,13 +40,17 @@ namespace UnityUtility.Rng
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private float NextInternal(float minValue, float maxValue)
+        protected override double NextInternal()
         {
-            return (float)(NextDouble() * ((double)maxValue - minValue) + minValue);
+            return RngHelper.ConvertToDouble(Xorshift64());
         }
 
-        private int NextInternal(int minValue, int maxValue)
+        protected override float NextInternal(float minValue, float maxValue)
+        {
+            return (float)(NextInternal() * ((double)maxValue - minValue) + minValue);
+        }
+
+        protected override int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
             uint rn = Xorshift32();
