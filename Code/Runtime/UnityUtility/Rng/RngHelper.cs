@@ -4,7 +4,7 @@
     {
         public static double UintToDouble(uint randomUnsignedInt)
         {
-            return (double)randomUnsignedInt / uint.MaxValue;
+            return randomUnsignedInt / (uint.MaxValue + 1d);
         }
 
         public static float DoubleToFloat(float minValue, float maxValue, double normalizedRandomDouble)
