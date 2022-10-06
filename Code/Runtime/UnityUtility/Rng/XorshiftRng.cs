@@ -55,7 +55,8 @@ namespace UnityUtility.Rng
 
         protected override float NextInternal(float minValue, float maxValue)
         {
-            return RngHelper.DoubleToFloat(minValue, maxValue, Xorshift32());
+            double normalizedRandomDouble = RngHelper.UintToDouble(Xorshift32());
+            return RngHelper.DoubleToFloat(minValue, maxValue, normalizedRandomDouble);
         }
 
         protected override int NextInternal(int minValue, int maxValue)
