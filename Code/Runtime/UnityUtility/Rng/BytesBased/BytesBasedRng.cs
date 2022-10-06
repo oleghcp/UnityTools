@@ -6,21 +6,15 @@ namespace UnityUtility.Rng.BytesBased
     {
         private IRandomBytesProvider _rbp;
 #if !UNITY_2021_2_OR_NEWER
-        private byte[] _bytes64;
-        private byte[] _bytes32;
-        private byte[] _bytes16;
-        private byte[] _bytes8;
+        private byte[] _bytes64 = new byte[sizeof(ulong)];
+        private byte[] _bytes32 = new byte[sizeof(uint)];
+        private byte[] _bytes16 = new byte[sizeof(ushort)];
+        private byte[] _bytes8 = new byte[sizeof(byte)];
 #endif
 
         public BytesBasedRng(IRandomBytesProvider randomBytesProvider)
         {
             _rbp = randomBytesProvider;
-#if !UNITY_2021_2_OR_NEWER
-            _bytes64 = new byte[sizeof(ulong)];
-            _bytes32 = new byte[sizeof(uint)];
-            _bytes16 = new byte[sizeof(ushort)];
-            _bytes8 = new byte[sizeof(byte)];
-#endif
         }
 
         public override double NextDouble()

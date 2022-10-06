@@ -6,8 +6,9 @@ namespace UnityUtility.Rng.BytesBased
     internal class CryptoBytes : IRandomBytesProvider
     {
         private RNGCryptoServiceProvider _rng;
-        private byte[] _buf;
-
+#if !UNITY_2021_2_OR_NEWER
+        private byte[] _buf = new byte[sizeof(byte)];
+#endif
         public CryptoBytes()
         {
             _rng = new RNGCryptoServiceProvider();
