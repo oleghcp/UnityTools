@@ -7,7 +7,7 @@ namespace UnityUtility.Rng.BytesBased
     {
         private RNGCryptoServiceProvider _rng;
 #if !UNITY_2021_2_OR_NEWER
-        private byte[] _buf = new byte[sizeof(byte)];
+        private byte[] _buf = new byte[1];
 #endif
         public CryptoBytes()
         {

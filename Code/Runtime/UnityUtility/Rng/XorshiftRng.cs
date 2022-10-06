@@ -5,26 +5,36 @@ namespace UnityUtility.Rng
     [Serializable]
     public class XorshiftRng : RandomNumberGenerator
     {
-        private uint _a32;
-        private ulong _a64;
+        private readonly int _a;
+        private readonly int _b;
+        private readonly int _c;
+        private uint _num32;
 
-        public XorshiftRng()
+        public XorshiftRng() : this(Environment.TickCount)
         {
-            int seed = Environment.TickCount;
-            Initialize(seed == 0 ? seed + 1 : seed);
+
         }
 
-        public XorshiftRng(int seed)
+        public XorshiftRng(int seed) : this(seed, 13, 17, 5)
+        {
+
+        }
+
+        public XorshiftRng(int seed, int a, int b, int c)
         {
             if (seed == 0)
                 throw new ArgumentException($"Parameter cannot be equal zero.", nameof(seed));
 
-            Initialize(seed);
+            _num32 = (uint)seed;
+
+            _a = a;
+            _b = b;
+            _c = c;
         }
 
         public override double NextDouble()
         {
-            return RngHelper.UlongToDouble(Xorshift64());
+            return RngHelper.UintToDouble(Xorshift32());
         }
 
         public override void NextBytes(byte[] buffer)
@@ -45,8 +55,7 @@ namespace UnityUtility.Rng
 
         protected override float NextInternal(float minValue, float maxValue)
         {
-            double randomDouble = RngHelper.UlongToDouble(Xorshift64());
-            return RngHelper.DoubleToFloat(minValue, maxValue, randomDouble);
+            return RngHelper.DoubleToFloat(minValue, maxValue, Xorshift32());
         }
 
         protected override int NextInternal(int minValue, int maxValue)
@@ -56,28 +65,13 @@ namespace UnityUtility.Rng
             return (int)(rn % length + minValue);
         }
 
-        private void Initialize(int seed)
-        {
-            _a32 = (uint)seed;
-            _a64 = (ulong)seed;
-        }
-
         private uint Xorshift32()
         {
-            uint x = _a32;
-            x ^= x << 13;
-            x ^= x >> 17;
-            x ^= x << 5;
-            return _a32 = x;
-        }
-
-        private ulong Xorshift64()
-        {
-            ulong x = _a64;
-            x ^= x << 13;
-            x ^= x >> 7;
-            x ^= x << 17;
-            return _a64 = x;
+            uint x = _num32;
+            x ^= x << _a;
+            x ^= x >> _b;
+            x ^= x << _c;
+            return _num32 = x;
         }
     }
 }

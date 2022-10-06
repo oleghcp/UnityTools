@@ -6,7 +6,6 @@ namespace UnityUtility.Rng.BytesBased
     {
         private IRandomBytesProvider _rbp;
 #if !UNITY_2021_2_OR_NEWER
-        private byte[] _bytes64 = new byte[sizeof(ulong)];
         private byte[] _bytes32 = new byte[sizeof(uint)];
         private byte[] _bytes16 = new byte[sizeof(ushort)];
         private byte[] _bytes8 = new byte[sizeof(byte)];
@@ -19,7 +18,7 @@ namespace UnityUtility.Rng.BytesBased
 
         public override double NextDouble()
         {
-            return Sample();
+            return RngHelper.UintToDouble(RandomUint32());
         }
 
         public override void NextBytes(byte[] buffer)
@@ -34,7 +33,8 @@ namespace UnityUtility.Rng.BytesBased
 
         protected override float NextInternal(float minValue, float maxValue)
         {
-            return RngHelper.DoubleToFloat(minValue, maxValue, Sample());
+            double normalizedRandomDouble = RngHelper.UintToDouble(RandomUint32());
+            return RngHelper.DoubleToFloat(minValue, maxValue, normalizedRandomDouble);
         }
 
         protected override int NextInternal(int minValue, int maxValue)
@@ -42,64 +42,48 @@ namespace UnityUtility.Rng.BytesBased
             long length = (long)maxValue - minValue;
 
             if (length <= 256L)
-                return Convert8(length, minValue);
+                return RandomUint8() % (int)length + minValue;
 
             if (length <= 65536L)
-                return Convert16(length, minValue);
+                return RandomUint16() % (int)length + minValue;
 
-            return Convert32(length, minValue);
+            return (int)(RandomUint32() % length + minValue);
         }
 
-        private int Convert8(long length, int minValue)
+        private byte RandomUint8()
         {
 #if UNITY_2021_2_OR_NEWER
             Span<byte> bytes = stackalloc byte[sizeof(byte)];
             _rbp.GetBytes(bytes);
-            byte rn = bytes[0];
+            return bytes[0];
 #else
             _rbp.GetBytes(_bytes8);
-            byte rn = _bytes8[0];
+            return _bytes8[0];
 #endif
-            return rn % (int)length + minValue;
         }
 
-        private int Convert16(long length, int minValue)
+        private ushort RandomUint16()
         {
 #if UNITY_2021_2_OR_NEWER
             Span<byte> bytes = stackalloc byte[sizeof(ushort)];
             _rbp.GetBytes(bytes);
-            ushort rn = BitConverter.ToUInt16(bytes);
+            return BitConverter.ToUInt16(bytes);
 #else
             _rbp.GetBytes(_bytes16);
-            ushort rn = BitConverter.ToUInt16(_bytes16, 0);
+            return BitConverter.ToUInt16(_bytes16, 0);
 #endif
-            return rn % (int)length + minValue;
         }
 
-        private int Convert32(long length, int minValue)
+        private uint RandomUint32()
         {
 #if UNITY_2021_2_OR_NEWER
             Span<byte> bytes = stackalloc byte[sizeof(uint)];
             _rbp.GetBytes(bytes);
-            uint rn = BitConverter.ToUInt32(bytes);
+            return BitConverter.ToUInt32(bytes);
 #else
             _rbp.GetBytes(_bytes32);
-            uint rn = BitConverter.ToUInt32(_bytes32, 0);
+            return BitConverter.ToUInt32(_bytes32, 0);
 #endif
-            return (int)(rn % length + minValue);
-        }
-
-        private double Sample()
-        {
-#if UNITY_2021_2_OR_NEWER
-            Span<byte> bytes = stackalloc byte[sizeof(ulong)];
-            _rbp.GetBytes(bytes);
-            ulong rn = BitConverter.ToUInt64(bytes);
-#else
-            _rbp.GetBytes(_bytes64);
-            ulong rn = BitConverter.ToUInt64(_bytes64, 0);
-#endif
-            return RngHelper.UlongToDouble(rn);
         }
     }
 }
