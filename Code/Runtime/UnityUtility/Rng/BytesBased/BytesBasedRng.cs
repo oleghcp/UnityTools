@@ -31,12 +31,6 @@ namespace UnityUtility.Rng.BytesBased
             _rbp.GetBytes(buffer);
         }
 
-        protected override float NextInternal(float minValue, float maxValue)
-        {
-            double normalizedRandomDouble = RngHelper.UintToDouble(RandomUint32());
-            return RngHelper.DoubleToFloat(minValue, maxValue, normalizedRandomDouble);
-        }
-
         protected override int NextInternal(int minValue, int maxValue)
         {
             long length = (long)maxValue - minValue;
@@ -48,6 +42,12 @@ namespace UnityUtility.Rng.BytesBased
                 return RandomUint16() % (int)length + minValue;
 
             return (int)(RandomUint32() % length + minValue);
+        }
+
+        protected override float NextInternal(float minValue, float maxValue)
+        {
+            double normalizedRandomDouble = RngHelper.UintToDouble(RandomUint32());
+            return RngHelper.DoubleToFloat(minValue, maxValue, normalizedRandomDouble);
         }
 
         private byte RandomUint8()

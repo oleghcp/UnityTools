@@ -53,17 +53,16 @@ namespace UnityUtility.Rng
             }
         }
 
+        protected override int NextInternal(int minValue, int maxValue)
+        {
+            long length = (long)maxValue - minValue;
+            return (int)(Xorshift32() % length + minValue);
+        }
+
         protected override float NextInternal(float minValue, float maxValue)
         {
             double normalizedRandomDouble = RngHelper.UintToDouble(Xorshift32());
             return RngHelper.DoubleToFloat(minValue, maxValue, normalizedRandomDouble);
-        }
-
-        protected override int NextInternal(int minValue, int maxValue)
-        {
-            long length = (long)maxValue - minValue;
-            uint rn = Xorshift32();
-            return (int)(rn % length + minValue);
         }
 
         private uint Xorshift32()
