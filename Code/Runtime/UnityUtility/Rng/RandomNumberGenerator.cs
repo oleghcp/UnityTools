@@ -38,16 +38,12 @@ namespace UnityUtility.Rng
             return NextInternal(0f, maxValue);
         }
 
-        public double NextDouble()
-        {
-            return NextInternal();
-        }
+        public abstract double NextDouble();
 
         public abstract void NextBytes(byte[] buffer);
         public abstract void NextBytes(Span<byte> buffer);
 
         protected abstract int NextInternal(int minValue, int maxValue);
         protected abstract float NextInternal(float minValue, float maxValue);
-        protected abstract double NextInternal();
     }
 }

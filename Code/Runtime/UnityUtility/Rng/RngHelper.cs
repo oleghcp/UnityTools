@@ -1,23 +1,18 @@
-﻿using System;
-
-namespace UnityUtility.Rng
+﻿namespace UnityUtility.Rng
 {
     internal static class RngHelper
     {
-        public static int GenerateSeed()
-        {
-            int seed = Environment.TickCount;
-            if (seed == 0)
-                seed++;
-            return seed;
-        }
-
-        public static double ConvertToDouble(ulong randomLong)
+        public static double UlongToDouble(ulong randomUnsignedLong)
         {
             const ulong repeatLength = 1000000000000000ul;
             const double multiplier = 0.000000000000001d;
 
-            return (randomLong % repeatLength) * multiplier;
+            return (randomUnsignedLong % repeatLength) * multiplier;
+        }
+
+        public static float DoubleToFloat(float minValue, float maxValue, double normalizedRandomDouble)
+        {
+            return (maxValue - minValue) * (float)normalizedRandomDouble + minValue;
         }
     }
 }

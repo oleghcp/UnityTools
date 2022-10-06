@@ -11,14 +11,19 @@ namespace UnityUtility.Rng.BytesBased
         private byte[] _bytes16;
         private byte[] _bytes8;
 
-        public BytesBasedRng(IRandomBytesProvider randomBytesGenerator)
+        public BytesBasedRng(IRandomBytesProvider randomBytesProvider)
         {
-            _rbp = randomBytesGenerator;
+            _rbp = randomBytesProvider;
 
             _bytes64 = new byte[sizeof(ulong)];
             _bytes32 = new byte[sizeof(uint)];
             _bytes16 = new byte[sizeof(ushort)];
             _bytes8 = new byte[sizeof(byte)];
+        }
+
+        public override double NextDouble()
+        {
+            return NextInternal();
         }
 
         public override void NextBytes(byte[] buffer)
@@ -31,16 +36,9 @@ namespace UnityUtility.Rng.BytesBased
             _rbp.GetBytes(buffer);
         }
 
-        protected override double NextInternal()
-        {
-            _rbp.GetBytes(_bytes64);
-            ulong rn = BitConverter.ToUInt64(_bytes64, 0);
-            return RngHelper.ConvertToDouble(rn);
-        }
-
         protected override float NextInternal(float minValue, float maxValue)
         {
-            return (float)(NextInternal() * ((double)maxValue - minValue) + minValue);
+            return RngHelper.DoubleToFloat(minValue, maxValue, NextInternal());
         }
 
         protected override int NextInternal(int minValue, int maxValue)
@@ -65,6 +63,13 @@ namespace UnityUtility.Rng.BytesBased
                 uint rn = BitConverter.ToUInt32(_bytes32, 0);
                 return (int)(rn % length + minValue);
             }
+        }
+
+        private double NextInternal()
+        {
+            _rbp.GetBytes(_bytes64);
+            ulong rn = BitConverter.ToUInt64(_bytes64, 0);
+            return RngHelper.UlongToDouble(rn);
         }
     }
 }

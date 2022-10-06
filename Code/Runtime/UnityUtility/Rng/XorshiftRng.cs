@@ -10,9 +10,8 @@ namespace UnityUtility.Rng
 
         public XorshiftRng()
         {
-            int seed = RngHelper.GenerateSeed();
-            _a32 = (uint)seed;
-            _a64 = (ulong)seed;
+            int seed = Environment.TickCount;
+            Initialize(seed == 0 ? seed + 1 : seed);
         }
 
         public XorshiftRng(int seed)
@@ -20,8 +19,12 @@ namespace UnityUtility.Rng
             if (seed == 0)
                 throw new ArgumentException($"Parameter cannot be equal zero.", nameof(seed));
 
-            _a32 = (uint)seed;
-            _a64 = (ulong)seed;
+            Initialize(seed);
+        }
+
+        public override double NextDouble()
+        {
+            return RngHelper.UlongToDouble(Xorshift64());
         }
 
         public override void NextBytes(byte[] buffer)
@@ -40,14 +43,10 @@ namespace UnityUtility.Rng
             }
         }
 
-        protected override double NextInternal()
-        {
-            return RngHelper.ConvertToDouble(Xorshift64());
-        }
-
         protected override float NextInternal(float minValue, float maxValue)
         {
-            return (float)(NextInternal() * ((double)maxValue - minValue) + minValue);
+            double randomDouble = RngHelper.UlongToDouble(Xorshift64());
+            return RngHelper.DoubleToFloat(minValue, maxValue, randomDouble);
         }
 
         protected override int NextInternal(int minValue, int maxValue)
@@ -55,6 +54,12 @@ namespace UnityUtility.Rng
             long length = (long)maxValue - minValue;
             uint rn = Xorshift32();
             return (int)(rn % length + minValue);
+        }
+
+        private void Initialize(int seed)
+        {
+            _a32 = (uint)seed;
+            _a64 = (ulong)seed;
         }
 
         private uint Xorshift32()

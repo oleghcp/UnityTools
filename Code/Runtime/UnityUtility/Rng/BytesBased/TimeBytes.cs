@@ -9,7 +9,10 @@ namespace UnityUtility.Rng.BytesBased
 
         public TimeBytes()
         {
-            _a = (uint)RngHelper.GenerateSeed();
+            uint seed = (uint)Environment.TickCount;
+            if (seed < byte.MaxValue)
+                seed = byte.MaxValue;
+            _a = seed;
         }
 
         public void GetBytes(byte[] buffer)
