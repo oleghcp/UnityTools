@@ -228,22 +228,6 @@ namespace UnityEditor
             return self.GetArrayElementAtIndex(index);
         }
 
-        public static Bytes GetBytesValue(this SerializedProperty self)
-        {
-            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
-            {
-                return inner.intValue;
-            }
-        }
-
-        public static void SetBytesValue(this SerializedProperty self, Bytes value)
-        {
-            using (SerializedProperty inner = self.FindPropertyRelative(Bytes.FieldName))
-            {
-                inner.intValue = (int)value;
-            }
-        }
-
         public static IntMask GetIntMaskValue(this SerializedProperty self)
         {
             using (SerializedProperty inner = self.FindPropertyRelative(IntMask.FieldName))
