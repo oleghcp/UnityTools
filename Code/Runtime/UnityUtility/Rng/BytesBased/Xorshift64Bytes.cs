@@ -5,11 +5,13 @@ namespace UnityUtility.Rng.BytesBased
     [Serializable]
     internal class Xorshift64Bytes : IRandomBytesProvider
     {
+        private const int COUNT = sizeof(ulong);
+
         private readonly int _a;
         private readonly int _b;
         private readonly int _c;
 
-        private byte[] _bytes = new byte[sizeof(ulong)];
+        private byte[] _bytes = new byte[COUNT];
         private ulong _num64;
         private int _counter;
 
@@ -29,17 +31,17 @@ namespace UnityUtility.Rng.BytesBased
                 throw new ArgumentException($"Parameter cannot be equal zero.", nameof(seed));
 
             _num64 = (ulong)seed;
-
             _a = a;
             _b = b;
             _c = c;
+            UpdateBytes();
         }
 
         public void GetBytes(byte[] buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                if (_counter >= _bytes.Length)
+                if (_counter >= COUNT)
                     UpdateBytes();
 
                 buffer[i] = _bytes[_counter++];
@@ -50,7 +52,7 @@ namespace UnityUtility.Rng.BytesBased
         {
             for (int i = 0; i < buffer.Length; i++)
             {
-                if (_counter >= _bytes.Length)
+                if (_counter >= COUNT)
                     UpdateBytes();
 
                 buffer[i] = _bytes[_counter++];
@@ -59,22 +61,25 @@ namespace UnityUtility.Rng.BytesBased
 
         private unsafe void UpdateBytes()
         {
-            ulong rn = Xorshift64();
+            Xorshift64();
+            ulong rn = _num64;
             byte* ptr = (byte*)&rn;
-            for (int j = 0; j < sizeof(ulong); j++)
+
+            for (int i = 0; i < COUNT; i++)
             {
-                _bytes[j] = ptr[j];
+                _bytes[i] = ptr[i];
             }
+
             _counter = 0;
         }
 
-        private ulong Xorshift64()
+        private void Xorshift64()
         {
             ulong x = _num64;
             x ^= x << _a;
             x ^= x >> _b;
             x ^= x << _c;
-            return _num64 = x;
+            _num64 = x;
         }
     }
 }
