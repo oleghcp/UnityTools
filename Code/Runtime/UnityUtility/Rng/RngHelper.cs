@@ -9,7 +9,7 @@
 
         public static float DoubleToFloat(float minValue, float maxValue, double normalizedRandomDouble)
         {
-            return (maxValue - minValue) * (float)normalizedRandomDouble + minValue;
+            return (float)(((double)maxValue - minValue) * normalizedRandomDouble + minValue);
         }
     }
 }
