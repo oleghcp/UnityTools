@@ -7,11 +7,11 @@ namespace UnityUtility.Rng
 #if !UNITY_2021_2_OR_NEWER
     [Serializable]
 #endif
-    public sealed class DotNetRng : Random, IRng
+    public sealed class BaseRng : Random, IRng
     {
-        public DotNetRng() : base() { }
+        public BaseRng() : base() { }
 
-        public DotNetRng(int seed) : base(seed) { }
+        public BaseRng(int seed) : base(seed) { }
 
         public float Next(float minValue, float maxValue)
         {
