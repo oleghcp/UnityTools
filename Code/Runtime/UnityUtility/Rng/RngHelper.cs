@@ -1,15 +1,31 @@
-﻿namespace UnityUtility.Rng
+﻿using System.Runtime.CompilerServices;
+
+namespace UnityUtility.Rng
 {
     internal static class RngHelper
     {
-        public static double UintToDouble(uint randomUnsignedInt)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double GetNormalizedDouble(uint randomUnsignedInt)
         {
             return randomUnsignedInt / (uint.MaxValue + 0.00001d);
         }
 
-        public static float DoubleToFloat(float minValue, float maxValue, double normalizedRandomDouble)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetNormalizedFloat(ushort randomUnsignedShort)
+        {
+            return randomUnsignedShort / (ushort.MaxValue + 0.01f);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float RandomFloat(float minValue, float maxValue, double normalizedRandomDouble)
         {
             return (float)(((double)maxValue - minValue) * normalizedRandomDouble + minValue);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float RandomFloat(float minValue, float maxValue, float normalizedRandomFloat)
+        {
+            return (maxValue - minValue) * normalizedRandomFloat + minValue;
         }
     }
 }

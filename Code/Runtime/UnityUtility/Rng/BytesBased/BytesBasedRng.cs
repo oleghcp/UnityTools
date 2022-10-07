@@ -17,7 +17,7 @@ namespace UnityUtility.Rng.BytesBased
 
         public override double NextDouble()
         {
-            return RngHelper.UintToDouble(RandomUint32());
+            return RngHelper.GetNormalizedDouble(RandomUint32());
         }
 
         public override void NextBytes(byte[] buffer)
@@ -45,8 +45,8 @@ namespace UnityUtility.Rng.BytesBased
 
         protected override float NextInternal(float minValue, float maxValue)
         {
-            double normalizedRandomDouble = RngHelper.UintToDouble(RandomUint32());
-            return RngHelper.DoubleToFloat(minValue, maxValue, normalizedRandomDouble);
+            float normalizedRandomFloat = RngHelper.GetNormalizedFloat(RandomUint16());
+            return RngHelper.RandomFloat(minValue, maxValue, normalizedRandomFloat);
         }
 
         private byte RandomUint8()
