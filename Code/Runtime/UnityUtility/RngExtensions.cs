@@ -15,24 +15,15 @@ namespace UnityUtility
     public static class RngExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Range(this IRng self, in (int minValue, int maxValue) range)
+        public static int Random(this IRng self, in (int minValue, int maxValue) range)
         {
             return self.Next(range.minValue, range.maxValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Range(this IRng self, in (float minValue, float maxValue) range)
+        public static float Random(this IRng self, in (float minValue, float maxValue) range)
         {
             return self.Next(range.minValue, range.maxValue);
-        }
-
-        /// <summary>
-        /// Returns a random float number between -<paramref name="range"/> [inclusive] and <paramref name="range"/> [inclusive].
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Range(this IRng self, float range)
-        {
-            return self.Next(-range, range);
         }
 
         /// <summary>
@@ -355,7 +346,7 @@ namespace UnityUtility
 
             do
             {
-                vector = new Vector3(self.Range(1f), self.Range(1f), self.Range(1f));
+                vector = new Vector3(self.Next(-1f, 1f), self.Next(-1f, 1f), self.Next(-1f, 1f));
                 magnitude = vector.magnitude;
 
             } while (magnitude <= MathUtility.kEpsilon || magnitude > 1f);
