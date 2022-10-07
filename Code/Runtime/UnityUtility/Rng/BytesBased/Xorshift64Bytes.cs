@@ -59,17 +59,24 @@ namespace UnityUtility.Rng.BytesBased
             }
         }
 
-        private unsafe void UpdateBytes()
+        private void UpdateBytes()
         {
             Xorshift64();
-            ulong rn = _num64;
-            byte* ptr = (byte*)&rn;
 
-            for (int i = 0; i < COUNT; i++)
+#if UNITY_2021_2_OR_NEWER
+            Span<byte> bytes = _bytes;
+            BitConverter.TryWriteBytes(bytes, _num64);
+#else
+            unsafe
             {
-                _bytes[i] = ptr[i];
+                ulong rn = _num64;
+                byte* bytes = (byte*)&rn;
+                for (int i = 0; i < COUNT; i++)
+                {
+                    _bytes[i] = bytes[i];
+                }
             }
-
+#endif
             _counter = 0;
         }
 
