@@ -261,38 +261,62 @@ namespace System.Collections.Generic
         }
 #endif
 
-        /// <summary>
-        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString<T>(this IEnumerable<T> self, string separator = "")
         {
             return string.Join(separator, self);
         }
 
-        /// <summary>
-        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
-        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString<T>(this IEnumerable<T> self, char separator)
+        {
+            return string.Join(separator, self);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this IEnumerable<string> self, string separator = "")
         {
             return string.Join(separator, self);
         }
 
-        /// <summary>
-        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatToString<T>(this IEnumerable<T> self, string separator, int startIndex, int count)
+        public static string ConcatToString(this IEnumerable<string> self, char separator)
+        {
+            return string.Join(separator, self);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this object[] self, string separator = "")
+        {
+            return string.Join(separator, self);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this object[] self, char separator)
+        {
+            return string.Join(separator, self);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this string[] self, string separator = "")
+        {
+            return string.Join(separator, self);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this string[] self, char separator)
+        {
+            return string.Join(separator, self);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatToString(this string[] self, int startIndex, int count, string separator = "")
         {
             return string.Join(separator, self, startIndex, count);
         }
 
-        /// <summary>
-        /// Converts the elements in the IEnumerable'1 collection to strings, inserts the specified separator between the elements, concatenates them, and returns the resulting string.
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatToString(this IEnumerable<string> self, string separator, int startIndex, int count)
+        public static string ConcatToString(this string[] self, int startIndex, int count, char separator)
         {
             return string.Join(separator, self, startIndex, count);
         }
