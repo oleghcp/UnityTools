@@ -12,8 +12,8 @@ namespace UnityUtility.Rng.BytesBased
         private readonly int _c;
 
         private byte[] _bytes = new byte[COUNT];
-        private ulong _num64;
         private int _counter;
+        private ulong _num64;
 
         public Xorshift64Bytes() : this(Environment.TickCount)
         {

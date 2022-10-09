@@ -15,11 +15,6 @@ namespace UnityUtility.Rng.BytesBased
             _rbp = randomBytesProvider;
         }
 
-        public override double NextDouble()
-        {
-            return RngHelper.GetNormalizedDouble(RandomUint32());
-        }
-
         public override void NextBytes(byte[] buffer)
         {
             _rbp.GetBytes(buffer);

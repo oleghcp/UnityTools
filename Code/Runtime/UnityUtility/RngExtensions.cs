@@ -32,7 +32,7 @@ namespace UnityUtility
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Chance(this IRng self, float chance)
         {
-            return chance > self.NextDouble();
+            return chance < 1f ? chance > self.Next(chance) : true;
         }
 
         /// <summary>

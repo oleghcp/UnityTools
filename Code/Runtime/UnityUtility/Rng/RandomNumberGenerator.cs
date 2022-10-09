@@ -6,6 +6,9 @@ namespace UnityUtility.Rng
     [Serializable]
     public abstract class RandomNumberGenerator : IRng
     {
+        public abstract void NextBytes(byte[] buffer);
+        public abstract void NextBytes(Span<byte> buffer);
+
         public int Next(int minValue, int maxValue)
         {
             if (minValue > maxValue)
@@ -37,11 +40,6 @@ namespace UnityUtility.Rng
 
             return NextInternal(0f, maxValue);
         }
-
-        public abstract double NextDouble();
-
-        public abstract void NextBytes(byte[] buffer);
-        public abstract void NextBytes(Span<byte> buffer);
 
         protected abstract int NextInternal(int minValue, int maxValue);
         protected abstract float NextInternal(float minValue, float maxValue);

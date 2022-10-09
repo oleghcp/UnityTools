@@ -7,19 +7,13 @@ namespace UnityUtility.Rng
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double GetNormalizedDouble(uint randomUnsignedInt)
         {
-            return randomUnsignedInt / (uint.MaxValue + 0.00001d);
+            return randomUnsignedInt / (double)uint.MaxValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetNormalizedFloat(ushort randomUnsignedShort)
         {
-            return randomUnsignedShort / (ushort.MaxValue + 0.01f);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float RandomFloat(float minValue, float maxValue, double normalizedRandomDouble)
-        {
-            return (float)(((double)maxValue - minValue) * normalizedRandomDouble + minValue);
+            return randomUnsignedShort / (float)ushort.MaxValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

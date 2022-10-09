@@ -8,7 +8,6 @@ namespace UnityUtility
         int Next(int maxValue);
         float Next(float minValue, float maxValue);
         float Next(float maxValue);
-        double NextDouble();
         void NextBytes(byte[] buffer);
         void NextBytes(Span<byte> buffer);
     }

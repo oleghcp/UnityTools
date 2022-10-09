@@ -32,12 +32,6 @@ namespace UnityUtility.Rng
             _c = c;
         }
 
-        public override double NextDouble()
-        {
-            Xorshift32();
-            return RngHelper.GetNormalizedDouble(_num32);
-        }
-
         public override void NextBytes(byte[] buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
@@ -64,8 +58,8 @@ namespace UnityUtility.Rng
         protected override float NextInternal(float minValue, float maxValue)
         {
             Xorshift32();
-            double normalizedRandomDouble = RngHelper.GetNormalizedDouble(_num32);
-            return RngHelper.RandomFloat(minValue, maxValue, normalizedRandomDouble);
+            float normalizedRandomFloat = (float)RngHelper.GetNormalizedDouble(_num32);
+            return RngHelper.RandomFloat(minValue, maxValue, normalizedRandomFloat);
         }
 
         private void Xorshift32()
