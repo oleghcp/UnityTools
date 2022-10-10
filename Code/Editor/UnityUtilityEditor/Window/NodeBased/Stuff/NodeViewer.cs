@@ -259,7 +259,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     return;
 
                 EditorGUIUtility.labelWidth = nodeRect.width * 0.5f;
-                _nodeDrawer.OnGui(_nodeProp);
+                _nodeDrawer.OnGui(_nodeProp, _window.FullDrawing);
             }
         }
 
@@ -458,7 +458,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             if (_heightVersion != _window.OnGuiCounter)
             {
-                _height = _map.NODE_HEADER_HEIGHT + _nodeDrawer.GetHeight(_nodeProp);
+                _height = _map.NODE_HEADER_HEIGHT + _nodeDrawer.GetHeight(_nodeProp, _window.FullDrawing);
                 _heightVersion = _window.OnGuiCounter;
             }
 

@@ -7,12 +7,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers
     {
         private string _label;
 
+        protected override string ShortDrawingView => _label;
+
         public ServiceNodeDrawer(GraphMap map, string label) : base(map)
         {
             _label = label;
         }
 
-        public override void OnGui(SerializedProperty property)
+        protected override void OnGui(SerializedProperty property)
         {
             EditorGUILayout.LabelField(_label);
         }

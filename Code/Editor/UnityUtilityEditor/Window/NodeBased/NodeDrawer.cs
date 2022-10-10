@@ -5,8 +5,32 @@ namespace UnityUtilityEditor.Window.NodeBased
 {
     public abstract class NodeDrawer
     {
-        public abstract void OnGui(SerializedProperty property);
-        public abstract float GetHeight(SerializedProperty property);
+        private string _label = "{...}";
+
+        protected virtual string ShortDrawingView => _label;
+
+        public void OnGui(SerializedProperty property, bool enabled)
+        {
+            if (enabled)
+            {
+                OnGui(property);
+                return;
+            }
+
+            EditorGUILayout.LabelField(ShortDrawingView);
+        }
+
+        public float GetHeight(SerializedProperty property, bool enabled)
+        {
+            if (enabled)
+                return GetHeight(property);
+
+            return EditorGUIUtility.singleLineHeight;
+        }
+
+
+        protected abstract void OnGui(SerializedProperty property);
+        protected abstract float GetHeight(SerializedProperty property);
     }
 }
 #endif

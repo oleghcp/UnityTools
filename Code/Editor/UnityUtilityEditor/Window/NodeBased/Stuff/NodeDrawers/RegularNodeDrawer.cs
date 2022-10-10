@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers
             _map = map;
         }
 
-        public override void OnGui(SerializedProperty property)
+        protected override void OnGui(SerializedProperty property)
         {
             foreach (SerializedProperty item in property.EnumerateInnerProperties())
             {
@@ -21,7 +21,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers
             }
         }
 
-        public override float GetHeight(SerializedProperty property)
+        protected override float GetHeight(SerializedProperty property)
         {
             return EditorGuiUtility.GetDrawHeight(property, _map.IsServiceField);
         }

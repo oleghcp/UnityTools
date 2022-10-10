@@ -32,6 +32,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         public TransitionViewType TransitionView => _toolbar.TransitionView;
         public GraphEditorSettings Settings => _settings;
         public GraphMap Map => _map;
+        public bool FullDrawing => !_toolbar.HideContentToggle;
 
         public Vector2 WinSize
         {
@@ -89,7 +90,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             _serializedGraph.SerializedObject.Update();
 
             _toolbar.Draw();
-            _sidePanel.Draw(_toolbar.PropertiesToggle, MapSize.y, WinSize.x, Event.current);
+            _sidePanel.Draw(_toolbar.SidePanelToggle, MapSize.y, WinSize.x, Event.current);
 
             Rect mapRect = new Rect(new Vector2(_sidePanel.Width, 0f), MapSize);
             GUI.BeginGroup(mapRect);
