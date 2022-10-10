@@ -169,6 +169,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             _map.Save();
             _serializedGraph.Save();
             _toolbar.Save();
+            _sidePanel.Save();
             _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
             _settings.CameraPosition = _camera.Position;
             _settings.Save(_serializedGraph.GraphAsset.GetAssetGuid());
