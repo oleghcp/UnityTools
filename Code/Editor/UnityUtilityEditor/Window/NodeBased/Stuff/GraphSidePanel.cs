@@ -52,7 +52,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUILayout.BeginArea(position);
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 
-            EditorGUIUtility.labelWidth = EditorGUIUtility.labelWidth.CutAfter(_width * 0.5f);
+            EditorGUIUtility.labelWidth = _width * 0.5f;
 
             foreach (SerializedProperty item in _window.SerializedGraph.SerializedObject.EnumerateProperties())
             {

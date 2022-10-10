@@ -6,12 +6,16 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphMap
     {
         private readonly Color SELECTION_COLOR = Colours.Black.AlterA(0.25f);
+        public readonly Vector2 UI_OFFSET = new Vector2(10f, 10f);
+        public readonly Vector2 UI_SHRINK = new Vector2(20f, 22f);
+        public readonly float NODE_HEADER_HEIGHT;
 
         private GraphEditorWindow _window;
         private GraphGrid _grid;
@@ -21,15 +25,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private bool _selectionRectOn;
         private Vector2 _downPoint;
         private PortViewer _selectedPort;
+        private RegularNodeDrawer _regularNodeDrawer;
+
 
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
+        public RegularNodeDrawer RegularNodeDrawer => _regularNodeDrawer;
 
         public GraphMap(GraphEditorWindow window)
         {
-            _window = window;
-            _grid = new GraphGrid(window);
-            _nodeViewers = new List<NodeViewer>();
+            NODE_HEADER_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
+
             _nodeIgnoredFields = new HashSet<string>
             {
                 RawNode.NameFieldName,
@@ -38,6 +44,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 RawNode.IdFieldName,
                 RawNode.PositionFieldName,
             };
+
+            _window = window;
+            _grid = new GraphGrid(window);
+            _nodeViewers = new List<NodeViewer>();
+            _regularNodeDrawer = new RegularNodeDrawer(this);
         }
 
         public void Clear()

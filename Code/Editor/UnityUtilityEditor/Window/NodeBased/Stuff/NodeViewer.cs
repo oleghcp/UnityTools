@@ -7,18 +7,14 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class NodeViewer
     {
-        private const string HUB_NODE_LABEL = "► ► ►";
-        private const string COMMON_NODE_LABEL = "[ . . . ]";
-        private const string EXIT_NODE_LABEL = "→ █";
+        private const float SERV_NODE_WIDTH = 150f;
 
-        private readonly Vector2 UI_OFFSET;
-        private readonly Vector2 UI_SHRINK;
-        private readonly float SMALL_NODE_HEIGHT;
         private readonly int _id;
         private readonly Type _systemType;
         private readonly NodeType _type;
@@ -28,6 +24,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private readonly GraphEditorWindow _window;
         private readonly List<TransitionViewer> _transitionViewers;
 
+        private NodeDrawer _nodeDrawer;
         private SerializedProperty _nodeProp;
         private SerializedProperty _nameProp;
 
@@ -39,11 +36,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private Vector2 _position;
         private Vector2 _dragedPosition;
 
+        private float _width;
         private Rect _screenRect;
         private Rect _worldRect;
         private bool _isInCamera;
 
         private int _heightVersion;
+        private int _widthVersion;
         private int _screenRectVersion;
         private int _worldRectVersion;
         private int _overlapVersion;
@@ -65,6 +64,20 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             set => _position = value;
         }
 
+        public float Width
+        {
+            get
+            {
+                if (_widthVersion != _window.OnGuiCounter)
+                {
+                    _width = _type.ServiceNode() ? SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
+                    _widthVersion = _window.OnGuiCounter;
+                }
+
+                return _width;
+            }
+        }
+
         public Rect ScreenRect
         {
             get
@@ -72,9 +85,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_screenRectVersion != _window.OnGuiCounter)
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
-                    float width = _type.ServiceNode() ? SerializedGraph.SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
-                    _screenRect.width = width / _window.Camera.Size;
-                    _screenRect.height = _window.Camera.Size > 1f ? SMALL_NODE_HEIGHT : GetBigNodeHeight();
+                    _screenRect.width = Width / _window.Camera.Size;
+                    _screenRect.height = _window.Camera.Size > 1f ? _map.NODE_HEADER_HEIGHT : GetBigNodeHeight();
                     _screenRectVersion = _window.OnGuiCounter;
                 }
 
@@ -89,8 +101,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_worldRectVersion != _window.OnGuiCounter)
                 {
                     _worldRect.position = _position;
-                    _worldRect.width = _type.ServiceNode() ? SerializedGraph.SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
-                    _worldRect.height = _window.Camera.Size > 1f ? SMALL_NODE_HEIGHT : GetBigNodeHeight();
+                    _worldRect.width = Width;
+                    _worldRect.height = _window.Camera.Size > 1f ? _map.NODE_HEADER_HEIGHT : GetBigNodeHeight();
                     _worldRectVersion = _window.OnGuiCounter;
                 }
 
@@ -114,18 +126,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public NodeViewer(SerializedProperty nodeProp, GraphMap map)
         {
-            UI_OFFSET = new Vector2(10f, 10f);
-            UI_SHRINK = new Vector2(20f, 22f);
-            SMALL_NODE_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
-
             _map = map;
             _window = map.Window;
+
             SetSerializedProperty(nodeProp);
 
             _id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
             _systemType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(nodeProp.managedReferenceFullTypename);
             _type = RawNode.GetNodeType(_systemType);
             _position = nodeProp.FindPropertyRelative(RawNode.PositionFieldName).vector2Value;
+            _nodeDrawer = GetDrawer();
 
             _transitionViewers = new List<TransitionViewer>();
 
@@ -206,12 +216,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.NodeSelected : GraphEditorStyles.Styles.NodeRegular);
 
-            nodeRect.position += UI_OFFSET;
-            nodeRect.size -= UI_SHRINK;
+            nodeRect.position += _map.UI_OFFSET;
+            nodeRect.size -= _map.UI_SHRINK;
 
             GUILayout.BeginArea(nodeRect);
             drawHeader();
-            drawContent(nodeRect.width);
+            drawContent();
             GUILayout.EndArea();
 
             void drawPorts()
@@ -249,43 +259,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 }
             }
 
-            void drawContent(float width)
+            void drawContent()
             {
                 if (_window.Camera.Size > 1f)
                     return;
 
-                switch (_type)
-                {
-                    case NodeType.Real:
-                        float labelWidth = EditorGUIUtility.labelWidth;
-                        EditorGUIUtility.labelWidth = width * 0.5f;
-
-                        foreach (SerializedProperty item in _nodeProp.EnumerateInnerProperties())
-                        {
-                            if (_map.IsServiceField(item))
-                                continue;
-
-                            EditorGUILayout.PropertyField(item, true);
-                        }
-
-                        EditorGUIUtility.labelWidth = labelWidth;
-                        break;
-
-                    case NodeType.Hub:
-                        EditorGUILayout.LabelField(HUB_NODE_LABEL);
-                        break;
-
-                    case NodeType.Common:
-                        EditorGUILayout.LabelField(COMMON_NODE_LABEL);
-                        break;
-
-                    case NodeType.Exit:
-                        EditorGUILayout.LabelField(EXIT_NODE_LABEL);
-                        break;
-
-                    default:
-                        throw new UnsupportedValueException(_type);
-                }
+                EditorGUIUtility.labelWidth = nodeRect.width * 0.5f;
+                _nodeDrawer.OnGui(_nodeProp);
             }
         }
 
@@ -487,7 +467,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             if (_heightVersion != _window.OnGuiCounter)
             {
-                _height = SMALL_NODE_HEIGHT + EditorGuiUtility.GetDrawHeight(_nodeProp, _map.IsServiceField);
+                _height = _map.NODE_HEADER_HEIGHT + _nodeDrawer.GetHeight(_nodeProp);
                 _heightVersion = _window.OnGuiCounter;
             }
 
@@ -504,6 +484,18 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             else
             {
                 _position += mouseDelta * _window.Camera.Size;
+            }
+        }
+
+        private NodeDrawer GetDrawer()
+        {
+            switch (_type)
+            {
+                case NodeType.Real: return _map.RegularNodeDrawer;
+                case NodeType.Hub: return new ServiceNodeDrawer(_map, "► ► ►");
+                case NodeType.Common: return new ServiceNodeDrawer(_map, "[ . . . ]");
+                case NodeType.Exit: return new ServiceNodeDrawer(_map, "→ █");
+                default: throw new UnsupportedValueException(_type);
             }
         }
 
