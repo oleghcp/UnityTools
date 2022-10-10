@@ -15,7 +15,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private GraphEditorWindow _window;
         private HashSet<string> _ignoredFields;
         private Vector2 _scrollPos;
-        private float _width = 300f;
+        private float _width;
         private bool _opened;
         private bool _dragging;
 
@@ -34,6 +34,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 RawGraph.WidthFieldName,
                 RawGraph.CommonNodeFieldName,
             };
+
+            _width = EditorPrefs.GetFloat(PrefsConstants.SIDE_PANEL_WIDTH_KEY, 300f);
         }
 
         public void Draw(bool opened, float height, float winWidth, Event e)
@@ -62,6 +64,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUILayout.EndArea();
 
             HandleResize(height, maxWidth, e);
+        }
+
+        public void Save()
+        {
+            EditorPrefs.SetFloat(PrefsConstants.SIDE_PANEL_WIDTH_KEY, _width);
         }
 
         private void HandleResize(float height, float maxWidth, Event e)
