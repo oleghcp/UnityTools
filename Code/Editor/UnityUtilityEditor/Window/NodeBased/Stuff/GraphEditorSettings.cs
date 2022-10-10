@@ -1,9 +1,7 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
-using UnityUtility.NodeBased;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
@@ -23,11 +21,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public static GraphEditorSettings Load(RawGraph asset)
+        public static GraphEditorSettings Load(string name)
         {
             string floderPath = Path.Combine(Application.persistentDataPath, "GraphSettings");
             Directory.CreateDirectory(floderPath);
-            string filePath = Path.Combine(floderPath, asset.GetAssetGuid());
+            string filePath = Path.Combine(floderPath, name);
 
             if (!File.Exists(filePath))
                 return new GraphEditorSettings();
@@ -36,11 +34,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return graphSettings ?? new GraphEditorSettings();
         }
 
-        public static void Save(RawGraph asset, GraphEditorSettings settings)
+        public void Save(string name)
         {
             string path = Path.Combine(Application.persistentDataPath, "GraphSettings");
             Directory.CreateDirectory(path);
-            BinaryFileUtility.Save(Path.Combine(path, asset.GetAssetGuid()), settings);
+            BinaryFileUtility.Save(Path.Combine(path, name), this);
         }
     }
 }

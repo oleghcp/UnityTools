@@ -8,11 +8,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphSidePanel
     {
-        public const float WIDTH = 300f;
-
         private GraphEditorWindow _window;
         private HashSet<string> _ignoredFields;
         private Vector2 _scrollPos;
+        private float _width = 300f;
+        private bool _opened;
+
+        public float Width => _opened ? _width : 0f;
 
         public GraphSidePanel(GraphEditorWindow window)
         {
@@ -29,8 +31,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             };
         }
 
-        public void Draw(in Rect position)
+        public void Draw(bool opened, float height)
         {
+            _opened = opened;
+
+            if (!opened)
+                return;
+
+            Rect position = new Rect(0f, 0f, _width, height);
+
             GUILayout.BeginArea(position);
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
 

@@ -55,10 +55,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 if (_mapSizeVersion != _onGuiCounter)
                 {
-                    _mapSize = WinSize;
-                    if (_toolbar.PropertiesToggle)
-                        _mapSize.x -= GraphSidePanel.WIDTH;
-                    _mapSize.y -= GraphToolbar.HEIGHT;
+                    _mapSize = WinSize - new Vector2(_sidePanel.Width, GraphToolbar.HEIGHT);
                     _mapSizeVersion = _onGuiCounter;
                 }
 
@@ -88,27 +85,21 @@ namespace UnityUtilityEditor.Window.NodeBased
                 return;
             }
 
-            _serializedGraph.SerializedObject.Update();
-
             _onGuiCounter++;
 
-            Event e = Event.current;
+            _serializedGraph.SerializedObject.Update();
 
             _toolbar.Draw();
+            _sidePanel.Draw(_toolbar.PropertiesToggle, MapSize.y);
 
-            float sidePanelWidth = _toolbar.PropertiesToggle ? GraphSidePanel.WIDTH : 0f;
-            Rect mapRect = new Rect(new Vector2(sidePanelWidth, 0f), MapSize);
-
-            if (_toolbar.PropertiesToggle)
-                _sidePanel.Draw(new Rect(0f, 0f, GraphSidePanel.WIDTH, mapRect.height));
-
+            Rect mapRect = new Rect(new Vector2(_sidePanel.Width, 0f), MapSize);
             GUI.BeginGroup(mapRect);
 
-            _camera.ProcessEvents(e);
+            _camera.ProcessEvents(Event.current);
             if (_camera.IsDragging)
                 EditorGUIUtility.AddCursorRect(mapRect, MouseCursor.Pan);
 
-            _map.Draw(e);
+            _map.Draw(Event.current);
 
             GUI.EndGroup();
 
@@ -149,7 +140,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             if (_serializedGraph == null)
             {
-                _settings = GraphEditorSettings.Load(graphAsset);
+                _settings = GraphEditorSettings.Load(graphAsset.GetAssetGuid());
                 _serializedGraph = new SerializedGraph(graphAsset);
                 _sidePanel = new GraphSidePanel(this);
                 _map = new GraphMap(this);
@@ -160,7 +151,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 Save();
 
-                _settings = GraphEditorSettings.Load(graphAsset);
+                _settings = GraphEditorSettings.Load(graphAsset.GetAssetGuid());
                 _serializedGraph.InitAssetReference(graphAsset);
                 _camera.Position = _settings.CameraPosition;
                 _map.Clear();
@@ -180,7 +171,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             _toolbar.Save();
             _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
             _settings.CameraPosition = _camera.Position;
-            GraphEditorSettings.Save(_serializedGraph.GraphAsset, _settings);
+            _settings.Save(_serializedGraph.GraphAsset.GetAssetGuid());
             EditorUtilityExt.SaveProject();
         }
     }
