@@ -21,7 +21,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private GUIContent _alignButton = new GUIContent("■ □ ■", "Align Selected");
         private GUIContent _moveButton = new GUIContent("● ←", "Move to Root");
         private GUIContent _snapButton = new GUIContent("#", "Grid Snapping");
-        private GUIContent _transitionsButton = new GUIContent("Hide", "Hide/Show Transitions");
         private GUIContent _leftWidthButton = new GUIContent("<", "Node Width");
         private GUIContent _rightWidthButton = new GUIContent(">", "Node Width");
         private GUIContent _infoButton = new GUIContent("?", "Info");
@@ -30,12 +29,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private bool _hintToggle;
         private bool _sidePanelToggle;
         private bool _gridSnapToggle;
-        private bool _hideTransitions;
         private int _transitionViewType;
 
         public bool GridToggle => _gridSnapToggle;
         public bool PropertiesToggle => _sidePanelToggle;
-        public bool HideTransitions => _hideTransitions;
         public TransitionViewType TransitionView => (TransitionViewType)_transitionViewType;
 
         public GraphToolbar(GraphEditorWindow window)
@@ -43,7 +40,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _window = window;
             _gridSnapToggle = EditorPrefs.GetBool(PrefsConstants.GRID_SNAPING_KEY);
             _sidePanelToggle = EditorPrefs.GetBool(PrefsConstants.SIDE_PANEL_KEY);
-            _hideTransitions = EditorPrefs.GetBool(PrefsConstants.HIDE_TRANSITIONS_KEY);
             _transitionViewType = EditorPrefs.GetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY);
         }
 
@@ -75,7 +71,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             EditorPrefs.SetBool(PrefsConstants.SIDE_PANEL_KEY, _sidePanelToggle);
             EditorPrefs.SetBool(PrefsConstants.GRID_SNAPING_KEY, _gridSnapToggle);
-            EditorPrefs.SetBool(PrefsConstants.HIDE_TRANSITIONS_KEY, _hideTransitions);
             EditorPrefs.SetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY, _transitionViewType);
         }
 
@@ -145,12 +140,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private void DrawRigt()
         {
-            if (!_hideTransitions)
-                _transitionViewType = GUILayout.Toolbar(_transitionViewType, _transitionViewNames);
-
-            GUILayout.Space(10f);
-
-            _hideTransitions = EditorGuiLayout.ToggleButton(_transitionsButton, _hideTransitions);
+            _transitionViewType = EditorGUILayout.Popup(_transitionViewType, _transitionViewNames, GUILayout.Width(100f));
 
             GUILayout.Space(10f);
 

@@ -200,13 +200,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             switch (_window.TransitionView)
             {
-                case TransitionViewType.Spline:
+                case TransitionViewType.Splines:
                     Vector2 startTangentDir = _selectedPort.Type == PortType.In ? Vector2.left : Vector2.right;
                     Vector2 endTangentDir = _selectedPort.Type == PortType.In ? Vector2.right : Vector2.left;
                     TransitionViewer.DrawSpline(_selectedPort.ScreenRect.center, e.mousePosition, startTangentDir, endTangentDir);
                     break;
 
-                case TransitionViewType.Direction:
+                case TransitionViewType.Arrows:
                     TransitionViewer.DrawDirection(_selectedPort.Node.ScreenRect.center, e.mousePosition);
                     break;
 

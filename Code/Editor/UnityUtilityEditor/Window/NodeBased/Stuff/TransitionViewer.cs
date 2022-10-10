@@ -12,8 +12,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal enum TransitionViewType
     {
-        Spline,
-        Direction,
+        Splines,
+        Arrows,
     }
 
     internal class TransitionViewer

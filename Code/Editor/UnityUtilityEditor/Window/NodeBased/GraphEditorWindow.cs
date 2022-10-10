@@ -29,7 +29,6 @@ namespace UnityUtilityEditor.Window.NodeBased
         public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
         public bool GridSnapping => _toolbar.GridToggle;
-        public bool HideTransitions => _toolbar.HideTransitions;
         public TransitionViewType TransitionView => _toolbar.TransitionView;
         public GraphEditorSettings Settings => _settings;
         public GraphMap Map => _map;

@@ -226,13 +226,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             void drawPorts()
             {
-                if (_window.HideTransitions)
-                {
-                    //_out.DrawList(_transitionViewers);
-                    return;
-                }
-
-                if (_window.TransitionView == TransitionViewType.Spline)
+                if (_window.TransitionView == TransitionViewType.Splines)
                 {
                     if (_type != NodeType.Common) _in.Draw();
                     if (_type != NodeType.Exit) _out.Draw();
@@ -271,19 +265,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void DrawTransitions()
         {
-            if (_window.HideTransitions)
-                return;
-
             switch (_window.TransitionView)
             {
-                case TransitionViewType.Spline:
+                case TransitionViewType.Splines:
                     for (int i = 0; i < _transitionViewers.Count; i++)
                     {
                         _transitionViewers[i].DrawSpline();
                     }
                     break;
 
-                case TransitionViewType.Direction:
+                case TransitionViewType.Arrows:
                     for (int i = 0; i < _transitionViewers.Count; i++)
                     {
                         _transitionViewers[i].DrawArrow();

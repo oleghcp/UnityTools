@@ -9,7 +9,6 @@
         public const string SIDE_PANEL_KEY = "uu_gsp";
         public const string SIDE_PANEL_WIDTH_KEY = "uu_gspw";
         public const string GRID_SNAPING_KEY = "uu_ggs";
-        public const string HIDE_TRANSITIONS_KEY = "uu_ght";
         public const string TRANSITION_VIEW_TYPE_KEY = "uu_gtvt";
 #endif
     }
