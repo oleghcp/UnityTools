@@ -21,6 +21,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private RawGraph _graphAsset;
         private SerializedObject _serializedObject;
         private SerializedProperty _nodesProperty;
+        private SerializedProperty _rootNodeProperty;
         private SerializedProperty _commonNodeProperty;
 
         private HashSet<string> _ignoredFields;
@@ -30,17 +31,19 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private IntIdGenerator _idGenerator;
 
         public RawGraph GraphAsset => _graphAsset;
-        public SerializedProperty NodesProperty => _nodesProperty;
-        public SerializedProperty CommonNodeProperty => _commonNodeProperty;
         public Type GraphNodeType => _graphAsset.GetNodeType();
-        public float NodeWidth => _nodeWidth;
         public SerializedObject SerializedObject => _serializedObject;
+        public SerializedProperty NodesProperty => _nodesProperty;
+        public SerializedProperty RootNodeProperty => _rootNodeProperty;
+        public SerializedProperty CommonNodeProperty => _commonNodeProperty;
+        public float NodeWidth => _nodeWidth;
 
         public GraphAssetEditor(RawGraph graphAsset)
         {
             _graphAsset = graphAsset;
             _serializedObject = new SerializedObject(graphAsset);
             _nodesProperty = _serializedObject.FindProperty(RawGraph.NodesFieldName);
+            _rootNodeProperty = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
             _commonNodeProperty = _serializedObject.FindProperty(RawGraph.CommonNodeFieldName);
             _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);

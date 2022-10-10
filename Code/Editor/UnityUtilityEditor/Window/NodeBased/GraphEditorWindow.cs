@@ -82,7 +82,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 if (_rootNodeVersion != _onGuiCounter)
                 {
-                    _rootNodeId = _graphAssetEditor.SerializedObject.FindProperty(RawGraph.RootNodeFieldName).intValue;
+                    _rootNodeId = _graphAssetEditor.RootNodeProperty.intValue;
                     _rootNodeVersion = _onGuiCounter;
                 }
 
