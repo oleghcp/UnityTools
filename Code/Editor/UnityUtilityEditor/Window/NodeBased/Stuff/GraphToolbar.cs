@@ -16,6 +16,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private GraphEditorWindow _window;
 
+        private string[] _transitionViewNames = Enum.GetNames(typeof(TransitionViewType));
         private GUIContent _selectButton = new GUIContent("[ . . . ]", "Select All");
         private GUIContent _alignButton = new GUIContent("■ □ ■", "Align Selected");
         private GUIContent _moveButton = new GUIContent("● ←", "Move to Root");
@@ -23,23 +24,25 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private GUIContent _transitionsButton = new GUIContent("Hide", "Hide/Show Transitions");
         private GUIContent _leftWidthButton = new GUIContent("<", "Node Width");
         private GUIContent _rightWidthButton = new GUIContent(">", "Node Width");
-        private string[] _transitionViewNames = Enum.GetNames(typeof(TransitionViewType));
+        private GUIContent _infoButton = new GUIContent("?", "Info");
+        private GUIContent _sidePanelButton = new GUIContent("Panel", "Side Panel");
 
         private bool _hintToggle;
-        private bool _propertiesToggle;
-        private bool _gridToggle;
+        private bool _sidePanelToggle;
+        private bool _gridSnapToggle;
         private bool _hideTransitions;
         private int _transitionViewType;
 
-        public bool GridToggle => _gridToggle;
-        public bool PropertiesToggle => _propertiesToggle;
+        public bool GridToggle => _gridSnapToggle;
+        public bool PropertiesToggle => _sidePanelToggle;
         public bool HideTransitions => _hideTransitions;
         public TransitionViewType TransitionView => (TransitionViewType)_transitionViewType;
 
         public GraphToolbar(GraphEditorWindow window)
         {
             _window = window;
-            _gridToggle = EditorPrefs.GetBool(PrefsConstants.GRID_SNAPING_KEY);
+            _gridSnapToggle = EditorPrefs.GetBool(PrefsConstants.GRID_SNAPING_KEY);
+            _sidePanelToggle = EditorPrefs.GetBool(PrefsConstants.SIDE_PANEL_KEY);
             _hideTransitions = EditorPrefs.GetBool(PrefsConstants.HIDE_TRANSITIONS_KEY);
             _transitionViewType = EditorPrefs.GetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY);
         }
@@ -70,14 +73,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Save()
         {
-            EditorPrefs.SetBool(PrefsConstants.GRID_SNAPING_KEY, _gridToggle);
+            EditorPrefs.SetBool(PrefsConstants.SIDE_PANEL_KEY, _sidePanelToggle);
+            EditorPrefs.SetBool(PrefsConstants.GRID_SNAPING_KEY, _gridSnapToggle);
             EditorPrefs.SetBool(PrefsConstants.HIDE_TRANSITIONS_KEY, _hideTransitions);
             EditorPrefs.SetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY, _transitionViewType);
         }
 
         private void DrawLeft()
         {
-            _propertiesToggle = EditorGuiLayout.ToggleButton("Properties", _propertiesToggle, GUILayout.Width(100f));
+            _sidePanelToggle = EditorGuiLayout.ToggleButton(_sidePanelButton, _sidePanelToggle, GUILayout.Width(100f));
         }
 
         private void DrawMiddle()
@@ -150,11 +154,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             GUILayout.Space(10f);
 
-            _gridToggle = EditorGuiLayout.ToggleButton(_snapButton, _gridToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+            _gridSnapToggle = EditorGuiLayout.ToggleButton(_snapButton, _gridSnapToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
 
             GUILayout.Space(10f);
 
-            _hintToggle = EditorGuiLayout.ToggleButton("?", _hintToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+            _hintToggle = EditorGuiLayout.ToggleButton(_infoButton, _hintToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
         }
 
         private void DrawHint(Vector2 winSize)
