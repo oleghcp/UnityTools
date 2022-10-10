@@ -96,8 +96,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _toolbar.Draw();
 
-            Vector2 mapScreenPos = new Vector2(_toolbar.PropertiesToggle ? GraphSidePanel.WIDTH : 0f, 0f);
-            Rect mapRect = new Rect(mapScreenPos, MapSize);
+            float sidePanelWidth = _toolbar.PropertiesToggle ? GraphSidePanel.WIDTH : 0f;
+            Rect mapRect = new Rect(new Vector2(sidePanelWidth, 0f), MapSize);
 
             if (_toolbar.PropertiesToggle)
                 _sidePanel.Draw(new Rect(0f, 0f, GraphSidePanel.WIDTH, mapRect.height));
