@@ -68,7 +68,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_screenRectVersion != _window.OnGuiCounter)
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
-                    float width = _type.ServiceNode() ? GraphAssetEditor.SERV_NODE_WIDTH : _window.GraphAssetEditor.NodeWidth;
+                    float width = _type.ServiceNode() ? SerializedGraph.SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
                     _screenRect.width = width / _window.Camera.Size;
                     _screenRect.height = _window.Camera.Size > 1f ? SMALL_NODE_HEIGHT : GetBigNodeHeight();
                     _screenRectVersion = _window.OnGuiCounter;
@@ -85,7 +85,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_worldRectVersion != _window.OnGuiCounter)
                 {
                     _worldRect.position = _position;
-                    _worldRect.width = _type.ServiceNode() ? GraphAssetEditor.SERV_NODE_WIDTH : _window.GraphAssetEditor.NodeWidth;
+                    _worldRect.width = _type.ServiceNode() ? SerializedGraph.SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
                     _worldRect.height = _window.Camera.Size > 1f ? SMALL_NODE_HEIGHT : GetBigNodeHeight();
                     _worldRectVersion = _window.OnGuiCounter;
                 }
@@ -448,7 +448,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             void renameAsset()
             {
-                string defaultName = GraphAssetEditor.GetDefaultNodeName(_systemType, _id);
+                string defaultName = SerializedGraph.GetDefaultNodeName(_systemType, _id);
                 _nodeProp.serializedObject.Update();
                 SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
                 nameProperty.stringValue = defaultName;

@@ -1,6 +1,5 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -10,7 +9,7 @@ using UnityUtility.NodeBased;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
-    internal class GraphAssetEditor
+    internal class SerializedGraph
     {
         public const float PANEL_WIDTH = 300f;
         public const float SERV_NODE_WIDTH = 150f;
@@ -24,57 +23,30 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private SerializedProperty _rootNodeProperty;
         private SerializedProperty _commonNodeProperty;
 
-        private HashSet<string> _ignoredFields;
-
         private float _nodeWidth;
-        private Vector2 _scrollPos;
         private IntIdGenerator _idGenerator;
 
         public RawGraph GraphAsset => _graphAsset;
-        public Type GraphNodeType => _graphAsset.GetNodeType();
         public SerializedObject SerializedObject => _serializedObject;
         public SerializedProperty NodesProperty => _nodesProperty;
         public SerializedProperty RootNodeProperty => _rootNodeProperty;
         public SerializedProperty CommonNodeProperty => _commonNodeProperty;
         public float NodeWidth => _nodeWidth;
 
-        public GraphAssetEditor(RawGraph graphAsset)
+        public SerializedGraph(RawGraph graphAsset)
+        {
+            InitAssetReference(graphAsset);
+        }
+
+        public void InitAssetReference(RawGraph graphAsset)
         {
             _graphAsset = graphAsset;
             _serializedObject = new SerializedObject(graphAsset);
+            _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodesProperty = _serializedObject.FindProperty(RawGraph.NodesFieldName);
             _rootNodeProperty = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
             _commonNodeProperty = _serializedObject.FindProperty(RawGraph.CommonNodeFieldName);
-            _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodeWidth = _serializedObject.FindProperty(RawGraph.WidthFieldName).floatValue.Clamp(MIN_NODE_WIDTH, MAX_NODE_WIDTH);
-            _ignoredFields = new HashSet<string>
-            {
-                EditorUtilityExt.SCRIPT_FIELD,
-                RawGraph.NodesFieldName,
-                RawGraph.RootNodeFieldName,
-                RawGraph.IdGeneratorFieldName,
-                RawGraph.WidthFieldName,
-                RawGraph.CommonNodeFieldName,
-            };
-        }
-
-        public void Draw(in Rect position)
-        {
-            GUILayout.BeginArea(position);
-            _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
-
-            EditorGUILayout.LabelField(_graphAsset.name, EditorStyles.boldLabel);
-
-            EditorGUILayout.Space();
-
-            foreach (SerializedProperty item in _serializedObject.EnumerateProperties())
-            {
-                if (!_ignoredFields.Contains(item.name))
-                    EditorGUILayout.PropertyField(item, true);
-            }
-
-            EditorGUILayout.EndScrollView();
-            GUILayout.EndArea();
         }
 
         public void ChangeNodeWidth(int dir)

@@ -40,6 +40,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public GraphCamera(GraphEditorWindow window)
         {
             _window = window;
+            _position = _window.Settings.CameraPosition;
         }
 
         public Vector2 ScreenToWorld(Vector2 screenPoint)

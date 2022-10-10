@@ -93,7 +93,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             if (GUILayout.RepeatButton(_leftWidthButton, nodeWidthButtonSize))
             {
-                _window.GraphAssetEditor.ChangeNodeWidth(-1);
+                _window.SerializedGraph.ChangeNodeWidth(-1);
                 GUI.changed = true;
             }
 
@@ -138,7 +138,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             if (GUILayout.RepeatButton(_rightWidthButton, nodeWidthButtonSize))
             {
-                _window.GraphAssetEditor.ChangeNodeWidth(1);
+                _window.SerializedGraph.ChangeNodeWidth(1);
                 GUI.changed = true;
             }
         }

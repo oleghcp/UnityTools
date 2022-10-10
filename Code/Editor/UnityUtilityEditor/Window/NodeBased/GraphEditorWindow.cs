@@ -1,7 +1,6 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -15,9 +14,11 @@ namespace UnityUtilityEditor.Window.NodeBased
     {
         private readonly Color SELECTION_COLOR = Colours.Black.AlterA(0.25f);
 
+        private SerializedGraph _serializedGraph;
         private GraphEditorSettings _settings;
-        private GraphAssetEditor _graphAssetEditor;
+        private HashSet<string> _nodeIgnoredFields;
         private GraphCamera _camera;
+        private GraphSidePanel _sidePanel;
         private GraphGrid _grid;
         private GraphToolbar _toolbar;
         private List<NodeViewer> _nodeViewers;
@@ -34,15 +35,15 @@ namespace UnityUtilityEditor.Window.NodeBased
         private int _onGuiCounter;
         private int _rootNodeId;
 
-        private HashSet<string> _nodeIgnoredFields;
-
-        public GraphAssetEditor GraphAssetEditor => _graphAssetEditor;
+        public SerializedGraph SerializedGraph => _serializedGraph;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
         public bool GridSnapping => _toolbar.GridToggle;
         public bool HideTransitions => _toolbar.HideTransitions;
         public TransitionViewType TransitionView => _toolbar.TransitionView;
+        public HashSet<string> NodeIgnoredFields => _nodeIgnoredFields;
+        public GraphEditorSettings Settings => _settings;
 
         public Vector2 WinSize
         {
@@ -67,7 +68,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                 {
                     _mapSize = WinSize;
                     if (_toolbar.PropertiesToggle)
-                        _mapSize.x -= GraphAssetEditor.PANEL_WIDTH;
+                        _mapSize.x -= SerializedGraph.PANEL_WIDTH;
                     _mapSize.y -= GraphToolbar.HEIGHT;
                     _mapSizeVersion = _onGuiCounter;
                 }
@@ -82,15 +83,13 @@ namespace UnityUtilityEditor.Window.NodeBased
             {
                 if (_rootNodeVersion != _onGuiCounter)
                 {
-                    _rootNodeId = _graphAssetEditor.RootNodeProperty.intValue;
+                    _rootNodeId = _serializedGraph.RootNodeProperty.intValue;
                     _rootNodeVersion = _onGuiCounter;
                 }
 
                 return _rootNodeId;
             }
         }
-
-        public HashSet<string> NodeIgnoredFields => _nodeIgnoredFields;
 
         private void OnEnable()
         {
@@ -107,13 +106,13 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void OnGUI()
         {
-            if (_graphAssetEditor.GraphAsset == null)
+            if (_serializedGraph.GraphAsset == null)
             {
                 Close();
                 return;
             }
 
-            _graphAssetEditor.SerializedObject.Update();
+            _serializedGraph.SerializedObject.Update();
 
             _onGuiCounter++;
 
@@ -121,11 +120,11 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             _toolbar.Draw();
 
-            Vector2 mapScreenPos = new Vector2(_toolbar.PropertiesToggle ? GraphAssetEditor.PANEL_WIDTH : 0f, 0f);
+            Vector2 mapScreenPos = new Vector2(_toolbar.PropertiesToggle ? SerializedGraph.PANEL_WIDTH : 0f, 0f);
             Rect mapRect = new Rect(mapScreenPos, MapSize);
 
             if (_toolbar.PropertiesToggle)
-                _graphAssetEditor.Draw(new Rect(0f, 0f, GraphAssetEditor.PANEL_WIDTH, mapRect.height));
+                _sidePanel.Draw(new Rect(0f, 0f, SerializedGraph.PANEL_WIDTH, mapRect.height));
 
             GUI.BeginGroup(mapRect);
 
@@ -144,12 +143,12 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             GUI.EndGroup();
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+            _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void OnDestroy()
         {
-            if (_graphAssetEditor.GraphAsset == null)
+            if (_serializedGraph.GraphAsset == null)
                 return;
 
             Save();
@@ -157,26 +156,25 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public static void Open(RawGraph graphAsset)
         {
-            GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, "Graph Editor");
-            window.SetUp(graphAsset);
+            GetWindow<GraphEditorWindow>(true, "Graph Editor").SetUp(graphAsset);
         }
 
         public void SetAsRoot(NodeViewer node)
         {
-            _graphAssetEditor.SerializedObject.Update();
-            _graphAssetEditor.SetAsRoot(node);
-            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+            _serializedGraph.SerializedObject.Update();
+            _serializedGraph.SetAsRoot(node);
+            _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void DeleteNode(NodeViewer node)
         {
-            _graphAssetEditor.SerializedObject.Update();
+            _serializedGraph.SerializedObject.Update();
 
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
-            _graphAssetEditor.RemoveNode(node);
+            _serializedGraph.RemoveNode(node);
 
-            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
+            foreach (SerializedProperty nodeProp in _serializedGraph.NodesProperty.EnumerateArrayElements())
             {
                 int id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
                 _nodeViewers.Find(item => item.Id == id).SetSerializedProperty(nodeProp);
@@ -185,7 +183,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (_nodeViewers.Count == 0)
                 _camera.Position = default;
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+            _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void OnClickOnPort(PortViewer targetPort)
@@ -238,33 +236,38 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void SetUp(RawGraph graphAsset)
         {
-            if (_graphAssetEditor?.GraphAsset == graphAsset)
-                return;
-
-            if (_graphAssetEditor != null)
+            if (_serializedGraph == null)
             {
+                _settings = GraphEditorSettings.Load(graphAsset);
+                _serializedGraph = new SerializedGraph(graphAsset);
+                _sidePanel = new GraphSidePanel(this);
+                _grid = new GraphGrid(this);
+                _toolbar = new GraphToolbar(this);
+                _camera = new GraphCamera(this);
+                _nodeViewers = new List<NodeViewer>();
+            }
+            else if (_serializedGraph.GraphAsset != graphAsset)
+            {
+                Save();
+
+                _settings = GraphEditorSettings.Load(graphAsset);
+                _serializedGraph.InitAssetReference(graphAsset);
+                _camera.Position = _settings.CameraPosition;
                 _nodeViewers.Clear();
             }
             else
             {
-                _grid = new GraphGrid(this);
-                _toolbar = new GraphToolbar(this);
-                _nodeViewers = new List<NodeViewer>();
-                _camera = new GraphCamera(this);
+                return;
             }
 
-            _settings = LoadSettings(graphAsset);
-            _graphAssetEditor = new GraphAssetEditor(graphAsset);
-            _camera.Position = _settings.CameraPosition;
-
-            foreach (SerializedProperty nodeProp in _graphAssetEditor.NodesProperty.EnumerateArrayElements())
+            foreach (SerializedProperty nodeProp in _serializedGraph.NodesProperty.EnumerateArrayElements())
             {
                 _nodeViewers.Add(new NodeViewer(nodeProp, this));
             }
 
-            if (_graphAssetEditor.CommonNodeProperty.HasManagedReferenceValue())
+            if (_serializedGraph.CommonNodeProperty.HasManagedReferenceValue())
             {
-                _nodeViewers.Add(new NodeViewer(_graphAssetEditor.CommonNodeProperty, this));
+                _nodeViewers.Add(new NodeViewer(_serializedGraph.CommonNodeProperty, this));
             }
 
             _nodeViewers.ForEach(item => item.CreateConnections());
@@ -272,13 +275,13 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         private void CreateNode(Vector2 mousePosition, Type type)
         {
-            _graphAssetEditor.SerializedObject.Update();
+            _serializedGraph.SerializedObject.Update();
 
             Vector2 position = _camera.ScreenToWorld(mousePosition);
-            SerializedProperty nodeProp = _graphAssetEditor.CreateNode(position, type);
+            SerializedProperty nodeProp = _serializedGraph.CreateNode(position, type);
             _nodeViewers.Add(new NodeViewer(nodeProp, this));
 
-            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+            _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void DrawNodes()
@@ -408,15 +411,15 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             GenericMenu menu = new GenericMenu();
 
-            addServiceMenuItem(typeof(CommonNode), "Common", _graphAssetEditor.CommonNodeProperty.HasManagedReferenceValue());
+            addServiceMenuItem(typeof(CommonNode), "Common", _serializedGraph.CommonNodeProperty.HasManagedReferenceValue());
             addServiceMenuItem(typeof(HubNode), "Hub", false);
             addServiceMenuItem(typeof(ExitNode), "Exit", _nodeViewers.Contains(item => item.Type == NodeType.Exit));
 
             menu.AddSeparator(string.Empty);
 
-            addNodeMenuItem(_graphAssetEditor.GraphNodeType);
+            addNodeMenuItem(_serializedGraph.GraphAsset.GetNodeType());
 
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(_graphAssetEditor.GraphNodeType))
+            foreach (Type type in TypeCache.GetTypesDerivedFrom(_serializedGraph.GraphAsset.GetNodeType()))
             {
                 addNodeMenuItem(type);
             }
@@ -443,32 +446,12 @@ namespace UnityUtilityEditor.Window.NodeBased
         private void Save()
         {
             _nodeViewers.ForEach(item => item.Save());
-            _graphAssetEditor.Save();
+            _serializedGraph.Save();
             _toolbar.Save();
-            _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+            _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
             _settings.CameraPosition = _camera.Position;
-            SaveSettings(_graphAssetEditor.GraphAsset, _settings);
+            GraphEditorSettings.Save(_serializedGraph.GraphAsset, _settings);
             EditorUtilityExt.SaveProject();
-        }
-
-        private static GraphEditorSettings LoadSettings(RawGraph asset)
-        {
-            string floderPath = Path.Combine(Application.persistentDataPath, "GraphSettings");
-            Directory.CreateDirectory(floderPath);
-            string filePath = Path.Combine(floderPath, asset.GetAssetGuid());
-
-            if (!File.Exists(filePath))
-                return new GraphEditorSettings();
-
-            GraphEditorSettings graphSettings = BinaryFileUtility.Load<GraphEditorSettings>(filePath);
-            return graphSettings ?? new GraphEditorSettings();
-        }
-
-        private static void SaveSettings(RawGraph asset, GraphEditorSettings settings)
-        {
-            string path = Path.Combine(Application.persistentDataPath, "GraphSettings");
-            Directory.CreateDirectory(path);
-            BinaryFileUtility.Save(Path.Combine(path, asset.GetAssetGuid()), settings);
         }
     }
 }
