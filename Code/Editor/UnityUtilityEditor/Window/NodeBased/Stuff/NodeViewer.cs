@@ -12,6 +12,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class NodeViewer
     {
+        private const string HUB_NODE_LABEL = "► ► ►";
+        private const string COMMON_NODE_LABEL = "[ . . . ]";
+        private const string EXIT_NODE_LABEL = "→ █";
+
         private readonly Vector2 UI_OFFSET;
         private readonly Vector2 UI_SHRINK;
         private readonly float SMALL_NODE_HEIGHT;
@@ -268,15 +272,15 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         break;
 
                     case NodeType.Hub:
-                        EditorGUILayout.LabelField("► ► ►");
+                        EditorGUILayout.LabelField(HUB_NODE_LABEL);
                         break;
 
                     case NodeType.Common:
-                        EditorGUILayout.LabelField("[ . . . ]");
+                        EditorGUILayout.LabelField(COMMON_NODE_LABEL);
                         break;
 
                     case NodeType.Exit:
-                        EditorGUILayout.LabelField("→ █");
+                        EditorGUILayout.LabelField(EXIT_NODE_LABEL);
                         break;
 
                     default:

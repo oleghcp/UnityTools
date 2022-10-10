@@ -90,7 +90,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             _serializedGraph.SerializedObject.Update();
 
             _toolbar.Draw();
-            _sidePanel.Draw(_toolbar.PropertiesToggle, MapSize.y);
+            _sidePanel.Draw(_toolbar.PropertiesToggle, MapSize.y, WinSize.x, Event.current);
 
             Rect mapRect = new Rect(new Vector2(_sidePanel.Width, 0f), MapSize);
             GUI.BeginGroup(mapRect);
@@ -124,7 +124,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public static void Open(RawGraph graphAsset)
         {
-            GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, "Graph Editor");
+            GraphEditorWindow window = GetWindow<GraphEditorWindow>(true, $"{graphAsset.name} Editor");
             window.minSize = new Vector2(800f, 600f);
             window.SetUp(graphAsset);
         }
