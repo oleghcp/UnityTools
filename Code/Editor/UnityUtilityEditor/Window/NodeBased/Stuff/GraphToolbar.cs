@@ -87,7 +87,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private void DrawMiddle()
         {
             const float buttonWidth = 50f;
-            IReadOnlyList<NodeViewer> nodeViewers = _window.NodeViewers;
+            IReadOnlyList<NodeViewer> nodeViewers = _window.Map.NodeViewers;
 
             GUILayoutOption nodeWidthButtonSize = GUILayout.Width(30f);
 
@@ -127,7 +127,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             if (GUILayout.Button(_moveButton, GUILayout.Width(buttonWidth)))
             {
-                NodeViewer viewer = _window.NodeViewers.FirstOrDefault(item => item.Id == _window.RootNodeId);
+                NodeViewer viewer = _window.Map.NodeViewers.FirstOrDefault(item => item.Id == _window.RootNodeId);
                 if (viewer != null)
                     _window.Camera.Position = viewer.WorldRect.center;
             }

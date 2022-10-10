@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private const float X_OFFSET = 8f;
 
         private PortType _type;
-        private GraphEditorWindow _window;
+        private GraphMap _map;
         private NodeViewer _node;
         private GUIStyle _style;
         private Rect _screenRect;
@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             get
             {
-                if (_screenRectVersion != _window.OnGuiCounter)
+                if (_screenRectVersion != _map.Window.OnGuiCounter)
                 {
                     Rect nodeScreenRect = _node.ScreenRect;
                     _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
@@ -42,18 +42,18 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                             break;
                     }
 
-                    _screenRectVersion = _window.OnGuiCounter;
+                    _screenRectVersion = _map.Window.OnGuiCounter;
                 }
 
                 return _screenRect;
             }
         }
 
-        public PortViewer(NodeViewer node, PortType type, GraphEditorWindow window)
+        public PortViewer(NodeViewer node, PortType type, GraphMap map)
         {
             _node = node;
             _type = type;
-            _window = window;
+            _map = map;
             _screenRect = new Rect(0, 0, 16f, 24f);
             _style = type == PortType.In ? GraphEditorStyles.Styles.InPort : GraphEditorStyles.Styles.OutPort;
         }
@@ -61,7 +61,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Draw()
         {
             if (GUI.Button(ScreenRect, GraphEditorStyles.Styles.RightTriangle, _style))
-                _window.OnClickOnPort(this);
+                _map.OnClickOnPort(this);
         }
 
         public void DrawList(IReadOnlyList<TransitionViewer> transitions)

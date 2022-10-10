@@ -7,6 +7,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphSidePanel
     {
+        public const float WIDTH = 300f;
+
         private GraphEditorWindow _window;
         private HashSet<string> _ignoredFields;
         private Vector2 _scrollPos;

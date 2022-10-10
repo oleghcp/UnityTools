@@ -15,12 +15,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private readonly Vector2 UI_OFFSET;
         private readonly Vector2 UI_SHRINK;
         private readonly float SMALL_NODE_HEIGHT;
-
         private readonly int _id;
         private readonly Type _systemType;
         private readonly NodeType _type;
         private readonly PortViewer _in;
         private readonly PortViewer _out;
+        private readonly GraphMap _map;
         private readonly GraphEditorWindow _window;
         private readonly List<TransitionViewer> _transitionViewers;
 
@@ -108,13 +108,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             }
         }
 
-        public NodeViewer(SerializedProperty nodeProp, GraphEditorWindow window)
+        public NodeViewer(SerializedProperty nodeProp, GraphMap map)
         {
             UI_OFFSET = new Vector2(10f, 10f);
             UI_SHRINK = new Vector2(20f, 22f);
             SMALL_NODE_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
 
-            _window = window;
+            _map = map;
+            _window = map.Window;
             SetSerializedProperty(nodeProp);
 
             _id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
@@ -124,8 +125,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
             _transitionViewers = new List<TransitionViewer>();
 
-            _in = new PortViewer(this, PortType.In, window);
-            _out = new PortViewer(this, PortType.Out, window);
+            _in = new PortViewer(this, PortType.In, _map);
+            _out = new PortViewer(this, PortType.Out, _map);
         }
 
         public void SetSerializedProperty(SerializedProperty nodeProp)
@@ -144,7 +145,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             foreach (SerializedProperty transitionProp in _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName).EnumerateArrayElements())
             {
                 int nextNodeId = transitionProp.FindPropertyRelative(Transition.NodeIdFieldName).intValue;
-                NodeViewer connectedNodeViewer = _window.NodeViewers.First(itm => itm.Id == nextNodeId);
+                NodeViewer connectedNodeViewer = _map.NodeViewers.First(itm => itm.Id == nextNodeId);
                 _transitionViewers.Add(new TransitionViewer(_out, connectedNodeViewer.In, _window));
             }
         }
@@ -257,7 +258,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
                         foreach (SerializedProperty item in _nodeProp.EnumerateInnerProperties())
                         {
-                            if (IsServiceField(item))
+                            if (_map.IsServiceField(item))
                                 continue;
 
                             EditorGUILayout.PropertyField(item, true);
@@ -369,7 +370,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     {
                         if (_isSelected)
                         {
-                            _window.DeleteNode(this);
+                            _map.DeleteNode(this);
                             GUI.changed = true;
                         }
                     }
@@ -415,29 +416,29 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     else
                         genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
 
-                    //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _window.CopySelectedNode());
+                    //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _field.CopySelectedNode());
                     //genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
                     break;
 
                 case NodeType.Hub:
                     genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
                     break;
 
                 case NodeType.Common:
                     genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
                     break;
 
                 case NodeType.Exit:
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _window.DeleteNode(this));
+                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     break;
 
                 default:
@@ -460,7 +461,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             DropDownWindow list = ScriptableObject.CreateInstance<DropDownWindow>();
 
-            foreach (NodeViewer item in _window.NodeViewers)
+            foreach (NodeViewer item in _map.NodeViewers)
             {
                 if (item == this || item.Type == NodeType.Common)
                     continue;
@@ -482,16 +483,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             if (_heightVersion != _window.OnGuiCounter)
             {
-                _height = SMALL_NODE_HEIGHT + EditorGuiUtility.GetDrawHeight(_nodeProp, IsServiceField);
+                _height = SMALL_NODE_HEIGHT + EditorGuiUtility.GetDrawHeight(_nodeProp, _map.IsServiceField);
                 _heightVersion = _window.OnGuiCounter;
             }
 
             return _height;
-        }
-
-        private bool IsServiceField(SerializedProperty property)
-        {
-            return _window.NodeIgnoredFields.Contains(property.name);
         }
 
         private void Drag(Vector2 mouseDelta)

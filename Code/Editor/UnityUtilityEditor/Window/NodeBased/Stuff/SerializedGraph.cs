@@ -11,7 +11,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class SerializedGraph
     {
-        public const float PANEL_WIDTH = 300f;
         public const float SERV_NODE_WIDTH = 150f;
         private const float MIN_NODE_WIDTH = 200f;
         private const float MAX_NODE_WIDTH = 400f;
