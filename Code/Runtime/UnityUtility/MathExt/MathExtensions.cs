@@ -149,35 +149,33 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Returns the sign of value (1 of -1).
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sign(this float value)
+        public static int Sign(this float value)
         {
-            return Mathf.Sign(value);
+            return value >= 0 ? 1 : -1;
         }
 
         /// <summary>
         /// Returns the sign of value (1 of -1).
         /// </summary>
-        public static float Sign(this double value)
+        public static int Sign(this double value)
         {
-            return (value >= 0) ? 1 : (-1);
+            return value >= 0 ? 1 : -1;
         }
 
         /// <summary>
         /// Returns the sign of value (1 of -1).
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sign(this int value)
         {
-            return (int)Mathf.Sign(value);
+            return value >= 0 ? 1 : -1;
         }
 
         /// <summary>
         /// Returns the sign of value (1 of -1).
         /// </summary>
-        public static long Sign(this long value)
+        public static int Sign(this long value)
         {
-            return (value >= 0) ? 1 : (-1);
+            return value >= 0 ? 1 : -1;
         }
 
         /// <summary>
@@ -215,10 +213,19 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Rounds the float value to the nearest integer.
         /// </summary>
-        public static int Round(this float value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Round(this float value)
         {
-            //return (int)Math.Round(value, MidpointRounding.AwayFromZero);
-            return (int)(value + 0.5f * value.Sign());
+            return MathF.Round(value);
+        }
+
+        /// <summary>
+        /// Rounds the float value to the nearest integer.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Round(this double value)
+        {
+            return Math.Round(value);
         }
 
         /// <summary>
@@ -226,7 +233,15 @@ namespace UnityUtility.MathExt
         /// </summary>
         public static float Round(this float value, float snapStep)
         {
-            return (value / snapStep).Round() * snapStep;
+            return Round(value / snapStep) * snapStep;
+        }
+
+        /// <summary>
+        /// Rounds the float value to the nearest value multiple to the specified step.
+        /// </summary>
+        public static double Round(this double value, double snapStep)
+        {
+            return Round(value / snapStep) * snapStep;
         }
 
         /// <summary>
@@ -239,12 +254,30 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Returns the smallest integer greater to or equal to the value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Ceiling(this double value)
+        {
+            return Math.Ceiling(value);
+        }
+
+        /// <summary>
         /// Returns the largest integer smaller to or equal to the value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Floor(this float value)
         {
             return MathF.Floor(value);
+        }
+
+        /// <summary>
+        /// Returns the largest integer smaller to or equal to the value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Floor(this double value)
+        {
+            return Math.Floor(value);
         }
 
         /// <summary>
@@ -756,7 +789,7 @@ namespace UnityUtility.MathExt
             switch (rounding)
             {
                 case RoundingWay.ToNearest:
-                    return value.Round();
+                    return (int)value.Round();
 
                 case RoundingWay.Ceiling:
                     return (int)MathF.Ceiling(value);
@@ -770,10 +803,41 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Casts double value to long.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long ToLong(this double value, RoundingWay rounding)
+        {
+            switch (rounding)
+            {
+                case RoundingWay.ToNearest:
+                    return (int)Round(value);
+
+                case RoundingWay.Ceiling:
+                    return (int)Math.Ceiling(value);
+
+                case RoundingWay.Floor:
+                    return (int)Math.Floor(value);
+
+                default:
+                    throw new UnsupportedValueException(rounding);
+            }
+        }
+
+        /// <summary>
         /// Casts integer value to float.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToFloat(this int value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// Casts long value to double.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double ToDouble(this long value)
         {
             return value;
         }
