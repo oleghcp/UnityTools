@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
@@ -15,6 +14,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     {
         private const float SERV_NODE_WIDTH = 150f;
 
+        private readonly Color _headerColor;
         private readonly int _id;
         private readonly Type _systemType;
         private readonly NodeType _type;
@@ -57,6 +57,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public IReadOnlyList<TransitionViewer> TransitionViewers => _transitionViewers;
         public SerializedProperty NodeProp => _nodeProp;
         public string Name => _nameProp.stringValue;
+        public NodeDrawer NodeDrawer => _nodeDrawer;
 
         public Vector2 Position
         {
@@ -135,12 +136,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _systemType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(nodeProp.managedReferenceFullTypename);
             _type = RawNode.GetNodeType(_systemType);
             _position = nodeProp.FindPropertyRelative(RawNode.PositionFieldName).vector2Value;
-            _nodeDrawer = GetDrawer();
-
             _transitionViewers = new List<TransitionViewer>();
-
             _in = new PortViewer(this, PortType.In, _map);
             _out = new PortViewer(this, PortType.Out, _map);
+            _nodeDrawer = _map.GetDrawer(_systemType);
+
+            _headerColor = GetHeaderColor();
         }
 
         public void SetSerializedProperty(SerializedProperty nodeProp)
@@ -247,7 +248,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 }
                 else
                 {
-                    GUI.color = GetHeaderColor();
+                    GUI.color = _headerColor;
                     EditorGUILayout.LabelField(nameProperty.stringValue, EditorStylesExt.Rect);
                     GUI.color = Colours.White;
                 }
@@ -475,18 +476,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             else
             {
                 _position += mouseDelta * _window.Camera.Size;
-            }
-        }
-
-        private NodeDrawer GetDrawer()
-        {
-            switch (_type)
-            {
-                case NodeType.Real: return _map.RegularNodeDrawer;
-                case NodeType.Hub: return new ServiceNodeDrawer(_map, "► ► ►");
-                case NodeType.Common: return new ServiceNodeDrawer(_map, "[ . . . ]");
-                case NodeType.Exit: return new ServiceNodeDrawer(_map, "→ █");
-                default: throw new UnsupportedValueException(_type);
             }
         }
 

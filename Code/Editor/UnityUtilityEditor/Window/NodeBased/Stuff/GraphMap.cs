@@ -25,16 +25,17 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private bool _selectionRectOn;
         private Vector2 _downPoint;
         private PortViewer _selectedPort;
-        private RegularNodeDrawer _regularNodeDrawer;
-
+        private Dictionary<Type, NodeDrawer> _nodeDrawers;
+        private NodeDrawer _regularNodeDrawer;
 
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
-        public RegularNodeDrawer RegularNodeDrawer => _regularNodeDrawer;
 
         public GraphMap(GraphEditorWindow window)
         {
             NODE_HEADER_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
+            _window = window;
+            _grid = new GraphGrid(window);
 
             _nodeIgnoredFields = new HashSet<string>
             {
@@ -45,10 +46,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 RawNode.PositionFieldName,
             };
 
-            _window = window;
-            _grid = new GraphGrid(window);
-            _nodeViewers = new List<NodeViewer>();
             _regularNodeDrawer = new RegularNodeDrawer(this);
+            _nodeDrawers = new Dictionary<Type, NodeDrawer>()
+            {
+                { typeof(HubNode), new ServiceNodeDrawer(this, "► ► ►") },
+                { typeof(CommonNode), new ServiceNodeDrawer(this, "[ . . . ]") },
+                { typeof(ExitNode), new ServiceNodeDrawer(this, "→ █") },
+            };
+            _nodeViewers = new List<NodeViewer>();
         }
 
         public void Clear()
@@ -157,6 +162,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         //    _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         //}
+
+        public NodeDrawer GetDrawer(Type type)
+        {
+            if (_nodeDrawers.TryGetValue(type, out NodeDrawer drawer))
+                return drawer;
+
+            return _regularNodeDrawer;
+        }
 
         public void Save()
         {
