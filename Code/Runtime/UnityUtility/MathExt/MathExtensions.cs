@@ -257,11 +257,28 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Returns the whole part of the specified value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Truncate(this double value)
+        {
+            return Math.Truncate(value);
+        }
+
+        /// <summary>
         /// Returns the decimal part of the specified value.
         /// </summary>
         public static float Decim(this float value)
         {
-            return value - (int)value;
+            return value % 1;
+        }
+
+        /// <summary>
+        /// Returns the decimal part of the specified value.
+        /// </summary>
+        public static double Decim(this double value)
+        {
+            return value % 1;
         }
 
         /// <summary>
