@@ -167,11 +167,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 
         public void Select(bool on)
         {
-            if (_isSelected == on)
-                return;
-
-            _isSelected = on;
-            GUI.changed = true;
+            if (SelectInternal(on))
+                GUI.changed = true;
         }
 
         public void CreateTransition(PortViewer dest)
@@ -303,14 +300,14 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                         if (e.button == 0)
                         {
                             _dragedPosition = _position;
-                            _isSelected = true;
+                            SelectInternal(true);
                             _isDragging = true;
                             needLock = true;
                             GUI.changed = true;
                         }
                         else if (e.button == 1)
                         {
-                            _isSelected = true;
+                            SelectInternal(true);
                             needLock = true;
                             ProcessContextMenu();
                             GUI.changed = true;
@@ -320,7 +317,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                     {
                         _renaming = false;
                         if (!(_isSelected && e.control))
-                            _isSelected = false;
+                            SelectInternal(false);
                         GUI.FocusControl(null);
                         GUI.changed = true;
                     }
@@ -488,6 +485,16 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                 case NodeType.Exit: return Colours.Red;
                 default: throw new UnsupportedValueException(_type);
             }
+        }
+
+        private bool SelectInternal(bool on)
+        {
+            if (_isSelected == on)
+                return false;
+
+            _isSelected = on;
+            _map.OnNodeSelectionChanched(this, on);
+            return true;
         }
     }
 }

@@ -18,6 +18,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private float _width;
         private bool _opened;
         private bool _dragging;
+        private string[] _toolbarLabels = { "Properties", "Node" };
+        private int _selectedIndex;
+
 
         public float Width => _opened ? _width : 0f;
 
@@ -36,6 +39,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             };
 
             _width = EditorPrefs.GetFloat(PrefsConstants.SIDE_PANEL_WIDTH_KEY, 300f);
+            _selectedIndex = EditorPrefs.GetInt(PrefsConstants.SIDE_PANEL_TAB_KEY);
+
         }
 
         public void Draw(bool opened, float height, float winWidth, Event e)
@@ -49,17 +54,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _width = _width.CutAfter(maxWidth);
             Rect position = new Rect(0f, 0f, _width, height);
 
-            GUILayout.BeginArea(position);
-            _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos, EditorStyles.helpBox).y;
-
-            EditorGUIUtility.labelWidth = _width * 0.5f;
-
-            foreach (SerializedProperty item in _window.SerializedGraph.SerializedObject.EnumerateProperties())
+            GUILayout.BeginArea(position, EditorStyles.helpBox);
+            _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos).y;
+            switch (_selectedIndex = GUILayout.Toolbar(_selectedIndex, _toolbarLabels))
             {
-                if (!_ignoredFields.Contains(item.name))
-                    EditorGUILayout.PropertyField(item, true);
+                case 0: DrawContent(); break;
+                case 1: DrawNode(); break;
             }
-
             EditorGUILayout.EndScrollView();
             GUILayout.EndArea();
 
@@ -69,6 +70,36 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Save()
         {
             EditorPrefs.SetFloat(PrefsConstants.SIDE_PANEL_WIDTH_KEY, _width);
+            EditorPrefs.SetInt(PrefsConstants.SIDE_PANEL_TAB_KEY, _selectedIndex);
+        }
+
+        private void DrawContent()
+        {
+            EditorGUIUtility.labelWidth = _width * 0.5f;
+
+            foreach (SerializedProperty item in _window.SerializedGraph.SerializedObject.EnumerateProperties())
+            {
+                if (!_ignoredFields.Contains(item.name))
+                    EditorGUILayout.PropertyField(item, true);
+            }
+        }
+
+        private void DrawNode()
+        {
+            int count = _window.Map.SelectionCount;
+
+            if (count > 1)
+            {
+                GUILayout.Label("[...]");
+                return;
+            }
+
+            if (count == 1)
+            {
+                var selected = _window.Map.GetSelectedNode();
+                GUILayout.Label(selected.Name, EditorStyles.boldLabel);
+                selected.NodeDrawer.OnGui(selected.NodeProp, _width, true);
+            }
         }
 
         private void HandleResize(float height, float maxWidth, Event e)

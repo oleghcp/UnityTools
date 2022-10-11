@@ -21,6 +21,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         private GraphEditorWindow _window;
         private GraphGrid _grid;
         private List<NodeViewer> _nodeViewers;
+        private HashSet<NodeViewer> _selectedNodes = new HashSet<NodeViewer>();
         private HashSet<string> _nodeIgnoredFields;
 
         private bool _selectionRectOn;
@@ -31,6 +32,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
+        public int SelectionCount => _selectedNodes.Count;
 
         public GraphMap(GraphEditorWindow window)
         {
@@ -60,6 +62,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         public void Clear()
         {
             _nodeViewers.Clear();
+            _selectedNodes.Clear();
         }
 
         public void Fill()
@@ -178,9 +181,24 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             return _nodeDrawers.Place(nodeType, (NodeDrawer)Activator.CreateInstance(drawerType));
         }
 
+        public NodeViewer GetSelectedNode()
+        {
+            var iterator = _selectedNodes.GetEnumerator();
+            iterator.MoveNext();
+            return iterator.Current;
+        }
+
         public void Save()
         {
             _nodeViewers.ForEach(item => item.Save());
+        }
+
+        public void OnNodeSelectionChanched(NodeViewer node, bool on)
+        {
+            if (on)
+                _selectedNodes.Add(node);
+            else
+                _selectedNodes.Remove(node);
         }
 
         private void DrawNodes()
