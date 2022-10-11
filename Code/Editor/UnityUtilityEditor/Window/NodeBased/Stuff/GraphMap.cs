@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -163,12 +164,18 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         //    _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         //}
 
-        public NodeDrawer GetDrawer(Type type)
+        public NodeDrawer GetDrawer(Type nodeType)
         {
-            if (_nodeDrawers.TryGetValue(type, out NodeDrawer drawer))
+            if (_nodeDrawers.TryGetValue(nodeType, out NodeDrawer drawer))
                 return drawer;
 
-            return _regularNodeDrawer;
+            Type drawerType = TypeCache.GetTypesDerivedFrom(typeof(NodeDrawer))
+                                       .Where(item => !item.IsAbstract && item.IsDefined(typeof(CustomNodeDrawerAttribute), true))
+                                       .FirstOrDefault(item => item.GetCustomAttribute<CustomNodeDrawerAttribute>().NodeType == nodeType);
+            if (drawerType == null)
+                return _nodeDrawers.Place(nodeType, _regularNodeDrawer);
+
+            return _nodeDrawers.Place(nodeType, (NodeDrawer)Activator.CreateInstance(drawerType));
         }
 
         public void Save()
