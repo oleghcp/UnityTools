@@ -10,6 +10,7 @@ namespace UnityUtility
     {
         public const float kEpsilon = FloatComparer.kEpsilon;
         public const float kEpsilonNormalSqrt = Vector3.kEpsilonNormalSqrt;
+        internal const double THIRD = 1d / 3d;
 
         public static Vector2 Normalize(in Vector2 value, out float prevMagnitude)
         {

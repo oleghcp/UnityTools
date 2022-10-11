@@ -419,7 +419,11 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Cbrt(this double value)
         {
+#if UNITY_2021_2_OR_NEWER
             return Math.Cbrt(value);
+#else
+            return Math.Pow(value, MathUtility.THIRD);
+#endif
         }
 
         /// <summary>
@@ -455,7 +459,11 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Cbrt(this long value)
         {
+#if UNITY_2021_2_OR_NEWER
             return Math.Cbrt(value);
+#else
+            return Math.Pow(value, MathUtility.THIRD);
+#endif
         }
 
         /// <summary>
@@ -571,7 +579,7 @@ namespace UnityUtility.MathExt
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Clamp01(this double value)
         {
-            return Math.Clamp(value, 0, 1);
+            return Clamp(value, 0, 1);
         }
 
         /// <summary>

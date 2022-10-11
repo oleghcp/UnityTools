@@ -1,5 +1,6 @@
 ﻿#if !UNITY_2021_2_OR_NEWER
 using System.Runtime.CompilerServices;
+using UnityUtility;
 
 namespace System
 {
@@ -44,7 +45,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cbrt(float value)
         {
-            return (float)Math.Pow(value, 1d / 3d);
+            return (float)Math.Pow(value, MathUtility.THIRD);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

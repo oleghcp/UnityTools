@@ -267,11 +267,13 @@ namespace System.Collections.Generic
             return string.Join(separator, self);
         }
 
+#if UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString<T>(this IEnumerable<T> self, char separator)
         {
             return string.Join(separator, self);
         }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this IEnumerable<string> self, string separator = "")
@@ -279,11 +281,13 @@ namespace System.Collections.Generic
             return string.Join(separator, self);
         }
 
+#if UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this IEnumerable<string> self, char separator)
         {
             return string.Join(separator, self);
         }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this object[] self, string separator = "")
@@ -291,11 +295,13 @@ namespace System.Collections.Generic
             return string.Join(separator, self);
         }
 
+#if UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this object[] self, char separator)
         {
             return string.Join(separator, self);
         }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, string separator = "")
@@ -303,11 +309,13 @@ namespace System.Collections.Generic
             return string.Join(separator, self);
         }
 
+#if UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, char separator)
         {
             return string.Join(separator, self);
         }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, int startIndex, int count, string separator = "")
@@ -315,11 +323,13 @@ namespace System.Collections.Generic
             return string.Join(separator, self, startIndex, count);
         }
 
+#if UNITY_2021_2_OR_NEWER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, int startIndex, int count, char separator)
         {
             return string.Join(separator, self, startIndex, count);
         }
+#endif
 
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
