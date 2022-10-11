@@ -167,8 +167,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 
         public void Select(bool on)
         {
-            if (SelectInternal(on))
-                GUI.changed = true;
+            SelectInternal(on);
         }
 
         public void CreateTransition(PortViewer dest)
@@ -487,14 +486,13 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
             }
         }
 
-        private bool SelectInternal(bool on)
+        private void SelectInternal(bool on)
         {
             if (_isSelected == on)
-                return false;
+                return;
 
             _isSelected = on;
             _map.OnNodeSelectionChanched(this, on);
-            return true;
         }
     }
 }

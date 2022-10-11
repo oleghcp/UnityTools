@@ -104,7 +104,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             GUI.enabled = nodeViewers.Count > 0;
 
             if (GUILayout.Button(_selectButton, GUILayout.Width(buttonWidth)))
+            {
                 nodeViewers.ForEach(item => item.Select(true));
+                GUI.changed = true;
+            }
 
             if (GUILayout.Button(_alignButton, GUILayout.Width(buttonWidth)))
             {
