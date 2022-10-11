@@ -1,7 +1,7 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using UnityEditor;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers
+namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 {
     internal class RegularNodeDrawer : NodeDrawer
     {
@@ -12,8 +12,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers
             _map = map;
         }
 
-        protected override void OnGui(SerializedProperty property)
+        protected override void OnGui(SerializedProperty property, float width)
         {
+            EditorGUIUtility.labelWidth = width * 0.5f;
             foreach (SerializedProperty item in property.EnumerateInnerProperties())
             {
                 if (!_map.IsServiceField(item))

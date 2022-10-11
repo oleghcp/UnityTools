@@ -8,7 +8,7 @@ using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 {
     internal enum TransitionViewType
     {

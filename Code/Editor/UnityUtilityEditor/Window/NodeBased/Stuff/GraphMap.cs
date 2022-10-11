@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawers;
+using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
@@ -50,9 +50,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _regularNodeDrawer = new RegularNodeDrawer(this);
             _nodeDrawers = new Dictionary<Type, NodeDrawer>()
             {
-                { typeof(HubNode), new ServiceNodeDrawer(this, "► ► ►") },
-                { typeof(CommonNode), new ServiceNodeDrawer(this, "[ . . . ]") },
-                { typeof(ExitNode), new ServiceNodeDrawer(this, "→ █") },
+                { typeof(HubNode), new ServiceNodeDrawer("► ► ►") },
+                { typeof(CommonNode), new ServiceNodeDrawer("[ . . . ]") },
+                { typeof(ExitNode), new ServiceNodeDrawer("→ █") },
             };
             _nodeViewers = new List<NodeViewer>();
         }

@@ -9,11 +9,11 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         protected virtual string ShortDrawingView => _label;
 
-        public void OnGui(SerializedProperty property, bool enabled)
+        public void OnGui(SerializedProperty property, float width, bool enabled)
         {
             if (enabled)
             {
-                OnGui(property);
+                OnGui(property, width);
                 return;
             }
 
@@ -29,7 +29,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         }
 
 
-        protected abstract void OnGui(SerializedProperty property);
+        protected abstract void OnGui(SerializedProperty property, float width);
         protected abstract float GetHeight(SerializedProperty property);
     }
 }

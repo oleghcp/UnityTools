@@ -1,7 +1,7 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using UnityEngine;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 {
     internal enum PortType : byte { In, Out }
 

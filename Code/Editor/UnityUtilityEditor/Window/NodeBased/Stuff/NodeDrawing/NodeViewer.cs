@@ -8,7 +8,7 @@ using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 {
     internal class NodeViewer
     {
@@ -259,8 +259,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 if (_window.Camera.Size > 1f)
                     return;
 
-                EditorGUIUtility.labelWidth = nodeRect.width * 0.5f;
-                _nodeDrawer.OnGui(_nodeProp, _window.FullDrawing);
+                _nodeDrawer.OnGui(_nodeProp, nodeRect.width, _window.FullDrawing);
             }
         }
 
