@@ -5,9 +5,9 @@ namespace UnityUtilityEditor.Window.NodeBased
 {
     public abstract class NodeDrawer
     {
-        private string _label = "{...}";
+        private const string LABEL = "{...}";
 
-        protected virtual string ShortDrawingView => _label;
+        protected virtual string ShortDrawingView => LABEL;
 
         public void OnGui(SerializedProperty property, float width, bool enabled)
         {

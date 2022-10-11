@@ -19,7 +19,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         private string[] _transitionViewNames = Enum.GetNames(typeof(TransitionViewType));
         private GUIContent _sidePanelButton = new GUIContent("Panel", "Side Panel");
-        private GUIContent _switchNodeDrawingButton = new GUIContent("Hide", "Hide Nodes Content");
+        private GUIContent _switchNodeDrawingButton = new GUIContent("Short View", "Hide Nodes Content");
         private GUIContent _leftWidthButton = new GUIContent("<", "Node Width");
         private GUIContent _rightWidthButton = new GUIContent(">", "Node Width");
         private GUIContent _selectButton = new GUIContent("[ . . . ]", "Select All");
