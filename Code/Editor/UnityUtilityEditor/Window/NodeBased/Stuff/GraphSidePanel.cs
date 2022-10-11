@@ -55,8 +55,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             Rect position = new Rect(0f, 0f, _width, height);
 
             GUILayout.BeginArea(position, EditorStyles.helpBox);
+            _selectedIndex = GUILayout.Toolbar(_selectedIndex, _toolbarLabels);
+            GUILayout.Space(5f);
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos).y;
-            switch (_selectedIndex = GUILayout.Toolbar(_selectedIndex, _toolbarLabels))
+            switch (_selectedIndex)
             {
                 case 0: DrawContent(); break;
                 case 1: DrawNode(); break;
