@@ -48,13 +48,13 @@ namespace UnityUtilityEditor.Inspectors.Sound
                 GUILayout.Space(10f);
                 loop.boolValue = EditorGUILayout.Toggle(loop.boolValue, GUILayout.Width(25f));
                 pitch.floatValue = EditorGUILayout.FloatField(pitch.floatValue, GUILayout.Width(40f)).Clamp(0f, 3f);
-                time.floatValue = EditorGUILayout.FloatField(time.floatValue, GUILayout.Width(40f)).CutBefore(0f);
-                delay.floatValue = EditorGUILayout.FloatField(delay.floatValue, GUILayout.Width(40f)).CutBefore(0f);
+                time.floatValue = EditorGUILayout.FloatField(time.floatValue, GUILayout.Width(40f)).ClampMin(0f);
+                delay.floatValue = EditorGUILayout.FloatField(delay.floatValue, GUILayout.Width(40f)).ClampMin(0f);
                 GUILayout.Space(10f);
                 rising.boolValue = EditorGUILayout.Toggle(rising.boolValue, GUILayout.Width(25f));
                 if (!rising.boolValue)
                     GUI.enabled = false;
-                intensity.floatValue = EditorGUILayout.FloatField(intensity.floatValue, GUILayout.Width(40f)).CutBefore(0f);
+                intensity.floatValue = EditorGUILayout.FloatField(intensity.floatValue, GUILayout.Width(40f)).ClampMin(0f);
                 GUI.enabled = true;
                 GUILayout.Space(5f);
                 if (GUILayout.Button("X", GUILayout.Height(17f), GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))

@@ -16,7 +16,7 @@ namespace UnityUtility.Timers
 
         public bool IsRunning => _task.IsAlive;
         public float TargetTime => _routine.WaitTime;
-        public float CurrentTime => _routine.CurrentTime.CutAfter(_routine.WaitTime);
+        public float CurrentTime => _routine.CurrentTime.ClampMax(_routine.WaitTime);
         public float Progress => CurrentTime / _routine.WaitTime;
 
         public float TimeScale

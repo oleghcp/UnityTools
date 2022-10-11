@@ -20,7 +20,7 @@ namespace UnityUtility.Shooting
         public float CastRadius
         {
             get => _castRadius.CastRadius;
-            set => _castRadius.CastRadius = value.CutBefore(0f);
+            set => _castRadius.CastRadius = value.ClampMin(0f);
         }
 
         public bool HighPrecision
@@ -44,7 +44,7 @@ namespace UnityUtility.Shooting
         public float InitialPrecastOffset
         {
             get => _initialPrecastOffset;
-            set => _initialPrecastOffset = value.CutAfter(0f);
+            set => _initialPrecastOffset = value.ClampMax(0f);
         }
 
 #if INCLUDE_PHYSICS

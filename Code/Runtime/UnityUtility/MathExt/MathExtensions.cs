@@ -50,6 +50,42 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Returns a value indicating whether the specified number evaluates to negative or positive infinity.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInfinity(this double value)
+        {
+            return double.IsInfinity(value);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the specified number evaluates to negative infinity.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNegInfinity(this double value)
+        {
+            return double.IsNegativeInfinity(value);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the specified number evaluates to positive infinity.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPosInfinity(this double value)
+        {
+            return double.IsPositiveInfinity(value);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the specified number evaluates to not a number.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNaN(this double value)
+        {
+            return double.IsNaN(value);
+        }
+
+        /// <summary>
         /// Compares two big floating point values if they are similar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,8 +97,15 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Counts digits amount.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Digits(this int number)
+        {
+            return (number != 0) ? (int)Math.Ceiling(Math.Log10(Math.Abs(number) + 0.5d)) : 1;
+        }
+
+        /// <summary>
+        /// Counts digits amount.
+        /// </summary>
+        public static int Digits(this long number)
         {
             return (number != 0) ? (int)Math.Ceiling(Math.Log10(Math.Abs(number) + 0.5d)) : 1;
         }
@@ -71,7 +114,16 @@ namespace UnityUtility.MathExt
         /// Returns the sign of value (1, -1 or 0).
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sign0(this float value)
+        public static int Sign0(this float value)
+        {
+            return Math.Sign(value);
+        }
+
+        /// <summary>
+        /// Returns the sign of value (1, -1 or 0).
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sign0(this double value)
         {
             return Math.Sign(value);
         }
@@ -81,6 +133,15 @@ namespace UnityUtility.MathExt
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sign0(this int value)
+        {
+            return Math.Sign(value);
+        }
+
+        /// <summary>
+        /// Returns the sign of value (1, -1 or 0).
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sign0(this long value)
         {
             return Math.Sign(value);
         }
@@ -97,6 +158,14 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Returns the sign of value (1 of -1).
         /// </summary>
+        public static float Sign(this double value)
+        {
+            return (value >= 0) ? 1 : (-1);
+        }
+
+        /// <summary>
+        /// Returns the sign of value (1 of -1).
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sign(this int value)
         {
@@ -104,10 +173,25 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Returns the sign of value (1 of -1).
+        /// </summary>
+        public static long Sign(this long value)
+        {
+            return (value >= 0) ? 1 : (-1);
+        }
+
+        /// <summary>
         /// Returns true if the value is in range between min [inclusive] and max [inclusive].
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsInBounds(this float value, float min, float max)
+        {
+            return value >= min && value <= max;
+        }
+
+        /// <summary>
+        /// Returns true if the value is in range between min [inclusive] and max [inclusive].
+        /// </summary>
+        public static bool IsInBounds(this double value, double min, double max)
         {
             return value >= min && value <= max;
         }
@@ -115,8 +199,15 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Returns true if the value is in range between min [inclusive] and max [exclusive].
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsInBounds(this int value, int min, int max)
+        {
+            return value >= min && value < max;
+        }
+
+        /// <summary>
+        /// Returns true if the value is in range between min [inclusive] and max [exclusive].
+        /// </summary>
+        public static bool IsInBounds(this long value, long min, long max)
         {
             return value >= min && value < max;
         }
@@ -124,7 +215,6 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Rounds the float value to the nearest integer.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Round(this float value)
         {
             //return (int)Math.Round(value, MidpointRounding.AwayFromZero);
@@ -134,7 +224,6 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Rounds the float value to the nearest value multiple to the specified step.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Round(this float value, float snapStep)
         {
             return (value / snapStep).Round() * snapStep;
@@ -144,18 +233,18 @@ namespace UnityUtility.MathExt
         /// Returns the smallest integer greater to or equal to the value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Ceiling(this float value)
+        public static float Ceiling(this float value)
         {
-            return (int)MathF.Ceiling(value);
+            return MathF.Ceiling(value);
         }
 
         /// <summary>
         /// Returns the largest integer smaller to or equal to the value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Floor(this float value)
+        public static float Floor(this float value)
         {
-            return (int)MathF.Floor(value);
+            return MathF.Floor(value);
         }
 
         /// <summary>
@@ -170,7 +259,6 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Returns the decimal part of the specified value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Decim(this float value)
         {
             return value - (int)value;
@@ -189,7 +277,25 @@ namespace UnityUtility.MathExt
         /// Returns the absolute value of the number.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Abs(this double value)
+        {
+            return Math.Abs(value);
+        }
+
+        /// <summary>
+        /// Returns the absolute value of the number.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Abs(this int value)
+        {
+            return Math.Abs(value);
+        }
+
+        /// <summary>
+        /// Returns the absolute value of the number.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Abs(this long value)
         {
             return Math.Abs(value);
         }
@@ -207,9 +313,27 @@ namespace UnityUtility.MathExt
         /// Raises the value to the specified power.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Pow(this double value, double pow)
+        {
+            return Math.Pow(value, pow);
+        }
+
+        /// <summary>
+        /// Raises the value to the specified power.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Pow(this int value, float pow)
         {
             return MathF.Pow(value, pow);
+        }
+
+        /// <summary>
+        /// Raises the value to the specified power.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Pow(this long value, double pow)
+        {
+            return Math.Pow(value, pow);
         }
 
         /// <summary>
@@ -222,12 +346,30 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Returns square root of the value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sqrt(this double value)
+        {
+            return Math.Sqrt(value);
+        }
+
+        /// <summary>
         /// Returns cubic root of the value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cbrt(this float value)
         {
             return MathF.Cbrt(value);
+        }
+
+        /// <summary>
+        /// Returns cubic root of the value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Cbrt(this double value)
+        {
+            return Math.Cbrt(value);
         }
 
         /// <summary>
@@ -240,12 +382,30 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Returns square root of the value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sqrt(this long value)
+        {
+            return Math.Sqrt(value);
+        }
+
+        /// <summary>
         /// Returns cubic root of the value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cbrt(this int value)
         {
             return MathF.Cbrt(value);
+        }
+
+        /// <summary>
+        /// Returns cubic root of the value.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Cbrt(this long value)
+        {
+            return Math.Cbrt(value);
         }
 
         /// <summary>
@@ -278,6 +438,27 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Clamps the value between a minimum float and maximum float value.
         /// </summary>
+#if UNITY_2021_2_OR_NEWER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        public static double Clamp(this double value, double min, double max)
+        {
+#if UNITY_2021_2_OR_NEWER
+            return Math.Clamp(value, min, max);
+#else
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+#endif
+        }
+
+        /// <summary>
+        /// Clamps the value between a minimum float and maximum float value.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(this float value, in (float min, float max) range)
         {
@@ -285,10 +466,26 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
-        /// Clamps the value between the specified minimum float value and float.PositiveInfinity.
+        /// Clamps the value between a minimum float and maximum float value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float CutBefore(this float value, float min)
+        public static double Clamp(this double value, in (double min, double max) range)
+        {
+            return Clamp(value, range.min, range.max);
+        }
+
+        /// <summary>
+        /// Clamps the value between the specified minimum float value and float.PositiveInfinity.
+        /// </summary>
+        public static float ClampMin(this float value, float min)
+        {
+            return value < min ? min : value;
+        }
+
+        /// <summary>
+        /// Clamps the value between the specified minimum float value and float.PositiveInfinity.
+        /// </summary>
+        public static double ClampMin(this double value, double min)
         {
             return value < min ? min : value;
         }
@@ -296,8 +493,15 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Clamps the value between float.NegativeInfinity and the specified maximum float value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float CutAfter(this float value, float max)
+        public static float ClampMax(this float value, float max)
+        {
+            return value > max ? max : value;
+        }
+
+        /// <summary>
+        /// Clamps the value between float.NegativeInfinity and the specified maximum float value.
+        /// </summary>
+        public static double ClampMax(this double value, double max)
         {
             return value > max ? max : value;
         }
@@ -311,6 +515,15 @@ namespace UnityUtility.MathExt
             return Mathf.Clamp01(value);
         }
 
+        /// <summary>        
+        /// Clamps the value between 0 and 1.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Clamp01(this double value)
+        {
+            return Math.Clamp(value, 0, 1);
+        }
+
         /// <summary>
         /// Clamps the value between a minimum int and maximum int value.
         /// </summary>
@@ -321,10 +534,38 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Clamps the value between a minimum int and maximum int value.
+        /// </summary>
+#if UNITY_2021_2_OR_NEWER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        public static long Clamp(this long value, long min, long max)
+        {
+#if UNITY_2021_2_OR_NEWER
+            return Math.Clamp(value, min, max);
+#else
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+#endif
+        }
+
+        /// <summary>
         /// Clamps the value between the specified minimum int value and int.MaxValue.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CutBefore(this int value, int min)
+        public static int ClampMin(this int value, int min)
+        {
+            return value < min ? min : value;
+        }
+
+        /// <summary>
+        /// Clamps the value between the specified minimum int value and int.MaxValue.
+        /// </summary>
+        public static long ClampMin(this long value, long min)
         {
             return value < min ? min : value;
         }
@@ -332,8 +573,15 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Clamps the value between int.MinValue and the specified maximum int value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CutAfter(this int value, int max)
+        public static int ClampMax(this int value, int max)
+        {
+            return value > max ? max : value;
+        }
+
+        /// <summary>
+        /// Clamps the value between int.MinValue and the specified maximum int value.
+        /// </summary>
+        public static long ClampMax(this long value, long max)
         {
             return value > max ? max : value;
         }
@@ -350,9 +598,26 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Loops the value t, so that it is never larger than length and never smaller than 0.
         /// </summary>
+        public static double Repeat(this double value, double length)
+        {
+            return Clamp(value - Math.Floor(value / length) * length, 0, length);
+        }
+
+        /// <summary>
+        /// Loops the value t, so that it is never larger than length and never smaller than 0.
+        /// </summary>
         public static int Repeat(this int value, int length)
         {
             int res = value % length;
+            return res >= 0 ? res : res + length;
+        }
+
+        /// <summary>
+        /// Loops the value t, so that it is never larger than length and never smaller than 0.
+        /// </summary>
+        public static long Repeat(this long value, long length)
+        {
+            long res = value % length;
             return res >= 0 ? res : res + length;
         }
 
@@ -368,7 +633,26 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double PingPong(this double value, float length)
+        {
+            value = Repeat(value, length * 2);
+            return length - Math.Abs(value - length);
+        }
+
+        /// <summary>
+        /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
+        /// </summary>
         public static int PingPong(this int value, int length)
+        {
+            value = Repeat(value, length * 2);
+            return length - Math.Abs(value - length);
+        }
+
+        /// <summary>
+        /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
+        /// </summary>
+        public static long PingPong(this long value, int length)
         {
             value = Repeat(value, length * 2);
             return length - Math.Abs(value - length);
@@ -384,6 +668,15 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
+        /// Transfers the value from radians to degrees.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double ToDegrees(this double value)
+        {
+            return value * Mathf.Rad2Deg;
+        }
+
+        /// <summary>
         /// Transfers the value from degrees to radians.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -393,21 +686,12 @@ namespace UnityUtility.MathExt
         }
 
         /// <summary>
-        /// Returns true if the value is even.
+        /// Transfers the value from degrees to radians.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEven(this byte value)
+        public static double ToRadians(this double value)
         {
-            return value % 2 == 0;
-        }
-
-        /// <summary>
-        /// Returns true if the value is even.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEven(this int value)
-        {
-            return value % 2 == 0;
+            return value * Mathf.Deg2Rad;
         }
 
         /// <summary>

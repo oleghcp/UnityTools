@@ -18,11 +18,11 @@ namespace UnityUtilityEditor.Window.ShapeWizards
 
         private void Update()
         {
-            Edges = Edges.CutBefore(3);
+            Edges = Edges.ClampMin(3);
             Pivot = Pivot.Clamp01();
-            TopRadius = TopRadius.CutBefore(0f);
-            BottomRadius = BottomRadius.CutBefore(TopRadius);
-            Height = Height.CutBefore(0f);
+            TopRadius = TopRadius.ClampMin(0f);
+            BottomRadius = BottomRadius.ClampMin(TopRadius);
+            Height = Height.ClampMin(0f);
         }
 
         protected override string GenerateObjectName()

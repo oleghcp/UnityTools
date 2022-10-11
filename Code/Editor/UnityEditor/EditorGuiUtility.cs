@@ -98,7 +98,7 @@ namespace UnityEditor
                     height += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
             }
 
-            return height.CutBefore(EditorGUIUtility.singleLineHeight);
+            return height.ClampMin(EditorGUIUtility.singleLineHeight);
         }
 
         private static GUIContent TempContent(string label, Texture2D image, string tooltip)

@@ -298,7 +298,7 @@ namespace UnityUtility
         /// </summary>
         public static int RandomEven(this IRng self, int min, int max)
         {
-            if (!min.IsEven())
+            if (min % 2 != 0)
             {
                 if (max - min < 2)
                     throw Errors.RangeDoesNotContain("even");
@@ -314,7 +314,7 @@ namespace UnityUtility
         /// </summary>
         public static int RandomOdd(this IRng self, int min, int max)
         {
-            if (max.IsEven())
+            if (min % 2 == 0)
             {
                 if (min == max)
                     throw Errors.RangeDoesNotContain("odd");

@@ -389,7 +389,7 @@ namespace UnityUtilityEditor.Window
                 int linesCount = getLinesCount();
                 float linesHeight = EditorGUIUtility.singleLineHeight * linesCount;
                 float spacesHeight = EditorGUIUtility.standardVerticalSpacing * (linesCount + 4);
-                return (linesHeight + spacesHeight).CutAfter(Screen.currentResolution.height * 0.5f);
+                return (linesHeight + spacesHeight).ClampMax(Screen.currentResolution.height * 0.5f);
 
                 int getLinesCount()
                 {

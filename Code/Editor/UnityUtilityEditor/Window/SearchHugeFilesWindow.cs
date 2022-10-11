@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.MathExt;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window
@@ -160,42 +161,12 @@ namespace UnityUtilityEditor.Window
         {
             switch (sizeToolbarIndex)
             {
-                case 0: return Clamp(EditorGUILayout.LongField(size, GUILayout.Width(WIDTH)), 0L, long.MaxValue);
-                case 1: return (long)Clamp(EditorGUILayout.DoubleField(size / 1024d, GUILayout.Width(WIDTH)) * 1024d, 0d, double.MaxValue);
-                case 2: return (long)Clamp(EditorGUILayout.DoubleField(size / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d, 0d, double.MaxValue);
-                case 3: return (long)Clamp(EditorGUILayout.DoubleField(size / 1024d / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d * 1024d, 0d, double.MaxValue);
+                case 0: return EditorGUILayout.LongField(size, GUILayout.Width(WIDTH)).ClampMin(0L);
+                case 1: return (long)(EditorGUILayout.DoubleField(size / 1024d, GUILayout.Width(WIDTH)) * 1024d).ClampMin(0d);
+                case 2: return (long)(EditorGUILayout.DoubleField(size / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d).ClampMin(0d);
+                case 3: return (long)(EditorGUILayout.DoubleField(size / 1024d / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d * 1024d).ClampMin(0d);
                 default: throw new UnsupportedValueException(sizeToolbarIndex);
             }
-        }
-
-        private static long Clamp(long value, long min, long max)
-        {
-#if UNITY_2021_2_OR_NEWER
-            return Math.Clamp(value, min, max);
-#else
-            if (value < min)
-                return min;
-
-            if (value > max)
-                return max;
-
-            return value;
-#endif
-        }
-
-        private static double Clamp(double value, double min, double max)
-        {
-#if UNITY_2021_2_OR_NEWER
-            return Math.Clamp(value, min, max);
-#else
-            if (value < min)
-                return min;
-
-            if (value > max)
-                return max;
-
-            return value;
-#endif
         }
 
         private struct Container

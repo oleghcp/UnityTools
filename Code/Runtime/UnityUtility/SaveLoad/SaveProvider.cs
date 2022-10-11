@@ -161,7 +161,7 @@ namespace UnityUtility.SaveLoad
         {
             IEnumerator CollectAndSave()
             {
-                stepsPerFrame = stepsPerFrame.CutBefore(1);
+                stepsPerFrame = stepsPerFrame.ClampMin(1);
 
                 int counter = 0;
 

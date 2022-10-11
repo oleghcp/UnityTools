@@ -18,7 +18,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
             linePos.width *= 0.75f;
-            count.intValue = EditorGUI.IntField(linePos, label, count.intValue).CutBefore(0);
+            count.intValue = EditorGUI.IntField(linePos, label, count.intValue).ClampMin(0);
 
             linePos.x += linePos.width + EditorGuiUtility.StandardHorizontalSpacing;
             linePos.width = position.width - linePos.width - EditorGuiUtility.StandardHorizontalSpacing;

@@ -1,6 +1,5 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.MathExt;
@@ -51,7 +50,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 return;
 
             float maxWidth = winWidth * 0.5f;
-            _width = _width.CutAfter(maxWidth);
+            _width = _width.ClampMax(maxWidth);
             Rect position = new Rect(0f, 0f, _width, height);
 
             GUILayout.BeginArea(position, EditorStyles.helpBox);
@@ -127,7 +126,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                     case EventType.MouseDrag:
                         Vector2 mousePosition = e.mousePosition;
 
-                        if (resizeZone.Contains(mousePosition) || (_outOfBounds && IsInBounds(mousePosition.x, MIN_WIDTH, maxWidth)))
+                        if (resizeZone.Contains(mousePosition) || (_outOfBounds && mousePosition.x.IsInBounds(MIN_WIDTH, maxWidth)))
                         {
                             _dragging = true;
                             _outOfBounds = false;
@@ -137,7 +136,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                         {
                             _width = mousePosition.x;
 
-                            if (!IsInBounds(mousePosition.x, MIN_WIDTH, maxWidth))
+                            if (!mousePosition.x.IsInBounds(MIN_WIDTH, maxWidth))
                             {
                                 _width = _width.Clamp(MIN_WIDTH, maxWidth);
                                 _dragging = false;
@@ -152,12 +151,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         }
 
         private bool _outOfBounds;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsInBounds(float value, float min, float max)
-        {
-            return value >= min && value <= max;
-        }
     }
 }
 #endif

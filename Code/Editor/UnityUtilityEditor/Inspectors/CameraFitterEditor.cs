@@ -141,7 +141,7 @@ namespace UnityUtilityEditor.Inspectors
 
             void drawSize(SerializedProperty property, string label)
             {
-                property.floatValue = EditorGUILayout.FloatField(label, property.floatValue).CutBefore(0f);
+                property.floatValue = EditorGUILayout.FloatField(label, property.floatValue).ClampMin(0f);
             }
 
             void drawFov(SerializedProperty property, string label)
@@ -154,7 +154,7 @@ namespace UnityUtilityEditor.Inspectors
                 if (GUILayout.Button("- / -", GUILayout.Width(60f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
                     _widthToHeight = !_widthToHeight;
                 float calculatedRatio = GetRatio(width, height);
-                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).CutBefore(0f);
+                float ratio = EditorGUILayout.FloatField(GetRatioLabel(), calculatedRatio).ClampMin(0f);
                 return ratio;
             }
         }

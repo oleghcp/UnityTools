@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Window.ShapeWizards
 
         private void Update()
         {
-            Vertices = Vertices.CutBefore(3);
+            Vertices = Vertices.ClampMin(3);
         }
 
         protected override string GenerateObjectName()

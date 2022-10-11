@@ -33,7 +33,7 @@ namespace UnityUtility.GameConsole
         public int LinesLimit
         {
             get => _linesLimit;
-            set => _linesLimit = value.CutBefore(0);
+            set => _linesLimit = value.ClampMin(0);
         }
     }
 

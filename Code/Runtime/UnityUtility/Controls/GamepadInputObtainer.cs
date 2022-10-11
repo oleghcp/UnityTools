@@ -1,10 +1,9 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
-using System.Collections.Generic;
-using UnityUtility.MathExt;
-using System.Runtime.CompilerServices;
 
 namespace UnityUtility.Controls
 {
@@ -139,7 +138,7 @@ namespace UnityUtility.Controls
         {
             for (int i = 0; i < 4; i++)
             {
-                float value = i.IsEven() ? -_axisStates[i / 2] : _axisStates[i / 2];
+                float value = i % 2 == 0 ? -_axisStates[i / 2] : _axisStates[i / 2];
                 CheckAxisBtnState(value, i);
             }
 

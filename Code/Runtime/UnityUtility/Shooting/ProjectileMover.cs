@@ -26,13 +26,13 @@ namespace UnityUtility.Shooting
         public float StartSpeed
         {
             get => _startSpeed;
-            set => _startSpeed = value.CutBefore(0f);
+            set => _startSpeed = value.ClampMin(0f);
         }
 
         public int Ricochets
         {
             get => _ricochets.Count;
-            set => _ricochets.Count = value.CutBefore(0);
+            set => _ricochets.Count = value.ClampMin(0);
         }
 
         public float SpeedRemainder

@@ -230,7 +230,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
         private static float GetTangentFactor(in Vector2 start, in Vector2 end)
         {
             float x = (end.x - start.x).Abs();
-            float y = (end.y - start.y).Abs().CutAfter(x);
+            float y = (end.y - start.y).Abs().ClampMax(x);
             return (x + y) * 0.3f;
         }
 

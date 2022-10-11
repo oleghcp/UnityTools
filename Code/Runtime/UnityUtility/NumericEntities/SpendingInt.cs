@@ -30,12 +30,12 @@ namespace UnityUtility.NumericEntities
 
         public int CurValue
         {
-            get => _curValue.CutBefore(0);
-            set => _curValue = value.CutAfter(_capacity);
+            get => _curValue.ClampMin(0);
+            set => _curValue = value.ClampMax(_capacity);
         }
 
-        public int Shortage => (_capacity - _curValue).CutAfter(_capacity);
-        public int ReducingExcess => _curValue.CutAfter(0).Abs();
+        public int Shortage => (_capacity - _curValue).ClampMax(_capacity);
+        public int ReducingExcess => _curValue.ClampMax(0).Abs();
         public float Ratio => NumericHelper.GetRatio(CurValue, _capacity);
         public bool IsEmpty => _curValue <= 0;
         public bool IsFull => _curValue == _capacity;
@@ -67,7 +67,7 @@ namespace UnityUtility.NumericEntities
             if (delta < 0)
                 throw Errors.NegativeParameter(nameof(delta));
 
-            _curValue = (_curValue + delta).CutAfter(_capacity);
+            _curValue = (_curValue + delta).ClampMax(_capacity);
         }
 
         public void RestoreFull()

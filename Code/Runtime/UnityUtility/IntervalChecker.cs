@@ -28,7 +28,7 @@ namespace UnityUtility
         public float CurrentValue
         {
             get => _currentValue;
-            set => _currentValue = value.CutAfter(_interval);
+            set => _currentValue = value.ClampMax(_interval);
         }
 
         public float Ratio
@@ -37,7 +37,7 @@ namespace UnityUtility
             set => _currentValue = _interval * value.Clamp01();
         }
 
-        public float Shortage => (_interval - _currentValue).CutBefore(0f);
+        public float Shortage => (_interval - _currentValue).ClampMin(0f);
 
         public IntervalChecker(float interval)
         {
@@ -54,7 +54,7 @@ namespace UnityUtility
                 throw Errors.NegativeParameter(nameof(interval));
 
             _interval = interval;
-            _currentValue = startValue.CutAfter(interval);
+            _currentValue = startValue.ClampMax(interval);
         }
 
         public bool HardCheckDelta(float deltaValue)

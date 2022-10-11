@@ -85,7 +85,7 @@ namespace System.IO
                 maxLength = j;
             }
 
-            return parent.Substring(0, maxLength.CutBefore(0));
+            return parent.Substring(0, maxLength.ClampMin(0));
         }
     }
 

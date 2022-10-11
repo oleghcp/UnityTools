@@ -25,11 +25,11 @@ namespace UnityUtility.NumericEntities
             }
         }
 
-        public float CurValue => _filler.CutAfter(_threshold);
+        public float CurValue => _filler.ClampMax(_threshold);
         public bool FilledFully => _filler >= _threshold;
         public bool IsEmpty => _filler == 0f;
         public float Ratio => NumericHelper.GetRatio(CurValue, _threshold);
-        public float Excess => (_filler - _threshold).CutBefore(0f);
+        public float Excess => (_filler - _threshold).ClampMin(0f);
         public float Shortage => (_threshold - _filler).Clamp(0f, _threshold);
 
         public FilledFloat(float threshold)
@@ -60,8 +60,8 @@ namespace UnityUtility.NumericEntities
             if (delta < 0f)
                 throw Errors.NegativeParameter(nameof(delta));
 
-            _filler = _filler.CutAfter(_threshold);
-            _filler -= delta.CutAfter(_filler);
+            _filler = _filler.ClampMax(_threshold);
+            _filler -= delta.ClampMax(_filler);
         }
 
         public void RemoveAll()

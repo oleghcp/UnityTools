@@ -34,8 +34,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             {
                 Vector2 winSize = _window.MapSize;
 
-                int widthDivs = (worldRect.width / spacing).Ceiling() + 1;
-                int heightDivs = (worldRect.height / spacing).Ceiling() + 1;
+                int widthDivs = (int)(worldRect.width / spacing).Ceiling() + 1;
+                int heightDivs = (int)(worldRect.height / spacing).Ceiling() + 1;
 
                 Vector2 lineStartPos = new Vector2(worldRect.x.Round(spacing),
                                                    worldRect.y.Round(spacing));

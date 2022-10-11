@@ -16,7 +16,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
-            radius.floatValue = EditorGUI.FloatField(linePos, label, radius.floatValue).CutBefore(0f);
+            radius.floatValue = EditorGUI.FloatField(linePos, label, radius.floatValue).ClampMin(0f);
 
             if (radius.floatValue > 0f)
             {
