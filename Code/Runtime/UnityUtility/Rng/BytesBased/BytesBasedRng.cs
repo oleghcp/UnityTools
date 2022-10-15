@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace UnityUtility.Rng.BytesBased
 {
@@ -40,8 +41,8 @@ namespace UnityUtility.Rng.BytesBased
 
         protected override float NextInternal(float minValue, float maxValue)
         {
-            float normalizedRandomFloat = RngHelper.GetNormalizedFloat(RandomUint16());
-            return RngHelper.RandomFloat(minValue, maxValue, normalizedRandomFloat);
+            float normalizedRandomFloat = RandomUint16() / (float)ushort.MaxValue;
+            return Mathf.LerpUnclamped(minValue, maxValue, normalizedRandomFloat);
         }
 
         private byte RandomUint8()

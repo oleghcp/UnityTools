@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace UnityUtility.Rng
 {
@@ -58,8 +59,8 @@ namespace UnityUtility.Rng
         protected override float NextInternal(float minValue, float maxValue)
         {
             Xorshift32();
-            float normalizedRandomFloat = (float)RngHelper.GetNormalizedDouble(_num32);
-            return RngHelper.RandomFloat(minValue, maxValue, normalizedRandomFloat);
+            float normalizedRandomFloat = _num32 / (float)uint.MaxValue;
+            return Mathf.LerpUnclamped(minValue, maxValue, normalizedRandomFloat);
         }
 
         private void Xorshift32()

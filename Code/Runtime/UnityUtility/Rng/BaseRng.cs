@@ -18,7 +18,7 @@ namespace UnityUtility.Rng
             if (minValue > maxValue)
                 throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
-            return RngHelper.RandomFloat(minValue, maxValue, (float)Sample());
+            return UnityEngine.Mathf.LerpUnclamped(minValue, maxValue, (float)Sample());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

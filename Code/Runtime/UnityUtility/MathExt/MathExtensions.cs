@@ -478,10 +478,27 @@ namespace UnityUtility.MathExt
         /// <summary>
         /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
         /// </summary>
+        public static double Ratio(this double value, double a, double b)
+        {
+            return a == b ? 0d : Clamp01((value - a) / (b - a));
+        }
+
+        /// <summary>
+        /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Ratio(this int value, int a, int b)
         {
             return Mathf.InverseLerp(a, b, value);
+        }
+
+        /// <summary>
+        /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Ratio(this long value, long a, long b)
+        {
+            return Ratio(a, b, (double)value);
         }
 
         /// <summary>
