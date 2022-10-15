@@ -63,11 +63,13 @@ namespace UnityEngine
             self.localRotation = targetLocalRot;
         }
 
-        public static void SetLocalParams(this Transform self, in Vector3 localPos, in Quaternion localRot)
+#if !UNITY_2022_1_OR_NEWER
+        public static void SetLocalPositionAndRotation(this Transform self, in Vector3 localPos, in Quaternion localRot)
         {
             self.localPosition = localPos;
             self.localRotation = localRot;
         }
+#endif
 
         public static void SetLocalParams(this Transform self, in Vector3 localPos, in Quaternion localRot, in Vector3 localScl)
         {
