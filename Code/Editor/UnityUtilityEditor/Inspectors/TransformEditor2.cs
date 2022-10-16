@@ -2,6 +2,7 @@
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.MathExt;
 
 namespace UnityUtilityEditor.Inspectors
 {
@@ -16,6 +17,9 @@ namespace UnityUtilityEditor.Inspectors
         private SerializedProperty _rotProp;
         private SerializedProperty _sclProp;
 
+        private string[] _toolbarNames = new string[] { "Local", "World" };
+        private static bool _world;
+
         private GUILayoutOption[] _buttonOptions = new[]
         {
             GUILayout.Height(EditorGUIUtility.singleLineHeight),
@@ -25,6 +29,11 @@ namespace UnityUtilityEditor.Inspectors
         private GUILayoutOption[] _areaOptions = new[]
         {
             GUILayout.Width(EditorGUIUtility.singleLineHeight),
+        };
+
+        private GUILayoutOption[] _labelOptions = new[]
+        {
+            GUILayout.Width(60f),
         };
 
         private void OnEnable()
@@ -40,6 +49,8 @@ namespace UnityUtilityEditor.Inspectors
 
         public override void OnInspectorGUI()
         {
+            DrawPanel();
+
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical(_areaOptions);
@@ -47,10 +58,22 @@ namespace UnityUtilityEditor.Inspectors
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical();
-            _builtInEditor.OnInspectorGUI();
+            if (_world)
+                DrawGlobal();
+            else
+                _builtInEditor.OnInspectorGUI();
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawPanel()
+        {
+            bool hasParent = target.parent;
+
+            GUI.enabled = hasParent;
+            _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames).ToBool();
+            GUI.enabled = true;
         }
 
         private void DrawButtons()
@@ -58,6 +81,8 @@ namespace UnityUtilityEditor.Inspectors
             serializedObject.Update();
 
             GUILayout.Space(VERTICAL_BUTTON_OFFSET);
+
+            GUI.enabled = !_world;
 
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
                 _posProp.vector3Value = Vector3.zero;
@@ -68,7 +93,33 @@ namespace UnityUtilityEditor.Inspectors
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
                 _sclProp.vector3Value = Vector3.one;
 
+            GUI.enabled = true;
+
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawGlobal()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Position", _labelOptions);
+            GUI.enabled = false;
+            EditorGUILayout.Vector3Field(GUIContent.none, target.position);
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Rotation", _labelOptions);
+            GUI.enabled = false;
+            EditorGUILayout.Vector3Field(GUIContent.none, target.rotation.eulerAngles);
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Scale", _labelOptions);
+            GUI.enabled = false;
+            EditorGUILayout.Vector3Field(GUIContent.none, target.lossyScale);
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
