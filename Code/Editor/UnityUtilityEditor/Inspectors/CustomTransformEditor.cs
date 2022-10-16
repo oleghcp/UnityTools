@@ -16,11 +16,11 @@ namespace UnityUtilityEditor.Inspectors
         private const float BTN_WIDTH = 40f;
         private const float LABEL_WIDTH = 40f;
 
-        private string[] _toolbarNames = new string[] { "Local", "World" };
+        private readonly string[] _toolbarNames = new string[] { "Local", "World" };
 
-        private string _pivotModeWarning = $"→ {PivotMode.Center}";
-        private string _pivotRotationWarning = $"→ {PivotRotation.Global}";
-        private Rect _sceneGuiArea = new Rect(5f, 5f, 65f, 100f);
+        private readonly Rect _sceneGuiArea = new Rect(5f, 5f, 65f, 100f);
+        private readonly string _pivotModeWarning = $"→ {PivotMode.Center}";
+        private readonly string _pivotRotationWarning = $"→ {PivotRotation.Global}";
 
         private static bool _world;
 

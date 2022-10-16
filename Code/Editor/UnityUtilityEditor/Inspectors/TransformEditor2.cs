@@ -2,6 +2,7 @@
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility;
 using UnityUtility.MathExt;
 
 namespace UnityUtilityEditor.Inspectors
@@ -17,8 +18,12 @@ namespace UnityUtilityEditor.Inspectors
         private SerializedProperty _rotProp;
         private SerializedProperty _sclProp;
 
-        private string[] _toolbarNames = new string[] { "Local", "World" };
+        private readonly string[] _toolbarNames = new string[] { "Local", "World" };
         private static bool _world;
+
+        private readonly Rect _sceneGuiArea = new Rect(5f, 5f, 65f, 100f);
+        private readonly string _pivotModeWarning = $"→ {PivotMode.Center}";
+        private readonly string _pivotRotationWarning = $"→ {PivotRotation.Global}";
 
         private GUILayoutOption[] _buttonOptions = new[]
         {
@@ -45,6 +50,19 @@ namespace UnityUtilityEditor.Inspectors
             _posProp = serializedObject.FindProperty("m_LocalPosition");
             _rotProp = serializedObject.FindProperty("m_LocalRotation");
             _sclProp = serializedObject.FindProperty("m_LocalScale");
+
+#if UNITY_2021_1_OR_NEWER
+            Tools.pivotModeChanged += SceneView.RepaintAll;
+            Tools.pivotRotationChanged += SceneView.RepaintAll;
+#endif
+        }
+
+        private void OnDisable()
+        {
+#if UNITY_2021_1_OR_NEWER
+            Tools.pivotModeChanged -= SceneView.RepaintAll;
+            Tools.pivotRotationChanged -= SceneView.RepaintAll;
+#endif
         }
 
         public override void OnInspectorGUI()
@@ -65,6 +83,28 @@ namespace UnityUtilityEditor.Inspectors
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
+        }
+
+        private void OnSceneGUI()
+        {
+            Handles.BeginGUI();
+            GUILayout.BeginArea(_sceneGuiArea);
+
+            if (Tools.pivotMode != PivotMode.Pivot)
+            {
+                GUI.color = Colours.Cyan;
+                GUILayout.Label(_pivotModeWarning, EditorStylesExt.Rect, GUILayout.Height(25f));
+            }
+
+            if (Tools.pivotRotation != PivotRotation.Local)
+            {
+                GUI.color = Colours.Yellow;
+                GUILayout.Label(_pivotRotationWarning, EditorStylesExt.Rect, GUILayout.Height(25f));
+            }
+
+            GUI.color = Colours.White;
+            GUILayout.EndArea();
+            Handles.EndGUI();
         }
 
         private void DrawPanel()
