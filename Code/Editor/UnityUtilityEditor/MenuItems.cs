@@ -2,7 +2,6 @@
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.Inspectors;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
 
@@ -88,12 +87,6 @@ namespace UnityUtilityEditor
         private static void FindHugeFiles()
         {
             SearchHugeFilesWindow.Create();
-        }
-
-        [MenuItem(nameof(UnityUtility) + "/Switch Transform Editor")]
-        private static void SwitchTransformEditor()
-        {
-            TransformEditor.SwitchType();
         }
 
         [MenuItem(nameof(UnityUtility) + "/About", false, 1)]

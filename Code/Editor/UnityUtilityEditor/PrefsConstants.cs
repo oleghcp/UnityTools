@@ -2,7 +2,6 @@
 {
     internal static class PrefsConstants
     {
-        public const string BUILTIN_TRANSFORM_EDITOR_KEY = "uu_ibte";
         public const string ASSEMBLY_INDEX_KEY = "uu_csowai";
         public const string WIDTH_TO_HEIGHT_KEY = "uu_cfw2h";
 #if UNITY_2019_3_OR_NEWER
