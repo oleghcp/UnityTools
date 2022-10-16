@@ -6,7 +6,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Inspectors
 {
-    [CustomEditor(typeof(Transform))]
+    //[CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor
     {
         private static Action<bool> _onSwitched;
