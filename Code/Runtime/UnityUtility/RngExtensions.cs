@@ -29,10 +29,9 @@ namespace UnityUtility
         /// <summary>
         /// Returns true with chance from 0f to 1f.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Chance(this IRng self, float chance)
         {
-            return chance < 1f ? chance > self.Next(chance) : true;
+            return chance >= 1f ? true : chance > self.Next(0f, 1f);
         }
 
         /// <summary>
