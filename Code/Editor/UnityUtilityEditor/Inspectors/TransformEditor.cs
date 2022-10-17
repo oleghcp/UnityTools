@@ -10,6 +10,7 @@ namespace UnityUtilityEditor.Inspectors
     [CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor<Transform>
     {
+        private const string EDITOR_TYPE_NAME = "UnityEditor.TransformInspector";
         private const string UNDO_NAME = "Transform";
         private const string BUTTON_NAME = "X";
         private const float VERTICAL_OFFSET = 2f;
@@ -48,8 +49,8 @@ namespace UnityUtilityEditor.Inspectors
 
         private void OnEnable()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(Editor));
-            Type type = assembly.GetType("UnityEditor.TransformInspector");
+            Type type = Assembly.GetAssembly(typeof(Editor))
+                                .GetType(EDITOR_TYPE_NAME);
             _builtInEditor = CreateEditor(target, type);
 
             _posProp = serializedObject.FindProperty("m_LocalPosition");
@@ -68,6 +69,7 @@ namespace UnityUtilityEditor.Inspectors
             Tools.pivotModeChanged -= SceneView.RepaintAll;
             Tools.pivotRotationChanged -= SceneView.RepaintAll;
 #endif
+            DestroyImmediate(_builtInEditor);
         }
 
         public override void OnInspectorGUI()
