@@ -221,10 +221,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 
         private SerializedProperty GetProperty()
         {
-            return _source.Node
-                          .FindSubProperty(RawNode.ArrayFieldName)
-                          .EnumerateArrayElements()
-                          .First(item => item.FindPropertyRelative(Transition.NodeIdFieldName).intValue == _destination.Node.Id);
+            SerializedProperty nodeProp = _source.Node.NodeProp;
+            return nodeProp.FindPropertyRelative(RawNode.ArrayFieldName)
+                           .EnumerateArrayElements()
+                           .First(item => item.FindPropertyRelative(Transition.NodeIdFieldName).intValue == _destination.Node.Id);
         }
 
         private static float GetTangentFactor(in Vector2 start, in Vector2 end)

@@ -14,7 +14,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
     {
         private const float SERV_NODE_WIDTH = 150f;
 
-        private readonly Color _headerColor;
         private readonly int _id;
         private readonly Type _systemType;
         private readonly NodeType _type;
@@ -56,7 +55,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 
         public IReadOnlyList<TransitionViewer> TransitionViewers => _transitionViewers;
         public SerializedProperty NodeProp => _nodeProp;
-        public string Name => _nameProp.stringValue;
+        public SerializedProperty NameProp => _nameProp;
         public NodeDrawer NodeDrawer => _nodeDrawer;
 
         public Vector2 Position
@@ -140,19 +139,12 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
             _in = new PortViewer(this, PortType.In, _map);
             _out = new PortViewer(this, PortType.Out, _map);
             _nodeDrawer = _map.GetDrawer(_systemType);
-
-            _headerColor = GetHeaderColor();
         }
 
         public void SetSerializedProperty(SerializedProperty nodeProp)
         {
             _nodeProp = nodeProp;
             _nameProp = nodeProp.FindPropertyRelative(RawNode.NameFieldName);
-        }
-
-        public SerializedProperty FindSubProperty(string name)
-        {
-            return _nodeProp.FindPropertyRelative(name);
         }
 
         public void CreateConnections()
@@ -217,8 +209,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
             nodeRect.size -= _map.UI_SHRINK;
 
             GUILayout.BeginArea(nodeRect);
-            drawHeader();
-            drawContent();
+            _nodeDrawer.OnHeaderGui(_window.RootNodeId == _id, _nameProp, ref _renaming);
+            if (_window.Camera.Size <= 1f)
+                _nodeDrawer.OnGui(_nodeProp, nodeRect.width, _window.FullDrawing);
             GUILayout.EndArea();
 
             void drawPorts()
@@ -228,34 +221,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                     if (_type != NodeType.Common) _in.Draw();
                     if (_type != NodeType.Exit) _out.Draw();
                 }
-            }
-
-            void drawHeader()
-            {
-                SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
-
-                if (_renaming)
-                {
-                    GUILayout.BeginHorizontal();
-                    nameProperty.stringValue = EditorGUILayout.TextField(nameProperty.stringValue);
-                    if (GUILayout.Button("V", GUILayout.Width(EditorGuiUtility.SmallButtonWidth), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
-                        _renaming = false;
-                    GUILayout.EndHorizontal();
-                }
-                else
-                {
-                    GUI.color = _headerColor;
-                    EditorGUILayout.LabelField(nameProperty.stringValue, EditorStylesExt.Rect);
-                    GUI.color = Colours.White;
-                }
-            }
-
-            void drawContent()
-            {
-                if (_window.Camera.Size > 1f)
-                    return;
-
-                _nodeDrawer.OnGui(_nodeProp, nodeRect.width, _window.FullDrawing);
             }
         }
 
@@ -422,8 +387,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
             {
                 string defaultName = SerializedGraph.GetDefaultNodeName(_systemType, _id);
                 _nodeProp.serializedObject.Update();
-                SerializedProperty nameProperty = _nodeProp.FindPropertyRelative(RawNode.NameFieldName);
-                nameProperty.stringValue = defaultName;
+                _nameProp.stringValue = defaultName;
                 _nodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
@@ -437,7 +401,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                 if (item == this || item.Type == NodeType.Common)
                     continue;
 
-                list.AddItem(item.Name, false, () => createTransition(item.In));
+                list.AddItem(item._nameProp.stringValue, false, () => createTransition(item.In));
             }
 
             list.ShowMenu(clickPosition);
@@ -471,18 +435,6 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
             else
             {
                 _position += mouseDelta * _window.Camera.Size;
-            }
-        }
-
-        private Color GetHeaderColor()
-        {
-            switch (_type)
-            {
-                case NodeType.Real: return _window.RootNodeId == _id ? Colours.Orange : Colours.Cyan;
-                case NodeType.Common: return Colours.Yellow;
-                case NodeType.Hub: return Colours.Silver;
-                case NodeType.Exit: return Colours.Red;
-                default: throw new UnsupportedValueException(_type);
             }
         }
 

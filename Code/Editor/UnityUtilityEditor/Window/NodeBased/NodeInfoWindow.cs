@@ -23,7 +23,7 @@ namespace UnityUtilityEditor.Window.NodeBased
         public static void Open(NodeViewer nodeEditor, GraphEditorWindow mainWindow)
         {
             NodeInfoWindow window = CreateInstance<NodeInfoWindow>();
-            window.titleContent = new GUIContent(nodeEditor.FindSubProperty(RawNode.NameFieldName).stringValue);
+            window.titleContent = new GUIContent(nodeEditor.NameProp.stringValue);
             window.SetUp(nodeEditor, mainWindow);
             window.ShowAuxWindow();
         }
@@ -68,7 +68,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(tab, tabWidth);
-                GUILayout.Label(item.Destination.Node.Name);
+                GUILayout.Label(item.Destination.Node.NameProp.stringValue);
                 if (GUILayout.Button("Remove", buttonWidth))
                 {
                     _nodeEditor.RemoveTransition(item);

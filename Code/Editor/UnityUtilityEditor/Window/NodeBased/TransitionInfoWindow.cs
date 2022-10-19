@@ -48,8 +48,8 @@ namespace UnityUtilityEditor.Window.NodeBased
         {
             _transitionProp.serializedObject.Update();
 
-            string from = _transition.Source.Node.FindSubProperty(RawNode.NameFieldName).stringValue;
-            string to = _transition.Destination.Node.FindSubProperty(RawNode.NameFieldName).stringValue;
+            string from = _transition.Source.Node.NameProp.stringValue;
+            string to = _transition.Destination.Node.NameProp.stringValue;
 
             using (new GUILayout.AreaScope(new Rect(_positionOffset, position.size - _sizeShrink), (string)null, EditorStyles.helpBox))
             {

@@ -98,7 +98,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             if (count == 1)
             {
                 var selected = _window.Map.GetSelectedNode();
-                GUILayout.Label(selected.Name, EditorStyles.boldLabel);
+                GUILayout.Label(selected.NameProp.stringValue, EditorStyles.boldLabel);
                 selected.NodeDrawer.OnGui(selected.NodeProp, _width, true);
             }
         }

@@ -52,9 +52,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             _regularNodeDrawer = new RegularNodeDrawer(this);
             _nodeDrawers = new Dictionary<Type, NodeDrawer>()
             {
-                { typeof(HubNode), new ServiceNodeDrawer("► ► ►") },
-                { typeof(CommonNode), new ServiceNodeDrawer("[ . . . ]") },
-                { typeof(ExitNode), new ServiceNodeDrawer("→ █") },
+                { typeof(HubNode), new ServiceNodeDrawer("► ► ►", Colours.Silver) },
+                { typeof(CommonNode), new ServiceNodeDrawer("[ . . . ]", Colours.Yellow) },
+                { typeof(ExitNode), new ServiceNodeDrawer("→ █", Colours.Red) },
             };
             _nodeViewers = new List<NodeViewer>();
         }
