@@ -20,7 +20,7 @@ namespace UnityUtilityTools
             list[j] = tmp;
         }
 
-        //The copy of internal System.Numerics.Hashing.HashHelpers
+        //A copy of internal System.Numerics.Hashing.HashHelpers
         public static int Combine(int hc1, int hc2)
         {
             uint rol5 = ((uint)hc1 << 5) | ((uint)hc1 >> 27);
