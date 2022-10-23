@@ -49,7 +49,7 @@ namespace UnityUtility
 
         private IEnumerator Start()
         {
-            yield return StartCoroutine(GetRransitionalRoutine());
+            yield return StartCoroutine(GetTransitionalRoutine());
 
             switch (_loadingWay)
             {
@@ -87,7 +87,7 @@ namespace UnityUtility
             LoadSceneLoader(sceneInfo, LoadingWay.Custom);
         }
 
-        protected virtual IEnumerator GetRransitionalRoutine()
+        protected virtual IEnumerator GetTransitionalRoutine()
         {
             yield break;
         }
