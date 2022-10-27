@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Inspector;
 
+#pragma warning disable UNT0014
 namespace UnityUtility.AiSimulation
 {
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/Behavior Set")]
@@ -24,8 +25,10 @@ namespace UnityUtility.AiSimulation
 
         public PermanentState PermanentState => _permanentState;
 
+#pragma warning disable IDE1006
         public GameObject gameObject => _gameObject;
         public Transform transform => _transform;
+#pragma warning restore IDE1006
 
 #if UNITY_EDITOR
         internal BehaviorState CurrentState => _currentState;

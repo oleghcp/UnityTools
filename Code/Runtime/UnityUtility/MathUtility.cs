@@ -8,8 +8,11 @@ namespace UnityUtility
 {
     public static class MathUtility
     {
+#pragma warning disable IDE1006
         public const float kEpsilon = FloatComparer.kEpsilon;
         public const float kEpsilonNormalSqrt = Vector3.kEpsilonNormalSqrt;
+#pragma warning restore IDE1006
+
         internal const double THIRD = 1d / 3d;
 
         public static Vector2 Normalize(in Vector2 value, out float prevMagnitude)

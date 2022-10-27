@@ -10,6 +10,7 @@ namespace UnityEditor
 {
     internal static class AssetOpenEditor
     {
+#pragma warning disable IDE0051
         [OnOpenAsset]
         private static bool OpenScriptableObjectClass(int instanceID, int _)
         {

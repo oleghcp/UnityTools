@@ -14,13 +14,13 @@ namespace UnityUtilityEditor.Drawers
         {
             string assignedTypeName = property.managedReferenceFullTypename;
             bool nullRef = !property.HasManagedReferenceValue();
-            string label = nullRef ? "Null" : ButtonLabel();
+            string label = nullRef ? "Null" : buttonLabel();
 
             GUI.color = nullRef ? Colours.Orange : Colours.Lime;
             GUI.Label(position, label);
             GUI.color = Colours.White;
 
-            string ButtonLabel()
+            string buttonLabel()
             {
                 Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
                 return ObjectNames.NicifyVariableName(assignedType.Name);

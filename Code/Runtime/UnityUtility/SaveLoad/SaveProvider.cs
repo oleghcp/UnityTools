@@ -159,7 +159,7 @@ namespace UnityUtility.SaveLoad
         /// </summary>
         public TaskInfo SaveAsync(string version, int stepsPerFrame)
         {
-            IEnumerator CollectAndSave()
+            IEnumerator collectAndSave()
             {
                 stepsPerFrame = stepsPerFrame.ClampMin(1);
 
@@ -189,7 +189,7 @@ namespace UnityUtility.SaveLoad
                 }
             }
 
-            return TaskSystem.StartAsync(CollectAndSave());
+            return TaskSystem.StartAsync(collectAndSave());
         }
 
         public bool Load(string version)

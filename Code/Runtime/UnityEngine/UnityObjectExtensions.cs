@@ -29,10 +29,15 @@ namespace UnityEngine
         /// </summary>
         public static T GetOrAddComponent<T>(this GameObject self) where T : Component
         {
+#if UNITY_2019_2_OR_NEWER
+            if (self.TryGetComponent(out T component))
+#else
             T component = self.GetComponent<T>();
-            if (component == null)
-                return self.AddComponent<T>();
-            return component;
+            if (component != null)
+#endif
+                return component;
+
+            return self.AddComponent<T>();
         }
 
         /// <summary>
@@ -40,10 +45,15 @@ namespace UnityEngine
         /// </summary>
         public static Component GetOrAddComponent(this GameObject self, Type type)
         {
+#if UNITY_2019_2_OR_NEWER
+            if (self.TryGetComponent(type, out Component component))
+#else
             Component component = self.GetComponent(type);
-            if (component == null)
-                return self.AddComponent(type);
-            return component;
+            if (component != null)
+#endif
+                return component;
+
+            return self.AddComponent(type);
         }
 
         /// <summary>

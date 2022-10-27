@@ -14,8 +14,10 @@ namespace UnityUtility.AiSimulation
         private AiBehaviorSet _behaviorSet;
 
         public AiBehaviorSet Owner => _behaviorSet;
+#pragma warning disable IDE1006
         public GameObject gameObject => _behaviorSet.gameObject;
         public Transform transform => _behaviorSet.transform;
+#pragma warning restore IDE1006
 
         internal void SetUp(AiBehaviorSet behaviorSet)
         {
