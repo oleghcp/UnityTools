@@ -64,9 +64,9 @@ namespace UnityUtility.Controls
 
     internal static class InputEnumUtility
     {
-        public const int GPKeyCodeCount = 16;
-        public const int GPAxisCodeCount = 8;
-        public const int KMAxisCodeCount = 5;
+        public const int GP_KEY_CODE_COUNT = 16;
+        public const int GP_AXIS_CODE_COUNT = 8;
+        public const int KM_AXIS_CODE_COUNT = 5;
 
         public static int GetKeyDefVal(int inputType)
         {

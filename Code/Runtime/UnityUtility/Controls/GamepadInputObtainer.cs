@@ -27,8 +27,8 @@ namespace UnityUtility.Controls
             _correctAxis = AxesCorrection.GetAxisCorrectionFunc(type);
             _converter = new GamepadInputConverter(type, num);
 
-            _buttonStates = new ButtonState[InputEnumUtility.GPKeyCodeCount];
-            _axisStates = new float[InputEnumUtility.GPAxisCodeCount];
+            _buttonStates = new ButtonState[InputEnumUtility.GP_KEY_CODE_COUNT];
+            _axisStates = new float[InputEnumUtility.GP_AXIS_CODE_COUNT];
         }
 
         public GamepadInputObtainer(GamepadType type, int num, LayoutConfig config) : this(type, num, config.ToBindLayout()) { }
@@ -107,7 +107,7 @@ namespace UnityUtility.Controls
         {
             float axisValue;
 
-            for (int i = 0; i < InputEnumUtility.GPAxisCodeCount; i++)
+            for (int i = 0; i < InputEnumUtility.GP_AXIS_CODE_COUNT; i++)
             {
                 axisValue = Input.GetAxisRaw(_converter.AxisNames[i]);
                 _axisStates[i] = _correctAxis((GPAxisCode)i, axisValue);
@@ -118,7 +118,7 @@ namespace UnityUtility.Controls
         {
             KeyCode keyCode;
 
-            for (int i = 0; i < InputEnumUtility.GPKeyCodeCount; i++)
+            for (int i = 0; i < InputEnumUtility.GP_KEY_CODE_COUNT; i++)
             {
                 keyCode = _converter.KeyCodes[i];
 

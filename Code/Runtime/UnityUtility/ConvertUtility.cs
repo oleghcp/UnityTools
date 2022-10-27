@@ -17,7 +17,7 @@ namespace UnityUtility
         /// <returns></returns>
         public static string DecimalToStringWithCustomRadix(long decimalNumber, int radix)
         {
-            const int BITS_IN_LONG = 64;
+            const int bitsInLong = 64;
 
             if (radix < 2 || radix > SYMBOLS.Length)
                 throw Errors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
@@ -25,9 +25,9 @@ namespace UnityUtility
             if (decimalNumber == 0)
                 return "0";
 
-            int index = BITS_IN_LONG - 1;
+            int index = bitsInLong - 1;
             long currentNumber = Math.Abs(decimalNumber);
-            char[] charArray = new char[BITS_IN_LONG];
+            char[] charArray = new char[bitsInLong];
 
             while (currentNumber != 0)
             {
@@ -36,7 +36,7 @@ namespace UnityUtility
                 currentNumber /= radix;
             }
 
-            string result = new string(charArray, index + 1, BITS_IN_LONG - index - 1);
+            string result = new string(charArray, index + 1, bitsInLong - index - 1);
             if (decimalNumber < 0)
             {
                 result = "-" + result;

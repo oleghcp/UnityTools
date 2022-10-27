@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityUtility.IdGenerating
 {
@@ -12,14 +13,14 @@ namespace UnityUtility.IdGenerating
     [Serializable]
     public abstract class IdGenerator<T> : IIdGenerator<T>
     {
-        [SerializeField, HideInInspector]
-        protected T _lastId;
+        [SerializeField, HideInInspector, FormerlySerializedAs("_lastId")]
+        protected T LastId;
 
-        public T LastID => _lastId;
+        public T LastID => LastId;
 
         public IdGenerator(T startId)
         {
-            _lastId = startId;
+            LastId = startId;
         }
 
         public abstract T GetNewId();

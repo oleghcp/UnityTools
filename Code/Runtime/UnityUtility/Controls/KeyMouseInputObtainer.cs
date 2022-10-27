@@ -23,7 +23,7 @@ namespace UnityUtility.Controls
 
             _curLayout = bindLayout;
             _buttonStates = new ButtonState[bindLayout.Keys.Count];
-            _axisStates = new float[InputEnumUtility.KMAxisCodeCount];
+            _axisStates = new float[InputEnumUtility.KM_AXIS_CODE_COUNT];
         }
 
         public KeyMouseInputObtainer(LayoutConfig config) : this(config.ToBindLayout()) { }

@@ -224,20 +224,18 @@ namespace UnityUtility.Sound
 
         private struct SoundKey : IEquatable<SoundKey>
         {
-            private readonly int HASH;
+            private readonly int _hash;
 
             public SoundKey(object sender, string name)
             {
-                HASH = Helper.GetHashCode(sender.GetHashCode(), name.GetHashCode());
+                _hash = Helper.GetHashCode(sender.GetHashCode(), name.GetHashCode());
             }
 
-            // -- //
-
             public override bool Equals(object obj) => obj is SoundKey soundKey && Equals(soundKey);
-            public bool Equals(SoundKey other) => HASH == other.HASH;
-            public override int GetHashCode() => HASH;
-            public static bool operator ==(SoundKey a, SoundKey b) => a.HASH == b.HASH;
-            public static bool operator !=(SoundKey a, SoundKey b) => a.HASH != b.HASH;
+            public bool Equals(SoundKey other) => _hash == other._hash;
+            public override int GetHashCode() => _hash;
+            public static bool operator ==(SoundKey a, SoundKey b) => a._hash == b._hash;
+            public static bool operator !=(SoundKey a, SoundKey b) => a._hash != b._hash;
         }
     }
 }

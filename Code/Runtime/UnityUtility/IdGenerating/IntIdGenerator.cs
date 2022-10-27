@@ -12,7 +12,7 @@ namespace UnityUtility.IdGenerating
 
         public override int GetNewId()
         {
-            return ++_lastId;
+            return ++LastId;
         }
     }
 }
