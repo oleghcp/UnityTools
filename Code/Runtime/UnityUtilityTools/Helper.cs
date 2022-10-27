@@ -8,23 +8,12 @@ namespace UnityUtilityTools
     {
         public static void Swap<T>(ref T a, ref T b)
         {
-            T temp = a;
-            a = b;
-            b = temp;
+            (b, a) = (a, b);
         }
 
         public static void Swap<T>(IList<T> list, int i, int j)
         {
-            T tmp = list[i];
-            list[i] = list[j];
-            list[j] = tmp;
-        }
-
-        //A copy of internal System.Numerics.Hashing.HashHelpers
-        public static int Combine(int hc1, int hc2)
-        {
-            uint rol5 = ((uint)hc1 << 5) | ((uint)hc1 >> 27);
-            return ((int)rol5 + hc1) ^ hc2;
+            (list[j], list[i]) = (list[i], list[j]);
         }
 
         public static int GetHashCode(int hc0, int hc1)
