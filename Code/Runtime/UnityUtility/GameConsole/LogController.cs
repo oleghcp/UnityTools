@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Pool;
 
-#pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
     [DisallowMultipleComponent]

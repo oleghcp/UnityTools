@@ -12,7 +12,6 @@ using UnityUtility.MathExt;
 using UnityUtility.SingleScripts;
 using static UnityEngine.RectTransform;
 
-#pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
     public class TerminalOptions

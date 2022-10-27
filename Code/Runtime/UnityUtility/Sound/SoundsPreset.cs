@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#pragma warning disable CS0649
 namespace UnityUtility.Sound
 {
     [Serializable]

@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 
-#pragma warning disable CS0649
 namespace UnityUtilityEditor.Window.ShapeWizards
 {
     internal abstract class CreateMeshWizard : ScriptableWizard

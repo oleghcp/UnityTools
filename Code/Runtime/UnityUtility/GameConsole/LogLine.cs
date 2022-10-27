@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityUtility.Pool;
 
-#pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
     [DisallowMultipleComponent]

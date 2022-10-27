@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#pragma warning disable CS0649
 namespace UnityUtility.GameConsole
 {
     [DisallowMultipleComponent]

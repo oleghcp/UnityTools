@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.MathExt;
 
-#pragma warning disable CS0649
 namespace UnityUtilityEditor.Window.ShapeWizards
 {
     internal class CreateShapeWizard : CreateMeshWizard
