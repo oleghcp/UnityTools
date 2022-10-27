@@ -31,7 +31,7 @@ namespace UnityUtility
         /// </summary>
         public static bool Chance(this IRng self, float chance)
         {
-            return chance >= 1f ? true : chance > self.Next(0f, 1f);
+            return chance >= 1f || chance > self.Next(0f, 1f);
         }
 
         /// <summary>

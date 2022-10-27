@@ -233,6 +233,9 @@ namespace UnityUtility.MathExt
         /// </summary>
         public static float Round(this float value, float snapStep)
         {
+            if (snapStep <= 0f)
+                return value;
+
             return Round(value / snapStep) * snapStep;
         }
 
@@ -241,6 +244,9 @@ namespace UnityUtility.MathExt
         /// </summary>
         public static double Round(this double value, double snapStep)
         {
+            if (snapStep <= 0f)
+                return value;
+
             return Round(value / snapStep) * snapStep;
         }
 
