@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityUtility;
 using UnityObject = UnityEngine.Object;
 
@@ -12,7 +11,6 @@ namespace UnityEngine
         /// Destroys the unity object.
         /// </summary>
         /// <param name="time">Time  for destruction.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Destroy(this UnityObject self, float time)
         {
             UnityObject.Destroy(self, time);
@@ -21,7 +19,6 @@ namespace UnityEngine
         /// <summary>
         /// Destroys the unity object.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Destroy(this UnityObject self)
         {
             UnityObject.Destroy(self, 0f);
@@ -52,19 +49,16 @@ namespace UnityEngine
         /// <summary>
         /// Marks unity object as DontDestroyOnLoad.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Immortalize(this UnityObject self)
         {
             UnityObject.DontDestroyOnLoad(self);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetParent(this GameObject self, GameObject parent)
         {
             self.transform.SetParent(parent.transform);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetParent(this GameObject self, Transform parent)
         {
             self.transform.SetParent(parent);
@@ -151,13 +145,11 @@ namespace UnityEngine
         }
 
 #if !UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponentInParent<T>(this Component self, bool includeInactive)
         {
             return self.transform.GetComponentInParent<T>(includeInactive);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponentInParent<T>(this GameObject self, bool includeInactive)
         {
             return self.transform.GetComponentInParent<T>(includeInactive);
@@ -178,13 +170,11 @@ namespace UnityEngine
             return default;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponentInChildren<T>(this Component self, bool includeInactive)
         {
             return self.transform.GetComponentInChildren<T>(includeInactive);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponentInChildren<T>(this GameObject self, bool includeInactive)
         {
             return self.transform.GetComponentInChildren<T>(includeInactive);
@@ -209,25 +199,21 @@ namespace UnityEngine
         /// <summary>
         /// Returns transform of gameobject as RectTransform if posible. Otherwise returns null.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static RectTransform GetRectTransform(this GameObject self)
         {
             return self.transform as RectTransform;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetOrthographicSize(this Camera self)
         {
             return ScreenUtility.GetOrthographicSize(self.orthographicSize);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetPerspectiveSize(this Camera self, float remoteness)
         {
             return ScreenUtility.GetPerspectiveSize(self.fieldOfView, remoteness);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetHorizontalFov(this Camera self)
         {
 #if UNITY_2019_1_OR_NEWER
@@ -240,7 +226,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates a sprite.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Sprite ToSprite(this Texture2D self, in Vector2 pivot, float pixelsPerUnit = 100f, uint extrude = 0, SpriteMeshType meshType = SpriteMeshType.Tight, in Vector4 border = default)
         {
             return Sprite.Create(self, new Rect(0f, 0f, self.width, self.height), pivot, pixelsPerUnit, extrude, meshType, border);
@@ -259,7 +244,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns true if a game object is asset reference. For scene objects returns false.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAsset(this GameObject self)
         {
             return UnityObjectUtility.IsAsset(self);
@@ -268,7 +252,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns true if a Component is asset reference. For scene objects returns false.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAsset(this Component self)
         {
             return UnityObjectUtility.IsAsset(self);
@@ -277,7 +260,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns true if UnityEngine.Object is asset reference.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAsset(this UnityObject self)
         {
             return UnityObjectUtility.IsAsset(self);

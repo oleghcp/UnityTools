@@ -5,13 +5,11 @@ namespace UnityUtility
 {
     public static class VectorExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static (float min, float max) ToMinMaxTuple(this in Vector2 self)
         {
             return (self.x, self.y);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static (int from, int before) ToMinMaxTuple(this in Vector2Int self)
         {
             return (self.x, self.y);

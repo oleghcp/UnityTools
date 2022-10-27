@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 using UnityUtility;
 using UnityUtilityTools;
 
@@ -7,7 +6,6 @@ namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] ToArray<T>(this Array self)
         {
             return (T[])self;
@@ -43,13 +41,11 @@ namespace System.Collections.Generic
             self[0] = tmp;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Swap<T>(this T[] self, int i, int j)
         {
             Helper.Swap(ref self[i], ref self[j]);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Swap<T>(this IList<T> self, int i, int j)
         {
             Helper.Swap(self, i, j);
@@ -58,7 +54,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
         /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Sort<T>(this T[] self) where T : IComparable<T>
         {
             Array.Sort(self);
@@ -68,7 +63,6 @@ namespace System.Collections.Generic
         /// Sorts by comparison.
         /// </summary>
         /// <param name="comparer">Reference to comparing function.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Sort<T>(this T[] self, Comparison<T> comparer)
         {
             Array.Sort(self, comparer);
@@ -98,7 +92,6 @@ namespace System.Collections.Generic
         /// Sorts by selected key.
         /// </summary>                
         /// <param name="keySelector">Reference to selecting function.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
             Comparer<TKey> comparer = Comparer<TKey>.Default;
@@ -108,7 +101,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of the first entrance of the specified element or -1 if the element is not found.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<T>(this T[] self, T item)
         {
             return (self as IList<T>).IndexOf(item);
@@ -117,7 +109,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of the first entrance of an element that matches the specified condition or -1 if the element is not found.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<T>(this T[] self, Predicate<T> condition)
         {
             return Array.FindIndex(self, condition);
@@ -140,7 +131,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of an element with the minimum parameter value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector)
         {
             return CollectionUtility.Min(self, selector, out _, out _);
@@ -149,7 +139,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of an element with the maximum parameter value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector)
         {
             return CollectionUtility.Max(self, selector, out _, out _);
@@ -158,7 +147,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of an element with the minimum parameter value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector, out TKey min)
         {
             return CollectionUtility.Min(self, selector, out _, out min);
@@ -167,7 +155,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns an index of an element with the maximum parameter value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> selector, out TKey max)
         {
             return CollectionUtility.Max(self, selector, out _, out max);
@@ -212,7 +199,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Indicates whether the specified collection is null or it's length equals zero.
         /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty<T>(this ICollection<T> self)
         {
             return self == null || self.Count == 0;
@@ -221,7 +207,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Indicates whether the specified collection is not null and contains at least one element.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasAnyData<T>(this ICollection<T> self)
         {
             return self != null && self.Count > 0;
@@ -247,84 +232,72 @@ namespace System.Collections.Generic
         /// <summary>
         /// Indicates whether the specified collection is not null and contains at least one element.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasAnyData<T>(this IEnumerable<T> self)
         {
             return !self.IsNullOrEmpty();
         }
 
 #if !UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
         {
             return new HashSet<T>(self);
         }
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString<T>(this IEnumerable<T> self, string separator = "")
         {
             return string.Join(separator, self);
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString<T>(this IEnumerable<T> self, char separator)
         {
             return string.Join(separator, self);
         }
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this IEnumerable<string> self, string separator = "")
         {
             return string.Join(separator, self);
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this IEnumerable<string> self, char separator)
         {
             return string.Join(separator, self);
         }
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this object[] self, string separator = "")
         {
             return string.Join(separator, self);
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this object[] self, char separator)
         {
             return string.Join(separator, self);
         }
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, string separator = "")
         {
             return string.Join(separator, self);
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, char separator)
         {
             return string.Join(separator, self);
         }
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, int startIndex, int count, string separator = "")
         {
             return string.Join(separator, self, startIndex, count);
         }
 
 #if UNITY_2021_2_OR_NEWER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatToString(this string[] self, int startIndex, int count, char separator)
         {
             return string.Join(separator, self, startIndex, count);
@@ -334,7 +307,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T FromEnd<T>(this IList<T> self, int reverseIndex)
         {
             return self[self.Count - (reverseIndex + 1)];
@@ -343,7 +315,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T FromEnd<T>(this T[] self, int reverseIndex)
         {
             return ref self[self.Length - (reverseIndex + 1)];
@@ -362,7 +333,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns a subarray starting from the specified index.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetSubArray<T>(this IList<T> self, int startIndex)
         {
             return GetSubArray(self, startIndex, self.Count - startIndex);
@@ -381,7 +351,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns a subarray starting from the specified index.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetSubArray<T>(this T[] self, int startIndex)
         {
             return GetSubArray(self, startIndex, self.Length - startIndex);
@@ -407,7 +376,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Enumerates collection from the specified index.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex)
         {
             return Enumerate(self, startIndex, self.Count - startIndex);
@@ -433,7 +401,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Enumerates collection from the specified index from the end.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateBack<T>(this IList<T> self, int startReverseIndex)
         {
             return Enumerate(self, startReverseIndex, self.Count - startReverseIndex);
@@ -480,19 +447,16 @@ namespace System.Collections.Generic
         /// <summary>
         /// Shuffles the elements of an entire collection.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this IList<T> self, IRng generator)
         {
             CollectionUtility.Shuffle(self, generator);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetRandomItem<T>(this IList<T> self, IRng generator)
         {
             return CollectionUtility.GetRandomItem(self, generator);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T PullOutRandomItem<T>(this IList<T> self, IRng generator)
         {
             return CollectionUtility.PullOutRandomItem(self, generator);
@@ -502,7 +466,6 @@ namespace System.Collections.Generic
         /// Finds an element by condition.
         /// </summary>        
         /// <param name="match">Reference to matching function.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Find<T>(this T[] self, Predicate<T> match)
         {
             return Array.Find(self, match);
@@ -511,7 +474,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Performs the specified action on each element of the specified array.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ForEach<T>(this T[] self, Action<T> action)
         {
             Array.ForEach(self, action);
@@ -538,7 +500,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Reverses the sequence of the elements.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Reverse<T>(this T[] self)
         {
             Array.Reverse(self);
@@ -549,7 +510,6 @@ namespace System.Collections.Generic
         /// </summary>
         /// <param name="index">The starting index of the section to reverse.</param>
         /// <param name="length">The number of elements in the section to reverse.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Reverse<T>(this T[] self, int index, int length)
         {
             Array.Reverse(self, index, length);
@@ -558,7 +518,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Sets elements of the array to their default value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Clear<T>(this T[] self)
         {
             Array.Clear(self, 0, self.Length);
@@ -569,7 +528,6 @@ namespace System.Collections.Generic
         /// </summary>
         /// <param name="index">The starting index of the range of elements to clear.</param>
         /// <param name="length">The number of elements to clear.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Clear<T>(this T[] self, int index, int length)
         {
             Array.Clear(self, index, length);
@@ -579,7 +537,6 @@ namespace System.Collections.Generic
         /// Returns new array contained elements got by converting the array.
         /// </summary>
         /// <param name="converter">Conveting function.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TOut[] GetConverted<TIn, TOut>(this TIn[] self, Converter<TIn, TOut> converter)
         {
             return Array.ConvertAll(self, converter);
@@ -588,7 +545,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns whether array contains the specified item.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<T>(this T[] self, T item)
         {
             return (self as IList<T>).Contains(item);
@@ -597,7 +553,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns whether array contains the specified item.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<T>(this IList<T> self, Predicate<T> condition)
         {
             return self.IndexOf(condition) >= 0;
@@ -688,7 +643,6 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns a read-only System.Collections.ObjectModel.ReadOnlyDictionary`2 wrapper for the current dictionary.
         /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> self)
         {
             return new ReadOnlyDictionary<TKey, TValue>(self);
@@ -712,13 +666,11 @@ namespace System.Collections.Generic
                 action(item.Key, item.Value);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in KeyValuePair<TKey, TValue> keyValuePair)
         {
             self.Add(keyValuePair.Key, keyValuePair.Value);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in (TKey key, TValue value) pair)
         {
             self.Add(pair.key, pair.value);

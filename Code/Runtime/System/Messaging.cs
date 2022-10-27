@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 #endif
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace System
 {
@@ -14,7 +13,6 @@ namespace System
         private static ConditionalWeakTable<object, ObjectData> _dataTable = new ConditionalWeakTable<object, ObjectData>();
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static object SendMsg(this object self, string methodName)
         {
             return SendMsg(self, methodName, null);

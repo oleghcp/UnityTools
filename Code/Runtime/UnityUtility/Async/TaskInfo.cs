@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace UnityUtility.Async
@@ -70,7 +69,6 @@ namespace UnityUtility.Async
                 _task.Stop();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsAliveInternal()
         {
             return _task != null && _task.Id == _id;
@@ -83,7 +81,6 @@ namespace UnityUtility.Async
             return obj is TaskInfo taskInfo && this == taskInfo;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(TaskInfo other)
         {
             return this == other;

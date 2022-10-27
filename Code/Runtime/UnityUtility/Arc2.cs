@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityUtility.MathExt;
@@ -101,9 +100,6 @@ namespace UnityUtility
             return new Vector2(x, y);
         }
 
-        // -- //
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static float DirToAngle(Vector2 dir)
         {
             float angle = Vector3.Angle(Vector2.right, dir);

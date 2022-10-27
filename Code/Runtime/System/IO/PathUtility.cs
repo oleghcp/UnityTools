@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityUtility.MathExt;
+﻿using UnityUtility.MathExt;
 using UnityUtilityTools;
 
 namespace System.IO
@@ -86,21 +85,6 @@ namespace System.IO
             }
 
             return parent.Substring(0, maxLength.ClampMin(0));
-        }
-    }
-
-    public static class IOExtensions
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetParentPath(this DirectoryInfo self, int steps = 1)
-        {
-            return PathUtility.GetParentPath(self.FullName, steps);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetParentPath(this FileInfo self, int steps = 1)
-        {
-            return PathUtility.GetParentPath(self.FullName, steps);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.MathExt;
@@ -14,13 +13,11 @@ namespace UnityUtility
     /// </summary>
     public static class RngExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Random(this IRng self, in (int minValue, int maxValue) range)
         {
             return self.Next(range.minValue, range.maxValue);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Random(this IRng self, in (float minValue, float maxValue) range)
         {
             return self.Next(range.minValue, range.maxValue);
@@ -356,7 +353,6 @@ namespace UnityUtility
         /// <summary>
         /// Returns a random rotation.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion GetRandomRotation(this IRng self)
         {
             Vector3 up = self.GetOnUnitCircle();
@@ -390,7 +386,6 @@ namespace UnityUtility
         /// <summary>
         /// Shuffles the elements of an entire collection.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this IRng self, IList<T> collection)
         {
             CollectionUtility.Shuffle(collection, self);

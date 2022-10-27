@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityUtility;
 
 namespace UnityEngine
 {
     public static class TransformExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Back(this Transform self)
         {
             return self.rotation * Vector3.back;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Left(this Transform self)
         {
             return self.rotation * Vector3.left;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Down(this Transform self)
         {
             return self.rotation * Vector3.down;
@@ -78,7 +74,6 @@ namespace UnityEngine
             self.localScale = localScl;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CopyParams(this Transform self, Transform source)
         {
             self.SetPositionAndRotation(source.position, source.rotation);
@@ -92,7 +87,6 @@ namespace UnityEngine
                 self.localScale = source.localScale;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetParent(this Transform self, GameObject parent)
         {
             self.SetParent(parent.transform);
@@ -270,7 +264,6 @@ namespace UnityEngine
         /// <summary>
         /// Transforms rotation from local space to world space.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion TransformRotation(this Transform self, in Quaternion rotation)
         {
             return self.rotation * rotation;
@@ -279,7 +272,6 @@ namespace UnityEngine
         /// <summary>
         /// Increases sibling index by one.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IncreaseSiblingIndex(this Transform self)
         {
             self.SetSiblingIndex(self.GetSiblingIndex() + 1);
@@ -288,7 +280,6 @@ namespace UnityEngine
         /// <summary>
         /// Decreases sibling index by one.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DecreaseSiblingIndex(this Transform self)
         {
             self.SetSiblingIndex(self.GetSiblingIndex() - 1);
@@ -297,7 +288,6 @@ namespace UnityEngine
         /// <summary>
         /// Increases or decreases sibling index by the specified value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void MoveSiblingIndex(this Transform self, int moveValue)
         {
             self.SetSiblingIndex(self.GetSiblingIndex() + moveValue);
@@ -318,7 +308,6 @@ namespace UnityEngine
         /// Moves the rect transform in the 2D direction and distance of translation.
         /// </summary>
         /// <param name="relativeTo">Translation's relative space (world or self).</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Move(this RectTransform self, float x, float y, Space relativeTo = default)
         {
             Move(self, new Vector2(x, y), relativeTo);
@@ -342,7 +331,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns the parent of the rectTransform.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static RectTransform GetParent(this RectTransform self)
         {
             return self.parent as RectTransform;

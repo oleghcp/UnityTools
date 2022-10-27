@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityUtility;
+﻿using UnityUtility;
 using UnityUtilityTools;
 
 namespace System.Collections.Generic.ReadOnly
@@ -13,7 +12,6 @@ namespace System.Collections.Generic.ReadOnly
             return subArray;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetSubArray_<T>(this IReadOnlyList<T> self, int startIndex)
         {
             return GetSubArray_(self, startIndex, self.Count - startIndex);
@@ -43,49 +41,41 @@ namespace System.Collections.Generic.ReadOnly
             return -1;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMin_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector)
         {
             return CollectionUtility.Min(self, selector, out _, out _);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMax_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector)
         {
             return CollectionUtility.Max(self, selector, out _, out _);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMin_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector, out TKey min)
         {
             return CollectionUtility.Min(self, selector, out _, out min);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfMax_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector, out TKey max)
         {
             return CollectionUtility.Max(self, selector, out _, out max);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetRandomItem_<T>(this IReadOnlyList<T> self, IRng generator)
         {
             return CollectionUtility.GetRandomItem(self, generator);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty_<T>(this IReadOnlyCollection<T> self)
         {
             return self == null || self.Count == 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasAnyData_<T>(this IReadOnlyCollection<T> self)
         {
             return self != null && self.Count > 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T FromEnd_<T>(this IReadOnlyList<T> self, int reverseIndex)
         {
             return self[self.Count - (reverseIndex + 1)];
@@ -105,7 +95,6 @@ namespace System.Collections.Generic.ReadOnly
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
         {
             return Enumerate_(self, startIndex, self.Count - startIndex);
@@ -125,7 +114,6 @@ namespace System.Collections.Generic.ReadOnly
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateBack_<T>(this IReadOnlyList<T> self, int startReverseIndex)
         {
             return Enumerate_(self, startReverseIndex, self.Count - startReverseIndex);
@@ -158,7 +146,6 @@ namespace System.Collections.Generic.ReadOnly
                 action(self[i]);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains_<T>(this IReadOnlyList<T> self, Predicate<T> condition)
         {
             return self.IndexOf_(condition) >= 0;

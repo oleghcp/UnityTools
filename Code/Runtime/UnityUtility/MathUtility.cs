@@ -145,7 +145,6 @@ namespace UnityUtility
             return Exp(-value);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ApproachOne(float value)
         {
             return 1f - Exp(-value);

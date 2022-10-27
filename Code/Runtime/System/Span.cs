@@ -4,7 +4,6 @@
 
 #if !UNITY_2021_2_OR_NEWER
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using UnityUtilityTools;
 
 namespace System
@@ -90,7 +89,7 @@ namespace System
             return new Span<T>(_ptr + startIndex, _length - startIndex);
         }
 
-        #region Regular stuff
+#region Regular stuff
         public Enumerator GetEnumerator()
         {
             return new Enumerator(this);
@@ -130,7 +129,7 @@ namespace System
         {
             return !(left == right);
         }
-        #endregion
+#endregion
 
         public ref struct Enumerator
         {
@@ -138,11 +137,7 @@ namespace System
 
             private int _index;
 
-            public ref T Current
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => ref _span[_index];
-            }
+            public ref T Current => ref _span[_index];
 
             internal Enumerator(Span<T> span)
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -79,9 +78,6 @@ namespace UnityUtility
             return newPos.GetRotated(Vector3.up, HorAngle) + StartPos;
         }
 
-        // -- //
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Vector3 AngleToDir(float hor, float vert)
         {
             return Quaternion.Euler(0f, hor, vert) * Vector3.right;

@@ -1,7 +1,6 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Controls.ControlStuff;
 
@@ -83,7 +82,6 @@ namespace UnityUtility.Controls
 
         // -- //
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CheckAndThrow(BindLayout bindLayout)
         {
             if (bindLayout.InputType != InputType.KeyMouse)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityUtility;
 using UnityUtilityTools;
 
@@ -128,14 +127,12 @@ namespace System
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Reverse<T>(this in Span<T> self) where T : unmanaged
         {
             Reverse(self, 0, self.Length);
         }
 #endif
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this in Span<T> self, IRng generator) where T : unmanaged
         {
 #if UNITY_2021_2_OR_NEWER
@@ -148,7 +145,6 @@ namespace System
 #endif
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Shuffle<T>(this in Span<T> self) where T : unmanaged
         {
 #if UNITY_2021_2_OR_NEWER
@@ -189,7 +185,6 @@ namespace System
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Min<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
 #if UNITY_2021_2_OR_NEWER
@@ -202,7 +197,6 @@ namespace System
 #endif
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Max<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
 #if UNITY_2021_2_OR_NEWER
@@ -226,7 +220,6 @@ namespace System
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Swap<T>(this in Span<T> self, int i, int j) where T : unmanaged
         {
             Helper.Swap(ref self[i], ref self[j]);

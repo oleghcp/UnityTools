@@ -1,36 +1,30 @@
-﻿using System.Runtime.CompilerServices;
-using UnityUtility;
+﻿using UnityUtility;
 using UnityUtility.MathExt;
 
 namespace UnityEngine
 {
     public static class UnityStructExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this in Vector3 value, in Vector3 other, float precision)
         {
             return MathUtility.Equals(value, other, precision);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this in Vector2 value, in Vector2 other, float precision)
         {
             return MathUtility.Equals(value, other, precision);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 AlterX(this in Vector3 value, float x)
         {
             return new Vector3(x, value.y, value.z);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 AlterY(this in Vector3 value, float y)
         {
             return new Vector3(value.x, y, value.z);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 AlterZ(this in Vector3 value, float z)
         {
             return new Vector3(value.x, value.y, z);
@@ -39,7 +33,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates vector2 based on X and Y of vector3 value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 XY(this in Vector3 value)
         {
             return new Vector2(value.x, value.y);
@@ -57,7 +50,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates vector2 based on X and Z of vector3 value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 XZ(this in Vector3 value)
         {
             return new Vector2(value.x, value.z);
@@ -75,7 +67,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates vector2 based on Y and Z of vector3 value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 YZ(this in Vector3 value)
         {
             return new Vector2(value.z, value.y);
@@ -93,7 +84,6 @@ namespace UnityEngine
         /// <summary>
         /// Converts vector2 params to vector3 X and Y with custom Z
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 To_XYz(this in Vector2 value, float z = 0f)
         {
             return new Vector3(value.x, value.y, z);
@@ -102,7 +92,6 @@ namespace UnityEngine
         /// <summary>
         /// Converts vector2 params to vector3 X and Z with custom Y
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 To_XyZ(this in Vector2 value, float y = 0f)
         {
             return new Vector3(value.x, y, value.y);
@@ -111,25 +100,21 @@ namespace UnityEngine
         /// <summary>
         /// Converts vector2 params to vector3 Y and Z with custom X
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 To_xYZ(this in Vector2 value, float x = 0f)
         {
             return new Vector3(x, value.y, value.x);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int AlterX(this in Vector3Int value, int x)
         {
             return new Vector3Int(x, value.y, value.z);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int AlterY(this in Vector3Int value, int y)
         {
             return new Vector3Int(value.x, y, value.z);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int AlterZ(this in Vector3Int value, int z)
         {
             return new Vector3Int(value.x, value.y, z);
@@ -138,7 +123,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates vector2 based on X and Y of vector3 value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2Int XY(this in Vector3Int value)
         {
             return new Vector2Int(value.x, value.y);
@@ -147,7 +131,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates vector2 based on X and Z of vector3 value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2Int XZ(this in Vector3Int value)
         {
             return new Vector2Int(value.x, value.z);
@@ -156,7 +139,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates vector2 based on Y and Z of vector3 value.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2Int YZ(this in Vector3Int value)
         {
             return new Vector2Int(value.z, value.y);
@@ -165,7 +147,6 @@ namespace UnityEngine
         /// <summary>
         /// Converts vector2 params to vector3 X and Y with custom Z
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int To_XYz(this in Vector2Int value, int z = 0)
         {
             return new Vector3Int(value.x, value.y, z);
@@ -174,7 +155,6 @@ namespace UnityEngine
         /// <summary>
         /// Converts vector2 params to vector3 X and Z with custom Y
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int To_XyZ(this in Vector2Int value, int y = 0)
         {
             return new Vector3Int(value.x, y, value.y);
@@ -183,19 +163,16 @@ namespace UnityEngine
         /// <summary>
         /// Converts vector2 params to vector3 Y and Z with custom X
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int To_xYZ(this in Vector2Int value, int x = 0)
         {
             return new Vector3Int(x, value.y, value.x);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetNormalized(this in Vector2 value, out float prevMagnitude)
         {
             return MathUtility.Normalize(value, out prevMagnitude);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 GetNormalized(this in Vector3 value, out float prevMagnitude)
         {
             return MathUtility.Normalize(value, out prevMagnitude);
@@ -228,7 +205,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns a copy of vector with its magnitude clamped to maxLength.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetClamped(this in Vector2 value, float maxLength)
         {
             return Vector2.ClampMagnitude(value, maxLength);
@@ -253,7 +229,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns a copy of vector with its magnitude clamped to maxLength.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 GetClamped(this in Vector3 value, float maxLength)
         {
             return Vector3.ClampMagnitude(value, maxLength);
@@ -263,7 +238,6 @@ namespace UnityEngine
         /// Returns vector2 rotated in XY-plane.
         /// </summary>
         /// <param name="angle">Rotation angle in degrees.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 GetRotated(this in Vector2 value, float angle)
         {
             return MathUtility.RotateVector(value, angle);
@@ -273,7 +247,6 @@ namespace UnityEngine
         /// Returns vector3 rotated around specified axis.
         /// </summary>
         /// <param name="angle">Rotation angle in degrees.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 GetRotated(this in Vector3 value, in Vector3 axis, float angle)
         {
             return MathUtility.RotateVector(value, axis, angle);
@@ -292,7 +265,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns a rotation that rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion ToEuler(this in Vector3 value)
         {
             return Quaternion.Euler(value);
@@ -301,7 +273,6 @@ namespace UnityEngine
         /// <summary>
         /// Creates a rotation with the specified forward and upwards directions.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion ToLookRotation(this in Vector3 value, Vector3 upwards)
         {
             return Quaternion.LookRotation(value, upwards);
@@ -310,43 +281,36 @@ namespace UnityEngine
         /// <summary>
         /// Creates a rotation with the specified forward direction and angle around it.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion ToLookRotation(this in Vector3 value)
         {
             return Quaternion.LookRotation(value);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Up(this in Quaternion value)
         {
             return value * Vector3.up;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Down(this in Quaternion value)
         {
             return value * Vector3.down;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Right(this in Quaternion value)
         {
             return value * Vector3.right;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Left(this in Quaternion value)
         {
             return value * Vector3.left;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Forward(this in Quaternion value)
         {
             return value * Vector3.forward;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Back(this in Quaternion value)
         {
             return value * Vector3.back;
@@ -365,7 +329,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns rect expanded multiplicatively relative to zero coordinates.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetMultiplied(this in Rect value, in Vector2 expandFactor)
         {
             return GetMultiplied(value, expandFactor.x, expandFactor.y);
@@ -374,7 +337,6 @@ namespace UnityEngine
         /// <summary>
         /// Returns rect expanded multiplicatively relative to zero coordinates.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetMultiplied(this in Rect value, float xFactor, float yFactor)
         {
             return Rect.MinMaxRect(value.xMin * xFactor,
@@ -405,61 +367,51 @@ namespace UnityEngine
         /// <summary>
         /// Returns additively expanded rect without preserving pivot.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect GetExpanded(this in Rect value, in Vector2 expandSize)
         {
             return new Rect(value.position - expandSize * 0.5f, value.size + expandSize);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect ToRect(this in RectInt value)
         {
             return new Rect(value.xMin, value.yMin, value.width, value.height);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect ToRect(this in RectInt value, in Vector2 expandFactor)
         {
             return new Rect(value.xMin * expandFactor.x, value.yMin * expandFactor.y, value.width * expandFactor.x, value.height * expandFactor.y);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Rect ToRect(this in RectInt value, float xFactor, float yFactor)
         {
             return new Rect(value.xMin * xFactor, value.yMin * yFactor, value.width * xFactor, value.height * yFactor);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasLayer(this LayerMask mask, int layer)
         {
             return BitMask.HasFlag(mask, layer);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasLayer(this LayerMask mask, string layer)
         {
             return BitMask.HasFlag(mask, LayerMask.NameToLayer(layer));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color AlterR(this in Color color, float r)
         {
             return new Color(r, color.g, color.b, color.a);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color AlterG(this in Color color, float g)
         {
             return new Color(color.r, g, color.b, color.a);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color AlterB(this in Color color, float b)
         {
             return new Color(color.r, color.g, b, color.a);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color AlterA(this in Color color, float a)
         {
             return new Color(color.r, color.g, color.b, a);

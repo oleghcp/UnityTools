@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityUtility.Inspector;
 using UnityUtility.MathExt;
 
@@ -247,14 +246,12 @@ namespace UnityUtility.Shooting
             _listener?.OnTimeOut();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private float GetDeltaTime()
         {
             return _timeProvider != null ? _timeProvider.GetDeltaTime()
                                          : Time.deltaTime;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Vector2 GetGravity()
         {
             return _gravityProvider != null ? _gravityProvider.GetGravity()

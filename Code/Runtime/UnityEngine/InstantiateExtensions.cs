@@ -8,7 +8,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates unity object of defined type.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Install<T>(this T self) where T : UnityObject
         {
             return UnityObject.Instantiate(self);
@@ -17,7 +16,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates gameobject as a child of the specified parent.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GameObject Install(this GameObject self, Transform parent, bool worldPositionStays)
         {
             return UnityObject.Instantiate(self, parent, worldPositionStays);
@@ -34,7 +32,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates gameobject as a child of the specified parent.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Install<T>(this T self, Transform parent, bool worldPositionStays) where T : Component
         {
             return UnityObject.Instantiate(self, parent, worldPositionStays);
@@ -51,7 +48,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates gameobject to the specified position with the specified rotation.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GameObject Install(this GameObject self, in Vector3 position)
         {
             return UnityObject.Instantiate(self, position, Quaternion.identity);
@@ -60,7 +56,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates gameobject to the specified position with the specified rotation.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GameObject Install(this GameObject self, in Vector3 position, in Quaternion rotation)
         {
             return UnityObject.Instantiate(self, position, rotation);
@@ -84,7 +79,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates defined component to specified position with specified rotation.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Install<T>(this T self, in Vector3 position) where T : Component
         {
             return UnityObject.Instantiate(self, position, Quaternion.identity);
@@ -93,7 +87,6 @@ namespace UnityEngine
         /// <summary>
         /// Instantiates defined component to specified position with specified rotation.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Install<T>(this T self, in Vector3 position, in Quaternion rotation) where T : Component
         {
             return UnityObject.Instantiate(self, position, rotation);

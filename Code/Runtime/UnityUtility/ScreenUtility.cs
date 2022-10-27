@@ -40,7 +40,6 @@ namespace UnityUtility
         /// Returns factor for converting screen path to world path.
         /// </summary>
         /// <param name="cameraOrthographicSize">Camera orthographic size.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float GetPathScreenFactor(float cameraOrthographicSize)
         {
             return cameraOrthographicSize * 2f / Screen.height;
@@ -92,7 +91,6 @@ namespace UnityUtility
             return MathF.Tan((fov * 0.5f).ToRadians());
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static float GetFovFromHalfTan(float halfFovTan)
         {
             return MathF.Atan(halfFovTan).ToDegrees() * 2f;

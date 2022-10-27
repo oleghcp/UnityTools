@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using UnityUtility;
 using UnityUtilityTools;
 
@@ -7,13 +6,11 @@ namespace System
 {
     public static class SystemTypeExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToString(this int self, int radix)
         {
             return ConvertUtility.DecimalToStringWithCustomRadix(self, radix);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToString(this long self, int radix)
         {
             return ConvertUtility.DecimalToStringWithCustomRadix(self, radix);
@@ -29,7 +26,6 @@ namespace System
         /// <summary>
         /// Retrieves the name of the constant in the specified enumeration that has the specified value.
         /// </summary>        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetName(this Enum self)
         {
             return Enum.GetName(self.GetType(), self);
@@ -46,7 +42,6 @@ namespace System
         /// <summary>
         /// Indicates whether the specified string is null or an empty string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this string self)
         {
             return string.IsNullOrEmpty(self);
@@ -55,7 +50,6 @@ namespace System
         /// <summary>
         /// Indicates whether the specified string is null, empty, or consists only of white-space characters.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string self)
         {
             return string.IsNullOrWhiteSpace(self);
@@ -64,7 +58,6 @@ namespace System
         /// <summary>
         /// Indicates whether the specified string is not null and not an empty string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasAnyData(this string self)
         {
             return !string.IsNullOrEmpty(self);
@@ -73,13 +66,11 @@ namespace System
         /// <summary>
         ///Indicates whether the specified string is not null, empty, and doesn't consist only of white-space characters.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasUsefulData(this string self)
         {
             return !string.IsNullOrWhiteSpace(self);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string RemoveWhiteSpaces(this string self)
         {
             return self.Replace(" ", string.Empty);
@@ -88,7 +79,6 @@ namespace System
         /// <summary>
         /// Returns the underlying type code of the specified Type.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TypeCode GetTypeCode(this Type self)
         {
             return Type.GetTypeCode(self);
@@ -97,7 +87,6 @@ namespace System
         /// <summary>
         /// Returns simplified assembly qualified name.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetTypeName(this Type self)
         {
             return Helper.SimplifyTypeName(self.AssemblyQualifiedName);
@@ -106,7 +95,6 @@ namespace System
         /// <summary>
         /// Returns default value for the specified Type.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static object GetDefaultValue(this Type self)
         {
             return Helper.GetDefaultValue(self);

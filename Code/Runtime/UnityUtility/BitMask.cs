@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace UnityUtility
 {
@@ -8,43 +7,36 @@ namespace UnityUtility
     {
         public const int SIZE = 32;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsEmpty(int mask)
         {
             return mask == 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNotEmpty(int mask)
         {
             return mask != 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsFull(int mask)
         {
             return mask == -1;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void AddFlag(ref int mask, int index)
         {
             mask |= 1 << index;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFlag(ref int mask, int index)
         {
             mask &= ~(1 << index);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SwitchFlag(ref int mask, int index)
         {
             mask ^= 1 << index;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasFlag(int mask, int index)
         {
             return (mask & (1 << index)) != 0;
@@ -56,7 +48,6 @@ namespace UnityUtility
             else { RemoveFlag(ref mask, index); }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Except(ref int targetMask, int otherMask)
         {
             targetMask ^= targetMask & otherMask;

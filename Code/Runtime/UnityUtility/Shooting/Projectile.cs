@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityUtility.Inspector;
 
 #if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS
@@ -243,14 +242,12 @@ namespace UnityUtility.Shooting
             return transform.forward;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private float GetDeltaTime()
         {
             return _timeProvider != null ? _timeProvider.GetDeltaTime()
                                          : Time.deltaTime;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Vector3 GetGravity()
         {
             return _gravityProvider != null ? _gravityProvider.GetGravity()
