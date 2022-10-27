@@ -47,7 +47,8 @@ namespace UnityUtilityEditor.Window
             if (MultiSelectable())
                 _onClose?.Invoke(_flags);
 
-            _prevWindow?.Repaint();
+            if (_prevWindow != null)
+                _prevWindow.Repaint();
         }
 
         private void OnGUI()

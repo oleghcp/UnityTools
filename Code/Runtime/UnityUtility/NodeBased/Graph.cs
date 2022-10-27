@@ -27,10 +27,7 @@ namespace UnityUtility.NodeBased
         internal RawNode RootNode => GetNodeById(_rootNodeId);
         internal RawNode CommonNode => _commonNode;
 
-        internal Dictionary<int, RawNode> Dict
-        {
-            get => _dict ?? (_dict = _nodes.ToDictionary(key => key.Id, value => value));
-        }
+        internal Dictionary<int, RawNode> Dict => _dict ?? (_dict = _nodes.ToDictionary(key => key.Id, value => value));
 
         internal RawNode GetNodeById(int id)
         {

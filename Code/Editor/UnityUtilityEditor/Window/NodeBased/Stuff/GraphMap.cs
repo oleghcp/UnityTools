@@ -13,10 +13,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphMap
     {
-        private readonly Color SELECTION_COLOR = Colours.Black.AlterA(0.25f);
-        public readonly Vector2 UI_OFFSET = new Vector2(10f, 10f);
-        public readonly Vector2 UI_SHRINK = new Vector2(20f, 22f);
-        public readonly float NODE_HEADER_HEIGHT;
+        private readonly Color _selectionColor = Colours.Black.AlterA(0.25f);
+        public readonly Vector2 UiOffset = new Vector2(10f, 10f);
+        public readonly Vector2 UiShrink = new Vector2(20f, 22f);
+        public readonly float NodeHeaderHeight;
 
         private GraphEditorWindow _window;
         private GraphGrid _grid;
@@ -36,7 +36,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public GraphMap(GraphEditorWindow window)
         {
-            NODE_HEADER_HEIGHT = EditorGUIUtility.singleLineHeight + UI_SHRINK.y;
+            NodeHeaderHeight = EditorGUIUtility.singleLineHeight + UiShrink.y;
             _window = window;
             _grid = new GraphGrid(window);
 
@@ -220,7 +220,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
             {
                 Rect selectionRect = new Rect(_downPoint, e.mousePosition - _downPoint);
 
-                Handles.DrawSolidRectangleWithOutline(selectionRect, SELECTION_COLOR, GraphEditorStyles.GetLineColor());
+                Handles.DrawSolidRectangleWithOutline(selectionRect, _selectionColor, GraphEditorStyles.GetLineColor());
 
                 for (int i = 0; i < _nodeViewers.Count; i++)
                 {

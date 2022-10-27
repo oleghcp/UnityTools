@@ -86,7 +86,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
                     _screenRect.width = Width / _window.Camera.Size;
-                    _screenRect.height = _window.Camera.Size > 1f ? _map.NODE_HEADER_HEIGHT : GetBigNodeHeight();
+                    _screenRect.height = _window.Camera.Size > 1f ? _map.NodeHeaderHeight : GetBigNodeHeight();
                     _screenRectVersion = _window.OnGuiCounter;
                 }
 
@@ -102,7 +102,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                 {
                     _worldRect.position = _position;
                     _worldRect.width = Width;
-                    _worldRect.height = _window.Camera.Size > 1f ? _map.NODE_HEADER_HEIGHT : GetBigNodeHeight();
+                    _worldRect.height = _window.Camera.Size > 1f ? _map.NodeHeaderHeight : GetBigNodeHeight();
                     _worldRectVersion = _window.OnGuiCounter;
                 }
 
@@ -205,8 +205,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 
             GUI.Box(nodeRect, (string)null, _isSelected ? GraphEditorStyles.Styles.NodeSelected : GraphEditorStyles.Styles.NodeRegular);
 
-            nodeRect.position += _map.UI_OFFSET;
-            nodeRect.size -= _map.UI_SHRINK;
+            nodeRect.position += _map.UiOffset;
+            nodeRect.size -= _map.UiShrink;
 
             GUILayout.BeginArea(nodeRect);
             _nodeDrawer.OnHeaderGui(_window.RootNodeId == _id, _nameProp, ref _renaming);
@@ -418,7 +418,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
         {
             if (_heightVersion != _window.OnGuiCounter)
             {
-                _height = _map.NODE_HEADER_HEIGHT + _nodeDrawer.GetHeight(_nodeProp, _window.FullDrawing);
+                _height = _map.NodeHeaderHeight + _nodeDrawer.GetHeight(_nodeProp, _window.FullDrawing);
                 _heightVersion = _window.OnGuiCounter;
             }
 

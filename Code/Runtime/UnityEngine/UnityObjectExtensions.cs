@@ -79,7 +79,12 @@ namespace UnityEngine
         /// </summary>
         public static GameObject GetParent(this GameObject self, int level = 1)
         {
-            return self.transform.GetParent(level)?.gameObject;
+            Transform parent = self.transform.GetParent(level);
+
+            if (parent == null)
+                return null;
+
+            return parent.gameObject;
         }
 
         /// <summary>

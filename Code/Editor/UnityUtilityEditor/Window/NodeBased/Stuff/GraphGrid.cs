@@ -8,8 +8,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {
     internal class GraphGrid
     {
-        private readonly Color SMALL_COLOR = Colours.Grey.AlterA(0.3f);
-        private readonly Color LARGE_COLOR = Colours.Grey.AlterA(0.5f);
+        private readonly Color _smallColor = Colours.Grey.AlterA(0.3f);
+        private readonly Color _largeColor = Colours.Grey.AlterA(0.5f);
         public const float SMALL_STEP = 20f;
         private const float LARGE_STEP = 160f;
 
@@ -24,9 +24,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
         {
             Rect worldRect = _window.Camera.WorldRect;
 
-            Handles.color = SMALL_COLOR;
+            Handles.color = _smallColor;
             drawInternal(SMALL_STEP);
-            Handles.color = LARGE_COLOR;
+            Handles.color = _largeColor;
             drawInternal(LARGE_STEP);
             Handles.color = Colours.White;
 
