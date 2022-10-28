@@ -118,6 +118,16 @@ namespace UnityEngine
             return Sprite.Create(self, new Rect(0f, 0f, x, y), new Vector2(x * 0.5f, y * 0.5f), pixelsPerUnit, extrude, meshType, border);
         }
 
+        public static bool IsNullOrDead(this UnityObject self)
+        {
+            return UnityObjectUtility.IsNullOrDead(self);
+        }
+
+        public static bool IsAlive(this UnityObject self)
+        {
+            return !UnityObjectUtility.IsNullOrDead(self);
+        }
+
         /// <summary>
         /// Returns true if a game object is asset reference. For scene objects returns false.
         /// </summary>
