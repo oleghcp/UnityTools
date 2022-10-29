@@ -356,21 +356,21 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
                     //genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoPopup.Open(this, _window));
                     break;
 
                 case NodeType.Hub:
                     genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
                     genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoPopup.Open(this, _window));
                     break;
 
                 case NodeType.Common:
                     genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
                     genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoWindow.Open(this, _window));
+                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoPopup.Open(this, _window));
                     break;
 
                 case NodeType.Exit:

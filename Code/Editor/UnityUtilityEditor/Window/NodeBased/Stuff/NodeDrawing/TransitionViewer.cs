@@ -76,7 +76,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
 
         public void ShowTransitionInfoWindow()
         {
-            TransitionInfoWindow.Open(this, GetProperty(), _window);
+            TransitionInfoPopup.Open(this, GetProperty(), _window);
         }
 
         public void Save()

@@ -7,7 +7,7 @@ using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing;
 
 namespace UnityUtilityEditor.Window.NodeBased
 {
-    internal class NodeInfoWindow : EditorWindow
+    internal class NodeInfoPopup : EditorWindow
     {
         private NodeViewer _nodeEditor;
         private GraphEditorWindow _mainWindow;
@@ -22,7 +22,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public static void Open(NodeViewer nodeEditor, GraphEditorWindow mainWindow)
         {
-            NodeInfoWindow window = CreateInstance<NodeInfoWindow>();
+            NodeInfoPopup window = CreateInstance<NodeInfoPopup>();
             window.titleContent = new GUIContent(nodeEditor.NameProp.stringValue);
             window.SetUp(nodeEditor, mainWindow);
             window.ShowAuxWindow();

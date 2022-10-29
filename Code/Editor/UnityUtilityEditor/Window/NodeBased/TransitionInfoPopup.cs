@@ -6,7 +6,7 @@ using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing;
 
 namespace UnityUtilityEditor.Window.NodeBased
 {
-    internal class TransitionInfoWindow : EditorWindow
+    internal class TransitionInfoPopup : EditorWindow
     {
         private readonly Vector2 _positionOffset = new Vector2(3f, 4f);
         private readonly Vector2 _sizeShrink = new Vector2(6f, 8f);
@@ -24,7 +24,7 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public static void Open(TransitionViewer transition, SerializedProperty transitionProp, GraphEditorWindow mainWindow)
         {
-            TransitionInfoWindow window = CreateInstance<TransitionInfoWindow>();
+            TransitionInfoPopup window = CreateInstance<TransitionInfoPopup>();
             window.titleContent = new GUIContent("Transition Info");
             window.SetUp(transition, transitionProp, mainWindow);
             window.ShowAuxWindow();
