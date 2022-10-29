@@ -2,7 +2,7 @@
 using UnityEngine;
 #if UNITY_2019_3_OR_NEWER
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.Window.NodeBased;
+using UnityUtilityEditor.Window;
 #endif
 using UnityObject = UnityEngine.Object;
 

@@ -49,7 +49,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
                 RawNode.PositionFieldName,
             };
 
-            _regularNodeDrawer = new RegularNodeDrawer(this);
+            _regularNodeDrawer = new NodeDrawer() { Map = this };
             _nodeDrawers = new Dictionary<Type, NodeDrawer>()
             {
                 { typeof(HubNode), new ServiceNodeDrawer("► ► ►", Colours.Silver) },

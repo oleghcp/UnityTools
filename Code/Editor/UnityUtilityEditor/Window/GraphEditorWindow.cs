@@ -5,7 +5,7 @@ using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased.Stuff;
 using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace UnityUtilityEditor.Window
 {
     internal class GraphEditorWindow : EditorWindow
     {

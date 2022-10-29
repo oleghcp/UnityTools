@@ -2,16 +2,19 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtilityEditor.Window.NodeBased.Stuff;
 
 namespace UnityUtilityEditor.Window.NodeBased
 {
-    public abstract class NodeDrawer
+    public class NodeDrawer
     {
         private const string LABEL = "{...}";
 
+        internal GraphMap Map;
+
         protected virtual string ShortDrawingView => LABEL;
 
-        public void OnHeaderGui(bool rootNode, SerializedProperty nameProperty, ref bool renaming)
+        internal void OnHeaderGui(bool rootNode, SerializedProperty nameProperty, ref bool renaming)
         {
             if (renaming)
             {
@@ -28,7 +31,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             GUI.color = Colours.White;
         }
 
-        public void OnGui(SerializedProperty property, float width, bool enabled)
+        internal void OnGui(SerializedProperty property, float width, bool enabled)
         {
             if (enabled)
             {
@@ -39,7 +42,7 @@ namespace UnityUtilityEditor.Window.NodeBased
             EditorGUILayout.LabelField(ShortDrawingView);
         }
 
-        public float GetHeight(SerializedProperty property, bool enabled)
+        internal float GetHeight(SerializedProperty property, bool enabled)
         {
             if (enabled)
                 return GetHeight(property);
@@ -47,9 +50,20 @@ namespace UnityUtilityEditor.Window.NodeBased
             return EditorGUIUtility.singleLineHeight;
         }
 
+        protected virtual void OnGui(SerializedProperty property, float width)
+        {
+            EditorGUIUtility.labelWidth = width * 0.5f;
+            foreach (SerializedProperty item in property.EnumerateInnerProperties())
+            {
+                if (!Map.IsServiceField(item))
+                    EditorGUILayout.PropertyField(item, true);
+            }
+        }
 
-        protected abstract void OnGui(SerializedProperty property, float width);
-        protected abstract float GetHeight(SerializedProperty property);
+        protected virtual float GetHeight(SerializedProperty property)
+        {
+            return EditorGuiUtility.GetDrawHeight(property, Map.IsServiceField);
+        }
 
         protected virtual Color GetHeaderColor(bool rootNode)
         {
