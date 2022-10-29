@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphSidePanel
     {

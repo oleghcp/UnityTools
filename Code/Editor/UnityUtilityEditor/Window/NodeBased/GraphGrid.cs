@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphGrid
     {

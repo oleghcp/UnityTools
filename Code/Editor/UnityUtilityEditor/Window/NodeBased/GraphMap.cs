@@ -7,9 +7,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.NodeBased;
-using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing;
+using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphMap
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.MathExt;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
+namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
 {
     internal class PointViewer
     {

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing;
+using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphToolbar
     {

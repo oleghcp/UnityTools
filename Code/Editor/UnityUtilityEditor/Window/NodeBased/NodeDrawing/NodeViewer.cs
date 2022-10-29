@@ -8,7 +8,7 @@ using UnityUtility;
 using UnityUtility.MathExt;
 using UnityUtility.NodeBased;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
+namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
 {
     internal class NodeViewer
     {

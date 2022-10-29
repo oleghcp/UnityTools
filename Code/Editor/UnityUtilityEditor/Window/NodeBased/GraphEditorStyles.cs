@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace UnityUtilityEditor.Window.NodeBased
 {
     internal class GraphEditorStyles
     {

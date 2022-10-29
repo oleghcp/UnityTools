@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff.NodeDrawing
+namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
 {
     internal class ServiceNodeDrawer : NodeDrawer
     {
