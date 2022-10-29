@@ -49,7 +49,7 @@ namespace UnityUtilityEditor.Window.NodeBased
                 RawNode.PositionFieldName,
             };
 
-            _regularNodeDrawer = new NodeDrawer() { Map = this };
+            _regularNodeDrawer = new NodeDrawer() { IgnoreCondition = IsServiceField };
             _nodeDrawers = new Dictionary<Type, NodeDrawer>()
             {
                 { typeof(HubNode), new ServiceNodeDrawer("► ► ►", Colours.Silver) },
@@ -78,11 +78,6 @@ namespace UnityUtilityEditor.Window.NodeBased
             }
 
             _nodeViewers.ForEach(item => item.CreateConnections());
-        }
-
-        public bool IsServiceField(SerializedProperty property)
-        {
-            return _nodeIgnoredFields.Contains(property.name);
         }
 
         public void Draw(Event e)
@@ -178,7 +173,9 @@ namespace UnityUtilityEditor.Window.NodeBased
             if (drawerType == null)
                 return _nodeDrawers.Place(nodeType, _regularNodeDrawer);
 
-            return _nodeDrawers.Place(nodeType, (NodeDrawer)Activator.CreateInstance(drawerType));
+            NodeDrawer nodeDrawer = (NodeDrawer)Activator.CreateInstance(drawerType);
+            nodeDrawer.IgnoreCondition = IsServiceField;
+            return _nodeDrawers.Place(nodeType, nodeDrawer);
         }
 
         public NodeViewer GetSelectedNode()
@@ -371,6 +368,11 @@ namespace UnityUtilityEditor.Window.NodeBased
             _nodeViewers.Add(new NodeViewer(nodeProp, this));
 
             _window.SerializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private bool IsServiceField(SerializedProperty property)
+        {
+            return _nodeIgnoredFields.Contains(property.name);
         }
     }
 }
