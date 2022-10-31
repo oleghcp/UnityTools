@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Window;
@@ -72,15 +71,10 @@ namespace UnityUtilityEditor
             MenuItemsUtility.RemoveEmptyFolders();
         }
 
-        [MenuItem(nameof(UnityUtility) + "/Files/Convert .cs Files to UTF8")]
+        [MenuItem(nameof(UnityUtility) + "/Files/Convert text Files to UTF8")]
         private static void ConvertToUtf8()
         {
-            foreach (var filePath in Directory.EnumerateFiles(Application.dataPath, "*.cs", SearchOption.AllDirectories))
-            {
-                string text = File.ReadAllText(filePath);
-                File.WriteAllText(filePath, text, Encoding.UTF8);
-            }
-            AssetDatabase.Refresh();
+            AssetDatabaseExt.ConvertToUtf8();
         }
 
         [MenuItem(nameof(UnityUtility) + "/Files/Find Huge Files")]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -71,6 +72,26 @@ namespace UnityEditor
             string projectSettingsPath = Path.Combine(projectFolderPath, PROJECT_SETTINGS_FOLDER);
 
             return EnumerateFiles(projectSettingsPath, searchPattern);
+        }
+
+        public static void ConvertToUtf8()
+        {
+            IEnumerable<string> files = enumerateFiles("*.txt").Join(enumerateFiles("*.xml"))
+                                                               .Join(enumerateFiles("*.json"))
+                                                               .Join(enumerateFiles("*.cs"))
+                                                               .Join(enumerateFiles("*.shader"))
+                                                               .Join(enumerateFiles("*.cginc"));
+            foreach (string filePath in files)
+            {
+                string text = File.ReadAllText(filePath);
+                File.WriteAllText(filePath, text, Encoding.UTF8);
+            }
+            AssetDatabase.Refresh();
+
+            IEnumerable<string> enumerateFiles(string pattern)
+            {
+                return Directory.EnumerateFiles(Application.dataPath, pattern, SearchOption.AllDirectories);
+            }
         }
 
         private static IEnumerable<string> EnumerateFiles(string path, string searchPattern)
