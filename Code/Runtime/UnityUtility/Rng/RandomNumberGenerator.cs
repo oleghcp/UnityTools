@@ -22,6 +22,9 @@ namespace UnityUtility.Rng
             if (maxValue < 0)
                 throw Errors.NegativeParameter(nameof(maxValue));
 
+            if (maxValue == 0)
+                return 0;
+
             return NextInternal(0, maxValue);
         }
 
