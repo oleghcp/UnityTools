@@ -16,6 +16,11 @@ namespace UnityEditor
         public const string ASSET_EXTENSION = ".asset";
         internal const string TEMPLATES_FOLDER = "Templates/";
 
+        public static string FullPathToProjectRelative(string fullPath)
+        {
+            return ASSET_FOLDER + fullPath.Substring(Application.dataPath.Length + 1);
+        }
+
         public static void CreateScriptableObjectAsset(Type type, string assetPath = null)
         {
             ScriptableObject so = ScriptableObject.CreateInstance(type);

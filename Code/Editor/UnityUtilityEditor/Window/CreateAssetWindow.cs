@@ -111,7 +111,7 @@ namespace UnityUtilityEditor.Window
 
                         if (path.HasUsefulData())
                         {
-                            path = AssetDatabaseExt.ASSET_FOLDER + path.Substring(dataPath.Length + 1);
+                            path = AssetDatabaseExt.FullPathToProjectRelative(path);
                             AssetDatabaseExt.CreateScriptableObjectAsset(type, path);
                         }
                     }
