@@ -28,12 +28,19 @@
             return self.collider != null;
         }
 
-        /// <summary>
-        /// Calls GetComponent() on the game object that was hit.
-        /// </summary>
         public static T GetComponent<T>(this in RaycastHit self)
         {
             return self.collider.GetComponent<T>();
+        }
+
+        public static T GetComponentInParent<T>(this in RaycastHit self)
+        {
+            return self.collider.GetComponentInParent<T>();
+        }
+
+        public static T GetComponentInChildren<T>(this in RaycastHit self)
+        {
+            return self.collider.GetComponentInChildren<T>();
         }
 
         /// <summary>
@@ -62,12 +69,19 @@
             return self.collider != null;
         }
 
-        /// <summary>
-        /// Calls GetComponent() on the game object that was hit.
-        /// </summary>
         public static T GetComponent<T>(this in RaycastHit2D self)
         {
             return self.collider.GetComponent<T>();
+        }
+
+        public static T GetComponentInParent<T>(this in RaycastHit2D self)
+        {
+            return self.collider.GetComponentInParent<T>();
+        }
+
+        public static T GetComponentInChildren<T>(this in RaycastHit2D self)
+        {
+            return self.collider.GetComponentInChildren<T>();
         }
 
         /// <summary>
