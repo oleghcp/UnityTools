@@ -24,13 +24,13 @@ namespace UnityUtilityEditor
                 return true;
             }
 #endif
-            if (obj is ScriptableObject scriptableObject)
+            if (obj is ScriptableObject scriptableObject && EditorPrefs.GetBool(PrefsKeys.OPEN_SO_ASSETS_CODE_BY_CLICK))
             {
                 EditorUtilityExt.OpenScriptableObjectCode(scriptableObject);
                 return true;
             }
 
-            if (ProjectWindowUtil.IsFolder(instanceID))
+            if (ProjectWindowUtil.IsFolder(instanceID) && EditorPrefs.GetBool(PrefsKeys.OPEN_FOLDERS_BY_CLICK))
             {
                 EditorUtilityExt.OpenFolder(obj.GetAssetPath());
                 return true;

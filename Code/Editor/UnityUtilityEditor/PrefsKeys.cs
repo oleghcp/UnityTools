@@ -4,6 +4,8 @@
     {
         public const string ASSEMBLY_INDEX = LibConstants.LIB_NAME + "_csowai";
         public const string WIDTH_TO_HEIGHT = LibConstants.LIB_NAME + "_cfw2h";
+        public const string OPEN_FOLDERS_BY_CLICK = LibConstants.LIB_NAME + "_eofbc";
+        public const string OPEN_SO_ASSETS_CODE_BY_CLICK = LibConstants.LIB_NAME + "_eosoacbc";
 #if UNITY_2019_3_OR_NEWER
         public const string SIDE_PANEL = LibConstants.LIB_NAME + "_gsp";
         public const string HIDE_CONTENT = LibConstants.LIB_NAME + "_ghnc";
