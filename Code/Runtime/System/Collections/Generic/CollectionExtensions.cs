@@ -367,7 +367,7 @@ namespace System.Collections.Generic
             if (startIndex + length > self.Count)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
-            for (int i = startIndex; i < length; i++)
+            for (int i = startIndex; i < length + startIndex; i++)
             {
                 yield return self[i];
             }
@@ -379,31 +379,6 @@ namespace System.Collections.Generic
         public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex)
         {
             return Enumerate(self, startIndex, self.Count - startIndex);
-        }
-
-        /// <summary>
-        /// Enumerates collection from the specified index from the end.
-        /// </summary>
-        public static IEnumerable<T> EnumerateBack<T>(this IList<T> self, int startReverseIndex, int length)
-        {
-            if ((uint)startReverseIndex >= (uint)self.Count)
-                throw new ArgumentOutOfRangeException(nameof(startReverseIndex), "Index was out of range.");
-
-            if (startReverseIndex + length > self.Count)
-                throw new ArgumentOutOfRangeException(nameof(length));
-
-            for (int i = startReverseIndex; i < length; i++)
-            {
-                yield return self.FromEnd(i);
-            }
-        }
-
-        /// <summary>
-        /// Enumerates collection from the specified index from the end.
-        /// </summary>
-        public static IEnumerable<T> EnumerateBack<T>(this IList<T> self, int startReverseIndex)
-        {
-            return Enumerate(self, startReverseIndex, self.Count - startReverseIndex);
         }
 
         /// <summary>
