@@ -1,4 +1,4 @@
-namespace UnityUtilityEditor
+﻿namespace UnityUtilityEditor
 {
     internal static class LibConstants
     {

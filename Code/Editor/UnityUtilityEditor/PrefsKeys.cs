@@ -6,6 +6,7 @@
         public const string WIDTH_TO_HEIGHT = LibConstants.LIB_NAME + "_cfw2h";
         public const string OPEN_FOLDERS_BY_CLICK = LibConstants.LIB_NAME + "_eofbc";
         public const string OPEN_SO_ASSETS_CODE_BY_CLICK = LibConstants.LIB_NAME + "_eosoacbc";
+        public const string SUPPRESSED_WARNINGS_IN_IDE = LibConstants.LIB_NAME + "_eswiide";
 #if UNITY_2019_3_OR_NEWER
         public const string SIDE_PANEL = LibConstants.LIB_NAME + "_gsp";
         public const string HIDE_CONTENT = LibConstants.LIB_NAME + "_ghnc";
