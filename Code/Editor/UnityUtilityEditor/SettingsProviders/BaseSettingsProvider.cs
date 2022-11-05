@@ -22,21 +22,18 @@ namespace UnityUtilityEditor.SettingsProviders
         {
             EditorGUILayout.Space();
 
-            DrawToggle(PrefsKeys.OPEN_FOLDERS_BY_CLICK, "Open Folders by Double Click");
-            DrawToggle(PrefsKeys.OPEN_SO_ASSETS_CODE_BY_CLICK, "Open ScriptableObject Assets as Code");
+            DrawToggle(PrefsKeys.OPEN_FOLDERS_BY_CLICK, "Open Folders by Double Click", true);
+            DrawToggle(PrefsKeys.OPEN_SO_ASSETS_CODE_BY_CLICK, "Open ScriptableObject Assets as Code", true);
         }
 
-        private void DrawToggle(string key, string label)
+        private void DrawToggle(string key, string label, bool defaultValue)
         {
-            bool curValue = EditorPrefs.GetBool(key);
-
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label(label, _labelWidth);
-            bool newValue = EditorGUILayout.Toggle(curValue);
+            bool value = EditorGUILayout.Toggle(EditorPrefs.GetBool(key, defaultValue));
             EditorGUILayout.EndHorizontal();
 
-            if (newValue != curValue)
-                EditorPrefs.SetBool(key, newValue);
+            EditorPrefs.SetBool(key, value);
         }
     }
 }
