@@ -5,10 +5,12 @@ namespace UnityUtilityEditor
 {
     internal static class TemplatesUtility
     {
+        private const string TEMPLATES_FOLDER = "Templates/";
+
 #if UNITY_2019_1_OR_NEWER
         public static void CreateScript()
         {
-            string templatePath = AssetDatabaseExt.TEMPLATES_FOLDER + "C#ScriptTemplate.cs.txt";
+            string templatePath = $"{AssetDatabaseExt.SETTINGS_FOLDER}{TEMPLATES_FOLDER}C#ScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -27,7 +29,7 @@ namespace Project
     }
 }
 ";
-                Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);
+                Directory.CreateDirectory($"{AssetDatabaseExt.SETTINGS_FOLDER}{TEMPLATES_FOLDER}");
                 File.WriteAllText(templatePath, text);
             }
 
@@ -38,7 +40,7 @@ namespace Project
 #if UNITY_2019_3_OR_NEWER
         public static void CreateNodeScript()
         {
-            string templatePath = AssetDatabaseExt.TEMPLATES_FOLDER + "C#NodeScriptTemplate.cs.txt";
+            string templatePath = $"{AssetDatabaseExt.SETTINGS_FOLDER}{TEMPLATES_FOLDER}C#NodeScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -54,7 +56,7 @@ namespace Project
     }
 }
 ";
-                Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);
+                Directory.CreateDirectory($"{AssetDatabaseExt.SETTINGS_FOLDER}{TEMPLATES_FOLDER}");
                 File.WriteAllText(templatePath, text);
             }
 
@@ -63,7 +65,7 @@ namespace Project
 
         public static void CreateGraphScript()
         {
-            string templatePath = AssetDatabaseExt.TEMPLATES_FOLDER + "C#GraphScriptTemplate.cs.txt";
+            string templatePath = $"{AssetDatabaseExt.SETTINGS_FOLDER}{TEMPLATES_FOLDER}C#GraphScriptTemplate.cs.txt";
 
             if (!File.Exists(templatePath))
             {
@@ -71,7 +73,7 @@ namespace Project
                               $"\t[CreateAssetMenu(menuName = nameof({nameof(UnityUtility)}) + \"/Graph/\" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]\n" +
                               "\tpublic class #SCRIPTNAME# : Graph</*your node type*/>\n\t{\n\n\t}\n}\n";
 
-                Directory.CreateDirectory(AssetDatabaseExt.TEMPLATES_FOLDER);
+                Directory.CreateDirectory($"{AssetDatabaseExt.SETTINGS_FOLDER}{TEMPLATES_FOLDER}");
                 File.WriteAllText(templatePath, text);
             }
 

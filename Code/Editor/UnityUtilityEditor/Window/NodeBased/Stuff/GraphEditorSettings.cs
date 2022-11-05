@@ -1,6 +1,7 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
@@ -8,6 +9,8 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
     [Serializable]
     internal class GraphEditorSettings
     {
+        private const string GRAPH_SETTINGS_NAME = "GraphSettings";
+
         private float _cameraPositionX;
         private float _cameraPositionY;
 
@@ -23,10 +26,11 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public static GraphEditorSettings Load(string name)
         {
-            string floderPath = $"Library/{nameof(UnityUtility)}/GraphSettings";
-            Directory.CreateDirectory(floderPath);
-            string filePath = Path.Combine(floderPath, name);
+            string folderPath = $"{AssetDatabaseExt.SETTINGS_FOLDER}{GRAPH_SETTINGS_NAME}";
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
+            string filePath = Path.Combine(folderPath, name);
             if (!File.Exists(filePath))
                 return new GraphEditorSettings();
 
@@ -36,9 +40,10 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Save(string name)
         {
-            string floderPath = $"Library/{nameof(UnityUtility)}/GraphSettings";
-            Directory.CreateDirectory(floderPath);
-            BinaryFileUtility.Save(Path.Combine(floderPath, name), this);
+            string folderPath = $"{AssetDatabaseExt.SETTINGS_FOLDER}{GRAPH_SETTINGS_NAME}";
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+            BinaryFileUtility.Save(Path.Combine(folderPath, name), this);
         }
     }
 }
