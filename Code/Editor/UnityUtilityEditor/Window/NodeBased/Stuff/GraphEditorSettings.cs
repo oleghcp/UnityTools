@@ -23,7 +23,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public static GraphEditorSettings Load(string name)
         {
-            string floderPath = Path.Combine(Application.persistentDataPath, "GraphSettings");
+            string floderPath = $"Library/{nameof(UnityUtility)}/GraphSettings";
             Directory.CreateDirectory(floderPath);
             string filePath = Path.Combine(floderPath, name);
 
@@ -36,9 +36,9 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Save(string name)
         {
-            string path = Path.Combine(Application.persistentDataPath, "GraphSettings");
-            Directory.CreateDirectory(path);
-            BinaryFileUtility.Save(Path.Combine(path, name), this);
+            string floderPath = $"Library/{nameof(UnityUtility)}/GraphSettings";
+            Directory.CreateDirectory(floderPath);
+            BinaryFileUtility.Save(Path.Combine(floderPath, name), this);
         }
     }
 }
