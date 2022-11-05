@@ -1,4 +1,5 @@
-﻿using UnityEditor.Callbacks;
+﻿using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 #if UNITY_2019_3_OR_NEWER
 using UnityUtility.NodeBased;
@@ -6,7 +7,7 @@ using UnityUtilityEditor.Window;
 #endif
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor
 {
     internal static class AssetOpenEditor
     {
