@@ -2,15 +2,15 @@
 {
     internal static class PrefsConstants
     {
-        public const string ASSEMBLY_INDEX_KEY = "uu_csowai";
-        public const string WIDTH_TO_HEIGHT_KEY = "uu_cfw2h";
+        public const string ASSEMBLY_INDEX_KEY = LibConstants.LIB_NAME + "_csowai";
+        public const string WIDTH_TO_HEIGHT_KEY = LibConstants.LIB_NAME + "_cfw2h";
 #if UNITY_2019_3_OR_NEWER
-        public const string SIDE_PANEL_KEY = "uu_gsp";
-        public const string HIDE_CONTENT_KEY = "uu_ghnc";
-        public const string SIDE_PANEL_WIDTH_KEY = "uu_gspw";
-        public const string SIDE_PANEL_TAB_KEY = "uu_gspt";
-        public const string GRID_SNAPING_KEY = "uu_ggs";
-        public const string TRANSITION_VIEW_TYPE_KEY = "uu_gtvt";
+        public const string SIDE_PANEL_KEY = LibConstants.LIB_NAME + "_gsp";
+        public const string HIDE_CONTENT_KEY = LibConstants.LIB_NAME + "_ghnc";
+        public const string SIDE_PANEL_WIDTH_KEY = LibConstants.LIB_NAME + "_gspw";
+        public const string SIDE_PANEL_TAB_KEY = LibConstants.LIB_NAME + "_gspt";
+        public const string GRID_SNAPING_KEY = LibConstants.LIB_NAME + "_ggs";
+        public const string TRANSITION_VIEW_TYPE_KEY = LibConstants.LIB_NAME + "_gtvt";
 #endif
     }
 }

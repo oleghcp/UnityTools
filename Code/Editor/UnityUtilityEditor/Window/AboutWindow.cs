@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Window
         {
             minSize = maxSize = new Vector2(350f, 150f);
 
-            Assembly assembly = Assembly.Load(nameof(UnityUtility)) ?? Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.Load(LibConstants.LIB_NAME) ?? Assembly.GetExecutingAssembly();
 
             var descriptionAttribute = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>();
             _description1 = descriptionAttribute.Description;

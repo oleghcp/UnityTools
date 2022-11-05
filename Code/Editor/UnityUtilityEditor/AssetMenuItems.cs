@@ -8,10 +8,10 @@ namespace UnityUtilityEditor
     internal static class AssetMenuItems
     {
         public const string MENU_PARENT = AssetDatabaseExt.ASSET_FOLDER;
-        public const string CREATE_ASSET_PATH = MENU_PARENT + "Create/" + nameof(UnityUtility) + "/Asset";
+        public const string CREATE_ASSET_PATH = MENU_PARENT + "Create/" + LibConstants.LIB_NAME + "/Asset";
 
 #if UNITY_2019_3_OR_NEWER
-        private const string FULL_MENU_GRAPH_PATH = MENU_PARENT + "Create/" + nameof(UnityUtility) + "/Graph/";
+        private const string FULL_MENU_GRAPH_PATH = MENU_PARENT + "Create/" + LibConstants.LIB_NAME + "/Graph/";
 
         [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
         private static void CreateNodeScript()

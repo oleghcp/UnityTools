@@ -14,7 +14,6 @@ namespace UnityEditor
         public const string ASSET_FOLDER = "Assets/";
         public const string PROJECT_SETTINGS_FOLDER = "ProjectSettings/";
         public const string ASSET_EXTENSION = ".asset";
-        internal const string SETTINGS_FOLDER = "Library/" + nameof(UnityUtility) + "/";
 
         public static string FullPathToProjectRelative(string fullPath)
         {

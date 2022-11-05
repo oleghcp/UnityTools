@@ -13,12 +13,12 @@ namespace UnityUtilityEditor.SettingsProviders
         [SettingsProvider]
         private static SettingsProvider CreateProvider()
         {
-            return new BaseSettingsProvider($"{SettingsScope.Project}/{nameof(UnityUtility)}", SettingsScope.Project);
+            return new BaseSettingsProvider($"{SettingsScope.Project}/{LibConstants.LIB_NAME}", SettingsScope.Project);
         }
 
         public override void OnGUI(string searchContext)
         {
-            GUILayout.Label($"{nameof(UnityUtility)} Settings");
+            GUILayout.Label($"{LibConstants.LIB_NAME} Settings");
         }
     }
 }
