@@ -42,10 +42,10 @@ namespace UnityUtilityEditor.Window.NodeBased
         public GraphToolbar(GraphEditorWindow window)
         {
             _window = window;
-            _sidePanelToggle = EditorPrefs.GetBool(PrefsConstants.SIDE_PANEL_KEY);
-            _hideContentToggle = EditorPrefs.GetBool(PrefsConstants.HIDE_CONTENT_KEY);
-            _gridSnapToggle = EditorPrefs.GetBool(PrefsConstants.GRID_SNAPING_KEY);
-            _transitionViewType = EditorPrefs.GetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY);
+            _sidePanelToggle = EditorPrefs.GetBool(PrefsKeys.SIDE_PANEL);
+            _hideContentToggle = EditorPrefs.GetBool(PrefsKeys.HIDE_CONTENT);
+            _gridSnapToggle = EditorPrefs.GetBool(PrefsKeys.GRID_SNAPING);
+            _transitionViewType = EditorPrefs.GetInt(PrefsKeys.TRANSITION_VIEW_TYPE);
         }
 
         public void Draw()
@@ -74,10 +74,10 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public void Save()
         {
-            EditorPrefs.SetBool(PrefsConstants.SIDE_PANEL_KEY, _sidePanelToggle);
-            EditorPrefs.SetBool(PrefsConstants.HIDE_CONTENT_KEY, _hideContentToggle);
-            EditorPrefs.SetBool(PrefsConstants.GRID_SNAPING_KEY, _gridSnapToggle);
-            EditorPrefs.SetInt(PrefsConstants.TRANSITION_VIEW_TYPE_KEY, _transitionViewType);
+            EditorPrefs.SetBool(PrefsKeys.SIDE_PANEL, _sidePanelToggle);
+            EditorPrefs.SetBool(PrefsKeys.HIDE_CONTENT, _hideContentToggle);
+            EditorPrefs.SetBool(PrefsKeys.GRID_SNAPING, _gridSnapToggle);
+            EditorPrefs.SetInt(PrefsKeys.TRANSITION_VIEW_TYPE, _transitionViewType);
         }
 
         private void DrawLeft()

@@ -33,7 +33,7 @@ namespace UnityUtilityEditor.Inspectors
             _mode = serializedObject.FindProperty(CameraFitter.ModeFieldName);
             _vertical = serializedObject.FindProperty(CameraFitter.VerticalFieldName);
             _horizontal = serializedObject.FindProperty(CameraFitter.HorizontalFieldName);
-            _widthToHeight = EditorPrefs.GetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY);
+            _widthToHeight = EditorPrefs.GetBool(PrefsKeys.WIDTH_TO_HEIGHT);
 
             _getSizeOfMainGameView = Delegate.CreateDelegate(typeof(Func<Vector2>), Type.GetType("UnityEditor.GameView,UnityEditor"), "GetSizeOfMainGameView") as Func<Vector2>;
             _currentViewRatio = GetGeameViewRatio();
@@ -41,7 +41,7 @@ namespace UnityUtilityEditor.Inspectors
 
         private void OnDisable()
         {
-            EditorPrefs.SetBool(PrefsConstants.WIDTH_TO_HEIGHT_KEY, _widthToHeight);
+            EditorPrefs.SetBool(PrefsKeys.WIDTH_TO_HEIGHT, _widthToHeight);
         }
 
         public override void OnInspectorGUI()

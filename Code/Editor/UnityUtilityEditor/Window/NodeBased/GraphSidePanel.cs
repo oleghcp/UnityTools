@@ -37,8 +37,8 @@ namespace UnityUtilityEditor.Window.NodeBased
                 RawGraph.CommonNodeFieldName,
             };
 
-            _width = EditorPrefs.GetFloat(PrefsConstants.SIDE_PANEL_WIDTH_KEY, 300f);
-            _selectedIndex = EditorPrefs.GetInt(PrefsConstants.SIDE_PANEL_TAB_KEY);
+            _width = EditorPrefs.GetFloat(PrefsKeys.SIDE_PANEL_WIDTH, 300f);
+            _selectedIndex = EditorPrefs.GetInt(PrefsKeys.SIDE_PANEL_TAB);
 
         }
 
@@ -70,8 +70,8 @@ namespace UnityUtilityEditor.Window.NodeBased
 
         public void Save()
         {
-            EditorPrefs.SetFloat(PrefsConstants.SIDE_PANEL_WIDTH_KEY, _width);
-            EditorPrefs.SetInt(PrefsConstants.SIDE_PANEL_TAB_KEY, _selectedIndex);
+            EditorPrefs.SetFloat(PrefsKeys.SIDE_PANEL_WIDTH, _width);
+            EditorPrefs.SetInt(PrefsKeys.SIDE_PANEL_TAB, _selectedIndex);
         }
 
         private void DrawContent()

@@ -64,9 +64,9 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(10f);
 
-            _assemblyIndex = EditorGuiLayout.DropDown("Assembly:", EditorPrefs.GetInt(PrefsConstants.ASSEMBLY_INDEX_KEY) % _assemblies.Length, _assemblies);
+            _assemblyIndex = EditorGuiLayout.DropDown("Assembly:", EditorPrefs.GetInt(PrefsKeys.ASSEMBLY_INDEX) % _assemblies.Length, _assemblies);
 
-            EditorPrefs.SetInt(PrefsConstants.ASSEMBLY_INDEX_KEY, _assemblyIndex);
+            EditorPrefs.SetInt(PrefsKeys.ASSEMBLY_INDEX, _assemblyIndex);
             string assemblyName = _assemblies[_assemblyIndex];
 
             GUILayout.Space(10f);
