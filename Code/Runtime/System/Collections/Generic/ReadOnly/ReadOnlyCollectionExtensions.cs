@@ -89,7 +89,7 @@ namespace System.Collections.Generic.ReadOnly
             if (startIndex + length > self.Count)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
-            for (int i = startIndex; i < length; i++)
+            for (int i = startIndex; i < length + startIndex; i++)
             {
                 yield return self[i];
             }
@@ -98,25 +98,6 @@ namespace System.Collections.Generic.ReadOnly
         public static IEnumerable<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
         {
             return Enumerate_(self, startIndex, self.Count - startIndex);
-        }
-
-        public static IEnumerable<T> EnumerateBack_<T>(this IReadOnlyList<T> self, int startReverseIndex, int length)
-        {
-            if ((uint)startReverseIndex >= (uint)self.Count)
-                throw new ArgumentOutOfRangeException(nameof(startReverseIndex), "Index was out of range.");
-
-            if (startReverseIndex + length > self.Count)
-                throw new ArgumentOutOfRangeException(nameof(length));
-
-            for (int i = startReverseIndex; i < length; i++)
-            {
-                yield return self.FromEnd_(i);
-            }
-        }
-
-        public static IEnumerable<T> EnumerateBack_<T>(this IReadOnlyList<T> self, int startReverseIndex)
-        {
-            return Enumerate_(self, startReverseIndex, self.Count - startReverseIndex);
         }
 
         public static void CopyTo_<T>(this IReadOnlyList<T> self, Span<T> target) where T : unmanaged
