@@ -17,7 +17,7 @@ namespace UnityUtilityEditor.SettingsProviders
         [SettingsProvider]
         private static SettingsProvider CreateProvider()
         {
-            return new GamepadAxesSettingsProvider($"{SettingsScope.Project}/{LibConstants.LIB_NAME}/Gamepad Axes",
+            return new GamepadAxesSettingsProvider($"{SettingsProviderUtility.PROJECT_SECTION_NAME}/{LibConstants.LIB_NAME}/Gamepad Axes",
                                                    SettingsScope.Project,
                                                    new[] { "Gamepad", "Axes" });
         }

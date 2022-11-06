@@ -3,16 +3,16 @@ using UnityEditor;
 
 namespace UnityUtilityEditor.SettingsProviders
 {
-    internal class BaseSettingsProvider : SettingsProvider
+    internal class UserBaseSettingsProvider : SettingsProvider
     {
-        public BaseSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
+        public UserBaseSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
         {
         }
 
         [SettingsProvider]
         private static SettingsProvider CreateProvider()
         {
-            return new BaseSettingsProvider($"{SettingsScope.Project}/{LibConstants.LIB_NAME}", SettingsScope.Project);
+            return new UserBaseSettingsProvider($"{SettingsProviderUtility.USER_SECTION_NAME}/{LibConstants.LIB_NAME}", SettingsScope.User);
         }
 
         public override void OnGUI(string searchContext)
