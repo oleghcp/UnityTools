@@ -52,12 +52,6 @@ namespace UnityUtilityEditor.Window
 
             GUILayout.Space(5f);
 
-            if (_objects.IsNullOrEmpty())
-            {
-                EditorGUILayout.LabelField("There are no references.");
-                return;
-            }
-
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox);
 
             for (int i = 0; i < _objects.Length; i++)

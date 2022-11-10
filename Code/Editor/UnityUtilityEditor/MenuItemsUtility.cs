@@ -33,7 +33,7 @@ namespace UnityUtilityEditor
             }
         }
 
-        public static IEnumerable<string> SearchReferencesViaDataBase(string targetGuid)
+        public static IList<string> SearchReferencesViaDataBase(string targetGuid)
         {
             List<string> foundObjects = new List<string>();
 
@@ -60,12 +60,12 @@ namespace UnityUtilityEditor
             return foundObjects;
         }
 
-        public static IEnumerable<string> SearchReferencesInAssetsViaText(string targetGuid)
+        public static IList<string> SearchReferencesInAssetsViaText(string targetGuid)
         {
             return SearchReferencesViaText(AssetDatabaseExt.EnumerateAssetFiles(), targetGuid, IsValidExtension);
         }
 
-        public static IEnumerable<string> SearchReferencesInSettingsViaText(string targetGuid)
+        public static IList<string> SearchReferencesInSettingsViaText(string targetGuid)
         {
             return SearchReferencesViaText(AssetDatabaseExt.EnumerateSettingsFiles(), targetGuid, isValidExtension);
 
@@ -76,7 +76,7 @@ namespace UnityUtilityEditor
             }
         }
 
-        private static IEnumerable<string> SearchReferencesViaText(IEnumerable<string> enumerable, string targetGuid, Predicate<string> extensionChecker)
+        private static IList<string> SearchReferencesViaText(IEnumerable<string> enumerable, string targetGuid, Predicate<string> extensionChecker)
         {
             string projectFolderPath = PathUtility.GetParentPath(Application.dataPath);
 

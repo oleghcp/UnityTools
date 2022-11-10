@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
@@ -60,24 +62,32 @@ namespace UnityUtilityEditor
         [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Asset Database", false, 26)]
         private static void FindReferencesViaAssetDatabase()
         {
-            string targetGuid = Selection.assetGUIDs[0];
-            var collection = MenuItemsUtility.SearchReferencesViaDataBase(targetGuid);
-            ReferencesWindow.Create(targetGuid, collection);
+            FindReferences(MenuItemsUtility.SearchReferencesViaDataBase);
         }
 
         [MenuItem(MENU_PARENT + "Find References In Project (ext.)/Via Text Searching", false, 26)]
         private static void FindReferencesViaTextSearching()
         {
-            string targetGuid = Selection.assetGUIDs[0];
-            var collection = MenuItemsUtility.SearchReferencesInAssetsViaText(targetGuid);
-            ReferencesWindow.Create(targetGuid, collection);
+            FindReferences(MenuItemsUtility.SearchReferencesInAssetsViaText);
         }
 
         [MenuItem(MENU_PARENT + "Find References In Settings (ext.)", false, 26)]
         private static void FindReferencesInSettingsViaTextSearching()
         {
+            FindReferences(MenuItemsUtility.SearchReferencesInSettingsViaText);
+        }
+
+        private static void FindReferences(Func<string, IList<string>> searcher)
+        {
             string targetGuid = Selection.assetGUIDs[0];
-            var collection = MenuItemsUtility.SearchReferencesInSettingsViaText(targetGuid);
+            IList<string> collection = searcher(targetGuid);
+
+            if (collection.IsNullOrEmpty())
+            {
+                Debug.Log("There are no references.");
+                return;
+            }
+
             ReferencesWindow.Create(targetGuid, collection);
         }
 
