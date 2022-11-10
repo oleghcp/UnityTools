@@ -123,7 +123,7 @@ namespace UnityEngine
             return UnityObjectUtility.IsNullOrDead(self);
         }
 
-        public static bool IsAlive(this UnityObject self)
+        public static bool ExistsAndAlive(this UnityObject self)
         {
             return !UnityObjectUtility.IsNullOrDead(self);
         }

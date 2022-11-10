@@ -21,7 +21,7 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAlive(object obj)
+        public static bool ExistsAndAlive(object obj)
         {
             return !IsNullOrDead(obj);
         }
