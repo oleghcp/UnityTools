@@ -17,16 +17,11 @@ namespace UnityUtility.GameConsole
 
         private Terminal _terminal;
         private ObjectPool<LogLine> _pool;
-        private List<LogLine> _lines;
-
-        private void Awake()
-        {
-            _pool = new ObjectPool<LogLine>(this);
-            _lines = new List<LogLine>();
-        }
+        private List<LogLine> _lines = new List<LogLine>();
 
         public void SetUp(Terminal terminal)
         {
+            _pool = new ObjectPool<LogLine>(this);
             _terminal = terminal;
         }
 
