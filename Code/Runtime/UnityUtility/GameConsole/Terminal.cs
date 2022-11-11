@@ -14,28 +14,6 @@ using static UnityEngine.RectTransform;
 
 namespace UnityUtility.GameConsole
 {
-    public class TerminalOptions
-    {
-        private float _targetHeight = 0.75f;
-        private int _linesLimit = 100;
-
-        public bool AddSpaceAfterName = true;
-        public bool ShowDebugLogs = true;
-
-        /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
-        public float TargetHeight
-        {
-            get => _targetHeight;
-            set => _targetHeight = value.Clamp01();
-        }
-
-        public int LinesLimit
-        {
-            get => _linesLimit;
-            set => _linesLimit = value.ClampMin(0);
-        }
-    }
-
     [DisallowMultipleComponent]
     public sealed class Terminal : SingleUiBehaviour<Terminal>
     {
@@ -50,6 +28,8 @@ namespace UnityUtility.GameConsole
         private LogController _log;
         [SerializeField]
         private GameObject _closeButton;
+        [SerializeField]
+        private GameObject _border;
 
         private bool _isOn;
         private PointerEventData _pointerEventData;
@@ -396,14 +376,14 @@ namespace UnityUtility.GameConsole
             float targetHeight = 720f * _options.TargetHeight;
 
             _field.gameObject.SetActive(_isOn);
-
-            if (_closeButton != null)
-                _closeButton.SetActive(_isOn);
+            _closeButton.SetActive(_isOn);
 
             if (_isOn)
             {
                 _field.text = string.Empty;
                 _field.OnPointerClick(_pointerEventData);
+                _log.gameObject.SetActive(true);
+                _border.SetActive(true);
             }
             else
             {
@@ -421,6 +401,12 @@ namespace UnityUtility.GameConsole
                 rectTransform.SetSizeWithCurrentAnchors(Axis.Vertical, Mathf.Lerp(hStart, hEnd, ratio));
 
                 yield return null;
+            }
+
+            if (!_isOn)
+            {
+                _log.gameObject.SetActive(false);
+                _border.SetActive(false);
             }
         }
     }

@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityUtility.Async;
 using UnityUtility.Pool;
 
 namespace UnityUtility.GameConsole
@@ -22,8 +23,8 @@ namespace UnityUtility.GameConsole
             _text.text = text;
             _text.color = color;
             _info = info;
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);
             gameObject.SetActive(true);
+            TaskSystem.RunAfterFrames(1, SetVerticalSize);
         }
 
         public LogLine Reuse()
@@ -49,6 +50,11 @@ namespace UnityUtility.GameConsole
         {
             if (_info.HasUsefulData())
                 _infoPanel.Show(_info);
+        }
+
+        private void SetVerticalSize()
+        {
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);
         }
     }
 }
