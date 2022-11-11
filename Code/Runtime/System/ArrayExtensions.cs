@@ -5,16 +5,45 @@ namespace System
 {
     public static class ArrayExtensions
     {
+        /// <summary>
+        /// Assigns the given value of type T to the elements of the specified array.
+        /// </summary>
         public static void Fill<T>(this T[] self, T value)
         {
+#if UNITY_2021_2_OR_NEWER
             Array.Fill(self, value);
+#else
+            for (int i = 0; i < self.Length; i++)
+            {
+                self[i] = value;
+            }
+#endif
         }
 
+        /// <summary>
+        /// Assigns the given value of type T to the elements of the specified array which are within the range of startIndex (inclusive) and the next count number of indices.
+        /// </summary>
         public static void Fill<T>(this T[] self, T value, int startIndex, int count)
         {
+#if UNITY_2021_2_OR_NEWER
             Array.Fill(self, value, startIndex, count);
+#else
+            if ((uint)startIndex >= (uint)self.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + count > self.Length)
+                throw new ArgumentOutOfRangeException(nameof(count));
+
+            for (int i = startIndex; i < count + startIndex; i++)
+            {
+                self[i] = value;
+            }
+#endif
         }
 
+        /// <summary>
+        /// Assigns the given value of type T to the elements of the specified array.
+        /// </summary>
         public static void Fill<T>(this T[] self, Func<T> factory)
         {
             for (int i = 0; i < self.Length; i++)
@@ -23,6 +52,9 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// Assigns the given value of type T to the elements of the specified array which are within the range of startIndex (inclusive) and the next count number of indices.
+        /// </summary>
         public static void Fill<T>(this T[] self, Func<T> factory, int startIndex, int count)
         {
             if ((uint)startIndex >= (uint)self.Length)
