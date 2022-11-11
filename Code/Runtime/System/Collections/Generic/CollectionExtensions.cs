@@ -6,11 +6,6 @@ namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
-        public static T[] ToArray<T>(this Array self)
-        {
-            return (T[])self;
-        }
-
         public static void DisplaceLeft<T>(this IList<T> self)
         {
             if (self.Count <= 1)
@@ -41,41 +36,9 @@ namespace System.Collections.Generic
             self[0] = tmp;
         }
 
-        public static void Swap<T>(this T[] self, int i, int j)
-        {
-            Helper.Swap(ref self[i], ref self[j]);
-        }
-
         public static void Swap<T>(this IList<T> self, int i, int j)
         {
             Helper.Swap(self, i, j);
-        }
-
-        /// <summary>
-        /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
-        /// </summary>        
-        public static void Sort<T>(this T[] self) where T : IComparable<T>
-        {
-            Array.Sort(self);
-        }
-
-        /// <summary>
-        /// Sorts by comparison.
-        /// </summary>
-        /// <param name="comparer">Reference to comparing function.</param>
-        public static void Sort<T>(this T[] self, Comparison<T> comparer)
-        {
-            Array.Sort(self, comparer);
-        }
-
-        /// <summary>
-        /// Sorts by selected key.
-        /// </summary>                
-        /// <param name="keySelector">Reference to selecting function.</param>
-        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
-        {
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-            Array.Sort(self, (itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
         }
 
         /// <summary>
@@ -96,22 +59,6 @@ namespace System.Collections.Generic
         {
             Comparer<TKey> comparer = Comparer<TKey>.Default;
             CollectionUtility.QuickSort(self, 0, self.Count - 1, (itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
-        }
-
-        /// <summary>
-        /// Returns an index of the first entrance of the specified element or -1 if the element is not found.
-        /// </summary>
-        public static int IndexOf<T>(this T[] self, T item)
-        {
-            return (self as IList<T>).IndexOf(item);
-        }
-
-        /// <summary>
-        /// Returns an index of the first entrance of an element that matches the specified condition or -1 if the element is not found.
-        /// </summary>
-        public static int IndexOf<T>(this T[] self, Predicate<T> condition)
-        {
-            return Array.FindIndex(self, condition);
         }
 
         /// <summary>
@@ -244,80 +191,12 @@ namespace System.Collections.Generic
         }
 #endif
 
-        public static string ConcatToString<T>(this IEnumerable<T> self, string separator = "")
-        {
-            return string.Join(separator, self);
-        }
-
-#if UNITY_2021_2_OR_NEWER
-        public static string ConcatToString<T>(this IEnumerable<T> self, char separator)
-        {
-            return string.Join(separator, self);
-        }
-#endif
-
-        public static string ConcatToString(this IEnumerable<string> self, string separator = "")
-        {
-            return string.Join(separator, self);
-        }
-
-#if UNITY_2021_2_OR_NEWER
-        public static string ConcatToString(this IEnumerable<string> self, char separator)
-        {
-            return string.Join(separator, self);
-        }
-#endif
-
-        public static string ConcatToString(this object[] self, string separator = "")
-        {
-            return string.Join(separator, self);
-        }
-
-#if UNITY_2021_2_OR_NEWER
-        public static string ConcatToString(this object[] self, char separator)
-        {
-            return string.Join(separator, self);
-        }
-#endif
-
-        public static string ConcatToString(this string[] self, string separator = "")
-        {
-            return string.Join(separator, self);
-        }
-
-#if UNITY_2021_2_OR_NEWER
-        public static string ConcatToString(this string[] self, char separator)
-        {
-            return string.Join(separator, self);
-        }
-#endif
-
-        public static string ConcatToString(this string[] self, int startIndex, int count, string separator = "")
-        {
-            return string.Join(separator, self, startIndex, count);
-        }
-
-#if UNITY_2021_2_OR_NEWER
-        public static string ConcatToString(this string[] self, int startIndex, int count, char separator)
-        {
-            return string.Join(separator, self, startIndex, count);
-        }
-#endif
-
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
         /// </summary>
         public static T FromEnd<T>(this IList<T> self, int reverseIndex)
         {
             return self[self.Count - (reverseIndex + 1)];
-        }
-
-        /// <summary>
-        /// Returns the element at the specified index from the end of a collection.
-        /// </summary>
-        public static ref T FromEnd<T>(this T[] self, int reverseIndex)
-        {
-            return ref self[self.Length - (reverseIndex + 1)];
         }
 
         /// <summary>
@@ -336,24 +215,6 @@ namespace System.Collections.Generic
         public static T[] GetSubArray<T>(this IList<T> self, int startIndex)
         {
             return GetSubArray(self, startIndex, self.Count - startIndex);
-        }
-
-        /// <summary>
-        /// Returns a subarray of the specified length starting from the specified index.
-        /// </summary>
-        public static T[] GetSubArray<T>(this T[] self, int startIndex, int length)
-        {
-            T[] subArray = new T[length];
-            Array.Copy(self, startIndex, subArray, 0, length);
-            return subArray;
-        }
-
-        /// <summary>
-        /// Returns a subarray starting from the specified index.
-        /// </summary>
-        public static T[] GetSubArray<T>(this T[] self, int startIndex)
-        {
-            return GetSubArray(self, startIndex, self.Length - startIndex);
         }
 
         /// <summary>
@@ -379,16 +240,6 @@ namespace System.Collections.Generic
         public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex)
         {
             return Enumerate(self, startIndex, self.Count - startIndex);
-        }
-
-        /// <summary>
-        /// Returns a copy of the array.
-        /// </summary>
-        public static T[] GetCopy<T>(this T[] self)
-        {
-            T[] copy = new T[self.Length];
-            self.CopyTo(copy, 0);
-            return copy;
         }
 
         /// <summary>
@@ -438,23 +289,6 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Finds an element by condition.
-        /// </summary>        
-        /// <param name="match">Reference to matching function.</param>
-        public static T Find<T>(this T[] self, Predicate<T> match)
-        {
-            return Array.Find(self, match);
-        }
-
-        /// <summary>
-        /// Performs the specified action on each element of the specified array.
-        /// </summary>
-        public static void ForEach<T>(this T[] self, Action<T> action)
-        {
-            Array.ForEach(self, action);
-        }
-
-        /// <summary>
         /// Performs the specified action on each element of the System.Collections.Generic.IList`1.
         /// </summary>
         public static void ForEach<T>(this IList<T> self, Action<T> action)
@@ -470,59 +304,6 @@ namespace System.Collections.Generic
         {
             foreach (var item in self)
                 action(item);
-        }
-
-        /// <summary>
-        /// Reverses the sequence of the elements.
-        /// </summary>
-        public static void Reverse<T>(this T[] self)
-        {
-            Array.Reverse(self);
-        }
-
-        /// <summary>
-        /// Reverses the sequence of the elements.
-        /// </summary>
-        /// <param name="index">The starting index of the section to reverse.</param>
-        /// <param name="length">The number of elements in the section to reverse.</param>
-        public static void Reverse<T>(this T[] self, int index, int length)
-        {
-            Array.Reverse(self, index, length);
-        }
-
-        /// <summary>
-        /// Sets elements of the array to their default value.
-        /// </summary>
-        public static void Clear<T>(this T[] self)
-        {
-            Array.Clear(self, 0, self.Length);
-        }
-
-        /// <summary>
-        /// Sets elements of the array to their default value.
-        /// </summary>
-        /// <param name="index">The starting index of the range of elements to clear.</param>
-        /// <param name="length">The number of elements to clear.</param>
-        public static void Clear<T>(this T[] self, int index, int length)
-        {
-            Array.Clear(self, index, length);
-        }
-
-        /// <summary>
-        /// Returns new array contained elements got by converting the array.
-        /// </summary>
-        /// <param name="converter">Conveting function.</param>
-        public static TOut[] GetConverted<TIn, TOut>(this TIn[] self, Converter<TIn, TOut> converter)
-        {
-            return Array.ConvertAll(self, converter);
-        }
-
-        /// <summary>
-        /// Returns whether array contains the specified item.
-        /// </summary>
-        public static bool Contains<T>(this T[] self, T item)
-        {
-            return (self as IList<T>).Contains(item);
         }
 
         /// <summary>
