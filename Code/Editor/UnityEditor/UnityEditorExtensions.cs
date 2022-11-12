@@ -247,7 +247,7 @@ namespace UnityEditor
         public static bool Disposed(this SerializedObject self)
         {
             try { bool check = self.isEditingMultipleObjects; }
-            catch (Exception) { return true; }
+            catch (ArgumentNullException) { return true; }
 
             return false;
         }
