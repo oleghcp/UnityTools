@@ -1,12 +1,14 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtility.Inspector;
 
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(BitList))]
-    internal class BitListDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(IntMask))]
+    internal class BitMaskDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

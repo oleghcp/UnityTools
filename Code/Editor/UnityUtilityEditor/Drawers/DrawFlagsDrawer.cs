@@ -12,12 +12,11 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Type type = EditorUtilityExt.GetFieldType(this);
-            bool integerMask = type.GetTypeCode() == TypeCode.Int32;
+            FieldType fieldType = GetFieldType();
 
-            if (type != typeof(BitList) && !integerMask)
+            if (fieldType == FieldType.Other)
             {
-                EditorGui.ErrorLabel(position, label, $"Use {nameof(DrawFlagsAttribute)} with {nameof(Int32)} or with {nameof(BitList)}.");
+                EditorGui.ErrorLabel(position, label, $"Use {nameof(DrawFlagsAttribute)} with {nameof(Int32)}, {nameof(IntMask)} or {nameof(BitList)}.");
                 return;
             }
 
@@ -25,14 +24,43 @@ namespace UnityUtilityEditor.Drawers
 
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent("Edit values"), FocusType.Keyboard))
             {
-                if (integerMask)
-                    ShowIntMaskMenu(position, property);
-                else
-                    ShowBitListMenu(position, property);
+                switch (fieldType)
+                {
+                    case FieldType.Int32:
+                        ShowIntMaskMenu(position, property, true);
+                        break;
+
+                    case FieldType.IntMask:
+                        ShowIntMaskMenu(position, property, false);
+                        break;
+
+                    case FieldType.BitList:
+                        ShowBitListMenu(position, property);
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(fieldType);
+                }
             }
         }
 
-        private void ShowIntMaskMenu(in Rect position, SerializedProperty property)
+        private FieldType GetFieldType()
+        {
+            Type type = EditorUtilityExt.GetFieldType(this);
+
+            if (type.GetTypeCode() == TypeCode.Int32)
+                return FieldType.Int32;
+
+            if (type == typeof(IntMask))
+                return FieldType.IntMask;
+
+            if (type == typeof(BitList))
+                return FieldType.BitList;
+
+            return FieldType.Other;
+        }
+
+        private void ShowIntMaskMenu(in Rect position, SerializedProperty property, bool int32)
         {
             var data = EnumDropDownData.GetData(attribute.EnumType);
             Array enumValues = data.EnumValues;
@@ -57,7 +85,8 @@ namespace UnityUtilityEditor.Drawers
                 names[Convert.ToInt32(item)] = item.GetName();
             }
 
-            BitList bits = BitList.CreateFromBitMask(property.intValue, names.Length);
+            int mask = int32 ? property.intValue : (int)property.GetIntMaskValue();
+            BitList bits = BitList.CreateFromBitMask(mask, names.Length);
             EditorUtilityExt.DisplayMultiSelectableList(position, bits, names, onCloseMenu);
 
             void onCloseMenu(BitList bitList)
@@ -66,7 +95,10 @@ namespace UnityUtilityEditor.Drawers
                     return;
 
                 property.serializedObject.Update();
-                property.intValue = bitList.ToIntBitMask();
+                if (int32)
+                    property.intValue = bitList.ToIntBitMask();
+                else
+                    property.SetIntMaskValue(bitList.ToIntBitMask());
                 property.serializedObject.ApplyModifiedProperties();
             }
         }
@@ -121,6 +153,14 @@ namespace UnityUtilityEditor.Drawers
                 }
                 property.serializedObject.ApplyModifiedProperties();
             }
+        }
+
+        private enum FieldType
+        {
+            Other,
+            Int32,
+            IntMask,
+            BitList,
         }
     }
 }
