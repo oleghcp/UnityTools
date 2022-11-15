@@ -193,6 +193,7 @@ namespace UnityUtility
 
         public static void GetDigits(int number, List<int> buffer)
         {
+            number = Math.Abs(number);
             while (number > 0)
             {
                 buffer.Add(number % 10);
@@ -203,6 +204,7 @@ namespace UnityUtility
 
         public static void GetDigits(long number, List<int> buffer)
         {
+            number = Math.Abs(number);
             while (number > 0)
             {
                 buffer.Add((int)(number % 10));
