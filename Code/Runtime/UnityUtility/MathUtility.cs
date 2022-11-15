@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
 using UnityUtility.MathExt;
@@ -177,6 +179,36 @@ namespace UnityUtility
         public static float GetSphereSurface(float radius)
         {
             return PI * radius * radius * 4f;
+        }
+
+        public static int DigitsCount(int number)
+        {
+            return (number != 0) ? (int)Math.Ceiling(Math.Log10(Math.Abs(number) + 0.5d)) : 1;
+        }
+
+        public static int DigitsCount(long number)
+        {
+            return (number != 0) ? (int)Math.Ceiling(Math.Log10(Math.Abs(number) + 0.5d)) : 1;
+        }
+
+        public static void GetDigits(int number, List<int> buffer)
+        {
+            while (number > 0)
+            {
+                buffer.Add(number % 10);
+                number = number / 10;
+            }
+            buffer.Reverse();
+        }
+
+        public static void GetDigits(long number, List<int> buffer)
+        {
+            while (number > 0)
+            {
+                buffer.Add((int)(number % 10));
+                number = number / 10;
+            }
+            buffer.Reverse();
         }
     }
 }

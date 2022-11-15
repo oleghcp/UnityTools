@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityUtility.MathExt
@@ -84,20 +85,38 @@ namespace UnityUtility.MathExt
             return Mathf.Approximately(value, other);
         }
 
-        /// <summary>
-        /// Counts digits amount.
-        /// </summary>
-        public static int Digits(this int number)
+        public static int DigitsCount(this int number)
         {
-            return (number != 0) ? (int)Math.Ceiling(Math.Log10(Math.Abs(number) + 0.5d)) : 1;
+            return MathUtility.DigitsCount(number);
         }
 
-        /// <summary>
-        /// Counts digits amount.
-        /// </summary>
-        public static int Digits(this long number)
+        public static int DigitsCount(this long number)
         {
-            return (number != 0) ? (int)Math.Ceiling(Math.Log10(Math.Abs(number) + 0.5d)) : 1;
+            return MathUtility.DigitsCount(number);
+        }
+
+        public static int[] GetDigits(this int number)
+        {
+            List<int> buffer = new List<int>();
+            MathUtility.GetDigits(number, buffer);
+            return buffer.ToArray();
+        }
+
+        public static int[] GetDigits(this long number)
+        {
+            List<int> buffer = new List<int>();
+            MathUtility.GetDigits(number, buffer);
+            return buffer.ToArray();
+        }
+
+        public static void GetDigits(this int number, List<int> buffer)
+        {
+            MathUtility.GetDigits(number, buffer);
+        }
+
+        public static void GetDigits(this long number, List<int> buffer)
+        {
+            MathUtility.GetDigits(number, buffer);
         }
 
         /// <summary>
