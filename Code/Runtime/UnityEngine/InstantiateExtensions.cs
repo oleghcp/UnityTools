@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityObject = UnityEngine.Object;
+﻿using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine
 {
@@ -46,11 +45,11 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Instantiates gameobject to the specified position with the specified rotation.
+        /// Instantiates gameobject to the specified position.
         /// </summary>
         public static GameObject Install(this GameObject self, in Vector3 position)
         {
-            return UnityObject.Instantiate(self, position, Quaternion.identity);
+            return UnityObject.Instantiate(self, position, self.transform.rotation);
         }
 
         /// <summary>
@@ -77,11 +76,19 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Instantiates defined component to specified position with specified rotation.
+        /// Instantiates defined component to specified position.
         /// </summary>
         public static T Install<T>(this T self, in Vector3 position) where T : Component
         {
-            return UnityObject.Instantiate(self, position, Quaternion.identity);
+            return UnityObject.Instantiate(self, position, self.transform.rotation);
+        }
+
+        /// <summary>
+        /// Instantiates defined component to specified position.
+        /// </summary>
+        public static Transform Install(this Transform self, in Vector3 position)
+        {
+            return UnityObject.Instantiate(self, position, self.rotation);
         }
 
         /// <summary>

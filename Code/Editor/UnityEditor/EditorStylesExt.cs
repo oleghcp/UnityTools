@@ -2,7 +2,7 @@
 
 namespace UnityEditor
 {
-    internal static class EditorStylesExt
+    public static class EditorStylesExt
     {
         public static GUIStyle DropArea { get; }
         public static GUIStyle DropDown { get; }
