@@ -1,10 +1,13 @@
-﻿using UnityUtility;
+﻿using System.Runtime.CompilerServices;
+using UnityUtility;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine
 {
     public static class UnityObjectExtensions
     {
+        private static ConditionalWeakTable<MeshRenderer, MeshFilter> _meshRendererData;
+
         /// <summary>
         /// Destroys the unity object.
         /// </summary>
@@ -28,6 +31,56 @@ namespace UnityEngine
         public static void Immortalize(this UnityObject self)
         {
             UnityObject.DontDestroyOnLoad(self);
+        }
+
+        /// <summary>
+        /// Returns true if a game object is asset reference. For scene objects returns false.
+        /// </summary>
+        public static bool IsAsset(this GameObject self)
+        {
+            return UnityObjectUtility.IsAsset(self);
+        }
+
+        /// <summary>
+        /// Returns true if a Component is asset reference. For scene objects returns false.
+        /// </summary>
+        public static bool IsAsset(this Component self)
+        {
+            return UnityObjectUtility.IsAsset(self);
+        }
+
+        /// <summary>
+        /// Returns true if UnityEngine.Object is asset reference.
+        /// </summary>
+        public static bool IsAsset(this UnityObject self)
+        {
+            return UnityObjectUtility.IsAsset(self);
+        }
+
+        public static Mesh GetMesh(this MeshRenderer self)
+        {
+            return GetMeshFilter(self)?.mesh;
+        }
+
+        public static Mesh GetSharedMesh(this MeshRenderer self)
+        {
+            return GetMeshFilter(self)?.sharedMesh;
+        }
+
+        private static MeshFilter GetMeshFilter(MeshRenderer renderer)
+        {
+            if (_meshRendererData == null)
+                _meshRendererData = new ConditionalWeakTable<MeshRenderer, MeshFilter>();
+
+            if (!_meshRendererData.TryGetValue(renderer, out MeshFilter filter))
+            {
+                if (!renderer.TryGetComponent(out filter))
+                    return null;
+
+                _meshRendererData.Add(renderer, filter);
+            }
+
+            return filter;
         }
 
         public static Vector2 GetOrthographicSize(this Camera self)
@@ -65,30 +118,6 @@ namespace UnityEngine
             float x = self.width;
             float y = self.height;
             return Sprite.Create(self, new Rect(0f, 0f, x, y), new Vector2(x * 0.5f, y * 0.5f), pixelsPerUnit, extrude, meshType, border);
-        }
-
-        /// <summary>
-        /// Returns true if a game object is asset reference. For scene objects returns false.
-        /// </summary>
-        public static bool IsAsset(this GameObject self)
-        {
-            return UnityObjectUtility.IsAsset(self);
-        }
-
-        /// <summary>
-        /// Returns true if a Component is asset reference. For scene objects returns false.
-        /// </summary>
-        public static bool IsAsset(this Component self)
-        {
-            return UnityObjectUtility.IsAsset(self);
-        }
-
-        /// <summary>
-        /// Returns true if UnityEngine.Object is asset reference.
-        /// </summary>
-        public static bool IsAsset(this UnityObject self)
-        {
-            return UnityObjectUtility.IsAsset(self);
         }
     }
 }
