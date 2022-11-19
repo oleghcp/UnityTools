@@ -30,57 +30,6 @@ namespace UnityEngine
             UnityObject.DontDestroyOnLoad(self);
         }
 
-#if !UNITY_2021_2_OR_NEWER
-        public static T GetComponentInParent<T>(this Component self, bool includeInactive)
-        {
-            return self.transform.GetComponentInParent<T>(includeInactive);
-        }
-
-        public static T GetComponentInParent<T>(this GameObject self, bool includeInactive)
-        {
-            return self.transform.GetComponentInParent<T>(includeInactive);
-        }
-
-        public static T GetComponentInParent<T>(this Transform self, bool includeInactive)
-        {
-            if (!includeInactive)
-                return self.GetComponentInParent<T>();
-
-            for (Transform p = self; p != null; p = p.parent)
-            {
-                T component = p.GetComponent<T>();
-                if (component != null)
-                    return component;
-            }
-
-            return default;
-        }
-
-        public static T GetComponentInChildren<T>(this Component self, bool includeInactive)
-        {
-            return self.transform.GetComponentInChildren<T>(includeInactive);
-        }
-
-        public static T GetComponentInChildren<T>(this GameObject self, bool includeInactive)
-        {
-            return self.transform.GetComponentInChildren<T>(includeInactive);
-        }
-
-        public static T GetComponentInChildren<T>(this Transform self, bool includeInactive)
-        {
-            if (!includeInactive)
-                return self.GetComponentInChildren<T>();
-
-            foreach (Transform child in self.EnumerateChildren(true))
-            {
-                T component = child.GetComponent<T>();
-                if (component != null)
-                    return component;
-            }
-
-            return default;
-        }
-#endif
         public static Vector2 GetOrthographicSize(this Camera self)
         {
             return ScreenUtility.GetOrthographicSize(self.orthographicSize);

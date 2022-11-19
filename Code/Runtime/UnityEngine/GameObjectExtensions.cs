@@ -5,38 +5,6 @@ namespace UnityEngine
 {
     public static class GameObjectExtensions
     {
-        /// <summary>
-        /// Returns existing component or adds and returns new one.
-        /// </summary>
-        public static T GetOrAddComponent<T>(this GameObject self) where T : Component
-        {
-#if UNITY_2019_2_OR_NEWER
-            if (self.TryGetComponent(out T component))
-#else
-            T component = self.GetComponent<T>();
-            if (component != null)
-#endif
-                return component;
-
-            return self.AddComponent<T>();
-        }
-
-        /// <summary>
-        /// Returns existing component of Type type or adds and returns new one.
-        /// </summary>
-        public static Component GetOrAddComponent(this GameObject self, Type type)
-        {
-#if UNITY_2019_2_OR_NEWER
-            if (self.TryGetComponent(type, out Component component))
-#else
-            Component component = self.GetComponent(type);
-            if (component != null)
-#endif
-                return component;
-
-            return self.AddComponent(type);
-        }
-
         public static void SetParent(this GameObject self, GameObject parent)
         {
             self.transform.SetParent(parent.transform);
