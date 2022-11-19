@@ -1,7 +1,7 @@
 ﻿namespace UnityEngine
 {
 #pragma warning disable UNT0014
-    public static class PhysicsObjectsExtensions
+    public static class PhysicsExtensions
     {
 #if !UNITY_2019_1_OR_NEWER || INCLUDE_PHYSICS
         /// <summary>
