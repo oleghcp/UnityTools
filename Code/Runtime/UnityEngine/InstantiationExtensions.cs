@@ -2,7 +2,7 @@
 
 namespace UnityEngine
 {
-    public static class InstantiateExtensions
+    public static class InstantiationExtensions
     {
         /// <summary>
         /// Instantiates unity object of defined type.
