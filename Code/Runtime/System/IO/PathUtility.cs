@@ -52,10 +52,8 @@ namespace System.IO
             }
 
             int startIndex = separatorIndex + 1;
-            int length = separatorCheck(path.LastChar()) ?
-                         path.Length - startIndex - 1 :
-                         path.Length - startIndex;
-
+            int length = separatorCheck(path.FromEnd(0)) ? path.Length - startIndex - 1
+                                                         : path.Length - startIndex;
             return path.Substring(startIndex, length);
         }
 

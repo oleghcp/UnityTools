@@ -31,12 +31,12 @@ namespace System
             return Enum.GetName(self.GetType(), self);
         }
 
-        public static char LastChar(this string self)
+        /// <summary>
+        /// Returns the element at the specified index from the end of a string.
+        /// </summary>
+        public static char FromEnd(this string self, int reverseIndex)
         {
-            if (self.Length == 0)
-                throw Errors.NoElements();
-
-            return self[self.Length - 1];
+            return self[self.Length - (reverseIndex + 1)];
         }
 
         /// <summary>
