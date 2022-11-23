@@ -93,6 +93,7 @@ namespace UnityUtilityEditor
                    extension == ".prefab" ||
                    extension == ".mat" ||
                    extension == ".spriteatlas" ||
+                   extension == ".spriteatlasv2" ||
                    extension == ".controller" ||
                    extension == ".overrideController" ||
                    extension == ".preset" ||
