@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -23,7 +22,7 @@ namespace UnityEditor
             }
         }
 
-        public static void DestroyChildren(this Transform self, Predicate<Transform> predicate)
+        public static void DestroyChildrenImmediate(this Transform self, Predicate<Transform> predicate)
         {
             Transform[] children = self.EnumerateChildren(false)
                                        .Where(item => predicate(item))
