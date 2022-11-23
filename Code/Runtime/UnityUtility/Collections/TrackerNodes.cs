@@ -6,36 +6,19 @@ namespace UnityUtility.Collections
     public interface ITrackerNode
     {
         bool Changed { get; }
-    }
-
-    public abstract class CustomTrackerNode
-    {
-        public abstract bool Changed { get; }
-        public abstract void Check();
-        public abstract void Force();
-        public abstract void Cache();
-    }
-
-    public abstract class CustomTrackerNode<T> : CustomTrackerNode
-    {
-        public abstract T Value { get; }
-    }
-    #endregion
-
-    #region Internals
-    internal interface IActiveNode : ITrackerNode
-    {
         void Check();
         void Force();
         void Cache();
     }
 
-    internal interface IValueKeeper<T>
+    public interface ITrackerNode<T> : ITrackerNode
     {
         T Value { get; }
     }
+    #endregion
 
-    internal class NodeForValueType<T> : IActiveNode, IValueKeeper<T> where T : struct, IEquatable<T>
+    #region Internals
+    internal class NodeForValueType<T> : ITrackerNode<T> where T : struct, IEquatable<T>
     {
         private Func<T> _getter;
         private Action _onChangedCallback1;
@@ -78,7 +61,7 @@ namespace UnityUtility.Collections
         }
     }
 
-    internal class NodeForRefType<T> : IActiveNode, IValueKeeper<T> where T : class
+    internal class NodeForRefType<T> : ITrackerNode<T> where T : class
     {
         private Func<T> _getter;
         private Action _onChangedCallback1;
@@ -121,7 +104,7 @@ namespace UnityUtility.Collections
         }
     }
 
-    internal class DependentNode : IActiveNode
+    internal class DependentNode : ITrackerNode
     {
         private Action _onChangedCallback;
         private ITrackerNode _previousNode;
@@ -168,18 +151,18 @@ namespace UnityUtility.Collections
         }
     }
 
-    internal class DependentNodeWithValue<T> : IActiveNode, IValueKeeper<T>
+    internal class DependentNodeWithValue<T> : ITrackerNode<T>
     {
         private Action<T> _onChangedCallback;
         private ITrackerNode _previousNode;
-        private IValueKeeper<T> _valueNode;
+        private ITrackerNode<T> _valueNode;
 
         public bool Changed => _previousNode.Changed;
         public T Value => _valueNode.Value;
 
         public DependentNodeWithValue(Action<T> onChangedCallback, ITrackerNode previousNode)
         {
-            if (previousNode is IValueKeeper<T> valueNode)
+            if (previousNode is ITrackerNode<T> valueNode)
                 _valueNode = valueNode;
             else
                 throw new InvalidOperationException($"Previous node does not cache value or value is not {typeof(T)}.");
@@ -200,43 +183,6 @@ namespace UnityUtility.Collections
         }
 
         public void Cache()
-        {
-
-        }
-    }
-
-    internal class CustomNodeWrapper : IActiveNode
-    {
-        protected CustomTrackerNode Node;
-
-        public bool Changed => Node.Changed;
-
-        public CustomNodeWrapper(CustomTrackerNode node)
-        {
-            Node = node;
-        }
-
-        public void Check()
-        {
-            Node.Check();
-        }
-
-        public void Force()
-        {
-            Node.Force();
-        }
-
-        public void Cache()
-        {
-            Node.Cache();
-        }
-    }
-
-    internal class CustomNodeWrapper<T> : CustomNodeWrapper, IValueKeeper<T>
-    {
-        public T Value => (Node as CustomTrackerNode<T>).Value;
-
-        public CustomNodeWrapper(CustomTrackerNode<T> node) : base(node)
         {
 
         }

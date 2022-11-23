@@ -6,7 +6,7 @@ namespace UnityUtility.Collections
 {
     public class Tracker : IRefreshable
     {
-        private List<IActiveNode> _nodes = new List<IActiveNode>();
+        private List<ITrackerNode> _nodes = new List<ITrackerNode>();
 
         public void Refresh()
         {
@@ -88,14 +88,14 @@ namespace UnityUtility.Collections
             return _nodes.Place(new DependentNode(onChangedCallback, null, dependencies));
         }
 
-        public ITrackerNode AddCustomNode(CustomTrackerNode node)
+        public ITrackerNode AddCustomNode(ITrackerNode node)
         {
-            return _nodes.Place(new CustomNodeWrapper(node));
+            return _nodes.Place(node);
         }
 
-        public ITrackerNode AddCustomNode<T>(CustomTrackerNode<T> node)
+        public ITrackerNode AddCustomNode<T>(ITrackerNode<T> node)
         {
-            return _nodes.Place(new CustomNodeWrapper<T>(node));
+            return _nodes.Place(node);
         }
     }
 }
