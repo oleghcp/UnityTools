@@ -10,11 +10,12 @@ namespace UnityUtility.SaveLoad
     public sealed class SaveLoadFieldAttribute : Attribute
     {
         internal object DefValue;
-
         internal string Key;
         internal FieldInfo Field;
 
-        public SaveLoadFieldAttribute(object defValue = null)
+        public SaveLoadFieldAttribute() { }
+
+        public SaveLoadFieldAttribute(object defValue)
         {
             DefValue = defValue;
         }

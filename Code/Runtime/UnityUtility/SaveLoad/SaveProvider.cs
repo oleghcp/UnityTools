@@ -6,14 +6,15 @@ using System.Runtime.CompilerServices;
 using UnityUtility.Async;
 using UnityUtility.MathExt;
 using UnityUtility.SaveLoad.SaveProviderStuff;
+using UnityUtilityTools;
 
 namespace UnityUtility.SaveLoad
 {
     public enum UnregOption
     {
         None,
-        SaveObjecState,
-        DeleteObjecState,
+        SaveObjectState,
+        DeleteObjectState,
     }
 
     /// <summary>
@@ -27,10 +28,11 @@ namespace UnityUtility.SaveLoad
         private IKeyGenerator _keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> _fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
 
-        public ISaver Saver => _saver;
-
         public SaveProvider(ISaver saver)
         {
+            if (saver == null)
+                throw Errors.NullParameter(nameof(saver));
+
             _saver = saver;
             _keyGenerator = new BaseKeyGenerator();
         }
@@ -43,32 +45,45 @@ namespace UnityUtility.SaveLoad
         /// 
         public SaveProvider(ISaver saver, IKeyGenerator keyGenerator)
         {
+            if (saver == null)
+                throw Errors.NullParameter(nameof(saver));
+
+            if (keyGenerator == null)
+                throw Errors.NullParameter(nameof(keyGenerator));
+
             _saver = saver;
             _keyGenerator = keyGenerator;
         }
 
-        ////////////////
-        //Public funcs//
-        ////////////////
+        public void ReplaceSaver(ISaver saver)
+        {
+            if (saver == null)
+                throw Errors.NullParameter(nameof(saver));
+
+            _saver = saver;
+        }
 
         /// <summary>
         /// Registers an object of which fields should be saved and load.
         /// </summary>
         /// <param name="initFields">If true the registered object fields will be initialized from saved data.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void RegMember(object client, bool initFields = true)
+        public void RegMember(object fieldsOwner, bool initFields = true)
         {
-            RegMember(client, null, initFields);
+            RegMember(fieldsOwner, null, initFields);
         }
 
         /// <summary>
         /// Registers an object of which fields should be saved and load.
         /// </summary>
-        /// <param name="clientId">Specific id for the client if there are more than one instance of the client class.</param>
+        /// <param name="ownerId">Specific id for the fields owner if there are more than one instance of the owner class.</param>
         /// <param name="initFields">If true the registered object fields will be initialized from saved data.</param>
-        public void RegMember(object client, string clientId, bool initFields = true)
+        public void RegMember(object fieldsOwner, string ownerId, bool initFields = true)
         {
-            Type t = client.GetType();
+            if (fieldsOwner == null)
+                throw Errors.NullParameter(nameof(fieldsOwner));
+
+            Type t = fieldsOwner.GetType();
             FieldInfo[] fields = t.GetFields(FIELD_MASK);
 
             List<SaveLoadFieldAttribute> list = null;
@@ -83,7 +98,7 @@ namespace UnityUtility.SaveLoad
                         list = new List<SaveLoadFieldAttribute>();
 
                     a.Field = fields[i];
-                    a.Key = _keyGenerator.Generate(t, a.Field.Name, clientId);
+                    a.Key = _keyGenerator.Generate(t, a.Field.Name, ownerId);
 
                     list.Add(a);
 
@@ -91,30 +106,32 @@ namespace UnityUtility.SaveLoad
                     {
                         object value = a.DefValue != null ? _saver.Get(a.Key, a.DefValue)
                                                           : _saver.Get(a.Key, a.Field.FieldType);
-
-                        a.Field.SetValue(client, value);
+                        a.Field.SetValue(fieldsOwner, value);
                     }
                 }
             }
 
             if (list != null)
-                _fields.Add(client, list);
+                _fields.Add(fieldsOwner, list);
         }
 
         /// <summary>
         /// Unregisters the registered object.
         /// </summary>        
         /// <param name="deleteSaves">Removes key-value data of the object from the storage if true. You should call ApplyAll Function to save changes.</param>
-        public void UnregMember(object client, UnregOption option = UnregOption.None)
+        public void UnregMember(object fieldsOwner, UnregOption option = UnregOption.None)
         {
-            if (!_fields.Remove(client, out var aList) || option == UnregOption.None)
+            if (fieldsOwner == null)
+                throw Errors.NullParameter(nameof(fieldsOwner));
+
+            if (!_fields.Remove(fieldsOwner, out var aList) || option == UnregOption.None)
                 return;
 
             foreach (var attribute in aList)
             {
-                if (option == UnregOption.SaveObjecState)
-                    _saver.Set(attribute.Key, attribute.Field.GetValue(client));
-                else if (option == UnregOption.DeleteObjecState)
+                if (option == UnregOption.SaveObjectState)
+                    _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                else if (option == UnregOption.DeleteObjectState)
                     _saver.DeleteKey(attribute.Key);
             }
         }
@@ -125,24 +142,34 @@ namespace UnityUtility.SaveLoad
         /// <param name="deleteSaves">Removes key-value data of the objects from the storage if true. You should call ApplyAll Function to save changes.</param>
         public void UnregAllMembers(UnregOption option = UnregOption.None)
         {
-            if (option == UnregOption.DeleteObjecState)
+            if (option == UnregOption.DeleteObjectState)
             {
-                foreach (var kvp in _fields)
+                foreach (var aList in _fields.Values)
                 {
-                    foreach (var attribute in kvp.Value)
+                    foreach (var attribute in aList)
                         _saver.DeleteKey(attribute.Key);
                 }
             }
-            else if (option == UnregOption.SaveObjecState)
+            else if (option == UnregOption.SaveObjectState)
             {
-                foreach (var kvp in _fields)
+                foreach (var (fieldsOwner, aList) in _fields)
                 {
-                    foreach (var attribute in kvp.Value)
-                        _saver.Set(attribute.Key, attribute.Field.GetValue(kvp.Key));
+                    foreach (var attribute in aList)
+                        _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
                 }
             }
 
             _fields.Clear();
+        }
+
+        public bool LoadVersion(string version)
+        {
+            return _saver.LoadVersion(version);
+        }
+
+        public bool DeleteVersion(string version)
+        {
+            return _saver.DeleteVersion(version);
         }
 
         /// <summary>
@@ -155,46 +182,39 @@ namespace UnityUtility.SaveLoad
         }
 
         /// <summary>
+        /// Saves all registered data.
+        /// </summary>
+        public void Save()
+        {
+            _saver.SaveLastVersion();
+        }
+
+        /// <summary>
         /// Saves all registered data asynchronously.
         /// </summary>
         public TaskInfo SaveAsync(string version, int stepsPerFrame)
         {
-            IEnumerator collectAndSave()
+            return getRoutine(stepsPerFrame.ClampMin(1)).StartAsync();
+
+            IEnumerator getRoutine(int spf)
             {
-                stepsPerFrame = stepsPerFrame.ClampMin(1);
-
-                int counter = 0;
-
-                foreach (var kvp in _fields)
-                {
-                    List<SaveLoadFieldAttribute> aList = kvp.Value;
-
-                    for (int i = 0; i < aList.Count; i++)
-                    {
-                        _saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
-
-                        if (++counter >= stepsPerFrame)
-                        {
-                            counter = 0;
-                            yield return null;
-                        }
-                    }
-                }
-
-                TaskInfo saveTask = _saver.SaveVersionAsync(version, stepsPerFrame);
-
-                while (saveTask.IsAlive)
-                {
-                    yield return null;
-                }
+                yield return GetCollectRountine(spf).StartAsync();
+                yield return _saver.SaveVersionAsync(version, spf);
             }
-
-            return TaskSystem.StartAsync(collectAndSave());
         }
 
-        public bool Load(string version)
+        /// <summary>
+        /// Saves all registered data asynchronously.
+        /// </summary>
+        public TaskInfo SaveAsync(int stepsPerFrame)
         {
-            return _saver.LoadVersion(version);
+            return getRoutine(stepsPerFrame.ClampMin(1)).StartAsync();
+
+            IEnumerator getRoutine(int spf)
+            {
+                yield return GetCollectRountine(spf).StartAsync();
+                yield return _saver.SaveCurrentVersionAsync(spf);
+            }
         }
 
         /// <summary>
@@ -205,18 +225,32 @@ namespace UnityUtility.SaveLoad
             _saver.Clear();
         }
 
-        ///////////////
-        //Inner funcs//
-        ///////////////
-
         private void Collect()
         {
-            foreach (var kvp in _fields)
+            foreach (var (fieldsOwner, aList) in _fields)
             {
-                List<SaveLoadFieldAttribute> aList = kvp.Value;
                 for (int i = 0; i < aList.Count; i++)
                 {
-                    _saver.Set(aList[i].Key, aList[i].Field.GetValue(kvp.Key));
+                    _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+                }
+            }
+        }
+
+        private IEnumerator GetCollectRountine(int stepsPerFrame)
+        {
+            int counter = 0;
+
+            foreach (var (fieldsOwner, aList) in _fields)
+            {
+                for (int i = 0; i < aList.Count; i++)
+                {
+                    _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+
+                    if (++counter >= stepsPerFrame)
+                    {
+                        counter = 0;
+                        yield return null;
+                    }
                 }
             }
         }
