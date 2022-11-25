@@ -18,7 +18,7 @@ namespace UnityUtility.Collections
     #endregion
 
     #region Internals
-    internal class NodeForValueType<T> : ITrackerNode<T> where T : struct, IEquatable<T>
+    internal abstract class BaseNode<T> : ITrackerNode<T>
     {
         private Func<T> _getter;
         private Action _onChangedCallback1;
@@ -29,7 +29,7 @@ namespace UnityUtility.Collections
         public bool Changed => _changed;
         public T Value => _cache;
 
-        public NodeForValueType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
+        public BaseNode(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
         {
             _getter = getter;
             _onChangedCallback1 = onChangedCallback1;
@@ -40,7 +40,7 @@ namespace UnityUtility.Collections
         {
             T tmp = _getter();
 
-            if (_changed = !_cache.Equals(tmp))
+            if (_changed = !Equal(_cache, tmp))
             {
                 _cache = tmp;
                 _onChangedCallback1?.Invoke();
@@ -59,79 +59,43 @@ namespace UnityUtility.Collections
         {
             _cache = _getter();
         }
+
+        protected abstract bool Equal(T a, T b);
     }
 
-    internal class NodeForRefType<T> : ITrackerNode<T> where T : class
+    internal class NodeForValueType<T> : BaseNode<T> where T : struct, IEquatable<T>
     {
-        private Func<T> _getter;
-        private Action _onChangedCallback1;
-        private Action<T> _onChangedCallback2;
-        private T _cachedObject;
-        private bool _changed;
+        public NodeForValueType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
+            : base(getter, onChangedCallback1, onChangedCallback2)
+        { }
 
-        public bool Changed => _changed;
-        public T Value => _cachedObject;
-
-        public NodeForRefType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
+        protected override bool Equal(T a, T b)
         {
-            _getter = getter;
-            _onChangedCallback1 = onChangedCallback1;
-            _onChangedCallback2 = onChangedCallback2;
-        }
-
-        public void Check()
-        {
-            T tmp = _getter();
-
-            if (_changed = _cachedObject != tmp)
-            {
-                _cachedObject = tmp;
-                _onChangedCallback1?.Invoke();
-                _onChangedCallback2?.Invoke(_cachedObject);
-            }
-        }
-
-        public void Force()
-        {
-            _cachedObject = _getter();
-            _onChangedCallback1?.Invoke();
-            _onChangedCallback2?.Invoke(_cachedObject);
-        }
-
-        public void Cache()
-        {
-            _cachedObject = _getter();
+            return a.Equals(b);
         }
     }
 
-    internal class DependentNode : ITrackerNode
+    internal class NodeForRefType<T> : BaseNode<T> where T : class
+    {
+        public NodeForRefType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
+            : base(getter, onChangedCallback1, onChangedCallback2)
+        { }
+
+        protected override bool Equal(T a, T b)
+        {
+            return a == b;
+        }
+    }
+
+    internal abstract class BaseDependentNode : ITrackerNode
     {
         private Action _onChangedCallback;
-        private ITrackerNode _previousNode;
-        private ITrackerNode[] _dependencies;
 
-        public bool Changed
-        {
-            get
-            {
-                if (_previousNode != null)
-                    return _previousNode.Changed;
+        public abstract bool Changed { get; }
 
-                for (int i = 0; i < _dependencies.Length; i++)
-                {
-                    if (_dependencies[i].Changed)
-                        return true;
-                }
-
-                return false;
-            }
-        }
-
-        public DependentNode(Action onChangedCallback, ITrackerNode previousNode, ITrackerNode[] dependencies)
+        public BaseDependentNode(Action onChangedCallback)
         {
             _onChangedCallback = onChangedCallback;
-            _previousNode = previousNode;
-            _dependencies = dependencies;
         }
 
         public void Check()
@@ -145,47 +109,78 @@ namespace UnityUtility.Collections
             _onChangedCallback();
         }
 
-        public void Cache()
-        {
+        public void Cache() { }
+    }
 
+    internal class PrevDependentNode : BaseDependentNode
+    {
+        private ITrackerNode _previousNode;
+
+        public override bool Changed => _previousNode.Changed;
+
+        public PrevDependentNode(Action onChangedCallback, ITrackerNode previousNode) : base(onChangedCallback)
+        {
+            _previousNode = previousNode;
+        }
+    }
+
+    internal class MassDependentNode : BaseDependentNode
+    {
+        private ITrackerNode[] _dependencies;
+
+        public override bool Changed
+        {
+            get
+            {
+                for (int i = 0; i < _dependencies.Length; i++)
+                {
+                    if (_dependencies[i].Changed)
+                        return true;
+                }
+
+                return false;
+            }
+        }
+
+        public MassDependentNode(Action onChangedCallback, ITrackerNode[] dependencies) : base(onChangedCallback)
+        {
+            _dependencies = dependencies;
         }
     }
 
     internal class DependentNodeWithValue<T> : ITrackerNode<T>
     {
         private Action<T> _onChangedCallback;
-        private ITrackerNode _previousNode;
-        private ITrackerNode<T> _valueNode;
+        private ITrackerNode<T> _previousNode;
 
         public bool Changed => _previousNode.Changed;
-        public T Value => _valueNode.Value;
+        public T Value => _previousNode.Value;
 
         public DependentNodeWithValue(Action<T> onChangedCallback, ITrackerNode previousNode)
         {
             if (previousNode is ITrackerNode<T> valueNode)
-                _valueNode = valueNode;
+            {
+                _onChangedCallback = onChangedCallback;
+                _previousNode = valueNode;
+            }
             else
+            {
                 throw new InvalidOperationException($"Previous node does not cache value or value is not {typeof(T)}.");
-
-            _onChangedCallback = onChangedCallback;
-            _previousNode = previousNode;
+            }
         }
 
         public void Check()
         {
             if (Changed)
-                _onChangedCallback(_valueNode.Value);
+                _onChangedCallback(_previousNode.Value);
         }
 
         public void Force()
         {
-            _onChangedCallback(_valueNode.Value);
+            _onChangedCallback(_previousNode.Value);
         }
 
-        public void Cache()
-        {
-
-        }
+        public void Cache() { }
     }
     #endregion
 }

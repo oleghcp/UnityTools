@@ -72,7 +72,7 @@ namespace UnityUtility.Collections
             if (_nodes.Count == 0)
                 throw Errors.EmptyTraker();
 
-            return _nodes.Place(new DependentNode(onChangedCallback, _nodes.FromEnd(0), null));
+            return _nodes.Place(new PrevDependentNode(onChangedCallback, _nodes.FromEnd(0)));
         }
 
         public ITrackerNode AddNodeBasedOnPrev<T>(Action<T> onChangedCallback)
@@ -85,15 +85,10 @@ namespace UnityUtility.Collections
 
         public ITrackerNode AddDependentNode(Action onChangedCallback, params ITrackerNode[] dependencies)
         {
-            return _nodes.Place(new DependentNode(onChangedCallback, null, dependencies));
+            return _nodes.Place(new MassDependentNode(onChangedCallback, dependencies));
         }
 
         public ITrackerNode AddCustomNode(ITrackerNode node)
-        {
-            return _nodes.Place(node);
-        }
-
-        public ITrackerNode AddCustomNode<T>(ITrackerNode<T> node)
         {
             return _nodes.Place(node);
         }
