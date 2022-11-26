@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtilityTools;
 
@@ -48,13 +47,11 @@ namespace UnityUtility.Mathematics
             return Distance(Position, other.Position) <= Radius + other.Radius;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float GetVolume()
         {
             return MathUtility.GetSphereVolume(Radius);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float GetSurface()
         {
             return MathUtility.GetSphereSurface(Radius);
