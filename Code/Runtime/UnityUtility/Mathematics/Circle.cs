@@ -68,7 +68,7 @@ namespace UnityUtility.Mathematics
 
             Vector2 vectorToCenter = Position - ray.origin;
 
-            if (Vector3.Dot(vectorToCenter, ray.direction) <= 0f)
+            if (Vector2.Dot(vectorToCenter, ray.direction) <= 0f)
                 return RaycastResult.None;
 
             Vector2 rayEndPoint = ray.origin + vectorToCenter.Project(ray.direction);
