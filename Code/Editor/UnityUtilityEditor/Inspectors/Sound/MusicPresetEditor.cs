@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.Sound;
 using UnityObject = UnityEngine.Object;
 

@@ -1,5 +1,5 @@
 ﻿using UnityUtility;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 
 namespace UnityEngine
 {

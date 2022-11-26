@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Collections;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 

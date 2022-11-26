@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 
 namespace UnityUtilityEditor.Inspectors
 {

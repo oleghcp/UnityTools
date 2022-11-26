@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.SingleScripts;
 using static UnityEngine.RectTransform;
 

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityUtility.Collections;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 
 namespace UnityUtilityEditor.Window
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityUtility.MathExt
+namespace UnityUtility.Mathematics
 {
     public enum RoundingWay
     {

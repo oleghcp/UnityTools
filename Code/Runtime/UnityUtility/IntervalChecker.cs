@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtilityTools;
 
 namespace UnityUtility

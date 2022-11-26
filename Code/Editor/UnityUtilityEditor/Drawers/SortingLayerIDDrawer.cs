@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Inspector;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 
 namespace UnityUtilityEditor.Drawers
 {

@@ -1,5 +1,5 @@
 ﻿#if !UNITY_2019_2_OR_NEWER || INCLUDE_UNITY_UI
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 
 namespace UnityUtility.GameConsole
 {

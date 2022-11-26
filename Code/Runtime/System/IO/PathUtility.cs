@@ -1,4 +1,4 @@
-﻿using UnityUtility.MathExt;
+﻿using UnityUtility.Mathematics;
 using UnityUtilityTools;
 
 namespace System.IO

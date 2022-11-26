@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityUtility.Async;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 
 namespace UnityUtility.Timers
 {

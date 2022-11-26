@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityUtility.Collections;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtilityTools;
 
 namespace UnityUtility

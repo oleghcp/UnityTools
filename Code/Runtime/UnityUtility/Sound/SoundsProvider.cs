@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.Pool;
 using UnityUtility.SaveLoad;
 using UnityUtility.Sound.SoundStuff;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.Pool;
 using UnityUtilityTools;
 

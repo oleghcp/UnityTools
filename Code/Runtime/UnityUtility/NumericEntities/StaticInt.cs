@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtilityTools;
 
 namespace UnityUtility.NumericEntities
