@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace UnityUtility
 {
@@ -19,6 +20,12 @@ namespace UnityUtility
                 case TextAnchor.LowerRight: return new Vector2(1f, 0f);
                 default: throw new UnsupportedValueException(anchor);
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static RectInt MinMaxRectInt(int xMin, int yMin, int xMax, int yMax)
+        {
+            return new RectInt(xMin, yMin, xMax - xMin, yMax - yMin);
         }
     }
 }

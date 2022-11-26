@@ -47,7 +47,7 @@ namespace UnityUtility
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float GetLength()
+        public float GetCircumference()
         {
             return MathUtility.GetCircumference(Radius);
         }

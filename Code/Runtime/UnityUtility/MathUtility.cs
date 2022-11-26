@@ -155,12 +155,6 @@ namespace UnityUtility
             return 1f - Exp(-value);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RectInt MinMaxRectInt(int xMin, int yMin, int xMax, int yMax)
-        {
-            return new RectInt(xMin, yMin, xMax - xMin, yMax - yMin);
-        }
-
         public static float GetCircleArea(float radius)
         {
             return PI * radius * radius;
