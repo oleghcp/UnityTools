@@ -59,16 +59,36 @@ namespace UnityUtility.Mathematics
             return new Rect(Position.x - Radius, Position.y - Radius, Diameter, Diameter);
         }
 
-        //public bool Raycast(Ray2D ray, out Vector2 point)
-        //{
-        //    if (Contains(ray.origin))
-        //    {
-        //        point = default;
-        //        return false;
-        //    }
+        public RaycastResult Raycast(Ray2D ray, out Vector2 hitPoint)
+        {
+            hitPoint = default;
 
-        //    throw new NotImplementedException();
-        //}
+            if (Contains(ray.origin))
+                return RaycastResult.Inside;
+
+            Vector2 vectorToCenter = Position - ray.origin;
+
+            if (Vector3.Dot(vectorToCenter, ray.direction) <= 0f)
+                return RaycastResult.None;
+
+            ray.direction = vectorToCenter.Project(ray.direction);
+            Vector2 rayCutEndPoint = ray.origin + ray.direction;
+            float distanceFromCenterToEndPoint = Distance(Position, rayCutEndPoint);
+
+            Debug.DrawRay(ray.origin, ray.direction, Colours.Green, float.PositiveInfinity);
+            Debug.DrawRay(Position, rayCutEndPoint - Position, Colours.Cyan, float.PositiveInfinity);
+
+            if (distanceFromCenterToEndPoint <= Radius)
+            {
+                float distanceFromEndPointToCircle = MathF.Sqrt(Radius * Radius - distanceFromCenterToEndPoint * distanceFromCenterToEndPoint);
+                Vector2 directionFromEndPointToOrigin = (ray.origin - rayCutEndPoint).normalized;
+                hitPoint = rayCutEndPoint + directionFromEndPointToOrigin * distanceFromEndPointToCircle;
+                Debug.DrawRay(Position, hitPoint - Position, Colours.Blue, float.PositiveInfinity);
+                return RaycastResult.Hit;
+            }
+
+            return RaycastResult.None;
+        }
 
         private float Distance(in Vector2 a, in Vector2 b)
         {
