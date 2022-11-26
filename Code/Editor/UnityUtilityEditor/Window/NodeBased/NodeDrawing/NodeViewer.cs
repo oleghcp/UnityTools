@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.NodeBased;
 
 namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityUtility.Inspector;
+using UnityUtility.Mathematics;
 
 #if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS
 namespace UnityUtility.Shooting

@@ -1,7 +1,7 @@
 ﻿#if UNITY_2019_3_OR_NEWER && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.Shooting;
 
 namespace UnityUtilityEditor.Drawers.Shooting

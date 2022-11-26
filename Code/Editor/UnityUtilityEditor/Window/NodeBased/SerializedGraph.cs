@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.IdGenerating;
-using UnityUtility.MathExt;
+using UnityUtility.Mathematics;
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
 
