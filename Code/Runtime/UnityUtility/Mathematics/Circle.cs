@@ -71,20 +71,14 @@ namespace UnityUtility.Mathematics
             if (Vector3.Dot(vectorToCenter, ray.direction) <= 0f)
                 return RaycastResult.None;
 
-            Vector2 rayVector = vectorToCenter.Project(ray.direction);
-            Vector2 rayEndPoint = ray.origin + rayVector;
+            Vector2 rayEndPoint = ray.origin + vectorToCenter.Project(ray.direction);
             float distanceFromCenterToEndPoint = Distance(Position, rayEndPoint);
-
-            Debug.DrawRay(ray.origin, rayVector, Colours.Green, float.PositiveInfinity);
-            Debug.DrawRay(Position, rayEndPoint - Position, Colours.Cyan, float.PositiveInfinity);
 
             if (distanceFromCenterToEndPoint > Radius)
                 return RaycastResult.None;
 
-            float distanceFromEndPointToCircle = MathF.Sqrt(Radius * Radius - distanceFromCenterToEndPoint * distanceFromCenterToEndPoint);
-            Vector2 directionFromEndPointToOrigin = (ray.origin - rayEndPoint).normalized;
-            hitPoint = rayEndPoint + directionFromEndPointToOrigin * distanceFromEndPointToCircle;
-            Debug.DrawRay(Position, hitPoint - Position, Colours.Blue, float.PositiveInfinity);
+            Ray2D rayFromEndPointToOrigin = new Ray2D(rayEndPoint, ray.origin - rayEndPoint);
+            hitPoint = rayFromEndPointToOrigin.GetPoint(MathF.Sqrt(Radius * Radius - distanceFromCenterToEndPoint * distanceFromCenterToEndPoint));
             return RaycastResult.Hit;
         }
 
