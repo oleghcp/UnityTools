@@ -12,6 +12,8 @@ namespace UnityUtility
         public Vector2 Position;
         public float Radius;
 
+        public float Diameter => Radius * 2f;
+
         public Circle(Vector2 position, float radius)
         {
             Position = position;
@@ -32,12 +34,12 @@ namespace UnityUtility
 
         public bool Contains(Vector2 point)
         {
-            return Vector2.Distance(point, Position) <= Radius;
+            return Distance(point, Position) <= Radius;
         }
 
         public bool Overlaps(in Circle other)
         {
-            return Vector2.Distance(Position, other.Position) <= Radius + other.Radius;
+            return Distance(Position, other.Position) <= Radius + other.Radius;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,6 +54,29 @@ namespace UnityUtility
             return MathUtility.GetCircumference(Radius);
         }
 
+        public Rect GetBounds()
+        {
+            return new Rect(Position.x - Radius, Position.y - Radius, Diameter, Diameter);
+        }
+
+        //public bool Raycast(Ray2D ray, out Vector2 point)
+        //{
+        //    if (Contains(ray.origin))
+        //    {
+        //        point = default;
+        //        return false;
+        //    }
+
+        //    throw new NotImplementedException();
+        //}
+
+        private float Distance(in Vector2 a, in Vector2 b)
+        {
+            var (x, y) = a - b;
+            return MathF.Sqrt(x * x + y * y);
+        }
+
+        #region Regular Stuff
         public override int GetHashCode()
         {
             return Helper.GetHashCode(Position.GetHashCode(), Radius.GetHashCode());
@@ -65,16 +90,6 @@ namespace UnityUtility
         public bool Equals(Circle other)
         {
             return this == other;
-        }
-
-        public static bool operator !=(Circle a, Circle b)
-        {
-            return !(a == b);
-        }
-
-        public static bool operator ==(Circle a, Circle b)
-        {
-            return a.Radius == b.Radius && a.Position == b.Position;
         }
 
         public override string ToString()
@@ -103,5 +118,16 @@ namespace UnityUtility
 
             return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", stringPosition, Radius.ToString(format, formatProvider));
         }
+
+        public static bool operator !=(Circle a, Circle b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator ==(Circle a, Circle b)
+        {
+            return a.Radius == b.Radius && a.Position == b.Position;
+        }
+        #endregion
     }
 }

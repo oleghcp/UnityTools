@@ -12,6 +12,8 @@ namespace UnityUtility
         public Vector3 Position;
         public float Radius;
 
+        public float Diameter => Radius * 2f;
+
         public Sphere(in Vector3 position, float radius)
         {
             Position = position;
@@ -38,12 +40,12 @@ namespace UnityUtility
 
         public bool Contains(in Vector3 point)
         {
-            return Vector3.Distance(point, Position) <= Radius;
+            return Distance(point, Position) <= Radius;
         }
 
         public bool Overlaps(in Sphere other)
         {
-            return Vector3.Distance(Position, other.Position) <= Radius + other.Radius;
+            return Distance(Position, other.Position) <= Radius + other.Radius;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,6 +60,29 @@ namespace UnityUtility
             return MathUtility.GetSphereSurface(Radius);
         }
 
+        public Bounds GetBounds()
+        {
+            return new Bounds(Position, Vector3.one * Diameter);
+        }
+
+        //public bool Raycast(Ray ray, out Vector3 point)
+        //{
+        //    if (Contains(ray.origin))
+        //    {
+        //        point = default;
+        //        return false;
+        //    }
+
+        //    throw new NotImplementedException();
+        //}
+
+        private float Distance(in Vector3 a, in Vector3 b)
+        {
+            var (x, y, z) = new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
+            return MathF.Sqrt(x * x + y * y + z * z);
+        }
+
+        #region Regular Stuff
         public override int GetHashCode()
         {
             return Helper.GetHashCode(Position.GetHashCode(), Radius.GetHashCode());
@@ -71,16 +96,6 @@ namespace UnityUtility
         public bool Equals(Sphere other)
         {
             return this == other;
-        }
-
-        public static bool operator !=(Sphere a, Sphere b)
-        {
-            return !(a == b);
-        }
-
-        public static bool operator ==(Sphere a, Sphere b)
-        {
-            return a.Radius == b.Radius && a.Position == b.Position;
         }
 
         public static implicit operator Sphere(BoundingSphere sphere)
@@ -119,5 +134,16 @@ namespace UnityUtility
 
             return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", stringPosition, Radius.ToString(format, formatProvider));
         }
+
+        public static bool operator !=(Sphere a, Sphere b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator ==(Sphere a, Sphere b)
+        {
+            return a.Radius == b.Radius && a.Position == b.Position;
+        }
+        #endregion
     }
 }
