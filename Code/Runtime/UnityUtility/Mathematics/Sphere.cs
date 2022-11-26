@@ -65,7 +65,7 @@ namespace UnityUtility.Mathematics
             return new Bounds(Position, Vector3.one * Diameter);
         }
 
-        public RaycastResult Raycast(Ray ray, out Vector3 hitPoint)
+        public RaycastResult Raycast(in Ray ray, out Vector3 hitPoint)
         {
             hitPoint = default;
 
@@ -86,6 +86,16 @@ namespace UnityUtility.Mathematics
             Ray rayFromEndPointToOrigin = new Ray(rayEndPoint, ray.origin - rayEndPoint);
             hitPoint = rayFromEndPointToOrigin.GetPoint(MathF.Sqrt(Radius * Radius - distanceFromCenterToEndPoint * distanceFromCenterToEndPoint));
             return RaycastResult.Hit;
+        }
+
+        public RaycastResult Raycast(in Ray ray, out Vector3 hitPoint, float distance)
+        {
+            RaycastResult result = Raycast(ray, out hitPoint);
+
+            if (result == RaycastResult.Hit && Distance(ray.origin, hitPoint) > distance)
+                result = RaycastResult.None;
+
+            return result;
         }
 
         private float Distance(in Vector3 a, in Vector3 b)
