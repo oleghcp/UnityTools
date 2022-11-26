@@ -135,6 +135,18 @@ namespace UnityUtility.Mathematics
             return new Vector2(Cos(angle), Sin(angle));
         }
 
+        /// <summary>
+        /// Projects a vector onto another vector.
+        /// </summary>
+        public static Vector2 Project(in Vector2 vector, in Vector2 onNormal)
+        {
+            float num = Vector2.Dot(onNormal, onNormal);
+            if (num > kEpsilon)
+                return onNormal * Vector2.Dot(vector, onNormal) / num;
+
+            return Vector2.zero;
+        }
+
         public static (float ch1, float ch2) LerpColorChannels(float ratio)
         {
             ratio = 1f - ratio.Clamp01();

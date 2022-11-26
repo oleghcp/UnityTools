@@ -179,6 +179,30 @@ namespace UnityEngine
         }
 
         /// <summary>
+        /// Projects a vector onto another vector.
+        /// </summary>
+        public static Vector2 Project(this in Vector2 self, in Vector2 onNormal)
+        {
+            return MathUtility.Project(self, onNormal);
+        }
+
+        /// <summary>
+        /// Projects a vector onto another vector.
+        /// </summary>
+        public static Vector3 Project(this in Vector3 self, in Vector3 onNormal)
+        {
+            return Vector3.Project(self, onNormal);
+        }
+
+        /// <summary>
+        /// Projects a vector onto a plane defined by a normal orthogonal to the plane.
+        /// </summary>
+        public static Vector3 ProjectOnPlane(this in Vector3 self, in Vector3 planeNormal)
+        {
+            return Vector3.ProjectOnPlane(self, planeNormal);
+        }
+
+        /// <summary>
         /// Returns vector2 value clamped between values represented by the bounds.
         /// </summary>
         public static Vector2Int GetClamped(this in Vector2Int value, in RectInt bounds)
