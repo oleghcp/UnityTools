@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtilityTools;
 
-namespace UnityUtility
+namespace UnityUtility.Mathematics
 {
     [Serializable]
     public struct Sphere : IEquatable<Sphere>, IFormattable

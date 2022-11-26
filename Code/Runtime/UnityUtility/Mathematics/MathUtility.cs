@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
-using UnityUtility.Mathematics;
 using static System.MathF;
 
-namespace UnityUtility
+namespace UnityUtility.Mathematics
 {
     public static class MathUtility
     {

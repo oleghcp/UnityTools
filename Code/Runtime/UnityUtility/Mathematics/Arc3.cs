@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace UnityUtility
+namespace UnityUtility.Mathematics
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]

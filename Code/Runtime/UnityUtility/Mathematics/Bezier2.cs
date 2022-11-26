@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.Mathematics;
 using UnityUtilityTools;
 
-namespace UnityUtility
+namespace UnityUtility.Mathematics
 {
     [Serializable]
     public sealed class Bezier2

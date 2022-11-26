@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityUtility.Mathematics;
 using static System.MathF;
 
-namespace UnityUtility
+namespace UnityUtility.Mathematics
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
