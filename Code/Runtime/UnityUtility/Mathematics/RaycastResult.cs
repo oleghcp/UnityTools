@@ -1,6 +1,6 @@
 ﻿namespace UnityUtility.Mathematics
 {
-    public enum RaycastResult : byte
+    public enum RaycastResult
     {
         None,
         Inside,
