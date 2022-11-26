@@ -390,5 +390,20 @@ namespace UnityUtility
         {
             CollectionUtility.Shuffle(collection, self);
         }
+
+        public static Vector2 GetInBounds(this IRng self, in Rect bounds)
+        {
+            return new Vector2(self.Next(bounds.xMin, bounds.xMax),
+                               self.Next(bounds.yMin, bounds.yMax));
+        }
+
+        public static Vector2 GetInBounds(this IRng self, in Bounds bounds)
+        {
+            Vector3 min = bounds.min;
+            Vector3 max = bounds.max;
+            return new Vector3(self.Next(min.x, max.x),
+                               self.Next(min.y, max.y),
+                               self.Next(min.z, max.z));
+        }
     }
 }
