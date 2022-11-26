@@ -336,7 +336,7 @@ namespace UnityEngine
             return self.parent as RectTransform;
         }
 
-        public static void SetAnchor(this RectTransform self, TextAnchor anchor, bool setPivot = false)
+        public static void SetAnchor(this RectTransform self, TextAnchor anchor, bool setPivot)
         {
             Vector2 vector = RectUtility.GetAnchor(anchor);
 
@@ -347,10 +347,52 @@ namespace UnityEngine
                 self.pivot = vector;
         }
 
+        public static void SetAnchor(this RectTransform self, RectTransformStretch stretch, bool setPivot)
+        {
+            Rect anchorRect = RectUtility.GetAnchor(stretch, out Vector2 pivot);
+
+            self.anchorMin = anchorRect.min;
+            self.anchorMax = anchorRect.max;
+
+            if (setPivot)
+                self.pivot = pivot;
+        }
+
         public static void SetPivot(this RectTransform self, TextAnchor anchor)
         {
-            Vector2 vector = RectUtility.GetAnchor(anchor);
-            self.pivot = vector;
+            self.pivot = RectUtility.GetAnchor(anchor);
+        }
+
+        /// <summary>
+		/// Sets the left offset of a rect transform to the specified value
+		/// </summary>
+		public static void SetLeft(this RectTransform self, float left)
+        {
+            self.offsetMin = new Vector2(left, self.offsetMin.y);
+        }
+
+        /// <summary>
+        /// Sets the right offset of a rect transform to the specified value
+        /// </summary>
+        public static void SetRight(this RectTransform self, float right)
+        {
+            self.offsetMax = new Vector2(-right, self.offsetMax.y);
+        }
+
+        /// <summary>
+        /// Sets the top offset of a rect transform to the specified value
+        /// </summary>
+        public static void SetTop(this RectTransform self, float top)
+        {
+            self.offsetMax = new Vector2(self.offsetMax.x, -top);
+        }
+
+        /// <summary>
+        /// Sets the bottom offset of a rect transform to the specified value
+        /// </summary>
+        public static void SetBottom(this RectTransform self, float bottom)
+        {
+            self.offsetMin = new Vector2(self.offsetMin.x, bottom);
         }
     }
 }
