@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityUtility.Mathematics;
 using UnityUtility.Sound;
+using UnityUtilityEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Inspectors.Sound

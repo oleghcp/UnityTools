@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Mathematics;
+using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Inspectors
 {

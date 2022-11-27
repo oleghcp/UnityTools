@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility.CSharp;
 using UnityUtility.CSharp.Collections;
 using UnityUtility.CSharp.IO;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public static class AssetDatabaseExt
     {

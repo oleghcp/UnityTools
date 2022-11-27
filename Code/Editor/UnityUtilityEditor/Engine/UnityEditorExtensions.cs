@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.CSharp;
 using UnityUtility.CSharp.Collections;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public static class UnityEditorExtensions
     {

@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public static class AssetExtensions
     {

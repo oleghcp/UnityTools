@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public static class EditorUtilityExt
     {

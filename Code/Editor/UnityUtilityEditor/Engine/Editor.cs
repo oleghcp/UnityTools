@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public abstract class Editor<T> : Editor where T : UnityObject
     {

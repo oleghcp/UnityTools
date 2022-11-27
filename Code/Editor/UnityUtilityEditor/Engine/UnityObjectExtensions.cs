@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public static class UnityObjectExtensions
     {

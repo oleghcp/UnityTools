@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Async;
+using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Inspectors.AsyncSystem
 {

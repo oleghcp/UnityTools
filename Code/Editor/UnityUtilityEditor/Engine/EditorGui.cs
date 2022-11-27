@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Collections;
@@ -8,7 +9,7 @@ using UnityUtility.Mathematics;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     public static class EditorGui
     {

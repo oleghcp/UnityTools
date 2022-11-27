@@ -1,6 +1,7 @@
-﻿using UnityObject = UnityEngine.Object;
+﻿using UnityEditor;
+using UnityObject = UnityEngine.Object;
 
-namespace UnityEditor
+namespace UnityUtilityEditor.Engine
 {
     internal static class Managers
     {
