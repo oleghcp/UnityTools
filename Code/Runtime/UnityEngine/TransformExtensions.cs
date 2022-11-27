@@ -55,8 +55,7 @@ namespace UnityEngine
         public static void SetParent(this Transform self, Transform parent, in Vector3 targetLocalPos, in Quaternion targetLocalRot)
         {
             self.SetParent(parent);
-            self.localPosition = targetLocalPos;
-            self.localRotation = targetLocalRot;
+            self.SetLocalPositionAndRotation(targetLocalPos, targetLocalRot);
         }
 
 #if !UNITY_2022_1_OR_NEWER
@@ -69,8 +68,7 @@ namespace UnityEngine
 
         public static void SetLocalParams(this Transform self, in Vector3 localPos, in Quaternion localRot, in Vector3 localScl)
         {
-            self.localPosition = localPos;
-            self.localRotation = localRot;
+            self.SetLocalPositionAndRotation(localPos, localRot);
             self.localScale = localScl;
         }
 
@@ -81,8 +79,7 @@ namespace UnityEngine
 
         public static void CopyLocalParams(this Transform self, Transform source, bool withScale = false)
         {
-            self.localPosition = source.localPosition;
-            self.localRotation = source.localRotation;
+            self.SetLocalPositionAndRotation(source.localPosition, source.localRotation);
             if (withScale)
                 self.localScale = source.localScale;
         }
@@ -217,13 +214,6 @@ namespace UnityEngine
             }
         }
 
-        public static void OrderSiblings<TKey>(this Transform self, Func<Transform, TKey> keySelector)
-        {
-            Transform[] children = self.GetTopChildren();
-            children.Sort(keySelector);
-            TransformUtility.OrderSiblingsByList(children);
-        }
-
         public static void DestroyChildren(this Transform self)
         {
             Transform[] children = self.GetTopChildren();
@@ -291,6 +281,16 @@ namespace UnityEngine
         public static void MoveSiblingIndex(this Transform self, int moveValue)
         {
             self.SetSiblingIndex(self.GetSiblingIndex() + moveValue);
+        }
+
+        /// <summary>
+        /// Sorts siblings by selected key.
+        /// </summary>
+        public static void OrderSiblings<TKey>(this Transform self, Func<Transform, TKey> keySelector)
+        {
+            Transform[] children = self.GetTopChildren();
+            children.Sort(keySelector);
+            TransformUtility.OrderSiblingsByList(children);
         }
 
         /// <summary>
