@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility.Mathematics;
 using UnityUtility.Shooting;
+using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Drawers.Shooting
 {

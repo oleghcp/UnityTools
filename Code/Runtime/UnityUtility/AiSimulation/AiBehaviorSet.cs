@@ -1,6 +1,6 @@
 ﻿#if UNITY_2019_3_OR_NEWER
-using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 
 #pragma warning disable UNT0014

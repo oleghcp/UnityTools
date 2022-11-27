@@ -15,7 +15,7 @@ namespace UnityUtility.SaveLoad
         bool DeleteVersion(string version);
         void SaveLastVersion();
         void SaveVersion(string version);
-        TaskInfo SaveCurrentVersionAsync(int keysPerFrame);
+        TaskInfo SaveLastVersionAsync(int keysPerFrame);
         TaskInfo SaveVersionAsync(string version, int keysPerFrame);
     }
 

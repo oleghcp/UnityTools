@@ -214,7 +214,7 @@ namespace UnityUtility.SaveLoad
             IEnumerator getRoutine(int spf)
             {
                 yield return GetCollectRountine(spf).StartAsync();
-                yield return _saver.SaveCurrentVersionAsync(spf);
+                yield return _saver.SaveLastVersionAsync(spf);
             }
         }
 

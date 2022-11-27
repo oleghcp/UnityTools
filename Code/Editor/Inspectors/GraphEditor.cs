@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 
 namespace UnityUtilityEditor.Inspectors

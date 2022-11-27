@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp
@@ -14,13 +13,6 @@ namespace UnityUtility.CSharp
         public static string ToString(this long self, int radix)
         {
             return ConvertUtility.DecimalToStringWithCustomRadix(self, radix);
-        }
-
-        public static string Cut(this StringBuilder self)
-        {
-            string value = self.ToString();
-            self.Clear();
-            return value;
         }
 
         /// <summary>

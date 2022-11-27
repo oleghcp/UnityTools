@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.AiSimulation;
+using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Inspectors
 {

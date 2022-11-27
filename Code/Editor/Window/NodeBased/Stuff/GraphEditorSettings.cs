@@ -1,8 +1,8 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using System;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp.IO;
 
 namespace UnityUtilityEditor.Window.NodeBased.Stuff
 {

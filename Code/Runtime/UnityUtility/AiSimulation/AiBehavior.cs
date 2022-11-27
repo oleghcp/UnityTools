@@ -1,5 +1,6 @@
 ﻿#if UNITY_2019_3_OR_NEWER
 using UnityEngine;
+using UnityUtility.Engine;
 
 namespace UnityUtility.AiSimulation
 {
