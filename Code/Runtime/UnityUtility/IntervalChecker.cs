@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityUtility.Mathematics;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace UnityUtility
 {

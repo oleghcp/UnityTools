@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 #if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 namespace UnityUtility.Controls

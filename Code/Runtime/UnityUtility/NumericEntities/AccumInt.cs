@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace UnityUtility.NumericEntities
 {

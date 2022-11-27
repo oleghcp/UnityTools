@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility;
 using UnityUtility.CSharp;
 
-namespace UnityUtilityTools
+namespace UnityUtility.Tools
 {
     public static class Helper
     {

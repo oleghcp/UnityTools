@@ -8,7 +8,7 @@ using UnityUtility.Mathematics;
 using UnityUtility.Pool;
 using UnityUtility.SaveLoad;
 using UnityUtility.Sound.SoundStuff;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace UnityUtility.Sound
 {

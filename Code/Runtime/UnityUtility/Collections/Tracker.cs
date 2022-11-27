@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityUtility.CSharp.Collections;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace UnityUtility.Collections
 {

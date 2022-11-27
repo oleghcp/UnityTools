@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace UnityUtility.Rng
 {

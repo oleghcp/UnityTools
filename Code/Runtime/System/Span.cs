@@ -4,7 +4,7 @@
 
 #if !UNITY_2021_2_OR_NEWER
 using System.ComponentModel;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace System
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtilityTools
+namespace UnityUtility.Tools
 {
     internal static class Errors
     {

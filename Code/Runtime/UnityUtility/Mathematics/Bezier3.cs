@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.CSharp.Collections;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 
 namespace UnityUtility.Mathematics
 {

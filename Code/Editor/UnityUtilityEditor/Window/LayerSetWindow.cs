@@ -8,7 +8,7 @@ using UnityUtility.CSharp;
 using UnityUtilityEditor.CodeGenerating;
 using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Gui;
-using UnityUtilityTools;
+using UnityUtility.Tools;
 using static UnityUtilityEditor.Configs.LayerSetConfig;
 
 namespace UnityUtilityEditor.Window
