@@ -1,4 +1,6 @@
-﻿namespace System.Runtime.CompilerServices
+﻿using System.Runtime.CompilerServices;
+
+namespace UnityUtility.CSharp.Runtime.CompilerServices
 {
     public static class WeakTableExtensions
     {

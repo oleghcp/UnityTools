@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Collections;
+using UnityUtility.CSharp;
 using UnityUtility.Mathematics;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;

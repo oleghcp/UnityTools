@@ -1,14 +1,15 @@
 ﻿#if !UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 #endif
 using System.Reflection;
 
-namespace System
+namespace UnityUtility
 {
     public static class Messaging
     {
-        private const BindingFlags MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        private const BindingFlags MASK = BindingFlags.Public | BindingFlags.Instance;
 
 #if !UNITY_EDITOR
         private static ConditionalWeakTable<object, ObjectData> _dataTable = new ConditionalWeakTable<object, ObjectData>();
@@ -24,9 +25,10 @@ namespace System
 #if UNITY_EDITOR
             return self.GetType().GetMethod(methodName, MASK)?.Invoke(self, arg);
 #else
-            return _dataTable.GetValue(self, key => new ObjectData(key.GetType()))
-                             .GetMethod(methodName)?
-                             .Invoke(self, arg);
+            if (!_dataTable.TryGetValue(self, out ObjectData data))
+                data = _dataTable.Place(self, new ObjectData(self.GetType()));
+
+            return data.GetMethod(methodName)?.Invoke(self, arg);
 #endif
         }
 

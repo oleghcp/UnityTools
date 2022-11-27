@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp;
 using UnityUtilityEditor.CodeGenerating;
 using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Gui;

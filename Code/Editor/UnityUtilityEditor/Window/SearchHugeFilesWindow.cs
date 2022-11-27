@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.CSharp.Collections;
+using UnityUtility.CSharp.IO;
 using UnityUtility.Mathematics;
 using UnityObject = UnityEngine.Object;
 

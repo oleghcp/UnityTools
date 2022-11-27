@@ -1,9 +1,9 @@
 ﻿#if !UNITY_2019_2_OR_NEWER || INCLUDE_UNITY_UI
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityUtility.Async;
+using UnityUtility.CSharp;
 using UnityUtility.Pool;
 
 namespace UnityUtility.GameConsole

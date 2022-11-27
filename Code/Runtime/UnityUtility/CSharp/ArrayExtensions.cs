@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityUtilityTools;
 
-namespace System
+namespace UnityUtility.CSharp
 {
     public static class ArrayExtensions
     {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 

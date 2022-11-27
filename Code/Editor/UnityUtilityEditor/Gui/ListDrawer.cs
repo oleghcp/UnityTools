@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityUtility.CSharp.Collections;
 
 namespace UnityUtilityEditor.Gui
 {
@@ -109,7 +110,7 @@ namespace UnityUtilityEditor.Gui
 #if !UNITY_2020_3_OR_NEWER
             using (new EditorGUILayout.VerticalScope())
 #endif
-            _drawer.DoLayoutList();
+                _drawer.DoLayoutList();
 
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             EditorGUILayout.EndHorizontal();

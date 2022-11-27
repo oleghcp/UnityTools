@@ -1,4 +1,6 @@
-﻿namespace System
+﻿using System;
+
+namespace UnityUtility.CSharp
 {
     public static class Enum<TEnum> where TEnum : Enum
     {

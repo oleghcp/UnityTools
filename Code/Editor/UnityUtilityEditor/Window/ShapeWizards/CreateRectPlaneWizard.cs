@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
+using UnityUtility.CSharp;
 using UnityUtility.Engine;
 
 namespace UnityUtilityEditor.Window.ShapeWizards

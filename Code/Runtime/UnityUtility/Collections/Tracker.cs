@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityUtility.CSharp.Collections;
 using UnityUtilityTools;
 
 namespace UnityUtility.Collections

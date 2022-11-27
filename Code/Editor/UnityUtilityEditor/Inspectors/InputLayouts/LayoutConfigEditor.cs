@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.Controls;
-using UnityUtilityEditor.Window;
-#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using UnityUtility.Controls.ControlStuff;
+using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
+using UnityUtilityEditor.Window;
 
+#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 namespace UnityUtilityEditor.Inspectors.InputLayouts
 {
     [CustomEditor(typeof(LayoutConfig))]

@@ -1,4 +1,6 @@
-﻿namespace System.IO
+﻿using System.IO;
+
+namespace UnityUtility.CSharp.IO
 {
     public static class IOExtensions
     {

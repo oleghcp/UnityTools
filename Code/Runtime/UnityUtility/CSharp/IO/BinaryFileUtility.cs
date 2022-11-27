@@ -1,8 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace System.IO
+namespace UnityUtility.CSharp.IO
 {
     public class BinaryFileUtility
     {

@@ -1,8 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using UnityUtility;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityUtilityTools;
 
-namespace System.Collections.Generic
+namespace UnityUtility.CSharp.Collections
 {
     public static class CollectionExtensions
     {

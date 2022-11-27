@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityUtility.Async;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Mathematics;
 using UnityUtility.SaveLoad.SaveProviderStuff;
 using UnityUtilityTools;

@@ -1,7 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using UnityUtility;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
-namespace System.Collections.Generic
+namespace UnityUtility.CSharp.Collections
 {
     internal static class CollectionUtility
     {

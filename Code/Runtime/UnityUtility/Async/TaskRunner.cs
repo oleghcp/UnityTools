@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Pool;
 
 namespace UnityUtility.Async

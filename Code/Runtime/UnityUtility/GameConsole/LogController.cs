@@ -1,6 +1,7 @@
 ﻿#if !UNITY_2019_2_OR_NEWER || INCLUDE_UNITY_UI
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Engine;
 using UnityUtility.Pool;
 

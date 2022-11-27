@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Window

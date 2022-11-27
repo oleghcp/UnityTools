@@ -1,8 +1,8 @@
-﻿using System.Text;
-using UnityUtility;
+﻿using System;
+using System.Text;
 using UnityUtilityTools;
 
-namespace System
+namespace UnityUtility.CSharp
 {
     public static class SystemTypeExtensions
     {

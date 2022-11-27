@@ -5,6 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
+using UnityUtility.CSharp.IO;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityEditor

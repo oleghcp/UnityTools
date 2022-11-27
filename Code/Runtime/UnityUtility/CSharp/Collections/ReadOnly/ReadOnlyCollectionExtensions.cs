@@ -1,7 +1,8 @@
-﻿using UnityUtility;
+﻿using System;
+using System.Collections.Generic;
 using UnityUtilityTools;
 
-namespace System.Collections.Generic.ReadOnly
+namespace UnityUtility.CSharp.Collections.ReadOnly
 {
     public static class ReadOnlyCollectionExtensions
     {

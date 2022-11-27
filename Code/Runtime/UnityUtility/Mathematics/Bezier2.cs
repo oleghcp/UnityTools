@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.CSharp.Collections;
 using UnityUtilityTools;
 
 namespace UnityUtility.Mathematics

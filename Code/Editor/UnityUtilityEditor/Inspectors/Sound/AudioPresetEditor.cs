@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Inspectors.Sound
