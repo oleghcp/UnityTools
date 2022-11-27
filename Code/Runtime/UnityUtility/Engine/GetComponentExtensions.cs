@@ -1,6 +1,7 @@
 ﻿using System;
+using UnityEngine;
 
-namespace UnityEngine
+namespace UnityUtility.Engine
 {
     public static class GetComponentExtensions
     {

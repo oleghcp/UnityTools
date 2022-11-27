@@ -1,7 +1,7 @@
-﻿using UnityUtility;
+﻿using UnityEngine;
 using UnityUtility.Mathematics;
 
-namespace UnityEngine
+namespace UnityUtility.Engine
 {
     public static class UnityStructExtensions
     {

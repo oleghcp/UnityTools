@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 
 namespace UnityUtilityEditor.Window.ShapeWizards

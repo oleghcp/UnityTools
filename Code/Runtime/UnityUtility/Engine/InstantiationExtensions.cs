@@ -1,6 +1,7 @@
-﻿using UnityObject = UnityEngine.Object;
+﻿using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
-namespace UnityEngine
+namespace UnityUtility.Engine
 {
     public static class InstantiationExtensions
     {

@@ -1,4 +1,6 @@
-﻿namespace UnityEngine
+﻿using UnityEngine;
+
+namespace UnityUtility
 {
     public abstract class UiMonoBehaviour : MonoBehaviour
     {

@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
-using UnityUtility;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEngine
+namespace UnityUtility.Engine
 {
     public static class UnityObjectExtensions
     {

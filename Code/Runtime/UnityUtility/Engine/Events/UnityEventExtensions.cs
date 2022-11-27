@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityEngine.Events
+namespace UnityUtility.Engine.Events
 {
     public static class UnityEventExtensions
     {

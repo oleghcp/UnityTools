@@ -1,4 +1,6 @@
-﻿namespace UnityEngine
+﻿using UnityEngine;
+
+namespace UnityUtility.Engine
 {
 #pragma warning disable UNT0014
     public static class PhysicsExtensions
