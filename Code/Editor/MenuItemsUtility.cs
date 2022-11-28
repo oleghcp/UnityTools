@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.CSharp.Collections;
@@ -14,25 +15,33 @@ namespace UnityUtilityEditor
     {
         public static void RemoveEmptyFolders()
         {
-            removeEmptyFolders(Application.dataPath);
+            List<string> list = new List<string>();
+            removeEmptyFolders(Application.dataPath, list);
 
-            Debug.Log("Done");
+            if (list.Count > 0)
+            {
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine("Removed folders:");
+                foreach (string item in list)
+                {
+                    builder.AppendLine(item);
+                }
+                Debug.Log(builder.ToString());
+            }
 
-            void removeEmptyFolders(string path)
+            void removeEmptyFolders(string path, List<string> removed)
             {
                 foreach (string directory in Directory.EnumerateDirectories(path))
                 {
-                    removeEmptyFolders(directory);
+                    removeEmptyFolders(directory, removed);
                 }
 
-                IEnumerable<string> entries = Directory.EnumerateFileSystemEntries(path);
-
-                if (entries.Any()) { return; }
-
-                string relativePath = "Assets" + path.Substring(Application.dataPath.Length);
-                AssetDatabase.DeleteAsset(relativePath);
-
-                Debug.Log("Deleted: " + relativePath);
+                if (Directory.EnumerateFileSystemEntries(path).IsNullOrEmpty())
+                {
+                    string relativePath = "Assets" + path.Substring(Application.dataPath.Length);
+                    AssetDatabase.DeleteAsset(relativePath);
+                    removed.Add(relativePath);
+                }
             }
         }
 
