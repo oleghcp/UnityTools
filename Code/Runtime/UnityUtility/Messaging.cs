@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityUtility.CSharp.Collections;
+using UnityUtility.CSharp.Runtime.CompilerServices;
 #endif
 using System.Reflection;
 
