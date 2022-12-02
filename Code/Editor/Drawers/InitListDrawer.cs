@@ -54,10 +54,10 @@ namespace UnityUtilityEditor.Drawers
 
                 for (int i = 0; i < _enumValues.Length; i++)
                 {
-                    object enumValue = _enumValues[i].GetValue(null);
+                    object value = _enumValues[i].GetValue(null);
 
-                    if (GetBindedType(enumValue) == bindedType)
-                        return enumValue;
+                    if (GetBindedType(value) == bindedType)
+                        return value;
                 }
 
                 return null;
@@ -129,9 +129,9 @@ namespace UnityUtilityEditor.Drawers
             var attribute = fieldInfo?.GetCustomAttribute<BindSubclassAttribute>();
             return attribute?.ClassType;
 
-            bool compare(FieldInfo fieldInfo)
+            bool compare(FieldInfo field)
             {
-                object itemValue = fieldInfo.GetValue(null);
+                object itemValue = field.GetValue(null);
                 long intValue = Convert.ToInt64(itemValue);
                 return value == intValue;
             }
