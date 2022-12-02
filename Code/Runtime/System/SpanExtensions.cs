@@ -47,7 +47,7 @@ namespace System
             if (self.IsEmpty)
                 return;
 
-            UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1);
+            SpanUtility.QuickSort(self, 0, self.Length - 1);
         }
 
         public static unsafe void Sort<T>(this in Span<T> self, Comparison<T> comparer) where T : unmanaged
@@ -55,7 +55,7 @@ namespace System
             if (self.IsEmpty)
                 return;
 
-            UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1, comparer);
+            SpanUtility.QuickSort(self, 0, self.Length - 1, comparer);
         }
 
         public static unsafe void Sort<T, TComparer>(this in Span<T> self, TComparer comparer)
@@ -65,7 +65,7 @@ namespace System
             if (self.IsEmpty)
                 return;
 
-            UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1, comparer);
+            SpanUtility.QuickSort(self, 0, self.Length - 1, comparer);
         }
 
         public static bool Contains<T>(this in Span<T> self, T item) where T : unmanaged, IEquatable<T>

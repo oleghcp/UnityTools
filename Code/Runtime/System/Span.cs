@@ -17,8 +17,6 @@ namespace System
         public bool IsEmpty => _length == 0;
         public int Length => _length;
 
-        internal T* Ptr => _ptr;
-
         public ref T this[int index]
         {
             get
@@ -89,7 +87,7 @@ namespace System
             return new Span<T>(_ptr + startIndex, _length - startIndex);
         }
 
-#region Regular stuff
+        #region Regular stuff
         public Enumerator GetEnumerator()
         {
             return new Enumerator(this);
@@ -129,7 +127,7 @@ namespace System
         {
             return !(left == right);
         }
-#endregion
+        #endregion
 
         public ref struct Enumerator
         {

@@ -13,7 +13,7 @@ namespace UnityUtility.CSharp
             if (self.IsEmpty)
                 return;
 
-            UnsafeArrayUtility.QuickSort(self.Ptr, 0, self.Length - 1, selector);
+            SpanUtility.QuickSort(self, 0, self.Length - 1, selector);
         }
 
         public static int Sum(this in Span<int> self)
