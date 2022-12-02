@@ -1,46 +1,73 @@
 ﻿#if UNITY_2020_1_OR_NEWER
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.CSharp;
 using UnityUtilityEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(AssetRef<>))]
-    public class AssetRefDrawer : PropertyDrawer
+    internal class AssetRefDrawer : PropertyDrawer
     {
+        private string[] _enumNames;
+        private int[] _enumValues;
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty flagProp = property.FindPropertyRelative(AssetRef<UnityObject>.FlagFieldName);
+            SerializedProperty typeProp = property.FindPropertyRelative(AssetRef<UnityObject>.TypeFieldName);
             SerializedProperty dirRefProp = property.FindPropertyRelative(AssetRef<UnityObject>.DirectRefFieldName);
             SerializedProperty lazyRefProp = property.FindPropertyRelative(AssetRef<UnityObject>.LazyRefFieldName);
+#if INCLUDE_ADDRESSABLES
+            SerializedProperty asyncRefProp = property.FindPropertyRelative(AssetRef<UnityObject>.AsyncRefFieldName);
+#endif
 
-            const float buttonText = 40f;
-            Type fieldType = EditorUtilityExt.GetFieldType(this);
+            if (_enumNames == null)
+            {
+                _enumNames = typeProp.enumDisplayNames;
+                _enumValues = Enum.GetValues(typeof(RefType)).Cast<int>().ToArray();
+            }
+
+            const float buttonWidth = 50f;
 
             position = EditorGUI.PrefixLabel(position, label);
 
             Rect rect = position;
-            rect.width = buttonText;
-            bool prevFlagValue = flagProp.boolValue;
-            flagProp.boolValue = EditorGui.ToggleButton(rect, "Lazy", prevFlagValue);
+            rect.width = buttonWidth;
+            int prevTypeIndex = typeProp.enumValueIndex;
+            typeProp.enumValueIndex = EditorGUI.IntPopup(rect, prevTypeIndex, _enumNames, _enumValues);
 
-            bool lazy = flagProp.boolValue;
-            if (prevFlagValue != lazy)
-            {
-                SerializedProperty source = lazy ? dirRefProp : lazyRefProp;
-                SerializedProperty dest = lazy ? lazyRefProp : dirRefProp;
-
-                dest.objectReferenceValue = source.objectReferenceValue;
-                source.objectReferenceValue = null;
-            }
+            int newTypeIndex = typeProp.enumValueIndex;
+            if (prevTypeIndex != newTypeIndex)
+                getProperty((RefType)prevTypeIndex).ResetToDefault();
 
             rect = position;
-            rect.xMin += buttonText + EditorGuiUtility.StandardHorizontalSpacing;
-            SerializedProperty drawnProp = lazy ? lazyRefProp : dirRefProp;
-            drawnProp.objectReferenceValue = EditorGUI.ObjectField(rect, drawnProp.objectReferenceValue, fieldType.GenericTypeArguments[0], false);
+            rect.xMin += buttonWidth + EditorGuiUtility.StandardHorizontalSpacing;
+
+#if INCLUDE_ADDRESSABLES
+            if (newTypeIndex == (int)RefType.Async && EditorUtilityExt.GetFieldType(this).GenericTypeArguments[0].IsAssignableTo(typeof(Component)))
+            {
+                GUI.Label(rect, "Not-components only");
+                return;
+            }
+#endif
+            EditorGUI.PropertyField(rect, getProperty((RefType)newTypeIndex), GUIContent.none);
+
+            SerializedProperty getProperty(RefType prevType)
+            {
+                switch (prevType)
+                {
+                    case RefType.Simple: return dirRefProp;
+                    case RefType.Lazy: return lazyRefProp;
+#if INCLUDE_ADDRESSABLES
+                    case RefType.Async: return asyncRefProp;
+#endif
+                    default: throw new UnsupportedValueException(prevType);
+                }
+            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

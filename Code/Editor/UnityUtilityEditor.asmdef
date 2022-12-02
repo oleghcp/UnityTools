@@ -1,7 +1,8 @@
 {
     "name": "UnityUtilityEditor",
     "references": [
-        "UnityUtility"
+        "UnityUtility",
+        "Unity.Addressables"
     ],
     "includePlatforms": [
         "Editor"
@@ -29,6 +30,11 @@
             "name": "com.unity.modules.audio",
             "expression": "",
             "define": "INCLUDE_AUDIO"
+        },
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "INCLUDE_ADDRESSABLES"
         }
     ],
     "noEngineReferences": false

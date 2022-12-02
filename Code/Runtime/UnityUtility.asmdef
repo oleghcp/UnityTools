@@ -1,6 +1,8 @@
 {
     "name": "UnityUtility",
-    "references": [],
+    "references": [
+        "Unity.Addressables"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
@@ -30,6 +32,11 @@
             "name": "com.unity.ugui",
             "expression": "",
             "define": "INCLUDE_UNITY_UI"
+        },
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "INCLUDE_ADDRESSABLES"
         }
     ],
     "noEngineReferences": false
