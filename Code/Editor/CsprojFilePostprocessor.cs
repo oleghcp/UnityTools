@@ -1,8 +1,7 @@
 ﻿using System.Xml.Linq;
 using UnityEditor;
-using UnityUtilityEditor;
 
-namespace Project
+namespace UnityUtilityEditor
 {
     public class CsprojFilePostprocessor : AssetPostprocessor
     {
