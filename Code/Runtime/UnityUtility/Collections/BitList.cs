@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Tools;
 
 namespace UnityUtility.Collections
 {
     //Based on System.Collections.BitArray
     [Serializable]
-    public sealed class BitList : ICloneable, IReadOnlyList<bool>
+    public sealed class BitList : ICloneable, IList<bool>, IReadOnlyList<bool>, IMutable
     {
         private const int MAX_LENGTH = int.MaxValue / BitMask.SIZE;
 
@@ -38,9 +40,7 @@ namespace UnityUtility.Collections
 
         public bool this[int index]
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => Get(index);
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set => Set(index, value);
         }
 
@@ -537,24 +537,63 @@ namespace UnityUtility.Collections
             return rem == 0 ? BitMask.SIZE : rem;
         }
 
-        // -- //
+        #region GetEnumerator
+        public Enumerator<bool> GetEnumerator()
+        {
+            return new Enumerator<bool>(this);
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return new Enumerator<bool>(this);
         }
 
-        public IEnumerator<bool> GetEnumerator()
+        IEnumerator<bool> IEnumerable<bool>.GetEnumerator()
         {
-            int ver = _version;
-
-            for (int i = 0; i < _length; i++)
-            {
-                if (ver != _version)
-                    throw Errors.CollectionChanged();
-
-                yield return Get(i);
-            }
+            return new Enumerator<bool>(this);
         }
+        #endregion
+
+        #region IList
+        int IList<bool>.IndexOf(bool item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList<bool>.Insert(int index, bool item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList<bool>.RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection<bool>.Add(bool item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection<bool>.Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ICollection<bool>.Contains(bool item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection<bool>.CopyTo(bool[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ICollection<bool>.Remove(bool item)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
