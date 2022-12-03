@@ -111,7 +111,7 @@ namespace UnityUtility.Shooting
         private void Reset()
         {
 #if INCLUDE_PHYSICS_2D
-            if (GetComponent<Projectile2D>() != null)
+            if (gameObject.TryGetComponent<Projectile2D>(out _))
             {
                 DestroyImmediate(this);
                 return;

@@ -23,8 +23,7 @@ namespace UnityUtility.Engine
 
             for (Transform p = self; p != null; p = p.parent)
             {
-                T component = p.GetComponent<T>();
-                if (component != null)
+                if (p.TryGetComponent(out T component))
                     return component;
             }
 
@@ -48,8 +47,7 @@ namespace UnityUtility.Engine
 
             foreach (Transform child in self.EnumerateChildren(true))
             {
-                T component = child.GetComponent<T>();
-                if (component != null)
+                if (child.TryGetComponent(out T component))
                     return component;
             }
 

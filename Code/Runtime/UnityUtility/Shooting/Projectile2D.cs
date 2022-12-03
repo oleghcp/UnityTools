@@ -113,7 +113,7 @@ namespace UnityUtility.Shooting
         private void Reset()
         {
 #if INCLUDE_PHYSICS
-            if (GetComponent<Projectile>() != null)
+            if (gameObject.TryGetComponent<Projectile>(out _))
             {
                 DestroyImmediate(this);
                 return;
