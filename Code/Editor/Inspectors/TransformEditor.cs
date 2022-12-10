@@ -21,9 +21,6 @@ namespace UnityUtilityEditor.Inspectors
         private const string SCALE_LABEL = "Scale";
 
         private Editor _builtInEditor;
-        private SerializedProperty _posProp;
-        private SerializedProperty _rotProp;
-        private SerializedProperty _sclProp;
 
         private readonly string[] _toolbarNames = new string[] { "Local", "World" };
         private static bool _world;
@@ -53,10 +50,6 @@ namespace UnityUtilityEditor.Inspectors
             Type type = Assembly.GetAssembly(typeof(Editor))
                                 .GetType(EDITOR_TYPE_NAME);
             _builtInEditor = CreateEditor(target, type);
-
-            _posProp = serializedObject.FindProperty("m_LocalPosition");
-            _rotProp = serializedObject.FindProperty("m_LocalRotation");
-            _sclProp = serializedObject.FindProperty("m_LocalScale");
 
 #if UNITY_2021_1_OR_NEWER
             Tools.pivotModeChanged += SceneView.RepaintAll;
@@ -133,18 +126,21 @@ namespace UnityUtilityEditor.Inspectors
 
             GUILayout.Space(VERTICAL_OFFSET);
 
-            GUI.enabled = !_world;
+            if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
+            {
+                GetProp("m_LocalPosition").vector3Value = Vector3.zero;
+            }
 
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
-                _posProp.vector3Value = Vector3.zero;
+            {
+                GetProp("m_LocalRotation").quaternionValue = Quaternion.identity;
+                GetProp("m_LocalEulerAnglesHint").vector3Value = Vector3.zero;
+            }
 
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
-                _rotProp.quaternionValue = Quaternion.identity;
-
-            if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
-                _sclProp.vector3Value = Vector3.one;
-
-            GUI.enabled = true;
+            {
+                GetProp("m_LocalScale").vector3Value = Vector3.one;
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -183,6 +179,11 @@ namespace UnityUtilityEditor.Inspectors
                 EditorGUILayout.EndHorizontal();
                 return changed;
             }
+        }
+
+        private SerializedProperty GetProp(string name)
+        {
+            return serializedObject.FindProperty(name);
         }
     }
 }
