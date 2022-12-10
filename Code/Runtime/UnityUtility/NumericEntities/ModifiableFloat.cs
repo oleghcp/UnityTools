@@ -6,7 +6,7 @@ using UnityUtility.Tools;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public sealed class StaticFloat : IStaticEntity<float>
+    public sealed class ModifiableFloat : IModifiableEntity<float>
     {
         private float _min;
         private float _max;
@@ -25,7 +25,7 @@ namespace UnityUtility.NumericEntities
         public float MaxValue => _max;
         public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
 
-        private StaticFloat(float minValue, float maxValue)
+        private ModifiableFloat(float minValue, float maxValue)
         {
             Resize(minValue, maxValue);
 
@@ -33,7 +33,7 @@ namespace UnityUtility.NumericEntities
             _relMods = new HashSet<IModifier<float>>();
         }
 
-        public StaticFloat(float pureValue, float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : this(minValue, maxValue)
+        public ModifiableFloat(float pureValue, float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : this(minValue, maxValue)
         {
             if (pureValue < minValue || pureValue > maxValue)
                 throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));

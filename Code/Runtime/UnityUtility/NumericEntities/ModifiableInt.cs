@@ -6,7 +6,7 @@ using UnityUtility.Tools;
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
-    public sealed class StaticInt : IStaticEntity<int>
+    public sealed class ModifiableInt : IModifiableEntity<int>
     {
         private int _min;
         private int _max;
@@ -25,7 +25,7 @@ namespace UnityUtility.NumericEntities
         public int MaxValue => _max;
         public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
 
-        private StaticInt(int minValue, int maxValue)
+        private ModifiableInt(int minValue, int maxValue)
         {
             Resize(minValue, maxValue);
 
@@ -33,7 +33,7 @@ namespace UnityUtility.NumericEntities
             _relMods = new HashSet<IModifier<int>>();
         }
 
-        public StaticInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
+        public ModifiableInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
         {
             if (pureValue < minValue || pureValue > maxValue)
                 throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));

@@ -52,7 +52,7 @@ namespace UnityUtility.NumericEntities
         T Value { get; }
     }
 
-    public interface IStaticEntity<T> where T : struct, IComparable<T>, IEquatable<T>
+    public interface IModifiableEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T PureValue { get; set; }
         T MinValue { get; }
