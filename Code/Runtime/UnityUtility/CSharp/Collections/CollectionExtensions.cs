@@ -384,19 +384,6 @@ namespace UnityUtility.CSharp.Collections
             return newItem;
         }
 
-        public static IEnumerable<T> Join<T>(this IEnumerable<T> self, IEnumerable<T> other)
-        {
-            foreach (T item in self)
-            {
-                yield return item;
-            }
-
-            foreach (T item in other)
-            {
-                yield return item;
-            }
-        }
-
 #if !UNITY_2021_2_OR_NEWER
         /// <summary>
         /// Removes the element with the specified key from the dictionary and returns it or default value.
