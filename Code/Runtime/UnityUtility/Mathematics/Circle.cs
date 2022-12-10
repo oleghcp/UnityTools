@@ -10,9 +10,12 @@ namespace UnityUtility.Mathematics
     [Serializable]
     public struct Circle : IEquatable<Circle>, IFormattable
     {
+        private static readonly Circle _unit = new Circle(Vector2.zero, 1f);
+
         public Vector2 Position;
         public float Radius;
 
+        public static Circle Unit => _unit;
         public float Diameter => Radius * 2f;
 
         public Circle(Vector2 position, float radius)

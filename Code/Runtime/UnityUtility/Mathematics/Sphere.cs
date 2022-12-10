@@ -10,9 +10,12 @@ namespace UnityUtility.Mathematics
     [Serializable]
     public struct Sphere : IEquatable<Sphere>, IFormattable
     {
+        private static readonly Sphere _unit = new Sphere(Vector3.zero, 1f);
+
         public Vector3 Position;
         public float Radius;
 
+        public static Sphere Unit => _unit;
         public float Diameter => Radius * 2f;
 
         public Sphere(in Vector3 position, float radius)

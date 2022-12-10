@@ -340,12 +340,12 @@ namespace UnityUtility
         /// </summary>
         public static Vector2 GetInsideUnitCircle(this IRng self)
         {
-            Rect rect = new Circle(Vector2.zero, 1f).GetBounds();
+            Rect bounds = Circle.Unit.GetBounds();
 
             Vector2 vector;
             do
             {
-                vector = self.GetInBounds(rect);
+                vector = self.GetInBounds(bounds);
             } while (vector.magnitude > 1f);
 
             return vector;
@@ -356,7 +356,7 @@ namespace UnityUtility
         /// </summary>
         public static Vector3 GetOnUnitSphere(this IRng self)
         {
-            Bounds bounds = new Sphere(Vector3.zero, 1f).GetBounds();
+            Bounds bounds = Sphere.Unit.GetBounds();
             Vector3 vector;
             float magnitude;
 
@@ -375,7 +375,7 @@ namespace UnityUtility
         /// </summary>
         public static Vector3 GetInsideUnitSphere(this IRng self)
         {
-            Bounds bounds = new Sphere(Vector3.zero, 1f).GetBounds();
+            Bounds bounds = Sphere.Unit.GetBounds();
 
             Vector3 vector;
             do
