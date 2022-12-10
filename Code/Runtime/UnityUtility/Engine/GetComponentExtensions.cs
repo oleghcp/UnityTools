@@ -94,7 +94,7 @@ namespace UnityUtility.Engine
         }
 
 #if !UNITY_2019_2_OR_NEWER
-        public static bool TryGetComponent<T>(this GameObject self, out T component) where T : Component
+        public static bool TryGetComponent<T>(this GameObject self, out T component)
         {
             component = self.GetComponent<T>();
             return component != null;
@@ -106,7 +106,7 @@ namespace UnityUtility.Engine
             return component != null;
         }
 
-        public static bool TryGetComponent<T>(this Component self, out T component) where T : Component
+        public static bool TryGetComponent<T>(this Component self, out T component)
         {
             component = self.GetComponent<T>();
             return component != null;
