@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityUtility.CSharp.Collections.Iterators;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp.Collections
