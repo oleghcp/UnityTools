@@ -82,23 +82,14 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
             return self[self.Count - (reverseIndex + 1)];
         }
 
-        public static IEnumerable<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex, int length)
+        public static EnumerableQuery_<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex, int length)
         {
-            if ((uint)startIndex >= (uint)self.Count)
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-
-            if (startIndex + length > self.Count)
-                throw new ArgumentOutOfRangeException(nameof(length));
-
-            for (int i = startIndex; i < length + startIndex; i++)
-            {
-                yield return self[i];
-            }
+            return new EnumerableQuery_<T>(self, startIndex, length);
         }
 
-        public static IEnumerable<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
+        public static EnumerableQuery_<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
         {
-            return Enumerate_(self, startIndex, self.Count - startIndex);
+            return new EnumerableQuery_<T>(self, startIndex);
         }
 
         public static void CopyTo_<T>(this IReadOnlyList<T> self, Span<T> target) where T : unmanaged

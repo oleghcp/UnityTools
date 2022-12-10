@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp
@@ -227,6 +228,22 @@ namespace UnityUtility.CSharp
         public static bool Contains<T>(this T[] self, T item)
         {
             return (self as IList<T>).Contains(item);
+        }
+
+        /// <summary>
+        /// Enumerates array from the specified index.
+        /// </summary>
+        public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex, int length)
+        {
+            return new ArrayEnumerableQuery<T>(self, startIndex, length);
+        }
+
+        /// <summary>
+        /// Enumerates array from the specified index.
+        /// </summary>
+        public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex)
+        {
+            return new ArrayEnumerableQuery<T>(self, startIndex);
         }
     }
 }

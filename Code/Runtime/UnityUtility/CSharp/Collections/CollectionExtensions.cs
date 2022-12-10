@@ -224,26 +224,17 @@ namespace UnityUtility.CSharp.Collections
         /// <summary>
         /// Enumerates collection from the specified index.
         /// </summary>
-        public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
+        public static EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
         {
-            if ((uint)startIndex >= (uint)self.Count)
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-
-            if (startIndex + length > self.Count)
-                throw new ArgumentOutOfRangeException(nameof(length));
-
-            for (int i = startIndex; i < length + startIndex; i++)
-            {
-                yield return self[i];
-            }
+            return new EnumerableQuery<T>(self, startIndex, length);
         }
 
         /// <summary>
         /// Enumerates collection from the specified index.
         /// </summary>
-        public static IEnumerable<T> Enumerate<T>(this IList<T> self, int startIndex)
+        public static EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
         {
-            return Enumerate(self, startIndex, self.Count - startIndex);
+            return new EnumerableQuery<T>(self, startIndex);
         }
 
         /// <summary>

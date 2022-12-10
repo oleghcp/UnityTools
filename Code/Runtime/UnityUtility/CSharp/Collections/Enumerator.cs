@@ -13,6 +13,7 @@ namespace UnityUtility.CSharp.Collections
         private readonly int _version;
 
         private int _index;
+        private int _count;
         private T _current;
 
         public T Current => _current;
@@ -21,9 +22,56 @@ namespace UnityUtility.CSharp.Collections
         {
             get
             {
-                if (_index == 0 || _index == _array.Length + 1)
+                if (_index == 0 || _index == _count + 1)
                     throw new InvalidOperationException();
                 return _current;
+            }
+        }
+
+        public ArrayEnumerator(T[] array, int startIndex, int length, IMutable versionProvider = null)
+        {
+            if ((uint)startIndex >= (uint)array.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + length > array.Length)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            _array = array;
+            _index = startIndex;
+            _count = startIndex + length;
+            _current = default;
+
+            if (versionProvider != null)
+            {
+                _version = versionProvider.Version;
+                _versionProvider = versionProvider;
+            }
+            else
+            {
+                _versionProvider = null;
+                _version = default;
+            }
+        }
+
+        public ArrayEnumerator(T[] array, int startIndex, IMutable versionProvider = null)
+        {
+            if ((uint)startIndex >= (uint)array.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            _array = array;
+            _index = startIndex;
+            _count = array.Length;
+            _current = default;
+
+            if (versionProvider != null)
+            {
+                _version = versionProvider.Version;
+                _versionProvider = versionProvider;
+            }
+            else
+            {
+                _versionProvider = null;
+                _version = default;
             }
         }
 
@@ -31,6 +79,7 @@ namespace UnityUtility.CSharp.Collections
         {
             _array = array;
             _index = 0;
+            _count = array.Length;
             _current = default;
 
             if (versionProvider != null)
@@ -54,14 +103,14 @@ namespace UnityUtility.CSharp.Collections
             if (Changed())
                 throw Errors.CollectionChanged();
 
-            if ((uint)_index < (uint)_array.Length)
+            if ((uint)_index < (uint)_count)
             {
                 _current = _array[_index];
                 _index++;
                 return true;
             }
 
-            _index = _array.Length + 1;
+            _index = _count + 1;
             _current = default;
             return false;
         }
@@ -86,6 +135,7 @@ namespace UnityUtility.CSharp.Collections
     {
         private readonly IList<T> _collection;
         private readonly int _version;
+        private readonly int _count;
 
         private int _index;
         private T _current;
@@ -96,16 +146,52 @@ namespace UnityUtility.CSharp.Collections
         {
             get
             {
-                if (_index == 0 || _index == _collection.Count + 1)
+                if (_index == 0 || _index == _count + 1)
                     throw new InvalidOperationException();
                 return _current;
             }
+        }
+
+        public Enumerator(IList<T> collection, int startIndex, int length)
+        {
+            if ((uint)startIndex >= (uint)collection.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + length > collection.Count)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            _collection = collection;
+            _index = startIndex;
+            _count = startIndex + length;
+            _current = default;
+
+            if (collection is IMutable mutable)
+                _version = mutable.Version;
+            else
+                _version = default;
+        }
+
+        public Enumerator(IList<T> collection, int startIndex)
+        {
+            if ((uint)startIndex >= (uint)collection.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            _collection = collection;
+            _index = startIndex;
+            _count = collection.Count;
+            _current = default;
+
+            if (collection is IMutable mutable)
+                _version = mutable.Version;
+            else
+                _version = default;
         }
 
         public Enumerator(IList<T> collection)
         {
             _collection = collection;
             _index = 0;
+            _count = collection.Count;
             _current = default;
 
             if (collection is IMutable mutable)
@@ -123,14 +209,14 @@ namespace UnityUtility.CSharp.Collections
             if (Changed())
                 throw Errors.CollectionChanged();
 
-            if ((uint)_index < (uint)_collection.Count)
+            if ((uint)_index < (uint)_count)
             {
                 _current = _collection[_index];
                 _index++;
                 return true;
             }
 
-            _index = _collection.Count + 1;
+            _index = _count + 1;
             _current = default;
             return false;
         }
@@ -155,6 +241,7 @@ namespace UnityUtility.CSharp.Collections
     {
         private readonly IReadOnlyList<T> _collection;
         private readonly int _version;
+        private readonly int _count;
 
         private int _index;
         private T _current;
@@ -165,15 +252,51 @@ namespace UnityUtility.CSharp.Collections
         {
             get
             {
-                if (_index == 0 || _index == _collection.Count + 1)
+                if (_index == 0 || _index == _count + 1)
                     throw new InvalidOperationException();
                 return _current;
             }
         }
 
+        public Enumerator_(IReadOnlyList<T> collection, int startIndex, int length)
+        {
+            if ((uint)startIndex >= (uint)collection.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + length > collection.Count)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            _collection = collection;
+            _index = startIndex;
+            _count = startIndex + length;
+            _current = default;
+
+            if (collection is IMutable mutable)
+                _version = mutable.Version;
+            else
+                _version = default;
+        }
+
+        public Enumerator_(IReadOnlyList<T> collection, int startIndex)
+        {
+            if ((uint)startIndex >= (uint)collection.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            _collection = collection;
+            _index = startIndex;
+            _count = collection.Count;
+            _current = default;
+
+            if (collection is IMutable mutable)
+                _version = mutable.Version;
+            else
+                _version = default;
+        }
+
         public Enumerator_(IReadOnlyList<T> collection)
         {
             _collection = collection;
+            _count = collection.Count;
             _index = 0;
             _current = default;
 
@@ -192,14 +315,14 @@ namespace UnityUtility.CSharp.Collections
             if (Changed())
                 throw Errors.CollectionChanged();
 
-            if ((uint)_index < (uint)_collection.Count)
+            if ((uint)_index < (uint)_count)
             {
                 _current = _collection[_index];
                 _index++;
                 return true;
             }
 
-            _index = _collection.Count + 1;
+            _index = _count + 1;
             _current = default;
             return false;
         }
