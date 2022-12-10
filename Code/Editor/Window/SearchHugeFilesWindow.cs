@@ -181,7 +181,7 @@ namespace UnityUtilityEditor.Window
             {
                 Size = size;
                 Asset = AssetDatabase.LoadAssetAtPath<UnityObject>(path);
-                Path = EditorGuiUtility.NicifyPathLabel(path);
+                Path = path;
             }
         }
     }

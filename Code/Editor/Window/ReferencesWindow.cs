@@ -33,7 +33,7 @@ namespace UnityUtilityEditor.Window
 
             (UnityObject, string) createTuple(string path)
             {
-                return (AssetDatabase.LoadAssetAtPath<UnityObject>(path), EditorGuiUtility.NicifyPathLabel(path));
+                return (AssetDatabase.LoadAssetAtPath<UnityObject>(path), path);
             }
         }
 

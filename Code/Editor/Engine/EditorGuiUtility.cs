@@ -17,13 +17,6 @@ namespace UnityUtilityEditor.Engine
         public static float SmallButtonWidth => EditorGUIUtility.singleLineHeight + 2f;
         public static float StandardHorizontalSpacing => EditorGUIUtility.standardVerticalSpacing + 1f;
 
-        public static string NicifyPathLabel(string path)
-        {
-            const string slash = " ∕ ";
-            return path.Replace("/", slash)
-                       .Replace("\\", slash);
-        }
-
         public static GUIContent TempContent(string label, string tooltip = null)
         {
             return TempContent(label, null, tooltip);
