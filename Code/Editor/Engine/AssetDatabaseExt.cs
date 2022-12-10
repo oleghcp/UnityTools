@@ -55,7 +55,7 @@ namespace UnityUtilityEditor.Engine
         public static Assembly[] LoadScriptAssemblies()
         {
             return Directory.GetFiles(@"Library\ScriptAssemblies\", "*.dll", SearchOption.AllDirectories)
-                            .Select(file => Assembly.LoadFrom(file))
+                            .Select(Assembly.LoadFrom)
                             .ToArray();
         }
 
