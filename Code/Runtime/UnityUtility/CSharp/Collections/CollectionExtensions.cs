@@ -58,6 +58,9 @@ namespace UnityUtility.CSharp.Collections
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
+            if (self.Count == 0)
+                return;
+
             Comparer<TKey> comparer = Comparer<TKey>.Default;
             CollectionUtility.QuickSort(self, 0, self.Count - 1, (itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
         }
