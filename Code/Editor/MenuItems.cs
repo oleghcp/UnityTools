@@ -56,7 +56,7 @@ namespace UnityUtilityEditor
         }
 
         [MenuItem(LibConstants.LIB_NAME + "/Folders/Open Project Folder")]
-        private static void OpenProjectSettingsFolder()
+        private static void OpenProjectFolder()
         {
             EditorUtilityExt.OpenFolder(PathUtility.GetParentPath(Application.dataPath));
         }
