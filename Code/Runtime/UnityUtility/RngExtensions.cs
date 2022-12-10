@@ -336,21 +336,54 @@ namespace UnityUtility
         }
 
         /// <summary>
+        /// Returns a random point inside a circle with radius 1.
+        /// </summary>
+        public static Vector2 GetInsideUnitCircle(this IRng self)
+        {
+            Rect rect = new Circle(Vector2.zero, 1f).GetBounds();
+
+            Vector2 vector;
+            do
+            {
+                vector = self.GetInBounds(rect);
+            } while (vector.magnitude > 1f);
+
+            return vector;
+        }
+
+        /// <summary>
         /// Returns a random point on the surface of a sphere with radius 1.
         /// </summary>
         public static Vector3 GetOnUnitSphere(this IRng self)
         {
+            Bounds bounds = new Sphere(Vector3.zero, 1f).GetBounds();
             Vector3 vector;
             float magnitude;
 
             do
             {
-                vector = new Vector3(self.Next(-1f, 1f), self.Next(-1f, 1f), self.Next(-1f, 1f));
+                vector = self.GetInBounds(bounds);
                 magnitude = vector.magnitude;
 
             } while (magnitude <= MathUtility.kEpsilon || magnitude > 1f);
 
             return vector / magnitude;
+        }
+
+        /// <summary>
+        /// Returns a random point inside a sphere with radius 1.
+        /// </summary>
+        public static Vector3 GetInsideUnitSphere(this IRng self)
+        {
+            Bounds bounds = new Sphere(Vector3.zero, 1f).GetBounds();
+
+            Vector3 vector;
+            do
+            {
+                vector = self.GetInBounds(bounds);
+            } while (vector.magnitude > 1f);
+
+            return vector;
         }
 
         /// <summary>
