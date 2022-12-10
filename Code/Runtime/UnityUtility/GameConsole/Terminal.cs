@@ -214,7 +214,7 @@ namespace UnityUtility.GameConsole
                 string[][] keys = null;
 
                 if (method.GetParameters().Length > 0)
-                    keys = new[] { words.Length > 1 ? words.GetSubArray(1) : new string[0] };
+                    keys = new[] { words.Length > 1 ? words.GetSubArray(1) : Array.Empty<string>() };
 
                 object cmdKeysParseError = method.Invoke(_cmdRun, keys);
 

@@ -13,7 +13,7 @@ namespace UnityUtilityEditor.Configs
         public bool SortingLayerFields;
         public bool LayerFields = true;
         public LayerMaskFieldType MaskFieldType;
-        public MaskField[] LayerMasks = new MaskField[0];
+        public MaskField[] LayerMasks = Array.Empty<MaskField>();
 
         [Serializable]
         public struct MaskField
