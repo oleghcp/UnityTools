@@ -185,5 +185,29 @@ namespace UnityUtilityEditor.Inspectors
         {
             return serializedObject.FindProperty(name);
         }
+
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(Transform) + "/Copy Values to Clipboard (ext.)")]
+        private static void CopyToClipboard(MenuCommand command)
+        {
+            GUIUtility.systemCopyBuffer = EditorJsonUtility.ToJson(command.context);
+        }
+
+        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(Transform) + "/Paste Values from Clipboard (ext.)")]
+        private static void PastFromClipboard(MenuCommand command)
+        {
+            using (SerializedObject serializedObject = new SerializedObject(command.context))
+            {
+                SerializedProperty orderProp = serializedObject.FindProperty("m_RootOrder");
+                int rootOrder = orderProp.intValue;
+
+                Undo.RecordObject(command.context, "Paste Values from Clipboard");
+                EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
+
+                serializedObject.Update();
+                orderProp.intValue = rootOrder;
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                orderProp.Dispose();
+            }
+        }
     }
 }
