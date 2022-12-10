@@ -7,7 +7,6 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
 using UnityUtility.CSharp.IO;
 using UnityObject = UnityEngine.Object;
 
@@ -84,22 +83,14 @@ namespace UnityUtilityEditor.Engine
 
         public static void ConvertToUtf8()
         {
-            IEnumerable<string> files = enumerateFiles("*.txt").Join(enumerateFiles("*.xml"))
-                                                               .Join(enumerateFiles("*.json"))
-                                                               .Join(enumerateFiles("*.cs"))
-                                                               .Join(enumerateFiles("*.shader"))
-                                                               .Join(enumerateFiles("*.cginc"));
-            foreach (string filePath in files)
-            {
-                string text = File.ReadAllText(filePath);
-                File.WriteAllText(filePath, text, Encoding.UTF8);
-            }
-            AssetDatabase.Refresh();
+            string dataPath = Application.dataPath;
+            string[] extensions = { "*.txt", "*.xml", "*.json", "*.cs", "*.shader", "*.cginc" };
 
-            IEnumerable<string> enumerateFiles(string pattern)
-            {
-                return Directory.EnumerateFiles(Application.dataPath, pattern, SearchOption.AllDirectories);
-            }
+            extensions.SelectMany(pattern => Directory.EnumerateFiles(dataPath, pattern, SearchOption.AllDirectories))
+                      .AsParallel()
+                      .ForAll(filePath => File.WriteAllText(filePath, File.ReadAllText(filePath), Encoding.UTF8));
+
+            AssetDatabase.Refresh();
         }
 
         private static IEnumerable<string> EnumerateFiles(string path, string searchPattern)
