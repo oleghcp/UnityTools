@@ -9,7 +9,7 @@ using UnityUtility.Tools;
 namespace System
 {
 #pragma warning disable CS0809
-    public unsafe ref struct Span<T> where T : unmanaged
+    public readonly unsafe ref struct Span<T> where T : unmanaged
     {
         private readonly T* _ptr;
         private readonly int _length;

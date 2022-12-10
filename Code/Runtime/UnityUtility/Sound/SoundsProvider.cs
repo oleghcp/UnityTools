@@ -223,7 +223,7 @@ namespace UnityUtility.Sound
             return set;
         }
 
-        private struct SoundKey : IEquatable<SoundKey>
+        private readonly struct SoundKey : IEquatable<SoundKey>
         {
             private readonly int _hash;
 

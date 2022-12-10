@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace UnityUtility.Async
 {
-    public struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
+    public readonly struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
     {
         private readonly long _id;
         private readonly TaskRunner _task;
