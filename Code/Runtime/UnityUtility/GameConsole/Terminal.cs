@@ -19,11 +19,15 @@ namespace UnityUtility.GameConsole
     [DisallowMultipleComponent]
     public sealed class Terminal : SingleUiBehaviour<Terminal>
     {
+        private const float TARGET_CANVAS_SIDE = 720f;
+
         private readonly Color _cmdColor = Colours.White;
         private readonly Color _cmdErrorColor = Colours.Orange;
 
         public static event Action<bool> Switched_Event;
 
+        [SerializeField]
+        private CanvasScaler _canvasScaler;
         [SerializeField]
         private InputField _field;
         [SerializeField]
@@ -41,13 +45,10 @@ namespace UnityUtility.GameConsole
         private List<string> _cmdHistory = new List<string>();
         private int _curHistoryIndex;
         private TerminalOptions _options;
+        private float _ratio;
 
         public bool IsOn => _isOn;
         public TerminalOptions Options => _options;
-
-        ///////////////
-        //Unity funcs//
-        ///////////////
 
         protected override void Construct()
         {
@@ -74,6 +75,9 @@ namespace UnityUtility.GameConsole
 
         private void Update()
         {
+            if (_ratio != (float)Screen.height / Screen.width)
+                OnAspectRatioChange();
+
             if (Input.GetKeyDown(KeyCode.BackQuote))
             {
                 SwitchInternal();
@@ -97,10 +101,6 @@ namespace UnityUtility.GameConsole
                 }
             }
         }
-
-        ////////////////
-        //Public funcs//
-        ////////////////
 
         /// <summary>
         /// Creates a command line (aka console/terminal). Takes command container.
@@ -194,10 +194,6 @@ namespace UnityUtility.GameConsole
         {
             _log.OnScroll();
         }
-
-        ///////////////
-        //Inner funcs//
-        ///////////////
 
         private void EnterCmd(string text)
         {
@@ -306,7 +302,7 @@ namespace UnityUtility.GameConsole
         private void SwitchInternal()
         {
             StopAllCoroutines();
-            StartCoroutine(SwitchRoutine());
+            StartCoroutine(GetSwitchRoutine());
         }
 
         private Color GetTextColor(LogType logType)
@@ -368,14 +364,17 @@ namespace UnityUtility.GameConsole
             return false;
         }
 
-        ////////////
-        //Routines//
-        ////////////
+        private void OnAspectRatioChange()
+        {
+            _ratio = (float)Screen.height / Screen.width;
+            _canvasScaler.referenceResolution = _ratio < 1f ? new Vector2(TARGET_CANVAS_SIDE / _ratio, TARGET_CANVAS_SIDE)
+                                                            : new Vector2(TARGET_CANVAS_SIDE, TARGET_CANVAS_SIDE * _ratio);
+        }
 
-        private IEnumerator SwitchRoutine()
+        private IEnumerator GetSwitchRoutine()
         {
             _isOn = !_isOn;
-            float targetHeight = 720f * _options.TargetHeight;
+            float consoleHeight = _canvasScaler.referenceResolution.y * _options.TargetHeight;
 
             _field.gameObject.SetActive(_isOn);
             _closeButton.SetActive(_isOn);
@@ -392,8 +391,8 @@ namespace UnityUtility.GameConsole
                 _curHistoryIndex = 0;
             }
 
-            float hStart = _isOn ? 0f : targetHeight;
-            float hEnd = _isOn ? targetHeight : 0f;
+            float hStart = _isOn ? 0f : consoleHeight;
+            float hEnd = _isOn ? consoleHeight : 0f;
 
             float ratio = 0f;
 
