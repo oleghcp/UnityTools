@@ -740,6 +740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 089def0aa18936445acfe694ae216fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasScaler: {fileID: 8614577478796120313}
   _field: {fileID: 6090613925782028590}
   _log: {fileID: 6091571194127111330}
   _closeButton: {fileID: 6580546031544356205}
@@ -861,7 +862,7 @@ MonoBehaviour:
     m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 0.8
+    m_LineSpacing: 1
   m_Text: 
 --- !u!114 &6090838524757008286
 MonoBehaviour:
