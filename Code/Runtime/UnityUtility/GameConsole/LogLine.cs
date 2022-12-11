@@ -1,8 +1,8 @@
 ﻿#if !UNITY_2019_2_OR_NEWER || INCLUDE_UNITY_UI
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityUtility.Async;
 using UnityUtility.CSharp;
 using UnityUtility.Pool;
 
@@ -15,6 +15,8 @@ namespace UnityUtility.GameConsole
         private Text _text;
         [SerializeField]
         private InfoPanel _infoPanel;
+        [SerializeField, Min(1)]
+        private int _initSizeCount = 3;
 
         private string _info;
 
@@ -24,7 +26,7 @@ namespace UnityUtility.GameConsole
             _text.color = color;
             _info = info;
             gameObject.SetActive(true);
-            TaskSystem.RunAfterFrames(1, SetVerticalSize);
+            StartCoroutine(GetSizeRoutine());
         }
 
         public LogLine Reuse()
@@ -52,9 +54,15 @@ namespace UnityUtility.GameConsole
                 _infoPanel.Show(_info);
         }
 
-        private void SetVerticalSize()
+        private IEnumerator GetSizeRoutine()
         {
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);
+            int couner = 0;
+
+            while (couner++ < _initSizeCount)
+            {
+                yield return null;
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);
+            }
         }
     }
 }
