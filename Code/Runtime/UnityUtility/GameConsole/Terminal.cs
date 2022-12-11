@@ -375,6 +375,7 @@ namespace UnityUtility.GameConsole
         {
             _isOn = !_isOn;
             float consoleHeight = _canvasScaler.referenceResolution.y * _options.TargetHeight;
+            rectTransform.SetSizeWithCurrentAnchors(Axis.Vertical, consoleHeight);
 
             _field.gameObject.SetActive(_isOn);
             _closeButton.SetActive(_isOn);
@@ -385,7 +386,6 @@ namespace UnityUtility.GameConsole
 #if UNITY_EDITOR || UNITY_STANDALONE
                 _field.OnPointerClick(_pointerEventData);
 #endif
-                _log.gameObject.SetActive(true);
                 _border.SetActive(true);
             }
             else
@@ -401,16 +401,14 @@ namespace UnityUtility.GameConsole
             while (ratio < 1f)
             {
                 ratio += Time.unscaledDeltaTime * 10f;
-                rectTransform.SetSizeWithCurrentAnchors(Axis.Vertical, Mathf.Lerp(hStart, hEnd, ratio));
+                float yPos = Mathf.Lerp(hStart, hEnd, ratio);
+                rectTransform.anchoredPosition = new Vector2(0f, -yPos);
 
                 yield return null;
             }
 
             if (!_isOn)
-            {
-                _log.gameObject.SetActive(false);
                 _border.SetActive(false);
-            }
         }
     }
 }
