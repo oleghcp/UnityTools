@@ -401,8 +401,7 @@ namespace UnityUtility.GameConsole
             while (ratio < 1f)
             {
                 ratio += Time.unscaledDeltaTime * 10f;
-                float yPos = Mathf.Lerp(hStart, hEnd, ratio);
-                rectTransform.anchoredPosition = new Vector2(0f, -yPos);
+                rectTransform.anchoredPosition = new Vector2(0f, -Mathf.Lerp(hStart, hEnd, ratio));
 
                 yield return null;
             }

@@ -316,8 +316,9 @@ namespace UnityUtility.Engine
 
         public static void SetSizeWithCurrentAnchors(this RectTransform self, in Vector2 size)
         {
-            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
-            self.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+            RectTransform rectTransform = self.parent as RectTransform;
+            Vector2 parentSize = rectTransform == null ? Vector2.zero : rectTransform.rect.size;
+            self.sizeDelta = size - parentSize * (self.anchorMax - self.anchorMin);
         }
 
         /// <summary>
