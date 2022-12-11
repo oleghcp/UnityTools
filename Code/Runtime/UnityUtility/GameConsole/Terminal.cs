@@ -382,7 +382,9 @@ namespace UnityUtility.GameConsole
             if (_isOn)
             {
                 _field.text = string.Empty;
+#if UNITY_EDITOR || UNITY_STANDALONE
                 _field.OnPointerClick(_pointerEventData);
+#endif
                 _log.gameObject.SetActive(true);
                 _border.SetActive(true);
             }
