@@ -38,14 +38,16 @@ namespace UnityUtilityEditor
         }
 
         [MenuItem(LibConstants.LIB_NAME + "/Terminal/Create Terminal Prefab")]
-        private static void CreateTerminal()
+        private static void CreateTerminalPrefab()
         {
             string assetPath = AssetDatabase.GUIDToAssetPath("7537be9dac6f69045a2656580dc951f0");
             string newFolderPath = $"{AssetDatabaseExt.ASSET_FOLDER}{nameof(Resources)}";
 
             Directory.CreateDirectory(newFolderPath);
-            GameObject prefab = PrefabUtility.LoadPrefabContents(assetPath);
+            GameObject prefab = (GameObject)AssetDatabase.LoadMainAssetAtPath(assetPath);
+            prefab = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
             PrefabUtility.SaveAsPrefabAsset(prefab, $"{newFolderPath}/Terminal.prefab");
+            prefab.DestroyImmediate();
             AssetDatabase.SaveAssets();
         }
 
