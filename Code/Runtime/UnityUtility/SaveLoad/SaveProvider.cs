@@ -187,6 +187,7 @@ namespace UnityUtility.SaveLoad
         /// </summary>
         public void Save()
         {
+            Collect();
             _saver.SaveLastVersion();
         }
 
