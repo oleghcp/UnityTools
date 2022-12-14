@@ -87,7 +87,7 @@ namespace UnityUtilityEditor
 
             if (collection.IsNullOrEmpty())
             {
-                Debug.Log("There are no references.");
+                EditorUtility.DisplayDialog("References Search", "There are no references.", "Ok");
                 return;
             }
 

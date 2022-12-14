@@ -15,32 +15,33 @@ namespace UnityUtilityEditor
     {
         public static void RemoveEmptyFolders()
         {
-            List<string> list = new List<string>();
-            removeEmptyFolders(Application.dataPath, list);
+            int counter = 0;
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("Removed folders:");
 
-            if (list.Count > 0)
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.AppendLine("Removed folders:");
-                foreach (string item in list)
-                {
-                    builder.AppendLine(item);
-                }
+            removeEmptyFolders(Application.dataPath);
+
+            if (counter == 0)
+                EditorUtility.DisplayDialog("Empty Folders Search", "There are no empty folders.", "Ok");
+            else
                 Debug.Log(builder.ToString());
-            }
 
-            void removeEmptyFolders(string path, List<string> removed)
+            void removeEmptyFolders(string path)
             {
+                const char forbiddenChar = '.';
+
                 foreach (string directory in Directory.EnumerateDirectories(path))
                 {
-                    removeEmptyFolders(directory, removed);
+                    if (Path.GetFileName(directory)[0] != forbiddenChar)
+                        removeEmptyFolders(directory);
                 }
 
                 if (Directory.EnumerateFileSystemEntries(path).IsNullOrEmpty())
                 {
                     string relativePath = "Assets" + path.Substring(Application.dataPath.Length);
                     AssetDatabase.DeleteAsset(relativePath);
-                    removed.Add(relativePath);
+                    builder.AppendLine(relativePath);
+                    counter++;
                 }
             }
         }
