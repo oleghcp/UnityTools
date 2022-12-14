@@ -35,6 +35,11 @@
             "name": "com.unity.addressables",
             "expression": "",
             "define": "INCLUDE_ADDRESSABLES"
+        },
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "",
+            "define": "INCLUDE_NEWTONSOFT_JSON"
         }
     ],
     "noEngineReferences": false

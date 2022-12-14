@@ -87,6 +87,14 @@ namespace UnityUtilityEditor
             SearchHugeFilesWindow.Create();
         }
 
+#if UNITY_2019_3_OR_NEWER && INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
+        [MenuItem(LibConstants.LIB_NAME + "/Addressables/Analysis Results")]
+        private static void OpenAddressablesAnalysisResultsWindow()
+        {
+            EditorWindow.GetWindow<AddressablesAnalysisResultsWindow>(false, "Analysis Results", true);
+        }
+#endif
+
         [MenuItem(LibConstants.LIB_NAME + "/About", false, 1)]
         private static void GetAboutWindow()
         {
