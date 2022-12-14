@@ -12,6 +12,7 @@ using UnityUtility.CSharp;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 using UnityUtility.SingleScripts;
+using UnityUtility.Tools;
 using static UnityEngine.RectTransform;
 
 namespace UnityUtility.GameConsole
@@ -37,14 +38,15 @@ namespace UnityUtility.GameConsole
         [SerializeField]
         private GameObject _border;
 
-        private bool _isOn;
+        private TerminalOptions _options;
+        private ITerminalSwitchTrigger _switchTrigger;
         private PointerEventData _pointerEventData;
         private StringBuilder _stringBuilder = new StringBuilder();
-        private object _cmdRun;
         private Dictionary<string, MethodInfo> _commands;
         private List<string> _cmdHistory = new List<string>();
+        private bool _isOn;
+        private object _cmdRun;
         private int _curHistoryIndex;
-        private TerminalOptions _options;
         private float _ratio;
 
         public bool IsOn => _isOn;
@@ -78,7 +80,7 @@ namespace UnityUtility.GameConsole
             if (_ratio != (float)Screen.height / Screen.width)
                 OnAspectRatioChange();
 
-            if (Input.GetKeyDown(KeyCode.BackQuote))
+            if (_switchTrigger.SwitchThisFrame)
             {
                 SwitchInternal();
                 Switched_Event?.Invoke(_isOn);
@@ -111,9 +113,8 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands, bool createEventSystem = false)
         {
-            CreateTerminalInternal(createEventSystem);
-            I.SetOptions(new TerminalOptions());
-            I.SetCommands(commands);
+            if (CreateTerminalInternal(createEventSystem))
+                I.Init(commands, new TerminalOptions(), new DefaultTrigger());
         }
 
         /// <summary>
@@ -125,9 +126,21 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands, TerminalOptions options, bool createEventSystem = false)
         {
-            CreateTerminalInternal(createEventSystem);
-            I.SetCommands(commands);
-            I.SetOptions(options);
+            if (CreateTerminalInternal(createEventSystem))
+                I.Init(commands, options, new DefaultTrigger());
+        }
+
+        /// <summary>
+        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Commands are just functions of the view:
+        /// public string commandname(string[] options).
+        /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
+        /// </summary>
+        /// <param name="commands">An object which contans command functions.</param>
+        public static void CreateTerminal(object commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
+        {
+            if (CreateTerminalInternal(createEventSystem))
+                I.Init(commands, options, switchTrigger);
         }
 
         /// <summary>
@@ -136,14 +149,28 @@ namespace UnityUtility.GameConsole
         /// <param name="commands">An object which contans command functions.</param>
         public void SetCommands(object commands)
         {
+            if (commands == null)
+                throw Errors.NullParameter(nameof(commands));
+
             _cmdRun = commands;
             Type t = _cmdRun.GetType();
             MethodInfo[] funcs = t.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
             _commands = funcs.ToDictionary(itm => itm.Name, itm => itm);
         }
 
+        public void SetSwitchTrigger(ITerminalSwitchTrigger switchTrigger)
+        {
+            if (switchTrigger == null)
+                throw Errors.NullParameter(nameof(switchTrigger));
+
+            _switchTrigger = switchTrigger;
+        }
+
         public void SetOptions(TerminalOptions options)
         {
+            if (options == null)
+                throw Errors.NullParameter(nameof(options));
+
             _options = options;
         }
 
@@ -193,6 +220,13 @@ namespace UnityUtility.GameConsole
         public void OnScroll()
         {
             _log.OnScroll();
+        }
+
+        private void Init(object commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger)
+        {
+            SetCommands(commands);
+            SetOptions(options);
+            SetSwitchTrigger(switchTrigger);
         }
 
         private void EnterCmd(string text)
@@ -333,14 +367,14 @@ namespace UnityUtility.GameConsole
             }
         }
 
-        private static void CreateTerminalInternal(bool createEventSystem)
+        private static bool CreateTerminalInternal(bool createEventSystem)
         {
             GameObject terminal = Resources.Load<GameObject>("Terminal");
 
             if (terminal == null)
             {
                 Debug.LogError($"No Terminal.prefab found. Create terminal prefab using {nameof(UnityUtility)} menu item.");
-                return;
+                return false;
             }
 
             if (createEventSystem && EventSystem.current == null)
@@ -351,6 +385,7 @@ namespace UnityUtility.GameConsole
             }
 
             terminal.Install().Immortalize();
+            return true;
         }
 
         private bool NoCommands()
@@ -408,6 +443,11 @@ namespace UnityUtility.GameConsole
 
             if (!_isOn)
                 _border.SetActive(false);
+        }
+
+        private class DefaultTrigger : ITerminalSwitchTrigger
+        {
+            public bool SwitchThisFrame => Input.GetKeyDown(KeyCode.BackQuote);
         }
     }
 }
