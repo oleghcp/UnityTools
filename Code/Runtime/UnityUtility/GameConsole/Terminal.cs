@@ -137,6 +137,19 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
+        public static void CreateTerminal(object commands, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
+        {
+            if (CreateTerminalInternal(createEventSystem))
+                I.Init(commands, new TerminalOptions(), switchTrigger);
+        }
+
+        /// <summary>
+        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Commands are just functions of the view:
+        /// public string commandname(string[] options).
+        /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
+        /// </summary>
+        /// <param name="commands">An object which contans command functions.</param>
         public static void CreateTerminal(object commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
