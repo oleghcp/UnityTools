@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityUtility.Mathematics;
 using UnityUtility.Tools;
 
@@ -8,60 +9,93 @@ namespace UnityUtility.NumericEntities
     [Serializable]
     public sealed class ModifiableFloat : IModifiableEntity<float>
     {
+        private bool _cachingModifiedValue;
         private float _min;
         private float _max;
-        private float _value;
-
-        private HashSet<IModifier<float>> _absMods;
-        private HashSet<IModifier<float>> _relMods;
+        private float _pureValue;
+        private float _modifiedValue;
+        private HashSet<IModifier<float>> _modifiers;
 
         public float PureValue
         {
-            get => _value;
-            set => _value = value.Clamp(_min, _max);
+            get => _pureValue;
+            set => _pureValue = value.Clamp(_min, _max);
+        }
+
+        public bool CachingModifiedValue
+        {
+            get => _cachingModifiedValue;
+            set
+            {
+                if (value && _cachingModifiedValue != value)
+                    InitModifiedValue();
+
+                _cachingModifiedValue = value;
+            }
         }
 
         public float MinValue => _min;
         public float MaxValue => _max;
-        public bool Modified => _absMods.Count > 0 || _relMods.Count > 0;
+        public bool Modified => _modifiers.Count > 0;
 
-        private ModifiableFloat(float minValue, float maxValue)
+        public ModifiableFloat(float pureValue, float minValue, float maxValue, bool cachingModifiedValue)
         {
-            Resize(minValue, maxValue);
+            if (minValue > maxValue)
+                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
-            _absMods = new HashSet<IModifier<float>>();
-            _relMods = new HashSet<IModifier<float>>();
+            _cachingModifiedValue = cachingModifiedValue;
+            _min = minValue;
+            _max = maxValue;
+            _pureValue = pureValue.Clamp(minValue, maxValue);
+
+            _modifiers = new HashSet<IModifier<float>>();
         }
 
-        public ModifiableFloat(float pureValue, float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : this(minValue, maxValue)
+        public ModifiableFloat(float pureValue, float minValue, float maxValue) : this(pureValue, minValue, maxValue, true)
         {
-            if (pureValue < minValue || pureValue > maxValue)
-                throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));
 
-            _value = pureValue;
+        }
+
+        public ModifiableFloat(float pureValue, bool cachingModifiedValue) : this(pureValue, float.NegativeInfinity, float.PositiveInfinity, cachingModifiedValue)
+        {
+
+        }
+
+        public ModifiableFloat(float pureValue) : this(pureValue, true)
+        {
+
         }
 
         public void AddModifier(IModifier<float> modifier)
         {
-            HashSet<IModifier<float>> collection = modifier.Relative ? _relMods : _absMods;
+            if (_modifiers.Add(modifier))
+            {
+                if (_cachingModifiedValue)
+                    InitModifiedValue();
 
-            if (collection.Add(modifier))
                 return;
+            }
 
             throw Errors.ContainsModifier();
         }
 
         public void RemoveModifier(IModifier<float> modifier)
         {
-            if (modifier.Relative)
-                _relMods.Remove(modifier);
-            else
-                _absMods.Remove(modifier);
+            _modifiers.Remove(modifier);
+
+            if (_cachingModifiedValue)
+                InitModifiedValue();
         }
 
         public float GetModifiedValue()
         {
-            return (_value + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
+            if (_modifiers.Count == 0)
+                return _pureValue;
+
+            if (_cachingModifiedValue)
+                return _modifiedValue.Clamp(_min, _max);
+
+            return (_pureValue + CalculateSum()).Clamp(_min, _max);
         }
 
         public void Resize(float minValue, float maxValue)
@@ -72,37 +106,38 @@ namespace UnityUtility.NumericEntities
             _min = minValue;
             _max = maxValue;
 
-            _value = _value.Clamp(minValue, maxValue);
+            _pureValue = _pureValue.Clamp(minValue, maxValue);
         }
 
-        //--//
-
-        private float GetAbsSum()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void InitModifiedValue()
         {
-            if (_absMods.Count == 0)
-                return 0f;
-
-            float sum = 0f;
-
-            foreach (IModifier<float> item in _absMods)
-            {
-                sum += item.Value;
-            }
-
-            return sum;
+            _modifiedValue = _pureValue + CalculateSum();
         }
 
-        private float GetRelSum()
+        private float CalculateSum()
         {
-            if (_relMods.Count == 0)
-                return 0f;
-
             float sum = 0f;
-            float value = _value;
 
-            foreach (IModifier<float> item in _relMods)
+            foreach (IModifier<float> modifier in _modifiers)
             {
-                sum += value * item.Value;
+                switch (modifier.Modification)
+                {
+                    case ModifierType.PureAdditive:
+                        sum += modifier.Value;
+                        break;
+
+                    case ModifierType.RelativeMultiplier:
+                        sum += _pureValue * modifier.Value;
+                        break;
+
+                    case ModifierType.RelativeDivider:
+                        sum += _pureValue / modifier.Value;
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(modifier.Modification);
+                }
             }
 
             return sum;

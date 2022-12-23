@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityUtility.Mathematics;
 using UnityUtility.Tools;
 
@@ -8,60 +9,93 @@ namespace UnityUtility.NumericEntities
     [Serializable]
     public sealed class ModifiableInt : IModifiableEntity<int>
     {
+        private bool _cachingModifiedValue;
         private int _min;
         private int _max;
-        private int _value;
-
-        private HashSet<IModifier<int>> _absMods;
-        private HashSet<IModifier<int>> _relMods;
+        private int _pureValue;
+        private int _modifiedValue;
+        private HashSet<IModifier<int>> _modifiers;
 
         public int PureValue
         {
-            get => _value;
-            set => _value = value.Clamp(_min, _max);
+            get => _pureValue;
+            set => _pureValue = value.Clamp(_min, _max);
+        }
+
+        public bool CachingModifiedValue
+        {
+            get => _cachingModifiedValue;
+            set
+            {
+                if (value && _cachingModifiedValue != value)
+                    InitModifiedValue();
+
+                _cachingModifiedValue = value;
+            }
         }
 
         public int MinValue => _min;
         public int MaxValue => _max;
-        public bool Modified => _absMods.Count > 0 || _relMods.Count > 0;
+        public bool Modified => _modifiers.Count > 0;
 
-        private ModifiableInt(int minValue, int maxValue)
+        public ModifiableInt(int pureValue, int minValue, int maxValue, bool cachingModifiedValue)
         {
-            Resize(minValue, maxValue);
+            if (minValue > maxValue)
+                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
 
-            _absMods = new HashSet<IModifier<int>>();
-            _relMods = new HashSet<IModifier<int>>();
+            _cachingModifiedValue = cachingModifiedValue;
+            _min = minValue;
+            _max = maxValue;
+            _pureValue = pureValue.Clamp(minValue, maxValue);
+
+            _modifiers = new HashSet<IModifier<int>>();
         }
 
-        public ModifiableInt(int pureValue, int minValue = int.MinValue, int maxValue = int.MaxValue) : this(minValue, maxValue)
+        public ModifiableInt(int pureValue, int minValue, int maxValue) : this(pureValue, minValue, maxValue, true)
         {
-            if (pureValue < minValue || pureValue > maxValue)
-                throw Errors.OutOfRange(nameof(pureValue), nameof(minValue), nameof(maxValue));
 
-            _value = pureValue;
+        }
+
+        public ModifiableInt(int pureValue, bool cachingModifiedValue) : this(pureValue, int.MinValue, int.MaxValue, cachingModifiedValue)
+        {
+
+        }
+
+        public ModifiableInt(int pureValue) : this(pureValue, true)
+        {
+
         }
 
         public void AddModifier(IModifier<int> modifier)
         {
-            HashSet<IModifier<int>> collection = modifier.Relative ? _relMods : _absMods;
+            if (_modifiers.Add(modifier))
+            {
+                if (_cachingModifiedValue)
+                    InitModifiedValue();
 
-            if (collection.Add(modifier))
                 return;
+            }
 
             throw Errors.ContainsModifier();
         }
 
         public void RemoveModifier(IModifier<int> modifier)
         {
-            if (modifier.Relative)
-                _relMods.Remove(modifier);
-            else
-                _absMods.Remove(modifier);
+            _modifiers.Remove(modifier);
+
+            if (_cachingModifiedValue)
+                InitModifiedValue();
         }
 
         public int GetModifiedValue()
         {
-            return (_value + GetAbsSum() + GetRelSum()).Clamp(_min, _max);
+            if (_modifiers.Count == 0)
+                return _pureValue;
+
+            if (_cachingModifiedValue)
+                return _modifiedValue.Clamp(_min, _max);
+
+            return (_pureValue + CalculateSum()).Clamp(_min, _max);
         }
 
         public void Resize(int minValue, int maxValue)
@@ -72,39 +106,41 @@ namespace UnityUtility.NumericEntities
             _min = minValue;
             _max = maxValue;
 
-            _value = _value.Clamp(minValue, maxValue);
+            _pureValue = _pureValue.Clamp(minValue, maxValue);
         }
 
-        //--//
-
-        private int GetAbsSum()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void InitModifiedValue()
         {
-            if (_absMods.Count == 0)
-                return 0;
-
-            int sum = 0;
-
-            foreach (IModifier<int> item in _absMods)
-            {
-                sum += item.Value;
-            }
-
-            return sum;
+            _modifiedValue = _pureValue + CalculateSum();
         }
 
-        private int GetRelSum()
+        private int CalculateSum()
         {
-            if (_relMods.Count == 0)
-                return 0;
+            float sum = 0f;
 
-            int sum = 0;
-
-            foreach (IModifier<int> item in _relMods)
+            foreach (IModifier<int> modifier in _modifiers)
             {
-                sum += _value * item.Value;
+                switch (modifier.Modification)
+                {
+                    case ModifierType.PureAdditive:
+                        sum += modifier.Value;
+                        break;
+
+                    case ModifierType.RelativeMultiplier:
+                        sum += _pureValue * modifier.Value;
+                        break;
+
+                    case ModifierType.RelativeDivider:
+                        sum += (float)_pureValue / modifier.Value;
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(modifier.Modification);
+                }
             }
 
-            return sum;
+            return sum.ToInt(RoundingWay.Floor);
         }
     }
 }

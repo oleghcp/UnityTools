@@ -46,15 +46,23 @@ namespace UnityUtility.NumericEntities
         void RemoveExcess();
     }
 
+    public enum ModifierType
+    {
+        PureAdditive,
+        RelativeMultiplier,
+        RelativeDivider,
+    }
+
     public interface IModifier<T> where T : struct, IComparable<T>, IEquatable<T>
     {
-        bool Relative { get; }
+        ModifierType Modification { get; }
         T Value { get; }
     }
 
     public interface IModifiableEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {
         T PureValue { get; set; }
+        bool CachingModifiedValue { get; }
         T MinValue { get; }
         T MaxValue { get; }
         bool Modified { get; }
