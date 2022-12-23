@@ -161,8 +161,7 @@ namespace UnityUtility.Engine
         /// </summary>
         public static GameObject Install(this LazyLoadReference<GameObject> self, in Vector3 position)
         {
-            GameObject asset = self.asset;
-            return UnityObject.Instantiate(asset, position, asset.transform.localRotation);
+            return Install(self.asset, position);
         }
 
         /// <summary>
@@ -178,8 +177,7 @@ namespace UnityUtility.Engine
         /// </summary>
         public static Transform Install(this LazyLoadReference<Transform> self, in Vector3 position)
         {
-            Transform asset = self.asset;
-            return UnityObject.Instantiate(asset, position, asset.localRotation);
+            return Install(self.asset, position);
         }
 
         /// <summary>
@@ -187,8 +185,7 @@ namespace UnityUtility.Engine
         /// </summary>
         public static T Install<T>(this LazyLoadReference<T> self, in Vector3 position) where T : Component
         {
-            T asset = self.asset;
-            return UnityObject.Instantiate(asset, position, asset.transform.localRotation);
+            return Install(self.asset, position);
         }
 
         /// <summary>
