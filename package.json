@@ -1,0 +1,15 @@
+{
+    "name": "com.oleghcp.unityutility",
+    "displayName": "Unity Utility",
+    "author": {
+        "name": "Oleg Pulkin",
+        "email": "oleghcp@gmail.com"
+    },
+    "version": "1.0.0",
+    "unity": "2018.3",
+    "description": "A set of helpful code stuff for Unity.",
+    "keywords": [ "Unity", "Utility" ],
+    "license": "MIT",
+    "dependencies": {},
+    "samples": []
+}
