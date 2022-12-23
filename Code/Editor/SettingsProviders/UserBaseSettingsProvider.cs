@@ -21,22 +21,28 @@ namespace UnityUtilityEditor.SettingsProviders
             EditorGUILayout.Space();
 
             EditorGUIUtility.labelWidth = 250f;
-            DrawToggle(PrefsKeys.OPEN_FOLDERS_BY_CLICK, "Open Folders by Double Click");
+            if (DrawToggle(PrefsKeys.OPEN_FOLDERS_BY_CLICK, "Open Folders by Double Click"))
+                EditorGUILayout.HelpBox("Folders opening  by double click works only with one column layout of Project window.", MessageType.Info);
             DrawToggle(PrefsKeys.OPEN_SO_ASSETS_CODE_BY_CLICK, "Open ScriptableObject Assets as Code");
-            DrawText(PrefsKeys.SUPPRESSED_WARNINGS_IN_IDE, "Suppressed Warnings in IDE", "If you specify multiple warning numbers, separate them with a comma. \n Example: CS0649,CS0169");
+
+            DrawText(PrefsKeys.SUPPRESSED_WARNINGS_IN_IDE,
+                     "Suppressed Warnings in IDE",
+                     tooltip: "If you specify multiple warning numbers, separate them with a comma. \n Example: CS0649,CS0169",
+                     defaultValue: CsprojFilePostprocessor.DEFAULT_WARNING);
         }
 
-        private void DrawToggle(string key, string label, string tooltip = null)
+        private bool DrawToggle(string key, string label)
         {
             bool curValue = EditorPrefs.GetBool(key);
-            bool newValue = EditorGUILayout.Toggle(EditorGuiUtility.TempContent(label, tooltip), curValue);
+            bool newValue = EditorGUILayout.Toggle(EditorGuiUtility.TempContent(label), curValue);
             if (newValue != curValue)
                 EditorPrefs.SetBool(key, newValue);
+            return newValue;
         }
 
-        private void DrawText(string key, string label, string tooltip = null)
+        private void DrawText(string key, string label, string tooltip = null, string defaultValue = null)
         {
-            string curValue = EditorPrefs.GetString(key);
+            string curValue = EditorPrefs.GetString(key, defaultValue);
             string newValue = EditorGUILayout.TextField(EditorGuiUtility.TempContent(label, tooltip), curValue);
             if (newValue != curValue)
                 EditorPrefs.SetString(key, newValue);
