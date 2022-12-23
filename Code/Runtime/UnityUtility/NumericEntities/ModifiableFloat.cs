@@ -23,7 +23,7 @@ namespace UnityUtility.NumericEntities
 
         public float MinValue => _min;
         public float MaxValue => _max;
-        public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
+        public bool Modified => _absMods.Count > 0 || _relMods.Count > 0;
 
         private ModifiableFloat(float minValue, float maxValue)
         {

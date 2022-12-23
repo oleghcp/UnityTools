@@ -23,7 +23,7 @@ namespace UnityUtility.NumericEntities
 
         public int MinValue => _min;
         public int MaxValue => _max;
-        public bool Modified => _absMods.Count > 0 && _relMods.Count > 0;
+        public bool Modified => _absMods.Count > 0 || _relMods.Count > 0;
 
         private ModifiableInt(int minValue, int maxValue)
         {
