@@ -2,7 +2,9 @@
     "name": "UnityUtilityEditor",
     "references": [
         "UnityUtility",
-        "Unity.Addressables"
+        "Unity.Addressables",
+        "Unity.Postprocessing.Runtime",
+        "Unity.Postprocessing.Editor"
     ],
     "includePlatforms": [
         "Editor"
@@ -40,6 +42,11 @@
             "name": "com.unity.nuget.newtonsoft-json",
             "expression": "",
             "define": "INCLUDE_NEWTONSOFT_JSON"
+        },
+        {
+            "name": "com.unity.postprocessing",
+            "expression": "",
+            "define": "INCLUDE_POST_PROCESSING"
         }
     ],
     "noEngineReferences": false

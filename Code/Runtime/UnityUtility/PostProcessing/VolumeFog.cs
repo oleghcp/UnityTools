@@ -10,11 +10,10 @@ namespace UnityUtility.PostProcessing
     [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "UnityUtility/Fog")]
     public class VolumeFog : PostProcessEffectSettings
     {
-        public ColorParameter FogColor = new ColorParameter { value = Colours.White };
-        [Range(0.0f, 1.0f)]
-        public FloatParameter FogDensity = new FloatParameter { value = 0.001f };
-        [UnityEngine.Rendering.PostProcessing.Min(0f)]
-        public FloatParameter FogOffset = new FloatParameter { value = 0f };
+        public FogModeParameter Mode = new FogModeParameter() { value = FogMode.ExponentialSquared };
+        public ColorParameter FogColor = new ColorParameter() { value = Colours.White };
+        public FloatParameter Param1 = new FloatParameter(); //fog density or linear start
+        public FloatParameter Param2 = new FloatParameter(); //fog offset or linear end
 
         [Preserve]
         public class FogRenderer : PostProcessEffectRenderer<VolumeFog>
@@ -22,21 +21,55 @@ namespace UnityUtility.PostProcessing
             private const string COLOR_PROP = "_FogColor";
             private const string DENSITY_PROP = "_FogDensity";
             private const string OFFSET_PROP = "_FogOffset";
+            private const string START_PROP = "_Start";
+            private const string END_PROP = "_End";
 
             private Shader _shader;
 
             public override void Init()
             {
-                _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
+                switch (settings.Mode.value)
+                {
+                    case FogMode.Linear:
+                        _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/LinearFog");
+                        break;
+
+                    case FogMode.Exponential:
+                        _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/ExpFog");
+                        break;
+
+                    case FogMode.ExponentialSquared:
+                        _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(settings.Mode.value);
+                }
             }
 
             public override void Render(PostProcessRenderContext context)
             {
                 PropertySheet sheet = context.propertySheets.Get(_shader);
+                MaterialPropertyBlock properties = sheet.properties;
 
-                sheet.properties.SetVector(COLOR_PROP, settings.FogColor);
-                sheet.properties.SetFloat(DENSITY_PROP, settings.FogDensity);
-                sheet.properties.SetFloat(OFFSET_PROP, settings.FogOffset);
+                properties.SetVector(COLOR_PROP, settings.FogColor);
+
+                switch (settings.Mode.value)
+                {
+                    case FogMode.Linear:
+                        properties.SetFloat(START_PROP, settings.Param1);
+                        properties.SetFloat(END_PROP, settings.Param2);
+                        break;
+
+                    case FogMode.Exponential:
+                    case FogMode.ExponentialSquared:
+                        properties.SetFloat(DENSITY_PROP, settings.Param1);
+                        properties.SetFloat(OFFSET_PROP, settings.Param2);
+                        break;
+
+                    default:
+                        throw new UnsupportedValueException(settings.Mode.value);
+                }
 
                 context.command.BlitFullscreenTriangle(context.source,
                                                        context.destination,
@@ -51,5 +84,8 @@ namespace UnityUtility.PostProcessing
             }
         }
     }
+
+    [Serializable]
+    public sealed class FogModeParameter : ParameterOverride<FogMode> { }
 }
 #endif
