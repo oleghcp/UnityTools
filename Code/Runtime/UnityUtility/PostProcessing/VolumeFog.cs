@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 namespace UnityUtility.PostProcessing
 {
     [Serializable]
-    [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "Custom/Fog")]
+    [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "UnityUtility/Fog")]
     public class VolumeFog : PostProcessEffectSettings
     {
         public ColorParameter FogColor = new ColorParameter { value = Colours.White };
