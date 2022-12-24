@@ -1,10 +1,10 @@
-﻿using System;
+﻿#if INCLUDE_POST_PROCESSING
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Scripting;
-using UnityUtility;
 
-namespace Engine.PostProcessing
+namespace UnityUtility.PostProcessing
 {
     [Serializable]
     [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "Custom/Fog")]
@@ -27,7 +27,7 @@ namespace Engine.PostProcessing
 
             public override void Init()
             {
-                _shader = Shader.Find("Hidden/OlegHCP/ESFog");
+                _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
             }
 
             public override void Render(PostProcessRenderContext context)
@@ -52,3 +52,4 @@ namespace Engine.PostProcessing
         }
     }
 }
+#endif
