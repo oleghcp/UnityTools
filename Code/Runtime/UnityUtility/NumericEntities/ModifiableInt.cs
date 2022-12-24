@@ -81,9 +81,7 @@ namespace UnityUtility.NumericEntities
 
         public void RemoveModifier(IModifier<int> modifier)
         {
-            _modifiers.Remove(modifier);
-
-            if (_cachingModifiedValue)
+            if (_modifiers.Remove(modifier) && _cachingModifiedValue)
                 InitModifiedValue();
         }
 
