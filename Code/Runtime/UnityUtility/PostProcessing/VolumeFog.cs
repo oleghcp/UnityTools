@@ -15,6 +15,9 @@ namespace UnityUtility.PostProcessing
         public FloatParameter Param1 = new FloatParameter(); //fog density or linear start
         public FloatParameter Param2 = new FloatParameter(); //fog offset or linear end
 
+        [Serializable]
+        public sealed class FogModeParameter : ParameterOverride<FogMode> { }
+
         [Preserve]
         public class FogRenderer : PostProcessEffectRenderer<VolumeFog>
         {
@@ -24,22 +27,31 @@ namespace UnityUtility.PostProcessing
             private const string START_PROP = "_Start";
             private const string END_PROP = "_End";
 
-            private Shader _shader;
+            private Shader _shaderLinear;
+            private Shader _shaderExponential;
+            private Shader _shaderExpSquared;
 
             public override void Init()
+            {
+                _shaderLinear = Shader.Find("Hidden/UnityUtility/PostProcessing/LinearFog");
+                _shaderExponential = Shader.Find("Hidden/UnityUtility/PostProcessing/ExpFog");
+                _shaderExpSquared = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
+            }
+
+            public override void Render(PostProcessRenderContext context)
             {
                 switch (settings.Mode.value)
                 {
                     case FogMode.Linear:
-                        _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/LinearFog");
+                        RenderTarget(context, _shaderLinear, START_PROP, END_PROP);
                         break;
 
                     case FogMode.Exponential:
-                        _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/ExpFog");
+                        RenderTarget(context, _shaderExponential, DENSITY_PROP, OFFSET_PROP);
                         break;
 
                     case FogMode.ExponentialSquared:
-                        _shader = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
+                        RenderTarget(context, _shaderExpSquared, DENSITY_PROP, OFFSET_PROP);
                         break;
 
                     default:
@@ -47,29 +59,19 @@ namespace UnityUtility.PostProcessing
                 }
             }
 
-            public override void Render(PostProcessRenderContext context)
+            public override DepthTextureMode GetCameraFlags()
             {
-                PropertySheet sheet = context.propertySheets.Get(_shader);
+                return DepthTextureMode.Depth;
+            }
+
+            private void RenderTarget(PostProcessRenderContext context, Shader shader, string param1, string param2)
+            {
+                PropertySheet sheet = context.propertySheets.Get(shader);
                 MaterialPropertyBlock properties = sheet.properties;
 
                 properties.SetVector(COLOR_PROP, settings.FogColor);
-
-                switch (settings.Mode.value)
-                {
-                    case FogMode.Linear:
-                        properties.SetFloat(START_PROP, settings.Param1);
-                        properties.SetFloat(END_PROP, settings.Param2);
-                        break;
-
-                    case FogMode.Exponential:
-                    case FogMode.ExponentialSquared:
-                        properties.SetFloat(DENSITY_PROP, settings.Param1);
-                        properties.SetFloat(OFFSET_PROP, settings.Param2);
-                        break;
-
-                    default:
-                        throw new UnsupportedValueException(settings.Mode.value);
-                }
+                properties.SetFloat(param1, settings.Param1);
+                properties.SetFloat(param2, settings.Param2);
 
                 context.command.BlitFullscreenTriangle(context.source,
                                                        context.destination,
@@ -77,15 +79,7 @@ namespace UnityUtility.PostProcessing
                                                        0,
                                                        preserveDepth: true);
             }
-
-            public override DepthTextureMode GetCameraFlags()
-            {
-                return DepthTextureMode.Depth;
-            }
         }
     }
-
-    [Serializable]
-    public sealed class FogModeParameter : ParameterOverride<FogMode> { }
 }
 #endif
