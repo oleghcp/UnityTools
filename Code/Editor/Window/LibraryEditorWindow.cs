@@ -7,9 +7,8 @@ using UnityUtility;
 
 namespace UnityUtilityEditor.Window
 {
-    public class LibraryEditorWindow : EditorWindow
+    internal class LibraryEditorWindow : EditorWindow
     {
-        private const string PACKAGE_INFO_GUID = "d14a26acf7afb104d86cc3c1d49007e1";
         private const string RUNTIME_INFO_GUID = "2a65d3c05ddab8b43ba7a7214de640db";
         private const string EDITOR_INFO_GUID = "d1131f8aadf09f145bd3a7155560b417";
 
@@ -19,25 +18,41 @@ namespace UnityUtilityEditor.Window
 
         private void OnFocus()
         {
-            _packageVersion = GetVersion(AssetDatabase.GUIDToAssetPath(PACKAGE_INFO_GUID), FileType.PackageInfo);
+            _packageVersion = GetVersion(AssetDatabase.GUIDToAssetPath(LibConstants.PACKAGE_INFO_GUID), FileType.PackageInfo);
             _runtimeVersion = GetVersion(AssetDatabase.GUIDToAssetPath(RUNTIME_INFO_GUID), FileType.AssemblyInfo);
             _editorVersion = GetVersion(AssetDatabase.GUIDToAssetPath(EDITOR_INFO_GUID), FileType.AssemblyInfo);
         }
 
         private void OnGUI()
         {
-            _packageVersion = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_packageVersion)), _packageVersion);
-            _runtimeVersion = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_runtimeVersion)), _runtimeVersion);
-            _editorVersion = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_editorVersion)), _editorVersion);
-
-            EditorGUILayout.Space();
-
-            if (GUILayout.Button("Apply"))
+            using (new GUILayout.HorizontalScope())
             {
-                SetVersion(AssetDatabase.GUIDToAssetPath(PACKAGE_INFO_GUID), FileType.PackageInfo, _packageVersion);
-                SetVersion(AssetDatabase.GUIDToAssetPath(RUNTIME_INFO_GUID), FileType.AssemblyInfo, _runtimeVersion);
-                SetVersion(AssetDatabase.GUIDToAssetPath(EDITOR_INFO_GUID), FileType.AssemblyInfo, _editorVersion);
-                AssetDatabase.Refresh();
+                _packageVersion = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_packageVersion)), _packageVersion);
+                if (GUILayout.Button("Apply"))
+                {
+                    SetVersion(AssetDatabase.GUIDToAssetPath(LibConstants.PACKAGE_INFO_GUID), FileType.PackageInfo, _packageVersion);
+                    AssetDatabase.Refresh();
+                }
+            }
+
+            using (new GUILayout.HorizontalScope())
+            {
+                _runtimeVersion = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_runtimeVersion)), _runtimeVersion);
+                if (GUILayout.Button("Apply"))
+                {
+                    SetVersion(AssetDatabase.GUIDToAssetPath(RUNTIME_INFO_GUID), FileType.AssemblyInfo, _runtimeVersion);
+                    AssetDatabase.Refresh();
+                }
+            }
+
+            using (new GUILayout.HorizontalScope())
+            {
+                _editorVersion = EditorGUILayout.TextField(ObjectNames.NicifyVariableName(nameof(_editorVersion)), _editorVersion);
+                if (GUILayout.Button("Apply"))
+                {
+                    SetVersion(AssetDatabase.GUIDToAssetPath(EDITOR_INFO_GUID), FileType.AssemblyInfo, _editorVersion);
+                    AssetDatabase.Refresh();
+                }
             }
         }
 
