@@ -11,12 +11,20 @@ namespace UnityUtility.PostProcessing
     public class Fog : PostProcessEffectSettings
     {
         public FogModeParameter Mode = new FogModeParameter() { value = FogMode.ExponentialSquared };
+
         public ColorParameter FogColor = new ColorParameter() { value = Colours.White };
         public FloatParameter Param1 = new FloatParameter(); //fog density or linear start
         public FloatParameter Param2 = new FloatParameter(); //fog offset or linear end
 
+        public ShaderParameter ShaderLinear = new ShaderParameter();
+        public ShaderParameter ShaderExponential = new ShaderParameter();
+        public ShaderParameter ShaderExpSquared = new ShaderParameter();
+
         [Serializable]
         public sealed class FogModeParameter : ParameterOverride<FogMode> { }
+
+        [Serializable]
+        public sealed class ShaderParameter : ParameterOverride<Shader> { }
 
         [Preserve]
         public class FogRenderer : PostProcessEffectRenderer<Fog>
@@ -27,31 +35,20 @@ namespace UnityUtility.PostProcessing
             private const string START_PROP = "_Start";
             private const string END_PROP = "_End";
 
-            private Shader _shaderLinear;
-            private Shader _shaderExponential;
-            private Shader _shaderExpSquared;
-
-            public override void Init()
-            {
-                _shaderLinear = Shader.Find("Hidden/UnityUtility/PostProcessing/LinearFog");
-                _shaderExponential = Shader.Find("Hidden/UnityUtility/PostProcessing/ExpFog");
-                _shaderExpSquared = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
-            }
-
             public override void Render(PostProcessRenderContext context)
             {
                 switch (settings.Mode.value)
                 {
                     case FogMode.Linear:
-                        RenderTarget(context, _shaderLinear, START_PROP, END_PROP);
+                        RenderTarget(context, settings.ShaderLinear, START_PROP, END_PROP);
                         break;
 
                     case FogMode.Exponential:
-                        RenderTarget(context, _shaderExponential, DENSITY_PROP, OFFSET_PROP);
+                        RenderTarget(context, settings.ShaderExponential, DENSITY_PROP, OFFSET_PROP);
                         break;
 
                     case FogMode.ExponentialSquared:
-                        RenderTarget(context, _shaderExpSquared, DENSITY_PROP, OFFSET_PROP);
+                        RenderTarget(context, settings.ShaderExpSquared, DENSITY_PROP, OFFSET_PROP);
                         break;
 
                     default:

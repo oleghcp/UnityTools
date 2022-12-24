@@ -14,6 +14,9 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
         private SerializedParameterOverride _color;
         private SerializedParameterOverride _aParam;
         private SerializedParameterOverride _bParam;
+        private SerializedParameterOverride _shaderLinear;
+        private SerializedParameterOverride _shaderExponential;
+        private SerializedParameterOverride _shaderExpSquared;
 
         public override void OnEnable()
         {
@@ -21,10 +24,26 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
             _color = FindParameterOverride(item => item.FogColor);
             _aParam = FindParameterOverride(item => item.Param1);
             _bParam = FindParameterOverride(item => item.Param2);
+            _shaderLinear = FindParameterOverride(item => item.ShaderLinear);
+            _shaderExponential = FindParameterOverride(item => item.ShaderExponential);
+            _shaderExpSquared = FindParameterOverride(item => item.ShaderExpSquared);
         }
 
         public override void OnInspectorGUI()
         {
+            _shaderLinear.overrideState.boolValue = true;
+            _shaderExponential.overrideState.boolValue = true;
+            _shaderExpSquared.overrideState.boolValue = true;
+
+            if (_shaderLinear.value.objectReferenceValue == null)
+                _shaderLinear.value.objectReferenceValue = Shader.Find("Hidden/UnityUtility/PostProcessing/LinearFog");
+
+            if (_shaderExponential.value.objectReferenceValue == null)
+                _shaderExponential.value.objectReferenceValue = Shader.Find("Hidden/UnityUtility/PostProcessing/ExpFog");           
+
+            if (_shaderExpSquared.value.objectReferenceValue == null)
+                _shaderExpSquared.value.objectReferenceValue = Shader.Find("Hidden/UnityUtility/PostProcessing/ESFog");
+
             PropertyField(_mode);
             PropertyField(_color);
             int mode = _mode.value.intValue;
