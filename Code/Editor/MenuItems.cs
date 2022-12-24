@@ -100,5 +100,13 @@ namespace UnityUtilityEditor
         {
             EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
         }
+
+#if LIBRARY_EDIT
+        [MenuItem(nameof(UnityUtility) + "/Library Editor Window")]
+        private static void Open()
+        {
+            EditorWindow.GetWindow<LibraryEditorWindow>();
+        }
+#endif
     }
 }
