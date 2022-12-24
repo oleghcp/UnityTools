@@ -8,7 +8,7 @@ namespace UnityUtility.PostProcessing
 {
     [Serializable]
     [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "UnityUtility/Fog")]
-    public class VolumeFog : PostProcessEffectSettings
+    public class Fog : PostProcessEffectSettings
     {
         public FogModeParameter Mode = new FogModeParameter() { value = FogMode.ExponentialSquared };
         public ColorParameter FogColor = new ColorParameter() { value = Colours.White };
@@ -19,7 +19,7 @@ namespace UnityUtility.PostProcessing
         public sealed class FogModeParameter : ParameterOverride<FogMode> { }
 
         [Preserve]
-        public class FogRenderer : PostProcessEffectRenderer<VolumeFog>
+        public class FogRenderer : PostProcessEffectRenderer<Fog>
         {
             private const string COLOR_PROP = "_FogColor";
             private const string DENSITY_PROP = "_FogDensity";

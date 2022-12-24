@@ -7,8 +7,8 @@ using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Inspectors.PostProcessing
 {
-    [PostProcessEditor(typeof(VolumeFog))]
-    public class FogEditor : PostProcessEffectEditor<VolumeFog>
+    [PostProcessEditor(typeof(Fog))]
+    public class FogEditor : PostProcessEffectEditor<Fog>
     {
         private SerializedParameterOverride _mode;
         private SerializedParameterOverride _color;
