@@ -17,7 +17,7 @@ namespace UnityUtility.Sound
         public float RisingDur;
     }
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
+#if INCLUDE_AUDIO
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Sound/Music Preset", fileName = "MusicPreset")]
 #endif
     public sealed class MusicPreset : ScriptableObject

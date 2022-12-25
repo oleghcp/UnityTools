@@ -1,6 +1,6 @@
-﻿using UnityUtility.Pool;
+﻿#if INCLUDE_AUDIO
+using UnityUtility.Pool;
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     public class DynamicMusSourceCreator : IObjectFactory<MusicInfo>

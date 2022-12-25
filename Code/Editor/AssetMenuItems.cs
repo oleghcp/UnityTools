@@ -120,16 +120,14 @@ namespace UnityUtilityEditor
 
 #if UNITY_2020_2_OR_NEWER
         private const int CREATE_CS_SCRIPT_PRIORITY = 80;
-#elif UNITY_2019_1_OR_NEWER
+#else
         private const int CREATE_CS_SCRIPT_PRIORITY = 81;
 #endif
 
-#if UNITY_2019_1_OR_NEWER
         [MenuItem(MENU_PARENT + "Create/C# Script (ext.)", false, CREATE_CS_SCRIPT_PRIORITY)]
         private static void CreateScript()
         {
             TemplatesUtility.CreateScript();
         }
-#endif
     }
 }

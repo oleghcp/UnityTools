@@ -5,7 +5,7 @@ namespace UnityUtility.Engine
 #pragma warning disable UNT0014
     public static class PhysicsExtensions
     {
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_PHYSICS
+#if INCLUDE_PHYSICS
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>
@@ -54,7 +54,7 @@ namespace UnityUtility.Engine
         }
 #endif
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_PHYSICS_2D
+#if INCLUDE_PHYSICS_2D
         /// <summary>
         /// Returns the layer in which the game object that was hit is.
         /// </summary>

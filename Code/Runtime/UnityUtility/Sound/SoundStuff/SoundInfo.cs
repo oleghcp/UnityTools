@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if INCLUDE_AUDIO
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityUtility.Engine;
@@ -6,7 +7,6 @@ using UnityUtility.Mathematics;
 using UnityUtility.Pool;
 using UnityUtility.Tools;
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     [AddComponentMenu(nameof(UnityUtility) + "/Sound Info")]

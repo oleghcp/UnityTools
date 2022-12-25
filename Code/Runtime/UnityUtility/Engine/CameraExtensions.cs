@@ -16,11 +16,7 @@ namespace UnityUtility.Engine
 
         public static float GetHorizontalFov(this Camera self)
         {
-#if UNITY_2019_1_OR_NEWER
             return Camera.VerticalToHorizontalFieldOfView(self.fieldOfView, (float)Screen.width / Screen.height);
-#else
-            return ScreenUtility.GetAspectAngle(self.fieldOfView, (float)Screen.width / Screen.height);
-#endif
         }
 
         public static Plane[] CalculateFrustumPlanes(this Camera self)

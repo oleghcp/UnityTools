@@ -15,7 +15,7 @@ namespace UnityUtility.Sound
         public float MaxDist;
     }
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
+#if INCLUDE_AUDIO
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Sound/Sounds Preset", fileName = "SoundsPreset")]
 #endif
     public sealed class SoundsPreset : ScriptableObject

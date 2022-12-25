@@ -7,7 +7,6 @@ using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 
-#if UNITY_2019_1_OR_NEWER
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(TypeNameAttribute))]
@@ -80,4 +79,3 @@ namespace UnityUtilityEditor.Drawers
         }
     }
 }
-#endif

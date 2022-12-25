@@ -1,4 +1,4 @@
-﻿#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
+﻿#if INCLUDE_AUDIO
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

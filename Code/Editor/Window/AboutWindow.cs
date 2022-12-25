@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Window
         private string _copyright;
         private string _version;
         private string _description1;
-        private string _description2 = "Supports Unity 2018.3 or higher.";
+        private string _description2 = "Supports Unity 2019.1 or higher.";
 
         private void OnEnable()
         {

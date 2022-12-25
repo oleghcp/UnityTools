@@ -182,13 +182,8 @@ namespace UnityUtilityEditor.Window
 
             Vector2 size = GetWinSize(_items);
             maxSize = size;
-
-#if UNITY_2019_1_OR_NEWER
             Rect rect = GUIUtility.GUIToScreenRect(buttonRect);
-#else
-            Rect rect = buttonRect;
-            rect.position = GUIUtility.GUIToScreenPoint(buttonRect.position);
-#endif
+
             ShowAsDropDown(rect, size);
         }
 

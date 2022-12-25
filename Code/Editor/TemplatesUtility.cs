@@ -7,7 +7,6 @@ namespace UnityUtilityEditor
     {
         private const string TEMPLATES_FOLDER = "Templates/";
 
-#if UNITY_2019_1_OR_NEWER
         public static void CreateScript()
         {
             string templatePath = $"{LibConstants.SETTINGS_FOLDER}{TEMPLATES_FOLDER}C#ScriptTemplate.cs.txt";
@@ -35,7 +34,6 @@ namespace Project
 
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyClass.cs");
         }
-#endif
 
 #if UNITY_2019_3_OR_NEWER
         public static void CreateNodeScript()

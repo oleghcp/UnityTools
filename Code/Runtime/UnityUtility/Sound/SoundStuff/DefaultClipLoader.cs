@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿#if INCLUDE_AUDIO
+using System.IO;
 using UnityEngine;
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 namespace UnityUtility.Sound.SoundStuff
 {
     public sealed class DefaultClipLoader : IClipLoader

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿#if INCLUDE_AUDIO
+using UnityEngine;
 
-#if !UNITY_2019_1_OR_NEWER || INCLUDE_AUDIO
 namespace UnityUtility.Sound
 {
     public interface IClipLoader
