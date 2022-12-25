@@ -62,25 +62,7 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
             if (_fogMode != mode)
             {
                 _fogMode = mode;
-                FogMode fogMode = (FogMode)mode;
-                _shader.value.objectReferenceValue = Shader.Find(Fog.GetFogShaderPath(fogMode));
-
-                switch (fogMode)
-                {
-                    case FogMode.Linear:
-                        _param1.value.floatValue = 0f;
-                        _param2.value.floatValue = 100f;
-                        break;
-
-                    case FogMode.Exponential:
-                    case FogMode.ExponentialSquared:
-                        _param1.value.floatValue = 0.001f;
-                        _param2.value.floatValue = 0f;
-                        break;
-
-                    default:
-                        throw new UnsupportedValueException(fogMode);
-                }
+                _shader.value.objectReferenceValue = Shader.Find(Fog.GetFogShaderPath((FogMode)mode));
             }
         }
     }
