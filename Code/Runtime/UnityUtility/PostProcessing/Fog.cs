@@ -36,11 +36,20 @@ namespace UnityUtility.PostProcessing
         [Preserve]
         public class FogRenderer : PostProcessEffectRenderer<Fog>
         {
-            private const string COLOR_PROP = "_FogColor";
-            private const string DENSITY_PROP = "_FogDensity";
-            private const string OFFSET_PROP = "_FogOffset";
-            private const string START_PROP = "_Start";
-            private const string END_PROP = "_End";
+            private int _colorId;
+            private int _densityId;
+            private int _offsetId;
+            private int _startId;
+            private int _endId;
+
+            public override void Init()
+            {
+                _colorId = UnityEngine.Shader.PropertyToID("_FogColor");
+                _densityId = UnityEngine.Shader.PropertyToID("_FogDensity");
+                _offsetId = UnityEngine.Shader.PropertyToID("_FogOffset");
+                _startId = UnityEngine.Shader.PropertyToID("_Start");
+                _endId = UnityEngine.Shader.PropertyToID("_End");
+            }
 
             public override void Render(PostProcessRenderContext context)
             {
@@ -51,19 +60,19 @@ namespace UnityUtility.PostProcessing
                 PropertySheet sheet = context.propertySheets.Get(settings.Shader);
                 MaterialPropertyBlock properties = sheet.properties;
 
-                properties.SetVector(COLOR_PROP, settings.FogColor);
+                properties.SetVector(_colorId, settings.FogColor);
 
                 switch (settings.Mode.value)
                 {
                     case FogMode.Linear:
-                        properties.SetFloat(START_PROP, settings.Param1);
-                        properties.SetFloat(END_PROP, settings.Param2);
+                        properties.SetFloat(_startId, settings.Param1);
+                        properties.SetFloat(_endId, settings.Param2);
                         break;
 
                     case FogMode.Exponential:
                     case FogMode.ExponentialSquared:
-                        properties.SetFloat(DENSITY_PROP, settings.Param1);
-                        properties.SetFloat(OFFSET_PROP, settings.Param2);
+                        properties.SetFloat(_densityId, settings.Param1);
+                        properties.SetFloat(_offsetId, settings.Param2);
                         break;
 
                     default:
