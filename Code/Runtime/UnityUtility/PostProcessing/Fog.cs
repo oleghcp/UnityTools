@@ -10,15 +10,22 @@ namespace UnityUtility.PostProcessing
     [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "UnityUtility/Fog")]
     public class Fog : PostProcessEffectSettings
     {
+        public ShaderParameter Shader = new ShaderParameter() { overrideState = true };
         public FogModeParameter Mode = new FogModeParameter() { value = FogMode.ExponentialSquared };
-
         public ColorParameter FogColor = new ColorParameter() { value = Colours.White };
         public FloatParameter Param1 = new FloatParameter(); //fog density or linear start
         public FloatParameter Param2 = new FloatParameter(); //fog offset or linear end
 
-        public ShaderParameter ShaderLinear = new ShaderParameter();
-        public ShaderParameter ShaderExponential = new ShaderParameter();
-        public ShaderParameter ShaderExpSquared = new ShaderParameter();
+        public static string GetFogShaderPath(FogMode mode)
+        {
+            switch (mode)
+            {
+                case FogMode.Linear: return "Hidden/UnityUtility/PostProcessing/LinearFog";
+                case FogMode.Exponential: return "Hidden/UnityUtility/PostProcessing/ExpFog";
+                case FogMode.ExponentialSquared: return "Hidden/UnityUtility/PostProcessing/ESFog";
+                default: throw new UnsupportedValueException(mode);
+            }
+        }
 
         [Serializable]
         public sealed class FogModeParameter : ParameterOverride<FogMode> { }
@@ -37,18 +44,20 @@ namespace UnityUtility.PostProcessing
 
             public override void Render(PostProcessRenderContext context)
             {
+#if UNITY_EDITOR
+                if (settings.Shader.value == null)
+                    return;
+#endif
+
                 switch (settings.Mode.value)
                 {
                     case FogMode.Linear:
-                        RenderTarget(context, settings.ShaderLinear, START_PROP, END_PROP);
+                        RenderTarget(context, START_PROP, END_PROP);
                         break;
 
                     case FogMode.Exponential:
-                        RenderTarget(context, settings.ShaderExponential, DENSITY_PROP, OFFSET_PROP);
-                        break;
-
                     case FogMode.ExponentialSquared:
-                        RenderTarget(context, settings.ShaderExpSquared, DENSITY_PROP, OFFSET_PROP);
+                        RenderTarget(context, DENSITY_PROP, OFFSET_PROP);
                         break;
 
                     default:
@@ -61,9 +70,9 @@ namespace UnityUtility.PostProcessing
                 return DepthTextureMode.Depth;
             }
 
-            private void RenderTarget(PostProcessRenderContext context, Shader shader, string param1, string param2)
+            private void RenderTarget(PostProcessRenderContext context, string param1, string param2)
             {
-                PropertySheet sheet = context.propertySheets.Get(shader);
+                PropertySheet sheet = context.propertySheets.Get(settings.Shader);
                 MaterialPropertyBlock properties = sheet.properties;
 
                 properties.SetVector(COLOR_PROP, settings.FogColor);
