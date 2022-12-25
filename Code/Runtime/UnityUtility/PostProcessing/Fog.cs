@@ -48,42 +48,34 @@ namespace UnityUtility.PostProcessing
                 if (settings.Shader.value == null)
                     return;
 #endif
+                PropertySheet sheet = context.propertySheets.Get(settings.Shader);
+                MaterialPropertyBlock properties = sheet.properties;
+
+                properties.SetVector(COLOR_PROP, settings.FogColor);
 
                 switch (settings.Mode.value)
                 {
                     case FogMode.Linear:
-                        RenderTarget(context, START_PROP, END_PROP);
+                        properties.SetFloat(START_PROP, settings.Param1);
+                        properties.SetFloat(END_PROP, settings.Param2);
                         break;
 
                     case FogMode.Exponential:
                     case FogMode.ExponentialSquared:
-                        RenderTarget(context, DENSITY_PROP, OFFSET_PROP);
+                        properties.SetFloat(DENSITY_PROP, settings.Param1);
+                        properties.SetFloat(OFFSET_PROP, settings.Param2);
                         break;
 
                     default:
                         throw new UnsupportedValueException(settings.Mode.value);
                 }
+
+                context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0, preserveDepth: true);
             }
 
             public override DepthTextureMode GetCameraFlags()
             {
                 return DepthTextureMode.Depth;
-            }
-
-            private void RenderTarget(PostProcessRenderContext context, string param1, string param2)
-            {
-                PropertySheet sheet = context.propertySheets.Get(settings.Shader);
-                MaterialPropertyBlock properties = sheet.properties;
-
-                properties.SetVector(COLOR_PROP, settings.FogColor);
-                properties.SetFloat(param1, settings.Param1);
-                properties.SetFloat(param2, settings.Param2);
-
-                context.command.BlitFullscreenTriangle(context.source,
-                                                       context.destination,
-                                                       sheet,
-                                                       0,
-                                                       preserveDepth: true);
             }
         }
     }
