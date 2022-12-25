@@ -32,6 +32,10 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
         {
             PropertyField(_mode);
             HandleFogMode();
+
+            if (!_mode.overrideState.boolValue)
+                return;
+
             PropertyField(_color);
 
             if (_mode.value.intValue == (int)FogMode.Linear)
@@ -52,6 +56,7 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
 
         private void HandleFogMode()
         {
+            _shader.overrideState.boolValue = true;
             int mode = _mode.value.intValue;
 
             if (_fogMode != mode)
