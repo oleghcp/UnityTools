@@ -6,5 +6,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("Oleg Pulkin the Individual Coder")]
 [assembly: AssemblyProduct("Utility Library for Unity Projects")]
 [assembly: AssemblyCopyright("© Oleg Pulkin")]
-[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
 [assembly: InternalsVisibleTo("UnityUtilityEditor")]
