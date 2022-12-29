@@ -89,13 +89,10 @@ namespace UnityUtility.Engine
         /// Instantiates game object as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static GameObject Install(this GameObject self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local)
+        public static GameObject Install(this GameObject self, Transform parent, in Vector3 targetPos, in Quaternion targetRot, bool local)
         {
             if (local)
-            {
-                targetPos = parent.TransformPoint(targetPos);
-                targetRot = parent.rotation * targetRot;
-            }
+                return UnityObject.Instantiate(self, parent.TransformPoint(targetPos), parent.rotation * targetRot, parent);
 
             return UnityObject.Instantiate(self, targetPos, targetRot, parent);
         }
@@ -104,13 +101,10 @@ namespace UnityUtility.Engine
         /// Instantiates object as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static T Install<T>(this T self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local) where T : Component
+        public static T Install<T>(this T self, Transform parent, in Vector3 targetPos, in Quaternion targetRot, bool local) where T : Component
         {
             if (local)
-            {
-                targetPos = parent.TransformPoint(targetPos);
-                targetRot = parent.rotation * targetRot;
-            }
+                return UnityObject.Instantiate(self, parent.TransformPoint(targetPos), parent.rotation * targetRot, parent);
 
             return UnityObject.Instantiate(self, targetPos, targetRot, parent);
         }
@@ -200,7 +194,7 @@ namespace UnityUtility.Engine
         /// Instantiates gameobject asset as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static GameObject Install(this LazyLoadReference<GameObject> self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local)
+        public static GameObject Install(this LazyLoadReference<GameObject> self, Transform parent, in Vector3 targetPos, in Quaternion targetRot, bool local)
         {
             return Install(self.asset, parent, targetPos, targetRot, local);
         }
@@ -209,7 +203,7 @@ namespace UnityUtility.Engine
         /// Instantiates gameobject asset as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
-        public static T Install<T>(this LazyLoadReference<T> self, Transform parent, Vector3 targetPos, Quaternion targetRot, bool local) where T : Component
+        public static T Install<T>(this LazyLoadReference<T> self, Transform parent, in Vector3 targetPos, in Quaternion targetRot, bool local) where T : Component
         {
             return Install(self.asset, parent, targetPos, targetRot, local);
         }
