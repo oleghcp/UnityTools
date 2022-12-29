@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
+using UnityUtility.CSharp;
 
 namespace UnityUtilityEditor
 {
@@ -78,5 +80,35 @@ namespace Project
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyGraph.cs");
         }
 #endif
+
+        public static void CreateMetaFile(string targetAsset, bool isFolder, string assetGuid = null)
+        {
+            const string key = "guid:";
+
+            string metaFileTemplate = AssetDatabase.GUIDToAssetPath("499c3a6e7a0f04c438e6d0f45ed563bb");
+            string[] lines = File.ReadAllLines(metaFileTemplate);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i].Contains(key))
+                {
+                    lines[i] = $"{key} {(assetGuid.HasAnyData() ? assetGuid : GUID.Generate().ToString())}";
+                    break;
+                }
+            }
+
+            string path = $"{targetAsset}.meta";
+
+            if (isFolder)
+            {
+                List<string> list = new List<string>(lines);
+                list.Insert(2, "folderAsset: yes");
+                File.WriteAllLines(path, list);
+            }
+            else
+            {
+                File.WriteAllLines(path, lines);
+            }
+        }
     }
 }

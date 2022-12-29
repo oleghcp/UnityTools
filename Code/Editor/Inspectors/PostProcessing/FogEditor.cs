@@ -1,7 +1,8 @@
 ﻿#if INCLUDE_POST_PROCESSING
+using System.IO;
+using UnityEditor;
 using UnityEditor.Rendering.PostProcessing;
 using UnityEngine;
-using UnityUtility;
 using UnityUtility.Mathematics;
 using UnityUtility.PostProcessing;
 using UnityUtilityEditor.Engine;
@@ -9,7 +10,7 @@ using UnityUtilityEditor.Engine;
 namespace UnityUtilityEditor.Inspectors.PostProcessing
 {
     [PostProcessEditor(typeof(Fog))]
-    public class FogEditor : PostProcessEffectEditor<Fog>
+    internal class FogEditor : PostProcessEffectEditor<Fog>
     {
         private SerializedParameterOverride _mode;
         private SerializedParameterOverride _color;
@@ -62,8 +63,40 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
             if (_fogMode != mode)
             {
                 _fogMode = mode;
-                _shader.value.objectReferenceValue = Shader.Find(Fog.GetFogShaderPath((FogMode)mode));
+
+                string shaderName = Fog.GetFogShaderPath((FogMode)mode);
+
+                Shader shader = Shader.Find(shaderName);
+                if (shader != null)
+                {
+                    _shader.value.objectReferenceValue = shader;
+                    return;
+                }
+
+                CreateShaders();
+                _shader.value.objectReferenceValue = Shader.Find(shaderName);
             }
+        }
+
+        private void CreateShaders()
+        {
+            const string extension = ".shader";
+            string destFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Shaders/{nameof(UnityUtility)}/{nameof(PostProcessing)}";
+            Directory.CreateDirectory(destFolder);
+
+            CreateAssetFromTemplate("610b257f6f84e644ab720a276f478350", destFolder, extension, "f7ed684984420634fbe1a903eb536700");
+            CreateAssetFromTemplate("49adad62dedaf104f9ed5c71c1853bf5", destFolder, extension, "944841f2be5c3e14fa046b60baa9b66e");
+            CreateAssetFromTemplate("38b8cc30e9d512b41b39c0e7b22e41f9", destFolder, extension, "0e185ad917445714696b3d339851a75c");
+
+            AssetDatabase.Refresh();
+        }
+
+        private static void CreateAssetFromTemplate(string templateGuid, string destFolder, string assetExtension, string targetGuid)
+        {
+            string sourcePath = AssetDatabase.GUIDToAssetPath(templateGuid);
+            string dest = $"{destFolder}/{Path.GetFileName(sourcePath)}{assetExtension}";
+            File.Copy(sourcePath, dest);
+            TemplatesUtility.CreateMetaFile(dest, false, targetGuid);
         }
     }
 }
