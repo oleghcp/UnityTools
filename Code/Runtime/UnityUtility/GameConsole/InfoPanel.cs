@@ -1,4 +1,4 @@
-﻿#if !UNITY_2019_2_OR_NEWER || INCLUDE_UNITY_UI
+﻿#if INCLUDE_UNITY_UI
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
