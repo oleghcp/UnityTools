@@ -17,16 +17,21 @@ namespace UnityUtility.Engine
         }
 
         /// <summary>
+        /// Returns an ancestor from the transform's hierarchy.
+        /// </summary>
+        public static GameObject GetParent(this GameObject self)
+        {
+            Transform parent = self.transform.parent;
+            return parent == null ? null : parent.gameObject;
+        }
+
+        /// <summary>
         /// Returns an ancestor from the transform's hierarchy on the specified hierarchy level.
         /// </summary>
-        public static GameObject GetParent(this GameObject self, int level = 1)
+        public static GameObject GetParent(this GameObject self, int level)
         {
             Transform parent = self.transform.GetParent(level);
-
-            if (parent == null)
-                return null;
-
-            return parent.gameObject;
+            return parent == null ? null : parent.gameObject;
         }
 
         /// <summary>

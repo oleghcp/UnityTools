@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityUtility.CSharp;
+using UnityUtility.CSharp.Text;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 using UnityUtility.SingleScripts;
@@ -22,8 +23,8 @@ namespace UnityUtility.GameConsole
     {
         private const float TARGET_CANVAS_SIDE = 720f;
 
-        private readonly Color _cmdColor = Colours.White;
-        private readonly Color _cmdErrorColor = Colours.Orange;
+        private readonly Color _cmdColor = Colours.Cyan;
+        private readonly Color _cmdErrorColor = Colours.Teal;
 
         public static event Action<bool> Switched_Event;
 
@@ -48,24 +49,26 @@ namespace UnityUtility.GameConsole
         private object _cmdRun;
         private int _curHistoryIndex;
         private float _ratio;
+        private bool _initialized;
 
         public bool IsOn => _isOn;
         public TerminalOptions Options => _options;
 
         protected override void Construct()
         {
+            transform.parent.Immortalize();
             _cmdHistory.Add(string.Empty);
             _log.SetUp(this);
-
-#if UNITY_EDITOR
-            if (!UnityEditor.EditorApplication.isPlaying)
-                return;
-#endif
-            Application.logMessageReceived += OnDebugLogMessageReceived;
         }
 
         private void Start()
         {
+            if (!_initialized)
+                Init(new object(), new TerminalOptions(), new DefaultTrigger());
+
+            if (EventSystem.current == null)
+                InstantiateEventSystem();
+
             _pointerEventData = new PointerEventData(EventSystem.current);
         }
 
@@ -187,7 +190,7 @@ namespace UnityUtility.GameConsole
             _options = options;
         }
 
-        public void GetCmd()
+        public void WriteCommanList()
         {
             FindCmd(string.Empty);
         }
@@ -240,6 +243,8 @@ namespace UnityUtility.GameConsole
             SetCommands(commands);
             SetOptions(options);
             SetSwitchTrigger(switchTrigger);
+            Application.logMessageReceived += OnDebugLogMessageReceived;
+            _initialized = true;
         }
 
         private void EnterCmd(string text)
@@ -264,11 +269,11 @@ namespace UnityUtility.GameConsole
                 if (cmdKeysParseError == null)
                     _log.WriteLine(_cmdColor, text);
                 else
-                    _log.WriteLine(_cmdErrorColor, "cmd options error: " + cmdKeysParseError);
+                    _log.WriteLine(_cmdErrorColor, $"cmd options error: {cmdKeysParseError}");
             }
             else
             {
-                _log.WriteLine(_cmdErrorColor, "unknown: " + command);
+                _log.WriteLine(_cmdErrorColor, $"unknown: {command}");
             }
 
             _cmdHistory.Add(text);
@@ -281,8 +286,7 @@ namespace UnityUtility.GameConsole
                 return;
 
             text = text.ToLower();
-
-            string[] cmds = _commands.Keys.Where(itm => itm.IndexOf(text) == 0).OrderBy(itm => itm).ToArray();
+            string[] cmds = _commands.Keys.Where(itm => itm.IndexOf(text) == 0).ToArray();
 
             if (cmds.Length == 0)
             {
@@ -290,23 +294,23 @@ namespace UnityUtility.GameConsole
             }
             else if (cmds.Length == 1)
             {
-                _field.text = _options.AddSpaceAfterName ? cmds[0] + " " : cmds[0];
-                _field.caretPosition = _field.text.Length;
+                _field.text = _options.AddSpaceAfterName ? $"{cmds[0]} " : cmds[0];
             }
             else
             {
+                cmds.Sort();
+
                 for (int i = 0; i < cmds.Length; i++)
                 {
-                    _stringBuilder.Append(cmds[i]).Append("   ");
+                    _stringBuilder.Append(cmds[i])
+                                  .Append("   ");
                 }
 
-                string line = _stringBuilder.ToString();
-                _stringBuilder.Clear();
-
-                _log.WriteLine(_cmdColor, line);
-                _field.text = text + getCommon(cmds, text.Length);
-                _field.caretPosition = _field.text.Length;
+                _log.WriteLine(_cmdColor, _stringBuilder.Cut());
+                _field.text = $"{text}{getCommon(cmds, text.Length)}";
             }
+
+            _field.caretPosition = _field.text.Length;
 
             string getCommon(string[] strings, int startIndex = 0)
             {
@@ -357,15 +361,17 @@ namespace UnityUtility.GameConsole
             switch (logType)
             {
                 case LogType.Error:
-                case LogType.Exception:
                 case LogType.Assert:
+                    return Colours.Orange;
+
+                case LogType.Exception:
                     return Colours.Red;
 
                 case LogType.Warning:
                     return Colours.Yellow;
 
                 case LogType.Log:
-                    return Colours.Cyan;
+                    return Colours.White;
 
                 default:
                     throw new UnsupportedValueException(logType);
@@ -375,13 +381,17 @@ namespace UnityUtility.GameConsole
         private void OnDebugLogMessageReceived(string msg, string stackTrace, LogType logType)
         {
             if (_options.ShowDebugLogs)
-            {
                 _log.WriteLine(GetTextColor(logType), msg, stackTrace);
-            }
         }
 
         private static bool CreateTerminalInternal(bool createEventSystem)
         {
+            if (Exists)
+            {
+                Debug.LogError($"Terminal is already created.");
+                return false;
+            }
+
             GameObject terminal = Resources.Load<GameObject>("Terminal");
 
             if (terminal == null)
@@ -391,14 +401,16 @@ namespace UnityUtility.GameConsole
             }
 
             if (createEventSystem && EventSystem.current == null)
-            {
-                EventSystem eventSystem = ComponentUtility.CreateInstance<EventSystem>();
-                eventSystem.gameObject.AddComponent<StandaloneInputModule>();
-                eventSystem.Immortalize();
-            }
+                InstantiateEventSystem();
 
-            terminal.Install().Immortalize();
-            return true;
+            return terminal.Install();
+        }
+
+        private static void InstantiateEventSystem()
+        {
+            EventSystem eventSystem = ComponentUtility.CreateInstance<EventSystem>();
+            eventSystem.gameObject.AddComponent<StandaloneInputModule>();
+            eventSystem.Immortalize();
         }
 
         private bool NoCommands()
