@@ -44,7 +44,7 @@ namespace UnityUtility.GameConsole
         private ITerminalSwitchTrigger _switchTrigger;
         private PointerEventData _pointerEventData;
         private StringBuilder _stringBuilder = new StringBuilder();
-        private Dictionary<string, MethodInfo> _commands;
+        private Dictionary<string, MethodInfo> _commands = new Dictionary<string, MethodInfo>();
         private List<string> _cmdHistory = new List<string>();
         private bool _isOn;
         private object _cmdContainer;
@@ -185,10 +185,10 @@ namespace UnityUtility.GameConsole
                 throw Errors.NullParameter(nameof(commands));
 
             _cmdContainer = commands;
-
             _commands = _cmdContainer.GetType()
-                                     .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                                     .ToDictionary(item => item.Name, item => item);
+                                     .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                                     .Where(method => method.GetCustomAttribute(typeof(TerminalCommandAttribute)) != null)
+                                     .ToDictionary(item => item.Name);
         }
 
         public void SetSwitchTrigger(ITerminalSwitchTrigger switchTrigger)
