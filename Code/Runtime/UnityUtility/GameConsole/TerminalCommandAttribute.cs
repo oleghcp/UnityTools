@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !UNITY_2019_2_OR_NEWER || INCLUDE_UNITY_UI
+using System;
 
 namespace UnityUtility.GameConsole
 {
@@ -8,3 +9,4 @@ namespace UnityUtility.GameConsole
 
     }
 }
+#endif

@@ -47,7 +47,7 @@ namespace UnityUtility.GameConsole
         private Dictionary<string, MethodInfo> _commands = new Dictionary<string, MethodInfo>();
         private List<string> _cmdHistory = new List<string>();
         private bool _isOn;
-        private object _cmdContainer;
+        private TerminalCommands _cmdContainer;
         private int _curHistoryIndex;
         private float _ratio;
         private bool _initialized;
@@ -66,7 +66,7 @@ namespace UnityUtility.GameConsole
         {
             if (!_initialized)
             {
-                Init(new object(), new TerminalOptions(), new DefaultTrigger());
+                Init(new TerminalCommands(), new TerminalOptions(), new DefaultTrigger());
 
                 if (EventSystem.current == null)
                     InstantiateEventSystem();
@@ -120,7 +120,7 @@ namespace UnityUtility.GameConsole
         public static void CreateTerminal(bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
-                I.Init(new object(), new TerminalOptions(), new DefaultTrigger());
+                I.Init(new TerminalCommands(), new TerminalOptions(), new DefaultTrigger());
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands, bool createEventSystem = false)
+        public static void CreateTerminal(TerminalCommands commands, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
                 I.Init(commands, new TerminalOptions(), new DefaultTrigger());
@@ -143,7 +143,7 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands, TerminalOptions options, bool createEventSystem = false)
+        public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
                 I.Init(commands, options, new DefaultTrigger());
@@ -156,7 +156,7 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
+        public static void CreateTerminal(TerminalCommands commands, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
                 I.Init(commands, new TerminalOptions(), switchTrigger);
@@ -169,7 +169,7 @@ namespace UnityUtility.GameConsole
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public static void CreateTerminal(object commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
+        public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
                 I.Init(commands, options, switchTrigger);
@@ -179,7 +179,7 @@ namespace UnityUtility.GameConsole
         /// Sets a new command container.
         /// </summary>
         /// <param name="commands">An object which contans command functions.</param>
-        public void SetCommands(object commands)
+        public void SetCommands(TerminalCommands commands)
         {
             if (commands == null)
                 throw Errors.NullParameter(nameof(commands));
@@ -220,6 +220,11 @@ namespace UnityUtility.GameConsole
             SwitchInternal();
         }
 
+        public void WriteCmdError(string txt)
+        {
+            _log.WriteLine(_cmdErrorColor, txt);
+        }
+
         public void WriteLine(string txt, Color color)
         {
             _log.WriteLine(color, txt);
@@ -255,7 +260,7 @@ namespace UnityUtility.GameConsole
             _log.OnScroll();
         }
 
-        private void Init(object commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger)
+        private void Init(TerminalCommands commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger)
         {
             SetCommands(commands);
             SetOptions(options);
