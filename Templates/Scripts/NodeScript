@@ -1,0 +1,11 @@
+﻿using System;
+using UnityUtility.NodeBased;
+
+namespace Project
+{
+    [Serializable]
+    public class #SCRIPTNAME# : Node<#SCRIPTNAME#>
+    {
+
+    }
+}

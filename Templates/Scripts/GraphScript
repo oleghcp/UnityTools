@@ -1,0 +1,11 @@
+﻿using UnityUtility.NodeBased;
+using UnityEngine; 
+
+namespace Project 
+{ 
+    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Graph/" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]
+    public class #SCRIPTNAME# : Graph</*your node type*/> 
+    {
+
+    }
+}
