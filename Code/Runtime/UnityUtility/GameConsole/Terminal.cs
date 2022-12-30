@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.CSharp.Text;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
@@ -46,7 +47,7 @@ namespace UnityUtility.GameConsole
         private Dictionary<string, MethodInfo> _commands;
         private List<string> _cmdHistory = new List<string>();
         private bool _isOn;
-        private object _cmdRun;
+        private object _cmdContainer;
         private int _curHistoryIndex;
         private float _ratio;
         private bool _initialized;
@@ -64,10 +65,12 @@ namespace UnityUtility.GameConsole
         private void Start()
         {
             if (!_initialized)
+            {
                 Init(new object(), new TerminalOptions(), new DefaultTrigger());
 
-            if (EventSystem.current == null)
-                InstantiateEventSystem();
+                if (EventSystem.current == null)
+                    InstantiateEventSystem();
+            }
 
             _pointerEventData = new PointerEventData(EventSystem.current);
         }
@@ -108,7 +111,20 @@ namespace UnityUtility.GameConsole
         }
 
         /// <summary>
-        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Creates a command line (aka console/terminal)
+        /// Commands are just functions of the view:
+        /// public string commandname(string[] options).
+        /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
+        /// </summary>
+        /// <param name="commands">An object which contans command functions.</param>
+        public static void CreateTerminal(bool createEventSystem = false)
+        {
+            if (CreateTerminalInternal(createEventSystem))
+                I.Init(new object(), new TerminalOptions(), new DefaultTrigger());
+        }
+
+        /// <summary>
+        /// Creates a command line (aka console/terminal)
         /// Commands are just functions of the view:
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
@@ -121,7 +137,7 @@ namespace UnityUtility.GameConsole
         }
 
         /// <summary>
-        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Creates a command line (aka console/terminal)
         /// Commands are just functions of the view:
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
@@ -134,7 +150,7 @@ namespace UnityUtility.GameConsole
         }
 
         /// <summary>
-        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Creates a command line (aka console/terminal)
         /// Commands are just functions of the view:
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
@@ -147,7 +163,7 @@ namespace UnityUtility.GameConsole
         }
 
         /// <summary>
-        /// Creates a command line (aka console/terminal). Takes command container.
+        /// Creates a command line (aka console/terminal)
         /// Commands are just functions of the view:
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
@@ -168,10 +184,11 @@ namespace UnityUtility.GameConsole
             if (commands == null)
                 throw Errors.NullParameter(nameof(commands));
 
-            _cmdRun = commands;
-            Type t = _cmdRun.GetType();
-            MethodInfo[] funcs = t.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-            _commands = funcs.ToDictionary(itm => itm.Name, itm => itm);
+            _cmdContainer = commands;
+
+            _commands = _cmdContainer.GetType()
+                                     .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                                     .ToDictionary(item => item.Name, item => item);
         }
 
         public void SetSwitchTrigger(ITerminalSwitchTrigger switchTrigger)
@@ -254,30 +271,36 @@ namespace UnityUtility.GameConsole
 
             text = text.ToLower();
 
-            string[] words = text.Split(' ');
-            string command = words[0];
+            string[] options = split(text, out string command);
 
             if (_commands.TryGetValue(command, out MethodInfo method))
             {
-                string[][] keys = null;
+                string[][] parameters = null;
 
                 if (method.GetParameters().Length > 0)
-                    keys = new[] { words.Length > 1 ? words.GetSubArray(1) : Array.Empty<string>() };
+                    parameters = new[] { options };
 
-                object cmdKeysParseError = method.Invoke(_cmdRun, keys);
+                object success = method.Invoke(_cmdContainer, parameters);
 
-                if (cmdKeysParseError == null)
+                if (success == null || (bool)success)
                     _log.WriteLine(_cmdColor, text);
-                else
-                    _log.WriteLine(_cmdErrorColor, $"cmd options error: {cmdKeysParseError}");
             }
             else
             {
-                _log.WriteLine(_cmdErrorColor, $"unknown: {command}");
+                _log.WriteLine(_cmdErrorColor, $"unknown command: {command}");
             }
 
             _cmdHistory.Add(text);
             _curHistoryIndex = 0;
+
+            string[] split(string line, out string commandWord)
+            {
+                string[] words = line.Trim(' ')
+                                     .Split(' ');
+                commandWord = words[0];
+                return words.Length == 1 ? Array.Empty<string>()
+                                         : words.GetSubArray(1);
+            }
         }
 
         private void FindCmd(string text)
@@ -415,7 +438,7 @@ namespace UnityUtility.GameConsole
 
         private bool NoCommands()
         {
-            if (_cmdRun == null)
+            if (_cmdContainer == null)
             {
                 _log.WriteLine(GetTextColor(LogType.Error), "Commands are not set.");
                 return true;
