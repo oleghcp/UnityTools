@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityUtility.NodeBased;
 
-namespace Project
+namespace #NAMESPACE#
 {
     [Serializable]
     public class #SCRIPTNAME# : Node<#SCRIPTNAME#>

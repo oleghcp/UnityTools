@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityUtility.CSharp;
+using UnityUtility.CSharp.IO;
+using UnityUtilityEditor.Engine;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
 {
@@ -16,6 +20,7 @@ namespace UnityUtilityEditor
             if (!File.Exists(templatePath))
                 CreateEditableTemplate(templatePath, "12b677268a71e8945b0b6e35e15d6983");
 
+            templatePath = GetTempScriptTemplateFileWithNamespace(templatePath);
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyClass.cs");
         }
 
@@ -27,6 +32,7 @@ namespace UnityUtilityEditor
             if (!File.Exists(templatePath))
                 CreateEditableTemplate(templatePath, "ffebfee6d47ee2d479894c0f294b7033");
 
+            templatePath = GetTempScriptTemplateFileWithNamespace(templatePath);
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyNode.cs");
         }
 
@@ -37,6 +43,7 @@ namespace UnityUtilityEditor
             if (!File.Exists(templatePath))
                 CreateEditableTemplate(templatePath, "917cf2d9a454951439fd980a95828bec");
 
+            templatePath = GetTempScriptTemplateFileWithNamespace(templatePath);
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyGraph.cs");
         }
 #endif
@@ -77,6 +84,33 @@ namespace UnityUtilityEditor
             string text = File.ReadAllText(sorceTemplatePath);
             Directory.CreateDirectory(TEMPLATES_FOLDER);
             File.WriteAllText(templatePath, text);
+        }
+
+        private static string GetTempScriptTemplateFileWithNamespace(string templatePath)
+        {
+            string text = File.ReadAllText(templatePath)
+                              .Replace("#NAMESPACE#", GetNameSpace());
+
+            string tempFile = $"{"Temp/"}{Path.GetFileName(templatePath)}";
+            File.WriteAllText(tempFile, text, Encoding.UTF8);
+
+            return tempFile;
+        }
+
+        private static string GetNameSpace()
+        {
+            UnityObject selected = Selection.activeObject;
+            string selectedPath = selected.GetAssetPath();
+
+            if (selectedPath.IsNullOrEmpty() || selectedPath == "Assets")
+                return "Project";
+
+            if (!selected.IsFolder())
+                selectedPath = PathUtility.GetParentPath(selectedPath);
+
+            return selectedPath.Replace(AssetDatabaseExt.ASSET_FOLDER, string.Empty)
+                               .Replace('/', '.')
+                               .RemoveWhiteSpaces();
         }
     }
 }

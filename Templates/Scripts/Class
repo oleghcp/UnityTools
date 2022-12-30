@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Project
+namespace #NAMESPACE#
 {
     public class #SCRIPTNAME# : MonoBehaviour
     {
