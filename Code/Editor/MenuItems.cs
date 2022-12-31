@@ -46,7 +46,7 @@ namespace UnityUtilityEditor
             Directory.CreateDirectory(newFolderPath);
             GameObject prefab = (GameObject)AssetDatabase.LoadMainAssetAtPath(assetPath);
             prefab = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-            PrefabUtility.SaveAsPrefabAsset(prefab, $"{newFolderPath}/Terminal.prefab");
+            PrefabUtility.SaveAsPrefabAsset(prefab, $"{newFolderPath}/Terminal{AssetDatabaseExt.PREFAB_EXTENSION}");
             prefab.DestroyImmediate();
             AssetDatabase.SaveAssets();
         }
@@ -75,10 +75,16 @@ namespace UnityUtilityEditor
             MenuItemsUtility.RemoveEmptyFolders();
         }
 
-        [MenuItem(LibConstants.LIB_NAME + "/Files/Convert text Files to UTF8")]
-        private static void ConvertToUtf8()
+        [MenuItem(LibConstants.LIB_NAME + "/Files/Convert Code Files to UTF8")]
+        private static void ConvertCodeFilesToUtf8()
         {
-            AssetDatabaseExt.ConvertToUtf8();
+            AssetDatabaseExt.ConvertCodeFilesToUtf8();
+        }
+
+        [MenuItem(LibConstants.LIB_NAME + "/Files/Convert Text Files to UTF8")]
+        private static void ConvertTextFilesToUtf8()
+        {
+            AssetDatabaseExt.ConvertTextFilesToUtf8();
         }
 
         [MenuItem(LibConstants.LIB_NAME + "/Files/Find Huge Files")]

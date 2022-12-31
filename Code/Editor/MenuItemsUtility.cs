@@ -102,8 +102,8 @@ namespace UnityUtilityEditor
         private static bool IsValidExtension(string extension)
         {
             return extension == AssetDatabaseExt.ASSET_EXTENSION ||
+                   extension == AssetDatabaseExt.PREFAB_EXTENSION ||
                    extension == ".unity" ||
-                   extension == ".prefab" ||
                    extension == ".mat" ||
                    extension == ".spriteatlas" ||
                    extension == ".spriteatlasv2" ||
