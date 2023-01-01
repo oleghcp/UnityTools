@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.CSharp.Collections;
-using UnityUtility.CSharp.IO;
+using UnityUtility.IO;
 using UnityUtility.Mathematics;
 using UnityUtilityEditor.Engine;
 using UnityObject = UnityEngine.Object;

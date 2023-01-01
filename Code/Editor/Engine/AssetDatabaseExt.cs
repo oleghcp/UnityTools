@@ -7,7 +7,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.CSharp;
-using UnityUtility.CSharp.IO;
+using UnityUtility.IO;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Engine

@@ -6,7 +6,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.CSharp.Collections;
-using UnityUtility.CSharp.IO;
+using UnityUtility.IO;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
+using UnityUtility.CSharp;
 using UnityUtility.Mathematics;
 using UnityUtility.Tools;
 
-namespace UnityUtility.CSharp.IO
+namespace UnityUtility.IO
 {
     public static class PathUtility
     {

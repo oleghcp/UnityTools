@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp.IO;
+using UnityUtility.IO;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;

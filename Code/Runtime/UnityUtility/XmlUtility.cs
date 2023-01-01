@@ -11,12 +11,7 @@ namespace UnityUtility
     /// </summary>
     public static class XmlUtility
     {
-        private static readonly XmlSerializerNamespaces _namespaces;
-
-        static XmlUtility()
-        {
-            _namespaces = new XmlSerializerNamespaces(new[] { new XmlQualifiedName() });
-        }
+        private static readonly XmlSerializerNamespaces _namespaces = new XmlSerializerNamespaces(new[] { new XmlQualifiedName() });
 
         /// <summary>
         /// Generates an XML representation of the public fields of an object.
