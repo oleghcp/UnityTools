@@ -1,11 +1,14 @@
 ﻿using System;
+using UnityEngine.Serialization;
 
 namespace UnityUtility.NumericEntities
 {
     [Serializable]
     public struct Diapason
     {
+        [FormerlySerializedAs("x")]
         public float Min;
+        [FormerlySerializedAs("y")]
         public float Max;
 
 #if UNITY_EDITOR
@@ -23,7 +26,9 @@ namespace UnityUtility.NumericEntities
     [Serializable]
     public struct DiapasonInt
     {
+        [FormerlySerializedAs("x")]
         public int From;
+        [FormerlySerializedAs("y")]
         public int Before;
 
 #if UNITY_EDITOR
