@@ -5,4 +5,3 @@
 [assembly: AssemblyCompany("Oleg Pulkin the Individual Coder")]
 [assembly: AssemblyProduct("Utility Library for Unity Editor")]
 [assembly: AssemblyCopyright("© Oleg Pulkin")]
-[assembly: AssemblyVersion("1.1.2.0")]
