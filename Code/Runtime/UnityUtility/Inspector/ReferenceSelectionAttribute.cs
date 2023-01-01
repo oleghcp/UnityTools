@@ -4,8 +4,5 @@ using UnityEngine;
 namespace UnityUtility.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public sealed class ReferenceSelectionAttribute : PropertyAttribute
-    {
-
-    }
+    public sealed class ReferenceSelectionAttribute : PropertyAttribute { }
 }

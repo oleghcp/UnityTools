@@ -97,7 +97,7 @@ namespace UnityUtilityEditor.Drawers
             {
                 if (type == null)
                 {
-                    error = "Selecte enum value has no binded class type.";
+                    error = "Select enum value has no binded class type.";
                     return true;
                 }
 

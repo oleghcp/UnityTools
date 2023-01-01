@@ -4,8 +4,5 @@ using UnityEngine;
 namespace UnityUtility.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public sealed class InitToggleAttribute : PropertyAttribute
-    {
-
-    }
+    public sealed class InitToggleAttribute : PropertyAttribute { }
 }
