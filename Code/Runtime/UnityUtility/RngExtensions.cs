@@ -7,6 +7,7 @@ using UnityUtility.CSharp;
 using UnityUtility.CSharp.Collections;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
+using UnityUtility.NumericEntities;
 using UnityUtility.Tools;
 
 namespace UnityUtility
@@ -24,6 +25,16 @@ namespace UnityUtility
         public static float Random(this IRng self, in (float minValue, float maxValue) range)
         {
             return self.Next(range.minValue, range.maxValue);
+        }
+
+        public static int Random(this IRng self, in DiapasonInt range)
+        {
+            return self.Next(range.From, range.Before);
+        }
+
+        public static float Random(this IRng self, in Diapason range)
+        {
+            return self.Next(range.Min, range.Max);
         }
 
         /// <summary>

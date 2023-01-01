@@ -1,58 +1,46 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.Inspector;
 using UnityUtility.Mathematics;
+using UnityUtility.NumericEntities;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Drawers
 {
-    [CustomPropertyDrawer(typeof(DiapasonAttribute))]
-    internal class DiapasonDrawer : AttributeDrawer<DiapasonAttribute>
+    [CustomPropertyDrawer(typeof(Diapason))]
+    [CustomPropertyDrawer(typeof(DiapasonInt))]
+    internal class DiapasonDrawer : PropertyDrawer
     {
-        private GUIContent[] _floatSubLabels = { new GUIContent("Min"), new GUIContent("Max") };
-        private GUIContent[] _intSubLabels = { new GUIContent("From"), new GUIContent("Before") };
+        private GUIContent[] _floatSubLabels = { new GUIContent(Diapason.MinFieldName), new GUIContent(Diapason.MaxFieldName) };
+        private GUIContent[] _intSubLabels = { new GUIContent(DiapasonInt.FromFieldName), new GUIContent(DiapasonInt.BeforeFieldName) };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             position = EditorGUI.PrefixLabel(position, label);
 
-            Type type = EditorUtilityExt.GetFieldType(this);
-
-            SerializedProperty min = property.FindPropertyRelative("x");
-            SerializedProperty max = property.FindPropertyRelative("y");
-
-            if (type == typeof(Vector2))
+            if (EditorUtilityExt.GetFieldType(this) == typeof(Diapason))
             {
-                if (attribute.MinValue > attribute.MaxValue)
-                {
-                    EditorGUI.LabelField(position, "Max value cannot be less than min value.");
-                    return;
-                }
+                SerializedProperty min = property.FindPropertyRelative(_floatSubLabels[0].text);
+                SerializedProperty max = property.FindPropertyRelative(_floatSubLabels[1].text);
 
-                float[] array = new[] { min.floatValue, max.floatValue };
+                float[] array = { min.floatValue, max.floatValue };
+
                 EditorGUI.MultiFloatField(position, _floatSubLabels, array);
-                min.floatValue = array[0].Clamp(attribute.MinValue, attribute.MaxValue);
-                max.floatValue = array[1].Clamp(array[0], attribute.MaxValue);
-                return;
-            }
 
-            if (type == typeof(Vector2Int))
+                min.floatValue = array[0];
+                max.floatValue = array[1].ClampMin(array[0]);
+            }
+            else
             {
-                if (attribute.MinValue >= attribute.MaxValue)
-                {
-                    EditorGUI.LabelField(position, "Max value must be more than min value.");
-                    return;
-                }
+                SerializedProperty min = property.FindPropertyRelative(_intSubLabels[0].text);
+                SerializedProperty max = property.FindPropertyRelative(_intSubLabels[1].text);
 
-                int[] array = new[] { min.intValue, max.intValue };
+                int[] array = { min.intValue, max.intValue };
+
                 EditorGUI.MultiIntField(position, _intSubLabels, array);
-                min.intValue = array[0].Clamp((int)attribute.MinValue, (int)attribute.MaxValue);
-                max.intValue = array[1].Clamp(array[0] + 1, (int)attribute.MaxValue);
-                return;
-            }
 
-            EditorGUI.LabelField(position, $"Use for {nameof(Vector2)} or {nameof(Vector2Int)}.");
+                min.intValue = array[0];
+                max.intValue = array[1].ClampMin(array[0] + 1);
+            }
         }
     }
 }
