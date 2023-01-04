@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine.Serialization;
+using UnityUtility.Tools;
 
 namespace UnityUtility.NumericEntities
 {
@@ -16,30 +17,34 @@ namespace UnityUtility.NumericEntities
         public static string MaxFieldName = nameof(Max);
 #endif
 
+        public Diapason(float min, float max)
+        {
+            if (min > max)
+                throw Errors.MinMax(nameof(min), nameof(max));
+
+            Min = min;
+            Max = max;
+        }
+
         public void Deconstruct(out float min, out float max)
         {
             min = Min;
             max = Max;
         }
-    }
 
-    [Serializable]
-    public struct DiapasonInt
-    {
-        [FormerlySerializedAs("x")]
-        public int From;
-        [FormerlySerializedAs("y")]
-        public int Before;
-
-#if UNITY_EDITOR
-        public static string FromFieldName = nameof(From);
-        public static string BeforeFieldName = nameof(Before);
-#endif
-
-        public void Deconstruct(out int from, out int before)
+        public override int GetHashCode()
         {
-            from = From;
-            before = Before;
+            return Helper.GetHashCode(Min.GetHashCode(), Max.GetHashCode());
+        }
+
+        public static implicit operator (float min, float max)(Diapason value)
+        {
+            return (value.Min, value.Max);
+        }
+
+        public static implicit operator Diapason((float min, float max) value)
+        {
+            return new Diapason(value.min, value.max);
         }
     }
 }
