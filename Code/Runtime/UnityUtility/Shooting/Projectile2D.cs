@@ -101,7 +101,7 @@ namespace UnityUtility.Shooting
                 }
             }
 
-            _listener.OnUpdate();
+            _listener?.OnUpdate();
         }
 
 #if UNITY_EDITOR
