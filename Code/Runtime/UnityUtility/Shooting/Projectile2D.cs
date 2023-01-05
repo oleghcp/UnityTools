@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Inspector;
 using UnityUtility.Mathematics;
@@ -25,6 +26,7 @@ namespace UnityUtility.Shooting
         [SerializeReference, InitToggle]
         private ProjectileEvents2D _events;
 
+        private IRotationProvider _rotationProvider;
         private ITimeProvider _timeProvider;
         private IGravityProvider2D _gravityProvider;
         private IProjectile2DEventListener _listener;
@@ -47,8 +49,14 @@ namespace UnityUtility.Shooting
 
         public Vector2 Velocity
         {
-            get => _velocity;
-            set => _velocity = value;
+            get => _canMove ? _velocity : Vector2.zero;
+            set
+            {
+                if (!_canMove)
+                    throw new InvalidOperationException("Projectile is stopped.");
+
+                _velocity = value;
+            }
         }
 
         public bool Autodestruct
@@ -70,6 +78,7 @@ namespace UnityUtility.Shooting
         }
 
         public ProjectileEvents2D Events { get => _events; set => _events = value; }
+        public IRotationProvider RotationProvider { get => _rotationProvider; set => _rotationProvider = value; }
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider2D GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
         public IProjectile2DEventListener Listener { get => _listener; set => _listener = value; }
@@ -120,9 +129,10 @@ namespace UnityUtility.Shooting
             }
 #endif
 
+            LayerMask mask = LayerMask.GetMask("Default");
+            _moving.RicochetMask = mask;
+            _casting.HitMask = mask;
             _moving.SpeedRemainder = 1f;
-            _moving.RicochetMask = LayerMask.GetMask("Default");
-            _casting.HitMask = LayerMask.GetMask("Default");
             _casting.ReflectedCastNear = 0.1f;
             _casting.InitialPrecastOffset = 0f;
         }
@@ -133,11 +143,44 @@ namespace UnityUtility.Shooting
             if (_canMove)
                 return;
 
+            PlayInternal(transform.right);
+        }
+
+        public void Play(float startSpeed)
+        {
+            if (_canMove)
+                return;
+
+            _moving.StartSpeed = startSpeed;
+            PlayInternal(transform.right);
+        }
+
+        public void Play(in Vector2 velocity)
+        {
+            if (_canMove)
+                return;
+
+            Vector3 direction = velocity.GetNormalized(out float magnitude);
+            _moving.StartSpeed = magnitude;
+
+            PlayInternal(direction);
+
+            if (_moving.MoveInInitialFrame == 0f)
+                transform.rotation = GetRotation();
+        }
+
+        public void Stop()
+        {
+            _canMove = false;
+            _currentTime = 0f;
+        }
+
+        private void PlayInternal(in Vector3 currentDirection)
+        {
             _canMove = true;
             _ricochetsLeft = _moving.Ricochets;
 
             Vector3 currentPosition = transform.position;
-            Vector3 currentDirection = transform.right;
 
             _prevPos = currentPosition + currentDirection * _casting.InitialPrecastOffset;
             _velocity = currentDirection * _moving.StartSpeed;
@@ -152,12 +195,6 @@ namespace UnityUtility.Shooting
                     return;
                 }
             }
-        }
-
-        public void Stop()
-        {
-            _canMove = false;
-            _currentTime = 0f;
         }
 
         private void UpdateState(Vector2 currentPosition, float deltaTime, float speedScale)
@@ -214,17 +251,6 @@ namespace UnityUtility.Shooting
             newDest = dest;
         }
 
-        private Quaternion GetRotation()
-        {
-            Vector2 right = _velocity.magnitude > MathUtility.kEpsilon ? _velocity
-                                                                       : transform.right.XY();
-
-            Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign())
-                                             : Vector3.forward;
-
-            return Quaternion.LookRotation(forward, right.GetRotated(90f * forward.z));
-        }
-
         private void InvokeHit()
         {
             _currentTime = 0f;
@@ -245,6 +271,20 @@ namespace UnityUtility.Shooting
 
             _events?.OnTimeOut.Invoke();
             _listener?.OnTimeOut();
+        }
+
+        private Quaternion GetRotation()
+        {
+            if (_rotationProvider != null)
+                return _rotationProvider.GetRotation();
+
+            Vector2 right = _velocity.magnitude > MathUtility.kEpsilon ? _velocity
+                                                                       : transform.right.XY();
+
+            Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign())
+                                             : Vector3.forward;
+
+            return Quaternion.LookRotation(forward, right.GetRotated(90f * forward.z));
         }
 
         private float GetDeltaTime()

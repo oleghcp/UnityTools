@@ -18,6 +18,11 @@ namespace UnityUtility.Shooting
         Vector2 GetGravity();
     }
 
+    public interface IRotationProvider
+    {
+        Quaternion GetRotation();
+    }
+
 #if INCLUDE_PHYSICS
     public interface IProjectileEventListener
     {
