@@ -131,10 +131,9 @@ namespace UnityUtility.Shooting
 
             LayerMask mask = LayerMask.GetMask("Default");
             _moving.RicochetMask = mask;
-            _casting.HitMask = mask;
             _moving.SpeedRemainder = 1f;
+            _casting.HitMask = mask;
             _casting.ReflectedCastNear = 0.1f;
-            _casting.InitialPrecastOffset = 0f;
         }
 #endif
 

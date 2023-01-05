@@ -14,6 +14,8 @@ namespace UnityUtility.Shooting
         private float _startSpeed;
         [SerializeField, Range(0f, 1f)]
         private float _moveInInitialFrame;
+        [SerializeField, Min(0f)]
+        private float _darg;
         [SerializeField]
         private RicochetOptions _ricochets;
 
@@ -53,10 +55,19 @@ namespace UnityUtility.Shooting
             set => _ricochets.RicochetMask = value;
         }
 
+        public float Darg
+        {
+            get => _darg;
+            set => _darg = value.ClampMin(0f);
+        }
+
         internal Vector3 GetNextPos(in Vector3 curPos, ref Vector3 velocity, in Vector3 gravity, float deltaTime, float speedScale)
         {
             if (_useGravity)
                 velocity += gravity * deltaTime;
+
+            if (_darg > 0f)
+                velocity /= 1f + _darg * deltaTime;
 
             return curPos + velocity * (deltaTime * speedScale);
         }
@@ -76,6 +87,9 @@ namespace UnityUtility.Shooting
         {
             if (_useGravity)
                 velocity += gravity * deltaTime;
+
+            if (_darg > 0f)
+                velocity /= 1f + _darg * deltaTime;
 
             return curPos + velocity * (deltaTime * speedScale);
         }
