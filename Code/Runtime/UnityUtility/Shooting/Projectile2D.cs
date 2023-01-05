@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityUtility.Engine;
-using UnityUtility.Inspector;
 using UnityUtility.Mathematics;
 
 #if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS_2D
@@ -23,8 +22,6 @@ namespace UnityUtility.Shooting
         private ProjectileMover _moving;
         [SerializeField]
         private ProjectileCaster _casting;
-        [SerializeReference, InitToggle]
-        private ProjectileEvents2D _events;
 
         private IRotationProvider _rotationProvider;
         private ITimeProvider _timeProvider;
@@ -77,7 +74,6 @@ namespace UnityUtility.Shooting
             set => _moving = value;
         }
 
-        public ProjectileEvents2D Events { get => _events; set => _events = value; }
         public IRotationProvider RotationProvider { get => _rotationProvider; set => _rotationProvider = value; }
         public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
         public IGravityProvider2D GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
@@ -229,7 +225,6 @@ namespace UnityUtility.Shooting
                         var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius);
                         _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
 
-                        _events?.OnReflect.Invoke(_hitInfo);
                         _listener?.OnReflect(_hitInfo);
 
                         float near = _casting.ReflectedCastNear;
@@ -259,7 +254,6 @@ namespace UnityUtility.Shooting
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _events?.OnHit.Invoke(_hitInfo);
             _listener?.OnHit(_hitInfo);
         }
 
@@ -270,7 +264,6 @@ namespace UnityUtility.Shooting
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _events?.OnTimeOut.Invoke();
             _listener?.OnTimeOut();
         }
 
