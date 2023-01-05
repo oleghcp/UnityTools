@@ -161,10 +161,12 @@ namespace UnityUtility.Shooting
             Vector3 direction = velocity.GetNormalized(out float magnitude);
             _moving.StartSpeed = magnitude;
 
-            PlayInternal(direction);
+            if (magnitude <= MathUtility.kEpsilon)
+                direction = transform.forward;
+            else if (_moving.MoveInInitialFrame == 0f)
+                transform.forward = direction;
 
-            if (_moving.MoveInInitialFrame == 0f)
-                transform.rotation = GetRotation();
+            PlayInternal(direction);
         }
 
         public void Stop()
@@ -276,10 +278,10 @@ namespace UnityUtility.Shooting
             if (_rotationProvider != null)
                 return _rotationProvider.GetRotation();
 
-            float length = _velocity.magnitude;
+            float magnitude = _velocity.magnitude;
 
-            if (length > MathUtility.kEpsilon)
-                return (_velocity / length).ToLookRotation();
+            if (magnitude > MathUtility.kEpsilon)
+                return (_velocity / magnitude).ToLookRotation();
 
             return transform.forward.ToLookRotation();
         }

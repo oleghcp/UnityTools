@@ -163,10 +163,12 @@ namespace UnityUtility.Shooting
             Vector3 direction = velocity.GetNormalized(out float magnitude);
             _moving.StartSpeed = magnitude;
 
-            PlayInternal(direction);
+            if (magnitude <= MathUtility.kEpsilon)
+                direction = transform.right;
+            else if (_moving.MoveInInitialFrame == 0f)
+                transform.right = direction;
 
-            if (_moving.MoveInInitialFrame == 0f)
-                transform.rotation = GetRotation();
+            PlayInternal(direction);
         }
 
         public void Stop()
@@ -278,13 +280,9 @@ namespace UnityUtility.Shooting
             if (_rotationProvider != null)
                 return _rotationProvider.GetRotation();
 
-            Vector2 right = _velocity.magnitude > MathUtility.kEpsilon ? _velocity
-                                                                       : transform.right.XY();
-
-            Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign())
-                                             : Vector3.forward;
-
-            return Quaternion.LookRotation(forward, right.GetRotated(90f * forward.z));
+            Vector2 right = _velocity.magnitude > MathUtility.kEpsilon ? _velocity : transform.right.XY();
+            Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign()) : Vector3.forward;
+            return forward.ToLookRotation(right.GetRotated(90f * forward.z));
         }
 
         private float GetDeltaTime()
