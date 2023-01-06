@@ -26,13 +26,14 @@ namespace UnityUtility.Shooting
         private IGravityProvider _gravityProvider;
         private IProjectileEventListener _listener;
 
-        private bool _canMove;
+        private bool _isPlaying;
         private float _currentTime;
         private int _ricochetsLeft;
         private Vector3 _prevPos;
         private Vector3 _velocity;
         private RaycastHit _hitInfo;
 
+        public bool IsPlaying => _isPlaying;
         public Vector3 PrevPos => _prevPos;
         public int RicochetsLeft => _ricochetsLeft;
 
@@ -44,10 +45,10 @@ namespace UnityUtility.Shooting
 
         public Vector3 Velocity
         {
-            get => _canMove ? _velocity : Vector3.zero;
+            get => _velocity;
             set
             {
-                if (!_canMove)
+                if (!_isPlaying)
                     throw new InvalidOperationException("Projectile is stopped.");
 
                 _velocity = value;
@@ -85,11 +86,11 @@ namespace UnityUtility.Shooting
 
         private void Update()
         {
-            if (_canMove)
+            if (_isPlaying)
             {
                 if (_currentTime >= _timer)
                 {
-                    _canMove = false;
+                    _isPlaying = false;
                     InvokeTimeOut();
                 }
                 else
@@ -99,7 +100,7 @@ namespace UnityUtility.Shooting
 
                     UpdateState(transform.position, deltaTime, 1f);
 
-                    if (!_canMove)
+                    if (!_isPlaying)
                         InvokeHit();
                 }
             }
@@ -133,7 +134,7 @@ namespace UnityUtility.Shooting
 
         public void Play()
         {
-            if (_canMove)
+            if (_isPlaying)
                 return;
 
             PlayInternal(transform.forward);
@@ -141,7 +142,7 @@ namespace UnityUtility.Shooting
 
         public void Play(float startSpeed)
         {
-            if (_canMove)
+            if (_isPlaying)
                 return;
 
             _moving.StartSpeed = startSpeed;
@@ -150,7 +151,7 @@ namespace UnityUtility.Shooting
 
         public void Play(in Vector3 velocity)
         {
-            if (_canMove)
+            if (_isPlaying)
                 return;
 
             Vector3 direction = velocity.GetNormalized(out float magnitude);
@@ -166,13 +167,14 @@ namespace UnityUtility.Shooting
 
         public void Stop()
         {
-            _canMove = false;
+            _isPlaying = false;
             _currentTime = 0f;
+            _velocity = default;
         }
 
         private void PlayInternal(in Vector3 currentDirection)
         {
-            _canMove = true;
+            _isPlaying = true;
             _ricochetsLeft = _moving.Ricochets;
 
             Vector3 currentPosition = transform.position;
@@ -184,7 +186,7 @@ namespace UnityUtility.Shooting
             {
                 UpdateState(currentPosition, GetDeltaTime(), _moving.MoveInInitialFrame);
 
-                if (!_canMove)
+                if (!_isPlaying)
                 {
                     InvokeHit();
                     return;
@@ -196,7 +198,7 @@ namespace UnityUtility.Shooting
         {
             CheckMovement(_prevPos, currentPosition, out _prevPos, out currentPosition);
 
-            if (_canMove)
+            if (_isPlaying)
             {
                 Vector3 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
                 CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
@@ -233,7 +235,7 @@ namespace UnityUtility.Shooting
                         return;
                     }
 
-                    _canMove = false;
+                    _isPlaying = false;
                     newSource = source;
                     newDest = _hitInfo.point;
 
