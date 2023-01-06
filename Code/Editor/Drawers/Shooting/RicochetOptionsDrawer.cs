@@ -12,27 +12,27 @@ namespace UnityUtilityEditor.Drawers.Shooting
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty count = property.FindPropertyRelative(nameof(RicochetOptions.Count));
-            SerializedProperty mask = property.FindPropertyRelative(nameof(RicochetOptions.RicochetMask));
-            SerializedProperty remainder = property.FindPropertyRelative(nameof(RicochetOptions.SpeedRemainder));
+            SerializedProperty countProp = property.FindPropertyRelative(nameof(RicochetOptions.Count));
+            SerializedProperty maskProp = property.FindPropertyRelative(nameof(RicochetOptions.RicochetMask));
+            SerializedProperty remainderProp = property.FindPropertyRelative(nameof(RicochetOptions.SpeedRemainder));
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
             linePos.width *= 0.75f;
-            count.intValue = EditorGUI.IntField(linePos, label, count.intValue).ClampMin(0);
+            countProp.intValue = EditorGUI.IntField(linePos, label, countProp.intValue).ClampMin(0);
 
             linePos.x += linePos.width + EditorGuiUtility.StandardHorizontalSpacing;
             linePos.width = position.width - linePos.width - EditorGuiUtility.StandardHorizontalSpacing;
 
             if (GUI.Button(linePos, "Max"))
-                count.intValue = int.MaxValue;
+                countProp.intValue = int.MaxValue;
 
-            if (count.intValue != 0)
+            if (countProp.intValue != 0)
             {
                 linePos = EditorGuiUtility.GetLinePosition(position, 1);
-                EditorGUI.PropertyField(linePos, mask);
+                EditorGUI.PropertyField(linePos, maskProp);
                 linePos = EditorGuiUtility.GetLinePosition(position, 2);
-                EditorGUI.PropertyField(linePos, remainder);
+                EditorGUI.PropertyField(linePos, remainderProp);
             }
         }
 

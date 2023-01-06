@@ -5,6 +5,21 @@ using UnityEngine;
 namespace UnityUtility.Shooting
 {
     [Serializable]
+    internal struct DragOptions
+    {
+        public DragMethod Method;
+        [Min(0f)]
+        public float Value;
+    }
+
+    public enum DragMethod
+    {
+        None = 0,
+        Linear = 1,
+        Exponential = 2,
+    }
+
+    [Serializable]
     internal struct RicochetOptions
     {
         public int Count;
