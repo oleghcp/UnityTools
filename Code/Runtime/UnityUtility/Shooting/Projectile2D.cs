@@ -33,9 +33,11 @@ namespace UnityUtility.Shooting
         private int _ricochetsLeft;
         private Vector2 _prevPos;
         private Vector2 _velocity;
+        private float _speed;
         private RaycastHit2D _hitInfo;
 
         public bool IsPlaying => _isPlaying;
+        public float Speed => _speed;
         public Vector2 PrevPos => _prevPos;
         public int RicochetsLeft => _ricochetsLeft;
 
@@ -54,6 +56,7 @@ namespace UnityUtility.Shooting
                     throw new InvalidOperationException("Projectile is stopped.");
 
                 _velocity = value;
+                _speed = value.magnitude;
             }
         }
 
@@ -171,6 +174,7 @@ namespace UnityUtility.Shooting
         {
             _isPlaying = false;
             _currentTime = 0f;
+            _speed = 0f;
             _velocity = default;
         }
 
@@ -182,7 +186,8 @@ namespace UnityUtility.Shooting
             Vector3 currentPosition = transform.position;
 
             _prevPos = currentPosition + currentDirection * _casting.InitialPrecastOffset;
-            _velocity = currentDirection * _moving.StartSpeed;
+            _speed = _moving.StartSpeed;
+            _velocity = currentDirection * _speed;
 
             if (_moving.MoveInInitialFrame > 0f)
             {
@@ -203,6 +208,7 @@ namespace UnityUtility.Shooting
             if (_isPlaying)
             {
                 Vector2 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
+                _speed = _velocity.magnitude;
                 CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
             }
 
@@ -225,7 +231,8 @@ namespace UnityUtility.Shooting
                         _ricochetsLeft--;
 
                         var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius);
-                        _velocity = reflectionInfo.newDir * (_velocity.magnitude * _moving.SpeedRemainder);
+                        _velocity = reflectionInfo.newDir * (_speed * _moving.SpeedRemainder);
+                        _speed = _velocity.magnitude;
 
                         _listener?.OnReflect(_hitInfo);
 
@@ -274,7 +281,7 @@ namespace UnityUtility.Shooting
             if (_rotationProvider != null)
                 return _rotationProvider.GetRotation();
 
-            Vector2 right = _velocity.magnitude > MathUtility.kEpsilon ? _velocity : transform.right.XY();
+            Vector2 right = _speed > MathUtility.kEpsilon ? _velocity : transform.right.XY();
             Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign()) : Vector3.forward;
             return forward.ToLookRotation(right.GetRotated(90f * forward.z));
         }
