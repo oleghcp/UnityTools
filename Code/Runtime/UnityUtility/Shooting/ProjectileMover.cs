@@ -81,7 +81,7 @@ namespace UnityUtility.Shooting
                     velocity = direction * (speed - _drag.Value * deltaTime).ClampMin(0f);
                     break;
 
-                case DragMethod.Exponential:
+                case DragMethod.NonLinear:
                     velocity /= 1f + _drag.Value * deltaTime;
                     break;
             }
@@ -112,7 +112,7 @@ namespace UnityUtility.Shooting
                     velocity = direction * (speed - _drag.Value * deltaTime).ClampMin(0f);
                     break;
 
-                case DragMethod.Exponential:
+                case DragMethod.NonLinear:
                     velocity /= 1f + _drag.Value * deltaTime;
                     break;
             }

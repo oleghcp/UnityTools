@@ -16,7 +16,7 @@ namespace UnityUtility.Shooting
     {
         None = 0,
         Linear = 1,
-        Exponential = 2,
+        NonLinear = 2,
     }
 
     [Serializable]
