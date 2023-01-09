@@ -57,7 +57,8 @@ namespace UnityUtility.Shooting
 
                 if (!_castRadius.HighPrecision)
                     return hit;
-                else if (hit)
+
+                if (hit)
                     return true;
             }
 
@@ -74,7 +75,8 @@ namespace UnityUtility.Shooting
 
                 if (!_castRadius.HighPrecision)
                     return hitInfo.Hit();
-                else if (hitInfo.Hit())
+
+                if (hitInfo.Hit())
                     return true;
             }
 
