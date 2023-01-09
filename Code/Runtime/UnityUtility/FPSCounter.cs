@@ -10,17 +10,26 @@ namespace UnityUtility
     {
         private const float DEFAULT_REFRESH_TIME = 0.5f;
 
+        private IntervalChecker _checker;
         private int _frameCounter;
-        private float _timeCounter;
-        private float _curFps;
+        private float _currentFps;
 
-        public float RefreshTime = DEFAULT_REFRESH_TIME;
-
-        public float FrameRate => _curFps;
-
-        public FpsCounter(float refreshTime = DEFAULT_REFRESH_TIME)
+        public float RefreshTime
         {
-            RefreshTime = refreshTime;
+            get => _checker.Interval;
+            set => _checker.Interval = value;
+        }
+
+        public float FrameRate => _currentFps;
+
+        public FpsCounter(float refreshTime)
+        {
+            _checker = new IntervalChecker(refreshTime);
+        }
+
+        public FpsCounter()
+        {
+            _checker = new IntervalChecker(DEFAULT_REFRESH_TIME);
         }
 
         /// <summary>
@@ -29,22 +38,18 @@ namespace UnityUtility
         /// <param name="deltaTime">Time passed from previous frame.</param>
         public void Update(float deltaTime)
         {
-            if (RefreshTime > 0f)
+            if (_checker.Interval <= float.Epsilon)
             {
-                _frameCounter++;
-                _timeCounter += deltaTime;
-
-                if (_timeCounter >= RefreshTime)
-                {
-                    _curFps = _frameCounter / _timeCounter;
-
-                    _frameCounter = 0;
-                    _timeCounter = 0f;
-                }
+                _currentFps = 1f / deltaTime;
+                return;
             }
-            else
+
+            _frameCounter++;
+
+            if (_checker.SmoothCheckDelta(deltaTime))
             {
-                _curFps = 1f / deltaTime;
+                _currentFps = _frameCounter / _checker.Interval;
+                _frameCounter = 0;
             }
         }
     }
