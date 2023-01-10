@@ -7,7 +7,7 @@ using UnityUtility.Mathematics;
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    public struct ProjectileCaster
+    internal struct ProjectileCaster
     {
         [SerializeField]
         private CastOptions _castRadius;
@@ -49,7 +49,7 @@ namespace UnityUtility.Shooting
         }
 
 #if INCLUDE_PHYSICS
-        internal bool Cast(in Vector3 source, in Vector3 direction, float distance, out RaycastHit hitInfo)
+        public bool Cast(in Vector3 source, in Vector3 direction, float distance, out RaycastHit hitInfo)
         {
             if (_castRadius.CastRadius > float.Epsilon)
             {
@@ -67,7 +67,7 @@ namespace UnityUtility.Shooting
 #endif
 
 #if INCLUDE_PHYSICS_2D
-        internal bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
+        public bool Cast(in Vector2 source, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
         {
             if (_castRadius.CastRadius > float.Epsilon)
             {

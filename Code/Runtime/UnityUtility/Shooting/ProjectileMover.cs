@@ -7,7 +7,7 @@ using UnityUtility.Mathematics;
 namespace UnityUtility.Shooting
 {
     [Serializable]
-    public struct ProjectileMover
+    internal struct ProjectileMover
     {
         [SerializeField]
         private bool _useGravity;
@@ -69,7 +69,7 @@ namespace UnityUtility.Shooting
         }
 
 #if INCLUDE_PHYSICS
-        internal Vector3 GetNextPos(in Vector3 curPos, ref Vector3 velocity, in Vector3 gravity, float deltaTime, float speedScale)
+        public Vector3 GetNextPos(in Vector3 curPos, ref Vector3 velocity, in Vector3 gravity, float deltaTime, float speedScale)
         {
             if (_useGravity)
                 velocity += gravity * deltaTime;
@@ -89,7 +89,7 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        internal (Vector3 newDest, Vector3 newDir) Reflect(in RaycastHit hitInfo, in Vector3 dest, in Vector3 direction, float castRadius)
+        public (Vector3 newDest, Vector3 newDir) Reflect(in RaycastHit hitInfo, in Vector3 dest, in Vector3 direction, float castRadius)
         {
             Vector3 newDirection = Vector3.Reflect(direction, hitInfo.normal);
             Vector3 hitPosition = hitInfo.point + hitInfo.normal * castRadius;
@@ -100,7 +100,7 @@ namespace UnityUtility.Shooting
 #endif
 
 #if INCLUDE_PHYSICS_2D
-        internal Vector2 GetNextPos(in Vector2 curPos, ref Vector2 velocity, in Vector2 gravity, float deltaTime, float speedScale)
+        public Vector2 GetNextPos(in Vector2 curPos, ref Vector2 velocity, in Vector2 gravity, float deltaTime, float speedScale)
         {
             if (_useGravity)
                 velocity += gravity * deltaTime;
@@ -120,7 +120,7 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        internal (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius)
+        public (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
             Vector2 hitPosition = hitInfo.point + hitInfo.normal * castRadius;

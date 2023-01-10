@@ -64,16 +64,82 @@ namespace UnityUtility.Shooting
             set => _autodestruct = value;
         }
 
-        public ProjectileCaster Caster
+        public bool UseGravity
         {
-            get => _casting;
-            set => _casting = value;
+            get => _moving.UseGravity;
+            set => _moving.UseGravity = value;
         }
 
-        public ProjectileMover Mover
+        public float StartSpeed
         {
-            get => _moving;
-            set => _moving = value;
+            get => _moving.StartSpeed;
+            set => _moving.StartSpeed = value;
+        }
+
+        public int Ricochets
+        {
+            get => _moving.Ricochets;
+            set => _moving.Ricochets = value;
+        }
+
+        public float SpeedRemainder
+        {
+            get => _moving.SpeedRemainder;
+            set => _moving.SpeedRemainder = value;
+        }
+
+        public float MoveInInitialFrame
+        {
+            get => _moving.MoveInInitialFrame;
+            set => _moving.MoveInInitialFrame = value;
+        }
+
+        public LayerMask RicochetMask
+        {
+            get => _moving.RicochetMask;
+            set => _moving.RicochetMask = value;
+        }
+
+        public DragMethod DragMethod
+        {
+            get => _moving.DragMethod;
+            set => _moving.DragMethod = value;
+        }
+
+        public float DargValue
+        {
+            get => _moving.Darg;
+            set => _moving.Darg = value;
+        }
+
+        public float CastRadius
+        {
+            get => _casting.CastRadius;
+            set => _casting.CastRadius = value;
+        }
+
+        public bool HighPrecision
+        {
+            get => _casting.HighPrecision;
+            set => _casting.HighPrecision = value;
+        }
+
+        public LayerMask HitMask
+        {
+            get => _casting.HitMask;
+            set => _casting.HitMask = value;
+        }
+
+        public float ReflectedCastNear
+        {
+            get => _casting.ReflectedCastNear;
+            set => _casting.ReflectedCastNear = value;
+        }
+
+        public float InitialPrecastOffset
+        {
+            get => _casting.InitialPrecastOffset;
+            set => _casting.InitialPrecastOffset = value;
         }
 
         public IRotationProvider RotationProvider { get => _rotationProvider; set => _rotationProvider = value; }
@@ -89,6 +155,8 @@ namespace UnityUtility.Shooting
 
         private void Update()
         {
+            _listener?.PreUpdate();
+
             if (_isPlaying)
             {
                 if (_currentTime >= _timer)
@@ -108,7 +176,7 @@ namespace UnityUtility.Shooting
                 }
             }
 
-            _listener?.OnUpdate();
+            _listener?.PostUpdate();
         }
 
 #if UNITY_EDITOR
