@@ -62,7 +62,7 @@ namespace UnityUtility.Shooting
             set => _drag.Method = value;
         }
 
-        public float Darg
+        public float Drag
         {
             get => _drag.Value;
             set => _drag.Value = value.ClampMin(0f);

@@ -108,10 +108,10 @@ namespace UnityUtility.Shooting
             set => _moving.DragMethod = value;
         }
 
-        public float DargValue
+        public float DragValue
         {
-            get => _moving.Darg;
-            set => _moving.Darg = value;
+            get => _moving.Drag;
+            set => _moving.Drag = value;
         }
 
         public float CastRadius

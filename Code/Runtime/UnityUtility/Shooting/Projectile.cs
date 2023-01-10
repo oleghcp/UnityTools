@@ -77,6 +77,24 @@ namespace UnityUtility.Shooting
             set => _moving.StartSpeed = value;
         }
 
+        public bool FreezeX
+        {
+            get => _moving.FreezePosition[0];
+            set => _moving.LockAxis(0, value);
+        }
+
+        public bool FreezeY
+        {
+            get => _moving.FreezePosition[1];
+            set => _moving.LockAxis(1, value);
+        }
+
+        public bool FreezeZ
+        {
+            get => _moving.FreezePosition[2];
+            set => _moving.LockAxis(2, value);
+        }
+
         public int Ricochets
         {
             get => _moving.Ricochets;
@@ -107,10 +125,10 @@ namespace UnityUtility.Shooting
             set => _moving.DragMethod = value;
         }
 
-        public float DargValue
+        public float DragValue
         {
-            get => _moving.Darg;
-            set => _moving.Darg = value;
+            get => _moving.Drag;
+            set => _moving.Drag = value;
         }
 
         public float CastRadius

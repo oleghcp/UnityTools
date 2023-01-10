@@ -67,7 +67,7 @@ namespace UnityUtility.Shooting
             set => _drag.Method = value;
         }
 
-        public float Darg
+        public float Drag
         {
             get => _drag.Value;
             set => _drag.Value = value.ClampMin(0f);
@@ -80,6 +80,11 @@ namespace UnityUtility.Shooting
         }
 
         public bool HasLocks => 0 != (int)_freezePosition;
+
+        public void LockAxis(int index, bool value)
+        {
+            _freezePosition[index] = value;
+        }
 
         public Vector3 GetNextPos(in Vector3 curPos, ref Vector3 velocity, in Vector3 gravity, float deltaTime, float speedScale)
         {
