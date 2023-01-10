@@ -1,9 +1,9 @@
-﻿using System;
+﻿#if INCLUDE_PHYSICS_2D
+using System;
 using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 
-#if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS_2D
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
@@ -19,7 +19,7 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autoFlippingX = true;
         [SerializeField]
-        private ProjectileMover _moving;
+        private ProjectileMover2D _moving;
         [SerializeField]
         private ProjectileCaster _casting;
 

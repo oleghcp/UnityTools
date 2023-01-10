@@ -1,9 +1,9 @@
-﻿using System;
+﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
+using System;
 using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 
-#if UNITY_2019_3_OR_NEWER && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
 namespace UnityUtility.Shooting
 {
     [Serializable]

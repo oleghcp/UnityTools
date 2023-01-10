@@ -1,9 +1,9 @@
-﻿using System;
+﻿#if INCLUDE_PHYSICS
+using System;
 using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 
-#if UNITY_2019_3_OR_NEWER && INCLUDE_PHYSICS
 namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
@@ -54,7 +54,8 @@ namespace UnityUtility.Shooting
                     throw new InvalidOperationException("Projectile is stopped.");
 
                 _velocity = value;
-                _speed = value.magnitude;
+                _moving.LockVelocity(ref _velocity);
+                _speed = _velocity.magnitude;
             }
         }
 
@@ -251,9 +252,18 @@ namespace UnityUtility.Shooting
 
             Vector3 currentPosition = transform.position;
 
-            _prevPos = currentPosition + currentDirection * _casting.InitialPrecastOffset;
-            _speed = _moving.StartSpeed;
-            _velocity = currentDirection * _speed;
+            _prevPos = currentPosition + (currentDirection * _casting.InitialPrecastOffset);
+            _velocity = currentDirection * _moving.StartSpeed;
+
+            if (_moving.HasLocks)
+            {
+                _moving.LockVelocity(ref _velocity);
+                _speed = _velocity.magnitude;
+            }
+            else
+            {
+                _speed = _moving.StartSpeed;
+            }
 
             if (_moving.MoveInInitialFrame > 0f)
             {
