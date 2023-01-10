@@ -118,7 +118,7 @@ namespace UnityUtility.Shooting
                     newDirection = -direction;
             }
 
-            Vector3 hitPosition = hitInfo.point + hitInfo.normal * castRadius;
+            Vector3 hitPosition = GetHitPosition(hitInfo, castRadius);
             float distanceAfterHit = Vector3.Distance(hitPosition, dest) * _ricochets.SpeedRemainder;
             Vector3 newDest = hitPosition + newDirection * distanceAfterHit;
 
@@ -126,6 +126,14 @@ namespace UnityUtility.Shooting
                 LockPosition(ref newDest, dest);
 
             return (newDest, newDirection);
+        }
+
+        public Vector3 GetHitPosition(in RaycastHit hitInfo, float castRadius)
+        {
+            if (castRadius <= MathUtility.kEpsilon)
+                return hitInfo.point;
+
+            return hitInfo.point + hitInfo.normal * castRadius;
         }
 
         public void LockVelocity(ref Vector3 veclocity)

@@ -322,7 +322,7 @@ namespace UnityUtility.Shooting
 
                     _isPlaying = false;
                     newSource = source;
-                    newDest = _hitInfo.point;
+                    newDest = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
 
                     return;
                 }

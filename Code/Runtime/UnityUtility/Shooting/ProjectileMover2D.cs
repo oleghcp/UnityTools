@@ -91,10 +91,18 @@ namespace UnityUtility.Shooting
         public (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
-            Vector2 hitPosition = hitInfo.point + hitInfo.normal * castRadius;
+            Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
             float distanceAfterHit = Vector2.Distance(hitPosition, dest) * _ricochets.SpeedRemainder;
 
             return (hitPosition + newDirection * distanceAfterHit, newDirection);
+        }
+
+        public Vector3 GetHitPosition(in RaycastHit2D hitInfo, float castRadius)
+        {
+            if (castRadius <= MathUtility.kEpsilon)
+                return hitInfo.point;
+
+            return hitInfo.point + hitInfo.normal * castRadius;
         }
     }
 }
