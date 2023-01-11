@@ -6,35 +6,6 @@ namespace UnityUtility.CSharp.Collections
 {
     internal static class CollectionUtility
     {
-        public static void Shuffle<T>(IList<T> collection, IRng generator)
-        {
-            int last = collection.Count;
-
-            while (last > 1)
-            {
-                int cur = generator.Next(last--);
-                collection.Swap(cur, last);
-            }
-        }
-
-        public static T GetRandomItem<T>(IList<T> collection, IRng generator)
-        {
-            int index = generator.Next(collection.Count);
-            return collection[index];
-        }
-
-        public static T GetRandomItem<T>(IReadOnlyList<T> collection, IRng generator)
-        {
-            int index = generator.Next(collection.Count);
-            return collection[index];
-        }
-
-        public static T PullOutRandomItem<T>(IList<T> collection, IRng generator)
-        {
-            int index = generator.Next(collection.Count);
-            return collection.PullOut(index);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void QuickSort<T>(IList<T> collection, int left, int right, IComparer<T> comparer)
         {

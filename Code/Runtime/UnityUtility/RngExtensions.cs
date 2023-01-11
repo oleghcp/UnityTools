@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
 using UnityUtility.NumericEntities;
@@ -428,14 +427,6 @@ namespace UnityUtility
                 b = self.Next(1f),
                 a = 1f,
             };
-        }
-
-        /// <summary>
-        /// Shuffles the elements of an entire collection.
-        /// </summary>
-        public static void Shuffle<T>(this IRng self, IList<T> collection)
-        {
-            CollectionUtility.Shuffle(collection, self);
         }
 
         public static Vector2 GetInBounds(this IRng self, in Rect bounds)

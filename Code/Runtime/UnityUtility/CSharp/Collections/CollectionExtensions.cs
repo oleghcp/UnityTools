@@ -271,17 +271,44 @@ namespace UnityUtility.CSharp.Collections
         /// </summary>
         public static void Shuffle<T>(this IList<T> self, IRng generator)
         {
-            CollectionUtility.Shuffle(self, generator);
+            int last = self.Count;
+
+            while (last > 1)
+            {
+                int cur = generator.Next(last--);
+                self.Swap(cur, last);
+            }
         }
 
         public static T GetRandomItem<T>(this IList<T> self, IRng generator)
         {
-            return CollectionUtility.GetRandomItem(self, generator);
+            if (self.Count == 0)
+                throw Errors.NoElements();
+
+            return self[generator.Next(self.Count)];
+        }
+
+        public static T GetRandomItem<T>(this ICollection<T> self, IRng generator)
+        {
+            int index = generator.Next(self.Count);
+            int count = 0;
+            foreach (T item in self)
+            {
+                if (index == count)
+                    return item;
+
+                count++;
+            }
+
+            throw Errors.NoElements();
         }
 
         public static T PullOutRandomItem<T>(this IList<T> self, IRng generator)
         {
-            return CollectionUtility.PullOutRandomItem(self, generator);
+            if (self.Count == 0)
+                throw Errors.NoElements();
+
+            return self.PullOut(generator.Next(self.Count));
         }
 
         /// <summary>

@@ -65,7 +65,25 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
 
         public static T GetRandomItem_<T>(this IReadOnlyList<T> self, IRng generator)
         {
-            return CollectionUtility.GetRandomItem(self, generator);
+            if (self.Count == 0)
+                throw Errors.NoElements();
+
+            return self[generator.Next(self.Count)];
+        }
+
+        public static T GetRandomItem_<T>(this IReadOnlyCollection<T> self, IRng generator)
+        {
+            int index = generator.Next(self.Count);
+            int count = 0;
+            foreach (T item in self)
+            {
+                if (index == count)
+                    return item;
+
+                count++;
+            }
+
+            throw Errors.NoElements();
         }
 
         public static bool IsNullOrEmpty_<T>(this IReadOnlyCollection<T> self)
