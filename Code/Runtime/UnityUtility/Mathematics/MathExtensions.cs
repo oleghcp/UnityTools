@@ -454,35 +454,35 @@ namespace UnityUtility.Mathematics
         }
 
         /// <summary>
-        /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
+        /// Calculates the linear parameter that produces the interpolant value within the range [a, b] (InverseLerp).
         /// </summary>
-        public static float Ratio(this float value, float a, float b)
+        public static float RatioToValue(this float value, float a, float b)
         {
             return Mathf.InverseLerp(a, b, value);
         }
 
         /// <summary>
-        /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
+        /// Calculates the linear parameter that produces the interpolant value within the range [a, b] (InverseLerp).
         /// </summary>
-        public static double Ratio(this double value, double a, double b)
+        public static double RatioToValue(this double value, double a, double b)
         {
             return a == b ? 0d : Clamp01((value - a) / (b - a));
         }
 
         /// <summary>
-        /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
+        /// Calculates the linear parameter that produces the interpolant value within the range [a, b] (InverseLerp).
         /// </summary>
-        public static float Ratio(this int value, int a, int b)
+        public static float RatioToValue(this int value, int a, int b)
         {
             return Mathf.InverseLerp(a, b, value);
         }
 
         /// <summary>
-        /// Calculates the linear parameter t that produces the interpolant value within the range [a, b] (InverseLerp).
+        /// Calculates the linear parameter that produces the interpolant value within the range [a, b] (InverseLerp).
         /// </summary>
-        public static double Ratio(this long value, long a, long b)
+        public static double RatioToValue(this long value, long a, long b)
         {
-            return Ratio(a, b, (double)value);
+            return RatioToValue((double)value, a, b);
         }
 
         /// <summary>
