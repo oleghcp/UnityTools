@@ -171,6 +171,12 @@ namespace UnityUtility.Sound.SoundStuff
             Sender = null;
             ApplicationUtility.OnUpdate_Event -= _update;
         }
+
+        void IDisposable.Dispose()
+        {
+            if (gameObject != null)
+                gameObject.Destroy();
+        }
         #endregion
 
         //////////////

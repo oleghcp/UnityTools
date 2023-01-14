@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -94,5 +95,7 @@ namespace UnityUtility.Async
             _iterator.Reset();
             _enabled = false;
         }
+
+        void IDisposable.Dispose() { }
     }
 }

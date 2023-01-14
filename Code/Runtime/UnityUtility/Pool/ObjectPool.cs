@@ -63,45 +63,36 @@ namespace UnityUtility.Pool
         /// <summary>
         /// Takes an object back to pool.
         /// </summary>
-        public void Release(T obj, Action<T> disposer)
+        public void Release(T obj)
         {
             obj.CleanUp();
             if (!_storage.TryAdd(obj))
-                disposer(obj);
+                obj.Dispose();
         }
 
-        public bool Release(T obj)
+        public void Release(IEnumerable<T> range)
         {
-            obj.CleanUp();
-            return _storage.TryAdd(obj);
-        }
-
-        public void Release(IEnumerable<T> range, Action<T> disposer = null)
-        {
-            foreach (var item in range)
+            foreach (T item in range)
             {
-                if (!Release(item))
-                    disposer?.Invoke(item);
+                Release(item);
             }
         }
 
         /// <summary>
         /// Clears object pool.
         /// </summary>
-        public void Clear()
+        public void Clear(bool dispose = false)
         {
-            _storage.Clear();
-        }
-
-        /// <summary>
-        /// Clears object pool with disposing of each element.
-        /// </summary>
-        public void Clear(Action<T> disposer)
-        {
-            while (_storage.TryGet(out T value))
+            if (dispose)
             {
-                disposer(value);
+                while (_storage.TryGet(out T value))
+                {
+                    value.Dispose();
+                }
+                return;
             }
+
+            _storage.Clear();
         }
 
         private class DefaultFactory : IObjectFactory<T>

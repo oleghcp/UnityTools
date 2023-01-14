@@ -213,8 +213,6 @@ namespace UnityUtility.Sound
             }
         }
 
-        //--//
-
         private SPreset GetPreset(string soundName)
         {
             if (!_presetList.TryGetValue(soundName, out SPreset set))
