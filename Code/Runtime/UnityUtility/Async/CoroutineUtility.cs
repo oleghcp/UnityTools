@@ -6,7 +6,7 @@ namespace UnityUtility.Async
 {
     internal static class CoroutineUtility
     {
-        public static IEnumerator RunDelayedRoutine(float time, Action run, bool scaledTime)
+        public static IEnumerator GetRunDelayedRoutine(float time, Action run, bool scaledTime)
         {
             while (time > 0f)
             {
@@ -17,7 +17,7 @@ namespace UnityUtility.Async
             run();
         }
 
-        public static IEnumerator RunByConditionRoutine(Func<bool> condition, Action run)
+        public static IEnumerator GetRunByConditionRoutine(Func<bool> condition, Action run)
         {
             while (!condition())
             {
@@ -27,7 +27,7 @@ namespace UnityUtility.Async
             run();
         }
 
-        public static IEnumerator RunAfterFramesRoutine(int frames, Action run)
+        public static IEnumerator GetRunAfterFramesRoutine(int frames, Action run)
         {
             while (frames > 0)
             {
@@ -38,7 +38,7 @@ namespace UnityUtility.Async
             run();
         }
 
-        public static IEnumerator RunWhileRoutine(Func<bool> condition, Action run)
+        public static IEnumerator GetRunWhileRoutine(Func<bool> condition, Action run)
         {
             while (condition())
             {
