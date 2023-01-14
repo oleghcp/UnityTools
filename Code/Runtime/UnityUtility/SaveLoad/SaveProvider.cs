@@ -125,15 +125,20 @@ namespace UnityUtility.SaveLoad
             if (fieldsOwner == null)
                 throw Errors.NullParameter(nameof(fieldsOwner));
 
-            if (!_fields.Remove(fieldsOwner, out var aList) || option == UnregOption.None)
+            if (!_fields.Remove(fieldsOwner, out var aList))
                 return;
 
-            foreach (var attribute in aList)
+            switch (option)
             {
-                if (option == UnregOption.SaveObjectState)
-                    _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
-                else if (option == UnregOption.DeleteObjectState)
-                    _saver.DeleteKey(attribute.Key);
+                case UnregOption.SaveObjectState:
+                    foreach (var attribute in aList)
+                        _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                    break;
+
+                case UnregOption.DeleteObjectState:
+                    foreach (var attribute in aList)
+                        _saver.DeleteKey(attribute.Key);
+                    break;
             }
         }
 
