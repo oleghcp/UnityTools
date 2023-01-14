@@ -45,29 +45,6 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns random index of collection contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
-        /// </summary>
-        public static int Random(this IRng self, IList<float> weights, float weightOfNone = 0f)
-        {
-            float target = self.Next(weights.Sum() + weightOfNone);
-            int startIndex = self.Next(weights.Count);
-            int count = weights.Count + startIndex;
-            float sum = 0f;
-
-            for (int i = startIndex; i < count; i++)
-            {
-                int index = i % weights.Count;
-
-                if (weights[index] + sum >= target)
-                    return index;
-
-                sum += weights[index];
-            }
-
-            return -1;
-        }
-
-        /// <summary>
         /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
         public static int Random(this IRng self, float[] weights, int weightOfNone = 0)
@@ -76,26 +53,67 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// Returns random index of collection contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
         /// </summary>
-        public static int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
+        public static int Random(this IRng self, IList<float> weights, float weightOfNone = 0f)
         {
-            float target = self.Next(weights.Sum() + weightOfNone);
-            int startIndex = self.Next(weights.Length);
-            int count = weights.Length + startIndex;
-            float sum = 0f;
+            float sum = weights.Sum();
 
-            for (int i = 0; i < count; i++)
+            float target;
+            do { target = self.Next(sum + weightOfNone); }
+            while (target == sum + weightOfNone);
+
+            int startIndex = self.Next(weights.Count);
+            int count = weights.Count + startIndex;
+            sum = 0f;
+
+            for (int i = startIndex; i < count; i++)
             {
-                int index = i % weights.Length;
+                int index = i % weights.Count;
 
-                if (weights[index] + sum >= target)
+                if (weights[index] + sum > target)
                     return index;
 
                 sum += weights[index];
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// </summary>
+        public static int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
+        {
+            float sum = weights.Sum();
+
+            float target;
+            do { target = self.Next(sum + weightOfNone); }
+            while (target == sum + weightOfNone);
+
+            int startIndex = self.Next(weights.Length);
+            int count = weights.Length + startIndex;
+            sum = 0f;
+
+            for (int i = 0; i < count; i++)
+            {
+                int index = i % weights.Length;
+
+                if (weights[index] + sum > target)
+                    return index;
+
+                sum += weights[index];
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
+        /// </summary>
+        public static int Random(this IRng self, int[] weights, int weightOfNone = 0)
+        {
+            return self.Random(weights as IList<int>, weightOfNone);
         }
 
         /// <summary>
@@ -119,14 +137,6 @@ namespace UnityUtility
             }
 
             return -1;
-        }
-
-        /// <summary>
-        /// Returns random index of array contains chance weights or -1 if none of the elements (if <paramref name="weightOfNone"/> more than zero).
-        /// </summary>
-        public static int Random(this IRng self, int[] weights, int weightOfNone = 0)
-        {
-            return self.Random(weights as IList<int>, weightOfNone);
         }
 
         /// <summary>
@@ -191,16 +201,16 @@ namespace UnityUtility
             return -1;
         }
 
-        #region randoms by condition
         //TODO: need check of impossible condition
-
+        #region randoms by condition
         /// <summary>
         /// Returns a random integer number between min [inclusive] and max [exclusive] and which is not equal to exclusiveValue.
         /// </summary>
         public static int Random(this IRng self, int min, int max, int exclusiveValue)
         {
             int value;
-            do { value = self.Next(min, max); } while (value == exclusiveValue);
+            do { value = self.Next(min, max); }
+            while (value == exclusiveValue);
             return value;
         }
 
@@ -210,7 +220,8 @@ namespace UnityUtility
         public static int Random(this IRng self, int min, int max, Func<int, bool> condition)
         {
             int value;
-            do { value = self.Next(min, max); } while (!condition(value));
+            do { value = self.Next(min, max); }
+            while (!condition(value));
             return value;
         }
 
@@ -220,7 +231,8 @@ namespace UnityUtility
         public static float Random(this IRng self, float min, float max, Func<float, bool> condition)
         {
             float value;
-            do { value = self.Next(min, max); } while (!condition(value));
+            do { value = self.Next(min, max); }
+            while (!condition(value));
             return value;
         }
 
@@ -230,7 +242,8 @@ namespace UnityUtility
         public static int RandomFlag(this IRng self, int mask, int length, Func<int, bool> condition)
         {
             int value;
-            do { value = self.RandomFlag(mask, length); } while (!condition(value));
+            do { value = self.RandomFlag(mask, length); }
+            while (!condition(value));
             return value;
         }
 
@@ -240,7 +253,8 @@ namespace UnityUtility
         public static int RandomFlag(this IRng self, BitList mask, Func<int, bool> condition)
         {
             int value;
-            do { value = self.RandomFlag(mask); } while (!condition(value));
+            do { value = self.RandomFlag(mask); }
+            while (!condition(value));
             return value;
         }
         #endregion
