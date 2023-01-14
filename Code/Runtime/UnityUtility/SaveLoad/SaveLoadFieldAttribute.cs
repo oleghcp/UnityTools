@@ -9,9 +9,9 @@ namespace UnityUtility.SaveLoad
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class SaveLoadFieldAttribute : Attribute
     {
-        internal object DefValue;
-        internal string Key;
-        internal FieldInfo Field;
+        internal string Key { get; set; }
+        internal FieldInfo Field { get; set; }
+        internal object DefValue { get; }
 
         public SaveLoadFieldAttribute() { }
 

@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Text;
 using UnityUtility.CSharp;
+using UnityUtility.CSharp.Text;
 
 namespace UnityUtility.SaveLoad.SaveProviderStuff
 {
     public class BaseKeyGenerator : IKeyGenerator
     {
-        private const char SEP = '.';
+        private StringBuilder _builder = new StringBuilder();
 
-        private StringBuilder _builder;
-
-        public BaseKeyGenerator()
+        public string Generate(Type objectType, string fieldName, string objectID = null)
         {
-            _builder = new StringBuilder();
-        }
+            const char separator = '.';
 
-        public string Generate(Type objectType, string fieldName, string objectID)
-        {
-            _builder.Clear()
-                     .Append(objectType.FullName)
-                     .Append(SEP)
-                     .Append(fieldName);
+            _builder.Append(objectType.FullName)
+                    .Append(separator)
+                    .Append(fieldName);
 
             if (objectID.HasUsefulData())
-                _builder.Append(SEP).Append(objectID);
+                _builder.Append(separator)
+                        .Append(objectID);
 
-            return _builder.ToString();
+            return _builder.Cut();
         }
     }
 }

@@ -65,7 +65,7 @@ namespace UnityUtility.SaveLoad
         }
 
         /// <summary>
-        /// Registers an object of which fields should be saved and load.
+        /// Registers an object of which fields should be saved and loaded.
         /// </summary>
         /// <param name="initFields">If true the registered object fields will be initialized from saved data.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,7 +75,7 @@ namespace UnityUtility.SaveLoad
         }
 
         /// <summary>
-        /// Registers an object of which fields should be saved and load.
+        /// Registers an object of which fields should be saved and loaded.
         /// </summary>
         /// <param name="ownerId">Specific id for the fields owner if there are more than one instance of the owner class.</param>
         /// <param name="initFields">If true the registered object fields will be initialized from saved data.</param>
@@ -148,21 +148,23 @@ namespace UnityUtility.SaveLoad
         /// <param name="deleteSaves">Removes key-value data of the objects from the storage if true. You should call ApplyAll Function to save changes.</param>
         public void UnregAllMembers(UnregOption option = UnregOption.None)
         {
-            if (option == UnregOption.DeleteObjectState)
+            switch (option)
             {
-                foreach (var aList in _fields.Values)
-                {
-                    foreach (var attribute in aList)
-                        _saver.DeleteKey(attribute.Key);
-                }
-            }
-            else if (option == UnregOption.SaveObjectState)
-            {
-                foreach (var (fieldsOwner, aList) in _fields)
-                {
-                    foreach (var attribute in aList)
-                        _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
-                }
+                case UnregOption.SaveObjectState:
+                    foreach (var aList in _fields.Values)
+                    {
+                        foreach (var attribute in aList)
+                            _saver.DeleteKey(attribute.Key);
+                    }
+                    break;
+
+                case UnregOption.DeleteObjectState:
+                    foreach (var (fieldsOwner, aList) in _fields)
+                    {
+                        foreach (var attribute in aList)
+                            _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                    }
+                    break;
             }
 
             _fields.Clear();

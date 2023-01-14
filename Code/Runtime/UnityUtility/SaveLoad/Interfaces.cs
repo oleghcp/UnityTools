@@ -21,6 +21,6 @@ namespace UnityUtility.SaveLoad
 
     public interface IKeyGenerator
     {
-        string Generate(Type objectType, string fieldName, string objectID);
+        string Generate(Type objectType, string fieldName, string objectID = null);
     }
 }
