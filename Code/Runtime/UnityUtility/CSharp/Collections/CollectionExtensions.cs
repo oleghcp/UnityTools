@@ -417,6 +417,18 @@ namespace UnityUtility.CSharp.Collections
 
             return false;
         }
+
+        /// <summary>
+        /// Attempts to add the specified key and value to the dictionary.
+        /// </summary>
+        public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue value)
+        {
+            if (self.ContainsKey(key))
+                return false;
+
+            self.Add(key, value);
+            return true;
+        }
 #endif
 
         /// <summary>
