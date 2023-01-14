@@ -176,7 +176,7 @@ namespace UnityUtilityEditor.Window
             _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
             _settings.CameraPosition = _camera.Position;
             _settings.Save(_serializedGraph.GraphAsset.GetAssetGuid());
-            EditorUtilityExt.SaveProject();
+            AssetDatabase.SaveAssets();
         }
     }
 }

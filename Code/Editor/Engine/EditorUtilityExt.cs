@@ -18,11 +18,6 @@ namespace UnityUtilityEditor.Engine
 
         private static MethodInfo _clearFunc;
 
-        public static void SaveProject()
-        {
-            EditorApplication.ExecuteMenuItem("File/Save Project");
-        }
-
         public static void OpenCsProject()
         {
             EditorApplication.ExecuteMenuItem("Assets/Open C# Project");
