@@ -49,7 +49,11 @@ namespace UnityUtility
         /// </summary>
         public static int Random(this IRng self, float[] weights, int weightOfNone = 0)
         {
-            return self.Random(weights as IList<float>, weightOfNone);
+#if UNITY_2021_2_OR_NEWER
+            return Random(self, (Span<float>)weights, weightOfNone);
+#else
+            return Random(self, (IList<float>)weights, weightOfNone);
+#endif
         }
 
         /// <summary>
@@ -113,7 +117,11 @@ namespace UnityUtility
         /// </summary>
         public static int Random(this IRng self, int[] weights, int weightOfNone = 0)
         {
-            return self.Random(weights as IList<int>, weightOfNone);
+#if UNITY_2021_2_OR_NEWER
+            return Random(self, (Span<int>)weights, weightOfNone);
+#else
+            return Random(self, (IList<int>)weights, weightOfNone);
+#endif
         }
 
         /// <summary>
