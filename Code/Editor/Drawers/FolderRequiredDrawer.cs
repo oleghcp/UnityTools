@@ -6,7 +6,7 @@ using UnityUtilityEditor.Engine;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(FolderRequiredAttribute))]
-    public class FolderRequiredDrawer : PropertyDrawer
+    internal class FolderRequiredDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

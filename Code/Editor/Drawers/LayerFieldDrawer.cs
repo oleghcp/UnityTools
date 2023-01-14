@@ -8,7 +8,7 @@ using UnityUtilityEditor.Engine;
 namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(LayerFieldAttribute))]
-    public class LayerFieldDrawer : AttributeDrawer<LayerFieldAttribute>
+    internal class LayerFieldDrawer : AttributeDrawer<LayerFieldAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

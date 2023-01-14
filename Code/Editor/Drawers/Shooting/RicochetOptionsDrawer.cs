@@ -8,7 +8,7 @@ using UnityUtilityEditor.Engine;
 namespace UnityUtilityEditor.Drawers.Shooting
 {
     [CustomPropertyDrawer(typeof(RicochetOptions))]
-    public class RicochetOptionsDrawer : PropertyDrawer
+    internal class RicochetOptionsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

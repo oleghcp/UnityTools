@@ -42,9 +42,14 @@ namespace UnityUtility.NumericEntities
             return (value.Min, value.Max);
         }
 
-        public static implicit operator Diapason((float min, float max) value)
+        public static implicit operator Diapason((float, float) value)
         {
-            return new Diapason(value.min, value.max);
+            return new Diapason(value.Item1, value.Item2);
+        }
+
+        public static explicit operator Diapason(DiapasonInt value)
+        {
+            return new Diapason(value.Min, value.Max);
         }
     }
 }

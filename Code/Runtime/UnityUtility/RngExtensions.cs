@@ -28,7 +28,7 @@ namespace UnityUtility
 
         public static int Random(this IRng self, in DiapasonInt range)
         {
-            return self.Next(range.From, range.Before);
+            return self.Next(range.Min, range.Max);
         }
 
         public static float Random(this IRng self, in Diapason range)

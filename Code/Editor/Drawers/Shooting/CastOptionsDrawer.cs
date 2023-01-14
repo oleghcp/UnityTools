@@ -8,7 +8,7 @@ using UnityUtilityEditor.Engine;
 namespace UnityUtilityEditor.Drawers.Shooting
 {
     [CustomPropertyDrawer(typeof(CastOptions))]
-    public class CastOptionsDrawer : PropertyDrawer
+    internal class CastOptionsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

@@ -29,7 +29,7 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(DiapasonInt))]
     internal class DiapasonIntDrawer : PropertyDrawer
     {
-        private GUIContent[] _subLabels = { new GUIContent(DiapasonInt.FromFieldName), new GUIContent(DiapasonInt.BeforeFieldName) };
+        private GUIContent[] _subLabels = { new GUIContent(DiapasonInt.MinFieldName), new GUIContent(DiapasonInt.MaxFieldName) };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -43,7 +43,7 @@ namespace UnityUtilityEditor.Drawers
             EditorGUI.MultiIntField(position, _subLabels, array);
 
             min.intValue = array[0];
-            max.intValue = array[1].ClampMin(array[0] + 1);
+            max.intValue = array[1].ClampMin(array[0]);
         }
     }
 }

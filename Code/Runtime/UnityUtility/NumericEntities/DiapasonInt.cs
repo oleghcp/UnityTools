@@ -7,44 +7,49 @@ namespace UnityUtility.NumericEntities
     [Serializable]
     public struct DiapasonInt
     {
-        [FormerlySerializedAs("x")]
-        public int From;
-        [FormerlySerializedAs("y")]
-        public int Before;
+        [FormerlySerializedAs("x"), FormerlySerializedAs("From")]
+        public int Min;
+        [FormerlySerializedAs("y"), FormerlySerializedAs("Before")]
+        public int Max;
 
 #if UNITY_EDITOR
-        public static string FromFieldName = nameof(From);
-        public static string BeforeFieldName = nameof(Before);
+        public static string MinFieldName = nameof(Min);
+        public static string MaxFieldName = nameof(Max);
 #endif
 
-        public DiapasonInt(int from, int before)
+        public DiapasonInt(int min, int max)
         {
-            if (from > before)
-                throw new ArgumentOutOfRangeException(nameof(from), $"{nameof(from)} value cannot be greater than or equals to {nameof(before)} value.");
+            if (min > max)
+                throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} value cannot be greater than {nameof(max)} value.");
 
-            From = from;
-            Before = before;
+            Min = min;
+            Max = max;
         }
 
         public void Deconstruct(out int from, out int before)
         {
-            from = From;
-            before = Before;
+            from = Min;
+            before = Max;
         }
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(From.GetHashCode(), Before.GetHashCode());
+            return Helper.GetHashCode(Min.GetHashCode(), Max.GetHashCode());
         }
 
-        public static implicit operator (int from, int before)(DiapasonInt value)
+        public static implicit operator (int min, int max)(DiapasonInt value)
         {
-            return (value.From, value.Before);
+            return (value.Min, value.Max);
         }
 
-        public static implicit operator DiapasonInt((int from, int before) value)
+        public static implicit operator DiapasonInt((int, int) value)
         {
-            return new DiapasonInt(value.from, value.before);
+            return new DiapasonInt(value.Item1, value.Item2);
+        }
+
+        public static explicit operator DiapasonInt(Diapason value)
+        {
+            return new DiapasonInt((int)value.Min, (int)value.Max);
         }
     }
 }
