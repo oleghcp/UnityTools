@@ -4,6 +4,7 @@ using System.Text;
 using UnityEditor;
 using UnityUtility.CSharp;
 using UnityUtility.IO;
+using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
@@ -99,17 +100,22 @@ namespace UnityUtilityEditor
 
         private static string GetNameSpace()
         {
+            const string defaultNamespace = "Assets";
             UnityObject selected = Selection.activeObject;
 
             if (selected == null)
-                return "Assets";
+                return defaultNamespace;
 
             string selectedPath = selected.GetAssetPath();
 
             if (!selected.IsFolder())
                 selectedPath = PathUtility.GetParentPath(selectedPath);
 
-            return selectedPath.Replace('/', '.').RemoveWhiteSpaces();
+            int steps = LibrarySettings.I.NamespaceFolderRootSkipSteps;
+            string targetNamespace = PathUtility.SkipRootSteps(selectedPath, steps)
+                                                .Replace('/', '.')
+                                                .RemoveWhiteSpaces();
+            return targetNamespace.IsNullOrEmpty() ? defaultNamespace : targetNamespace;
         }
     }
 }

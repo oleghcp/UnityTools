@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityUtilityEditor.Configs;
+using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.SettingsProviders
 {
@@ -18,7 +20,41 @@ namespace UnityUtilityEditor.SettingsProviders
 
         public override void OnGUI(string searchContext)
         {
-            GUILayout.Label($"{LibConstants.LIB_NAME} Settings");
+            EditorGUILayout.Space();
+
+            DrawNamespaceRootFolder();
+        }
+
+        private void DrawNamespaceRootFolder()
+        {
+            GUILayoutOption buttonWidth = GUILayout.Width(60f);
+            GUILayoutOption slashWidth = GUILayout.Width(10f);
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Namespace Root Folder", GUILayout.Width(SettingsProviderUtility.LABEL_WIDTH));
+
+            int c = LibrarySettings.I.NamespaceFolderRootSkipSteps + 1;
+            for (int i = 0; i < c; i++)
+            {
+                string text = i == 0 ? "Assets" : "...";
+                bool shouldBeToggled = i < c - 1;
+                bool toggled = EditorGuiLayout.ToggleButton(text, shouldBeToggled, buttonWidth);
+                GUILayout.Label("/", slashWidth);
+
+                if (toggled != shouldBeToggled)
+                {
+                    if (toggled)
+                    {
+                        LibrarySettings.I.SetNamespaceFolderRootSkipSteps(i + 1);
+                    }
+                    else
+                    {
+                        LibrarySettings.I.SetNamespaceFolderRootSkipSteps(i);
+                        break;
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

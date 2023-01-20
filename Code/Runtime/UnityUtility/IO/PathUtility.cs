@@ -75,7 +75,6 @@ namespace UnityUtility.IO
             if (steps < 0)
                 throw Errors.NegativeParameter(nameof(path));
 
-            string parent = path;
             int maxLength = path.Length;
 
             for (int i = 0; i < steps; i++)
@@ -85,7 +84,7 @@ namespace UnityUtility.IO
                 int j = maxLength - 1;
                 while (j >= 0)
                 {
-                    if (separatorCheck(parent[j]) && !terminator)
+                    if (separatorCheck(path[j]) && !terminator)
                         break;
 
                     terminator = false;
@@ -95,7 +94,7 @@ namespace UnityUtility.IO
                 maxLength = j;
             }
 
-            return parent.Substring(0, maxLength.ClampMin(0));
+            return path.Substring(0, maxLength.ClampMin(0));
         }
 
         private static string SkipRootSteps(string path, int steps, Predicate<char> separatorCheck)

@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.SettingsProviders
         {
             EditorGUILayout.Space();
 
-            EditorGUIUtility.labelWidth = 250f;
+            EditorGUIUtility.labelWidth = SettingsProviderUtility.LABEL_WIDTH;
             if (DrawToggle(PrefsKeys.OPEN_FOLDERS_BY_CLICK, "Open Folders by Double Click"))
                 EditorGUILayout.HelpBox("Folders opening  by double click works only with one column layout of Project window.", MessageType.Info);
             DrawToggle(PrefsKeys.OPEN_SO_ASSETS_CODE_BY_CLICK, "Open ScriptableObject Assets as Code");
