@@ -16,16 +16,6 @@ namespace UnityUtility
     /// </summary>
     public static class RngExtensions
     {
-        public static int Random(this IRng self, in (int minValue, int maxValue) range)
-        {
-            return self.Next(range.minValue, range.maxValue);
-        }
-
-        public static float Random(this IRng self, in (float minValue, float maxValue) range)
-        {
-            return self.Next(range.minValue, range.maxValue);
-        }
-
         public static int Random(this IRng self, in DiapasonInt range)
         {
             return self.Next(range.Min, range.Max);
@@ -268,7 +258,28 @@ namespace UnityUtility
         #endregion
 
         /// <summary>
-        /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values.
+        /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to max values.
+        /// </summary>
+        public static float Ascending(this IRng self, float min, float max)
+        {
+            if (min > max)
+                throw Errors.MinMax(nameof(min), nameof(max));
+
+            float range = max - min;
+            float rnd = self.Next(0f, 1f);
+            return rnd.Sqrt() * range + min;
+        }
+
+        /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to max values.
+        /// </summary>
+        public static float Ascending(this IRng self, in Diapason range)
+        {
+            return Ascending(self, range.Min, range.Max);
+        }
+
+        /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
         /// </summary>
         public static float Descending(this IRng self, float min, float max)
         {
@@ -280,17 +291,9 @@ namespace UnityUtility
             return rnd * rnd * range + min;
         }
 
-        /// <summary>
-        /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to max values.
-        /// </summary>
-        public static float Ascending(this IRng self, float min, float max)
+        public static float Descending(this IRng self, in Diapason range)
         {
-            if (min > max)
-                throw Errors.MinMax(nameof(min), nameof(max));
-
-            float range = max - min;
-            float rnd = self.Next(0f, 1f);
-            return rnd.Sqrt() * range + min;
+            return Descending(self, range.Min, range.Max);
         }
 
         /// <summary>
