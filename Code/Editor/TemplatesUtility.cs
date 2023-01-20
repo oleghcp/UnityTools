@@ -102,15 +102,13 @@ namespace UnityUtilityEditor
             UnityObject selected = Selection.activeObject;
             string selectedPath = selected.GetAssetPath();
 
-            if (selectedPath.IsNullOrEmpty() || selectedPath == "Assets")
-                return "Project";
+            if (selectedPath.IsNullOrEmpty())
+                return "Assets";
 
             if (!selected.IsFolder())
                 selectedPath = PathUtility.GetParentPath(selectedPath);
 
-            return selectedPath.Replace(AssetDatabaseExt.ASSET_FOLDER, string.Empty)
-                               .Replace('/', '.')
-                               .RemoveWhiteSpaces();
+            return selectedPath.Replace('/', '.').RemoveWhiteSpaces();
         }
     }
 }
