@@ -28,6 +28,16 @@ namespace UnityUtility.IO
             return GetParentPath(path, steps, ch => ch == separator);
         }
 
+        public static string SkipRootSteps(string path, int steps = 1)
+        {
+            return SkipRootSteps(path, steps, IsSeparator);
+        }
+
+        public static string SkipRootSteps(string path, char separator, int steps = 1)
+        {
+            return SkipRootSteps(path, steps, ch => ch == separator);
+        }
+
         private static bool IsSeparator(char ch)
         {
             return ch == Path.DirectorySeparatorChar || ch == Path.AltDirectorySeparatorChar;
@@ -86,6 +96,24 @@ namespace UnityUtility.IO
             }
 
             return parent.Substring(0, maxLength.ClampMin(0));
+        }
+
+        private static string SkipRootSteps(string path, int steps, Predicate<char> separatorCheck)
+        {
+            if (steps < 0)
+                throw Errors.NegativeParameter(nameof(path));
+
+            int j = 0;
+            for (int i = 0; i < steps; i++)
+            {
+                while (j < path.Length)
+                {
+                    if (separatorCheck(path[j++]))
+                        break;
+                }
+            }
+
+            return path.Substring(j);
         }
     }
 }
