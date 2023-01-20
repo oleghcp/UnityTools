@@ -100,10 +100,11 @@ namespace UnityUtilityEditor
         private static string GetNameSpace()
         {
             UnityObject selected = Selection.activeObject;
-            string selectedPath = selected.GetAssetPath();
 
-            if (selectedPath.IsNullOrEmpty())
+            if (selected == null)
                 return "Assets";
+
+            string selectedPath = selected.GetAssetPath();
 
             if (!selected.IsFolder())
                 selectedPath = PathUtility.GetParentPath(selectedPath);
