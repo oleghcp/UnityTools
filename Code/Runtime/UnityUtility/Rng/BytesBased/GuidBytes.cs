@@ -9,7 +9,7 @@ namespace UnityUtility.Rng.BytesBased
         private const int EXCL_BYTE_INDEX1 = 8;
 
         private byte[] _bytes;
-        private int _counter;
+        private int _counter = int.MaxValue;
 
         public GuidBytes()
         {
