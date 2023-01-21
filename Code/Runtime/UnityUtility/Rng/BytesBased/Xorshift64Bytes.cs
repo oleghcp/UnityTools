@@ -12,7 +12,7 @@ namespace UnityUtility.Rng.BytesBased
         private readonly int _c;
 
         private byte[] _bytes = new byte[COUNT];
-        private int _counter;
+        private int _counter = int.MaxValue;
         private ulong _num64;
 
         public Xorshift64Bytes() : this(Environment.TickCount)
@@ -34,7 +34,6 @@ namespace UnityUtility.Rng.BytesBased
             _a = a;
             _b = b;
             _c = c;
-            UpdateBytes();
         }
 
         public void GetBytes(byte[] buffer)
