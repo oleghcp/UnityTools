@@ -161,7 +161,7 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns a random flag contains in the specified mask. Returns -1 if mask is empty.
+        /// Returns a random flag index contained in the specified mask. Returns -1 if mask is empty.
         /// </summary>
         /// <param name="length">How many flags of 32bit mask should be considered.</param>
         public static int RandomFlag(this IRng self, int mask, int length)
@@ -181,7 +181,7 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns a random flag contains in the specified mask. Returns -1 if mask is empty.
+        /// Returns a random flag index contained in the specified mask. Returns -1 if mask is empty.
         /// </summary>
         public static int RandomFlag(this IRng self, BitList mask)
         {
@@ -198,64 +198,6 @@ namespace UnityUtility
 
             return -1;
         }
-
-        //TODO: need check of impossible condition
-        #region randoms by condition
-        /// <summary>
-        /// Returns a random integer number between min [inclusive] and max [exclusive] and which is not equal to exclusiveValue.
-        /// </summary>
-        public static int Random(this IRng self, int min, int max, int exclusiveValue)
-        {
-            int value;
-            do { value = self.Next(min, max); }
-            while (value == exclusiveValue);
-            return value;
-        }
-
-        /// <summary>
-        /// Returns a random integer number between min [inclusive] and max [exclusive] and which is satisfies the specified condition.
-        /// </summary>
-        public static int Random(this IRng self, int min, int max, Func<int, bool> condition)
-        {
-            int value;
-            do { value = self.Next(min, max); }
-            while (!condition(value));
-            return value;
-        }
-
-        /// <summary>
-        /// Returns a random float number between min [inclusive] and max [inclusive] and which is satisfies the specified condition.
-        /// </summary>
-        public static float Random(this IRng self, float min, float max, Func<float, bool> condition)
-        {
-            float value;
-            do { value = self.Next(min, max); }
-            while (!condition(value));
-            return value;
-        }
-
-        /// <summary>
-        /// Returns a random flag contains in the specified mask and which is satisfies the specified condition.
-        /// </summary>
-        public static int RandomFlag(this IRng self, int mask, int length, Func<int, bool> condition)
-        {
-            int value;
-            do { value = self.RandomFlag(mask, length); }
-            while (!condition(value));
-            return value;
-        }
-
-        /// <summary>
-        /// Returns a random flag contains in the specified mask and which is satisfies the specified condition.
-        /// </summary>
-        public static int RandomFlag(this IRng self, BitList mask, Func<int, bool> condition)
-        {
-            int value;
-            do { value = self.RandomFlag(mask); }
-            while (!condition(value));
-            return value;
-        }
-        #endregion
 
         /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to max values.
