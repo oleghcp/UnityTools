@@ -209,7 +209,7 @@ namespace UnityUtility
 
             float range = max - min;
             float rnd = self.Next(0f, 1f);
-            return rnd.Sqrt() * range + min;
+            return (1f - rnd * rnd) * range + min;
         }
 
         /// <summary>
