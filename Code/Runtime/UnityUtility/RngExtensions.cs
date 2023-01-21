@@ -213,6 +213,20 @@ namespace UnityUtility
         }
 
         /// <summary>
+        /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to max values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Ascending(this IRng self, float min, float max, float offsetIntensity)
+        {
+            if (min > max)
+                throw Errors.MinMax(nameof(min), nameof(max));
+
+            float range = max - min;
+            float rnd = self.Next(0f, 1f);
+            return (1f - rnd.Pow(offsetIntensity.ClampMin(0f) + 1f)) * range + min;
+        }
+
+        /// <summary>
         /// Returns a random float number within range (min/max inclusive) with chance offset to max values.
         /// </summary>
         public static float Ascending(this IRng self, in Diapason range)
@@ -221,7 +235,16 @@ namespace UnityUtility
         }
 
         /// <summary>
-        /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
+        /// Returns a random float number within range (min/max inclusive) with chance offset to max values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Ascending(this IRng self, in Diapason range, float offsetIntensity)
+        {
+            return Ascending(self, range.Min, range.Max, offsetIntensity);
+        }
+
+        /// <summary>
+        /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values.
         /// </summary>
         public static float Descending(this IRng self, float min, float max)
         {
@@ -233,9 +256,35 @@ namespace UnityUtility
             return rnd * rnd * range + min;
         }
 
+        /// <summary>
+        /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Descending(this IRng self, float min, float max, float offsetIntensity)
+        {
+            if (min > max)
+                throw Errors.MinMax(nameof(min), nameof(max));
+
+            float range = max - min;
+            float rnd = self.Next(0f, 1f);
+            return rnd.Pow(offsetIntensity.ClampMin(0f) + 1f) * range + min;
+        }
+
+        /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
+        /// </summary>
         public static float Descending(this IRng self, in Diapason range)
         {
             return Descending(self, range.Min, range.Max);
+        }
+
+        /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Descending(this IRng self, in Diapason range, float offsetIntensity)
+        {
+            return Descending(self, range.Min, range.Max, offsetIntensity);
         }
 
         /// <summary>
@@ -265,8 +314,8 @@ namespace UnityUtility
 
             if (self.Next(0, 2) == 0)
                 return self.Side(min, average, curvature);
-            else
-                return self.Side(average, max, 1f / curvature);
+
+            return self.Side(average, max, 1f / curvature);
         }
 
         /// <summary>
