@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Inspector;
+using UnityUtility.Mathematics;
 using UnityUtility.NumericEntities;
 using UnityUtilityEditor.Engine;
 
@@ -26,7 +27,23 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-            EditorGui.ErrorLabel(position, label, $"Use {nameof(ClampDiapasonAttribute)} with {nameof(Diapason)} or {nameof(DiapasonInt)}.");
+            if (type == typeof(RngParam))
+            {
+                property.Draw(position, label, true);
+                SerializedProperty rangeProp = property.FindPropertyRelative(RngParam.RangeFieldName);
+                Diapason range = rangeProp.GetDiapasonValue();
+                range.Min = range.Min.Clamp(attribute.Min, attribute.Max);
+                range.Max = range.Max.Clamp(attribute.Min, attribute.Max);
+                rangeProp.SetDiapasonValue(range);
+                return;
+            }
+
+            EditorGui.ErrorLabel(position, label, $"Use {nameof(ClampDiapasonAttribute)} with {nameof(Diapason)} or {nameof(RngParam)}.");
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return property.GetHeight(label);
         }
     }
 }

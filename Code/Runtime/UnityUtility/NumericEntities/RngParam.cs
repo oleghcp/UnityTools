@@ -15,6 +15,11 @@ namespace UnityUtility.NumericEntities
         public RngMode Mode { get => _params.Mode; set => _params.Mode = value; }
         public float Intensity { get => _params.Intensity; set => _params.Intensity = value; }
 
+#if UNITY_EDITOR
+        internal static string RangeFieldName = nameof(_range);
+        internal static string ParamsFieldName = nameof(_params);
+#endif
+
         public RngParam(in Diapason range)
         {
             _range = range;
