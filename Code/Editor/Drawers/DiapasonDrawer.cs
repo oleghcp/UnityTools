@@ -27,6 +27,8 @@ namespace UnityUtilityEditor.Drawers
     {
         private static GUIContent[] _subLabels = { new GUIContent("Min"), new GUIContent("Max") };
 
+        public static GUIContent[] SubLabels => _subLabels;
+
         public static void DrawInt(Rect position, SerializedProperty property, GUIContent label, int min = int.MinValue, int max = int.MaxValue)
         {
             position = EditorGUI.PrefixLabel(position, label);

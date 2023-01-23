@@ -6,6 +6,8 @@ using UnityUtility;
 using UnityUtility.Collections;
 using UnityUtility.CSharp;
 using UnityUtility.Mathematics;
+using UnityUtility.NumericEntities;
+using UnityUtilityEditor.Drawers;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
@@ -13,6 +15,44 @@ namespace UnityUtilityEditor.Engine
 {
     public static class EditorGui
     {
+        public static Diapason DiapasonField(in Rect position, string text, Diapason diapason, float minLimit = float.NegativeInfinity, float maxLimit = float.PositiveInfinity)
+        {
+            return DiapasonField(position, EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit);
+        }
+
+        public static Diapason DiapasonField(in Rect position, GUIContent label, Diapason diapason, float minLimit = float.NegativeInfinity, float maxLimit = float.PositiveInfinity)
+        {
+            Rect rect = EditorGUI.PrefixLabel(position, label);
+
+            float[] array = { diapason.Min, diapason.Max };
+
+            EditorGUI.MultiFloatField(rect, DiapasonDrawerHelper.SubLabels, array);
+
+            diapason.Min = array[0] = array[0].Clamp(minLimit, maxLimit);
+            diapason.Max = array[1].Clamp(array[0], maxLimit);
+
+            return diapason;
+        }
+
+        public static DiapasonInt DiapasonIntField(in Rect position, string text, DiapasonInt diapason, int minLimit = int.MinValue, int maxLimit = int.MaxValue)
+        {
+            return DiapasonIntField(position, EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit);
+        }
+
+        public static DiapasonInt DiapasonIntField(in Rect position, GUIContent label, DiapasonInt diapason, int minLimit = int.MinValue, int maxLimit = int.MaxValue)
+        {
+            Rect rect = EditorGUI.PrefixLabel(position, label);
+
+            int[] array = { diapason.Min, diapason.Max };
+
+            EditorGUI.MultiIntField(rect, DiapasonDrawerHelper.SubLabels, array);
+
+            diapason.Min = array[0] = array[0].Clamp(minLimit, maxLimit);
+            diapason.Max = array[1].Clamp(array[0], maxLimit);
+
+            return diapason;
+        }
+
         public static bool ToggleButton(in Rect position, string text, bool value)
         {
             return ToggleButton(position, text, value, GUI.skin.button);

@@ -1,12 +1,56 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.NumericEntities;
+
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Engine
 {
     public static class EditorGuiLayout
     {
+        public static Diapason DiapasonField(string text, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options)
+        {
+            return DiapasonField(EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit, options);
+        }
+
+        public static Diapason DiapasonField(GUIContent label, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options)
+        {
+            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DiapasonField(position, label, diapason, minLimit, maxLimit);
+        }
+
+        public static Diapason DiapasonField(string text, Diapason diapason, params GUILayoutOption[] options)
+        {
+            return DiapasonField(EditorGuiUtility.TempContent(text), diapason, float.NegativeInfinity, float.PositiveInfinity, options);
+        }
+
+        public static Diapason DiapasonField(GUIContent label, Diapason diapason, params GUILayoutOption[] options)
+        {
+            return DiapasonField(label, diapason, float.NegativeInfinity, float.PositiveInfinity, options);
+        }
+
+        public static DiapasonInt DiapasonIntField(string text, DiapasonInt diapason, int minLimit, int maxLimit, params GUILayoutOption[] options)
+        {
+            return DiapasonIntField(EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit, options);
+        }
+
+        public static DiapasonInt DiapasonIntField(GUIContent label, DiapasonInt diapason, int minLimit, int maxLimit, params GUILayoutOption[] options)
+        {
+            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DiapasonIntField(position, label, diapason, minLimit, maxLimit);
+        }
+
+        public static DiapasonInt DiapasonIntField(string text, DiapasonInt diapason, params GUILayoutOption[] options)
+        {
+            return DiapasonIntField(EditorGuiUtility.TempContent(text), diapason, int.MinValue, int.MaxValue, options);
+        }
+
+        public static DiapasonInt DiapasonIntField(GUIContent label, DiapasonInt diapason, params GUILayoutOption[] options)
+        {
+            return DiapasonIntField(label, diapason, int.MinValue, int.MaxValue, options);
+        }
+
         public static bool ToggleButton(string text, bool value, params GUILayoutOption[] options)
         {
             return ToggleButton(text, value, GUI.skin.button, options);
