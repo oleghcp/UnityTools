@@ -13,8 +13,8 @@ namespace UnityUtility.NumericEntities
         public float Max;
 
 #if UNITY_EDITOR
-        public static string MinFieldName = nameof(Min);
-        public static string MaxFieldName = nameof(Max);
+        internal static string MinFieldName = nameof(Min);
+        internal static string MaxFieldName = nameof(Max);
 #endif
 
         public Diapason(float min, float max)

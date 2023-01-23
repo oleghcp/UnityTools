@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.CSharp;
 using UnityUtility.CSharp.Collections;
+using UnityUtility.NumericEntities;
 
 namespace UnityUtilityEditor.Engine
 {
@@ -244,6 +245,60 @@ namespace UnityUtilityEditor.Engine
             using (SerializedProperty inner = self.FindPropertyRelative(IntMask.FieldName))
             {
                 inner.intValue = (int)value;
+            }
+        }
+
+        public static Diapason GetDiapasonValue(this SerializedProperty self)
+        {
+            return new Diapason(getValue(Diapason.MinFieldName), getValue(Diapason.MaxFieldName));
+
+            float getValue(string fieldName)
+            {
+                using (SerializedProperty inner = self.FindPropertyRelative(fieldName))
+                {
+                    return inner.floatValue;
+                }
+            }
+        }
+
+        public static void SetDiapasonValue(this SerializedProperty self, Diapason value)
+        {
+            setValue(Diapason.MinFieldName, value.Min);
+            setValue(Diapason.MaxFieldName, value.Max);
+
+            void setValue(string fieldName, float fieldValue)
+            {
+                using (SerializedProperty inner = self.FindPropertyRelative(fieldName))
+                {
+                    inner.floatValue = fieldValue;
+                }
+            }
+        }
+
+        public static DiapasonInt GetDiapasonIntValue(this SerializedProperty self)
+        {
+            return new DiapasonInt(getValue(DiapasonInt.MinFieldName), getValue(DiapasonInt.MaxFieldName));
+
+            int getValue(string fieldName)
+            {
+                using (SerializedProperty inner = self.FindPropertyRelative(fieldName))
+                {
+                    return inner.intValue;
+                }
+            }
+        }
+
+        public static void SetDiapasonIntValue(this SerializedProperty self, DiapasonInt value)
+        {
+            setValue(DiapasonInt.MinFieldName, value.Min);
+            setValue(DiapasonInt.MaxFieldName, value.Max);
+
+            void setValue(string fieldName, int fieldValue)
+            {
+                using (SerializedProperty inner = self.FindPropertyRelative(fieldName))
+                {
+                    inner.intValue = fieldValue;
+                }
             }
         }
 
