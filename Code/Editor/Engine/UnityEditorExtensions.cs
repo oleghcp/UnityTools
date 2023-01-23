@@ -351,29 +351,29 @@ namespace UnityUtilityEditor.Engine
             EditorGUI.PropertyField(position, self, label, includeChildren);
         }
 
-        public static void GetHeight(this SerializedProperty self)
+        public static float GetHeight(this SerializedProperty self)
         {
-            EditorGUI.GetPropertyHeight(self);
+            return EditorGUI.GetPropertyHeight(self);
         }
 
-        public static void GetHeight(this SerializedProperty self, GUIContent label)
+        public static float GetHeight(this SerializedProperty self, GUIContent label)
         {
-            EditorGUI.GetPropertyHeight(self, label);
+            return EditorGUI.GetPropertyHeight(self, label);
         }
 
-        public static void GetHeight(this SerializedProperty self, bool includeChildren)
+        public static float GetHeight(this SerializedProperty self, bool includeChildren)
         {
-            EditorGUI.GetPropertyHeight(self, includeChildren);
+            return EditorGUI.GetPropertyHeight(self, includeChildren);
         }
 
-        public static void GetHeight(this SerializedProperty self, GUIContent label, bool includeChildren)
+        public static float GetHeight(this SerializedProperty self, GUIContent label, bool includeChildren)
         {
-            EditorGUI.GetPropertyHeight(self, label, includeChildren);
+            return EditorGUI.GetPropertyHeight(self, label, includeChildren);
         }
 
-        public static void GetHeight(this SerializedProperty self, Predicate<SerializedProperty> ignoreCondition)
+        public static float GetHeight(this SerializedProperty self, Predicate<SerializedProperty> ignoreCondition)
         {
-            EditorGuiUtility.GetDrawHeight(self, ignoreCondition);
+            return EditorGuiUtility.GetDrawHeight(self, ignoreCondition);
         }
         #endregion
     }
