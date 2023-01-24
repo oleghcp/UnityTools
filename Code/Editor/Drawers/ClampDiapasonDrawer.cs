@@ -29,7 +29,7 @@ namespace UnityUtilityEditor.Drawers
 
             if (type == typeof(RngParam))
             {
-                property.Draw(position, label, true);
+                RngParamDrawer.Draw(position, property, label);
                 SerializedProperty rangeProp = property.FindPropertyRelative(RngParam.RangeFieldName);
                 Diapason range = rangeProp.GetDiapasonValue();
                 range.Min = range.Min.Clamp(attribute.Min, attribute.Max);
@@ -43,7 +43,10 @@ namespace UnityUtilityEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return property.GetHeight(label);
+            if (EditorUtilityExt.GetFieldType(this) == typeof(RngParam))
+                return RngParamDrawer.GetHeight(property, label);
+
+            return EditorGUIUtility.singleLineHeight;
         }
     }
 }

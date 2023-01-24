@@ -10,12 +10,22 @@ namespace UnityUtilityEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            Draw(position, property, label);
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return GetHeight(property, label);
+        }
+
+        public static void Draw(in Rect position, SerializedProperty property, GUIContent label)
+        {
             string name = label.text;
             Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
             SerializedProperty rangeProp = property.FindPropertyRelative(RngParam.RangeFieldName);
             Rect contentLineRect = lineRect;
-            contentLineRect.xMin += EditorGUIUtility.labelWidth;
+            contentLineRect.xMin += EditorGUIUtility.labelWidth + EditorGuiUtility.StandardHorizontalSpacing;
             rangeProp.Draw(contentLineRect, EditorGuiUtility.TempContent(string.Empty));
 
             property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, EditorGuiUtility.TempContent(name), true);
@@ -30,7 +40,7 @@ namespace UnityUtilityEditor.Drawers
             EditorGUI.indentLevel--;
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public static float GetHeight(SerializedProperty property, GUIContent label)
         {
             if (property.isExpanded)
                 return property.GetHeight(label, true) - EditorGUIUtility.singleLineHeight - EditorGUIUtility.standardVerticalSpacing;
