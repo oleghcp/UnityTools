@@ -10,7 +10,7 @@ using UnityUtility.Tools;
 namespace UnityUtility.Sound.SoundStuff
 {
     [AddComponentMenu(nameof(UnityUtility) + "/Sound Info")]
-    public sealed class SoundInfo : AudioInfo, IPoolable
+    public sealed class SoundInfo : AudioInfo, IPoolable, IDisposable
     {
         internal object Sender;
 

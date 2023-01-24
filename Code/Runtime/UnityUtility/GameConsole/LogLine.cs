@@ -1,5 +1,4 @@
 ﻿#if INCLUDE_UNITY_UI
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -48,8 +47,6 @@ namespace UnityUtility.GameConsole
             _text.text = string.Empty;
             _info = null;
         }
-
-        void IDisposable.Dispose() { }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {

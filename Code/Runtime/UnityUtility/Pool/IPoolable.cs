@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace UnityUtility.Pool
+﻿namespace UnityUtility.Pool
 {
-    public interface IPoolable : IDisposable
+    public interface IPoolable
     {
         /// <summary>
         /// Called when pool gives an existing object away.

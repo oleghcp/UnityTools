@@ -67,7 +67,7 @@ namespace UnityUtility.Pool
         {
             obj.CleanUp();
             if (!_storage.TryAdd(obj))
-                obj.Dispose();
+                (obj as IDisposable)?.Dispose();
         }
 
         public void Release(IEnumerable<T> range)
@@ -87,7 +87,7 @@ namespace UnityUtility.Pool
             {
                 while (_storage.TryGet(out T value))
                 {
-                    value.Dispose();
+                    (value as IDisposable)?.Dispose();
                 }
                 return;
             }
