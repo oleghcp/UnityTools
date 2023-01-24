@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityUtilityEditor.Engine;
 using static UnityUtility.NumericEntities.RngParam;
 
-namespace Drawers
+namespace UnityUtilityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(Option))]
     internal class RngParamOptionDrawer : PropertyDrawer

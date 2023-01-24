@@ -45,6 +45,16 @@ namespace UnityUtility.NumericEntities
             }
         }
 
+        public static implicit operator RngParam(Diapason value)
+        {
+            return new RngParam(value);
+        }
+
+        public static implicit operator RngParam((float, float) value)
+        {
+            return new RngParam(value);
+        }
+
         public enum RngMode
         {
             Simple,
