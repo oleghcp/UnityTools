@@ -26,6 +26,20 @@ namespace UnityUtility.Shooting
         public LayerMask RicochetMask;
         [Range(0f, 1f)]
         public float SpeedRemainder;
+
+        private int _ricochetsLeft;
+
+        public int RicochetsLeft => _ricochetsLeft;
+
+        internal void ResetRicochets()
+        {
+            _ricochetsLeft = Count;
+        }
+
+        internal void DecreaseCounter()
+        {
+            _ricochetsLeft--;
+        }
     }
 
     [Serializable]

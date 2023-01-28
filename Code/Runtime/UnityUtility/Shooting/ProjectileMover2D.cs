@@ -17,8 +17,6 @@ namespace UnityUtility.Shooting
         private float _moveInInitialFrame;
         [SerializeField]
         private DragOptions _drag;
-        [SerializeField]
-        private RicochetOptions _ricochets;
 
         public bool UseGravity
         {
@@ -32,28 +30,10 @@ namespace UnityUtility.Shooting
             set => _startSpeed = value.ClampMin(0f);
         }
 
-        public int Ricochets
-        {
-            get => _ricochets.Count;
-            set => _ricochets.Count = value.ClampMin(0);
-        }
-
-        public float SpeedRemainder
-        {
-            get => _ricochets.SpeedRemainder;
-            set => _ricochets.SpeedRemainder = value.Clamp01();
-        }
-
         public float MoveInInitialFrame
         {
             get => _moveInInitialFrame;
             set => _moveInInitialFrame = value.Clamp01();
-        }
-
-        public LayerMask RicochetMask
-        {
-            get => _ricochets.RicochetMask;
-            set => _ricochets.RicochetMask = value;
         }
 
         public DragMethod DragMethod
@@ -88,11 +68,11 @@ namespace UnityUtility.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        public (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius)
+        public (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius, float speedRemainder)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
             Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
-            float distanceAfterHit = Vector2.Distance(hitPosition, dest) * _ricochets.SpeedRemainder;
+            float distanceAfterHit = Vector2.Distance(hitPosition, dest) * speedRemainder;
 
             return (hitPosition + newDirection * distanceAfterHit, newDirection);
         }

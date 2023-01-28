@@ -1,5 +1,6 @@
 ﻿#if INCLUDE_PHYSICS_2D
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Engine;
@@ -20,9 +21,11 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autoFlippingX = true;
         [SerializeField]
+        private ProjectileCaster _casting;
+        [SerializeField]
         private ProjectileMover2D _moving;
         [SerializeField]
-        private ProjectileCaster _casting;
+        private List<RicochetOptions> _ricochets;
 
         private IRotationProvider _rotationProvider;
         private ITimeProvider _timeProvider;
@@ -31,7 +34,6 @@ namespace UnityUtility.Shooting
 
         private bool _isPlaying;
         private float _currentTime;
-        private int _ricochetsLeft;
         private Vector2 _prevPos;
         private Vector2 _prevVelocity;
         private float _prevSpeed;
@@ -42,7 +44,7 @@ namespace UnityUtility.Shooting
         public bool IsPlaying => _isPlaying;
         public float Speed => _speed;
         public Vector2 PrevPos => _prevPos;
-        public int RicochetsLeft => _ricochetsLeft;
+        internal List<RicochetOptions> Ricochets => _ricochets;
 
         public float Timer
         {
@@ -81,28 +83,10 @@ namespace UnityUtility.Shooting
             set => _moving.StartSpeed = value;
         }
 
-        public int Ricochets
-        {
-            get => _moving.Ricochets;
-            set => _moving.Ricochets = value;
-        }
-
-        public float SpeedRemainder
-        {
-            get => _moving.SpeedRemainder;
-            set => _moving.SpeedRemainder = value;
-        }
-
         public float MoveInInitialFrame
         {
             get => _moving.MoveInInitialFrame;
             set => _moving.MoveInInitialFrame = value;
-        }
-
-        public LayerMask RicochetMask
-        {
-            get => _moving.RicochetMask;
-            set => _moving.RicochetMask = value;
         }
 
         public DragMethod DragMethod
@@ -200,10 +184,7 @@ namespace UnityUtility.Shooting
             }
 #endif
 
-            LayerMask mask = LayerMask.GetMask("Default");
-            _moving.RicochetMask = mask;
-            _moving.SpeedRemainder = 1f;
-            _casting.HitMask = mask;
+            _casting.HitMask = LayerMask.GetMask("Default");
             _casting.ReflectedCastNear = 0.1f;
         }
 #endif
@@ -252,7 +233,10 @@ namespace UnityUtility.Shooting
         private void PlayInternal(in Vector3 currentDirection)
         {
             _isPlaying = true;
-            _ricochetsLeft = _moving.Ricochets;
+            foreach (RicochetOptions item in _ricochets)
+            {
+                item.ResetRicochets();
+            }
 
             Vector3 currentPosition = transform.position;
 
@@ -298,23 +282,26 @@ namespace UnityUtility.Shooting
 
                 if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    if (_ricochetsLeft > 0 && _moving.RicochetMask.HasLayer(_hitInfo.GetLayer()))
+                    foreach (RicochetOptions ricochetOption in _ricochets)
                     {
-                        _ricochetsLeft--;
+                        if (ricochetOption.RicochetsLeft > 0 && ricochetOption.RicochetMask.HasLayer(_hitInfo.GetLayer()))
+                        {
+                            ricochetOption.DecreaseCounter();
 
-                        UpdatePrevState();
-                        var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius);
-                        _velocity = reflectionInfo.newDir * (_speed * _moving.SpeedRemainder);
-                        _speed = _velocity.magnitude;
+                            UpdatePrevState();
+                            var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius, ricochetOption.SpeedRemainder);
+                            _velocity = reflectionInfo.newDir * (_speed * ricochetOption.SpeedRemainder);
+                            _speed = _velocity.magnitude;
 
-                        _listener?.OnReflect(_hitInfo, _prevVelocity, _prevSpeed);
+                            _listener?.OnReflect(_hitInfo, _prevVelocity, _prevSpeed);
 
-                        float near = _casting.ReflectedCastNear;
-                        Vector2 from = near == 0f ? _hitInfo.point
-                                                  : Vector2.LerpUnclamped(_hitInfo.point, reflectionInfo.newDest, near);
+                            float near = _casting.ReflectedCastNear;
+                            Vector2 from = near == 0f ? _hitInfo.point
+                                                      : Vector2.LerpUnclamped(_hitInfo.point, reflectionInfo.newDest, near);
 
-                        CheckMovement(from, reflectionInfo.newDest, out newSource, out newDest);
-                        return;
+                            CheckMovement(from, reflectionInfo.newDest, out newSource, out newDest);
+                            return;
+                        }
                     }
 
                     _isPlaying = false;
