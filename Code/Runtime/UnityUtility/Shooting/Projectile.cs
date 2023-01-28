@@ -1,5 +1,6 @@
 ﻿#if INCLUDE_PHYSICS
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
@@ -30,6 +31,8 @@ namespace UnityUtility.Shooting
         private float _currentTime;
         private int _ricochetsLeft;
         private Vector3 _prevPos;
+        private Vector3 _prevVelocity;
+        private float _prevSpeed;
         private Vector3 _velocity;
         private float _speed;
         private RaycastHit _hitInfo;
@@ -301,6 +304,7 @@ namespace UnityUtility.Shooting
 
             if (_isPlaying)
             {
+                UpdatePrevState();
                 Vector3 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
                 _speed = _velocity.magnitude;
                 CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
@@ -324,11 +328,12 @@ namespace UnityUtility.Shooting
                     {
                         _ricochetsLeft--;
 
+                        UpdatePrevState();
                         var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius);
                         _velocity = reflectionInfo.newDir * (_speed * _moving.SpeedRemainder);
                         _speed = _velocity.magnitude;
 
-                        _listener?.OnReflect(_hitInfo);
+                        _listener?.OnReflect(_hitInfo, _prevVelocity, _prevSpeed);
 
                         float near = _casting.ReflectedCastNear;
                         Vector3 from = near == 0f ? _hitInfo.point
@@ -350,14 +355,23 @@ namespace UnityUtility.Shooting
             newDest = dest;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void UpdatePrevState()
+        {
+            _prevVelocity = _velocity;
+            _prevSpeed = _speed;
+        }
+
         private void InvokeHit()
         {
-            _currentTime = 0f;
-
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _listener?.OnHit(_hitInfo);
+            _currentTime = 0f;
+            _velocity = default;
+            _speed = 0f;
+
+            _listener?.OnHit(_hitInfo, _prevVelocity, _prevSpeed);
         }
 
         private void InvokeTimeOut()
