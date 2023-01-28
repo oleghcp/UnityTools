@@ -20,7 +20,7 @@ namespace UnityUtilityEditor.Configs
         public void SetNamespaceFolderRootSkipSteps(int steps)
         {
             if (steps < 0)
-                Errors.NegativeParameter(nameof(steps));
+                throw Errors.NegativeParameter(nameof(steps));
 
             _namespaceFolderRootSkipSteps = steps;
             File.WriteAllText(GetPath(), JsonUtility.ToJson(this, true));
