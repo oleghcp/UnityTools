@@ -233,9 +233,12 @@ namespace UnityUtility.Shooting
         private void PlayInternal(in Vector3 currentDirection)
         {
             _isPlaying = true;
-            foreach (RicochetOptions item in _ricochets)
+
+            for (int i = 0; i < _ricochets.Count; i++)
             {
-                item.ResetRicochets();
+                RicochetOptions option = _ricochets[i];
+                option.ResetRicochets();
+                _ricochets[i] = option;
             }
 
             Vector3 currentPosition = transform.position;
@@ -282,11 +285,14 @@ namespace UnityUtility.Shooting
 
                 if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    foreach (RicochetOptions ricochetOption in _ricochets)
+                    for (int i = 0; i < _ricochets.Count; i++)
                     {
+                        RicochetOptions ricochetOption = _ricochets[i];
+
                         if (ricochetOption.RicochetsLeft > 0 && ricochetOption.RicochetMask.HasLayer(_hitInfo.GetLayer()))
                         {
                             ricochetOption.DecreaseCounter();
+                            _ricochets[i] = ricochetOption;
 
                             UpdatePrevState();
                             var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius, ricochetOption.SpeedRemainder);

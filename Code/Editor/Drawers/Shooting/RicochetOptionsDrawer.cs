@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
         {
             SerializedProperty countProp = property.FindPropertyRelative(nameof(RicochetOptions.Count));
             SerializedProperty maskProp = property.FindPropertyRelative(nameof(RicochetOptions.RicochetMask));
-            SerializedProperty remainderProp = property.FindPropertyRelative(nameof(RicochetOptions.SpeedRemainder));
+            SerializedProperty lossProp = property.FindPropertyRelative(nameof(RicochetOptions.SpeedLoss));
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
@@ -32,7 +32,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
                 linePos = EditorGuiUtility.GetLinePosition(position, 1);
                 EditorGUI.PropertyField(linePos, maskProp);
                 linePos = EditorGuiUtility.GetLinePosition(position, 2);
-                EditorGUI.PropertyField(linePos, remainderProp);
+                EditorGUI.PropertyField(linePos, lossProp);
             }
         }
 
