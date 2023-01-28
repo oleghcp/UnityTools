@@ -23,21 +23,32 @@ namespace UnityUtility.Shooting
     [Serializable]
     internal struct RicochetOptions
     {
-        public int Count;
-        public LayerMask RicochetMask;
-        [Range(0f, 1f)]
-        public float SpeedLoss;
+        [SerializeField]
+        private int _count;
+        [SerializeField]
+        private LayerMask _ricochetMask;
+        [SerializeField, Range(0f, 1f)]
+        private float _speedLoss;
 
         private int _ricochetsLeft;
 
+#if UNITY_EDITOR
+        public static string CountFieldName => nameof(_count);
+        public static string MaskFieldName => nameof(_ricochetMask);
+        public static string LossFieldName => nameof(_speedLoss);
+#endif
+
         internal float SpeedRemainder => 1f - SpeedLoss;
+        public int Count => _count;
+        public LayerMask RicochetMask => _ricochetMask;
+        public float SpeedLoss => _speedLoss;
         public int RicochetsLeft => _ricochetsLeft;
 
         public RicochetOptions(LayerMask mask, int count, float speedLoss)
         {
-            Count = count;
-            RicochetMask = mask;
-            SpeedLoss = speedLoss.Clamp01();
+            _count = count;
+            _ricochetMask = mask;
+            _speedLoss = speedLoss.Clamp01();
             _ricochetsLeft = count;
         }
 

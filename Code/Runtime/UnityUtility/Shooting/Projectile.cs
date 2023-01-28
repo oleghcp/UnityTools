@@ -1,10 +1,10 @@
 ﻿#if INCLUDE_PHYSICS
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
+using UnityUtility.Tools;
 
 namespace UnityUtility.Shooting
 {
@@ -23,7 +23,7 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private ProjectileMover _moving;
         [SerializeField]
-        private List<RicochetOptions> _ricochets;
+        private RicochetOptions[] _ricochets;
 
         private IRotationProvider _rotationProvider;
         private ITimeProvider _timeProvider;
@@ -42,7 +42,7 @@ namespace UnityUtility.Shooting
         public bool IsPlaying => _isPlaying;
         public float Speed => _speed;
         public Vector3 PrevPos => _prevPos;
-        internal List<RicochetOptions> Ricochets => _ricochets;
+        internal RicochetOptions[] Ricochets => _ricochets;
 
         public float Timer
         {
@@ -247,15 +247,24 @@ namespace UnityUtility.Shooting
             _velocity = default;
         }
 
+        public void SetRicochetOptionsCount(int count)
+        {
+            if (count < 0)
+                throw Errors.NegativeParameter(nameof(count));
+
+            if (count == _ricochets.Length)
+                return;
+
+            Array.Resize(ref _ricochets, count);
+        }
+
         private void PlayInternal(in Vector3 currentDirection)
         {
             _isPlaying = true;
 
-            for (int i = 0; i < _ricochets.Count; i++)
+            for (int i = 0; i < _ricochets.Length; i++)
             {
-                RicochetOptions option = _ricochets[i];
-                option.ResetRicochets();
-                _ricochets[i] = option;
+                _ricochets[i].ResetRicochets();
             }
 
             Vector3 currentPosition = transform.position;
@@ -311,14 +320,13 @@ namespace UnityUtility.Shooting
 
                 if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    for (int i = 0; i < _ricochets.Count; i++)
+                    for (int i = 0; i < _ricochets.Length; i++)
                     {
-                        RicochetOptions ricochetOption = _ricochets[i];
+                        ref RicochetOptions ricochetOption = ref _ricochets[i];
 
                         if (ricochetOption.RicochetsLeft > 0 && ricochetOption.RicochetMask.HasLayer(_hitInfo.GetLayer()))
                         {
                             ricochetOption.DecreaseCounter();
-                            _ricochets[i] = ricochetOption;
 
                             UpdatePrevState();
                             var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius, ricochetOption.SpeedRemainder);

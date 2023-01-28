@@ -12,9 +12,9 @@ namespace UnityUtilityEditor.Drawers.Shooting
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty countProp = property.FindPropertyRelative(nameof(RicochetOptions.Count));
-            SerializedProperty maskProp = property.FindPropertyRelative(nameof(RicochetOptions.RicochetMask));
-            SerializedProperty lossProp = property.FindPropertyRelative(nameof(RicochetOptions.SpeedLoss));
+            SerializedProperty countProp = property.FindPropertyRelative(RicochetOptions.CountFieldName);
+            SerializedProperty maskProp = property.FindPropertyRelative(RicochetOptions.MaskFieldName);
+            SerializedProperty lossProp = property.FindPropertyRelative(RicochetOptions.LossFieldName);
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
@@ -38,7 +38,7 @@ namespace UnityUtilityEditor.Drawers.Shooting
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.FindPropertyRelative(nameof(RicochetOptions.Count)).intValue != 0)
+            if (property.FindPropertyRelative(RicochetOptions.CountFieldName).intValue != 0)
                 return EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing * 2f;
 
             return EditorGUIUtility.singleLineHeight;
