@@ -16,14 +16,24 @@ namespace UnityUtility
     /// </summary>
     public static class RngExtensions
     {
-        public static int Random(this IRng self, in DiapasonInt range)
+        public static int Next(this IRng self, in DiapasonInt range)
         {
             return self.Next(range.Min, range.Max);
         }
 
-        public static float Random(this IRng self, in Diapason range)
+        public static float Next(this IRng self, in Diapason range)
         {
             return self.Next(range.Min, range.Max);
+        }
+
+        public static int Next(this IRng self, in (int min, int max) range)
+        {
+            return self.Next(range.min, range.max);
+        }
+
+        public static float Next(this IRng self, in (float min, float max) range)
+        {
+            return self.Next(range.min, range.max);
         }
 
         /// <summary>
@@ -223,6 +233,15 @@ namespace UnityUtility
         }
 
         /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to max values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Ascending(this IRng self, in (float min, float max) range, float offsetIntensity)
+        {
+            return Ascending(self, range.min, range.max, offsetIntensity);
+        }
+
+        /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
@@ -246,6 +265,15 @@ namespace UnityUtility
         }
 
         /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Descending(this IRng self, in (float min, float max) range, float offsetIntensity)
+        {
+            return Descending(self, range.min, range.max, offsetIntensity);
+        }
+
+        /// <summary>
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min and max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
@@ -262,6 +290,15 @@ namespace UnityUtility
         public static float MinMax(this IRng self, in Diapason range, float offsetIntensity)
         {
             return MinMax(self, range.Min, range.Max, offsetIntensity);
+        }
+
+        /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to min and max values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float MinMax(this IRng self, in (float min, float max) range, float offsetIntensity)
+        {
+            return MinMax(self, range.min, range.max, offsetIntensity);
         }
 
         /// <summary>
@@ -284,6 +321,15 @@ namespace UnityUtility
         }
 
         /// <summary>
+        /// Returns a random float number within range (min/max inclusive) with chance offset to average values.
+        /// </summary>
+        /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
+        public static float Average(this IRng self, in (float min, float max) range, float offsetIntensity)
+        {
+            return Average(self, range.min, range.max, offsetIntensity);
+        }
+
+        /// <summary>
         /// Returns a random even integer number between min [inclusive] and max [exclusive].
         /// </summary>
         public static int RandomEven(this IRng self, int min, int max)
@@ -297,6 +343,22 @@ namespace UnityUtility
             }
 
             return self.Next(min, max) & -2;
+        }
+
+        /// <summary>
+        /// Returns a random even integer number within range (min [inclusive] and max [exclusive]).
+        /// </summary>
+        public static int RandomEven(this IRng self, in DiapasonInt range)
+        {
+            return RandomEven(self, range.Min, range.Max);
+        }
+
+        /// <summary>
+        /// Returns a random even integer number within range (min [inclusive] and max [exclusive]).
+        /// </summary>
+        public static int RandomEven(this IRng self, in (int min, int max) range)
+        {
+            return RandomEven(self, range.min, range.max);
         }
 
         /// <summary>
@@ -315,6 +377,22 @@ namespace UnityUtility
             }
 
             return self.Next(min, max) | 1;
+        }
+
+        /// <summary>
+        /// Returns a random odd integer number within range (min [inclusive] and max [exclusive]).
+        /// </summary>
+        public static int RandomOdd(this IRng self, in DiapasonInt range)
+        {
+            return RandomOdd(self, range.Min, range.Max);
+        }
+
+        /// <summary>
+        /// Returns a random odd integer number within range (min [inclusive] and max [exclusive]).
+        /// </summary>
+        public static int RandomOdd(this IRng self, in (int min, int max) range)
+        {
+            return RandomOdd(self, range.min, range.max);
         }
 
         /// <summary>
