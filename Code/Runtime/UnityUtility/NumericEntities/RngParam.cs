@@ -36,7 +36,7 @@ namespace UnityUtility.NumericEntities
         {
             switch (_params.Mode)
             {
-                case RngMode.Simple: return rng.Random(_range);
+                case RngMode.Simple: return rng.Next(_range);
                 case RngMode.Ascending: return rng.Ascending(_range, _params.Intensity);
                 case RngMode.Descending: return rng.Descending(_range, _params.Intensity);
                 case RngMode.MinMax: return rng.MinMax(_range, _params.Intensity);
