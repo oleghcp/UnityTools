@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UnityUtility.Engine
 {
-    public static class GetComponentExtensions
+    public static class GetOrAddComponentExtensions
     {
 #if !UNITY_2021_2_OR_NEWER
         public static T GetComponentInParent<T>(this Component self, bool includeInactive)
@@ -30,30 +30,40 @@ namespace UnityUtility.Engine
             return default;
         }
 
-        public static T GetComponentInChildren<T>(this Component self, bool includeInactive)
+        public static Component GetComponentInParent(this Component self, Type type, bool includeInactive)
         {
-            return self.transform.GetComponentInChildren<T>(includeInactive);
+            return self.transform.GetComponentInParent(type, includeInactive);
         }
 
-        public static T GetComponentInChildren<T>(this GameObject self, bool includeInactive)
+        public static Component GetComponentInParent(this GameObject self, Type type, bool includeInactive)
         {
-            return self.transform.GetComponentInChildren<T>(includeInactive);
+            return self.transform.GetComponentInParent(type, includeInactive);
         }
 
-        public static T GetComponentInChildren<T>(this Transform self, bool includeInactive)
+        public static Component GetComponentInParent(this Transform self, Type type, bool includeInactive)
         {
             if (!includeInactive)
-                return self.GetComponentInChildren<T>();
+                return self.GetComponentInParent(type);
 
-            foreach (Transform child in self.EnumerateChildren(true))
+            for (Transform p = self; p != null; p = p.parent)
             {
-                if (child.TryGetComponent(out T component))
+                if (p.TryGetComponent(type, out Component component))
                     return component;
             }
 
             return default;
         }
 #endif
+
+        public static Component AddComponent(this Component self, Type type)
+        {
+            return self.gameObject.AddComponent(type);
+        }
+
+        public static T AddComponent<T>(this Component self) where T : Component
+        {
+            return self.gameObject.AddComponent<T>();
+        }
 
         /// <summary>
         /// Returns existing component or adds and returns new one.
