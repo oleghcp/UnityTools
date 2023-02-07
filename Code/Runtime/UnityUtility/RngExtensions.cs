@@ -502,5 +502,37 @@ namespace UnityUtility
                                self.Next(min.y, max.y),
                                self.Next(min.z, max.z));
         }
+
+        public static string GetAlphanumeric(this IRng self, int length)
+        {
+            if (length < 0)
+                throw new Exception();
+
+            if (length == 0)
+                return string.Empty;
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            const int stackLenCup = 512;
+
+#if UNITY_2021_2_OR_NEWER
+            Span<char> charArray = length > stackLenCup ? new char[length] : stackalloc char[length];
+            for (int i = 0; i < length; i++) { charArray[i] = chars[self.Next(chars.Length)]; }
+            return new string(charArray);
+#else
+            if (length > stackLenCup)
+            {
+                char[] charArray = new char[length];
+                for (int i = 0; i < length; i++) { charArray[i] = chars[self.Next(chars.Length)]; }
+                return new string(charArray);
+            }
+
+            unsafe
+            {
+                char* charArray = stackalloc char[length];
+                for (int i = 0; i < length; i++) { charArray[i] = chars[self.Next(chars.Length)]; }
+                return new string(charArray);
+            }
+#endif
+        }
     }
 }
