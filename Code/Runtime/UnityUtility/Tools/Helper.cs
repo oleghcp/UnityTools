@@ -6,6 +6,36 @@ namespace UnityUtility.Tools
 {
     public static class Helper
     {
+        public static string GetDateTimeString()
+        {
+            return GetDateTimeString(DateTime.Now);
+        }
+
+        public static string GetDateTimeString(in DateTime dateTime)
+        {
+            return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}";
+        }
+
+        public static string GetDateTimeStringWithSeconds()
+        {
+            return GetDateTimeStringWithSeconds(DateTime.Now);
+        }
+
+        public static string GetDateTimeStringWithSeconds(in DateTime dateTime)
+        {
+            return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}.{dateTime.Second:D2}";
+        }
+
+        public static string GetDateTimeStringWithMilliseconds()
+        {
+            return GetDateTimeStringWithMilliseconds(DateTime.Now);
+        }
+
+        public static string GetDateTimeStringWithMilliseconds(in DateTime dateTime)
+        {
+            return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}.{dateTime.Second:D2}_{dateTime.Millisecond:D3}";
+        }
+
         public static void Swap<T>(ref T a, ref T b)
         {
             (b, a) = (a, b);
