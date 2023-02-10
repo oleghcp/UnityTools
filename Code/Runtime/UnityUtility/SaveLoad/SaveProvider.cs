@@ -190,15 +190,6 @@ namespace UnityUtility.SaveLoad
         }
 
         /// <summary>
-        /// Saves all registered data.
-        /// </summary>
-        public void Save()
-        {
-            Collect();
-            _saver.SaveLastVersion();
-        }
-
-        /// <summary>
         /// Saves all registered data asynchronously.
         /// </summary>
         public TaskInfo SaveAsync(string version, int stepsPerFrame)
@@ -207,31 +198,32 @@ namespace UnityUtility.SaveLoad
 
             IEnumerator getRoutine(int spf)
             {
-                yield return GetCollectRountine(spf).StartAsync();
+                int counter = 0;
+
+                foreach (var (fieldsOwner, aList) in _fields)
+                {
+                    for (int i = 0; i < aList.Count; i++)
+                    {
+                        _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+
+                        if (++counter >= stepsPerFrame)
+                        {
+                            counter = 0;
+                            yield return null;
+                        }
+                    }
+                }
+
                 yield return _saver.SaveVersionAsync(version, spf);
             }
         }
 
         /// <summary>
-        /// Saves all registered data asynchronously.
+        /// Delete saved data.
         /// </summary>
-        public TaskInfo SaveAsync(int stepsPerFrame)
+        public void Delete(string version)
         {
-            return getRoutine(stepsPerFrame.ClampMin(1)).StartAsync();
-
-            IEnumerator getRoutine(int spf)
-            {
-                yield return GetCollectRountine(spf).StartAsync();
-                yield return _saver.SaveLastVersionAsync(spf);
-            }
-        }
-
-        /// <summary>
-        /// Clears current storage.
-        /// </summary>
-        public void Clear()
-        {
-            _saver.Clear();
+            _saver.DeleteVersion(version);
         }
 
         private void Collect()
@@ -241,25 +233,6 @@ namespace UnityUtility.SaveLoad
                 for (int i = 0; i < aList.Count; i++)
                 {
                     _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
-                }
-            }
-        }
-
-        private IEnumerator GetCollectRountine(int stepsPerFrame)
-        {
-            int counter = 0;
-
-            foreach (var (fieldsOwner, aList) in _fields)
-            {
-                for (int i = 0; i < aList.Count; i++)
-                {
-                    _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
-
-                    if (++counter >= stepsPerFrame)
-                    {
-                        counter = 0;
-                        yield return null;
-                    }
                 }
             }
         }

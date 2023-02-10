@@ -9,13 +9,10 @@ namespace UnityUtility.SaveLoad
         void Set(string key, object value);
         object Get(string key, object defaltValue);
         object Get(string key, Type type);
-        void Clear();
 
         bool LoadVersion(string version);
         bool DeleteVersion(string version);
-        void SaveLastVersion();
         void SaveVersion(string version);
-        TaskInfo SaveLastVersionAsync(int keysPerFrame);
         TaskInfo SaveVersionAsync(string version, int keysPerFrame);
     }
 

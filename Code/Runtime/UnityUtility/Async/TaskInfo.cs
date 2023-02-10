@@ -96,7 +96,10 @@ namespace UnityUtility.Async
             return IsAliveInternal();
         }
 
-        void IEnumerator.Reset() { }
+        void IEnumerator.Reset()
+        {
+            throw new NotImplementedException();
+        }
 
         public static bool operator ==(TaskInfo a, TaskInfo b)
         {
