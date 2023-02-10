@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp;
 using UnityUtility.IO;
+using UnityUtility.Tools;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
@@ -12,6 +14,12 @@ namespace UnityUtilityEditor
     {
         public const string CONTEXT_MENU_NAME = "CONTEXT/";
         public const string RESET_ITEM_NAME = "Reset";
+
+        [MenuItem(LibConstants.LIB_NAME + "/About", false, 1)]
+        private static void GetAboutWindow()
+        {
+            EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
+        }
 
         [MenuItem(LibConstants.LIB_NAME + "/Objects/Meshes/Create Rect Plane")]
         private static void GetCreateRectPlaneWizard()
@@ -100,11 +108,18 @@ namespace UnityUtilityEditor
             EditorWindow.GetWindow<AddressablesAnalysisResultsWindow>(false, "Analysis Results", true);
         }
 #endif
-
-        [MenuItem(LibConstants.LIB_NAME + "/About", false, 1)]
-        private static void GetAboutWindow()
+        [MenuItem(LibConstants.LIB_NAME + "/Capture Screen/Take Screenshot")]
+        private static void Screenshot()
         {
-            EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
+            ScreenCapture.CaptureScreenshot($"Screenshot_{Helper.GetDateTimeString()}.png");
+        }
+
+        [MenuItem(LibConstants.LIB_NAME + "/Capture Screen/Take Screenshot as")]
+        private static void ScreenshotAs()
+        {
+            string path = EditorUtility.SaveFilePanel("Take Screenshot", Application.dataPath, $"Screenshot_{Helper.GetDateTimeString()}", "png");
+            if (path.HasUsefulData())
+                ScreenCapture.CaptureScreenshot(path);
         }
     }
 }
