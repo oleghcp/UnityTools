@@ -170,12 +170,15 @@ namespace UnityUtility.SaveLoad
             _fields.Clear();
         }
 
-        public bool LoadVersion(string version)
+        public bool Load(string version)
         {
             return _saver.LoadVersion(version);
         }
 
-        public bool DeleteVersion(string version)
+        /// <summary>
+        /// Delete saved data.
+        /// </summary>
+        public bool Delete(string version)
         {
             return _saver.DeleteVersion(version);
         }
@@ -216,14 +219,6 @@ namespace UnityUtility.SaveLoad
 
                 yield return _saver.SaveVersionAsync(version, spf);
             }
-        }
-
-        /// <summary>
-        /// Delete saved data.
-        /// </summary>
-        public void Delete(string version)
-        {
-            _saver.DeleteVersion(version);
         }
 
         private void Collect()
