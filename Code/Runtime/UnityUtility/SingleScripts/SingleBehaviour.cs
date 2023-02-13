@@ -23,7 +23,11 @@ namespace UnityUtility.SingleScripts
             {
                 if (_instance == null)
                 {
+#if UNITY_2020_1_OR_NEWER
+                    T instance = FindObjectOfType<T>(true);
+#else
                     T instance = FindObjectOfType<T>();
+#endif
 
                     if (instance == null)
                         throw new ObjectNotFoundException($"There is no any instance of {typeof(T).Name}.");
