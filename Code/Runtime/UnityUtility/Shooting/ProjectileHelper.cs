@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
+using System;
 using UnityUtility.CSharp;
 using UnityUtility.Tools;
 
@@ -32,3 +33,4 @@ namespace UnityUtility.Shooting
         }
     }
 }
+#endif

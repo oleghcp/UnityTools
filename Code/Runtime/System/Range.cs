@@ -2,7 +2,7 @@
 // Analogue of real System.Range from .net core library. //
 ///////////////////////////////////////////////////////////
 
-#if !UNITY_2021_2_OR_NEWER
+#if UNITY_2020_2_OR_NEWER && !UNITY_2021_2_OR_NEWER
 namespace System
 {
     /// <summary>Represent a range has start and end indexes.</summary>
