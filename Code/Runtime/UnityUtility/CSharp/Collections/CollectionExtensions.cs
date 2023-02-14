@@ -209,8 +209,20 @@ namespace UnityUtility.CSharp.Collections
         /// </summary>
         public static T[] GetSubArray<T>(this IList<T> self, int startIndex, int length)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
+            if ((uint)startIndex >= (uint)self.Count)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (length == 0)
+                return Array.Empty<T>();
+
             T[] subArray = new T[length];
-            for (int i = 0; i < length; i++) { subArray[i] = self[i + startIndex]; }
+            for (int i = 0; i < length; i++)
+            {
+                subArray[i] = self[i + startIndex];
+            }
             return subArray;
         }
 

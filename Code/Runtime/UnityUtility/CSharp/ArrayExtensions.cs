@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections;
 using UnityUtility.CSharp.Collections.Iterators;
 using UnityUtility.Tools;
 
@@ -138,6 +137,15 @@ namespace UnityUtility.CSharp
         /// </summary>
         public static T[] GetSubArray<T>(this T[] self, int startIndex, int length)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
+            if ((uint)startIndex >= (uint)self.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (length == 0)
+                return Array.Empty<T>();
+
             T[] subArray = new T[length];
             Array.Copy(self, startIndex, subArray, 0, length);
             return subArray;
@@ -156,6 +164,12 @@ namespace UnityUtility.CSharp
         /// </summary>
         public static T[] GetCopy<T>(this T[] self)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
+            if (self.Length == 0)
+                return self;
+
             T[] copy = new T[self.Length];
             self.CopyTo(copy, 0);
             return copy;
