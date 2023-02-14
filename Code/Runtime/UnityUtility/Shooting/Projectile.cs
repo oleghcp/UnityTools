@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Engine;
 using UnityUtility.Mathematics;
-using UnityUtility.Tools;
 
 namespace UnityUtility.Shooting
 {
@@ -249,13 +248,17 @@ namespace UnityUtility.Shooting
 
         public void SetRicochetOptionsCount(int count)
         {
-            if (count < 0)
-                throw Errors.NegativeParameter(nameof(count));
+            ProjectileHelper.SetRicochetOptionsCount(ref _ricochets, count);
+        }
 
-            if (count == _ricochets.Length)
-                return;
+        public void AddRicochetOptions(in RicochetOptions options)
+        {
+            ProjectileHelper.AddRicochetOptions(ref _ricochets, options);
+        }
 
-            Array.Resize(ref _ricochets, count);
+        public void RemoveRicochetOptionsAt(int index)
+        {
+            ProjectileHelper.RemoveRicochetOptionsAt(ref _ricochets, index);
         }
 
         private void PlayInternal(in Vector3 currentDirection)
