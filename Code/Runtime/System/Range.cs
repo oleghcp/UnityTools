@@ -2,6 +2,9 @@
 // Analogue of real System.Range from .net core library. //
 ///////////////////////////////////////////////////////////
 
+//Doesn't work without System.Runtime.CompilerServices.RuntimeHelpers
+//Unfortunately copied RuntimeHelpers class doesn't work with Unity assembly definitions
+/*
 #if UNITY_2020_2_OR_NEWER && !UNITY_2021_2_OR_NEWER
 namespace System
 {
@@ -110,3 +113,4 @@ namespace System
     }
 }
 #endif
+*/
