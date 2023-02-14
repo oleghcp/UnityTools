@@ -21,7 +21,7 @@ namespace UnityUtility.Shooting
     }
 
     [Serializable]
-    internal struct RicochetOptions
+    public struct RicochetOptions
     {
         [SerializeField]
         private int _count;
@@ -38,18 +38,33 @@ namespace UnityUtility.Shooting
         public static string LossFieldName => nameof(_speedLoss);
 #endif
 
-        internal float SpeedRemainder => 1f - SpeedLoss;
-        public int Count => _count;
-        public LayerMask RicochetMask => _ricochetMask;
-        public float SpeedLoss => _speedLoss;
-        public int RicochetsLeft => _ricochetsLeft;
+        public LayerMask RicochetMask
+        {
+            get => _ricochetMask;
+            set => _ricochetMask = value;
+        }
+
+        public int Count
+        {
+            get => _count;
+            set => _count = value.ClampMin(0);
+        }
+
+        public float SpeedLoss
+        {
+            get => _speedLoss;
+            set => _speedLoss = value.Clamp01();
+        }
+
+        internal float SpeedRemainder => 1f - _speedLoss;
+        internal int RicochetsLeft => _ricochetsLeft;
 
         public RicochetOptions(LayerMask mask, int count, float speedLoss)
         {
-            _count = count;
             _ricochetMask = mask;
+            _count = count.ClampMin(0);
             _speedLoss = speedLoss.Clamp01();
-            _ricochetsLeft = count;
+            _ricochetsLeft = 0;
         }
 
         internal void ResetRicochets()

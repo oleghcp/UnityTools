@@ -42,7 +42,7 @@ namespace UnityUtility.Shooting
         public bool IsPlaying => _isPlaying;
         public float Speed => _speed;
         public Vector3 PrevPos => _prevPos;
-        internal RicochetOptions[] Ricochets => _ricochets;
+        public RicochetOptions[] Ricochets => _ricochets;
 
         public float Timer
         {
