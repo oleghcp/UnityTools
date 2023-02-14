@@ -257,7 +257,7 @@ namespace UnityUtility.Shooting
 
             _prevPos = currentPosition + currentDirection * _casting.InitialPrecastOffset;
             _speed = _moving.StartSpeed;
-            _velocity = currentDirection * _speed;
+            _velocity = currentDirection.XY() * _speed;
 
             if (_moving.MoveInInitialFrame > 0f)
             {
