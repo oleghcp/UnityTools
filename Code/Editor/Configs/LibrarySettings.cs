@@ -9,6 +9,8 @@ namespace UnityUtilityEditor.Configs
     [Serializable]
     internal class LibrarySettings
     {
+        private const string FILE_PATH = AssetDatabaseExt.USER_SETTINGS_FOLDER + nameof(UnityUtility) + "Settings.json";
+
         [SerializeField]
         private int _namespaceFolderRootSkipSteps;
 
@@ -34,14 +36,16 @@ namespace UnityUtilityEditor.Configs
 
         private static void Save(LibrarySettings instance)
         {
-            File.WriteAllText(GetPath(), JsonUtility.ToJson(instance, true));
+            if (!Directory.Exists(AssetDatabaseExt.USER_SETTINGS_FOLDER))
+                Directory.CreateDirectory(AssetDatabaseExt.USER_SETTINGS_FOLDER);
+
+            string json = JsonUtility.ToJson(instance, true);
+            File.WriteAllText(FILE_PATH, json);
         }
 
         private static LibrarySettings Load()
         {
-            string settingsPath = GetPath();
-
-            if (!File.Exists(settingsPath))
+            if (!File.Exists(FILE_PATH))
             {
                 var instance = new LibrarySettings();
                 Save(instance);
@@ -49,14 +53,9 @@ namespace UnityUtilityEditor.Configs
             }
             else
             {
-                string json = File.ReadAllText(settingsPath);
+                string json = File.ReadAllText(FILE_PATH);
                 return JsonUtility.FromJson<LibrarySettings>(json);
             }
-        }
-
-        private static string GetPath()
-        {
-            return $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}{nameof(UnityUtility)}Settings.json";
         }
     }
 }

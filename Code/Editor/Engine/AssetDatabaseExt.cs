@@ -16,6 +16,7 @@ namespace UnityUtilityEditor.Engine
     {
         public const string ASSET_FOLDER = "Assets/";
         public const string PROJECT_SETTINGS_FOLDER = "ProjectSettings/";
+        public const string USER_SETTINGS_FOLDER = "UserSettings/";
         public const string LIBRARY_FOLDER = "Library/";
         public const string ASSET_EXTENSION = ".asset";
         public const string PREFAB_EXTENSION = ".prefab";
