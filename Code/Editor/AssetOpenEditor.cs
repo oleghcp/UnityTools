@@ -2,6 +2,7 @@
 using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityUtilityEditor.Engine;
+using UnityUtilityEditor.Configs;
 #if UNITY_2019_3_OR_NEWER
 using UnityUtility.NodeBased;
 using UnityUtilityEditor.Window;
@@ -10,9 +11,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
 {
+#pragma warning disable IDE0051
     internal static class AssetOpenEditor
     {
-#pragma warning disable IDE0051
         [OnOpenAsset]
         private static bool OpenScriptableObjectClass(int instanceID, int _)
         {
@@ -25,13 +26,13 @@ namespace UnityUtilityEditor
                 return true;
             }
 #endif
-            if (obj is ScriptableObject scriptableObject && EditorPrefs.GetBool(PrefsKeys.OPEN_SO_ASSETS_CODE_BY_CLICK))
+            if (obj is ScriptableObject scriptableObject && LibrarySettings.OpenScriptableAssetsAsCode)
             {
                 EditorUtilityExt.OpenScriptableObjectCode(scriptableObject);
                 return true;
             }
 
-            if (ProjectWindowUtil.IsFolder(instanceID) && EditorPrefs.GetBool(PrefsKeys.OPEN_FOLDERS_BY_CLICK))
+            if (ProjectWindowUtil.IsFolder(instanceID) && LibrarySettings.OpenFoldersByDoubleClick)
             {
                 EditorUtilityExt.OpenFolder(obj.GetAssetPath());
                 return true;

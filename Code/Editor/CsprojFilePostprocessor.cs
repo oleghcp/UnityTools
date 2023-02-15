@@ -1,17 +1,16 @@
 ﻿using System.Xml.Linq;
 using UnityEditor;
+using UnityUtilityEditor.Configs;
 
 namespace UnityUtilityEditor
 {
     public class CsprojFilePostprocessor : AssetPostprocessor
     {
-        public const string DEFAULT_WARNING = "CS0649";
-
         public static string OnGeneratedCSProject(string path, string content)
         {
             XDocument document = XDocument.Parse(content);
 
-            string warns = EditorPrefs.GetString(PrefsKeys.SUPPRESSED_WARNINGS_IN_IDE, DEFAULT_WARNING);
+            string warns = LibrarySettings.SuppressedWarningsInIde;
             XName xName = document.Root.GetDefaultNamespace() + "NoWarn";
 
             foreach (XElement element in document.Root.Elements())
