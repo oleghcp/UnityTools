@@ -100,22 +100,27 @@ namespace UnityUtilityEditor
 
         private static string GetNameSpace()
         {
-            const string defaultNamespace = "Assets";
             UnityObject selected = Selection.activeObject;
 
             if (selected == null)
-                return defaultNamespace;
+                return "Assets";
 
-            string selectedPath = selected.GetAssetPath();
+            string targetPath = selected.GetAssetPath();
 
             if (!selected.IsFolder())
-                selectedPath = PathUtility.GetParentPath(selectedPath);
+                targetPath = PathUtility.GetParentPath(targetPath);
 
             int steps = LibrarySettings.I.NamespaceFolderRootSkipSteps;
-            string targetNamespace = PathUtility.SkipRootSteps(selectedPath, steps)
-                                                .Replace('/', '.')
-                                                .RemoveWhiteSpaces();
-            return targetNamespace.IsNullOrEmpty() ? defaultNamespace : targetNamespace;
+            string trimmedPath = PathUtility.SkipRootSteps(targetPath, steps);
+
+            return trimmedPath.HasAnyData() ? pathToNamespace(trimmedPath)
+                                            : pathToNamespace(targetPath);
+
+            string pathToNamespace(string path)
+            {
+                return path.Replace('/', '.')
+                           .RemoveWhiteSpaces();
+            }
         }
     }
 }
