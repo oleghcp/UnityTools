@@ -289,7 +289,7 @@ namespace UnityUtility.Engine
         /// <summary>
         /// Returns a rotation that rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis.
         /// </summary>
-        public static Quaternion ToEuler(this in Vector3 value)
+        public static Quaternion ToEulerRotation(this in Vector3 value)
         {
             return Quaternion.Euler(value);
         }
