@@ -110,7 +110,7 @@ namespace UnityUtilityEditor
             if (!selected.IsFolder())
                 targetPath = PathUtility.GetParentPath(targetPath);
 
-            int steps = LibrarySettings.I.NamespaceFolderRootSkipSteps;
+            int steps = LibrarySettings.NamespaceFolderRootSkipSteps;
             string trimmedPath = PathUtility.SkipRootSteps(targetPath, steps);
 
             return trimmedPath.HasAnyData() ? pathToNamespace(trimmedPath)

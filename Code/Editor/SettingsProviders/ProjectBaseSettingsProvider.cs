@@ -33,7 +33,7 @@ namespace UnityUtilityEditor.SettingsProviders
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Namespace Root Folder", GUILayout.Width(SettingsProviderUtility.LABEL_WIDTH));
 
-            int c = LibrarySettings.I.NamespaceFolderRootSkipSteps + 1;
+            int c = LibrarySettings.NamespaceFolderRootSkipSteps + 1;
             for (int i = 0; i < c; i++)
             {
                 string text = i == 0 ? "Assets" : "...";
@@ -45,11 +45,11 @@ namespace UnityUtilityEditor.SettingsProviders
                 {
                     if (toggled)
                     {
-                        LibrarySettings.I.SetNamespaceFolderRootSkipSteps(i + 1);
+                        LibrarySettings.SetNamespaceFolderRootSkipSteps(i + 1);
                     }
                     else
                     {
-                        LibrarySettings.I.SetNamespaceFolderRootSkipSteps(i);
+                        LibrarySettings.SetNamespaceFolderRootSkipSteps(i);
                         break;
                     }
                 }

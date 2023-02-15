@@ -9,35 +9,49 @@ namespace UnityUtilityEditor.Configs
     [Serializable]
     internal class LibrarySettings
     {
-        private static LibrarySettings _instance;
-
         [SerializeField]
         private int _namespaceFolderRootSkipSteps;
 
-        public static LibrarySettings I => _instance ?? (_instance = GetSetting());
-        public int NamespaceFolderRootSkipSteps => _namespaceFolderRootSkipSteps;
+        private static LibrarySettings _instance;
 
-        public void SetNamespaceFolderRootSkipSteps(int steps)
+        public static int NamespaceFolderRootSkipSteps => Get()._namespaceFolderRootSkipSteps;
+
+        public static void SetNamespaceFolderRootSkipSteps(int steps)
         {
             if (steps < 0)
                 throw Errors.NegativeParameter(nameof(steps));
 
-            _namespaceFolderRootSkipSteps = steps;
-            File.WriteAllText(GetPath(), JsonUtility.ToJson(this, true));
+            LibrarySettings instance = Get();
+
+            instance._namespaceFolderRootSkipSteps = steps;
+            Save(instance);
         }
 
-        private static LibrarySettings GetSetting()
+        private static LibrarySettings Get()
+        {
+            return _instance ?? (_instance = Load());
+        }
+
+        private static void Save(LibrarySettings instance)
+        {
+            File.WriteAllText(GetPath(), JsonUtility.ToJson(instance, true));
+        }
+
+        private static LibrarySettings Load()
         {
             string settingsPath = GetPath();
 
             if (!File.Exists(settingsPath))
             {
-                File.Create(settingsPath);
-                return new LibrarySettings();
+                var instance = new LibrarySettings();
+                Save(instance);
+                return instance;
             }
-
-            string json = File.ReadAllText(settingsPath);
-            return JsonUtility.FromJson<LibrarySettings>(json);
+            else
+            {
+                string json = File.ReadAllText(settingsPath);
+                return JsonUtility.FromJson<LibrarySettings>(json);
+            }
         }
 
         private static string GetPath()
