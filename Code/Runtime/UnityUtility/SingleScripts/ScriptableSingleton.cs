@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityUtility.Engine;
+using UnityUtility.Tools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -19,7 +21,7 @@ namespace UnityUtility.SingleScripts
                 if (_instance == null)
                 {
                     if (!CreateInstanceAttribute.TryUse(out _instance))
-                        _instance = CreateInstance<T>();
+                        CreateInstance<T>();
                 }
 
                 return _instance;
@@ -30,5 +32,41 @@ namespace UnityUtility.SingleScripts
         /// Returns true if the instance is not null.
         /// </summary>
         public static bool Exists => _instance != null;
+
+        private void OnEnable()
+        {
+            if (_instance != null)
+            {
+                if (this != _instance)
+                    DebugErrors.MultipleInstancesMessage<T>();
+
+                return;
+            }
+
+            Construct();
+            _instance = this as T;
+        }
+
+        private void OnDisable()
+        {
+            _instance = null;
+            Destruct();
+        }
+
+        public void Dispose()
+        {
+            this.Destroy();
+            _instance = null;
+        }
+
+        /// <summary>
+        /// Used it instead of Awake.
+        /// </summary>
+        protected abstract void Construct();
+
+        /// <summary>
+        /// Used it instead of OnDestroy.
+        /// </summary>
+        protected abstract void Destruct();
     }
 }
