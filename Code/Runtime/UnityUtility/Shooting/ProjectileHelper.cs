@@ -24,7 +24,7 @@ namespace UnityUtility.Shooting
         public static void RemoveRicochetOptionsAt(ref RicochetOptions[] array, int index)
         {
             if ((uint)index >= (uint)array.Length)
-                throw Errors.IndexOutOfRange();
+                throw ThrowErrors.IndexOutOfRange();
 
             if (index < array.Length - 1)
                 array[index] = array.FromEnd(0);

@@ -20,7 +20,7 @@ namespace UnityUtility.NumericEntities
         public Diapason(float min, float max)
         {
             if (min > max)
-                throw Errors.MinMax(nameof(min), nameof(max));
+                throw ThrowErrors.MinMax(nameof(min), nameof(max));
 
             Min = min;
             Max = max;

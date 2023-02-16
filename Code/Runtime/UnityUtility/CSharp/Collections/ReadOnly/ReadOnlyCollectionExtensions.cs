@@ -78,7 +78,7 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
         public static T GetRandomItem_<T>(this IReadOnlyList<T> self, IRng generator)
         {
             if (self.Count == 0)
-                throw Errors.NoElements();
+                throw ThrowErrors.NoElements();
 
             return self[generator.Next(self.Count)];
         }
@@ -95,7 +95,7 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
                 count++;
             }
 
-            throw Errors.NoElements();
+            throw ThrowErrors.NoElements();
         }
 
         public static bool IsNullOrEmpty_<T>(this IReadOnlyCollection<T> self)
@@ -135,7 +135,7 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
         public static void CopyTo_<T>(this IReadOnlyList<T> self, Span<T> target, int index) where T : unmanaged
         {
             if ((uint)index >= (uint)target.Length)
-                throw Errors.IndexOutOfRange();
+                throw ThrowErrors.IndexOutOfRange();
 
             int count = Math.Min(self.Count, target.Length - index);
             for (int i = 0; i < count; i++)

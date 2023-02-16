@@ -31,7 +31,7 @@ namespace System
         public static T Min<T>(Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
-                throw Errors.NoElements();
+                throw ThrowErrors.NoElements();
 
             T num = span[0];
 
@@ -47,7 +47,7 @@ namespace System
         public static T Max<T>(Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
-                throw Errors.NoElements();
+                throw ThrowErrors.NoElements();
 
             T num = span[0];
 

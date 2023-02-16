@@ -34,7 +34,7 @@ namespace System
         public Span(void* ptr, int length)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _ptr = (T*)ptr;
             _length = ptr == null ? 0 : length;

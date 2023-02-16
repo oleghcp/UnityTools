@@ -19,7 +19,7 @@ namespace UnityUtility.NumericEntities
             set
             {
                 if (value < 0f)
-                    throw Errors.NegativeParameter(nameof(Capacity));
+                    throw ThrowErrors.NegativeParameter(nameof(Capacity));
 
                 _capacity = value;
 
@@ -43,7 +43,7 @@ namespace UnityUtility.NumericEntities
         public SpendingFloat(float capacity)
         {
             if (capacity < 0f)
-                throw Errors.NegativeParameter(nameof(capacity));
+                throw ThrowErrors.NegativeParameter(nameof(capacity));
 
             _curValue = _capacity = capacity;
         }
@@ -51,7 +51,7 @@ namespace UnityUtility.NumericEntities
         public void Spend(float delta)
         {
             if (delta < 0f)
-                throw Errors.NegativeParameter(nameof(delta));
+                throw ThrowErrors.NegativeParameter(nameof(delta));
 
             _curValue -= delta;
         }
@@ -65,7 +65,7 @@ namespace UnityUtility.NumericEntities
         public void Restore(float delta)
         {
             if (delta < 0f)
-                throw Errors.NegativeParameter(nameof(delta));
+                throw ThrowErrors.NegativeParameter(nameof(delta));
 
             _curValue = (_curValue + delta).ClampMax(_capacity);
         }

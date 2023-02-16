@@ -2,7 +2,7 @@
 
 namespace UnityUtility.Tools
 {
-    internal static class Errors
+    internal static class ThrowErrors
     {
         public static NotSupportedException ReadOnlyBitList()
         {

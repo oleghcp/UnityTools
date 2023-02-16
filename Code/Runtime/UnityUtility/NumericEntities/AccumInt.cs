@@ -20,7 +20,7 @@ namespace UnityUtility.NumericEntities
         public AccumInt(int got, int spent)
         {
             if (spent > got)
-                throw Errors.MinMax(nameof(spent), nameof(got));
+                throw ThrowErrors.MinMax(nameof(spent), nameof(got));
 
             _got = got;
             _spent = spent;
@@ -29,7 +29,7 @@ namespace UnityUtility.NumericEntities
         public void Add(int addValue)
         {
             if (addValue < 0)
-                throw Errors.NegativeParameter(nameof(addValue));
+                throw ThrowErrors.NegativeParameter(nameof(addValue));
 
             checked { _got += addValue; }
         }
@@ -37,7 +37,7 @@ namespace UnityUtility.NumericEntities
         public bool Spend(int spendValue)
         {
             if (spendValue < 0)
-                throw Errors.NegativeParameter(nameof(spendValue));
+                throw ThrowErrors.NegativeParameter(nameof(spendValue));
 
             if (spendValue <= Value)
             {
@@ -91,7 +91,7 @@ namespace UnityUtility.NumericEntities
         public static AccumInt operator +(AccumInt value1, int value2)
         {
             if (value2 < 0)
-                throw Errors.NegativeParameter(nameof(value2));
+                throw ThrowErrors.NegativeParameter(nameof(value2));
 
             checked { value1._got += value2; }
             return value1;
@@ -100,7 +100,7 @@ namespace UnityUtility.NumericEntities
         public static AccumInt operator -(AccumInt value1, int value2)
         {
             if (value2 < 0)
-                throw Errors.NegativeParameter(nameof(value2));
+                throw ThrowErrors.NegativeParameter(nameof(value2));
 
             checked { value1._spent += value2; }
             return value1;

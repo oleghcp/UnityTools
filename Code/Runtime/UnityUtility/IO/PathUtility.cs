@@ -73,7 +73,7 @@ namespace UnityUtility.IO
         private static string GetParentPath(string path, int steps, Predicate<char> separatorCheck)
         {
             if (steps < 0)
-                throw Errors.NegativeParameter(nameof(path));
+                throw ThrowErrors.NegativeParameter(nameof(path));
 
             int maxLength = path.Length;
 
@@ -100,7 +100,7 @@ namespace UnityUtility.IO
         private static string SkipRootSteps(string path, int steps, Predicate<char> separatorCheck)
         {
             if (steps < 0)
-                throw Errors.NegativeParameter(nameof(path));
+                throw ThrowErrors.NegativeParameter(nameof(path));
 
             int j = 0;
             for (int i = 0; i < steps; i++)

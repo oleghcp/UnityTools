@@ -182,7 +182,7 @@ namespace UnityUtility.GameConsole
         public void SetCommands(TerminalCommands commands)
         {
             if (commands == null)
-                throw Errors.NullParameter(nameof(commands));
+                throw ThrowErrors.NullParameter(nameof(commands));
 
             _cmdContainer = commands;
             _commands = _cmdContainer.GetType()
@@ -194,7 +194,7 @@ namespace UnityUtility.GameConsole
         public void SetSwitchTrigger(ITerminalSwitchTrigger switchTrigger)
         {
             if (switchTrigger == null)
-                throw Errors.NullParameter(nameof(switchTrigger));
+                throw ThrowErrors.NullParameter(nameof(switchTrigger));
 
             _switchTrigger = switchTrigger;
         }
@@ -202,7 +202,7 @@ namespace UnityUtility.GameConsole
         public void SetOptions(TerminalOptions options)
         {
             if (options == null)
-                throw Errors.NullParameter(nameof(options));
+                throw ThrowErrors.NullParameter(nameof(options));
 
             _options = options;
         }

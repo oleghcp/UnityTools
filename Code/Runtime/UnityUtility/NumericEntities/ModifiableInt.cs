@@ -41,7 +41,7 @@ namespace UnityUtility.NumericEntities
         public ModifiableInt(int pureValue, int minValue, int maxValue, bool cachingModifiedValue)
         {
             if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw ThrowErrors.MinMax(nameof(minValue), nameof(maxValue));
 
             _cachingModifiedValue = cachingModifiedValue;
             _min = minValue;
@@ -76,7 +76,7 @@ namespace UnityUtility.NumericEntities
                 return;
             }
 
-            throw Errors.ContainsModifier();
+            throw ThrowErrors.ContainsModifier();
         }
 
         public void RemoveModifier(IModifier<int> modifier)
@@ -99,7 +99,7 @@ namespace UnityUtility.NumericEntities
         public void Resize(int minValue, int maxValue)
         {
             if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw ThrowErrors.MinMax(nameof(minValue), nameof(maxValue));
 
             _min = minValue;
             _max = maxValue;

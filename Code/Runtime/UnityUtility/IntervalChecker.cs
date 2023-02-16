@@ -19,7 +19,7 @@ namespace UnityUtility
             set
             {
                 if (value <= 0f)
-                    throw Errors.ZeroParameter(nameof(value));
+                    throw ThrowErrors.ZeroParameter(nameof(value));
 
                 _interval = value;
             }
@@ -42,7 +42,7 @@ namespace UnityUtility
         public IntervalChecker(float interval)
         {
             if (interval < 0f)
-                throw Errors.NegativeParameter(nameof(interval));
+                throw ThrowErrors.NegativeParameter(nameof(interval));
 
             _interval = interval;
             _currentValue = 0f;
@@ -51,7 +51,7 @@ namespace UnityUtility
         public IntervalChecker(float interval, float startValue)
         {
             if (interval < 0f)
-                throw Errors.NegativeParameter(nameof(interval));
+                throw ThrowErrors.NegativeParameter(nameof(interval));
 
             _interval = interval;
             _currentValue = startValue.ClampMax(interval);
@@ -60,7 +60,7 @@ namespace UnityUtility
         public bool HardCheckDelta(float deltaValue)
         {
             if (deltaValue < 0f)
-                throw Errors.NegativeParameter(nameof(deltaValue));
+                throw ThrowErrors.NegativeParameter(nameof(deltaValue));
 
             return HardCheckValue(_currentValue + deltaValue);
         }
@@ -80,7 +80,7 @@ namespace UnityUtility
         public bool SmoothCheckDelta(float deltaValue)
         {
             if (deltaValue < 0f)
-                throw Errors.NegativeParameter(nameof(deltaValue));
+                throw ThrowErrors.NegativeParameter(nameof(deltaValue));
 
             return SmoothCheckValue(_currentValue + deltaValue);
         }

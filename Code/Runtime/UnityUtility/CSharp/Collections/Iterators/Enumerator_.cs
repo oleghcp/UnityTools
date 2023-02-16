@@ -82,7 +82,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
         public bool MoveNext()
         {
             if (Changed())
-                throw Errors.CollectionChanged();
+                throw ThrowErrors.CollectionChanged();
 
             if ((uint)_index < (uint)_count)
             {
@@ -99,7 +99,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
         void IEnumerator.Reset()
         {
             if (Changed())
-                throw Errors.CollectionChanged();
+                throw ThrowErrors.CollectionChanged();
 
             _index = 0;
             _current = default;

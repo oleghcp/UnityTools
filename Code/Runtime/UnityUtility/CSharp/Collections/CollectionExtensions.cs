@@ -269,7 +269,7 @@ namespace UnityUtility.CSharp.Collections
         public static void CopyTo<T>(this IList<T> self, Span<T> target, int index) where T : unmanaged
         {
             if ((uint)index >= (uint)target.Length)
-                throw Errors.IndexOutOfRange();
+                throw ThrowErrors.IndexOutOfRange();
 
             int count = Math.Min(self.Count, target.Length - index);
             for (int i = 0; i < count; i++)
@@ -295,7 +295,7 @@ namespace UnityUtility.CSharp.Collections
         public static T GetRandomItem<T>(this IList<T> self, IRng generator)
         {
             if (self.Count == 0)
-                throw Errors.NoElements();
+                throw ThrowErrors.NoElements();
 
             return self[generator.Next(self.Count)];
         }
@@ -312,13 +312,13 @@ namespace UnityUtility.CSharp.Collections
                 count++;
             }
 
-            throw Errors.NoElements();
+            throw ThrowErrors.NoElements();
         }
 
         public static T PullOutRandomItem<T>(this IList<T> self, IRng generator)
         {
             if (self.Count == 0)
-                throw Errors.NoElements();
+                throw ThrowErrors.NoElements();
 
             return self.PullOut(generator.Next(self.Count));
         }
@@ -365,7 +365,7 @@ namespace UnityUtility.CSharp.Collections
         public static T Pop<T>(this IList<T> self)
         {
             if (self.Count == 0)
-                throw Errors.NoElements();
+                throw ThrowErrors.NoElements();
 
             return self.PullOut(self.Count - 1);
         }

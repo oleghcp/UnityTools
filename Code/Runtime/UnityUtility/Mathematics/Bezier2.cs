@@ -18,7 +18,7 @@ namespace UnityUtility.Mathematics
         public Bezier2(Vector2[] points)
         {
             if (points.IsNullOrEmpty())
-                throw Errors.InvalidArrayArgument(nameof(points));
+                throw ThrowErrors.InvalidArrayArgument(nameof(points));
 
             _points = points;
         }

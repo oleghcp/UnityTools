@@ -71,7 +71,7 @@ namespace UnityUtility.Collections
         public ITrackerNode AddNodeBasedOnPrev(Action onChangedCallback)
         {
             if (_nodes.Count == 0)
-                throw Errors.EmptyTraker();
+                throw ThrowErrors.EmptyTraker();
 
             return _nodes.Place(new PrevDependentNode(onChangedCallback, _nodes.FromEnd(0)));
         }
@@ -79,7 +79,7 @@ namespace UnityUtility.Collections
         public ITrackerNode AddNodeBasedOnPrev<T>(Action<T> onChangedCallback)
         {
             if (_nodes.Count == 0)
-                throw Errors.EmptyTraker();
+                throw ThrowErrors.EmptyTraker();
 
             return _nodes.Place(new DependentNodeWithValue<T>(onChangedCallback, _nodes.FromEnd(0)));
         }

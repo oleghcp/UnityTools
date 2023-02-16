@@ -32,7 +32,7 @@ namespace UnityUtility.SaveLoad
         public SaveProvider(ISaver saver)
         {
             if (saver == null)
-                throw Errors.NullParameter(nameof(saver));
+                throw ThrowErrors.NullParameter(nameof(saver));
 
             _saver = saver;
             _keyGenerator = new BaseKeyGenerator();
@@ -47,10 +47,10 @@ namespace UnityUtility.SaveLoad
         public SaveProvider(ISaver saver, IKeyGenerator keyGenerator)
         {
             if (saver == null)
-                throw Errors.NullParameter(nameof(saver));
+                throw ThrowErrors.NullParameter(nameof(saver));
 
             if (keyGenerator == null)
-                throw Errors.NullParameter(nameof(keyGenerator));
+                throw ThrowErrors.NullParameter(nameof(keyGenerator));
 
             _saver = saver;
             _keyGenerator = keyGenerator;
@@ -59,7 +59,7 @@ namespace UnityUtility.SaveLoad
         public void ReplaceSaver(ISaver saver)
         {
             if (saver == null)
-                throw Errors.NullParameter(nameof(saver));
+                throw ThrowErrors.NullParameter(nameof(saver));
 
             _saver = saver;
         }
@@ -82,7 +82,7 @@ namespace UnityUtility.SaveLoad
         public void RegMember(object fieldsOwner, string ownerId, bool initFields = true)
         {
             if (fieldsOwner == null)
-                throw Errors.NullParameter(nameof(fieldsOwner));
+                throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
             Type t = fieldsOwner.GetType();
             FieldInfo[] fields = t.GetFields(FIELD_MASK);
@@ -123,7 +123,7 @@ namespace UnityUtility.SaveLoad
         public void UnregMember(object fieldsOwner, UnregOption option = UnregOption.None)
         {
             if (fieldsOwner == null)
-                throw Errors.NullParameter(nameof(fieldsOwner));
+                throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
             if (!_fields.Remove(fieldsOwner, out var aList))
                 return;

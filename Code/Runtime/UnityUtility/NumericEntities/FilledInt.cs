@@ -19,7 +19,7 @@ namespace UnityUtility.NumericEntities
             set
             {
                 if (value < 0)
-                    throw Errors.NegativeParameter(nameof(Threshold));
+                    throw ThrowErrors.NegativeParameter(nameof(Threshold));
 
                 _threshold = value;
             }
@@ -35,7 +35,7 @@ namespace UnityUtility.NumericEntities
         public FilledInt(int threshold)
         {
             if (threshold < 0)
-                throw Errors.NegativeParameter(nameof(threshold));
+                throw ThrowErrors.NegativeParameter(nameof(threshold));
 
             _threshold = threshold;
             _filler = 0;
@@ -44,7 +44,7 @@ namespace UnityUtility.NumericEntities
         public void Fill(int delta)
         {
             if (delta < 0)
-                throw Errors.NegativeParameter(nameof(delta));
+                throw ThrowErrors.NegativeParameter(nameof(delta));
 
             _filler += delta;
         }
@@ -58,7 +58,7 @@ namespace UnityUtility.NumericEntities
         public void Remove(int delta)
         {
             if (delta < 0)
-                throw Errors.NegativeParameter(nameof(delta));
+                throw ThrowErrors.NegativeParameter(nameof(delta));
 
             _filler = _filler.ClampMax(_threshold);
             _filler -= delta.ClampMax(_filler);

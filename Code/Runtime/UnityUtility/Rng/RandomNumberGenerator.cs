@@ -12,7 +12,7 @@ namespace UnityUtility.Rng
         public int Next(int minValue, int maxValue)
         {
             if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw ThrowErrors.MinMax(nameof(minValue), nameof(maxValue));
 
             return NextInternal(minValue, maxValue);
         }
@@ -20,7 +20,7 @@ namespace UnityUtility.Rng
         public int Next(int maxValue)
         {
             if (maxValue < 0)
-                throw Errors.NegativeParameter(nameof(maxValue));
+                throw ThrowErrors.NegativeParameter(nameof(maxValue));
 
             if (maxValue == 0)
                 return 0;
@@ -31,7 +31,7 @@ namespace UnityUtility.Rng
         public float Next(float minValue, float maxValue)
         {
             if (minValue > maxValue)
-                throw Errors.MinMax(nameof(minValue), nameof(maxValue));
+                throw ThrowErrors.MinMax(nameof(minValue), nameof(maxValue));
 
             return NextInternal(minValue, maxValue);
         }
@@ -39,7 +39,7 @@ namespace UnityUtility.Rng
         public float Next(float maxValue)
         {
             if (maxValue < 0f)
-                throw Errors.NegativeParameter(nameof(maxValue));
+                throw ThrowErrors.NegativeParameter(nameof(maxValue));
 
             return NextInternal(0f, maxValue);
         }

@@ -21,7 +21,7 @@ namespace UnityUtility
             const int bitsInLong = 64;
 
             if (radix < 2 || radix > SYMBOLS.Length)
-                throw Errors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
+                throw ThrowErrors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
 
             if (decimalNumber == 0)
                 return "0";
@@ -57,7 +57,7 @@ namespace UnityUtility
         public static long ParseStringCustomRadixToDecimal(string number, int radix)
         {
             if (radix < 2 || radix > SYMBOLS.Length)
-                throw Errors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
+                throw ThrowErrors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
 
             if (number.IsNullOrEmpty())
                 return 0;

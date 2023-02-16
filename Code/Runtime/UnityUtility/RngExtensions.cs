@@ -216,7 +216,7 @@ namespace UnityUtility
         public static float Ascending(this IRng self, float min, float max, float offsetIntensity)
         {
             if (min > max)
-                throw Errors.MinMax(nameof(min), nameof(max));
+                throw ThrowErrors.MinMax(nameof(min), nameof(max));
 
             float range = max - min;
             float rnd = self.Next(0f, 1f);
@@ -248,7 +248,7 @@ namespace UnityUtility
         public static float Descending(this IRng self, float min, float max, float offsetIntensity)
         {
             if (min > max)
-                throw Errors.MinMax(nameof(min), nameof(max));
+                throw ThrowErrors.MinMax(nameof(min), nameof(max));
 
             float range = max - min;
             float rnd = self.Next(0f, 1f);
@@ -337,7 +337,7 @@ namespace UnityUtility
             if (min % 2 != 0)
             {
                 if (max - min < 2)
-                    throw Errors.RangeDoesNotContain("even");
+                    throw ThrowErrors.RangeDoesNotContain("even");
 
                 min++;
             }
@@ -369,11 +369,11 @@ namespace UnityUtility
             if (min % 2 == 0)
             {
                 if (min == max)
-                    throw Errors.RangeDoesNotContain("odd");
+                    throw ThrowErrors.RangeDoesNotContain("odd");
             }
             else if (max - min < 2)
             {
-                throw Errors.RangeDoesNotContain("odd");
+                throw ThrowErrors.RangeDoesNotContain("odd");
             }
 
             return self.Next(min, max) | 1;

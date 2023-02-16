@@ -21,7 +21,7 @@ namespace UnityUtility.NumericEntities
         public AccumFloat(float got, float spent)
         {
             if (spent > got)
-                throw Errors.MinMax(nameof(spent), nameof(got));
+                throw ThrowErrors.MinMax(nameof(spent), nameof(got));
 
             _got = got;
             _spent = spent;
@@ -30,7 +30,7 @@ namespace UnityUtility.NumericEntities
         public void Add(float addValue)
         {
             if (addValue < 0f)
-                throw Errors.NegativeParameter(nameof(addValue));
+                throw ThrowErrors.NegativeParameter(nameof(addValue));
 
             _got += addValue;
         }
@@ -38,7 +38,7 @@ namespace UnityUtility.NumericEntities
         public bool Spend(float spendValue)
         {
             if (spendValue < 0f)
-                throw Errors.NegativeParameter(nameof(spendValue));
+                throw ThrowErrors.NegativeParameter(nameof(spendValue));
 
             if (spendValue <= Value)
             {
@@ -92,7 +92,7 @@ namespace UnityUtility.NumericEntities
         public static AccumFloat operator +(AccumFloat value1, float value2)
         {
             if (value2 < 0f)
-                throw Errors.NegativeParameter(nameof(value2));
+                throw ThrowErrors.NegativeParameter(nameof(value2));
 
             value1._got += value2;
             return value1;
@@ -101,7 +101,7 @@ namespace UnityUtility.NumericEntities
         public static AccumFloat operator -(AccumFloat value1, float value2)
         {
             if (value2 < 0f)
-                throw Errors.NegativeParameter(nameof(value2));
+                throw ThrowErrors.NegativeParameter(nameof(value2));
 
             value1._spent += value2;
             return value1;

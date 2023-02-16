@@ -51,7 +51,7 @@ namespace UnityUtility.Collections
         public BitList(int length, bool defaultValue)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _array = new int[GetArraySize(length)];
             _length = length;
@@ -67,7 +67,7 @@ namespace UnityUtility.Collections
         public BitList(int length, int flagIndex0)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _array = new int[GetArraySize(length)];
             _length = length;
@@ -78,7 +78,7 @@ namespace UnityUtility.Collections
         public BitList(int length, int flagIndex0, int flagIndex1)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _array = new int[GetArraySize(length)];
             _length = length;
@@ -90,7 +90,7 @@ namespace UnityUtility.Collections
         public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _array = new int[GetArraySize(length)];
             _length = length;
@@ -103,7 +103,7 @@ namespace UnityUtility.Collections
         public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _array = new int[GetArraySize(length)];
             _length = length;
@@ -117,7 +117,7 @@ namespace UnityUtility.Collections
         public BitList(int length, params int[] indices)
         {
             if (length < 0)
-                throw Errors.NegativeParameter(nameof(length));
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             _array = new int[GetArraySize(length)];
             _length = length;
@@ -224,7 +224,7 @@ namespace UnityUtility.Collections
         public void Set(int index, bool value)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             if ((uint)index >= (uint)_length)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -246,7 +246,7 @@ namespace UnityUtility.Collections
         public void SetAll(bool value)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             int num = value ? (-1) : 0;
             int arrayLength = GetArraySize(_length);
@@ -262,13 +262,13 @@ namespace UnityUtility.Collections
         public void Except(BitList other)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
             if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
+                throw ThrowErrors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
@@ -281,13 +281,13 @@ namespace UnityUtility.Collections
         public void And(BitList other)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
             if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
+                throw ThrowErrors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
@@ -300,13 +300,13 @@ namespace UnityUtility.Collections
         public void Or(BitList other)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
             if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
+                throw ThrowErrors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
@@ -319,13 +319,13 @@ namespace UnityUtility.Collections
         public void Xor(BitList other)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
             if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
+                throw ThrowErrors.DifferentArrayLengths();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
@@ -338,7 +338,7 @@ namespace UnityUtility.Collections
         public void Not()
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             int arrayLength = GetArraySize(_length);
             for (int i = 0; i < arrayLength; i++)
@@ -386,7 +386,7 @@ namespace UnityUtility.Collections
                 throw new ArgumentNullException(nameof(other));
 
             if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
+                throw ThrowErrors.DifferentArrayLengths();
 
             int lastElement = GetArraySize(_length) - 1;
 
@@ -405,7 +405,7 @@ namespace UnityUtility.Collections
         public bool Coincides(BitList other)
         {
             if (_length != other._length)
-                throw Errors.DifferentArrayLengths();
+                throw ThrowErrors.DifferentArrayLengths();
 
             int lastElement = GetArraySize(_length) - 1;
 
@@ -504,7 +504,7 @@ namespace UnityUtility.Collections
         private void SetLength(int value)
         {
             if (!_mutable)
-                throw Errors.ReadOnlyBitList();
+                throw ThrowErrors.ReadOnlyBitList();
 
             if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value), "Value cannot be negative.");

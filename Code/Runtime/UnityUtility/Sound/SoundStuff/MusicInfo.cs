@@ -195,7 +195,7 @@ namespace UnityUtility.Sound.SoundStuff
         private IEnumerator FadeAndStop(float time)
         {
             if (time < 0f)
-                throw Errors.NegativeTime(nameof(time));
+                throw ThrowErrors.NegativeTime(nameof(time));
 
             _fading = true;
             float startVal = _volume;
