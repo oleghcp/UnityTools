@@ -49,8 +49,15 @@ namespace UnityUtility.SingleScripts
 
         private void Awake()
         {
-            if (_instance == null)
-                Initialize();
+            if (_instance != null)
+            {
+                if (this != _instance)
+                    Debug.LogError($"More than one instance of {typeof(T).Name}.");
+
+                return;
+            }
+
+            Initialize();
         }
 
         private void OnDestroy()
