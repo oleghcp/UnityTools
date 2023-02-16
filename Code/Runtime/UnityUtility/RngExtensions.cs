@@ -99,7 +99,7 @@ namespace UnityUtility
             int count = weights.Length + startIndex;
             sum = 0f;
 
-            for (int i = 0; i < count; i++)
+            for (int i = startIndex; i < count; i++)
             {
                 int index = i % weights.Length;
 
