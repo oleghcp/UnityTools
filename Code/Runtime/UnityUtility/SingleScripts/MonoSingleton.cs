@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityUtility.Engine;
+using UnityUtility.Tools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -21,7 +22,7 @@ namespace UnityUtility.SingleScripts
                 if (_instance == null)
                 {
                     if (!CreateInstanceAttribute.TryUse(out _instance))
-                        _instance = ComponentUtility.CreateInstance<T>();
+                        ComponentUtility.CreateInstance<T>();
                 }
 
                 return _instance;
@@ -32,6 +33,20 @@ namespace UnityUtility.SingleScripts
         /// Returns true if the instance is not null.
         /// </summary>
         public static bool Exists => _instance != null;
+
+        private void Awake()
+        {
+            if (_instance != null)
+            {
+                if (this != _instance)
+                    DebugErrors.MultipleInstancesMessage<T>();
+
+                return;
+            }
+
+            Construct();
+            _instance = this as T;
+        }
 
         private void OnDestroy()
         {
@@ -44,6 +59,11 @@ namespace UnityUtility.SingleScripts
             gameObject.Destroy();
             _instance = null;
         }
+
+        /// <summary>
+        /// Used it instead of Awake.
+        /// </summary>
+        protected abstract void Construct();
 
         /// <summary>
         /// Use it instead of OnDestroy.

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityUtility.Engine;
+using UnityUtility.Tools;
 
 namespace UnityUtility.SingleScripts
 {
@@ -52,7 +53,7 @@ namespace UnityUtility.SingleScripts
             if (_instance != null)
             {
                 if (this != _instance)
-                    Debug.LogError($"More than one instance of {typeof(T).Name}.");
+                    DebugErrors.MultipleInstancesMessage<T>();
 
                 return;
             }
