@@ -15,6 +15,11 @@ namespace UnityUtilityEditor.Engine
 {
     public static class EditorGui
     {
+        internal static void ErrorLabel(in Rect position, GUIContent label, string message)
+        {
+            EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));
+        }
+
         public static Diapason DiapasonField(in Rect position, string text, Diapason diapason, float minLimit = float.NegativeInfinity, float maxLimit = float.PositiveInfinity)
         {
             return DiapasonField(position, EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit);
@@ -75,7 +80,7 @@ namespace UnityUtilityEditor.Engine
 
         public static UnityObject[] DropArea(in Rect position)
         {
-            return DropArea(position, (string)null);
+            return DropArea(position, GUIContent.none);
         }
 
         public static UnityObject[] DropArea(in Rect position, string text)
@@ -109,22 +114,21 @@ namespace UnityUtilityEditor.Engine
             return objects;
         }
 
-        internal static void ErrorLabel(in Rect position, GUIContent label, string message)
-        {
-            EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));
-        }
-
         public static int DropDown(in Rect propertyRect, int selectedIndex, string[] displayedOptions)
         {
-            return DropDown(propertyRect, null, selectedIndex, displayedOptions);
+            return DropDown(propertyRect, GUIContent.none, selectedIndex, displayedOptions);
         }
 
         public static int DropDown(Rect propertyRect, string label, int selectedIndex, string[] displayedOptions)
         {
+            return DropDown(propertyRect, EditorGuiUtility.TempContent(label), selectedIndex, displayedOptions);
+        }
+
+        public static int DropDown(Rect propertyRect, GUIContent label, int selectedIndex, string[] displayedOptions)
+        {
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
 
-            if (label != null)
-                propertyRect = EditorGUI.PrefixLabel(propertyRect, EditorGuiUtility.TempContent(label));
+            propertyRect = EditorGUI.PrefixLabel(propertyRect, label);
 
             selectedIndex = DropDownData.GetSelectedValueById(selectedIndex, controlId)
                                         .Clamp(0, displayedOptions.Length);
@@ -142,10 +146,15 @@ namespace UnityUtilityEditor.Engine
 
         public static int IntDropDown(in Rect propertyRect, int selectedValue, string[] displayedOptions, int[] optionValues)
         {
-            return IntDropDown(propertyRect, null, selectedValue, displayedOptions, optionValues);
+            return IntDropDown(propertyRect, GUIContent.none, selectedValue, displayedOptions, optionValues);
         }
 
         public static int IntDropDown(in Rect propertyRect, string label, int selectedValue, string[] displayedOptions, int[] optionValues)
+        {
+            return IntDropDown(propertyRect, EditorGuiUtility.TempContent(label), selectedValue, displayedOptions, optionValues);
+        }
+
+        public static int IntDropDown(in Rect propertyRect, GUIContent label, int selectedValue, string[] displayedOptions, int[] optionValues)
         {
             if (displayedOptions.Length != optionValues.Length)
             {
@@ -160,10 +169,15 @@ namespace UnityUtilityEditor.Engine
 
         public static Enum EnumDropDown(in Rect propertyRect, Enum selected)
         {
-            return EnumDropDown(propertyRect, null, selected);
+            return EnumDropDown(propertyRect, GUIContent.none, selected);
         }
 
         public static Enum EnumDropDown(in Rect propertyRect, string label, Enum selected)
+        {
+            return EnumDropDown(propertyRect, EditorGuiUtility.TempContent(label), selected);
+        }
+
+        public static Enum EnumDropDown(in Rect propertyRect, GUIContent label, Enum selected)
         {
             var enumData = EnumDropDownData.GetData(selected.GetType());
             int index = Array.IndexOf(enumData.EnumValues, selected);
@@ -180,42 +194,47 @@ namespace UnityUtilityEditor.Engine
 
         public static int MaskDropDown(in Rect propertyRect, int mask, string[] displayedOptions)
         {
-            return MaskDropDown(propertyRect, null, mask, displayedOptions);
+            return MaskDropDown(propertyRect, GUIContent.none, mask, displayedOptions);
         }
 
         public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions)
         {
+            return MaskDropDown(propertyRect, EditorGuiUtility.TempContent(label), mask, displayedOptions);
+        }
+
+        public static int MaskDropDown(Rect propertyRect, GUIContent label, int mask, string[] displayedOptions)
+        {
             int controlId = GUIUtility.GetControlID(FocusType.Keyboard);
 
-            if (label != null)
-                propertyRect = EditorGUI.PrefixLabel(propertyRect, EditorGuiUtility.TempContent(label));
+            propertyRect = EditorGUI.PrefixLabel(propertyRect, label);
 
-            int bitsCount = Math.Min(displayedOptions.Length, BitMask.SIZE);
+            int flagsCount = Math.Min(displayedOptions.Length, BitMask.SIZE);
             mask = DropDownData.GetSelectedValueById(mask, controlId);
 
-            if (EditorGUI.DropdownButton(propertyRect, EditorGuiUtility.TempContent(getContentText()), FocusType.Keyboard))
+            string stringLabel = GetDropdownButtonText(mask, flagsCount, displayedOptions);
+            if (EditorGUI.DropdownButton(propertyRect, EditorGuiUtility.TempContent(stringLabel), FocusType.Keyboard))
             {
                 EditorUtilityExt.DisplayMultiSelectableList(propertyRect,
-                                                            BitList.CreateFromBitMask(mask, bitsCount),
+                                                            BitList.CreateFromBitMask(mask, flagsCount),
                                                             displayedOptions,
                                                             bitList => DropDownData.MenuAction(controlId, bitList.ToIntBitMask()));
             }
 
             return mask;
+        }
 
-            string getContentText()
-            {
-                if (BitMask.EmptyFor(mask, bitsCount))
-                    return DropDownWindow.NOTHING_ITEM;
+        private static string GetDropdownButtonText(int mask, int bitsCount, string[] displayedOptions)
+        {
+            if (BitMask.EmptyFor(mask, bitsCount))
+                return DropDownWindow.NOTHING_ITEM;
 
-                if (all())
-                    return DropDownWindow.EVERYTHING_ITEM;
+            if (all())
+                return DropDownWindow.EVERYTHING_ITEM;
 
-                if (BitMask.GetCount(mask, bitsCount) == 1)
-                    return displayedOptions[BitMask.EnumerateIndices(mask, bitsCount).First()];
+            if (BitMask.GetCount(mask, bitsCount) == 1)
+                return displayedOptions[BitMask.EnumerateIndices(mask, bitsCount).First()];
 
-                return "Mixed...";
-            }
+            return "Mixed...";
 
             bool all()
             {
@@ -231,10 +250,15 @@ namespace UnityUtilityEditor.Engine
 
         public static Enum FlagsDropDown(in Rect propertyRect, Enum flags)
         {
-            return FlagsDropDown(propertyRect, null, flags);
+            return FlagsDropDown(propertyRect, GUIContent.none, flags);
         }
 
         public static Enum FlagsDropDown(in Rect propertyRect, string label, Enum flags)
+        {
+            return FlagsDropDown(propertyRect, EditorGuiUtility.TempContent(label), flags);
+        }
+
+        public static Enum FlagsDropDown(in Rect propertyRect, GUIContent label, Enum flags)
         {
             Type type = flags.GetType();
             var enumData = EnumDropDownData.GetData(type);
