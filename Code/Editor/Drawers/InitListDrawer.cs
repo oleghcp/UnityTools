@@ -75,6 +75,9 @@ namespace UnityUtilityEditor.Drawers
             {
                 Type newType = GetBindedType(newEnumValue);
 
+                if (newType == null)
+                    return null;
+
                 if (invalidType(newType, out string error))
                 {
                     Debug.LogWarning(error);
@@ -95,12 +98,6 @@ namespace UnityUtilityEditor.Drawers
 
             bool invalidType(Type type, out string error)
             {
-                if (type == null)
-                {
-                    error = "Select enum value has no binded class type.";
-                    return true;
-                }
-
                 if (type.IsValueType || !type.IsAssignableTo(EditorUtilityExt.GetFieldType(this)))
                 {
                     error = $"Binded type ({type.Name}) is not subclass.";

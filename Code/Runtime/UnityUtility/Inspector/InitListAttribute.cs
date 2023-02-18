@@ -6,7 +6,7 @@ namespace UnityUtility.Inspector
     [AttributeUsage(AttributeTargets.Field)]
     public class InitListAttribute : PropertyAttribute
     {
-        internal Type EnumType { get; }
+        internal readonly Type EnumType;
 
         public InitListAttribute(Type enumType)
         {
