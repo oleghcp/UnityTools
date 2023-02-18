@@ -129,28 +129,11 @@ namespace UnityUtility.Collections
         }
         #endregion
 
-        public BitList(IEnumerable<bool> values)
-        {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
-
-            _array = new int[2];
-
-            int i = 0;
-            foreach (var item in values)
-            {
-                if (i >= _array.Length * BitMask.SIZE)
-                    Array.Resize(ref _array, _array.Length * 2);
-
-                if (item)
-                    _array[i / BitMask.SIZE] |= 1 << i % BitMask.SIZE;
-
-                i++;
-            }
-
-            _length = i;
-            _mutable = true;
-        }
+#if UNITY_2021_2_OR_NEWER
+        public BitList(bool[] values) : this((Span<bool>)values) { }
+#else
+        public BitList(bool[] values) : this((ICollection<bool>)values) { }
+#endif
 
         public BitList(ICollection<bool> values)
         {
@@ -172,6 +155,29 @@ namespace UnityUtility.Collections
             _mutable = true;
         }
 
+        public BitList(Span<bool> values)
+        {
+            _length = values.Length;
+            _array = new int[GetArraySize(_length)];
+
+            int i = 0;
+            foreach (var item in values)
+            {
+
+                if (item)
+                    _array[i / BitMask.SIZE] |= 1 << i % BitMask.SIZE;
+
+                i++;
+            }
+            _mutable = true;
+        }
+
+#if UNITY_2021_2_OR_NEWER
+        public BitList(int[] intBlocks) : this((Span<float>)intBlocks) { }
+#else
+        public BitList(int[] intBlocks) : this((ICollection<int>)intBlocks) { }
+#endif
+
         public BitList(ICollection<int> intBlocks)
         {
             if (intBlocks == null)
@@ -185,10 +191,6 @@ namespace UnityUtility.Collections
             _mutable = true;
         }
 
-        public BitList(int[] intBlocks) : this(intBlocks as ICollection<int>)
-        {
-
-        }
 
         public BitList(Span<int> intBlocks)
         {
@@ -210,6 +212,21 @@ namespace UnityUtility.Collections
             _length = bits._length;
             Array.Copy(bits._array, _array, arrayLength);
             _version = bits._version;
+            _mutable = true;
+        }
+
+        public BitList(BitArray bits)
+        {
+            if (bits == null)
+                throw new ArgumentNullException(nameof(bits));
+
+            int arrayLength = GetArraySize(bits.Length);
+            _array = new int[arrayLength];
+            _length = bits.Length;
+            for (int i = 0; i < _length; i++)
+            {
+                Set(i, bits[i]);
+            }
             _mutable = true;
         }
 
@@ -454,6 +471,32 @@ namespace UnityUtility.Collections
             return count;
         }
 
+        #region GetEnumerator
+        public Enumerator_<bool> GetEnumerator()
+        {
+            return new Enumerator_<bool>(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new Enumerator_<bool>(this);
+        }
+
+        IEnumerator<bool> IEnumerable<bool>.GetEnumerator()
+        {
+            return new Enumerator_<bool>(this);
+        }
+        #endregion
+
+        public IEnumerable<int> EnumerateIndices()
+        {
+            for (int i = 0; i < _length; i++)
+            {
+                if (Get(i))
+                    yield return i;
+            }
+        }
+
         public BitList GetCopy(bool mutable)
         {
             return new BitList(_array)
@@ -536,22 +579,5 @@ namespace UnityUtility.Collections
             int rem = _length % BitMask.SIZE;
             return rem == 0 ? BitMask.SIZE : rem;
         }
-
-        #region GetEnumerator
-        public Enumerator_<bool> GetEnumerator()
-        {
-            return new Enumerator_<bool>(this);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new Enumerator_<bool>(this);
-        }
-
-        IEnumerator<bool> IEnumerable<bool>.GetEnumerator()
-        {
-            return new Enumerator_<bool>(this);
-        }
-        #endregion
     }
 }
