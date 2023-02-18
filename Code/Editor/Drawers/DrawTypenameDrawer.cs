@@ -11,21 +11,14 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(DrawTypenameAttribute))]
     internal class DrawTypenameDrawer : SerializeReferenceDrawer
     {
-        protected override void DrawContent(in Rect position, SerializedProperty property)
+        protected override void DrawExtendedContent(in Rect position, SerializedProperty property)
         {
-            string assignedTypeName = property.managedReferenceFullTypename;
-            bool nullRef = !property.HasManagedReferenceValue();
-            string label = nullRef ? "Null" : buttonLabel();
-
+            Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
+            bool nullRef = assignedType == null;
+            string label = nullRef ? "Null" : assignedType.Name;
             GUI.color = nullRef ? Colours.Orange : Colours.Lime;
             GUI.Label(position, label);
             GUI.color = Colours.White;
-
-            string buttonLabel()
-            {
-                Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
-                return ObjectNames.NicifyVariableName(assignedType.Name);
-            }
         }
     }
 }

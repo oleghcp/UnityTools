@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(InitToggleAttribute))]
     internal class InitToggleDrawer : SerializeReferenceDrawer
     {
-        protected override void DrawContent(in Rect position, SerializedProperty property)
+        protected override void DrawExtendedContent(in Rect position, SerializedProperty property)
         {
             Type type = EditorUtilityExt.GetFieldType(this);
 

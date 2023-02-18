@@ -9,11 +9,11 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(StateCondition))]
     internal class StateConditionDrawer : ReferenceSelectionDrawer
     {
-        protected override void DrawContent(in Rect position, SerializedProperty property)
+        protected override void DrawExtendedContent(in Rect position, SerializedProperty property)
         {
             if (!property.HasManagedReferenceValue())
             {
-                base.DrawContent(position, property);
+                base.DrawExtendedContent(position, property);
                 return;
             }
 
@@ -21,7 +21,7 @@ namespace UnityUtilityEditor.Drawers
 
             Rect rect = position;
             rect.width *= weight;
-            base.DrawContent(rect, property);
+            base.DrawExtendedContent(rect, property);
 
             SerializedProperty notProp = property.FindPropertyRelative(StateCondition.NotFieldName);
 

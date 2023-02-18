@@ -32,9 +32,12 @@ namespace UnityUtilityEditor.Drawers
             Rect rect = position;
             rect.xMin += Math.Max(EditorGUIUtility.labelWidth, position.width * 0.33333f) + EditorGUIUtility.standardVerticalSpacing;
             rect.height = EditorGUIUtility.singleLineHeight;
+            DrawExtendedContent(rect, property);
 
-            DrawContent(rect, property);
-            EditorGUI.PropertyField(position, property, label, true);
+            rect = new Rect(position.position, new Vector2(EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight));
+            GUI.Label(rect, label);
+
+            EditorGUI.PropertyField(position, property, GUIContent.none, true);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -45,7 +48,7 @@ namespace UnityUtilityEditor.Drawers
             return EditorGUI.GetPropertyHeight(property, label, true);
         }
 
-        protected abstract void DrawContent(in Rect position, SerializedProperty property);
+        protected abstract void DrawExtendedContent(in Rect position, SerializedProperty property);
     }
 }
 #endif

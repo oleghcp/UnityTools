@@ -3,7 +3,6 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
-using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
@@ -14,11 +13,11 @@ namespace UnityUtilityEditor.Drawers
     [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]
     internal class ReferenceSelectionDrawer : SerializeReferenceDrawer
     {
-        protected override void DrawContent(in Rect position, SerializedProperty property)
+        protected override void DrawExtendedContent(in Rect position, SerializedProperty property)
         {
-            string assignedTypeName = property.managedReferenceFullTypename;
-            bool nullRef = assignedTypeName.IsNullOrEmpty();
-            string label = nullRef ? "Null" : buttonLabel();
+            Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
+            bool nullRef = assignedType == null;
+            string label = nullRef ? "Null" : assignedType.Name;
 
             if (nullRef)
                 GUI.color = Colours.Orange;
@@ -27,12 +26,6 @@ namespace UnityUtilityEditor.Drawers
                 ShowContextMenu(position, property);
 
             GUI.color = Colours.White;
-
-            string buttonLabel()
-            {
-                Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(assignedTypeName);
-                return assignedType.Name;
-            }
         }
 
         private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)

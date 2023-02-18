@@ -15,7 +15,7 @@ namespace UnityUtilityEditor.Drawers
     {
         private FieldInfo[] _enumValues;
 
-        protected override void DrawContent(in Rect position, SerializedProperty property)
+        protected override void DrawExtendedContent(in Rect position, SerializedProperty property)
         {
             InitListAttribute a = attribute as InitListAttribute;
 
@@ -47,10 +47,10 @@ namespace UnityUtilityEditor.Drawers
 
             object getEnumValue()
             {
-                if (!property.HasManagedReferenceValue())
-                    return null;
-
                 Type bindedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
+
+                if (bindedType == null)
+                    return null;
 
                 for (int i = 0; i < _enumValues.Length; i++)
                 {
