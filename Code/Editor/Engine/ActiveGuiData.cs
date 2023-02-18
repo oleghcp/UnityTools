@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Engine
@@ -82,20 +84,52 @@ namespace UnityUtilityEditor.Engine
             if (_data == null)
                 _data = new Dictionary<Type, Data>();
 
-            if (!_data.TryGetValue(enumType, out Data data))
-            {
-                data.EnumNames = Enum.GetNames(enumType);
-                data.EnumValues = Enum.GetValues(enumType);
-                _data[enumType] = data;
-            }
+            if (_data.TryGetValue(enumType, out Data data))
+                return data;
 
-            return data;
+            return _data.Place(enumType, new Data(enumType));
         }
 
-        public struct Data
+        public class Data
         {
-            public string[] EnumNames;
-            public Array EnumValues;
+            private Type _enumType;
+            private Array _enumValues;
+            private string[] _enumNames;
+            private string[] _indexableEnumNames;
+
+            public Array EnumValues => _enumValues ?? (_enumValues = Enum.GetValues(_enumType));
+            public string[] EnumNames => _enumNames ?? (_enumNames = Enum.GetNames(_enumType));
+
+            public string[] IndexableEnumNames
+            {
+                get
+                {
+                    if (_indexableEnumNames == null)
+                    {
+                        if (_enumType.IsDefined(typeof(FlagsAttribute), false) || EnumValues.Length == 0)
+                            return Array.Empty<string>();
+
+                        Array enumValues = EnumValues;
+                        object lastElement = enumValues.GetValue(enumValues.Length - 1);
+                        _indexableEnumNames = new string[Convert.ToInt32(lastElement) + 1];
+
+                        foreach (Enum item in enumValues)
+                        {
+                            _indexableEnumNames[Convert.ToInt32(item)] = item.GetName();
+                        }
+                    }
+
+                    return _indexableEnumNames;
+                }
+            }
+
+            public Data(Type enumType)
+            {
+                _enumType = enumType;
+
+                _enumValues = Enum.GetValues(enumType);
+                _enumNames = Enum.GetNames(enumType);
+            }
         }
     }
 }
