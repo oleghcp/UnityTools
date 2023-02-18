@@ -2,27 +2,27 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.NumericEntities;
-
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Engine
 {
     public static class EditorGuiLayout
     {
-        public static Diapason DiapasonField(string text, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options)
+        public static Diapason DiapasonField(string label, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options)
         {
-            return DiapasonField(EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit, options);
+            Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DiapasonField(position, label, diapason, minLimit, maxLimit);
         }
 
         public static Diapason DiapasonField(GUIContent label, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options)
         {
-            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DiapasonField(position, label, diapason, minLimit, maxLimit);
         }
 
-        public static Diapason DiapasonField(string text, Diapason diapason, params GUILayoutOption[] options)
+        public static Diapason DiapasonField(string label, Diapason diapason, params GUILayoutOption[] options)
         {
-            return DiapasonField(EditorGuiUtility.TempContent(text), diapason, float.NegativeInfinity, float.PositiveInfinity, options);
+            return DiapasonField(label, diapason, float.NegativeInfinity, float.PositiveInfinity, options);
         }
 
         public static Diapason DiapasonField(GUIContent label, Diapason diapason, params GUILayoutOption[] options)
@@ -30,20 +30,21 @@ namespace UnityUtilityEditor.Engine
             return DiapasonField(label, diapason, float.NegativeInfinity, float.PositiveInfinity, options);
         }
 
-        public static DiapasonInt DiapasonIntField(string text, DiapasonInt diapason, int minLimit, int maxLimit, params GUILayoutOption[] options)
+        public static DiapasonInt DiapasonIntField(string label, DiapasonInt diapason, int minLimit, int maxLimit, params GUILayoutOption[] options)
         {
-            return DiapasonIntField(EditorGuiUtility.TempContent(text), diapason, minLimit, maxLimit, options);
+            Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DiapasonIntField(position, label, diapason, minLimit, maxLimit);
         }
 
         public static DiapasonInt DiapasonIntField(GUIContent label, DiapasonInt diapason, int minLimit, int maxLimit, params GUILayoutOption[] options)
         {
-            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DiapasonIntField(position, label, diapason, minLimit, maxLimit);
         }
 
-        public static DiapasonInt DiapasonIntField(string text, DiapasonInt diapason, params GUILayoutOption[] options)
+        public static DiapasonInt DiapasonIntField(string label, DiapasonInt diapason, params GUILayoutOption[] options)
         {
-            return DiapasonIntField(EditorGuiUtility.TempContent(text), diapason, int.MinValue, int.MaxValue, options);
+            return DiapasonIntField(label, diapason, int.MinValue, int.MaxValue, options);
         }
 
         public static DiapasonInt DiapasonIntField(GUIContent label, DiapasonInt diapason, params GUILayoutOption[] options)
@@ -73,7 +74,8 @@ namespace UnityUtilityEditor.Engine
 
         public static UnityObject[] DropArea(params GUILayoutOption[] options)
         {
-            return DropArea((string)null, options);
+            Rect position = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DropArea(position);
         }
 
         public static UnityObject[] DropArea(string text, params GUILayoutOption[] options)
@@ -93,62 +95,97 @@ namespace UnityUtilityEditor.Engine
 
         public static UnityObject[] DropArea(GUIContent content, GUIStyle style, params GUILayoutOption[] options)
         {
-            Rect position = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight, options);
+            Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DropArea(position, content, style);
         }
 
         public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
         {
-            return DropDown(null, selectedIndex, displayedOptions, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DropDown(propertyRect, selectedIndex, displayedOptions);
         }
 
         public static int DropDown(string label, int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
         {
-            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.DropDown(propertyRect, label, selectedIndex, displayedOptions);
+        }
+
+        public static int DropDown(GUIContent label, int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DropDown(propertyRect, label, selectedIndex, displayedOptions);
         }
 
         public static int IntDropDown(int selectedValue, string[] displayedOptions, int[] optionValues, params GUILayoutOption[] options)
         {
-            return IntDropDown(null, selectedValue, displayedOptions, optionValues, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.IntDropDown(propertyRect, selectedValue, displayedOptions, optionValues);
         }
 
         public static int IntDropDown(string label, int selectedValue, string[] displayedOptions, int[] optionValues, params GUILayoutOption[] options)
         {
-            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.IntDropDown(propertyRect, label, selectedValue, displayedOptions, optionValues);
+        }
+
+        public static int IntDropDown(GUIContent label, int selectedValue, string[] displayedOptions, int[] optionValues, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.IntDropDown(propertyRect, label, selectedValue, displayedOptions, optionValues);
         }
 
         public static Enum EnumDropDown(Enum selected, params GUILayoutOption[] options)
         {
-            return EnumDropDown(null, selected, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.EnumDropDown(propertyRect, selected);
         }
 
         public static Enum EnumDropDown(string label, Enum selected, params GUILayoutOption[] options)
         {
-            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.EnumDropDown(propertyRect, label, selected);
+        }
+
+        public static Enum EnumDropDown(GUIContent label, Enum selected, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.EnumDropDown(propertyRect, label, selected);
         }
 
         public static int MaskDropDown(int mask, string[] displayedOptions, params GUILayoutOption[] options)
         {
-            return MaskDropDown(null, mask, displayedOptions, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.MaskDropDown(propertyRect, mask, displayedOptions);
         }
 
         public static int MaskDropDown(string label, int mask, string[] displayedOptions, params GUILayoutOption[] options)
         {
-            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.MaskDropDown(propertyRect, label, mask, displayedOptions);
+        }
+
+        public static int MaskDropDown(GUIContent label, int mask, string[] displayedOptions, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.MaskDropDown(propertyRect, label, mask, displayedOptions);
         }
 
         public static Enum FlagsDropDown(Enum flags, params GUILayoutOption[] options)
         {
-            return FlagsDropDown(null, flags, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.FlagsDropDown(propertyRect, flags);
         }
 
         public static Enum FlagsDropDown(string label, Enum flags, params GUILayoutOption[] options)
         {
-            Rect propertyRect = EditorGUILayout.GetControlRect(label != null, EditorGUIUtility.singleLineHeight, options);
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
+            return EditorGui.FlagsDropDown(propertyRect, label, flags);
+        }
+
+        public static Enum FlagsDropDown(GUIContent label, Enum flags, params GUILayoutOption[] options)
+        {
+            Rect propertyRect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.FlagsDropDown(propertyRect, label, flags);
         }
 
