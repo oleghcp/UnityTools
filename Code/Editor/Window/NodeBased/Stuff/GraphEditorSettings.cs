@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public static GraphEditorSettings Load(string name)
         {
-            string folderPath = $"{LibConstants.SETTINGS_FOLDER}{GRAPH_SETTINGS_NAME}";
+            string folderPath = $"{LibConstants.TEMP_SETTINGS_FOLDER}{GRAPH_SETTINGS_NAME}";
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
@@ -40,7 +40,7 @@ namespace UnityUtilityEditor.Window.NodeBased.Stuff
 
         public void Save(string name)
         {
-            string folderPath = $"{LibConstants.SETTINGS_FOLDER}{GRAPH_SETTINGS_NAME}";
+            string folderPath = $"{LibConstants.TEMP_SETTINGS_FOLDER}{GRAPH_SETTINGS_NAME}";
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
             BinaryFileUtility.Save(Path.Combine(folderPath, name), this);

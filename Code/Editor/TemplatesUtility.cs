@@ -12,7 +12,7 @@ namespace UnityUtilityEditor
 {
     internal static class TemplatesUtility
     {
-        private const string TEMPLATES_FOLDER = LibConstants.SETTINGS_FOLDER + "Templates/";
+        private const string TEMPLATES_FOLDER = AssetDatabaseExt.USER_SETTINGS_FOLDER + "Templates/";
 
         public static void CreateScript()
         {
