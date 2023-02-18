@@ -211,8 +211,8 @@ namespace UnityUtilityEditor.Engine
             int flagsCount = Math.Min(displayedOptions.Length, BitMask.SIZE);
             mask = DropDownData.GetSelectedValueById(mask, controlId);
 
-            string stringLabel = GetDropdownButtonText(mask, flagsCount, displayedOptions);
-            if (EditorGUI.DropdownButton(propertyRect, EditorGuiUtility.TempContent(stringLabel), FocusType.Keyboard))
+            string buttonText = GetDropdownButtonText(mask, flagsCount, displayedOptions);
+            if (EditorGUI.DropdownButton(propertyRect, EditorGuiUtility.TempContent(buttonText), FocusType.Keyboard))
             {
                 EditorUtilityExt.DisplayMultiSelectableList(propertyRect,
                                                             BitList.CreateFromBitMask(mask, flagsCount),
