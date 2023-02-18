@@ -119,7 +119,7 @@ namespace UnityUtilityEditor.Engine
             return DropDown(propertyRect, GUIContent.none, selectedIndex, displayedOptions);
         }
 
-        public static int DropDown(Rect propertyRect, string label, int selectedIndex, string[] displayedOptions)
+        public static int DropDown(in Rect propertyRect, string label, int selectedIndex, string[] displayedOptions)
         {
             return DropDown(propertyRect, EditorGuiUtility.TempContent(label), selectedIndex, displayedOptions);
         }
@@ -197,7 +197,7 @@ namespace UnityUtilityEditor.Engine
             return MaskDropDown(propertyRect, GUIContent.none, mask, displayedOptions);
         }
 
-        public static int MaskDropDown(Rect propertyRect, string label, int mask, string[] displayedOptions)
+        public static int MaskDropDown(in Rect propertyRect, string label, int mask, string[] displayedOptions)
         {
             return MaskDropDown(propertyRect, EditorGuiUtility.TempContent(label), mask, displayedOptions);
         }
