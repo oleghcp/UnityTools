@@ -137,5 +137,41 @@ namespace UnityUtility.CSharp
         {
             Helper.Swap(ref self[i], ref self[j]);
         }
+
+        public static void Fill<T>(this in Span<T> self, T value, int startIndex, int count) where T : unmanaged
+        {
+            if ((uint)startIndex >= (uint)self.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + count > self.Length)
+                throw new ArgumentOutOfRangeException(nameof(count));
+
+            for (int i = startIndex; i < count + startIndex; i++)
+            {
+                self[i] = value;
+            }
+        }
+
+        public static void Fill<T>(this in Span<T> self, Func<int, T> factory) where T : unmanaged
+        {
+            for (int i = 0; i < self.Length; i++)
+            {
+                self[i] = factory(i);
+            }
+        }
+
+        public static void Fill<T>(this in Span<T> self, Func<int, T> factory, int startIndex, int count) where T : unmanaged
+        {
+            if ((uint)startIndex >= (uint)self.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + count > self.Length)
+                throw new ArgumentOutOfRangeException(nameof(count));
+
+            for (int i = startIndex; i < count + startIndex; i++)
+            {
+                self[i] = factory(i);
+            }
+        }
     }
 }

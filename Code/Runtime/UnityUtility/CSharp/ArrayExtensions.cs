@@ -46,18 +46,18 @@ namespace UnityUtility.CSharp
         /// <summary>
         /// Assigns the given value of type T to the elements of the specified array.
         /// </summary>
-        public static void Fill<T>(this T[] self, Func<T> factory)
+        public static void Fill<T>(this T[] self, Func<int, T> factory)
         {
             for (int i = 0; i < self.Length; i++)
             {
-                self[i] = factory();
+                self[i] = factory(i);
             }
         }
 
         /// <summary>
         /// Assigns the given value of type T to the elements of the specified array which are within the range of startIndex (inclusive) and the next count number of indices.
         /// </summary>
-        public static void Fill<T>(this T[] self, Func<T> factory, int startIndex, int count)
+        public static void Fill<T>(this T[] self, Func<int, T> factory, int startIndex, int count)
         {
             if ((uint)startIndex >= (uint)self.Length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
@@ -67,7 +67,7 @@ namespace UnityUtility.CSharp
 
             for (int i = startIndex; i < count + startIndex; i++)
             {
-                self[i] = factory();
+                self[i] = factory(i);
             }
         }
 
