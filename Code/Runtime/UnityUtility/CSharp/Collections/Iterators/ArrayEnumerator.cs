@@ -41,16 +41,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
             _count = startIndex + length;
             _current = default;
 
-            if (versionProvider != null)
-            {
-                _version = versionProvider.Version;
-                _versionProvider = versionProvider;
-            }
-            else
-            {
-                _versionProvider = null;
-                _version = default;
-            }
+            InitVersion(versionProvider, out _versionProvider, out _version);
         }
 
         public ArrayEnumerator(T[] array, int startIndex, IMutable versionProvider = null)
@@ -63,16 +54,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
             _count = array.Length;
             _current = default;
 
-            if (versionProvider != null)
-            {
-                _version = versionProvider.Version;
-                _versionProvider = versionProvider;
-            }
-            else
-            {
-                _versionProvider = null;
-                _version = default;
-            }
+            InitVersion(versionProvider, out _versionProvider, out _version);
         }
 
         public ArrayEnumerator(T[] array, IMutable versionProvider = null)
@@ -82,16 +64,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
             _count = array.Length;
             _current = default;
 
-            if (versionProvider != null)
-            {
-                _version = versionProvider.Version;
-                _versionProvider = versionProvider;
-            }
-            else
-            {
-                _versionProvider = null;
-                _version = default;
-            }
+            InitVersion(versionProvider, out _versionProvider, out _version);
         }
 
         public void Dispose()
@@ -128,6 +101,20 @@ namespace UnityUtility.CSharp.Collections.Iterators
         private bool Changed()
         {
             return _versionProvider != null && _versionProvider.Version != _version;
+        }
+
+        private static void InitVersion(IMutable versionProvider, out IMutable versionProviderField, out int version)
+        {
+            if (versionProvider != null)
+            {
+                version = versionProvider.Version;
+                versionProviderField = versionProvider;
+            }
+            else
+            {
+                version = default;
+                versionProviderField = null;
+            }
         }
     }
 }

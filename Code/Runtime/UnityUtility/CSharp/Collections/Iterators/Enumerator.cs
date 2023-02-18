@@ -40,10 +40,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
             _count = startIndex + length;
             _current = default;
 
-            if (collection is IMutable mutable)
-                _version = mutable.Version;
-            else
-                _version = default;
+            InitVersion(collection, out _version);
         }
 
         public Enumerator(IList<T> collection, int startIndex)
@@ -56,10 +53,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
             _count = collection.Count;
             _current = default;
 
-            if (collection is IMutable mutable)
-                _version = mutable.Version;
-            else
-                _version = default;
+            InitVersion(collection, out _version);
         }
 
         public Enumerator(IList<T> collection)
@@ -69,10 +63,7 @@ namespace UnityUtility.CSharp.Collections.Iterators
             _count = collection.Count;
             _current = default;
 
-            if (collection is IMutable mutable)
-                _version = mutable.Version;
-            else
-                _version = default;
+            InitVersion(collection, out _version);
         }
 
         public void Dispose()
@@ -109,6 +100,14 @@ namespace UnityUtility.CSharp.Collections.Iterators
         private bool Changed()
         {
             return _collection is IMutable mutable && mutable.Version != _version;
+        }
+
+        private static void InitVersion(IList<T> collection, out int version)
+        {
+            if (collection is IMutable mutable)
+                version = mutable.Version;
+            else
+                version = default;
         }
     }
 }
