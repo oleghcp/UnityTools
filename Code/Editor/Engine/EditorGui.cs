@@ -208,15 +208,16 @@ namespace UnityUtilityEditor.Engine
                 if (BitMask.EmptyFor(mask, bitsCount))
                     return DropDownWindow.NOTHING_ITEM;
 
-                if (allFor())
+                if (all())
                     return DropDownWindow.EVERYTHING_ITEM;
 
-                return BitMask.EnumerateIndices(mask, bitsCount)
-                              .Select(item => displayedOptions[item])
-                              .ConcatToString(", ");
+                if (BitMask.GetCount(mask, bitsCount) == 1)
+                    return displayedOptions[BitMask.EnumerateIndices(mask, bitsCount).First()];
+
+                return "Mixed...";
             }
 
-            bool allFor()
+            bool all()
             {
                 for (int i = 0; i < bitsCount; i++)
                 {
