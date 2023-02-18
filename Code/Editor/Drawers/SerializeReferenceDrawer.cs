@@ -42,10 +42,10 @@ namespace UnityUtilityEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (!property.HasManagedReferenceValue() || !property.isExpanded)
-                return EditorGUIUtility.singleLineHeight;
+            if (property.isExpanded)
+                return EditorGUI.GetPropertyHeight(property, label, true);
 
-            return EditorGUI.GetPropertyHeight(property, label, true);
+            return EditorGUIUtility.singleLineHeight;
         }
 
         protected abstract void DrawExtendedContent(in Rect position, SerializedProperty property);
