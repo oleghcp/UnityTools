@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -18,7 +17,7 @@ namespace UnityUtilityEditor.Drawers
         {
             Type type = EditorUtilityExt.GetFieldType(this);
 
-            if (type.GetTypeCode() == TypeCode.Int32)
+            if (type == typeof(int))
             {
                 DrawIntMask(position, property, label, true);
                 return;
@@ -30,11 +29,9 @@ namespace UnityUtilityEditor.Drawers
                 return;
             }
 
-
             if (type == typeof(BitList))
             {
-                position = EditorGUI.PrefixLabel(position, label);
-                DrawBitList(position, property);
+                DrawBitList(position, property, label);
                 return;
             }
 
@@ -58,8 +55,10 @@ namespace UnityUtilityEditor.Drawers
                 property.SetIntMaskValue(EditorGui.MaskDropDown(position, label, (int)property.GetIntMaskValue(), names));
         }
 
-        private void DrawBitList(in Rect position, SerializedProperty property)
+        private void DrawBitList(Rect position, SerializedProperty property, GUIContent label)
         {
+            position = EditorGUI.PrefixLabel(position, label);
+
             SerializedProperty arrayProp = property.FindPropertyRelative(BitList.ArrayFieldName);
             SerializedProperty lengthProp = property.FindPropertyRelative(BitList.LengthFieldName);
 
@@ -92,28 +91,54 @@ namespace UnityUtilityEditor.Drawers
             }
         }
 
-        private static string GetDropdownButtonText(BitList flags, string[] displayedOptions)
+        private static string GetDropdownButtonText(BitList bits, string[] displayedOptions)
         {
-            if (flags.IsEmpty())
+            if (none())
                 return DropDownWindow.NOTHING_ITEM;
 
             if (all())
                 return DropDownWindow.EVERYTHING_ITEM;
 
-            if (flags.GetCount() == 1)
-                return displayedOptions[flags.EnumerateIndices().First()];
+            if (bits.GetCount() == 1)
+            {
+                int index = first();
+                if (index >= 0)
+                    return displayedOptions[index];
+            }
 
             return "Mixed...";
 
-            bool all()
+            bool none()
             {
-                for (int i = 0; i < flags.Count; i++)
+                for (int i = 0; i < bits.Count; i++)
                 {
-                    if (displayedOptions[i].HasAnyData() && !flags[i])
+                    if (displayedOptions[i].HasAnyData() && bits[i])
                         return false;
                 }
 
                 return true;
+            }
+
+            bool all()
+            {
+                for (int i = 0; i < bits.Count; i++)
+                {
+                    if (displayedOptions[i].HasAnyData() && !bits[i])
+                        return false;
+                }
+
+                return true;
+            }
+
+            int first()
+            {
+                for (int i = 0; i < bits.Count; i++)
+                {
+                    if (displayedOptions[i].HasAnyData() && bits[i])
+                        return i;
+                }
+
+                return -1;
             }
         }
     }

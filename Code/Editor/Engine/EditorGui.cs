@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -225,16 +224,31 @@ namespace UnityUtilityEditor.Engine
 
         private static string GetDropdownButtonText(int mask, int bitsCount, string[] displayedOptions)
         {
-            if (BitMask.EmptyFor(mask, bitsCount))
+            if (none())
                 return DropDownWindow.NOTHING_ITEM;
 
             if (all())
                 return DropDownWindow.EVERYTHING_ITEM;
 
             if (BitMask.GetCount(mask, bitsCount) == 1)
-                return displayedOptions[BitMask.EnumerateIndices(mask, bitsCount).First()];
+            {
+                int index = first();
+                if (index >= 0)
+                    return displayedOptions[index];
+            }
 
             return "Mixed...";
+
+            bool none()
+            {
+                for (int i = 0; i < bitsCount; i++)
+                {
+                    if (displayedOptions[i].HasAnyData() && BitMask.HasFlag(mask, i))
+                        return false;
+                }
+
+                return true;
+            }
 
             bool all()
             {
@@ -245,6 +259,17 @@ namespace UnityUtilityEditor.Engine
                 }
 
                 return true;
+            }
+
+            int first()
+            {
+                for (int i = 0; i < bitsCount; i++)
+                {
+                    if (displayedOptions[i].HasAnyData() && BitMask.HasFlag(mask, i))
+                        return i;
+                }
+
+                return -1;
             }
         }
 
