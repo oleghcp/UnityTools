@@ -28,6 +28,7 @@ namespace UnityUtility.Collections
 #if UNITY_EDITOR
         internal static string ArrayFieldName => nameof(_array);
         internal static string LengthFieldName => nameof(_length);
+        internal static string MutableFieldName => nameof(_mutable);
 #endif
 
         public bool IsReadOnly => !_mutable;

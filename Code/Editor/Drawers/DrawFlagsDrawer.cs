@@ -57,10 +57,13 @@ namespace UnityUtilityEditor.Drawers
 
         private void DrawBitList(Rect position, SerializedProperty property, GUIContent label)
         {
+            const float smallButtonWidth = 25f;
+
             position = EditorGUI.PrefixLabel(position, label);
 
             SerializedProperty arrayProp = property.FindPropertyRelative(BitList.ArrayFieldName);
             SerializedProperty lengthProp = property.FindPropertyRelative(BitList.LengthFieldName);
+            SerializedProperty mutableProp = property.FindPropertyRelative(BitList.MutableFieldName);
 
             var data = EnumDropDownData.GetData(attribute.EnumType);
             string[] names = data.IndexableEnumNames;
@@ -74,8 +77,13 @@ namespace UnityUtilityEditor.Drawers
             BitList bits = new BitList(intBlocks) { Count = names.Length };
             string buttonText = GetDropdownButtonText(bits, names);
 
+            position.width -= smallButtonWidth;
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(buttonText), FocusType.Keyboard))
                 EditorUtilityExt.DisplayMultiSelectableList(position, bits, names, onCloseMenu);
+
+            position.xMin += position.width;
+            position.width = smallButtonWidth;
+            mutableProp.boolValue = EditorGui.ToggleButton(position, EditorGuiUtility.TempContent("M", "Switch mutability."), mutableProp.boolValue);
 
             void onCloseMenu(BitList bitList)
             {
