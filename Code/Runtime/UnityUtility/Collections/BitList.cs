@@ -174,7 +174,7 @@ namespace UnityUtility.Collections
         }
 
 #if UNITY_2021_2_OR_NEWER
-        public BitList(int[] intBlocks) : this((Span<float>)intBlocks) { }
+        public BitList(int[] intBlocks) : this((Span<int>)intBlocks) { }
 #else
         public BitList(int[] intBlocks) : this((ICollection<int>)intBlocks) { }
 #endif
