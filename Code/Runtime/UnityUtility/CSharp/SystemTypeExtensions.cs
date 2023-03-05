@@ -68,6 +68,14 @@ namespace UnityUtility.CSharp
             return self.Replace(" ", string.Empty);
         }
 
+        public static char GetRandomChar(this string self, IRng generator)
+        {
+            if (self.Length == 0)
+                throw new InvalidOperationException("String is empty.");
+
+            return self[generator.Next(self.Length)];
+        }
+
         /// <summary>
         /// Returns the underlying type code of the specified Type.
         /// </summary>

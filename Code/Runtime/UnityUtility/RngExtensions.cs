@@ -516,20 +516,20 @@ namespace UnityUtility
 
 #if UNITY_2021_2_OR_NEWER
             Span<char> charArray = length > stackLenCup ? new char[length] : stackalloc char[length];
-            for (int i = 0; i < length; i++) { charArray[i] = chars[self.Next(chars.Length)]; }
+            for (int i = 0; i < length; i++) { charArray[i] = chars.GetRandomChar(self); }
             return new string(charArray);
 #else
             if (length > stackLenCup)
             {
                 char[] charArray = new char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = chars[self.Next(chars.Length)]; }
+                for (int i = 0; i < length; i++) { charArray[i] = chars.GetRandomChar(self); }
                 return new string(charArray);
             }
 
             unsafe
             {
                 char* charArray = stackalloc char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = chars[self.Next(chars.Length)]; }
+                for (int i = 0; i < length; i++) { charArray[i] = chars.GetRandomChar(self); }
                 return new string(charArray);
             }
 #endif
