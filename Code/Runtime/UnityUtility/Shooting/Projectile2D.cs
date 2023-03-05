@@ -20,6 +20,8 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autoFlippingX = true;
         [SerializeField]
+        private bool _doubleCollisionCheck = true;
+        [SerializeField]
         private ProjectileCaster _casting;
         [SerializeField]
         private ProjectileMover2D _moving;
@@ -68,6 +70,18 @@ namespace UnityUtility.Shooting
         {
             get => _autodestruct;
             set => _autodestruct = value;
+        }
+
+        public bool AutoFlippingX
+        {
+            get => _autoFlippingX;
+            set => _autoFlippingX = value;
+        }
+
+        public bool DoubleCollisionCheck
+        {
+            get => _doubleCollisionCheck;
+            set => _doubleCollisionCheck = value;
         }
 
         public bool UseGravity
@@ -273,16 +287,20 @@ namespace UnityUtility.Shooting
 
         private void UpdateState(Vector2 currentPosition, float deltaTime, float speedScale)
         {
-            CheckMovement(_prevPos, currentPosition, out _prevPos, out currentPosition);
-
-            if (_isPlaying)
+            if (_doubleCollisionCheck)
             {
-                UpdatePrevState();
-                Vector2 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
-                _speed = _velocity.magnitude;
-                CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
+                CheckMovement(_prevPos, currentPosition, out _prevPos, out currentPosition);
+                if (!_isPlaying)
+                {
+                    transform.SetPositionAndRotation(currentPosition.To_XYz(transform.position.z), GetRotation());
+                    return;
+                }
             }
 
+            UpdatePrevState();
+            Vector2 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
+            _speed = _velocity.magnitude;
+            CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
             transform.SetPositionAndRotation(currentPosition.To_XYz(transform.position.z), GetRotation());
         }
 
