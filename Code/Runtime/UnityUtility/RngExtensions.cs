@@ -506,7 +506,7 @@ namespace UnityUtility
         public static string GetAlphanumeric(this IRng self, int length)
         {
             if (length < 0)
-                throw new Exception();
+                throw ThrowErrors.NegativeParameter(nameof(length));
 
             if (length == 0)
                 return string.Empty;
