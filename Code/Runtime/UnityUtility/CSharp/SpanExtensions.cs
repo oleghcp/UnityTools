@@ -173,5 +173,13 @@ namespace UnityUtility.CSharp
                 self[i] = factory(i);
             }
         }
+
+        public static T GetRandomItem<T>(this in Span<T> self, IRng generator) where T : unmanaged
+        {
+            if (self.Length == 0)
+                throw ThrowErrors.NoElements();
+
+            return self[generator.Next(self.Length)];
+        }
     }
 }
