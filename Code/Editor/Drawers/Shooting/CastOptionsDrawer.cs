@@ -17,10 +17,15 @@ namespace UnityUtilityEditor.Drawers.Shooting
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
+
+            float prevValue = radius.floatValue;
             radius.floatValue = EditorGUI.FloatField(linePos, label, radius.floatValue).ClampMin(0f);
 
             if (radius.floatValue > 0f)
             {
+                if (prevValue == 0f)
+                    highPrecision.boolValue = true;
+
                 linePos = EditorGuiUtility.GetLinePosition(position, 1);
                 EditorGUI.PropertyField(linePos, highPrecision);
             }
