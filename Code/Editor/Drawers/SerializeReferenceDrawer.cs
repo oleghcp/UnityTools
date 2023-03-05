@@ -34,9 +34,7 @@ namespace UnityUtilityEditor.Drawers
             rect.height = EditorGUIUtility.singleLineHeight;
             DrawExtendedContent(rect, property);
 
-            rect = new Rect(position.position, new Vector2(EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight));
-            GUI.Label(rect, label);
-
+            EditorGUI.PrefixLabel(new Rect(position.position, new Vector2(EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight)), label);
             EditorGUI.PropertyField(position, property, GUIContent.none, true);
         }
 
