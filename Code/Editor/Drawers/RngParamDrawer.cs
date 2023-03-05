@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.Drawers
             SerializedProperty rangeProp = property.FindPropertyRelative(RngParam.RangeFieldName);
             Rect contentLineRect = lineRect;
             contentLineRect.xMin += EditorGUIUtility.labelWidth + EditorGuiUtility.StandardHorizontalSpacing;
-            rangeProp.Draw(contentLineRect, EditorGuiUtility.TempContent(string.Empty));
+            rangeProp.Draw(contentLineRect, GUIContent.none);
 
             property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, EditorGuiUtility.TempContent(name), true);
 
