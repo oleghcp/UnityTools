@@ -28,7 +28,7 @@ namespace System
         public Index(int value, bool fromEnd = false)
         {
             if (value < 0)
-                throw Errors.NegativeParameter(nameof(value));
+                throw ThrowErrors.NegativeParameter(nameof(value));
 
             if (fromEnd)
                 _value = ~value;
@@ -53,7 +53,7 @@ namespace System
         public static Index FromStart(int value)
         {
             if (value < 0)
-                throw Errors.NegativeParameter(nameof(value));
+                throw ThrowErrors.NegativeParameter(nameof(value));
 
             return new Index(value);
         }
@@ -63,7 +63,7 @@ namespace System
         public static Index FromEnd(int value)
         {
             if (value < 0)
-                throw Errors.NegativeParameter(nameof(value));
+                throw ThrowErrors.NegativeParameter(nameof(value));
 
             return new Index(~value);
         }
