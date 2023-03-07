@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityUtility.CSharp;
 using UnityUtility.Inspector;
+using UnityUtility.Tools;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Drawers
@@ -38,20 +39,16 @@ namespace UnityUtilityEditor.Drawers
 
         private void DrawProperty(in Rect position, SerializedProperty property, GUIContent label)
         {
-            Rect labelPos = position;
-            labelPos.width = EditorGUIUtility.labelWidth;
+            Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
-            Rect fieldRect = position;
-            fieldRect.xMin += labelPos.width + EditorGuiUtility.StandardHorizontalSpacing;
-
-            property.isExpanded = GUI.Toggle(labelPos, property.isExpanded, label, EditorStylesExt.DropDown);
-            property.objectReferenceValue = EditorGUI.ObjectField(fieldRect, property.objectReferenceValue, typeof(ScriptableObject), false);
+            EditorGUI.ObjectField(lineRect, property, typeof(ScriptableObject), EditorGuiUtility.TempContent(Helper.SPACE));
+            EditorGUI.PrefixLabel(lineRect, label);
+            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
 
             if (property.objectReferenceValue == null || !property.isExpanded)
                 return;
 
-            Rect rect = position;
-            rect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            lineRect = EditorGuiUtility.GetLinePosition(position, 1);
 
             using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
             {
@@ -65,8 +62,8 @@ namespace UnityUtilityEditor.Drawers
                     if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
                         continue;
 
-                    EditorGUI.PropertyField(rect, item, true);
-                    rect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
+                    EditorGUI.PropertyField(lineRect, item, true);
+                    lineRect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
                 }
 
                 if (attribute.NeedIndent)
