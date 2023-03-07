@@ -23,12 +23,9 @@ namespace UnityUtilityEditor.Drawers
             string name = label.text;
             Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
-            SerializedProperty rangeProp = property.FindPropertyRelative(RngParam.RangeFieldName);
-            Rect contentLineRect = lineRect;
-            contentLineRect.xMin += EditorGUIUtility.labelWidth + EditorGuiUtility.StandardHorizontalSpacing;
-            rangeProp.Draw(contentLineRect, GUIContent.none);
-
-            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, EditorGuiUtility.TempContent(name), true);
+            property.FindPropertyRelative(RngParam.RangeFieldName).Draw(lineRect, EditorGuiUtility.TempContent(" "));
+            EditorGUI.PrefixLabel(lineRect, EditorGuiUtility.TempContent(name));
+            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
 
             if (!property.isExpanded)
                 return;
