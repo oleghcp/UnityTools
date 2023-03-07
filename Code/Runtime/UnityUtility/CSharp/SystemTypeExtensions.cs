@@ -65,7 +65,7 @@ namespace UnityUtility.CSharp
 
         public static string RemoveWhiteSpaces(this string self)
         {
-            return self.Replace(" ", string.Empty);
+            return self.Replace(Helper.SPACE, string.Empty);
         }
 
         public static char GetRandomChar(this string self, IRng generator)

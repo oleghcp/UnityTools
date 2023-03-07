@@ -6,6 +6,8 @@ namespace UnityUtility.Tools
 {
     public static class Helper
     {
+        public const string SPACE = " ";
+
         public static string GetDateTimeString()
         {
             return GetDateTimeString(DateTime.Now);

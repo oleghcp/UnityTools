@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.AiSimulation;
+using UnityUtility.Tools;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Inspectors
@@ -11,7 +12,6 @@ namespace UnityUtilityEditor.Inspectors
     public class AiBehaviorEditor : Editor<AiBehavior>
     {
         private const string NONE_WORD = "None";
-        private const string SPACE = " ";
 
         public override void OnInspectorGUI()
         {
@@ -26,7 +26,7 @@ namespace UnityUtilityEditor.Inspectors
             GUI.color = Colours.Lime;
             EditorGUILayout.LabelField("Current:", GetStateName(target.BehaviorSetInstance.CurrentState));
             GUI.color = Colours.White;
-            EditorGUILayout.LabelField(SPACE, "↑");
+            EditorGUILayout.LabelField(Helper.SPACE, "↑");
             EditorGUILayout.LabelField("Previous:", GetStateName(target.BehaviorSetInstance.PrevState));
             EditorGUILayout.EndVertical();
         }
