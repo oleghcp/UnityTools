@@ -48,7 +48,7 @@ namespace UnityUtilityEditor.Drawers
             if (property.objectReferenceValue == null || !property.isExpanded)
                 return;
 
-            lineRect = EditorGuiUtility.GetLinePosition(position, 1);
+            Rect subPos = EditorGuiUtility.GetLinePosition(position, 1);
 
             using (SerializedObject serObject = new SerializedObject(property.objectReferenceValue))
             {
@@ -62,8 +62,10 @@ namespace UnityUtilityEditor.Drawers
                     if (item.propertyPath == EditorUtilityExt.SCRIPT_FIELD)
                         continue;
 
-                    EditorGUI.PropertyField(lineRect, item, true);
-                    lineRect.y += EditorGUI.GetPropertyHeight(item) + EditorGUIUtility.standardVerticalSpacing;
+                    float height = EditorGUI.GetPropertyHeight(item);
+                    subPos.height = height;
+                    EditorGUI.PropertyField(subPos, item, true);
+                    subPos.y += height + EditorGUIUtility.standardVerticalSpacing;
                 }
 
                 if (attribute.NeedIndent)
