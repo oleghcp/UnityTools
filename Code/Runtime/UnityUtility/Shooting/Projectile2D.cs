@@ -170,11 +170,7 @@ namespace UnityUtility.Shooting
                 {
                     float deltaTime = GetDeltaTime();
                     _currentTime += deltaTime;
-
                     UpdateState(transform.position, deltaTime, 1f);
-
-                    if (!_isPlaying)
-                        InvokeHit();
                 }
             }
 
@@ -276,12 +272,6 @@ namespace UnityUtility.Shooting
             if (_moving.MoveInInitialFrame > 0f)
             {
                 UpdateState(currentPosition, GetDeltaTime(), _moving.MoveInInitialFrame);
-
-                if (!_isPlaying)
-                {
-                    InvokeHit();
-                    return;
-                }
             }
         }
 
@@ -293,6 +283,7 @@ namespace UnityUtility.Shooting
                 if (!_isPlaying)
                 {
                     transform.SetPositionAndRotation(currentPosition.To_XYz(transform.position.z), GetRotation());
+                    InvokeHit();
                     return;
                 }
             }
@@ -302,6 +293,9 @@ namespace UnityUtility.Shooting
             _speed = _velocity.magnitude;
             CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
             transform.SetPositionAndRotation(currentPosition.To_XYz(transform.position.z), GetRotation());
+
+            if (!_isPlaying)
+                InvokeHit();
         }
 
         private void CheckMovement(in Vector2 source, in Vector2 dest, out Vector2 newSource, out Vector2 newDest)
