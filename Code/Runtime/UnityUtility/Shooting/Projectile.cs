@@ -149,10 +149,10 @@ namespace UnityUtility.Shooting
             set => _casting.ReflectedCastNear = value;
         }
 
-        public float InitialPrecastOffset
+        public float InitialPrecastBackOffset
         {
-            get => _casting.InitialPrecastOffset;
-            set => _casting.InitialPrecastOffset = value;
+            get => _casting.InitialPrecastBackOffset;
+            set => _casting.InitialPrecastBackOffset = value;
         }
 
         public IRotationProvider RotationProvider { get => _rotationProvider; set => _rotationProvider = value; }
@@ -191,7 +191,7 @@ namespace UnityUtility.Shooting
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            _casting.InitialPrecastOffset = _casting.InitialPrecastOffset;
+            _casting.InitialPrecastBackOffset = _casting.InitialPrecastBackOffset;
         }
 
         private void Reset()
@@ -276,7 +276,7 @@ namespace UnityUtility.Shooting
 
             Vector3 currentPosition = transform.position;
 
-            _prevPos = currentPosition + (currentDirection * _casting.InitialPrecastOffset);
+            _prevPos = currentPosition - (currentDirection * _casting.InitialPrecastBackOffset);
             _velocity = currentDirection * _moving.StartSpeed;
 
             if (_moving.HasLocks)

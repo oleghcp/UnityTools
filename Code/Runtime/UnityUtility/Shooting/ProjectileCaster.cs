@@ -14,7 +14,7 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private LayerMask _hitMask;
         [SerializeField]
-        private float _initialPrecastOffset;
+        private float _initialPrecastBackOffset;
         [SerializeField, Range(0f, 1f)]
         private float _reflectedCastNear;
 
@@ -42,10 +42,10 @@ namespace UnityUtility.Shooting
             set => _reflectedCastNear = value.Clamp01();
         }
 
-        public float InitialPrecastOffset
+        public float InitialPrecastBackOffset
         {
-            get => _initialPrecastOffset;
-            set => _initialPrecastOffset = value.ClampMax(0f);
+            get => _initialPrecastBackOffset;
+            set => _initialPrecastBackOffset = value.ClampMin(0f);
         }
 
 #if INCLUDE_PHYSICS
