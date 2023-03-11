@@ -157,7 +157,7 @@ namespace UnityUtility.Shooting
 
         private void Update()
         {
-            _listener?.PreUpdate();
+            _listener?.PreUpdate(_isPlaying);
 
             if (_isPlaying)
             {
@@ -178,7 +178,7 @@ namespace UnityUtility.Shooting
                 }
             }
 
-            _listener?.PostUpdate();
+            _listener?.PostUpdate(_isPlaying);
         }
 
 #if UNITY_EDITOR
@@ -328,7 +328,7 @@ namespace UnityUtility.Shooting
                             _velocity = reflectionInfo.newDir * (_speed * ricochetOption.SpeedRemainder);
                             _speed = _velocity.magnitude;
 
-                            _listener?.OnReflect(_hitInfo, _prevVelocity, _prevSpeed);
+                            _listener?.OnHitReflected(_hitInfo, _prevVelocity, _prevSpeed);
 
                             float near = _casting.ReflectedCastNear;
                             Vector2 from = near == 0f ? _hitInfo.point
@@ -367,7 +367,7 @@ namespace UnityUtility.Shooting
             _velocity = default;
             _speed = 0f;
 
-            _listener?.OnHit(_hitInfo, _prevVelocity, _prevSpeed);
+            _listener?.OnHitFinal(_hitInfo, _prevVelocity, _prevSpeed);
         }
 
         private void InvokeTimeOut()

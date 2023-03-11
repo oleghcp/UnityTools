@@ -26,22 +26,22 @@ namespace UnityUtility.Shooting
 #if INCLUDE_PHYSICS
     public interface IProjectileEventListener
     {
-        void OnHit(in RaycastHit hitInfo, in Vector3 velocity, float speed);
+        void OnHitFinal(in RaycastHit hitInfo, in Vector3 velocity, float speed);
+        void OnHitReflected(in RaycastHit hitInfo, in Vector3 previousVelocity, float previousSpeed);
         void OnTimeOut();
-        void OnReflect(in RaycastHit hitInfo, in Vector3 previousVelocity, float previousSpeed);
-        void PreUpdate();
-        void PostUpdate();
+        void PreUpdate(bool isPlaying);
+        void PostUpdate(bool isPlaying);
     }
 #endif
 
 #if INCLUDE_PHYSICS_2D
     public interface IProjectile2DEventListener
     {
-        void OnHit(in RaycastHit2D hitInfo, in Vector2 velocity, float speed);
+        void OnHitFinal(in RaycastHit2D hitInfo, in Vector2 velocity, float speed);
+        void OnHitReflected(in RaycastHit2D hitInfo, in Vector2 previousVelocity, float previousSpeed);
         void OnTimeOut();
-        void OnReflect(in RaycastHit2D hitInfo, in Vector2 previousVelocity, float previousSpeed);
-        void PreUpdate();
-        void PostUpdate();
+        void PreUpdate(bool isPlaying);
+        void PostUpdate(bool isPlaying);
     }
 #endif
 }
