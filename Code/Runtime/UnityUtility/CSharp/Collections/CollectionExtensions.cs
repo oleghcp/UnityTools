@@ -8,6 +8,95 @@ namespace UnityUtility.CSharp.Collections
 {
     public static class CollectionExtensions
     {
+        /// <summary>
+        /// Adds a number of items equals <paramref name="expandSize"/> to the collection.
+        /// </summary>
+        public static void Expand<T>(this ICollection<T> self, int expandSize, T value = default)
+        {
+            if (expandSize < 0)
+                throw ThrowErrors.NegativeParameter(nameof(expandSize));
+
+            for (int i = 0; i < expandSize; i++)
+            {
+                self.Add(value);
+            }
+        }
+
+        /// <summary>
+        /// Adds a number of items equals <paramref name="expandSize"/> to the collection.
+        /// </summary>
+        public static void Expand<T>(this ICollection<T> self, int expandSize, Func<T> factory)
+        {
+            if (expandSize < 0)
+                throw ThrowErrors.NegativeParameter(nameof(expandSize));
+
+            for (int i = 0; i < expandSize; i++)
+            {
+                self.Add(factory());
+            }
+        }
+
+        /// <summary>
+        /// Increases or decrease the number of items in the list to the specified count.
+        /// </summary>
+        public static void SetCount<T>(this IList<T> self, int newCount, T value = default)
+        {
+            if (newCount < 0)
+                throw ThrowErrors.NegativeParameter(nameof(newCount));
+
+            int diffCount = newCount - self.Count;
+
+            if (diffCount == 0)
+                return;
+
+            if (diffCount > 0)
+            {
+                for (int i = 0; i < diffCount; i++)
+                {
+                    self.Add(value);
+                }
+            }
+            else
+            {
+                while (self.Count > newCount)
+                {
+                    self.RemoveAt(self.Count - 1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Increases or decrease the number of items in the list to the specified count.
+        /// </summary>
+        public static void SetCount<T>(this IList<T> self, int newCount, Func<T> factory)
+        {
+            if (newCount < 0)
+                throw ThrowErrors.NegativeParameter(nameof(newCount));
+
+            if (factory == null)
+                throw ThrowErrors.NullParameter(nameof(factory));
+
+            int diffCount = newCount - self.Count;
+
+            if (diffCount == 0)
+                return;
+
+            if (diffCount > 0)
+            {
+                for (int i = 0; i < diffCount; i++)
+                {
+                    self.Add(factory());
+                }
+            }
+            else
+            {
+                while (self.Count > newCount)
+                {
+                    self.RemoveAt(self.Count - 1);
+                }
+            }
+        }
+
         public static void DisplaceLeft<T>(this IList<T> self)
         {
             if (self.Count <= 1)
