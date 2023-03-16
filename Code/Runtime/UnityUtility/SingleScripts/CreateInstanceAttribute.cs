@@ -6,19 +6,16 @@ namespace UnityUtility.SingleScripts
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public abstract class CreateInstanceAttribute : Attribute
     {
-        public abstract object Create();
+        public abstract void Create();
 
-        internal static bool TryUse<T>(out T value) where T : class
+        internal static bool TryUse<T>() where T : class
         {
             CreateInstanceAttribute attribute = typeof(T).GetCustomAttribute<CreateInstanceAttribute>(true);
 
             if (attribute == null)
-            {
-                value = default;
                 return false;
-            }
 
-            value = (T)attribute.Create();
+            attribute.Create();
             return true;
         }
     }

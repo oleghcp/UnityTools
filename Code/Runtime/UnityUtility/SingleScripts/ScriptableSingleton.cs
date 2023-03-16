@@ -20,7 +20,7 @@ namespace UnityUtility.SingleScripts
             {
                 if (_instance == null)
                 {
-                    if (!CreateInstanceAttribute.TryUse(out _instance))
+                    if (!CreateInstanceAttribute.TryUse<T>())
                         CreateInstance<T>();
                 }
 
