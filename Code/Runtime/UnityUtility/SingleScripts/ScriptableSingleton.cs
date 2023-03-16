@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityUtility.Engine;
 using UnityUtility.Tools;
 
 namespace UnityUtility.SingleScripts
@@ -51,12 +50,6 @@ namespace UnityUtility.SingleScripts
         {
             _instance = null;
             Destruct();
-        }
-
-        public void Dispose()
-        {
-            this.Destroy();
-            _instance = null;
         }
 
         /// <summary>

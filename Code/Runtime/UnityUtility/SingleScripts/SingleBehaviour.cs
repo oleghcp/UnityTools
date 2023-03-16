@@ -16,7 +16,7 @@ namespace UnityUtility.SingleScripts
         private bool _locked;
 
         /// <summary>
-        /// Static instance of SingleScript`1.
+        /// Static instance of SingleBehaviour`1.
         /// </summary>
         public static T I
         {
