@@ -28,7 +28,7 @@ namespace System
             }
         }
 
-        public static T Min<T>(Span<T> span) where T : unmanaged, IComparable<T>
+        public static T Min<T>(in Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw ThrowErrors.NoElements();
@@ -44,7 +44,7 @@ namespace System
             return num;
         }
 
-        public static T Max<T>(Span<T> span) where T : unmanaged, IComparable<T>
+        public static T Max<T>(in Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw ThrowErrors.NoElements();
@@ -59,6 +59,40 @@ namespace System
 
             return num;
         }
+
+#if UNITY_2021_2_OR_NEWER
+        public static T Min<T>(in ReadOnlySpan<T> span) where T : unmanaged, IComparable<T>
+        {
+            if (span.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            T num = span[0];
+
+            for (int i = 1; i < span.Length; i++)
+            {
+                if (span[i].CompareTo(num) < 0)
+                    num = span[i];
+            }
+
+            return num;
+        }
+
+        public static T Max<T>(in ReadOnlySpan<T> span) where T : unmanaged, IComparable<T>
+        {
+            if (span.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            T num = span[0];
+
+            for (int i = 1; i < span.Length; i++)
+            {
+                if (span[i].CompareTo(num) > 0)
+                    num = span[i];
+            }
+
+            return num;
+        } 
+#endif
 
         public static unsafe void QuickSort<T>(Span<T> span, int left, int right) where T : unmanaged, IComparable<T>
         {
@@ -125,7 +159,7 @@ namespace System
                 QuickSort(span, i, right, comparer);
         }
 
-        public static unsafe void QuickSort<T, TKey>(Span<T> span, int left, int right, Func<T, TKey> selector)
+        public static unsafe void QuickSort<T, TKey>(in Span<T> span, int left, int right, Func<T, TKey> selector)
             where T : unmanaged
             where TKey : IComparable<TKey>
         {
