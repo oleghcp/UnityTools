@@ -44,24 +44,14 @@ namespace UnityUtility.CSharp.Collections
             if (newCount < 0)
                 throw ThrowErrors.NegativeParameter(nameof(newCount));
 
-            int diffCount = newCount - self.Count;
-
-            if (diffCount == 0)
-                return;
-
-            if (diffCount > 0)
+            while (self.Count < newCount)
             {
-                for (int i = 0; i < diffCount; i++)
-                {
-                    self.Add(value);
-                }
+                self.Add(value);
             }
-            else
+
+            while (self.Count > newCount)
             {
-                while (self.Count > newCount)
-                {
-                    self.RemoveAt(self.Count - 1);
-                }
+                self.RemoveAt(self.Count - 1);
             }
         }
 
@@ -76,24 +66,14 @@ namespace UnityUtility.CSharp.Collections
             if (factory == null)
                 throw ThrowErrors.NullParameter(nameof(factory));
 
-            int diffCount = newCount - self.Count;
-
-            if (diffCount == 0)
-                return;
-
-            if (diffCount > 0)
+            while (self.Count < newCount)
             {
-                for (int i = 0; i < diffCount; i++)
-                {
-                    self.Add(factory());
-                }
+                self.Add(factory());
             }
-            else
+
+            while (self.Count > newCount)
             {
-                while (self.Count > newCount)
-                {
-                    self.RemoveAt(self.Count - 1);
-                }
+                self.RemoveAt(self.Count - 1);
             }
         }
 
