@@ -245,8 +245,9 @@ namespace UnityUtility.CSharp
             return (self as IList<T>).Contains(item);
         }
 
+#if UNITY_2021_2_OR_NEWER
         /// <summary>
-        /// Enumerates array from the specified index.
+        /// Returns ArraySegment within the specified range.
         /// </summary>
         public static ArraySegment<T> Slice<T>(this T[] self, int startIndex, int length)
         {
@@ -254,16 +255,35 @@ namespace UnityUtility.CSharp
         }
 
         /// <summary>
-        /// Enumerates array from the specified index.
+        /// Returns ArraySegment within the specified range.
         /// </summary>
         public static ArraySegment<T> Slice<T>(this T[] self, int startIndex)
         {
             return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
         }
+#endif
 
-#if !UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
         /// <summary>
-        /// Enumerates array from the specified index.
+        /// Enumerates array within the specified range.
+        /// </summary>
+        [Obsolete("This method is deprecated. Use Slice instead.")]
+        public static ArraySegment<T> Enumerate<T>(this T[] self, int startIndex, int length)
+        {
+            return new ArraySegment<T>(self, startIndex, length);
+        }
+
+        /// <summary>
+        /// Enumerates array within the specified range.
+        /// </summary>
+        [Obsolete("This method is deprecated. Use Slice instead.")]
+        public static ArraySegment<T> Enumerate<T>(this T[] self, int startIndex)
+        {
+            return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
+        }
+#else
+        /// <summary>
+        /// Enumerates array within the specified range.
         /// </summary>
         public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex, int length)
         {
@@ -271,7 +291,7 @@ namespace UnityUtility.CSharp
         }
 
         /// <summary>
-        /// Enumerates array from the specified index.
+        /// Enumerates array within the specified range.
         /// </summary>
         public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex)
         {

@@ -304,7 +304,7 @@ namespace UnityUtility.CSharp.Collections
         }
 
         /// <summary>
-        /// Enumerates collection from the specified index.
+        /// Enumerates collection within the specified range.
         /// </summary>
         public static EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
         {
@@ -312,7 +312,7 @@ namespace UnityUtility.CSharp.Collections
         }
 
         /// <summary>
-        /// Enumerates collection from the specified index.
+        /// Enumerates collection within the specified range.
         /// </summary>
         public static EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
         {
