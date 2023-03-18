@@ -248,6 +248,23 @@ namespace UnityUtility.CSharp
         /// <summary>
         /// Enumerates array from the specified index.
         /// </summary>
+        public static ArraySegment<T> Slice<T>(this T[] self, int startIndex, int length)
+        {
+            return new ArraySegment<T>(self, startIndex, length);
+        }
+
+        /// <summary>
+        /// Enumerates array from the specified index.
+        /// </summary>
+        public static ArraySegment<T> Slice<T>(this T[] self, int startIndex)
+        {
+            return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
+        }
+
+#if !UNITY_2021_2_OR_NEWER
+        /// <summary>
+        /// Enumerates array from the specified index.
+        /// </summary>
         public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex, int length)
         {
             return new ArrayEnumerableQuery<T>(self, startIndex, length);
@@ -260,5 +277,6 @@ namespace UnityUtility.CSharp
         {
             return new ArrayEnumerableQuery<T>(self, startIndex);
         }
+#endif
     }
 }
