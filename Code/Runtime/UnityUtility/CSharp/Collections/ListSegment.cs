@@ -19,7 +19,14 @@ namespace UnityUtility.CSharp.Collections
             set => _items[_offset + index] = value;
         }
 
-        //public ListSegment<T> this[Range range] => throw new NotImplementedException();
+        public ListSegment<T> this[Range range]
+        {
+            get
+            {
+                (int offset, int length) = range.GetOffsetAndLength(_count);
+                return new ListSegment<T>(_items, _offset + offset, length);
+            }
+        }
 
         public IList<T> Items => _items;
         public int Offset => _offset;
