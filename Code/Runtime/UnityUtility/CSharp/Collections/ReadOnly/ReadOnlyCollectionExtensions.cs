@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections.Iterators;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp.Collections.ReadOnly
@@ -113,15 +112,39 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
             return self[self.Count - (reverseIndex + 1)];
         }
 
-        public static EnumerableQuery_<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex, int length)
+#if UNITY_2021_2_OR_NEWER
+        public static ReadOnlySegment<T> Slice_<T>(this IReadOnlyList<T> self, int startIndex, int length)
         {
-            return new EnumerableQuery_<T>(self, startIndex, length);
+            return new ReadOnlySegment<T>(self, startIndex, length);
         }
 
-        public static EnumerableQuery_<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
+        public static ReadOnlySegment<T> Slice_<T>(this IReadOnlyList<T> self, int startIndex)
         {
-            return new EnumerableQuery_<T>(self, startIndex);
+            return new ReadOnlySegment<T>(self, startIndex);
         }
+
+        [Obsolete("This method is deprecated. Use Slice instead.")]
+        public static ReadOnlySegment<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex, int length)
+        {
+            return new ReadOnlySegment<T>(self, startIndex, length);
+        }
+
+        [Obsolete("This method is deprecated. Use Slice instead.")]
+        public static ReadOnlySegment<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
+        {
+            return new ReadOnlySegment<T>(self, startIndex);
+        }
+#else
+        public static Iterators.EnumerableQuery_<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex, int length)
+        {
+            return new Iterators.EnumerableQuery_<T>(self, startIndex, length);
+        }
+
+        public static Iterators.EnumerableQuery_<T> Enumerate_<T>(this IReadOnlyList<T> self, int startIndex)
+        {
+            return new Iterators.EnumerableQuery_<T>(self, startIndex);
+        }
+#endif
 
         public static void CopyTo_<T>(this IReadOnlyList<T> self, Span<T> target) where T : unmanaged
         {

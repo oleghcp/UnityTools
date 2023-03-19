@@ -341,17 +341,17 @@ namespace UnityUtility.CSharp.Collections
         /// <summary>
         /// Enumerates collection within the specified range.
         /// </summary>
-        public static Collections.Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
+        public static Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
         {
-            return new Collections.Iterators.EnumerableQuery<T>(self, startIndex, length);
+            return new Iterators.EnumerableQuery<T>(self, startIndex, length);
         }
 
         /// <summary>
         /// Enumerates collection within the specified range.
         /// </summary>
-        public static Collections.Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
+        public static Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
         {
-            return new Collections.Iterators.EnumerableQuery<T>(self, startIndex);
+            return new Iterators.EnumerableQuery<T>(self, startIndex);
         }
 #endif
 
