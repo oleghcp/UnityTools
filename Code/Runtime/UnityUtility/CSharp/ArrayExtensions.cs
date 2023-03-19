@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections.Iterators;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp
@@ -34,7 +33,7 @@ namespace UnityUtility.CSharp
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             if (startIndex + count > self.Length)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw ThrowErrors.SegmentOutOfRange();
 
             for (int i = startIndex; i < count + startIndex; i++)
             {
@@ -63,7 +62,7 @@ namespace UnityUtility.CSharp
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             if (startIndex + count > self.Length)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw ThrowErrors.SegmentOutOfRange();
 
             for (int i = startIndex; i < count + startIndex; i++)
             {
@@ -247,7 +246,7 @@ namespace UnityUtility.CSharp
 
 #if UNITY_2021_2_OR_NEWER
         /// <summary>
-        /// Returns ArraySegment within the specified range.
+        /// Returns ArraySegment with the specified range.
         /// </summary>
         public static ArraySegment<T> Slice<T>(this T[] self, int startIndex, int length)
         {
@@ -255,15 +254,13 @@ namespace UnityUtility.CSharp
         }
 
         /// <summary>
-        /// Returns ArraySegment within the specified range.
+        /// Returns ArraySegment with the specified range.
         /// </summary>
         public static ArraySegment<T> Slice<T>(this T[] self, int startIndex)
         {
             return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
         }
-#endif
 
-#if UNITY_2021_2_OR_NEWER
         /// <summary>
         /// Enumerates array within the specified range.
         /// </summary>
@@ -285,17 +282,17 @@ namespace UnityUtility.CSharp
         /// <summary>
         /// Enumerates array within the specified range.
         /// </summary>
-        public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex, int length)
+        public static Collections.Iterators.ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex, int length)
         {
-            return new ArrayEnumerableQuery<T>(self, startIndex, length);
+            return new Collections.Iterators.ArrayEnumerableQuery<T>(self, startIndex, length);
         }
 
         /// <summary>
         /// Enumerates array within the specified range.
         /// </summary>
-        public static ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex)
+        public static Collections.Iterators.ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex)
         {
-            return new ArrayEnumerableQuery<T>(self, startIndex);
+            return new Collections.Iterators.ArrayEnumerableQuery<T>(self, startIndex);
         }
 #endif
     }

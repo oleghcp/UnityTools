@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if !UNITY_2021_2_OR_NEWER
+using System.Collections;
 using System.Collections.Generic;
 
 namespace UnityUtility.CSharp.Collections.Iterators
@@ -36,5 +37,6 @@ namespace UnityUtility.CSharp.Collections.Iterators
         {
             return _enumerator;
         }
-    }    
+    }
 }
+#endif

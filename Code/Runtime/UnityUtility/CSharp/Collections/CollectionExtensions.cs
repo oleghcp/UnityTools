@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using UnityUtility.CSharp.Collections.Iterators;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp.Collections
@@ -303,21 +302,58 @@ namespace UnityUtility.CSharp.Collections
             return GetSubArray(self, startIndex, self.Count - startIndex);
         }
 
+
+#if UNITY_2021_2_OR_NEWER
         /// <summary>
-        /// Enumerates collection within the specified range.
+        /// Returns ListSegment with the specified range.
         /// </summary>
-        public static EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
+        public static ListSegment<T> Slice<T>(this IList<T> self, int startIndex, int length)
         {
-            return new EnumerableQuery<T>(self, startIndex, length);
+            return new ListSegment<T>(self, startIndex, length);
+        }
+
+        /// <summary>
+        /// Returns ListSegment with the specified range.
+        /// </summary>
+        public static ListSegment<T> Slice<T>(this IList<T> self, int startIndex)
+        {
+            return new ListSegment<T>(self, startIndex);
         }
 
         /// <summary>
         /// Enumerates collection within the specified range.
         /// </summary>
-        public static EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
+        [Obsolete("This method is deprecated. Use Slice instead.")]
+        public static ListSegment<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
         {
-            return new EnumerableQuery<T>(self, startIndex);
+            return new ListSegment<T>(self, startIndex, length);
         }
+
+        /// <summary>
+        /// Enumerates collection within the specified range.
+        /// </summary>
+        [Obsolete("This method is deprecated. Use Slice instead.")]
+        public static ListSegment<T> Enumerate<T>(this IList<T> self, int startIndex)
+        {
+            return new ListSegment<T>(self, startIndex);
+        }
+#else
+        /// <summary>
+        /// Enumerates collection within the specified range.
+        /// </summary>
+        public static Collections.Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
+        {
+            return new Collections.Iterators.EnumerableQuery<T>(self, startIndex, length);
+        }
+
+        /// <summary>
+        /// Enumerates collection within the specified range.
+        /// </summary>
+        public static Collections.Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
+        {
+            return new Collections.Iterators.EnumerableQuery<T>(self, startIndex);
+        }
+#endif
 
         /// <summary>
         /// Copies all the elements of the current collection to the specified Span`1.

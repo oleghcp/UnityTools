@@ -4,6 +4,16 @@ namespace UnityUtility.Tools
 {
     internal static class ThrowErrors
     {
+        public static ArgumentException SegmentOutOfRange()
+        {
+            return new ArgumentException("Segment is out of range.");
+        }
+
+        public static ArgumentException DestinationTooShort(string paramName)
+        {
+            return new ArgumentException("Destination too short.", paramName);
+        }
+
         public static NotSupportedException ReadOnlyBitList()
         {
             return new NotSupportedException("BitList is read only.");
