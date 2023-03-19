@@ -108,7 +108,7 @@ namespace UnityUtility.CSharp.Collections
 
         public static void Swap<T>(this IList<T> self, int i, int j)
         {
-            Helper.Swap(self, i, j);
+            (self[j], self[i]) = (self[i], self[j]);
         }
 
         /// <summary>

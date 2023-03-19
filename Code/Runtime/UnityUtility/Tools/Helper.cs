@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityUtility.CSharp;
 
 namespace UnityUtility.Tools
@@ -8,31 +8,37 @@ namespace UnityUtility.Tools
     {
         public const string SPACE = " ";
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeString()
         {
             return GetDateTimeString(DateTime.Now);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeString(in DateTime dateTime)
         {
             return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}";
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeStringWithSeconds()
         {
             return GetDateTimeStringWithSeconds(DateTime.Now);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeStringWithSeconds(in DateTime dateTime)
         {
             return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}.{dateTime.Second:D2}";
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeStringWithMilliseconds()
         {
             return GetDateTimeStringWithMilliseconds(DateTime.Now);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeStringWithMilliseconds(in DateTime dateTime)
         {
             return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}.{dateTime.Second:D2}_{dateTime.Millisecond:D3}";
@@ -43,24 +49,34 @@ namespace UnityUtility.Tools
             (b, a) = (a, b);
         }
 
-        public static void Swap<T>(IList<T> list, int i, int j)
-        {
-            (list[j], list[i]) = (list[i], list[j]);
-        }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetHashCode(int hc0, int hc1)
         {
+#if UNITY_2021_2_OR_NEWER
+            return HashCode.Combine(hc0, hc1);
+#else
             return hc0 ^ hc1 << 2;
+#endif
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetHashCode(int hc0, int hc1, int hc2)
         {
+#if UNITY_2021_2_OR_NEWER
+            return HashCode.Combine(hc0, hc1, hc2);
+#else
             return hc0 ^ hc1 << 2 ^ hc2 >> 2;
+#endif
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetHashCode(int hc0, int hc1, int hc2, int hc3)
         {
+#if UNITY_2021_2_OR_NEWER
+            return HashCode.Combine(hc0, hc1, hc2, hc3);
+#else
             return hc0 ^ hc1 << 2 ^ hc2 >> 2 ^ hc3 >> 1;
+#endif
         }
 
         internal static string SimplifyTypeName(string assemblyQualifiedName)
