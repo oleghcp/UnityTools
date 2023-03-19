@@ -85,6 +85,11 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
+        public void CopyTo(IList<T> destination)
+        {
+            CopyTo(destination, 0);
+        }
+
         public void CopyTo(IList<T> destination, int destinationIndex)
         {
             if (_count > destination.Count)
