@@ -11,12 +11,12 @@ namespace UnityUtility.Controls
 
         public override bool Equals(object obj)
         {
-            return obj is ButtonInfo buttonInfo && this == buttonInfo;
+            return obj is ButtonInfo buttonInfo && Equals(buttonInfo);
         }
 
         public bool Equals(ButtonInfo other)
         {
-            return this == other;
+            return Function == other.Function && KeyCode == other.KeyCode;
         }
 
         public override int GetHashCode()
@@ -26,12 +26,12 @@ namespace UnityUtility.Controls
 
         public static bool operator ==(ButtonInfo a, ButtonInfo b)
         {
-            return a.Function == b.Function && a.KeyCode == b.KeyCode;
+            return a.Equals(b);
         }
 
         public static bool operator !=(ButtonInfo a, ButtonInfo b)
         {
-            return !(a == b);
+            return !a.Equals(b);
         }
     }
 }

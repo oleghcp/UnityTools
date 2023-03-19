@@ -233,8 +233,8 @@ namespace UnityUtility.Sound
             public override bool Equals(object obj) => obj is SoundKey soundKey && Equals(soundKey);
             public bool Equals(SoundKey other) => _hash == other._hash;
             public override int GetHashCode() => _hash;
-            public static bool operator ==(SoundKey a, SoundKey b) => a._hash == b._hash;
-            public static bool operator !=(SoundKey a, SoundKey b) => a._hash != b._hash;
+            public static bool operator ==(SoundKey a, SoundKey b) => a.Equals(b);
+            public static bool operator !=(SoundKey a, SoundKey b) => !a.Equals(b);
         }
     }
 }

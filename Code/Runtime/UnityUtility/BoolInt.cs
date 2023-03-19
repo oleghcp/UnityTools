@@ -60,12 +60,12 @@ namespace UnityUtility
 
         public override bool Equals(object obj)
         {
-            return obj is BoolInt boolInt && this == boolInt;
+            return obj is BoolInt boolInt && Equals(boolInt);
         }
 
         public bool Equals(BoolInt other)
         {
-            return this == other;
+            return other._value == _value;
         }
 
         public int CompareTo(BoolInt other)
@@ -85,12 +85,12 @@ namespace UnityUtility
 
         public static bool operator ==(BoolInt a, BoolInt b)
         {
-            return a._value == b._value;
+            return a.Equals(b);
         }
 
         public static bool operator !=(BoolInt a, BoolInt b)
         {
-            return a._value != b._value;
+            return !a.Equals(b);
         }
     }
 }

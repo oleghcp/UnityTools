@@ -58,12 +58,12 @@ namespace UnityUtility.NumericEntities
 
         public override bool Equals(object obj)
         {
-            return obj is AccumInt accumInt && this == accumInt;
+            return obj is AccumInt accumInt && Equals(accumInt);
         }
 
         public bool Equals(AccumInt other)
         {
-            return this == other;
+            return other._got == _got && other._spent == _spent;
         }
 
         public override int GetHashCode()
@@ -80,12 +80,12 @@ namespace UnityUtility.NumericEntities
 
         public static bool operator ==(AccumInt a, AccumInt b)
         {
-            return a._got == b._got && a._spent == b._spent;
+            return a.Equals(b);
         }
 
         public static bool operator !=(AccumInt a, AccumInt b)
         {
-            return !(a == b);
+            return !a.Equals(b);
         }
 
         public static AccumInt operator +(AccumInt value1, int value2)

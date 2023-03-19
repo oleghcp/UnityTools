@@ -114,12 +114,12 @@ namespace UnityUtility.Mathematics
 
         public override bool Equals(object obj)
         {
-            return obj is Sphere sphere && sphere.Equals(this);
+            return obj is Sphere sphere && Equals(sphere);
         }
 
         public bool Equals(Sphere other)
         {
-            return this == other;
+            return other.Radius == Radius && other.Position == Position;
         }
 
         public static implicit operator Sphere(BoundingSphere sphere)
@@ -159,14 +159,14 @@ namespace UnityUtility.Mathematics
             return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", stringPosition, Radius.ToString(format, formatProvider));
         }
 
-        public static bool operator !=(Sphere a, Sphere b)
-        {
-            return !(a == b);
-        }
-
         public static bool operator ==(Sphere a, Sphere b)
         {
-            return a.Radius == b.Radius && a.Position == b.Position;
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Sphere a, Sphere b)
+        {
+            return !a.Equals(b);
         }
         #endregion
     }

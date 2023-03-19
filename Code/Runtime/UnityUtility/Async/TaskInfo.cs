@@ -78,12 +78,12 @@ namespace UnityUtility.Async
 
         public override bool Equals(object obj)
         {
-            return obj is TaskInfo taskInfo && this == taskInfo;
+            return obj is TaskInfo taskInfo && Equals(taskInfo);
         }
 
         public bool Equals(TaskInfo other)
         {
-            return this == other;
+            return other._id == _id;
         }
 
         public override int GetHashCode()
@@ -103,12 +103,12 @@ namespace UnityUtility.Async
 
         public static bool operator ==(TaskInfo a, TaskInfo b)
         {
-            return a._id == b._id;
+            return a.Equals(b);
         }
 
         public static bool operator !=(TaskInfo a, TaskInfo b)
         {
-            return a._id != b._id;
+            return !a.Equals(b);
         }
     }
 }

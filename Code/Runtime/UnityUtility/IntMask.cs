@@ -104,24 +104,24 @@ namespace UnityUtility
 
         public bool Equals(IntMask other)
         {
-            return this == other;
+            return _mask == other._mask;
         }
 
         public override bool Equals(object other)
         {
-            return other is IntMask mask && this == mask;
+            return other is IntMask mask && Equals(mask);
         }
         #endregion
 
         #region Operators
         public static bool operator ==(IntMask a, IntMask b)
         {
-            return a._mask == b._mask;
+            return a.Equals(b);
         }
 
         public static bool operator !=(IntMask a, IntMask b)
         {
-            return !(a == b);
+            return !a.Equals(b);
         }
 
         public static implicit operator IntMask(int value)

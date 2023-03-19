@@ -108,12 +108,12 @@ namespace UnityUtility.Mathematics
 
         public override bool Equals(object obj)
         {
-            return obj is Circle circle && circle.Equals(this);
+            return obj is Circle circle && Equals(circle);
         }
 
         public bool Equals(Circle other)
         {
-            return this == other;
+            return other.Radius == Radius && other.Position == Position;
         }
 
         public override string ToString()
@@ -143,14 +143,14 @@ namespace UnityUtility.Mathematics
             return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", stringPosition, Radius.ToString(format, formatProvider));
         }
 
-        public static bool operator !=(Circle a, Circle b)
-        {
-            return !(a == b);
-        }
-
         public static bool operator ==(Circle a, Circle b)
         {
-            return a.Radius == b.Radius && a.Position == b.Position;
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Circle a, Circle b)
+        {
+            return !a.Equals(b);
         }
         #endregion
     }
