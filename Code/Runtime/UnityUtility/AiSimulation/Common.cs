@@ -10,9 +10,9 @@ namespace UnityUtility.AiSimulation
         [SerializeField]
         private CommonCondition _common;
 
-        protected override bool Satisfied(AiBehaviorSet owner)
+        protected override bool Satisfied(PermanentState permanentState)
         {
-            return _common.Satisfied(owner);
+            return _common.Satisfied(permanentState);
         }
     }
 }

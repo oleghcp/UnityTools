@@ -14,12 +14,23 @@ namespace UnityUtility.AiSimulation
         internal static string NotFieldName => nameof(_not);
 #endif
 
-        internal bool Check(AiBehaviorSet owner)
+        internal bool Check(PermanentState permanentState)
         {
-            return Satisfied(owner) != _not;
+            return Satisfied(permanentState) != _not;
         }
 
-        protected abstract bool Satisfied(AiBehaviorSet owner);
+        protected abstract bool Satisfied(PermanentState permanentState);
+    }
+
+    [Serializable]
+    public abstract class StateCondition<T> : StateCondition where T : PermanentState
+    {
+        protected sealed override bool Satisfied(PermanentState permanentState)
+        {
+            return Satisfied((T)permanentState);
+        }
+
+        protected abstract bool Satisfied(T permanentState);
     }
 }
 #endif

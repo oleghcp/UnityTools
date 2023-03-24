@@ -9,9 +9,9 @@ namespace UnityUtility.AiSimulation
         [SerializeReference]
         private StateCondition[] _conditions;
 
-        public bool Satisfied(AiBehaviorSet owner)
+        public bool Satisfied(PermanentState permanentState)
         {
-            return ConditionUtility.All(_conditions, owner);
+            return ConditionUtility.All(_conditions, permanentState);
         }
     }
 }

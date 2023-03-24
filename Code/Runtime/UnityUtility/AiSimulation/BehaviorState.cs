@@ -11,23 +11,24 @@ namespace UnityUtility.AiSimulation
         [SerializeReference]
         private StateCondition[] _conditions;
 
-        private AiBehaviorSet _behaviorSet;
+        private PermanentState _permanentState;
 
-        public AiBehaviorSet Owner => _behaviorSet;
 #pragma warning disable IDE1006
-        public GameObject gameObject => _behaviorSet.gameObject;
-        public Transform transform => _behaviorSet.transform;
+        protected GameObject gameObject => _permanentState.gameObject;
+        protected Transform transform => _permanentState.transform;
 #pragma warning restore IDE1006
 
-        internal void SetUp(AiBehaviorSet behaviorSet)
+        protected PermanentState PermanentState => _permanentState;
+
+        internal void SetUp(PermanentState permanentState)
         {
-            _behaviorSet = behaviorSet;
+            _permanentState = permanentState;
             OnSetUp();
         }
 
         public bool Available()
         {
-            return ConditionUtility.All(_conditions, Owner);
+            return ConditionUtility.All(_conditions, _permanentState);
         }
 
         protected virtual void OnSetUp() { }
@@ -36,9 +37,9 @@ namespace UnityUtility.AiSimulation
         public virtual void OnEnd() { }
         public abstract void Refresh(float deltaTime);
 
-        public T GetComponent<T>()
+        protected T GetComponent<T>()
         {
-            return _behaviorSet.GetComponent<T>();
+            return _permanentState.GetComponent<T>();
         }
     }
 
@@ -54,7 +55,7 @@ namespace UnityUtility.AiSimulation
             {
                 for (int i = 0; i < _finalizers.Length; i++)
                 {
-                    _finalizers[i].OnComlete(Owner);
+                    _finalizers[i].OnComlete(PermanentState);
                 }
             }
         }

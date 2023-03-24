@@ -3,11 +3,10 @@ using UnityEngine;
 using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 
-#pragma warning disable UNT0014
 namespace UnityUtility.AiSimulation
 {
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/Behavior Set")]
-    public class AiBehaviorSet : ScriptableObject
+    internal class AiBehaviorSet : ScriptableObject
     {
         [SerializeReference, ReferenceSelection]
         private PermanentState _permanentState;
@@ -16,8 +15,6 @@ namespace UnityUtility.AiSimulation
         [SerializeReference, ReferenceSelection]
         private BehaviorState[] _states;
 
-        private GameObject _gameObject;
-        private Transform _transform;
         private BehaviorState _currentState;
 #if UNITY_EDITOR
         private BehaviorState _prevState;
@@ -25,29 +22,21 @@ namespace UnityUtility.AiSimulation
 
         public PermanentState PermanentState => _permanentState;
 
-#pragma warning disable IDE1006
-        public GameObject gameObject => _gameObject;
-        public Transform transform => _transform;
-#pragma warning restore IDE1006
-
 #if UNITY_EDITOR
-        internal BehaviorState CurrentState => _currentState;
-        internal BehaviorState PrevState => _prevState;
+        public BehaviorState CurrentState => _currentState;
+        public BehaviorState PrevState => _prevState;
 #endif
 
-        internal void SetUp(GameObject gameObject)
+        public void SetUp(GameObject gameObject)
         {
-            _gameObject = gameObject;
-            _transform = gameObject.transform;
-
-            _permanentState?.SetUp(this);
+            _permanentState?.SetUp(gameObject);
 
             if (_states.Length == 0)
                 return;
 
             for (int i = 0; i < _states.Length; i++)
             {
-                _states[i].SetUp(this);
+                _states[i].SetUp(_permanentState);
             }
 
             _currentState = _states.FromEnd(0);
@@ -57,6 +46,7 @@ namespace UnityUtility.AiSimulation
         private void OnDestroy()
         {
             _permanentState?.OnDestroy();
+            _currentState?.OnEnd();
 
             for (int i = 0; i < _states.Length; i++)
             {
@@ -64,7 +54,7 @@ namespace UnityUtility.AiSimulation
             }
         }
 
-        internal void Refresh(float deltaTime)
+        public void Refresh(float deltaTime)
         {
             _permanentState?.Refresh(deltaTime);
 
@@ -87,11 +77,6 @@ namespace UnityUtility.AiSimulation
             }
 
             _currentState?.Refresh(deltaTime);
-        }
-
-        public T GetComponent<T>()
-        {
-            return _gameObject.GetComponent<T>();
         }
     }
 }

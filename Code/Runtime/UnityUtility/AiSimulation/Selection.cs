@@ -10,9 +10,9 @@ namespace UnityUtility.AiSimulation
         [SerializeReference]
         private StateCondition[] _conditions;
 
-        protected override bool Satisfied(AiBehaviorSet owner)
+        protected override bool Satisfied(PermanentState permanentState)
         {
-            return ConditionUtility.Any(_conditions, owner);
+            return ConditionUtility.Any(_conditions, permanentState);
         }
     }
 }

@@ -7,17 +7,18 @@ namespace UnityUtility.AiSimulation
     [Serializable]
     public abstract class PermanentState
     {
-        private AiBehaviorSet _behaviorSet;
+        private GameObject _gameObject;
+        private Transform _transform;
 
-        public AiBehaviorSet Owner => _behaviorSet;
 #pragma warning disable IDE1006
-        public GameObject gameObject => _behaviorSet.gameObject;
-        public Transform transform => _behaviorSet.transform;
+        public GameObject gameObject => _gameObject;
+        public Transform transform => _transform;
 #pragma warning restore IDE1006
 
-        internal void SetUp(AiBehaviorSet behaviorSet)
+        internal void SetUp(GameObject gameObject)
         {
-            _behaviorSet = behaviorSet;
+            _gameObject = gameObject;
+            _transform = gameObject.transform;
             OnSetUp();
         }
 
@@ -27,7 +28,7 @@ namespace UnityUtility.AiSimulation
 
         public T GetComponent<T>()
         {
-            return _behaviorSet.GetComponent<T>();
+            return _gameObject.GetComponent<T>();
         }
     }
 }

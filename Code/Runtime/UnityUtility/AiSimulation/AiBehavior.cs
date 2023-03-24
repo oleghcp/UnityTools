@@ -14,20 +14,7 @@ namespace UnityUtility.AiSimulation
         private bool _raw = true;
         private AiBehaviorSet _behaviorSetInstance;
 
-        public AiBehaviorSet BehaviorSet
-        {
-            get
-            {
-                if (_raw)
-                {
-                    _behaviorSetInstance = _behaviorSet.Install();
-                    _behaviorSetInstance.SetUp(gameObject);
-                    _raw = false;
-                }
-
-                return _behaviorSetInstance;
-            }
-        }
+        public PermanentState PermanentState => GetBehaviorSet().PermanentState;
 
 #if UNITY_EDITOR
         internal AiBehaviorSet BehaviorSetInstance => _behaviorSetInstance;
@@ -41,7 +28,19 @@ namespace UnityUtility.AiSimulation
 
         private void Update()
         {
-            BehaviorSet.Refresh(Time.deltaTime);
+            GetBehaviorSet().Refresh(Time.deltaTime);
+        }
+
+        private AiBehaviorSet GetBehaviorSet()
+        {
+            if (_raw)
+            {
+                _behaviorSetInstance = _behaviorSet.Install();
+                _behaviorSetInstance.SetUp(gameObject);
+                _raw = false;
+            }
+
+            return _behaviorSetInstance;
         }
     }
 }

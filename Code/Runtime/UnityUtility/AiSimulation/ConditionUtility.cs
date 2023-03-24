@@ -3,22 +3,22 @@ namespace UnityUtility.AiSimulation
 {
     internal static class ConditionUtility
     {
-        public static bool All(StateCondition[] conditions, AiBehaviorSet owner)
+        public static bool All(StateCondition[] conditions, PermanentState permanentState)
         {
             for (int i = 0; i < conditions.Length; i++)
             {
-                if (!conditions[i].Check(owner))
+                if (!conditions[i].Check(permanentState))
                     return false;
             }
 
             return true;
         }
 
-        public static bool Any(StateCondition[] conditions, AiBehaviorSet owner)
+        public static bool Any(StateCondition[] conditions, PermanentState permanentState)
         {
             for (int i = 0; i < conditions.Length; i++)
             {
-                if (conditions[i].Check(owner))
+                if (conditions[i].Check(permanentState))
                     return true;
             }
 
