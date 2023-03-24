@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-namespace UnityUtility.AiSimulation
+﻿namespace UnityUtility.AiSimulation
 {
     internal static class ConditionUtility
     {
@@ -26,4 +25,3 @@ namespace UnityUtility.AiSimulation
         }
     }
 }
-#endif

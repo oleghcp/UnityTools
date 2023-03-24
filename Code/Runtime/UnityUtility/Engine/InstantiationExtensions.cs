@@ -109,7 +109,6 @@ namespace UnityUtility.Engine
             return UnityObject.Instantiate(self, targetPos, targetRot, parent);
         }
 
-#if UNITY_2019_3_OR_NEWER
         /// <summary>
         /// Instantiates asset.
         /// </summary>
@@ -207,6 +206,5 @@ namespace UnityUtility.Engine
         {
             return Install(self.asset, parent, targetPos, targetRot, local);
         }
-#endif
     }
 }

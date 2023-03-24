@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using System;
+﻿using System;
 using UnityUtility.CSharp;
 using UnityUtility.NodeBased;
 
@@ -19,4 +18,3 @@ namespace UnityUtilityEditor.Window.NodeBased
         }
     }
 }
-#endif

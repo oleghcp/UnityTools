@@ -1,12 +1,10 @@
 ﻿using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Configs;
-#if UNITY_2019_3_OR_NEWER
 using UnityUtility.NodeBased;
+using UnityUtilityEditor.Configs;
+using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
-#endif
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor
@@ -19,13 +17,12 @@ namespace UnityUtilityEditor
         {
             UnityObject obj = EditorUtility.InstanceIDToObject(instanceID);
 
-#if UNITY_2019_3_OR_NEWER
             if (obj is RawGraph graphAsset)
             {
                 GraphEditorWindow.Open(graphAsset);
                 return true;
             }
-#endif
+
             if (obj is ScriptableObject scriptableObject && LibrarySettings.OpenScriptableAssetsAsCode)
             {
                 EditorUtilityExt.OpenScriptableObjectCode(scriptableObject);

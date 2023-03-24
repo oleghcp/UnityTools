@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Mathematics;
@@ -154,4 +153,3 @@ namespace UnityUtilityEditor.Window.NodeBased
         private bool _outOfBounds;
     }
 }
-#endif

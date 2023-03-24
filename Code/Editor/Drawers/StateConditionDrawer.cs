@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityUtility.AiSimulation;
 using UnityUtilityEditor.Engine;
@@ -31,4 +30,3 @@ namespace UnityUtilityEditor.Drawers
         }
     }
 }
-#endif

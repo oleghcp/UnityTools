@@ -1,4 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER && INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
+﻿#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
 using System;
 using System.Collections.Generic;
 using System.IO;

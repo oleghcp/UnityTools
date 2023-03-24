@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using System;
+﻿using System;
 
 namespace UnityUtility.AiSimulation
 {
@@ -19,4 +18,3 @@ namespace UnityUtility.AiSimulation
         public abstract void OnComlete(T permanentState);
     }
 }
-#endif

@@ -102,7 +102,7 @@ namespace UnityUtilityEditor
             SearchHugeFilesWindow.Create();
         }
 
-#if UNITY_2019_3_OR_NEWER && INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
+#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
         [MenuItem(MAIN_MENU_NAME + "Addressables/Analysis Results")]
         private static void OpenAddressablesAnalysisResultsWindow()
         {

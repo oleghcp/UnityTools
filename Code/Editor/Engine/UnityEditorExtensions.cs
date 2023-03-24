@@ -41,11 +41,11 @@ namespace UnityUtilityEditor.Engine
                 case SerializedPropertyType.ExposedReference:
                     self.exposedReferenceValue = null;
                     break;
-#if UNITY_2019_3_OR_NEWER
+
                 case SerializedPropertyType.ManagedReference:
                     self.managedReferenceValue = null;
                     break;
-#endif
+
                 case SerializedPropertyType.String:
                 case SerializedPropertyType.Character:
                     self.stringValue = string.Empty;
@@ -129,7 +129,6 @@ namespace UnityUtilityEditor.Engine
             #endregion
         }
 
-#if UNITY_2019_3_OR_NEWER
         public static bool HasManagedReferenceValue(this SerializedProperty self)
         {
 #if UNITY_2021_2_OR_NEWER
@@ -138,7 +137,6 @@ namespace UnityUtilityEditor.Engine
             return self.managedReferenceFullTypename.HasAnyData();
 #endif
         }
-#endif
 
         public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self, bool copyIterationState = true)
         {

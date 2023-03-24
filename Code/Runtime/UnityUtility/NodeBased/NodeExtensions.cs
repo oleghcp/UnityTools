@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-namespace UnityUtility.NodeBased
+﻿namespace UnityUtility.NodeBased
 {
     internal static class NodeExtensions
     {
@@ -24,4 +23,3 @@ namespace UnityUtility.NodeBased
         }
     }
 }
-#endif

@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnityUtilityEditor.Window.NodeBased
 {
@@ -94,4 +93,3 @@ namespace UnityUtilityEditor.Window.NodeBased
         }
     }
 }
-#endif

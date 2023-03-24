@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using UnityEngine;
+﻿using UnityEngine;
 using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 
@@ -80,4 +79,3 @@ namespace UnityUtility.AiSimulation
         }
     }
 }
-#endif

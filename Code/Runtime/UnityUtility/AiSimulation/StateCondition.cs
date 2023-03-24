@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace UnityUtility.AiSimulation
@@ -33,4 +32,3 @@ namespace UnityUtility.AiSimulation
         protected abstract bool Satisfied(T permanentState);
     }
 }
-#endif

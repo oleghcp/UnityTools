@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
@@ -33,4 +32,3 @@ namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
         }
     }
 }
-#endif

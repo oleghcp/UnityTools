@@ -34,7 +34,6 @@ namespace UnityUtilityEditor.Engine
             _clearFunc.Invoke(null, null);
         }
 
-#if UNITY_2019_3_OR_NEWER
         public static string ConvertToSystemTypename(string managedReferenceFieldTypename)
         {
             if (managedReferenceFieldTypename.IsNullOrEmpty())
@@ -51,7 +50,6 @@ namespace UnityUtilityEditor.Engine
 
             return Type.GetType(ConvertToSystemTypename(managedReferenceTypename));
         }
-#endif
 
         public static Type GetFieldType(PropertyDrawer drawer)
         {

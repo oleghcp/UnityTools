@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace UnityUtility.NodeBased
@@ -94,4 +93,3 @@ namespace UnityUtility.NodeBased
         }
     }
 }
-#endif

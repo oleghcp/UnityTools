@@ -25,12 +25,10 @@ namespace UnityUtility.Collections
 
         public StateMachine() { }
 
-#if UNITY_2019_3_OR_NEWER
-        public StateMachine(UnityUtility.NodeBased.RawGraph graph)
+        public StateMachine(NodeBased.RawGraph graph)
         {
             graph.InitializeMachine(this);
         } 
-#endif
 
         public void Start()
         {

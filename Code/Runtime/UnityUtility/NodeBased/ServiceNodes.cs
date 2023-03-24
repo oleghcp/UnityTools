@@ -1,5 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER
-using System;
+﻿using System;
 
 namespace UnityUtility.NodeBased
 {
@@ -26,4 +25,3 @@ namespace UnityUtility.NodeBased
         internal override NodeType NodeType => NodeType.Common;
     }
 }
-#endif

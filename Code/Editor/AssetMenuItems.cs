@@ -15,7 +15,6 @@ namespace UnityUtilityEditor
         public const string MENU_PARENT = AssetDatabaseExt.ASSET_FOLDER;
         public const string CREATE_ASSET_PATH = MENU_PARENT + "Create/" + LibConstants.LIB_NAME + "/Asset";
 
-#if UNITY_2019_3_OR_NEWER
         private const string FULL_MENU_GRAPH_PATH = MENU_PARENT + "Create/" + LibConstants.LIB_NAME + "/Graph/";
 
         [MenuItem(FULL_MENU_GRAPH_PATH + "Node C# Script")]
@@ -29,7 +28,6 @@ namespace UnityUtilityEditor
         {
             TemplatesUtility.CreateGraphScript();
         }
-#endif
 
         [MenuItem(CREATE_ASSET_PATH)]
         private static void CreateAsset()

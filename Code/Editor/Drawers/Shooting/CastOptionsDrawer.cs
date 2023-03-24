@@ -1,4 +1,4 @@
-﻿#if UNITY_2019_3_OR_NEWER && (INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D)
+﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Mathematics;

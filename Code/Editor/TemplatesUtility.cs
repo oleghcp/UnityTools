@@ -25,7 +25,6 @@ namespace UnityUtilityEditor
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyClass.cs");
         }
 
-#if UNITY_2019_3_OR_NEWER
         public static void CreateNodeScript()
         {
             string templatePath = $"{TEMPLATES_FOLDER}C#NodeScriptTemplate.cs.txt";
@@ -47,7 +46,6 @@ namespace UnityUtilityEditor
             templatePath = GetTempScriptTemplateFileWithNamespace(templatePath);
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "MyGraph.cs");
         }
-#endif
 
         public static void CreateMetaFile(string targetAsset, bool isFolder, string assetGuid = null)
         {
