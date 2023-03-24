@@ -30,11 +30,10 @@ namespace UnityUtilityEditor.Drawers
             }
 
             Rect rect = position;
-            rect.xMin += Math.Max(EditorGUIUtility.labelWidth, position.width * 0.33333f) + EditorGUIUtility.standardVerticalSpacing;
             rect.height = EditorGUIUtility.singleLineHeight;
+            rect = EditorGUI.PrefixLabel(rect, label);
             DrawExtendedContent(rect, property);
 
-            EditorGUI.PrefixLabel(new Rect(position.position, new Vector2(EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight)), label);
             EditorGUI.PropertyField(position, property, GUIContent.none, true);
         }
 
