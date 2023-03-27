@@ -12,7 +12,7 @@ namespace UnityUtilityEditor.Window
         private string _copyright;
         private string _version;
         private string _description1;
-        private string _description2 = "Supports Unity 2019.1 or higher.";
+        private string _description2;
 
         private void OnEnable()
         {
@@ -27,6 +27,7 @@ namespace UnityUtilityEditor.Window
             string json = File.ReadAllText(path);
             VersionInfo package = JsonUtility.FromJson<VersionInfo>(json);
             _version = package.version;
+            _description2 = $"Supports Unity {package.unity} or higher";
         }
 
         private void OnGUI()
@@ -54,6 +55,7 @@ namespace UnityUtilityEditor.Window
         {
 #pragma warning disable IDE1006
             public string version;
+            public string unity;
 #pragma warning restore
         }
     }
