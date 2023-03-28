@@ -35,7 +35,7 @@ namespace UnityUtility.AiSimulation
 
             for (int i = 0; i < _states.Length; i++)
             {
-                _states[i].SetUp(_permanentState);
+                _states[i].SetUp(_permanentState, gameObject);
             }
 
             _currentState = _states.FromEnd(0);

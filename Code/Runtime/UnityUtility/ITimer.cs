@@ -10,13 +10,10 @@ namespace UnityUtility
         float TargetTime { get; }
         float CurrentTime { get; }
         float Progress { get; }
-        float TimeScale { get; set; }
+        bool ConsiderGlobalTimeScale { get; set; }
 
-        void Start(float time, float timeScale);
         void Start(float time);
-
         void Prolong(float extraTime);
-
         void Stop();
     }
 }

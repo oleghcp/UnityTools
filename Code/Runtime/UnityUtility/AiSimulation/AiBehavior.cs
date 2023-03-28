@@ -10,36 +10,44 @@ namespace UnityUtility.AiSimulation
         [SerializeField]
         private AiBehaviorSet _behaviorSet;
 
-        private bool _raw = true;
+        private bool _initialized;
         private AiBehaviorSet _behaviorSetInstance;
 
-        public PermanentState PermanentState => GetBehaviorSet().PermanentState;
+        public PermanentState PermanentState
+        {
+            get
+            {
+                UpdateBehaviorSet();
+                return _behaviorSetInstance.PermanentState;
+            }
+        }
 
 #if UNITY_EDITOR
-        internal AiBehaviorSet BehaviorSetInstance => _behaviorSetInstance;
+        internal bool Initialized => _initialized;
+        internal BehaviorState CurrentState => _behaviorSetInstance.CurrentState;
+        internal BehaviorState PrevState => _behaviorSetInstance.PrevState;
 #endif
 
         private void OnDestroy()
         {
-            if (_behaviorSetInstance != null)
+            if (_initialized)
                 _behaviorSetInstance.Destroy();
         }
 
         private void Update()
         {
-            GetBehaviorSet().Refresh(Time.deltaTime);
+            UpdateBehaviorSet();
+            _behaviorSetInstance.Refresh(Time.deltaTime);
         }
 
-        private AiBehaviorSet GetBehaviorSet()
+        private void UpdateBehaviorSet()
         {
-            if (_raw)
-            {
-                _behaviorSetInstance = _behaviorSet.Install();
-                _behaviorSetInstance.SetUp(gameObject);
-                _raw = false;
-            }
+            if (_initialized)
+                return;
 
-            return _behaviorSetInstance;
+            _initialized = true;
+            _behaviorSetInstance = _behaviorSet.Install();
+            _behaviorSetInstance.SetUp(gameObject);
         }
     }
 }

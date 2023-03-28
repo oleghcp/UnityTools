@@ -16,17 +16,17 @@ namespace UnityUtilityEditor.Inspectors
         {
             base.OnInspectorGUI();
 
-            if (!EditorApplication.isPlaying || target.BehaviorSetInstance == null)
+            if (!EditorApplication.isPlaying || !target.Initialized)
                 return;
 
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             GUI.color = Colours.Lime;
-            EditorGUILayout.LabelField("Current:", GetStateName(target.BehaviorSetInstance.CurrentState));
+            EditorGUILayout.LabelField("Current:", GetStateName(target.CurrentState));
             GUI.color = Colours.White;
             EditorGUILayout.LabelField(Helper.SPACE, "↑");
-            EditorGUILayout.LabelField("Previous:", GetStateName(target.BehaviorSetInstance.PrevState));
+            EditorGUILayout.LabelField("Previous:", GetStateName(target.PrevState));
             EditorGUILayout.EndVertical();
         }
 

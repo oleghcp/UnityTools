@@ -10,17 +10,21 @@ namespace UnityUtility.AiSimulation
         [SerializeReference]
         private StateCondition[] _conditions;
 
+        private GameObject _gameObject;
+        private Transform _transform;
         private PermanentState _permanentState;
 
 #pragma warning disable IDE1006
-        protected GameObject gameObject => _permanentState.gameObject;
-        protected Transform transform => _permanentState.transform;
+        protected GameObject gameObject => _gameObject;
+        protected Transform transform => _transform;
 #pragma warning restore IDE1006
 
         protected PermanentState PermanentState => _permanentState;
 
-        internal void SetUp(PermanentState permanentState)
+        internal void SetUp(PermanentState permanentState, GameObject gameObject)
         {
+            _gameObject = gameObject;
+            _transform = gameObject.transform;
             _permanentState = permanentState;
             OnSetUp();
         }
@@ -38,7 +42,7 @@ namespace UnityUtility.AiSimulation
 
         protected T GetComponent<T>()
         {
-            return _permanentState.GetComponent<T>();
+            return _gameObject.GetComponent<T>();
         }
     }
 

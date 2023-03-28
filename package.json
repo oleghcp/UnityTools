@@ -5,7 +5,7 @@
         "name": "Oleg Pulkin",
         "email": "oleghcp@gmail.com"
     },
-    "version": "1.2.8",
+    "version": "1.2.9",
     "unity": "2019.4",
     "description": "A set of helpful code stuff for Unity.",
     "keywords": [ "Unity", "Utility" ],

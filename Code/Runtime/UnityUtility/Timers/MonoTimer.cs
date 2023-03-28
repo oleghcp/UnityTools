@@ -19,12 +19,6 @@ namespace UnityUtility.Timers
         public float CurrentTime => _routine.CurrentTime.ClampMax(_routine.WaitTime);
         public float Progress => CurrentTime / _routine.WaitTime;
 
-        public float TimeScale
-        {
-            get => _routine.TimeScale;
-            set => _routine.TimeScale = value;
-        }
-
         public bool ConsiderGlobalTimeScale
         {
             get => _routine.GlobalScale;
@@ -42,41 +36,24 @@ namespace UnityUtility.Timers
             _routine.WaitTime += extraTime;
         }
 
-        public void Start(float time, float timeScale)
-        {
-            _routine.TimeScale = timeScale;
-            StartInternal(time);
-        }
-
         public void Start(float time)
         {
-            _routine.TimeScale = 1f;
-            StartInternal(time);
+            _routine.Reset();
+            _routine.WaitTime = time;
+
+            if (time == 0f)
+            {
+                Elapsed_Event?.Invoke(this);
+                return;
+            }
+
+            _task = _local ? TaskSystem.StartAsyncLocally(_routine)
+                           : TaskSystem.StartAsync(_routine);
         }
 
         public void Stop()
         {
             _task.Stop();
-        }
-
-        // -- //
-
-        private void StartInternal(float time)
-        {
-            _routine.Reset();
-            _routine.WaitTime = time;
-
-            if (time > 0f)
-            {
-                if (_local)
-                    _task = TaskSystem.StartAsyncLocally(_routine);
-                else
-                    _task = TaskSystem.StartAsync(_routine);
-            }
-            else
-            {
-                Elapsed_Event?.Invoke(this);
-            }
         }
 
         #region IEnumerator impelementation
@@ -85,7 +62,6 @@ namespace UnityUtility.Timers
             public bool GlobalScale = true;
             public float WaitTime = 1f;
             public float CurrentTime;
-            public float TimeScale = 1f;
             private MonoTimer _owner;
 
             public object Current => null;
@@ -103,7 +79,7 @@ namespace UnityUtility.Timers
                     return false;
                 }
 
-                CurrentTime += (GlobalScale ? Time.deltaTime : Time.unscaledDeltaTime) * TimeScale;
+                CurrentTime += GlobalScale ? Time.deltaTime : Time.unscaledDeltaTime;
                 return true;
             }
 
