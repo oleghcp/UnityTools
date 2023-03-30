@@ -9,6 +9,8 @@ namespace UnityUtility.AiSimulation
     {
         [SerializeReference]
         private StateCondition[] _conditions;
+        [SerializeReference, ReferenceSelection]
+        private StateFinalizer[] _finalizers;
 
         private GameObject _gameObject;
         private Transform _transform;
@@ -38,24 +40,12 @@ namespace UnityUtility.AiSimulation
         public virtual void OnDestroy() { }
         public virtual void OnBegin() { }
         public virtual void OnEnd() { }
-        public abstract void Refresh(float deltaTime);
 
-        protected T GetComponent<T>()
-        {
-            return _gameObject.GetComponent<T>();
-        }
-    }
-
-    [Serializable]
-    public abstract class CompletableState : BehaviorState
-    {
-        [SerializeReference, ReferenceSelection]
-        private StateFinalizer[] _finalizers;
-
-        public sealed override void Refresh(float deltaTime)
+        internal void Refresh(float deltaTime)
         {
             if (OnRefresh(deltaTime) == Status.Complete)
             {
+                OnComplete();
                 for (int i = 0; i < _finalizers.Length; i++)
                 {
                     _finalizers[i].OnComlete(PermanentState);
@@ -64,6 +54,12 @@ namespace UnityUtility.AiSimulation
         }
 
         protected abstract Status OnRefresh(float deltaTime);
+        protected virtual void OnComplete() { }
+
+        protected T GetComponent<T>()
+        {
+            return _permanentState.GetComponent<T>();
+        }
 
         protected enum Status : byte
         {
