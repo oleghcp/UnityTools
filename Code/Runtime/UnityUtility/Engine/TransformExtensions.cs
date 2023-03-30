@@ -73,15 +73,15 @@ namespace UnityUtility.Engine
             self.localScale = localScl;
         }
 
-        public static void CopyParams(this Transform self, Transform source)
+        public static void SetParams(this Transform self, Transform source)
         {
             self.SetPositionAndRotation(source.position, source.rotation);
         }
 
-        public static void CopyLocalParams(this Transform self, Transform source, bool withScale = false)
+        public static void SetLocalParams(this Transform self, Transform source, bool includeScale = false)
         {
             self.SetLocalPositionAndRotation(source.localPosition, source.localRotation);
-            if (withScale)
+            if (includeScale)
                 self.localScale = source.localScale;
         }
 
