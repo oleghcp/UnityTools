@@ -48,13 +48,13 @@ namespace UnityUtility
             _currentValue = 0f;
         }
 
-        public IntervalChecker(float interval, float startValue)
+        public IntervalChecker(float interval, float startRatio)
         {
             if (interval < 0f)
                 throw ThrowErrors.NegativeParameter(nameof(interval));
 
             _interval = interval;
-            _currentValue = startValue.ClampMax(interval);
+            _currentValue = _interval * startRatio.Clamp01();
         }
 
         public bool HardCheckDelta(float deltaValue)
