@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityUtility.CSharp;
-using UnityUtility.NodeBased;
+using UnityUtility.NodeBased.Service;
 
 namespace UnityUtilityEditor.Window.NodeBased
 {

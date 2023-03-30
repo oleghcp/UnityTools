@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityUtility.Collections;
 using UnityUtility.Inspector;
+using UnityUtility.NodeBased.Service;
 
 namespace UnityUtility.NodeBased
 {

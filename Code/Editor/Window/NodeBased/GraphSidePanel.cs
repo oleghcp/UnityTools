@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility.Mathematics;
-using UnityUtility.NodeBased;
+using UnityUtility.NodeBased.Service;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Window.NodeBased
@@ -19,7 +19,6 @@ namespace UnityUtilityEditor.Window.NodeBased
         private bool _dragging;
         private string[] _toolbarLabels = { "Properties", "Node" };
         private int _selectedIndex;
-
 
         public float Width => _opened ? _width : 0f;
 

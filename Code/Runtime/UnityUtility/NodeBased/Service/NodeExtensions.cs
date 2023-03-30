@@ -1,4 +1,4 @@
-﻿namespace UnityUtility.NodeBased
+﻿namespace UnityUtility.NodeBased.Service
 {
     internal static class NodeExtensions
     {

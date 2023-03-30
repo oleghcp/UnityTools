@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.NodeBased;
+using UnityUtility.NodeBased.Service;
 using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
 
 namespace UnityUtilityEditor.Window.NodeBased

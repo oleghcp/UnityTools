@@ -7,6 +7,7 @@ using UnityUtility;
 using UnityUtility.CSharp.Collections;
 using UnityUtility.Mathematics;
 using UnityUtility.NodeBased;
+using UnityUtility.NodeBased.Service;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
