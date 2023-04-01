@@ -14,7 +14,7 @@ namespace UnityUtilityEditor.Drawers
         {
             if (!EditorUtilityExt.GetFieldType(this).IsAssignableTo(typeof(ScriptableObject)))
             {
-                EditorGui.ErrorLabel(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with ScriptableObject.");
+                EditorGui.ErrorLabel(position, label, $"Use {nameof(DrawObjectFieldsAttribute)} only with {nameof(ScriptableObject)}.");
                 return;
             }
 
