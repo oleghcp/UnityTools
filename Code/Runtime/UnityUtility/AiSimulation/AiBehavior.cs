@@ -9,9 +9,14 @@ namespace UnityUtility.AiSimulation
     {
         [SerializeField]
         private AiBehaviorSet _behaviorSet;
+        [SerializeField]
+        private bool _playAutomatically = true;
 
         private bool _initialized;
         private AiBehaviorSet _behaviorSetInstance;
+        private bool _active;
+
+        public bool Active => _active;
 
         public PermanentState PermanentState
         {
@@ -28,6 +33,12 @@ namespace UnityUtility.AiSimulation
         internal BehaviorState PrevState => _behaviorSetInstance.PrevState;
 #endif
 
+        private void Awake()
+        {
+            if (_playAutomatically)
+                Play();
+        }
+
         private void OnDestroy()
         {
             if (_initialized)
@@ -36,8 +47,31 @@ namespace UnityUtility.AiSimulation
 
         private void Update()
         {
+            if (_active)
+            {
+                UpdateBehaviorSet();
+                _behaviorSetInstance.Refresh(Time.deltaTime);
+            }
+        }
+
+        public void Play()
+        {
+            if (_active)
+                return;
+
+            _active = true;
             UpdateBehaviorSet();
-            _behaviorSetInstance.Refresh(Time.deltaTime);
+            _behaviorSetInstance.Play();
+        }
+
+        public void Stop()
+        {
+            if (_active)
+            {
+                _active = false;
+                UpdateBehaviorSet();
+                _behaviorSetInstance.Stop();
+            }
         }
 
         private void UpdateBehaviorSet()

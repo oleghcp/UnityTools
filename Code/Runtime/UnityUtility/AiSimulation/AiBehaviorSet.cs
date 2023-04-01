@@ -26,22 +26,6 @@ namespace UnityUtility.AiSimulation
         public BehaviorState PrevState => _prevState;
 #endif
 
-        public void SetUp(GameObject gameObject)
-        {
-            _permanentState?.SetUp(gameObject);
-
-            if (_states.Length == 0)
-                return;
-
-            for (int i = 0; i < _states.Length; i++)
-            {
-                _states[i].SetUp(_permanentState, gameObject);
-            }
-
-            _currentState = _states.FromEnd(0);
-            _currentState.OnBegin();
-        }
-
         private void OnDestroy()
         {
             _permanentState?.OnDestroy();
@@ -50,6 +34,16 @@ namespace UnityUtility.AiSimulation
             for (int i = 0; i < _states.Length; i++)
             {
                 _states[i].OnDestroy();
+            }
+        }
+
+        public void SetUp(GameObject gameObject)
+        {
+            _permanentState?.SetUp(gameObject);
+
+            for (int i = 0; i < _states.Length; i++)
+            {
+                _states[i].SetUp(_permanentState, gameObject);
             }
         }
 
@@ -76,6 +70,20 @@ namespace UnityUtility.AiSimulation
             }
 
             _currentState?.Refresh(deltaTime);
+        }
+
+        public void Play()
+        {
+            if (_states.Length > 0)
+            {
+                _currentState = _states.FromEnd(0);
+                _currentState.OnBegin();
+            }
+        }
+
+        public void Stop()
+        {
+            _currentState?.OnEnd();
         }
     }
 }

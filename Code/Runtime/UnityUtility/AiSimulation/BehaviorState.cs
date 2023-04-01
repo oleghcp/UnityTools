@@ -45,7 +45,6 @@ namespace UnityUtility.AiSimulation
         {
             if (OnRefresh(deltaTime) == Status.Complete)
             {
-                OnComplete();
                 for (int i = 0; i < _finalizers.Length; i++)
                 {
                     _finalizers[i].OnComlete(PermanentState);
@@ -54,7 +53,6 @@ namespace UnityUtility.AiSimulation
         }
 
         protected abstract Status OnRefresh(float deltaTime);
-        protected virtual void OnComplete() { }
 
         protected T GetComponent<T>()
         {
