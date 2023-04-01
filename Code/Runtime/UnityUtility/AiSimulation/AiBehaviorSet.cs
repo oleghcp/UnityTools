@@ -15,15 +15,14 @@ namespace UnityUtility.AiSimulation
         private BehaviorState[] _states;
 
         private BehaviorState _currentState;
-#if UNITY_EDITOR
-        private BehaviorState _prevState;
-#endif
+        private BehaviorState.Status _status;
 
         public PermanentState PermanentState => _permanentState;
 
 #if UNITY_EDITOR
+        public BehaviorState.Status Status => _status;
         public BehaviorState CurrentState => _currentState;
-        public BehaviorState PrevState => _prevState;
+        public BehaviorState PrevState { get; private set; }
 #endif
 
         private void OnDestroy()
@@ -58,10 +57,11 @@ namespace UnityUtility.AiSimulation
                     if (_states[i] != _currentState)
                     {
 #if UNITY_EDITOR
-                        _prevState = _currentState;
+                        PrevState = _currentState;
 #endif
                         _currentState.OnEnd();
                         _currentState = _states[i];
+                        _status = BehaviorState.Status.Running;
                         _currentState.OnBegin();
                     }
 
@@ -69,7 +69,18 @@ namespace UnityUtility.AiSimulation
                 }
             }
 
-            _currentState?.Refresh(deltaTime);
+            if (_currentState != null && _status == BehaviorState.Status.Running)
+            {
+                _status = _currentState.Refresh(deltaTime);
+
+                if (_status == BehaviorState.Status.Complete)
+                {
+                    for (int i = 0; i < _currentState.Finalizers.Length; i++)
+                    {
+                        _currentState.Finalizers[i].OnComlete(_permanentState);
+                    }
+                }
+            }
         }
 
         public void Play()

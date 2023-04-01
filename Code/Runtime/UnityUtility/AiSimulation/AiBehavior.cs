@@ -29,6 +29,7 @@ namespace UnityUtility.AiSimulation
 
 #if UNITY_EDITOR
         internal bool Initialized => _initialized;
+        internal BehaviorState.Status Status => _behaviorSetInstance.Status;
         internal BehaviorState CurrentState => _behaviorSetInstance.CurrentState;
         internal BehaviorState PrevState => _behaviorSetInstance.PrevState;
 #endif
