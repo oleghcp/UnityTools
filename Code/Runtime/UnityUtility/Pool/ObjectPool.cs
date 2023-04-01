@@ -26,25 +26,19 @@ namespace UnityUtility.Pool
             _factory = factory;
         }
 
-        public ObjectPool(IPoolStorage<T> storage, IObjectFactory<T> factory, int preCount) : this(storage, factory)
-        {
-            for (int i = 0; i < preCount; i++)
-            {
-                Release(factory.Create());
-            }
-        }
-
         public ObjectPool(IPoolStorage<T> storage, Func<T> creator) : this(storage, new DefaultFactory(creator)) { }
 
         public ObjectPool(IObjectFactory<T> factory) : this(new QueueStorage<T>(16), factory) { }
 
         public ObjectPool(Func<T> creator) : this(new DefaultFactory(creator)) { }
 
-        public ObjectPool(IPoolStorage<T> storage, Func<T> creator, int preCount) : this(storage, new DefaultFactory(creator), preCount) { }
-
-        public ObjectPool(IObjectFactory<T> factory, int preCount) : this(new QueueStorage<T>(preCount * 2), factory, preCount) { }
-
-        public ObjectPool(Func<T> creator, int preCount) : this(new DefaultFactory(creator), preCount) { }
+        public void Fill(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Release(_factory.Create());
+            }
+        }
 
         /// <summary>
         /// Returns an existing element or creates a new one if pool is empty.
