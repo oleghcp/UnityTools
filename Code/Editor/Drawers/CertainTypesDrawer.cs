@@ -29,7 +29,7 @@ namespace Drawers
             Type tryType = property.objectReferenceValue.GetType();
             if (!Inherited(tryType))
             {
-                property.objectReferenceValue = prevValue;
+                property.objectReferenceValue = prevValue == null || Inherited(prevValue.GetType()) ? prevValue : null;
                 Debug.LogWarning($"Cannot assign {tryType}. It is not specified by {nameof(CertainTypesAttribute)}.");
             }
         }
