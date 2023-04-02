@@ -5,7 +5,7 @@ using UnityUtility;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DrawTypenameAttribute))]
     internal class DrawTypenameDrawer : SerializeReferenceDrawer

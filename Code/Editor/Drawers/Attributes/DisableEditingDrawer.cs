@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityUtility.Inspector;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DisableEditingAttribute))]
     internal class DisableEditingDrawer : PropertyDrawer

@@ -1,11 +1,12 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityUtility.AiSimulation;
+using UnityUtilityEditor.Drawers.Attributes;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.AiSimulation
 {
-    [CustomPropertyDrawer(typeof(StateCondition))]
+    [CustomPropertyDrawer(typeof(StateCondition), true)]
     internal class StateConditionDrawer : ReferenceSelectionDrawer
     {
         protected override void DrawExtendedContent(in Rect position, SerializedProperty property)

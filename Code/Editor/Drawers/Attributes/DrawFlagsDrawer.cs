@@ -8,7 +8,7 @@ using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DrawFlagsAttribute))]
     internal class DrawFlagsDrawer : AttributeDrawer<DrawFlagsAttribute>

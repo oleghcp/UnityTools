@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(InitToggleAttribute))]
     internal class InitToggleDrawer : SerializeReferenceDrawer

@@ -6,7 +6,7 @@ using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]

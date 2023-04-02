@@ -5,7 +5,7 @@ using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(LayerFieldAttribute))]
     internal class LayerFieldDrawer : AttributeDrawer<LayerFieldAttribute>

@@ -5,7 +5,7 @@ using UnityUtility.Inspector;
 using UnityUtility.Tools;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DrawObjectFieldsAttribute))]
     internal class DrawObjectFieldsDrawer : AttributeDrawer<DrawObjectFieldsAttribute>

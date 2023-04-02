@@ -6,7 +6,7 @@ using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(CertainTypesAttribute))]
     public class CertainTypesDrawer : AttributeDrawer<CertainTypesAttribute>

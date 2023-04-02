@@ -6,7 +6,7 @@ using UnityUtility.Mathematics;
 using UnityUtility.NumericEntities;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(ClampDiapasonAttribute))]
     internal class ClampDiapasonDrawer : AttributeDrawer<ClampDiapasonAttribute>

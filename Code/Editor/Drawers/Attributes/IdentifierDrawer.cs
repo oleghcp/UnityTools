@@ -5,7 +5,7 @@ using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(IdentifierAttribute))]
     internal class IdentifierDrawer : AttributeDrawer<IdentifierAttribute>

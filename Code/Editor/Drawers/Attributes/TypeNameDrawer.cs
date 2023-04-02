@@ -7,7 +7,7 @@ using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 
-namespace UnityUtilityEditor.Drawers
+namespace UnityUtilityEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(TypeNameAttribute))]
     internal class TypeNameDrawer : AttributeDrawer<TypeNameAttribute>
