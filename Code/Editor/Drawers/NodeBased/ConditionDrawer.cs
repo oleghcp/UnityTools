@@ -1,6 +1,8 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility.NodeBased;
+using UnityUtility.NodeBased.Service;
 using UnityUtilityEditor.Drawers.Attributes;
 using UnityUtilityEditor.Engine;
 
@@ -32,7 +34,7 @@ namespace UnityUtilityEditor.Drawers.NodeBased
         {
             if (!property.HasManagedReferenceValue())
             {
-                ReferenceSelectionDrawer.DrawContent(position, property);
+                DrawContent(position, property);
                 return;
             }
 
@@ -40,13 +42,22 @@ namespace UnityUtilityEditor.Drawers.NodeBased
 
             Rect rect = position;
             rect.width *= weight;
-            ReferenceSelectionDrawer.DrawContent(rect, property);
+            DrawContent(position, property);
 
             SerializedProperty notProp = property.FindPropertyRelative(Condition.NotFieldName);
 
             rect.x += rect.width;
             rect.width = position.width * (1f - weight);
             notProp.boolValue = EditorGui.ToggleButton(rect, "Not", notProp.boolValue);
+        }
+
+        private void DrawContent(in Rect position, SerializedProperty property)
+        {
+            Type conditionType = (property.serializedObject.targetObject as RawGraph).GetConditionRootType();
+            if (conditionType == typeof(Condition))
+                ReferenceSelectionDrawer.DrawContent(position, property, conditionType);
+            else
+                ReferenceSelectionDrawer.DrawContent(position, property, conditionType, typeof(Any), typeof(All));
         }
     }
 }

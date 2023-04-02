@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
@@ -17,7 +18,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
             DrawContent(position, property);
         }
 
-        public static void DrawContent(in Rect position, SerializedProperty property)
+        public static void DrawContent(in Rect position, SerializedProperty property, params Type[] rootTypes)
         {
             Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
             bool nullRef = assignedType == null;
@@ -27,12 +28,12 @@ namespace UnityUtilityEditor.Drawers.Attributes
                 GUI.color = Colours.Orange;
 
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(label), FocusType.Keyboard))
-                ShowContextMenu(position, property);
+                ShowContextMenu(position, property, rootTypes);
 
             GUI.color = Colours.White;
         }
 
-        private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property)
+        private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property, params Type[] rootTypes)
         {
             Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
 
@@ -42,17 +43,25 @@ namespace UnityUtilityEditor.Drawers.Attributes
                 return;
             }
 
-            Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
-            var types = TypeCache.GetTypesDerivedFrom(fieldType);
-
             DropDownWindow menu = ScriptableObject.CreateInstance<DropDownWindow>();
 
+            Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
             menu.AddItem("Null", assignedType == null, () => assignField(property, null));
-            addMenuItem(fieldType);
 
-            foreach (Type type in types)
+            foreach (Type rootType in rootTypes)
             {
-                addMenuItem(type);
+                if (!rootType.IsAssignableTo(fieldType))
+                {
+                    Debug.LogWarning($"{rootType.Name} is not subclass of {fieldType.Name}");
+                    continue;
+                }
+
+                addMenuItem(rootType);
+
+                foreach (Type type in TypeCache.GetTypesDerivedFrom(rootType))
+                {
+                    addMenuItem(type);
+                }
             }
 
             menu.ShowMenu(buttonPosition);

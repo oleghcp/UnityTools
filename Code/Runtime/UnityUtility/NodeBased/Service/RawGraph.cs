@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased.Service
 {
@@ -35,6 +34,11 @@ namespace UnityUtility.NodeBased.Service
         }
 
         //internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
+
+        public virtual Type GetConditionRootType()
+        {
+            return typeof(Condition);
+        }
 
 #if UNITY_EDITOR
         internal abstract Type GetNodeType();
