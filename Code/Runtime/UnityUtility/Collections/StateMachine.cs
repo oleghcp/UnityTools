@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.NodeBased.Service;
 
 namespace UnityUtility.Collections
 {
@@ -26,10 +25,10 @@ namespace UnityUtility.Collections
 
         public StateMachine() { }
 
-        public StateMachine(RawGraph graph)
-        {
-            graph.InitializeMachine(this);
-        }
+        //public StateMachine(RawGraph graph)
+        //{
+        //    graph.InitializeMachine(this);
+        //}
 
         public void Start()
         {

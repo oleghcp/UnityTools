@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityUtility.Collections;
-using UnityUtility.CSharp.Collections;
 using UnityUtility.NodeBased.Service;
 
 namespace UnityUtility.NodeBased
@@ -41,46 +39,46 @@ namespace UnityUtility.NodeBased
             return _commonNodeWrapper ?? (_commonNodeWrapper = new NodeWrapper(CommonNode));
         }
 
-        internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
-        {
-            Dictionary<RawNode, TState> states = new Dictionary<RawNode, TState>(Dict.Count);
+        //internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
+        //{
+        //    Dictionary<RawNode, TState> states = new Dictionary<RawNode, TState>(Dict.Count);
 
-            RawNode rootNode = RootNode;
+        //    RawNode rootNode = RootNode;
 
-            foreach (RawNode node in Dict.Values)
-            {
-                if (node is HubNode)
-                    continue;
+        //    foreach (RawNode node in Dict.Values)
+        //    {
+        //        if (node is HubNode)
+        //            continue;
 
-                TState state = states.Place(node, node.CreateState<TState>());
+        //        TState state = states.Place(node, node.CreateState<TState>());
 
-                if (state != null)
-                    stateMachine.AddState(state, node == rootNode);
-            }
+        //        if (state != null)
+        //            stateMachine.AddState(state, node == rootNode);
+        //    }
 
-            foreach (RawNode node in Dict.Values)
-            {
-                if (node.ServiceNode())
-                    continue;
+        //    foreach (RawNode node in Dict.Values)
+        //    {
+        //        if (node.ServiceNode())
+        //            continue;
 
-                foreach (TransitionInfo<TNode> transition in node as TNode)
-                {
-                    addTransition(node, transition);
-                }
+        //        foreach (TransitionInfo<TNode> transition in node as TNode)
+        //        {
+        //            addTransition(node, transition);
+        //        }
 
-                foreach (TransitionInfo<TNode> transition in EnumerateFromAny())
-                {
-                    addTransition(node, transition);
-                }
-            }
+        //        foreach (TransitionInfo<TNode> transition in EnumerateFromAny())
+        //        {
+        //            addTransition(node, transition);
+        //        }
+        //    }
 
-            void addTransition(RawNode node, in TransitionInfo<TNode> transition)
-            {
-                stateMachine.AddTransition(states[node],
-                                           transition.Condition.CreateCondition<TState, TData>(),
-                                           states[transition.NextNode]);
-            }
-        }
+        //    void addTransition(RawNode node, in TransitionInfo<TNode> transition)
+        //    {
+        //        stateMachine.AddTransition(states[node],
+        //                                   transition.Condition.CreateCondition<TState, TData>(),
+        //                                   states[transition.NextNode]);
+        //    }
+        //}
 
 #if UNITY_EDITOR
         internal sealed override Type GetNodeType() => typeof(TNode);

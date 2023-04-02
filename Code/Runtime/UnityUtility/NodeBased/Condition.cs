@@ -1,5 +1,6 @@
 ﻿using System;
-using UnityUtility.Collections;
+using UnityEngine;
+using UnityUtility.Inspector;
 using UnityUtility.NodeBased.Service;
 
 namespace UnityUtility.NodeBased
@@ -8,10 +9,41 @@ namespace UnityUtility.NodeBased
     public abstract class Condition
     {
         public abstract bool Satisfied(RawNode from, object data);
+    }
 
-        public virtual Func<TState, TData, bool> CreateCondition<TState, TData>() where TState : class, IState
+    [Serializable]
+    internal class Any : Condition
+    {
+        [SerializeReference, ReferenceSelection]
+        private Condition[] _conditions;
+
+        public override bool Satisfied(RawNode from, object data)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _conditions.Length; i++)
+            {
+                if (_conditions[i].Satisfied(from, data))
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
+    [Serializable]
+    internal class All : Condition
+    {
+        [SerializeReference, ReferenceSelection]
+        private Condition[] _conditions;
+
+        public override bool Satisfied(RawNode from, object data)
+        {
+            for (int i = 0; i < _conditions.Length; i++)
+            {
+                if (!_conditions[i].Satisfied(from, data))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

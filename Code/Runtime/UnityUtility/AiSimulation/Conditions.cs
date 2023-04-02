@@ -18,6 +18,8 @@ namespace UnityUtility.AiSimulation
             return Satisfied(permanentState) != _not;
         }
 
+        protected abstract bool Satisfied(PermanentState permanentState);
+
         internal static bool All(StateCondition[] conditions, PermanentState permanentState)
         {
             for (int i = 0; i < conditions.Length; i++)
@@ -39,8 +41,6 @@ namespace UnityUtility.AiSimulation
 
             return false;
         }
-
-        protected abstract bool Satisfied(PermanentState permanentState);
     }
 
     [Serializable]

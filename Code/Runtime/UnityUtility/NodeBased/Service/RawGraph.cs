@@ -34,7 +34,7 @@ namespace UnityUtility.NodeBased.Service
             return null;
         }
 
-        internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
+        //internal abstract void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine) where TState : class, IState;
 
 #if UNITY_EDITOR
         internal abstract Type GetNodeType();
