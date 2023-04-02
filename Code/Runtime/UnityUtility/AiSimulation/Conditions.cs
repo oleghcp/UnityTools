@@ -77,16 +77,4 @@ namespace UnityUtility.AiSimulation
             return All(_conditions, permanentState);
         }
     }
-
-    [Serializable]
-    internal class Common : StateCondition
-    {
-        [SerializeField]
-        private CommonCondition _common;
-
-        protected override bool Satisfied(PermanentState permanentState)
-        {
-            return _common.Satisfied(permanentState);
-        }
-    }
 }
