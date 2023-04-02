@@ -5,7 +5,7 @@ using UnityUtility.Inspector;
 namespace UnityUtility.AiSimulation
 {
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/Behavior Set")]
-    internal class AiBehaviorSet : ScriptableObject
+    internal class AiStateSet : ScriptableObject, IStateSet
     {
         [SerializeReference, ReferenceSelection]
         private PermanentState _permanentState;
@@ -14,15 +14,19 @@ namespace UnityUtility.AiSimulation
         [SerializeReference, ReferenceSelection]
         private BehaviorState[] _states;
 
+        private StateStatus _status;
         private BehaviorState _currentState;
-        private BehaviorState.Status _status;
+
+#if UNITY_EDITOR
+        private BehaviorState _prevState;
+#endif
 
         public PermanentState PermanentState => _permanentState;
 
 #if UNITY_EDITOR
-        public BehaviorState.Status Status => _status;
-        public BehaviorState CurrentState => _currentState;
-        public BehaviorState PrevState { get; private set; }
+        StateStatus IStateSet.Status => _status;
+        object IStateSet.CurrentState => _currentState;
+        object IStateSet.PrevState => _prevState;
 #endif
 
         private void OnDestroy()
@@ -57,11 +61,11 @@ namespace UnityUtility.AiSimulation
                     if (_states[i] != _currentState)
                     {
 #if UNITY_EDITOR
-                        PrevState = _currentState;
+                        _prevState = _currentState;
 #endif
                         _currentState.OnEnd();
                         _currentState = _states[i];
-                        _status = BehaviorState.Status.Running;
+                        _status = StateStatus.Running;
                         _currentState.OnBegin();
                     }
 
@@ -69,11 +73,11 @@ namespace UnityUtility.AiSimulation
                 }
             }
 
-            if (_currentState != null && _status == BehaviorState.Status.Running)
+            if (_currentState != null && _status == StateStatus.Running)
             {
                 _status = _currentState.Refresh(deltaTime);
 
-                if (_status == BehaviorState.Status.Complete)
+                if (_status == StateStatus.Complete)
                 {
                     for (int i = 0; i < _currentState.Finalizers.Length; i++)
                     {
@@ -95,6 +99,11 @@ namespace UnityUtility.AiSimulation
         public void Stop()
         {
             _currentState?.OnEnd();
+        }
+
+        void IStateSet.Destroy()
+        {
+            Destroy(this);
         }
     }
 }

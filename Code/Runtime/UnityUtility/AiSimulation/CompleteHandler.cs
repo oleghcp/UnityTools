@@ -3,12 +3,12 @@
 namespace UnityUtility.AiSimulation
 {
     [Serializable]
-    public abstract class StateFinalizer
+    public abstract class CompleteHandler
     {
         public abstract void OnComlete(PermanentState permanentState);
     }
 
-    public abstract class StateFinalizer<T> : StateFinalizer where T : PermanentState
+    public abstract class CompleteHandler<T> : CompleteHandler where T : PermanentState
     {
         public sealed override void OnComlete(PermanentState permanentState)
         {

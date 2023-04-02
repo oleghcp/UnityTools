@@ -10,7 +10,7 @@ namespace UnityUtility.AiSimulation
         [SerializeReference]
         private StateCondition[] _conditions;
         [SerializeReference, ReferenceSelection]
-        private StateFinalizer[] _finalizers;
+        private CompleteHandler[] _finalizers;
 
         private GameObject _gameObject;
         private Transform _transform;
@@ -22,7 +22,7 @@ namespace UnityUtility.AiSimulation
 #pragma warning restore IDE1006
 
         protected PermanentState PermanentState => _permanentState;
-        internal StateFinalizer[] Finalizers => _finalizers;
+        internal CompleteHandler[] Finalizers => _finalizers;
 
         internal void SetUp(PermanentState permanentState, GameObject gameObject)
         {
@@ -41,17 +41,16 @@ namespace UnityUtility.AiSimulation
         public virtual void OnDestroy() { }
         public virtual void OnBegin() { }
         public virtual void OnEnd() { }
-        public abstract Status Refresh(float deltaTime);
+        public abstract StateStatus Refresh(float deltaTime);
 
         protected T GetComponent<T>()
         {
             return _permanentState.GetComponent<T>();
         }
+    }
 
-        public enum Status : byte
-        {
-            Running,
-            Complete,
-        }
+    public abstract class BehaviorState<T> : BehaviorState where T : PermanentState
+    {
+        protected new T PermanentState => (T)base.PermanentState;
     }
 }
