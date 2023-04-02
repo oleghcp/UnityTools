@@ -4,8 +4,8 @@ using UnityUtility.Inspector;
 
 namespace UnityUtility.AiSimulation
 {
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/Behavior Set")]
-    internal class AiStateSet : ScriptableObject, IStateSet
+    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/State Set")]
+    public class AiStateSet : ScriptableObject, IStateSet
     {
         [SerializeReference, ReferenceSelection]
         private PermanentState _permanentState;
@@ -40,7 +40,7 @@ namespace UnityUtility.AiSimulation
             }
         }
 
-        public void SetUp(GameObject gameObject)
+        void IStateSet.SetUp(GameObject gameObject)
         {
             _permanentState?.SetUp(gameObject);
 
@@ -50,7 +50,7 @@ namespace UnityUtility.AiSimulation
             }
         }
 
-        public void Refresh(float deltaTime)
+        void IStateSet.Refresh(float deltaTime)
         {
             _permanentState?.Refresh(deltaTime);
 
@@ -87,7 +87,7 @@ namespace UnityUtility.AiSimulation
             }
         }
 
-        public void Play()
+        void IStateSet.Play()
         {
             if (_states.Length > 0)
             {
@@ -96,7 +96,7 @@ namespace UnityUtility.AiSimulation
             }
         }
 
-        public void Stop()
+        void IStateSet.Stop()
         {
             _currentState?.OnEnd();
         }
