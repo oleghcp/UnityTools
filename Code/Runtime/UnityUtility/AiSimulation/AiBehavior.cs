@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityUtility.Engine;
+using UnityUtility.Inspector;
 
 namespace UnityUtility.AiSimulation
 {
@@ -30,8 +31,8 @@ namespace UnityUtility.AiSimulation
     [AddComponentMenu(nameof(UnityUtility) + "/Ai Behavior")]
     public class AiBehavior : MonoBehaviour
     {
-        [SerializeField]
-        private AiStateSet _behaviorSet;
+        [SerializeField, CertainTypes(typeof(IStateSet))]
+        private ScriptableObject _behaviorSet;
         [SerializeField]
         private bool _playAutomatically = true;
 
@@ -104,7 +105,7 @@ namespace UnityUtility.AiSimulation
                 return;
 
             _initialized = true;
-            _behaviorSetInstance = _behaviorSet.Install();
+            _behaviorSetInstance = (IStateSet)_behaviorSet.Install();
             _behaviorSetInstance.SetUp(gameObject);
         }
     }

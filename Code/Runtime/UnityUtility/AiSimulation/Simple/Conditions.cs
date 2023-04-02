@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.AiSimulation
+namespace UnityUtility.AiSimulation.Simple
 {
     [Serializable]
     public abstract class StateCondition

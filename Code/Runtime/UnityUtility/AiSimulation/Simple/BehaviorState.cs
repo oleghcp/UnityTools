@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityUtility.Inspector;
 
-namespace UnityUtility.AiSimulation
+namespace UnityUtility.AiSimulation.Simple
 {
     [Serializable]
     public abstract class BehaviorState
@@ -49,6 +49,7 @@ namespace UnityUtility.AiSimulation
         }
     }
 
+    [Serializable]
     public abstract class BehaviorState<T> : BehaviorState where T : PermanentState
     {
         protected new T PermanentState => (T)base.PermanentState;

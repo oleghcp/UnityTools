@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.AiSimulation;
+using UnityUtility.AiSimulation.Simple;
 using UnityUtilityEditor.Drawers.Attributes;
 using UnityUtilityEditor.Engine;
 

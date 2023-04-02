@@ -2,7 +2,7 @@
 using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 
-namespace UnityUtility.AiSimulation
+namespace UnityUtility.AiSimulation.Simple
 {
     [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/State Set")]
     public class AiStateSet : ScriptableObject, IStateSet
