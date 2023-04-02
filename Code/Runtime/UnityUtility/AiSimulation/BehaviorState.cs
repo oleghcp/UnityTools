@@ -34,7 +34,7 @@ namespace UnityUtility.AiSimulation
 
         public bool Available()
         {
-            return ConditionUtility.All(_conditions, _permanentState);
+            return StateCondition.All(_conditions, _permanentState);
         }
 
         protected virtual void OnSetUp() { }

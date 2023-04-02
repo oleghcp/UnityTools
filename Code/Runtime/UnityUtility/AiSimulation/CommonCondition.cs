@@ -10,7 +10,7 @@ namespace UnityUtility.AiSimulation
 
         public bool Satisfied(PermanentState permanentState)
         {
-            return ConditionUtility.All(_conditions, permanentState);
+            return StateCondition.All(_conditions, permanentState);
         }
     }
 }
