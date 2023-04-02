@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Inspector;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
@@ -48,19 +49,27 @@ namespace UnityUtilityEditor.Drawers.Attributes
             Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
             menu.AddItem("Null", assignedType == null, () => assignField(property, null));
 
-            foreach (Type rootType in rootTypes)
+            if (rootTypes.IsNullOrEmpty())
             {
-                if (!rootType.IsAssignableTo(fieldType))
-                {
-                    Debug.LogWarning($"{rootType.Name} is not subclass of {fieldType.Name}");
-                    continue;
-                }
+                addMenuItem(fieldType);
 
-                addMenuItem(rootType);
-
-                foreach (Type type in TypeCache.GetTypesDerivedFrom(rootType))
+                TypeCache.GetTypesDerivedFrom(fieldType)
+                         .ForEach(type => addMenuItem(type));
+            }
+            else
+            {
+                foreach (Type rootType in rootTypes)
                 {
-                    addMenuItem(type);
+                    if (!rootType.IsAssignableTo(fieldType))
+                    {
+                        Debug.LogWarning($"{rootType.Name} is not subclass of {fieldType.Name}");
+                        continue;
+                    }
+
+                    addMenuItem(rootType);
+
+                    TypeCache.GetTypesDerivedFrom(rootType)
+                             .ForEach(type => addMenuItem(type));
                 }
             }
 
@@ -68,16 +77,11 @@ namespace UnityUtilityEditor.Drawers.Attributes
 
             void addMenuItem(Type type)
             {
-                if (isValidType(type))
+                if (!type.IsAbstract && !type.IsInterface)
                 {
                     string entryName = $"{type.Name}  ({type.Namespace})";
                     menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
                 }
-            }
-
-            bool isValidType(Type type)
-            {
-                return !type.IsAbstract && !type.IsInterface;
             }
 
             void assignField(SerializedProperty prop, object newValue)
