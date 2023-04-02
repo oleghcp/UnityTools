@@ -1,0 +1,27 @@
+﻿using System;
+using UnityEngine;
+using UnityUtility.Inspector;
+
+namespace UnityUtility.NodeBased.Service
+{
+    [Serializable]
+    internal struct Transition
+    {
+        [SerializeField]
+        private int _nextNodeId;
+        [SerializeReference, ReferenceSelection]
+        private Condition _condition;
+
+        public int NextNodeId => _nextNodeId;
+        public Condition Condition => _condition;
+
+#if UNITY_EDITOR
+        [SerializeField]
+        private Vector2[] _points;
+
+        internal static string NodeIdFieldName => nameof(_nextNodeId);
+        internal static string ConditionFieldName => nameof(_condition);
+        internal static string PointsFieldName => nameof(_points);
+#endif
+    }
+}

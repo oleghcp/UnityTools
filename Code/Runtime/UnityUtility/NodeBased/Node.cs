@@ -9,6 +9,7 @@ namespace UnityUtility.NodeBased
     public abstract class Node<TNode> : RawNode, IEnumerableNode<TNode> where TNode : Node<TNode>
     {
         public Graph<TNode> Graph => Owner as Graph<TNode>;
+        public bool IsRoot => Owner.RootNode == this;
 
         public NodeEnumerator<TNode> GetEnumerator()
         {
@@ -20,7 +21,7 @@ namespace UnityUtility.NodeBased
             return new NodeEnumerator<TNode>(this as TNode);
         }
 
-        IEnumerator<Transition<TNode>> IEnumerable<Transition<TNode>>.GetEnumerator()
+        IEnumerator<TransitionInfo<TNode>> IEnumerable<TransitionInfo<TNode>>.GetEnumerator()
         {
             return new NodeEnumerator<TNode>(this as TNode);
         }

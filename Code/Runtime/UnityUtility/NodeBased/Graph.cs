@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityUtility.Collections;
 using UnityUtility.CSharp.Collections;
@@ -11,21 +10,21 @@ namespace UnityUtility.NodeBased
 {
     public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
     {
-        private ReadOnlyCollection<TNode> _nodeList;
-        private CommonNodeWrapper _commonNodeWrapper;
+        private TNode[] _nodeList;
+        private NodeWrapper _commonNodeWrapper;
 
         public new TNode RootNode => (TNode)base.RootNode;
 
-        public ReadOnlyCollection<TNode> Nodes
+        public IReadOnlyList<TNode> Nodes
         {
             get
             {
                 if (_nodeList == null)
                 {
-                    TNode[] nodes = Dict.Values.Where(item => item.RealNode())
-                                               .Select(item => (TNode)item)
-                                               .ToArray();
-                    _nodeList = new ReadOnlyCollection<TNode>(nodes);
+                    _nodeList = Dict.Values
+                                    .Where(item => item.RealNode())
+                                    .Select(item => (TNode)item)
+                                    .ToArray();
                 }
 
                 return _nodeList;
@@ -39,7 +38,7 @@ namespace UnityUtility.NodeBased
 
         public IEnumerableNode<TNode> EnumerateFromAny()
         {
-            return _commonNodeWrapper ?? (_commonNodeWrapper = new CommonNodeWrapper(CommonNode));
+            return _commonNodeWrapper ?? (_commonNodeWrapper = new NodeWrapper(CommonNode));
         }
 
         internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
@@ -64,21 +63,21 @@ namespace UnityUtility.NodeBased
                 if (node.ServiceNode())
                     continue;
 
-                foreach (Transition<TNode> transition in node as TNode)
+                foreach (TransitionInfo<TNode> transition in node as TNode)
                 {
                     addTransition(node, transition);
                 }
 
-                foreach (Transition<TNode> transition in EnumerateFromAny())
+                foreach (TransitionInfo<TNode> transition in EnumerateFromAny())
                 {
                     addTransition(node, transition);
                 }
             }
 
-            void addTransition(RawNode node, in Transition<TNode> transition)
+            void addTransition(RawNode node, in TransitionInfo<TNode> transition)
             {
                 stateMachine.AddTransition(states[node],
-                                           transition.CreateCondition<TState, TData>(),
+                                           transition.Condition.CreateCondition<TState, TData>(),
                                            states[transition.NextNode]);
             }
         }
@@ -87,28 +86,28 @@ namespace UnityUtility.NodeBased
         internal sealed override Type GetNodeType() => typeof(TNode);
 #endif
 
-        private class CommonNodeWrapper : IEnumerableNode<TNode>
+        private class NodeWrapper : IEnumerableNode<TNode>
         {
-            private RawNode _commonNode;
+            private RawNode _rawNode;
 
-            public CommonNodeWrapper(RawNode commonNode)
+            public NodeWrapper(RawNode rawNode)
             {
-                _commonNode = commonNode;
+                _rawNode = rawNode;
             }
 
             public NodeEnumerator<TNode> GetEnumerator()
             {
-                return new NodeEnumerator<TNode>(_commonNode);
+                return new NodeEnumerator<TNode>(_rawNode);
             }
 
-            IEnumerator<Transition<TNode>> IEnumerable<Transition<TNode>>.GetEnumerator()
+            IEnumerator<TransitionInfo<TNode>> IEnumerable<TransitionInfo<TNode>>.GetEnumerator()
             {
-                return new NodeEnumerator<TNode>(_commonNode);
+                return new NodeEnumerator<TNode>(_rawNode);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return new NodeEnumerator<TNode>(_commonNode);
+                return new NodeEnumerator<TNode>(_rawNode);
             }
         }
     }

@@ -1,31 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityUtility.NodeBased.Service;
 
-namespace UnityUtility.NodeBased
+namespace UnityUtility.NodeBased.Service
 {
-    public struct NodeEnumerator<TNode> : IEnumerator<Transition<TNode>> where TNode : Node<TNode>
+    public struct NodeEnumerator<TNode> : IEnumerator<TransitionInfo<TNode>> where TNode : Node<TNode>
     {
         private RawNode _node;
         private HubNode _hub;
         private int _index;
         private int _subIndex;
 
-        public Transition<TNode> Current
+        public TransitionInfo<TNode> Current
         {
             get
             {
                 if (_node == null)
                     return default;
 
-                int index = (_hub != null ? _subIndex : _index) - 1;
-                Transition[] array = (_hub ?? _node).Next;
+                bool isHub = _hub != null;
+                Transition[] array = (isHub ? _hub : _node).Next;
+                int index = (isHub ? _subIndex : _index) - 1;
 
                 if ((uint)index >= (uint)array.Length)
                     return default;
 
-                RawNode nextNode = _node.Owner.Dict[array[index].NextNodeId];
-                return new Transition<TNode>(array[index].Condition, _node, nextNode);
+                Transition transition = array[index];
+                RawNode nextNode = _node.Owner.Dict[transition.NextNodeId];
+                return new TransitionInfo<TNode>(transition.Condition, _node, nextNode);
             }
         }
 
