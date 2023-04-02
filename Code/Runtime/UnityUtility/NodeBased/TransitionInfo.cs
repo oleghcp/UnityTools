@@ -21,7 +21,7 @@ namespace UnityUtility.NodeBased
 
         public bool Available(object data = null)
         {
-            return _condition == null || _condition.Satisfied(_from, data);
+            return _condition == null || _condition.Check(_from, data);
         }
     }
 }

@@ -14,6 +14,11 @@ namespace UnityUtilityEditor.Drawers.Attributes
     {
         protected override void DrawExtendedContent(in Rect position, SerializedProperty property)
         {
+            DrawContent(position, property);
+        }
+
+        public static void DrawContent(in Rect position, SerializedProperty property)
+        {
             Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
             bool nullRef = assignedType == null;
             string label = nullRef ? "Null" : assignedType.Name;

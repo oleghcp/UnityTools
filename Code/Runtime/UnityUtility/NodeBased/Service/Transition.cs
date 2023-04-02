@@ -9,7 +9,7 @@ namespace UnityUtility.NodeBased.Service
     {
         [SerializeField]
         private int _nextNodeId;
-        [SerializeReference, ReferenceSelection]
+        [SerializeReference]
         private Condition _condition;
 
         public int NextNodeId => _nextNodeId;

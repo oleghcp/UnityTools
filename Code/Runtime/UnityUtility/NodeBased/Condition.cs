@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Inspector;
 using UnityUtility.NodeBased.Service;
 
 namespace UnityUtility.NodeBased
@@ -8,20 +7,32 @@ namespace UnityUtility.NodeBased
     [Serializable]
     public abstract class Condition
     {
-        public abstract bool Satisfied(RawNode from, object data);
+        [SerializeField, HideInInspector]
+        private bool _not;
+
+#if UNITY_EDITOR
+        internal static string NotFieldName => nameof(_not);
+#endif
+
+        internal bool Check(RawNode from, object data)
+        {
+            return Satisfied(from, data) != _not;
+        }
+
+        protected abstract bool Satisfied(RawNode from, object data);
     }
 
     [Serializable]
     internal class Any : Condition
     {
-        [SerializeReference, ReferenceSelection]
+        [SerializeReference]
         private Condition[] _conditions;
 
-        public override bool Satisfied(RawNode from, object data)
+        protected override bool Satisfied(RawNode from, object data)
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (_conditions[i].Satisfied(from, data))
+                if (_conditions[i].Check(from, data))
                     return true;
             }
 
@@ -32,14 +43,14 @@ namespace UnityUtility.NodeBased
     [Serializable]
     internal class All : Condition
     {
-        [SerializeReference, ReferenceSelection]
+        [SerializeReference]
         private Condition[] _conditions;
 
-        public override bool Satisfied(RawNode from, object data)
+        protected override bool Satisfied(RawNode from, object data)
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (!_conditions[i].Satisfied(from, data))
+                if (!_conditions[i].Check(from, data))
                     return false;
             }
 
