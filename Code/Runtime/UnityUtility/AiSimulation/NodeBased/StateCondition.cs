@@ -7,25 +7,24 @@ namespace UnityUtility.AiSimulation.NodeBased
     [Serializable]
     public abstract class StateCondition : Condition
     {
-        protected sealed override bool Satisfied(RawNode from, object data)
+        protected sealed override bool Satisfied(RawNode _, object data)
         {
-            return Satisfied((BehaviorState)from, (PermanentState)data);
+            return Satisfied((PermanentState)data);
         }
 
-        protected abstract bool Satisfied(BehaviorState from, PermanentState permanentState);
+        protected abstract bool Satisfied(PermanentState permanentState);
     }
 
 
     [Serializable]
-    public abstract class StateCondition<TState, TPermanent> : StateCondition
-        where TState : BehaviorState
+    public abstract class StateCondition<TPermanent> : StateCondition
         where TPermanent : PermanentState
     {
-        protected sealed override bool Satisfied(BehaviorState from, PermanentState permanentState)
+        protected sealed override bool Satisfied(PermanentState permanentState)
         {
-            return Satisfied((TState)from, (TPermanent)permanentState);
+            return Satisfied((TPermanent)permanentState);
         }
 
-        protected abstract bool Satisfied(TState from, TPermanent permanentState);
+        protected abstract bool Satisfied(TPermanent permanentState);
     }
 }
