@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityUtility.Inspector;
 using UnityUtility.NodeBased;
 
@@ -34,6 +35,11 @@ namespace UnityUtility.AiSimulation.NodeBased
             {
                 Nodes[i].OnDestroy();
             }
+        }
+
+        public override Type GetConditionRootType()
+        {
+            return typeof(StateCondition);
         }
 
         void IStateSet.SetUp(GameObject gameObject)
@@ -93,7 +99,7 @@ namespace UnityUtility.AiSimulation.NodeBased
         {
             foreach (TransitionInfo<BehaviorState> item in next)
             {
-                if (item.Available())
+                if (item.Available(_permanentState))
                 {
 #if UNITY_EDITOR
                     _prevState = _currentState;

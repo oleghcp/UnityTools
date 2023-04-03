@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.AiSimulation.Simple;
 using UnityUtility.Inspector;
 using UnityUtility.NodeBased;
 
@@ -9,8 +8,6 @@ namespace UnityUtility.AiSimulation.NodeBased
     [Serializable]
     public abstract class BehaviorState : Node<BehaviorState>
     {
-        [SerializeReference]
-        private StateCondition[] _conditions;
         [SerializeReference, ReferenceSelection]
         private CompleteHandler[] _finalizers;
 
@@ -32,11 +29,6 @@ namespace UnityUtility.AiSimulation.NodeBased
             _transform = gameObject.transform;
             _permanentState = permanentState;
             OnSetUp();
-        }
-
-        public bool Available()
-        {
-            return StateCondition.All(_conditions, _permanentState);
         }
 
         protected virtual void OnSetUp() { }
