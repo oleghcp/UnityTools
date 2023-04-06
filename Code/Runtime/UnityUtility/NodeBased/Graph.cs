@@ -12,6 +12,7 @@ namespace UnityUtility.NodeBased
         private NodeWrapper _commonNodeWrapper;
 
         public new TNode RootNode => (TNode)base.RootNode;
+        internal sealed override Type RootNodeType => typeof(TNode);
 
         public IReadOnlyList<TNode> Nodes
         {
@@ -80,9 +81,10 @@ namespace UnityUtility.NodeBased
         //    }
         //}
 
-#if UNITY_EDITOR
-        internal sealed override Type GetNodeType() => typeof(TNode);
-#endif
+        public override Type GetNodeRootType()
+        {
+            return typeof(TNode);
+        }
 
         private class NodeWrapper : IEnumerableNode<TNode>
         {

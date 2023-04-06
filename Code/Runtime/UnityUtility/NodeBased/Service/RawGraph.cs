@@ -22,6 +22,7 @@ namespace UnityUtility.NodeBased.Service
 
         internal RawNode RootNode => GetNodeById(_rootNodeId);
         internal RawNode CommonNode => _commonNode;
+        internal abstract Type RootNodeType { get; }
 
         internal Dictionary<int, RawNode> Dict => _dict ?? (_dict = _nodes.ToDictionary(key => key.Id, value => value));
 
@@ -40,8 +41,9 @@ namespace UnityUtility.NodeBased.Service
             return typeof(Condition);
         }
 
+        public abstract Type GetNodeRootType();
+
 #if UNITY_EDITOR
-        internal abstract Type GetNodeType();
         internal static string IdGeneratorFieldName => nameof(LastId);
         internal static string WidthFieldName => nameof(_nodeWidth);
         internal static string NodesFieldName => nameof(_nodes);

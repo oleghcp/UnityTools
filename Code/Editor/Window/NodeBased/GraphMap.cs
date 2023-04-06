@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
+using UnityUtility.CSharp;
 using UnityUtility.CSharp.Collections;
 using UnityUtility.Engine;
 using UnityUtility.NodeBased;
@@ -336,9 +337,17 @@ namespace UnityUtilityEditor.Window.NodeBased
 
             menu.AddSeparator(string.Empty);
 
-            addNodeMenuItem(serializedGraph.GraphAsset.GetNodeType());
+            Type nodeType = serializedGraph.GraphAsset.GetNodeRootType();
 
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(serializedGraph.GraphAsset.GetNodeType()))
+            if (!nodeType.IsAssignableTo(serializedGraph.GraphAsset.RootNodeType))
+            {
+                Debug.LogError($"{nodeType} is not assignable to {serializedGraph.GraphAsset.RootNodeType}.");
+                return;
+            }
+
+            addNodeMenuItem(nodeType);
+
+            foreach (Type type in TypeCache.GetTypesDerivedFrom(nodeType))
             {
                 addNodeMenuItem(type);
             }
