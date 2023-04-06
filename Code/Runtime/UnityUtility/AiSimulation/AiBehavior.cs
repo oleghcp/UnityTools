@@ -70,7 +70,7 @@ namespace UnityUtility.AiSimulation
                 _behaviorSetInstance.Destroy();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (_active)
             {
