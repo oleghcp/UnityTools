@@ -4,5 +4,5 @@ using UnityEngine;
 namespace UnityUtility.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class FolderRequiredAttribute : PropertyAttribute { }
+    public sealed class FolderRequiredAttribute : PropertyAttribute { }
 }

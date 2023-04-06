@@ -5,7 +5,7 @@ using UnityUtility.Mathematics;
 namespace UnityUtility.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class ClampDiapasonAttribute : PropertyAttribute
+    public sealed class ClampDiapasonAttribute : PropertyAttribute
     {
         internal float Min { get; }
         internal float Max { get; }

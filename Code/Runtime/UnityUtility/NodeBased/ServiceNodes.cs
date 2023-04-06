@@ -14,10 +14,10 @@ namespace UnityUtility.NodeBased
     {
         internal override NodeType NodeType => NodeType.Exit;
 
-        public override TState CreateState<TState>()
-        {
-            return null;
-        }
+        //public override TState CreateState<TState>()
+        //{
+        //    return null;
+        //}
     }
 
     [Serializable]

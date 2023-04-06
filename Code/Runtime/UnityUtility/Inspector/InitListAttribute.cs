@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityUtility.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class InitListAttribute : PropertyAttribute
+    public sealed class InitListAttribute : PropertyAttribute
     {
         internal readonly Type EnumType;
 
@@ -15,7 +15,7 @@ namespace UnityUtility.Inspector
     }
 
     [AttributeUsage(AttributeTargets.Field)]
-    public class BindSubclassAttribute : Attribute
+    public sealed class BindSubclassAttribute : Attribute
     {
         internal Type ClassType { get; }
 

@@ -23,16 +23,24 @@ namespace UnityUtilityEditor.Inspectors
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             GUI.color = Colours.Lime;
-            EditorGUILayout.LabelField("Current:", GetStateName(target.CurrentState));
+            EditorGUILayout.LabelField("Current:", GetCurrentStateInfo());
             GUI.color = Colours.White;
             EditorGUILayout.LabelField(Helper.SPACE, "↑");
-            EditorGUILayout.LabelField("Previous:", GetStateName(target.PrevState));
+            EditorGUILayout.LabelField("Previous:", GetPrevStateInfo());
             EditorGUILayout.EndVertical();
         }
 
-        private string GetStateName(BehaviorState state)
+        private string GetCurrentStateInfo()
         {
-            return state == null ? NONE_WORD : state.GetType().Name;
+            if (target.CurrentState == null)
+                return NONE_WORD;
+
+            return $"{target.CurrentState.GetType().Name} ({target.Status})" ;
+        }
+
+        private string GetPrevStateInfo()
+        {
+            return target.PrevState == null ? NONE_WORD : target.PrevState.GetType().Name;
         }
     }
 }

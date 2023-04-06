@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using UnityEngine;
-using UnityUtility.Collections;
 
 namespace UnityUtility.NodeBased.Service
 {
@@ -29,11 +28,6 @@ namespace UnityUtility.NodeBased.Service
         public int LocalId => Id;
         public string Name => NodeName;
         internal virtual NodeType NodeType => NodeType.Real;
-
-        public virtual TState CreateState<TState>() where TState : class, IState
-        {
-            throw new NotImplementedException();
-        }
 
 #if UNITY_EDITOR
         internal static string PositionFieldName => nameof(Position);

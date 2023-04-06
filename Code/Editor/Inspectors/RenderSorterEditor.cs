@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityUtility;
 using UnityUtilityEditor.Engine;
-using static UnityUtilityEditor.Drawers.SortingLayerIDDrawer;
+using static UnityUtilityEditor.Drawers.Attributes.SortingLayerIDDrawer;
 
 namespace UnityUtilityEditor.Inspectors
 {

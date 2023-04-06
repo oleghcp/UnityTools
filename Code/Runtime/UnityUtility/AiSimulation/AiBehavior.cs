@@ -1,17 +1,46 @@
 ﻿using UnityEngine;
 using UnityUtility.Engine;
+using UnityUtility.Inspector;
 
 namespace UnityUtility.AiSimulation
 {
+    internal interface IStateSet
+    {
+        PermanentState PermanentState { get; }
+
+#if UNITY_EDITOR
+        StateStatus Status { get; }
+        object CurrentState { get; }
+        object PrevState { get; }
+#endif
+
+        void SetUp(GameObject gameObject);
+        void Destroy();
+        void Refresh(float deltaTime);
+        void Play();
+        void Stop();
+    }
+
+    public enum StateStatus : byte
+    {
+        Running,
+        Complete,
+    }
+
     [DisallowMultipleComponent]
     [AddComponentMenu(nameof(UnityUtility) + "/Ai Behavior")]
     public class AiBehavior : MonoBehaviour
     {
+        [SerializeField, CertainTypes(typeof(IStateSet))]
+        private ScriptableObject _behaviorSet;
         [SerializeField]
-        private AiBehaviorSet _behaviorSet;
+        private bool _playAutomatically = true;
 
         private bool _initialized;
-        private AiBehaviorSet _behaviorSetInstance;
+        private IStateSet _behaviorSetInstance;
+        private bool _active;
+
+        public bool Active => _active;
 
         public PermanentState PermanentState
         {
@@ -24,9 +53,16 @@ namespace UnityUtility.AiSimulation
 
 #if UNITY_EDITOR
         internal bool Initialized => _initialized;
-        internal BehaviorState CurrentState => _behaviorSetInstance.CurrentState;
-        internal BehaviorState PrevState => _behaviorSetInstance.PrevState;
+        internal StateStatus Status => _behaviorSetInstance.Status;
+        internal object CurrentState => _behaviorSetInstance.CurrentState;
+        internal object PrevState => _behaviorSetInstance.PrevState;
 #endif
+
+        private void Start()
+        {
+            if (_playAutomatically)
+                Play();
+        }
 
         private void OnDestroy()
         {
@@ -34,10 +70,33 @@ namespace UnityUtility.AiSimulation
                 _behaviorSetInstance.Destroy();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
+            if (_active)
+            {
+                UpdateBehaviorSet();
+                _behaviorSetInstance.Refresh(Time.deltaTime);
+            }
+        }
+
+        public void Play()
+        {
+            if (_active)
+                return;
+
+            _active = true;
             UpdateBehaviorSet();
-            _behaviorSetInstance.Refresh(Time.deltaTime);
+            _behaviorSetInstance.Play();
+        }
+
+        public void Stop()
+        {
+            if (_active)
+            {
+                _active = false;
+                UpdateBehaviorSet();
+                _behaviorSetInstance.Stop();
+            }
         }
 
         private void UpdateBehaviorSet()
@@ -46,7 +105,7 @@ namespace UnityUtility.AiSimulation
                 return;
 
             _initialized = true;
-            _behaviorSetInstance = _behaviorSet.Install();
+            _behaviorSetInstance = (IStateSet)_behaviorSet.Install();
             _behaviorSetInstance.SetUp(gameObject);
         }
     }
