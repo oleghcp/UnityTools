@@ -46,6 +46,11 @@ namespace UnityUtility.AiSimulation.Simple
             return typeof(BehaviorState);
         }
 
+        public virtual Type GetConditionRootType()
+        {
+            return typeof(StateCondition);
+        }
+
         void IStateSet.SetUp(GameObject gameObject)
         {
             _permanentState?.SetUp(gameObject);

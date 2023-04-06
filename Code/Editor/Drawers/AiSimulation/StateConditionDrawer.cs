@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility.AiSimulation.Simple;
 using UnityUtilityEditor.Drawers.Attributes;
@@ -13,7 +14,7 @@ namespace UnityUtilityEditor.Drawers.AiSimulation
         {
             if (!property.HasManagedReferenceValue())
             {
-                base.DrawExtendedContent(position, property);
+                Draw(position, property);
                 return;
             }
 
@@ -21,13 +22,22 @@ namespace UnityUtilityEditor.Drawers.AiSimulation
 
             Rect rect = position;
             rect.width *= weight;
-            base.DrawExtendedContent(rect, property);
+            Draw(position, property);
 
             SerializedProperty notProp = property.FindPropertyRelative(StateCondition.NotFieldName);
 
             rect.x += rect.width;
             rect.width = position.width * (1f - weight);
             notProp.boolValue = EditorGui.ToggleButton(rect, "Not", notProp.boolValue);
+        }
+
+        private void Draw(in Rect position, SerializedProperty property)
+        {
+            Type conditionType = (property.serializedObject.targetObject as AiStateSet).GetConditionRootType();
+            if (conditionType == typeof(StateCondition))
+                DrawContent(position, property, conditionType);
+            else
+                DrawContent(position, property, conditionType, typeof(Any), typeof(All));
         }
     }
 }
