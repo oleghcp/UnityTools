@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityUtility.CSharp;
 using UnityUtility.Inspector;
 
@@ -11,7 +12,7 @@ namespace UnityUtility.AiSimulation.Simple
         private PermanentState _permanentState;
 
         [Space]
-        [SerializeReference, ReferenceSelection]
+        [SerializeReference]
         private BehaviorState[] _states;
 
         private StateStatus _status;
@@ -38,6 +39,11 @@ namespace UnityUtility.AiSimulation.Simple
             {
                 _states[i].OnDestroy();
             }
+        }
+
+        public virtual Type GetStateRootType()
+        {
+            return typeof(BehaviorState);
         }
 
         void IStateSet.SetUp(GameObject gameObject)
