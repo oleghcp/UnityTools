@@ -58,7 +58,7 @@ namespace UnityUtility.AiSimulation
         internal object PrevState => _behaviorSetInstance.PrevState;
 #endif
 
-        private void Awake()
+        private void Start()
         {
             if (_playAutomatically)
                 Play();
