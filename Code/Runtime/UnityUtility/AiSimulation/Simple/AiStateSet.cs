@@ -70,26 +70,32 @@ namespace UnityUtility.AiSimulation.Simple
         {
             _permanentState?.Refresh(deltaTime);
 
-            for (int i = 0; i < _states.Length; i++)
-            {
-                if (_states[i].Available())
-                {
-                    if (_states[i] != _currentState)
-                    {
-#if UNITY_EDITOR
-                        _prevState = _currentState;
-#endif
-                        _currentState.OnEnd();
-                        _currentState = _states[i];
-                        _status = StateStatus.Running;
-                        _currentState.OnBegin();
-                    }
+            if (_currentState == null)
+                return;
 
-                    break;
+            if (_currentState.Interruptible || _status == StateStatus.Complete)
+            {
+                for (int i = 0; i < _states.Length; i++)
+                {
+                    if (_states[i].Available())
+                    {
+                        if (_states[i] != _currentState)
+                        {
+#if UNITY_EDITOR
+                            _prevState = _currentState;
+#endif
+                            _currentState.OnEnd();
+                            _currentState = _states[i];
+                            _status = StateStatus.Running;
+                            _currentState.OnBegin();
+                        }
+
+                        break;
+                    }
                 }
             }
 
-            if (_currentState != null && _status == StateStatus.Running)
+            if (_status == StateStatus.Running)
             {
                 _status = _currentState.Refresh(deltaTime);
 

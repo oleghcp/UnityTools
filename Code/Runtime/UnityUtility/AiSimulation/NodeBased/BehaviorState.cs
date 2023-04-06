@@ -7,6 +7,8 @@ namespace UnityUtility.AiSimulation.NodeBased
     [Serializable]
     public abstract class BehaviorState : Node<BehaviorState>
     {
+        [SerializeField]
+        private bool _interruptible = true;
         [SerializeReference]
         private CompleteHandler[] _onComlete;
 
@@ -21,6 +23,7 @@ namespace UnityUtility.AiSimulation.NodeBased
 
         protected PermanentState PermanentState => _permanentState;
         internal CompleteHandler[] CompleteHandlers => _onComlete;
+        public bool Interruptible => _interruptible;
 
         internal void SetUp(PermanentState permanentState, GameObject gameObject)
         {

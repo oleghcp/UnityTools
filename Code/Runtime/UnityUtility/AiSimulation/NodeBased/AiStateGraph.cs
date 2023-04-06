@@ -64,10 +64,13 @@ namespace UnityUtility.AiSimulation.NodeBased
             if (_currentState == null)
                 return;
 
-            if (!UpdateState(EnumerateFromAny()))
-                UpdateState(_currentState);
+            if (_currentState.Interruptible || _status == StateStatus.Complete)
+            {
+                if (!UpdateState(_currentState))
+                    UpdateState(EnumerateFromAny());
+            }
 
-            if (_currentState != null && _status == StateStatus.Running)
+            if (_status == StateStatus.Running)
             {
                 _status = _currentState.Refresh(deltaTime);
 
