@@ -1,13 +1,10 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace UnityUtility.Engine
 {
     public static class UnityObjectExtensions
     {
-        private static ConditionalWeakTable<MeshRenderer, MeshFilter> _meshRendererData;
-
         /// <summary>
         /// Destroys the unity object.
         /// </summary>
@@ -67,20 +64,19 @@ namespace UnityUtility.Engine
             return GetMeshFilter(self)?.sharedMesh;
         }
 
+        public static void SetMesh(this MeshRenderer self, Mesh mesh)
+        {
+            self.GetOrAddComponent<MeshFilter>().mesh = mesh;
+        }
+
+        public static void SetSharedMesh(this MeshRenderer self, Mesh mesh)
+        {
+            self.GetOrAddComponent<MeshFilter>().sharedMesh = mesh;
+        }
+
         private static MeshFilter GetMeshFilter(MeshRenderer renderer)
         {
-            if (_meshRendererData == null)
-                _meshRendererData = new ConditionalWeakTable<MeshRenderer, MeshFilter>();
-
-            if (!_meshRendererData.TryGetValue(renderer, out MeshFilter filter))
-            {
-                if (!renderer.TryGetComponent(out filter))
-                    return null;
-
-                _meshRendererData.Add(renderer, filter);
-            }
-
-            return filter;
+            return renderer.TryGetComponent(out MeshFilter filter) ? filter : null;
         }
 
         /// <summary>
