@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Inspector;
 using UnityUtility.NodeBased;
 
 namespace UnityUtility.AiSimulation.NodeBased
@@ -8,8 +7,8 @@ namespace UnityUtility.AiSimulation.NodeBased
     [Serializable]
     public abstract class BehaviorState : Node<BehaviorState>
     {
-        [SerializeReference, ReferenceSelection]
-        private CompleteHandler[] _finalizers;
+        [SerializeReference]
+        private CompleteHandler[] _onComlete;
 
         private GameObject _gameObject;
         private Transform _transform;
@@ -21,7 +20,7 @@ namespace UnityUtility.AiSimulation.NodeBased
 #pragma warning restore IDE1006
 
         protected PermanentState PermanentState => _permanentState;
-        internal CompleteHandler[] Finalizers => _finalizers;
+        internal CompleteHandler[] CompleteHandlers => _onComlete;
 
         internal void SetUp(PermanentState permanentState, GameObject gameObject)
         {

@@ -51,6 +51,11 @@ namespace UnityUtility.AiSimulation.Simple
             return typeof(StateCondition);
         }
 
+        public virtual Type GetCompleteHandlerRootType()
+        {
+            return typeof(CompleteHandler);
+        }
+
         void IStateSet.SetUp(GameObject gameObject)
         {
             _permanentState?.SetUp(gameObject);
@@ -90,9 +95,9 @@ namespace UnityUtility.AiSimulation.Simple
 
                 if (_status == StateStatus.Complete)
                 {
-                    for (int i = 0; i < _currentState.Finalizers.Length; i++)
+                    for (int i = 0; i < _currentState.CompleteHandlers.Length; i++)
                     {
-                        _currentState.Finalizers[i].OnComlete(_permanentState);
+                        _currentState.CompleteHandlers[i].OnComlete(_permanentState);
                     }
                 }
             }

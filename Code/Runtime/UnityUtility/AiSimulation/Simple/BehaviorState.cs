@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Inspector;
 
 namespace UnityUtility.AiSimulation.Simple
 {
@@ -9,8 +8,8 @@ namespace UnityUtility.AiSimulation.Simple
     {
         [SerializeReference]
         private StateCondition[] _conditions;
-        [SerializeReference, ReferenceSelection]
-        private CompleteHandler[] _finalizers;
+        [SerializeReference]
+        private CompleteHandler[] _onComlete;
 
         private GameObject _gameObject;
         private Transform _transform;
@@ -22,7 +21,7 @@ namespace UnityUtility.AiSimulation.Simple
 #pragma warning restore IDE1006
 
         protected PermanentState PermanentState => _permanentState;
-        internal CompleteHandler[] Finalizers => _finalizers;
+        internal CompleteHandler[] CompleteHandlers => _onComlete;
 
         internal void SetUp(PermanentState permanentState, GameObject gameObject)
         {
