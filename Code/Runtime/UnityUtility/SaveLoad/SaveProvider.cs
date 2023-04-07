@@ -195,13 +195,15 @@ namespace UnityUtility.SaveLoad
         /// <summary>
         /// Saves all registered data asynchronously.
         /// </summary>
-        public TaskInfo SaveAsync(string version, int stepsPerFrame)
+        public TaskInfo SaveAsync(string version, int stepsPerFrame = 10)
         {
             return getRoutine(stepsPerFrame.ClampMin(1)).StartAsync();
 
             IEnumerator getRoutine(int spf)
             {
                 int counter = 0;
+
+                yield return null;
 
                 foreach (var (fieldsOwner, aList) in _fields)
                 {
