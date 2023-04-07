@@ -33,21 +33,17 @@ namespace UnityUtility.Async
 
         public void Refresh()
         {
-            if (_enabled)
-            {
-                if (_id == 0L)
-                    _owner.ReleaseRunner(this);
-            }
+            if (_enabled && _id == 0L)
+                _owner.ReleaseRunner(this);
         }
-
-        // - - //
 
         public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool paused = false)
         {
             _id = TaskSystem.IdProvider.GetNewId();
             _iterator.Initialize(routine, token, paused);
+            TaskInfo task = new TaskInfo(this);
             StartCoroutine(_iterator);
-            return new TaskInfo(this);
+            return task;
         }
 
         public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)

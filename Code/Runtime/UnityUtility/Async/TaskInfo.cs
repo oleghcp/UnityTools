@@ -46,6 +46,8 @@ namespace UnityUtility.Async
         {
             if (IsAliveInternal())
                 _task.OnCompleted_Event += onComplete;
+            else
+                onComplete(null);
         }
 
         public void OnInterrupt(Action onInterrupt)
