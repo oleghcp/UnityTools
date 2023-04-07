@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityUtility.Rng;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp
@@ -74,6 +75,11 @@ namespace UnityUtility.CSharp
                 throw new InvalidOperationException("String is empty.");
 
             return self[generator.Next(self.Length)];
+        }
+
+        public static char GetRandomChar(this string self)
+        {
+            return GetRandomChar(self, RandomNumberGenerator.Default);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityUtility.Rng;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp.Collections
@@ -397,12 +398,22 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
+        public static void Shuffle<T>(this IList<T> self)
+        {
+            Shuffle(self, RandomNumberGenerator.Default);
+        }
+
         public static T GetRandomItem<T>(this IList<T> self, IRng generator)
         {
             if (self.Count == 0)
                 throw ThrowErrors.NoElements();
 
             return self[generator.Next(self.Count)];
+        }
+
+        public static T GetRandomItem<T>(this IList<T> self)
+        {
+            return GetRandomItem(self, RandomNumberGenerator.Default);
         }
 
         public static T GetRandomItem<T>(this ICollection<T> self, IRng generator)
@@ -420,12 +431,22 @@ namespace UnityUtility.CSharp.Collections
             throw ThrowErrors.NoElements();
         }
 
+        public static T GetRandomItem<T>(this ICollection<T> self)
+        {
+            return GetRandomItem(self, RandomNumberGenerator.Default);
+        }
+
         public static T PullOutRandomItem<T>(this IList<T> self, IRng generator)
         {
             if (self.Count == 0)
                 throw ThrowErrors.NoElements();
 
             return self.PullOut(generator.Next(self.Count));
+        }
+
+        public static T PullOutRandomItem<T>(this IList<T> self)
+        {
+            return PullOutRandomItem(self, RandomNumberGenerator.Default);
         }
 
         /// <summary>

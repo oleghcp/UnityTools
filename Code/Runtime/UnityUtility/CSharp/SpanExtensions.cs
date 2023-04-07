@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityUtility.Rng;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp
@@ -81,7 +82,7 @@ namespace UnityUtility.CSharp
 
         public static void Shuffle<T>(this Span<T> self) where T : unmanaged
         {
-            SpanUtility.Shuffle(self);
+            SpanUtility.Shuffle(self, RandomNumberGenerator.Default);
         }
 
         public static T Find<T>(this in Span<T> self, Predicate<T> match) where T : unmanaged
@@ -180,6 +181,11 @@ namespace UnityUtility.CSharp
                 throw ThrowErrors.NoElements();
 
             return self[generator.Next(self.Length)];
+        }
+
+        public static T GetRandomItem<T>(this in Span<T> self) where T : unmanaged
+        {
+            return GetRandomItem(self, RandomNumberGenerator.Default);
         }
 
 #if UNITY_2021_2_OR_NEWER
@@ -285,6 +291,11 @@ namespace UnityUtility.CSharp
                 throw ThrowErrors.NoElements();
 
             return self[generator.Next(self.Length)];
+        }
+        
+        public static T GetRandomItem<T>(this in ReadOnlySpan<T> self) where T : unmanaged
+        {
+            return GetRandomItem(self, RandomNumberGenerator.Default);
         }
 #endif
     }

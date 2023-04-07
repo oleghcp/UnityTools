@@ -17,17 +17,6 @@ namespace System
             }
         }
 
-        public static void Shuffle<T>(Span<T> span) where T : unmanaged
-        {
-            int last = span.Length;
-
-            while (last > 1)
-            {
-                int cur = UnityEngine.Random.Range(0, last--);
-                Helper.Swap(ref span[cur], ref span[last]);
-            }
-        }
-
         public static T Min<T>(in Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)

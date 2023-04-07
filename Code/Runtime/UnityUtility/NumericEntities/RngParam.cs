@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityUtility.Rng;
 
 namespace UnityUtility.NumericEntities
 {
@@ -30,6 +31,11 @@ namespace UnityUtility.NumericEntities
         {
             _range = range;
             _params = new Option(mode, intensity);
+        }
+
+        public float GetRandomValue()
+        {
+            return GetRandomValue(RandomNumberGenerator.Default);
         }
 
         public float GetRandomValue(IRng rng)

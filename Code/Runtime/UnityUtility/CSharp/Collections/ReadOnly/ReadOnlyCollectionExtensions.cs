@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityUtility.Rng;
 using UnityUtility.Tools;
 
 namespace UnityUtility.CSharp.Collections.ReadOnly
@@ -82,6 +83,11 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
             return self[generator.Next(self.Count)];
         }
 
+        public static T GetRandomItem_<T>(this IReadOnlyList<T> self)
+        {
+            return GetRandomItem_(self, RandomNumberGenerator.Default);
+        }
+
         public static T GetRandomItem_<T>(this IReadOnlyCollection<T> self, IRng generator)
         {
             int index = generator.Next(self.Count);
@@ -95,6 +101,11 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
             }
 
             throw ThrowErrors.NoElements();
+        }
+
+        public static T GetRandomItem_<T>(this IReadOnlyCollection<T> self)
+        {
+            return GetRandomItem_(self, RandomNumberGenerator.Default);
         }
 
         public static bool IsNullOrEmpty_<T>(this IReadOnlyCollection<T> self)
