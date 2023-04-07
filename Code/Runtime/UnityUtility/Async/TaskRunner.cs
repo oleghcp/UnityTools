@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -9,6 +10,9 @@ namespace UnityUtility.Async
 {
     internal class TaskRunner : MonoBehaviour, IPoolable
     {
+        public event Action<object> OnCompleted_Event;
+        public event Action OnInterrupted_Event;
+
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
         private List<TaskInfo> _continues = new List<TaskInfo>();
@@ -69,10 +73,21 @@ namespace UnityUtility.Async
 
         public void OnCoroutineInterrupted()
         {
-            OnCoroutineEnded();
+            OnCoroutineEndedInternal();
+
+            try { OnInterrupted_Event?.Invoke(); }
+            finally { OnInterrupted_Event = null; }
         }
 
         public void OnCoroutineEnded()
+        {
+            OnCoroutineEndedInternal();
+
+            try { OnCompleted_Event?.Invoke(_iterator.Current); }
+            finally { OnCompleted_Event = null; }
+        }
+
+        private void OnCoroutineEndedInternal()
         {
             _id = 0L;
 

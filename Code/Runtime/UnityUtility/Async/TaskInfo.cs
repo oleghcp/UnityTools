@@ -42,6 +42,18 @@ namespace UnityUtility.Async
             return TaskSystem.StartAsyncLocally(routine, token);
         }
 
+        public void OnComlete(Action<object> onComplete)
+        {
+            if (IsAliveInternal())
+                _task.OnCompleted_Event += onComplete;
+        }
+
+        public void OnInterrupt(Action onInterrupt)
+        {
+            if (IsAliveInternal())
+                _task.OnInterrupted_Event += onInterrupt;
+        }
+
         /// <summary>
         /// Pauses the task.
         /// </summary>
@@ -69,13 +81,7 @@ namespace UnityUtility.Async
                 _task.Stop();
         }
 
-        private bool IsAliveInternal()
-        {
-            return _task != null && _task.Id == _id;
-        }
-
-        // -- //
-
+        #region Regular stuff
         public override bool Equals(object obj)
         {
             return obj is TaskInfo taskInfo && Equals(taskInfo);
@@ -91,6 +97,18 @@ namespace UnityUtility.Async
             return _id.GetHashCode();
         }
 
+        public static bool operator ==(TaskInfo a, TaskInfo b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(TaskInfo a, TaskInfo b)
+        {
+            return !a.Equals(b);
+        }
+        #endregion
+
+        #region IEnumerator implementation
         bool IEnumerator.MoveNext()
         {
             return IsAliveInternal();
@@ -100,15 +118,11 @@ namespace UnityUtility.Async
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public static bool operator ==(TaskInfo a, TaskInfo b)
+        private bool IsAliveInternal()
         {
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(TaskInfo a, TaskInfo b)
-        {
-            return !a.Equals(b);
+            return _task != null && _task.Id == _id;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace UnityUtility.Async
 
         public bool IsEmpty => _curRoutine == null;
         public bool IsPaused => _isPaused;
+        public object Current => _curRoutine.Current;
 
         public RoutineIterator(TaskRunner owner)
         {
@@ -44,8 +45,6 @@ namespace UnityUtility.Async
             _isStopped = false;
             _token = default;
         }
-
-        object IEnumerator.Current => _curRoutine.Current;
 
         bool IEnumerator.MoveNext()
         {
