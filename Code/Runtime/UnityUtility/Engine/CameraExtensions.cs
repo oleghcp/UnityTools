@@ -24,9 +24,9 @@ namespace UnityUtility.Engine
             return GeometryUtility.CalculateFrustumPlanes(self);
         }
 
-        public static bool IsVisible(this Camera self, Renderer renderer)
+        public static bool CanSee(this Camera self, Renderer target)
         {
-            return GeometryUtility.TestPlanesAABB(self.CalculateFrustumPlanes(), renderer.bounds);
+            return GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(self), target.bounds);
         }
     }
 }
