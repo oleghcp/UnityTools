@@ -1,10 +1,141 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityUtility.Mathematics;
 
 namespace UnityUtility.Engine
 {
     public static class VectorExtensions
     {
+        public static Vector3 IncreaseX(this Vector3 value, float xIncrease)
+        {
+            value.x += xIncrease;
+            return value;
+        }
+
+        public static Vector2 IncreaseX(this Vector2 value, float xIncrease)
+        {
+            value.x += xIncrease;
+            return value;
+        }
+
+        public static Vector3 IncreaseY(this Vector3 value, float yIncrease)
+        {
+            value.y += yIncrease;
+            return value;
+        }
+        
+        public static Vector2 IncreaseY(this Vector2 value, float yIncrease)
+        {
+            value.y += yIncrease;
+            return value;
+        }
+
+        public static Vector3 IncreaseZ(this Vector3 value, float zIncrease)
+        {
+            value.z += zIncrease;
+            return value;
+        }
+
+        public static Vector3 DecreaseX(this Vector3 value, float xDecrease)
+        {
+            value.x -= xDecrease;
+            return value;
+        }
+        
+        public static Vector2 DecreaseX(this Vector2 value, float xDecrease)
+        {
+            value.x -= xDecrease;
+            return value;
+        }
+
+        public static Vector3 DecreaseY(this Vector3 value, float yDecrease)
+        {
+            value.y -= yDecrease;
+            return value;
+        }
+        
+        public static Vector2 DecreaseY(this Vector2 value, float yDecrease)
+        {
+            value.y -= yDecrease;
+            return value;
+        }
+
+        public static Vector3 DecreaseZ(this Vector3 value, float zDecrease)
+        {
+            value.z -= zDecrease;
+            return value;
+        }
+
+        public static Vector3 MultiplyX(this Vector3 value, float xMultiply)
+        {
+            value.x *= xMultiply;
+            return value;
+        }
+
+        public static Vector2 MultiplyX(this Vector2 value, float xMultiply)
+        {
+            value.x *= xMultiply;
+            return value;
+        }
+
+        public static Vector3 MultiplyY(this Vector3 value, float yMultiply)
+        {
+            value.y *= yMultiply;
+            return value;
+        }
+        
+        public static Vector2 MultiplyY(this Vector2 value, float yMultiply)
+        {
+            value.y *= yMultiply;
+            return value;
+        }
+
+        public static Vector3 MultiplyZ(this Vector3 value, float zMultiply)
+        {
+            value.z *= zMultiply;
+            return value;
+        }
+
+        public static Vector3 DivideX(this Vector3 value, float xDivide)
+        {
+            value.x /= xDivide;
+            return value;
+        }
+        
+        public static Vector2 DivideX(this Vector2 value, float xDivide)
+        {
+            value.x /= xDivide;
+            return value;
+        }
+
+        public static Vector3 DivideY(this Vector3 value, float yDivide)
+        {
+            value.y /= yDivide;
+            return value;
+        }
+        
+        public static Vector2 DivideY(this Vector2 value, float yDivide)
+        {
+            value.y /= yDivide;
+            return value;
+        }
+
+        public static Vector3 DivideZ(this Vector3 value, float zDivide)
+        {
+            value.z /= zDivide;
+            return value;
+        }
+
+        public static Vector3 Abs(this in Vector3 value)
+        {
+            return new Vector3(Math.Abs(value.x), Math.Abs(value.y), Math.Abs(value.z));
+        }
+
+        public static Vector2 Abs(this in Vector2 value)
+        {
+            return new Vector2(Math.Abs(value.x), Math.Abs(value.y));
+        }
+
         public static Vector3 Invert(this in Vector3 value)
         {
             return new Vector3(-value.x, -value.y, -value.z);
@@ -13,16 +144,6 @@ namespace UnityUtility.Engine
         public static Vector2 Invert(this in Vector2 value)
         {
             return new Vector2(-value.x, -value.y);
-        }
-
-        public static Vector3Int Invert(this in Vector3Int value)
-        {
-            return new Vector3Int(-value.x, -value.y, -value.z);
-        }
-
-        public static Vector2Int Invert(this in Vector2Int value)
-        {
-            return new Vector2Int(-value.x, -value.y);
         }
 
         public static bool Equals(this in Vector3 value, in Vector3 other, float precision)
