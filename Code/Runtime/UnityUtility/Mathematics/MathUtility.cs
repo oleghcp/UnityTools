@@ -155,26 +155,6 @@ namespace UnityUtility.Mathematics
             return (ch1, ch2);
         }
 
-        public static float ExpLerp(float from, float to, float sharpness)
-        {
-            return Mathf.LerpUnclamped(from, to, ApproachOne(sharpness));
-        }
-
-        public static Vector2 ExpLerp(Vector2 from, Vector2 to, float sharpness)
-        {
-            return Vector2.LerpUnclamped(from, to, ApproachOne(sharpness));
-        }
-
-        public static Vector3 ExpLerp(in Vector3 from, in Vector3 to, float sharpness)
-        {
-            return Vector3.LerpUnclamped(from, to, ApproachOne(sharpness));
-        }
-
-        public static Quaternion ExpLerp(in Quaternion from, in Quaternion to, float sharpness)
-        {
-            return Quaternion.LerpUnclamped(from, to, ApproachOne(sharpness));
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ApproachZero(float value)
         {
