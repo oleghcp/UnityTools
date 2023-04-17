@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityUtility.Mathematics;
 
@@ -38,11 +39,13 @@ namespace UnityUtility
             _value = 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Increment()
         {
             checked { _value++; }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Decrement()
         {
             checked { _value--; }
