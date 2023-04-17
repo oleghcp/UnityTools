@@ -9,7 +9,17 @@ namespace UnityUtility.Rng
     {
         private static IRng _default;
 
-        public static IRng Default => _default ?? (_default = new BuiltinRngWrapper());
+        public static IRng Default
+        {
+            get => _default ?? (_default = new BuiltinRngWrapper());
+            set
+            {
+                if (value == null)
+                    throw ThrowErrors.NullParameter("value");
+
+                _default = value;
+            }
+        }
 
         public abstract void NextBytes(byte[] buffer);
         public abstract void NextBytes(Span<byte> buffer);
