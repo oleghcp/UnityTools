@@ -45,6 +45,26 @@ namespace UnityUtility.Rng.BytesBased
         {
             Guid guid = Guid.NewGuid();
 
+#if UNITY_2021_2_OR_NEWER
+            Span<byte> bytes = stackalloc byte[COUNT + 2];
+            if (guid.TryWriteBytes(bytes))
+            {
+                int j = 0;
+                for (int i = 0; i < COUNT; i++)
+                {
+                    while (j == EXCL_BYTE_INDEX0 ||
+                           j == EXCL_BYTE_INDEX1)
+                    { j++; }
+
+                    _bytes[i] = bytes[j];
+                    j++;
+                }
+            }
+            else
+            {
+                throw new Exception("Cannot write GUID bytes.");
+            }
+#else
             unsafe
             {
                 byte* bytes = (byte*)&guid;
@@ -60,7 +80,7 @@ namespace UnityUtility.Rng.BytesBased
                     j++;
                 }
             }
-
+#endif
             _counter = 0;
         }
     }
