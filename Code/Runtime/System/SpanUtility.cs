@@ -83,7 +83,7 @@ namespace System
         } 
 #endif
 
-        public static unsafe void QuickSort<T>(Span<T> span, int left, int right) where T : unmanaged, IComparable<T>
+        public static void QuickSort<T>(Span<T> span, int left, int right) where T : unmanaged, IComparable<T>
         {
             int i = left, j = right;
             T pivot = span[(left + right) / 2];
@@ -104,7 +104,7 @@ namespace System
                 QuickSort(span, i, right);
         }
 
-        public static unsafe void QuickSort<T>(Span<T> span, int left, int right, Comparison<T> comparer) where T : unmanaged
+        public static void QuickSort<T>(Span<T> span, int left, int right, Comparison<T> comparer) where T : unmanaged
         {
             int i = left, j = right;
             T pivot = span[(left + right) / 2];
@@ -125,7 +125,7 @@ namespace System
                 QuickSort(span, i, right, comparer);
         }
 
-        public static unsafe void QuickSort<T, TComparer>(Span<T> span, int left, int right, TComparer comparer)
+        public static void QuickSort<T, TComparer>(Span<T> span, int left, int right, TComparer comparer)
             where T : unmanaged
             where TComparer : IComparer<T>
         {
@@ -148,7 +148,7 @@ namespace System
                 QuickSort(span, i, right, comparer);
         }
 
-        public static unsafe void QuickSort<T, TKey>(in Span<T> span, int left, int right, Func<T, TKey> selector)
+        public static void QuickSort<T, TKey>(in Span<T> span, int left, int right, Func<T, TKey> selector)
             where T : unmanaged
             where TKey : IComparable<TKey>
         {

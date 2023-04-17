@@ -7,7 +7,7 @@ namespace UnityUtility.CSharp
 {
     public static class SpanExtensions
     {
-        public static unsafe void Sort<T, TKey>(this Span<T> self, Func<T, TKey> selector)
+        public static void Sort<T, TKey>(this Span<T> self, Func<T, TKey> selector)
             where T : unmanaged
             where TKey : IComparable<TKey>
         {
