@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
+using UnityUtility.Tools;
 using static System.MathF;
 
 namespace UnityUtility.Mathematics
@@ -14,7 +15,9 @@ namespace UnityUtility.Mathematics
         public const float kEpsilonNormalSqrt = Vector3.kEpsilonNormalSqrt;
 #pragma warning restore IDE1006
 
+#if !UNITY_2021_2_OR_NEWER
         internal const double THIRD = 1d / 3d;
+#endif
 
         public static Vector2 Normalize(in Vector2 value, out float prevMagnitude)
         {
@@ -216,6 +219,70 @@ namespace UnityUtility.Mathematics
                 number /= 10;
             }
             buffer.Reverse();
+        }
+
+        public static Vector3 AveragePosition(IList<Vector3> self)
+        {
+            if (self.Count == 0)
+                throw ThrowErrors.NoElements();
+
+            Vector3 sum = default;
+
+            for (int i = 0; i < self.Count; i++)
+            {
+                sum += self[i];
+            }
+
+            return sum / self.Count;
+        }
+
+        public static Vector2 AveragePosition(IList<Vector2> self)
+        {
+            if (self.Count == 0)
+                throw ThrowErrors.NoElements();
+
+            Vector2 sum = default;
+
+            for (int i = 0; i < self.Count; i++)
+            {
+                sum += self[i];
+            }
+
+            return sum / self.Count;
+        }
+
+        public static Vector3 AveragePosition(IEnumerable<Vector3> self)
+        {
+            Vector3 sum = default;
+
+            int count = 0;
+            foreach (Vector3 item in self)
+            {
+                sum += item;
+                count++;
+            }
+
+            if (count == 0)
+                throw ThrowErrors.NoElements();
+
+            return sum / count;
+        }
+
+        public static Vector2 AveragePosition(IEnumerable<Vector2> self)
+        {
+            Vector2 sum = default;
+
+            int count = 0;
+            foreach (Vector2 item in self)
+            {
+                sum += item;
+                count++;
+            }
+
+            if (count == 0)
+                throw ThrowErrors.NoElements();
+
+            return sum / count;
         }
     }
 }
