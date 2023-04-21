@@ -92,9 +92,81 @@ namespace UnityUtility.CSharp.Collections
             yield return newElement;
         }
 
+        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, T newElement1, T newElement2)
+        {
+            foreach (T item in self)
+            {
+                yield return item;
+            }
+
+            yield return newElement1;
+            yield return newElement2;
+        }
+
+        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
+        {
+            foreach (T item in self)
+            {
+                yield return item;
+            }
+
+            yield return newElement1;
+            yield return newElement2;
+            yield return newElement3;
+        }
+
+        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, params T[] newElements)
+        {
+            foreach (T item in self)
+            {
+                yield return item;
+            }
+
+            for (int i = 0; i < newElements.Length; i++)
+            {
+                yield return newElements[i];
+            }
+        }
+
         public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, T newElement)
         {
             yield return newElement;
+
+            foreach (T item in self)
+            {
+                yield return item;
+            }
+        }
+
+        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, T newElement1, T newElement2)
+        {
+            yield return newElement1;
+            yield return newElement2;
+
+            foreach (T item in self)
+            {
+                yield return item;
+            }
+        }
+
+        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
+        {
+            yield return newElement1;
+            yield return newElement2;
+            yield return newElement3;
+
+            foreach (T item in self)
+            {
+                yield return item;
+            }
+        }
+
+        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, params T[] newElements)
+        {
+            for (int i = 0; i < newElements.Length; i++)
+            {
+                yield return newElements[i];
+            }
 
             foreach (T item in self)
             {
