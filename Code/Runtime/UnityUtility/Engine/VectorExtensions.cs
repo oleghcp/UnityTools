@@ -23,7 +23,7 @@ namespace UnityUtility.Engine
             value.y += yIncrease;
             return value;
         }
-        
+
         public static Vector2 IncreaseY(this Vector2 value, float yIncrease)
         {
             value.y += yIncrease;
@@ -41,7 +41,7 @@ namespace UnityUtility.Engine
             value.x -= xDecrease;
             return value;
         }
-        
+
         public static Vector2 DecreaseX(this Vector2 value, float xDecrease)
         {
             value.x -= xDecrease;
@@ -53,7 +53,7 @@ namespace UnityUtility.Engine
             value.y -= yDecrease;
             return value;
         }
-        
+
         public static Vector2 DecreaseY(this Vector2 value, float yDecrease)
         {
             value.y -= yDecrease;
@@ -83,7 +83,7 @@ namespace UnityUtility.Engine
             value.y *= yMultiply;
             return value;
         }
-        
+
         public static Vector2 MultiplyY(this Vector2 value, float yMultiply)
         {
             value.y *= yMultiply;
@@ -101,7 +101,7 @@ namespace UnityUtility.Engine
             value.x /= xDivide;
             return value;
         }
-        
+
         public static Vector2 DivideX(this Vector2 value, float xDivide)
         {
             value.x /= xDivide;
@@ -113,7 +113,7 @@ namespace UnityUtility.Engine
             value.y /= yDivide;
             return value;
         }
-        
+
         public static Vector2 DivideY(this Vector2 value, float yDivide)
         {
             value.y /= yDivide;
@@ -156,54 +156,64 @@ namespace UnityUtility.Engine
             return MathUtility.Equals(value, other, precision);
         }
 
-        public static Vector3 AlterX(this in Vector3 value, float x)
+        public static Vector3 AlterX(this Vector3 value, float x)
         {
-            return new Vector3(x, value.y, value.z);
+            value.x = x;
+            return value;
         }
 
-        public static Vector2 AlterX(this in Vector2 value, float x)
+        public static Vector2 AlterX(this Vector2 value, float x)
         {
-            return new Vector2(x, value.y);
+            value.x = x;
+            return value;
         }
 
-        public static Vector3 AlterY(this in Vector3 value, float y)
+        public static Vector3 AlterY(this Vector3 value, float y)
         {
-            return new Vector3(value.x, y, value.z);
+            value.y = y;
+            return value;
         }
 
-        public static Vector2 AlterY(this in Vector2 value, float y)
+        public static Vector2 AlterY(this Vector2 value, float y)
         {
-            return new Vector2(value.x, y);
+            value.y = y;
+            return value;
         }
 
-        public static Vector3 AlterZ(this in Vector3 value, float z)
+        public static Vector3 AlterZ(this Vector3 value, float z)
         {
-            return new Vector3(value.x, value.y, z);
+            value.z = z;
+            return value;
         }
 
-        public static Vector3Int AlterX(this in Vector3Int value, int x)
+        public static Vector3Int AlterX(this Vector3Int value, int x)
         {
-            return new Vector3Int(x, value.y, value.z);
+            value.x = x;
+            return value;
         }
 
-        public static Vector2Int AlterX(this in Vector2Int value, int x)
+        public static Vector2Int AlterX(this Vector2Int value, int x)
         {
-            return new Vector2Int(x, value.y);
+            value.x = x;
+            return value;
         }
 
-        public static Vector3Int AlterY(this in Vector3Int value, int y)
+        public static Vector3Int AlterY(this Vector3Int value, int y)
         {
-            return new Vector3Int(value.x, y, value.z);
+            value.y = y;
+            return value;
         }
 
-        public static Vector2Int AlterY(this in Vector2Int value, int y)
+        public static Vector2Int AlterY(this Vector2Int value, int y)
         {
-            return new Vector2Int(value.x, y);
+            value.y = y;
+            return value;
         }
 
-        public static Vector3Int AlterZ(this in Vector3Int value, int z)
+        public static Vector3Int AlterZ(this Vector3Int value, int z)
         {
-            return new Vector3Int(value.x, value.y, z);
+            value.z = z;
+            return value;
         }
 
         /// <summary>
