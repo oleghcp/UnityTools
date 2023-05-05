@@ -11,27 +11,27 @@ namespace UnityUtility.GameConsole
     {
 #if UNITY_EDITOR || TOUCH_SCREEN
         [TerminalCommand, Preserve]
-        public void help()
+        private void help()
         {
             Terminal.I.WriteCommanList();
         }
 #endif
 
         [TerminalCommand, Preserve]
-        public void clear()
+        private void clear()
         {
             Terminal.I.Clear();
         }
 
         [TerminalCommand, Preserve]
-        public void endian()
+        private void endian()
         {
             string message = BitConverter.IsLittleEndian ? "little" : "big";
             Terminal.I.WriteLine(message, LogType.Log);
         }
 
         [TerminalCommand, Preserve]
-        public bool quit()
+        private bool quit()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -42,19 +42,19 @@ namespace UnityUtility.GameConsole
         }
 
         [TerminalCommand, Preserve]
-        public void time_scale(string[] opt)
+        private void time_scale(string[] opt)
         {
             ParseFloat(opt, scale => Time.timeScale = scale);
         }
 
         [TerminalCommand, Preserve]
-        public void frame_rate(string[] opt)
+        private void frame_rate(string[] opt)
         {
             ParseInt(opt, frameRate => Application.targetFrameRate = frameRate);
         }
 
         [TerminalCommand, Preserve]
-        public bool vsync(string[] opt)
+        private bool vsync(string[] opt)
         {
             return ParseOnOff(opt, value => QualitySettings.vSyncCount = value.ToInt());
         }
