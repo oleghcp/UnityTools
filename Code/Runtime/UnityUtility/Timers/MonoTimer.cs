@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityUtility.Async;
 using UnityUtility.Mathematics;
+using UnityUtility.Tools;
 
 namespace UnityUtility.Timers
 {
@@ -23,6 +24,18 @@ namespace UnityUtility.Timers
         {
             get => _routine.GlobalScale;
             set => _routine.GlobalScale = value;
+        }
+
+        public float ExtraTimeScale
+        {
+            get => _routine.ExtraTimeScale;
+            set
+            {
+                if (value < 0f)
+                    throw ThrowErrors.NegativeParameter(nameof(ExtraTimeScale));
+
+                _routine.ExtraTimeScale = value;
+            }
         }
 
         public MonoTimer(bool withinCurrentScene = true)
@@ -62,6 +75,8 @@ namespace UnityUtility.Timers
             public bool GlobalScale = true;
             public float WaitTime = 1f;
             public float CurrentTime;
+            public float ExtraTimeScale = 1f;
+
             private MonoTimer _owner;
 
             public object Current => null;
@@ -79,7 +94,7 @@ namespace UnityUtility.Timers
                     return false;
                 }
 
-                CurrentTime += GlobalScale ? Time.deltaTime : Time.unscaledDeltaTime;
+                CurrentTime += (GlobalScale ? Time.deltaTime : Time.unscaledDeltaTime) * ExtraTimeScale;
                 return true;
             }
 
