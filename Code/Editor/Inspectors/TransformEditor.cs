@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using MenuItems;
 using UnityEditor;
 using UnityEngine;
 using UnityUtility;
@@ -187,13 +188,13 @@ namespace UnityUtilityEditor.Inspectors
             return serializedObject.FindProperty(name);
         }
 
-        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(Transform) + "/Copy Values to Clipboard (ext.)")]
+        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(Transform) + "/Copy Values to Clipboard (ext.)")]
         private static void CopyToClipboard(MenuCommand command)
         {
             GUIUtility.systemCopyBuffer = EditorJsonUtility.ToJson(command.context);
         }
 
-        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(Transform) + "/Paste Values from Clipboard (ext.)")]
+        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(Transform) + "/Paste Values from Clipboard (ext.)")]
         private static void PastFromClipboard(MenuCommand command)
         {
             using (SerializedObject serializedObject = new SerializedObject(command.context))

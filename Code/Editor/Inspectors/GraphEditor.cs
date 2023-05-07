@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using MenuItems;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.NodeBased.Service;
@@ -34,13 +35,13 @@ namespace UnityUtilityEditor.Inspectors
                 EditorUtilityExt.OpenScriptableObjectCode(target);
         }
 
-        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + BaseMenuItems.RESET_ITEM_NAME)]
+        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + ContextMenuItems.RESET_ITEM_NAME)]
         private static void ResetMenuItem() { }
 
-        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + BaseMenuItems.RESET_ITEM_NAME, true)]
+        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + ContextMenuItems.RESET_ITEM_NAME, true)]
         private static bool ResetMenuItemValidate() => false;
 
-        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
+        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
         private static void OpenMenuItem(MenuCommand command)
         {
             GraphEditorWindow.Open(command.context as RawGraph);

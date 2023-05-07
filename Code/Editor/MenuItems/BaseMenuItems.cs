@@ -13,8 +13,6 @@ namespace UnityUtilityEditor.MenuItems
     internal static class BaseMenuItems
     {
         public const string MAIN_MENU_NAME = "Tools/" + LibConstants.LIB_NAME + "/";
-        public const string CONTEXT_MENU_NAME = "CONTEXT/";
-        public const string RESET_ITEM_NAME = "Reset";
 
         [MenuItem(MAIN_MENU_NAME + "About", false, 1)]
         private static void GetAboutWindow()

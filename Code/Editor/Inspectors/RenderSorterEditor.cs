@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using MenuItems;
+using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtilityEditor.Engine;
@@ -45,7 +46,7 @@ namespace UnityUtilityEditor.Inspectors
             }
         }
 
-        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + BaseMenuItems.RESET_ITEM_NAME)]
+        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + ContextMenuItems.RESET_ITEM_NAME)]
         private static void ResetMenuItem(MenuCommand command)
         {
             Renderer renderer = (command.context as RenderSorter).Renderer;
