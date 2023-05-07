@@ -8,7 +8,7 @@ using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.MenuItems
 {
     internal static class AssetMenuItems
     {

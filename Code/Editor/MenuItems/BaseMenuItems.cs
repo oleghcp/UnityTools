@@ -8,9 +8,9 @@ using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.MenuItems
 {
-    internal static class MenuItems
+    internal static class BaseMenuItems
     {
         public const string MAIN_MENU_NAME = "Tools/" + LibConstants.LIB_NAME + "/";
         public const string CONTEXT_MENU_NAME = "CONTEXT/";

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityUtility;
 using UnityUtilityEditor.Engine;
+using UnityUtilityEditor.MenuItems;
 using static UnityUtilityEditor.Drawers.Attributes.SortingLayerIDDrawer;
 
 namespace UnityUtilityEditor.Inspectors
@@ -44,7 +45,7 @@ namespace UnityUtilityEditor.Inspectors
             }
         }
 
-        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + MenuItems.RESET_ITEM_NAME)]
+        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + BaseMenuItems.RESET_ITEM_NAME)]
         private static void ResetMenuItem(MenuCommand command)
         {
             Renderer renderer = (command.context as RenderSorter).Renderer;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityUtility;
 using UnityUtility.Mathematics;
 using UnityUtilityEditor.Engine;
+using UnityUtilityEditor.MenuItems;
 
 namespace UnityUtilityEditor.Inspectors
 {
@@ -193,7 +194,7 @@ namespace UnityUtilityEditor.Inspectors
             return _widthToHeight ? "Width / Height" : "Height / Width";
         }
 
-        [MenuItem(MenuItems.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItems.RESET_ITEM_NAME)]
+        [MenuItem(BaseMenuItems.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + BaseMenuItems.RESET_ITEM_NAME)]
         private static void ResetMenuItem()
         {
 

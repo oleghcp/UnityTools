@@ -9,7 +9,7 @@ using UnityUtility.CSharp.Collections;
 using UnityUtility.IO;
 using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor
+namespace UnityUtilityEditor.MenuItems
 {
     internal static class MenuItemsUtility
     {
