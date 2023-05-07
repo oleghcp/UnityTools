@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityUtility.CSharp;
+using UnityUtility.CSharp.Collections;
 
 namespace UnityUtility.Engine
 {
@@ -273,12 +274,22 @@ namespace UnityUtility.Engine
         }
 
         /// <summary>
-        /// Sorts siblings by selected key.
+        /// Sorts children by selected key.
         /// </summary>
-        public static void OrderSiblings<TKey>(this Transform self, Func<Transform, TKey> keySelector)
+        public static void OrderChildren<TKey>(this Transform self, Func<Transform, TKey> keySelector)
         {
             Transform[] children = self.GetTopChildren();
             children.Sort(keySelector);
+            TransformUtility.OrderSiblingsByList(children);
+        }
+
+        /// <summary>
+        /// Sorts children by selected key.
+        /// </summary>
+        public static void OrderChildren(this Transform self, Comparison<Transform> comparer)
+        {
+            Transform[] children = self.GetTopChildren();
+            children.Sort(comparer);
             TransformUtility.OrderSiblingsByList(children);
         }
 

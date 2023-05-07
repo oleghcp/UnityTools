@@ -1,15 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace UnityUtility.CSharp.Collections
 {
     internal static class CollectionUtility
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void QuickSort<T>(IList<T> collection, int left, int right) where T : IComparable<T>
+        {
+            int i = left, j = right;
+            T pivot = collection[(left + right) / 2];
+
+            while (i < j)
+            {
+                while (collection[i].CompareTo(pivot) < 0) { i++; }
+                while (collection[j].CompareTo(pivot) > 0) { j--; }
+
+                if (i <= j)
+                    collection.Swap(i++, j--);
+            }
+
+            if (left < j)
+                QuickSort(collection, left, j);
+
+            if (i < right)
+                QuickSort(collection, i, right);
+        }
+
         public static void QuickSort<T>(IList<T> collection, int left, int right, IComparer<T> comparer)
         {
-            QuickSort(collection, left, right, comparer.Compare);
+            int i = left, j = right;
+            T pivot = collection[(left + right) / 2];
+
+            while (i < j)
+            {
+                while (comparer.Compare(collection[i], pivot) < 0) { i++; }
+                while (comparer.Compare(collection[j], pivot) > 0) { j--; }
+
+                if (i <= j)
+                    collection.Swap(i++, j--);
+            }
+
+            if (left < j)
+                QuickSort(collection, left, j, comparer);
+
+            if (i < right)
+                QuickSort(collection, i, right, comparer);
         }
 
         public static void QuickSort<T>(IList<T> collection, int left, int right, Comparison<T> comparison)

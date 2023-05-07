@@ -82,29 +82,47 @@ namespace UnityUtility.CSharp
 
         /// <summary>
         /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
-        /// </summary>        
+        /// </summary>
         public static void Sort<T>(this T[] self) where T : IComparable<T>
         {
             Array.Sort(self);
         }
 
         /// <summary>
-        /// Sorts by comparison.
+        /// Sorts using the specified comparer.
         /// </summary>
-        /// <param name="comparer">Reference to comparing function.</param>
-        public static void Sort<T>(this T[] self, Comparison<T> comparer)
+        public static void Sort<T>(this T[] self, IComparer<T> comparer)
         {
             Array.Sort(self, comparer);
         }
 
         /// <summary>
+        /// Sorts by comparison.
+        /// </summary>
+        /// <param name="comparison">Reference to comparing function.</param>
+        public static void Sort<T>(this T[] self, Comparison<T> comparison)
+        {
+            Array.Sort(self, comparison);
+        }
+
+        /// <summary>
         /// Sorts by selected key.
-        /// </summary>                
+        /// </summary>
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
         {
             Comparer<TKey> comparer = Comparer<TKey>.Default;
-            Array.Sort(self, (itm1, itm2) => comparer.Compare(keySelector(itm1), keySelector(itm2)));
+            Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key in descending order.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void SortDescending<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
+        {
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            Array.Sort(self, (a, b) => -comparer.Compare(keySelector(a), keySelector(b)));
         }
 
         /// <summary>
