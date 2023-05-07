@@ -447,6 +447,11 @@ namespace UnityUtility.Engine
             return MathUtility.RotateVector(value, axis, angle);
         }
 
+        public static Vector3 GetRotated(this in Vector3 value, in Quaternion quaternion)
+        {
+            return quaternion * value;
+        }
+
         /// <summary>
         /// Returns vector2int rotated right angles (90, 180, etc.).
         /// </summary>
