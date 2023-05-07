@@ -134,18 +134,6 @@ namespace UnityUtility.Engine
             }
         }
 
-        public static Transform GetRootTransform(this Transform self)
-        {
-            Transform root = self;
-
-            for (Transform p = self.parent; p != null; p = p.parent)
-            {
-                root = p;
-            }
-
-            return root;
-        }
-
         /// <summary>
         /// Returns IEnumerable collection of all children;
         /// </summary>
