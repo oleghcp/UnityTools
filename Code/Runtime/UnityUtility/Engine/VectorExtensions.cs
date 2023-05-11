@@ -462,6 +462,11 @@ namespace UnityUtility.Engine
             return new Vector2Int(x, y);
         }
 
+        public static Vector3 GetReflected(this in Vector3 value, in Vector3 normal)
+        {
+            return Vector3.Reflect(value, normal);
+        }
+
         /// <summary>
         /// Returns a rotation that rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis.
         /// </summary>
