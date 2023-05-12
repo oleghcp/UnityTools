@@ -1,11 +1,11 @@
-﻿#if !UNITY_2021_2_OR_NEWER
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityUtility.CSharp;
 
 namespace System
 {
     public static class SpanExtensions
     {
+#if !UNITY_2021_2_OR_NEWER
         public static void CopyTo<T>(this in Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
         {
             if (self.Length > destination.Length)
@@ -40,6 +40,12 @@ namespace System
 
             return -1;
         }
+
+        public static void Reverse<T>(this in Span<T> self) where T : unmanaged
+        {
+            self.Reverse(0, self.Length);
+        }
+#endif
 
         public static unsafe void Sort<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
         {
@@ -77,11 +83,5 @@ namespace System
 
             return false;
         }
-
-        public static void Reverse<T>(this in Span<T> self) where T : unmanaged
-        {
-            self.Reverse(0, self.Length);
-        }
     }
 }
-#endif

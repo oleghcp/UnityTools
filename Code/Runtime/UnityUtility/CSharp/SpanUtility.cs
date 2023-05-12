@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityUtility;
+﻿using System;
+using System.Collections.Generic;
 using UnityUtility.Tools;
 
-namespace System
+namespace UnityUtility.CSharp
 {
     internal static class SpanUtility
     {
@@ -80,7 +80,7 @@ namespace System
             }
 
             return num;
-        } 
+        }
 #endif
 
         public static void QuickSort<T>(Span<T> span, int left, int right) where T : unmanaged, IComparable<T>
