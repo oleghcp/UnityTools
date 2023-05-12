@@ -6,7 +6,7 @@ namespace UnityUtility.CSharp
 {
     internal static class SpanUtility
     {
-        public static void Shuffle<T>(Span<T> span, IRng generator)
+        public static void Shuffle<T>(Span<T> span, IRng generator) where T : unmanaged
         {
             int last = span.Length;
 
@@ -17,7 +17,7 @@ namespace UnityUtility.CSharp
             }
         }
 
-        public static T Min<T>(in Span<T> span) where T : IComparable<T>
+        public static T Min<T>(in Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw ThrowErrors.NoElements();
@@ -33,7 +33,7 @@ namespace UnityUtility.CSharp
             return num;
         }
 
-        public static T Max<T>(in Span<T> span) where T : IComparable<T>
+        public static T Max<T>(in Span<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw ThrowErrors.NoElements();
@@ -50,7 +50,7 @@ namespace UnityUtility.CSharp
         }
 
 #if UNITY_2021_2_OR_NEWER
-        public static T Min<T>(in ReadOnlySpan<T> span) where T : IComparable<T>
+        public static T Min<T>(in ReadOnlySpan<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw ThrowErrors.NoElements();
@@ -66,7 +66,7 @@ namespace UnityUtility.CSharp
             return num;
         }
 
-        public static T Max<T>(in ReadOnlySpan<T> span) where T : IComparable<T>
+        public static T Max<T>(in ReadOnlySpan<T> span) where T : unmanaged, IComparable<T>
         {
             if (span.Length <= 0)
                 throw ThrowErrors.NoElements();
@@ -83,7 +83,7 @@ namespace UnityUtility.CSharp
         }
 #endif
 
-        public static void QuickSort<T>(Span<T> span, int left, int right) where T : IComparable<T>
+        public static void QuickSort<T>(Span<T> span, int left, int right) where T : unmanaged, IComparable<T>
         {
             int i = left, j = right;
             T pivot = span[(left + right) / 2];
@@ -104,7 +104,7 @@ namespace UnityUtility.CSharp
                 QuickSort(span, i, right);
         }
 
-        public static void QuickSort<T>(Span<T> span, int left, int right, Comparison<T> comparer)
+        public static void QuickSort<T>(Span<T> span, int left, int right, Comparison<T> comparer) where T : unmanaged
         {
             int i = left, j = right;
             T pivot = span[(left + right) / 2];
@@ -125,7 +125,9 @@ namespace UnityUtility.CSharp
                 QuickSort(span, i, right, comparer);
         }
 
-        public static void QuickSort<T, TComparer>(Span<T> span, int left, int right, TComparer comparer) where TComparer : IComparer<T>
+        public static void QuickSort<T, TComparer>(Span<T> span, int left, int right, TComparer comparer)
+            where T : unmanaged
+            where TComparer : IComparer<T>
         {
             int i = left, j = right;
             T pivot = span[(left + right) / 2];
@@ -146,7 +148,9 @@ namespace UnityUtility.CSharp
                 QuickSort(span, i, right, comparer);
         }
 
-        public static void QuickSort<T, TKey>(in Span<T> span, int left, int right, Func<T, TKey> selector) where TKey : IComparable<TKey>
+        public static void QuickSort<T, TKey>(in Span<T> span, int left, int right, Func<T, TKey> selector)
+            where T : unmanaged
+            where TKey : IComparable<TKey>
         {
             int i = left, j = right;
             TKey pivotKey = selector(span[(left + right) / 2]);
@@ -167,7 +171,7 @@ namespace UnityUtility.CSharp
                 QuickSort(span, i, right, selector);
         }
 
-        public static void SelectionSort<T>(in Span<T> span) where T : IComparable<T>
+        public static void SelectionSort<T>(in Span<T> span) where T : unmanaged, IComparable<T>
         {
             int count = span.Length - 1;
 
@@ -186,7 +190,7 @@ namespace UnityUtility.CSharp
             }
         }
 
-        public static void SelectionSort<T>(in Span<T> span, IComparer<T> comparer)
+        public static void SelectionSort<T>(in Span<T> span, IComparer<T> comparer) where T : unmanaged
         {
             int count = span.Length - 1;
 
@@ -205,7 +209,7 @@ namespace UnityUtility.CSharp
             }
         }
 
-        public static void SelectionSort<T>(in Span<T> span, Comparison<T> comparison)
+        public static void SelectionSort<T>(in Span<T> span, Comparison<T> comparison) where T : unmanaged
         {
             int count = span.Length - 1;
 
@@ -224,7 +228,9 @@ namespace UnityUtility.CSharp
             }
         }
 
-        public static void SelectionSort<T, TKey>(in Span<T> span, Func<T, TKey> selector) where TKey : IComparable<TKey>
+        public static void SelectionSort<T, TKey>(in Span<T> span, Func<T, TKey> selector)
+            where T : unmanaged
+            where TKey : IComparable<TKey>
         {
             int count = span.Length - 1;
 
