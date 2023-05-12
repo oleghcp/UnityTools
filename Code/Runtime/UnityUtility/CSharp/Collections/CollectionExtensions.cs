@@ -145,12 +145,12 @@ namespace UnityUtility.CSharp.Collections
 
         public static void SortDescending<T>(this IList<T> self) where T : IComparable<T>
         {
-            if (self.Count == 0)
+            if (self.Count <= 1)
                 return;
 
             if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
             {
-                CollectionUtility.SelectionSort(self);
+                CollectionUtility.SelectionSort(self, (a, b) => -a.CompareTo(b));
                 return;
             }
 
@@ -192,7 +192,7 @@ namespace UnityUtility.CSharp.Collections
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            if (self.Count == 0)
+            if (self.Count <= 1)
                 return;
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
@@ -217,7 +217,7 @@ namespace UnityUtility.CSharp.Collections
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void SortDescending<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            if (self.Count == 0)
+            if (self.Count <= 1)
                 return;
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
