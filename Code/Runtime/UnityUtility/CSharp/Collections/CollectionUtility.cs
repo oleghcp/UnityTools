@@ -5,9 +5,13 @@ namespace UnityUtility.CSharp.Collections
 {
     internal static class CollectionUtility
     {
+        public const int QUICK_SORT_MIN_SIZE = 5;
+
+        #region Sort
         public static void QuickSort<T>(IList<T> collection, int left, int right) where T : IComparable<T>
         {
-            int i = left, j = right;
+            int i = left;
+            int j = right;
             T pivot = collection[(left + right) / 2];
 
             while (i < j)
@@ -28,7 +32,8 @@ namespace UnityUtility.CSharp.Collections
 
         public static void QuickSort<T>(IList<T> collection, int left, int right, IComparer<T> comparer)
         {
-            int i = left, j = right;
+            int i = left;
+            int j = right;
             T pivot = collection[(left + right) / 2];
 
             while (i < j)
@@ -49,7 +54,8 @@ namespace UnityUtility.CSharp.Collections
 
         public static void QuickSort<T>(IList<T> collection, int left, int right, Comparison<T> comparison)
         {
-            int i = left, j = right;
+            int i = left;
+            int j = right;
             T pivot = collection[(left + right) / 2];
 
             while (i < j)
@@ -67,6 +73,64 @@ namespace UnityUtility.CSharp.Collections
             if (i < right)
                 QuickSort(collection, i, right, comparison);
         }
+
+        public static void SelectionSort<T>(IList<T> collection) where T : IComparable<T>
+        {
+            int count = collection.Count - 1;
+
+            for (int i = 0; i < count; i++)
+            {
+                int indexOfMin = i;
+
+                for (int j = i + 1; j < collection.Count; j++)
+                {
+                    if (collection[indexOfMin].CompareTo(collection[j]) > 0)
+                        indexOfMin = j;
+                }
+
+                if (indexOfMin != i)
+                    collection.Swap(i, indexOfMin);
+            }
+        }
+
+        public static void SelectionSort<T>(IList<T> collection, IComparer<T> comparer)
+        {
+            int count = collection.Count - 1;
+
+            for (int i = 0; i < count; i++)
+            {
+                int indexOfMin = i;
+
+                for (int j = i + 1; j < collection.Count; j++)
+                {
+                    if (comparer.Compare(collection[indexOfMin], collection[j]) > 0)
+                        indexOfMin = j;
+                }
+
+                if (indexOfMin != i)
+                    collection.Swap(i, indexOfMin);
+            }
+        }
+
+        public static void SelectionSort<T>(IList<T> collection, Comparison<T> comparison)
+        {
+            int count = collection.Count - 1;
+
+            for (int i = 0; i < count; i++)
+            {
+                int indexOfMin = i;
+
+                for (int j = i + 1; j < collection.Count; j++)
+                {
+                    if (comparison(collection[indexOfMin], collection[j]) > 0)
+                        indexOfMin = j;
+                }
+
+                if (indexOfMin != i)
+                    collection.Swap(i, indexOfMin);
+            }
+        }
+        #endregion
 
         public static int Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
         {

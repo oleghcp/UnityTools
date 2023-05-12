@@ -132,6 +132,60 @@ namespace UnityUtility.CSharp.Collections
             self.Sort((a, b) => -comparer.Compare(keySelector(a), keySelector(b)));
         }
 
+        public static void Sort<T>(this IList<T> self) where T : IComparable<T>
+        {
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1);
+        }
+
+        public static void SortDescending<T>(this IList<T> self) where T : IComparable<T>
+        {
+            if (self.Count == 0)
+                return;
+
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, (a, b) => -a.CompareTo(b));
+        }
+
+        /// <summary>
+        /// Sorts using the specified comparer.
+        /// </summary>
+        public static void Sort<T>(this IList<T> self, IComparer<T> comparer)
+        {
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self, comparer);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, comparer);
+        }
+
+        /// <summary>
+        /// Sorts by comparison.
+        /// </summary>
+        /// <param name="comparison">Reference to comparing function.</param>
+        public static void Sort<T>(this IList<T> self, Comparison<T> comparison)
+        {
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self, comparison);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, comparison);
+        }
+
         /// <summary>
         /// Sorts by selected key.
         /// </summary>
@@ -142,7 +196,19 @@ namespace UnityUtility.CSharp.Collections
                 return;
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
-            CollectionUtility.QuickSort(self, 0, self.Count - 1, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self, compare);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, compare);
+
+            int compare(TSource a, TSource b)
+            {
+                return comparer.Compare(keySelector(a), keySelector(b));
+            }
         }
 
         /// <summary>
@@ -155,46 +221,19 @@ namespace UnityUtility.CSharp.Collections
                 return;
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
-            CollectionUtility.QuickSort(self, 0, self.Count - 1, (a, b) => -comparer.Compare(keySelector(a), keySelector(b)));
-        }
 
-        /// <summary>
-        /// Sorts by comparison.
-        /// </summary>
-        /// <param name="comparison">Reference to comparing function.</param>
-        public static void Sort<T>(this IList<T> self, Comparison<T> comparison)
-        {
-            if (self.Count == 0)
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self, compare);
                 return;
+            }
 
-            CollectionUtility.QuickSort(self, 0, self.Count - 1, comparison);
-        }
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, compare);
 
-        /// <summary>
-        /// Sorts using the specified comparer.
-        /// </summary>
-        public static void Sort<T>(this IList<T> self, IComparer<T> comparer)
-        {
-            if (self.Count == 0)
-                return;
-
-            CollectionUtility.QuickSort(self, 0, self.Count - 1, comparer);
-        }
-
-        public static void Sort<T>(this IList<T> self) where T : IComparable<T>
-        {
-            if (self.Count == 0)
-                return;
-
-            CollectionUtility.QuickSort(self, 0, self.Count - 1);
-        }
-
-        public static void SortDescending<T>(this IList<T> self) where T : IComparable<T>
-        {
-            if (self.Count == 0)
-                return;
-
-            CollectionUtility.QuickSort(self, 0, self.Count - 1, (a, b) => -a.CompareTo(b));
+            int compare(TSource a, TSource b)
+            {
+                return -comparer.Compare(keySelector(a), keySelector(b));
+            }
         }
 
         /// <summary>
