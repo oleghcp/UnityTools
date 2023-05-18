@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 
 namespace UnityUtility.Async
 {
     internal static class CoroutineUtility
     {
-        public static IEnumerator GetRunDelayedRoutine(float time, Action run, bool scaledTime)
+        public static IEnumerator GetRunDelayedRoutine(float seconds, Action run, bool scaledTime)
         {
-            while (time > 0f)
-            {
-                yield return null;
-                time -= scaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
-            }
+            if (scaledTime)
+                yield return TaskSystem.GetWaitInstruction(seconds);
+            else
+                yield return TaskSystem.GetWaitUnscaledInstruction(seconds);
 
             run();
         }

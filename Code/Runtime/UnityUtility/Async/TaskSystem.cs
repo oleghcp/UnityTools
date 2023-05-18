@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
+using UnityUtility.CSharp.Collections;
 using UnityUtility.Engine;
 using UnityUtility.IdGenerating;
 
@@ -11,10 +14,33 @@ namespace UnityUtility.Async
     /// </summary>
     public static class TaskSystem
     {
+        private static LongIdGenerator _idProvider = new LongIdGenerator();
         private static TaskDispatcher _globals;
         private static TaskDispatcher _locals;
+        private static Dictionary<float, WaitForSeconds> _timeInstructions = new Dictionary<float, WaitForSeconds>();
+        private static Dictionary<float, WaitForUnscaledSeconds> _unscaledTimeInstructions = new Dictionary<float, WaitForUnscaledSeconds>();
+        private static WaitForEndOfFrame _waitForEndOfFrame = new WaitForEndOfFrame();
+        private static WaitForFixedUpdate _waitForFixedUpdate = new WaitForFixedUpdate();
 
-        internal static LongIdGenerator IdProvider { get; } = new LongIdGenerator();
+        public static WaitForEndOfFrame WaitForEndOfFrame => _waitForEndOfFrame;
+        public static WaitForFixedUpdate WaitForFixedUpdate => _waitForFixedUpdate;
+        internal static LongIdGenerator IdProvider => _idProvider;
+
+        public static WaitForSeconds GetWaitInstruction(float seconds)
+        {
+            if (_timeInstructions.TryGetValue(seconds, out var instruction))
+                return instruction;
+
+            return _timeInstructions.Place(seconds, new WaitForSeconds(seconds));
+        }
+
+        public static WaitForUnscaledSeconds GetWaitUnscaledInstruction(float seconds)
+        {
+            if (_unscaledTimeInstructions.TryGetValue(seconds, out var instruction))
+                return instruction;
+
+            return _unscaledTimeInstructions.Place(seconds, new WaitForUnscaledSeconds(seconds));
+        }
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
