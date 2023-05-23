@@ -7,6 +7,7 @@ using UnityUtility.Tools;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
 using UnityUtilityEditor.Window.ShapeWizards;
+using Window;
 
 namespace UnityUtilityEditor.MenuItems
 {
@@ -20,25 +21,31 @@ namespace UnityUtilityEditor.MenuItems
             EditorWindow.GetWindow(typeof(AboutWindow), true, "About");
         }
 
-        [MenuItem(MAIN_MENU_NAME + "Objects/Meshes/Create Rect Plane")]
+        [MenuItem(MAIN_MENU_NAME + "Assets/Meshes/Create Rect Plane")]
         private static void GetCreateRectPlaneWizard()
         {
             ScriptableWizard.DisplayWizard("Create Rect Plane", typeof(CreateRectPlaneWizard));
         }
 
-        [MenuItem(MAIN_MENU_NAME + "Objects/Meshes/Create Figured Plane")]
+        [MenuItem(MAIN_MENU_NAME + "Assets/Meshes/Create Figured Plane")]
         private static void GetCreateFiguredPlaneWizard()
         {
             ScriptableWizard.DisplayWizard("Create Figured Plane", typeof(CreateFiguredPlaneWizard));
         }
 
-        [MenuItem(MAIN_MENU_NAME + "Objects/Meshes/Create Shape")]
+        [MenuItem(MAIN_MENU_NAME + "Assets/Meshes/Create Shape")]
         private static void GetCreateShapeWizard()
         {
             ScriptableWizard.DisplayWizard("Create Shape", typeof(CreateShapeWizard));
         }
 
-        [MenuItem(MAIN_MENU_NAME + "Objects/Create Scriptable Object Asset")]
+        [MenuItem(MAIN_MENU_NAME + "Assets/Find Asset By Guid")]
+        private static void FindAssetByGuid()
+        {
+            EditorWindow.GetWindow(typeof(FindAssetByGuidWindow), false, "Find Asset");
+        }
+
+        [MenuItem(MAIN_MENU_NAME + "Assets/Create Scriptable Object Asset")]
         private static void GetScriptableObjectWindow()
         {
             EditorWindow.GetWindow(typeof(CreateAssetWindow), true, "Create Asset");
