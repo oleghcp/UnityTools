@@ -11,9 +11,12 @@ using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.MenuItems
 {
-    internal static class MenuItemsUtility
+    public static class MenuItemsUtility
     {
-        public static void RemoveEmptyFolders()
+        public const string CONTEXT_MENU_NAME = "CONTEXT/";
+        public const string RESET_ITEM_NAME = "Reset";
+
+        internal static void RemoveEmptyFolders()
         {
             int counter = 0;
             StringBuilder builder = new StringBuilder();
@@ -46,7 +49,7 @@ namespace UnityUtilityEditor.MenuItems
             }
         }
 
-        public static IList<string> SearchReferencesViaDataBase(string targetGuid)
+        internal static IList<string> SearchReferencesViaDataBase(string targetGuid)
         {
             List<string> foundObjects = new List<string>();
 
@@ -73,12 +76,12 @@ namespace UnityUtilityEditor.MenuItems
             return foundObjects;
         }
 
-        public static IList<string> SearchReferencesInAssetsViaText(string targetGuid)
+        internal static IList<string> SearchReferencesInAssetsViaText(string targetGuid)
         {
             return SearchReferencesViaText(AssetDatabaseExt.EnumerateAssetFiles(), targetGuid, IsValidExtension);
         }
 
-        public static IList<string> SearchReferencesInSettingsViaText(string targetGuid)
+        internal static IList<string> SearchReferencesInSettingsViaText(string targetGuid)
         {
             return SearchReferencesViaText(AssetDatabaseExt.EnumerateSettingsFiles(), targetGuid, isValidExtension);
 

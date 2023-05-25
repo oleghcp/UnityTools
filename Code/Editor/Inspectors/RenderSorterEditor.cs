@@ -46,7 +46,7 @@ namespace UnityUtilityEditor.Inspectors
             }
         }
 
-        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + ContextMenuItems.RESET_ITEM_NAME)]
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
         private static void ResetMenuItem(MenuCommand command)
         {
             Renderer renderer = (command.context as RenderSorter).Renderer;

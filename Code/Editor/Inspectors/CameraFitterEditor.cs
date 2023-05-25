@@ -195,7 +195,7 @@ namespace UnityUtilityEditor.Inspectors
             return _widthToHeight ? "Width / Height" : "Height / Width";
         }
 
-        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + ContextMenuItems.RESET_ITEM_NAME)]
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
         private static void ResetMenuItem()
         {
 

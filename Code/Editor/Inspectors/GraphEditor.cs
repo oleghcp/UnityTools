@@ -35,13 +35,13 @@ namespace UnityUtilityEditor.Inspectors
                 EditorUtilityExt.OpenScriptableObjectCode(target);
         }
 
-        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + ContextMenuItems.RESET_ITEM_NAME)]
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
         private static void ResetMenuItem() { }
 
-        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + ContextMenuItems.RESET_ITEM_NAME, true)]
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItemsUtility.RESET_ITEM_NAME, true)]
         private static bool ResetMenuItemValidate() => false;
 
-        [MenuItem(ContextMenuItems.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]
         private static void OpenMenuItem(MenuCommand command)
         {
             GraphEditorWindow.Open(command.context as RawGraph);
