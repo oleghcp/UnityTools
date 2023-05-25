@@ -42,15 +42,15 @@ namespace UnityUtility.GameConsole
         }
 
         [TerminalCommand, Preserve]
-        protected void time_scale(string[] opt)
+        protected bool time_scale(string[] opt)
         {
-            ParseFloat(opt, scale => Time.timeScale = scale);
+            return ParseFloat(opt, scale => Time.timeScale = scale);
         }
 
         [TerminalCommand, Preserve]
-        protected void frame_rate(string[] opt)
+        protected bool frame_rate(string[] opt)
         {
-            ParseInt(opt, frameRate => Application.targetFrameRate = frameRate);
+            return ParseInt(opt, frameRate => Application.targetFrameRate = frameRate);
         }
 
         [TerminalCommand, Preserve]
