@@ -54,6 +54,7 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw ThrowErrors.NegativeParameter(nameof(length));
 
+            _mutable = true;
             _array = new int[GetArraySize(length)];
             _length = length;
             int num = defaultValue ? (-1) : 0;
@@ -61,7 +62,6 @@ namespace UnityUtility.Collections
             {
                 _array[i] = num;
             }
-            _mutable = true;
         }
 
         #region constructor with flag indices
@@ -70,10 +70,10 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw ThrowErrors.NegativeParameter(nameof(length));
 
+            _mutable = true;
             _array = new int[GetArraySize(length)];
             _length = length;
             Set(flagIndex0, true);
-            _mutable = true;
         }
 
         public BitList(int length, int flagIndex0, int flagIndex1)
@@ -81,11 +81,11 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw ThrowErrors.NegativeParameter(nameof(length));
 
+            _mutable = true;
             _array = new int[GetArraySize(length)];
             _length = length;
             Set(flagIndex0, true);
             Set(flagIndex1, true);
-            _mutable = true;
         }
 
         public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2)
@@ -93,12 +93,12 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw ThrowErrors.NegativeParameter(nameof(length));
 
+            _mutable = true;
             _array = new int[GetArraySize(length)];
             _length = length;
             Set(flagIndex0, true);
             Set(flagIndex1, true);
             Set(flagIndex2, true);
-            _mutable = true;
         }
 
         public BitList(int length, int flagIndex0, int flagIndex1, int flagIndex2, int flagIndex3)
@@ -106,13 +106,13 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw ThrowErrors.NegativeParameter(nameof(length));
 
+            _mutable = true;
             _array = new int[GetArraySize(length)];
             _length = length;
             Set(flagIndex0, true);
             Set(flagIndex1, true);
             Set(flagIndex2, true);
             Set(flagIndex3, true);
-            _mutable = true;
         }
 
         public BitList(int length, params int[] indices)
@@ -120,13 +120,13 @@ namespace UnityUtility.Collections
             if (length < 0)
                 throw ThrowErrors.NegativeParameter(nameof(length));
 
+            _mutable = true;
             _array = new int[GetArraySize(length)];
             _length = length;
             for (int i = 0; i < indices.Length; i++)
             {
                 Set(indices[i], true);
             }
-            _mutable = true;
         }
         #endregion
 
@@ -141,6 +141,7 @@ namespace UnityUtility.Collections
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
+            _mutable = true;
             _length = values.Count;
             _array = new int[GetArraySize(_length)];
 
@@ -153,11 +154,11 @@ namespace UnityUtility.Collections
 
                 i++;
             }
-            _mutable = true;
         }
 
         public BitList(Span<bool> values)
         {
+            _mutable = true;
             _length = values.Length;
             _array = new int[GetArraySize(_length)];
 
@@ -170,7 +171,6 @@ namespace UnityUtility.Collections
 
                 i++;
             }
-            _mutable = true;
         }
 
 #if UNITY_2021_2_OR_NEWER
@@ -187,9 +187,9 @@ namespace UnityUtility.Collections
             if (intBlocks.Count > MAX_LENGTH)
                 throw new ArgumentException("Array is too large.", nameof(intBlocks));
 
+            _mutable = true;
             _length = intBlocks.Count * BitMask.SIZE;
             _array = intBlocks.ToArray();
-            _mutable = true;
         }
 
 
@@ -198,9 +198,9 @@ namespace UnityUtility.Collections
             if (intBlocks.Length > MAX_LENGTH)
                 throw new ArgumentException("Array is too large.", nameof(intBlocks));
 
+            _mutable = true;
             _length = intBlocks.Length * BitMask.SIZE;
             _array = intBlocks.ToArray();
-            _mutable = true;
         }
 
         public BitList(BitList bits)
@@ -208,12 +208,12 @@ namespace UnityUtility.Collections
             if (bits == null)
                 throw new ArgumentNullException(nameof(bits));
 
+            _mutable = true;
             int arrayLength = GetArraySize(bits._length);
             _array = new int[arrayLength];
             _length = bits._length;
             Array.Copy(bits._array, _array, arrayLength);
             _version = bits._version;
-            _mutable = true;
         }
 
         public BitList(BitArray bits)
@@ -221,6 +221,7 @@ namespace UnityUtility.Collections
             if (bits == null)
                 throw new ArgumentNullException(nameof(bits));
 
+            _mutable = true;
             int arrayLength = GetArraySize(bits.Length);
             _array = new int[arrayLength];
             _length = bits.Length;
@@ -228,7 +229,6 @@ namespace UnityUtility.Collections
             {
                 Set(i, bits[i]);
             }
-            _mutable = true;
         }
 
         public bool Get(int index)
