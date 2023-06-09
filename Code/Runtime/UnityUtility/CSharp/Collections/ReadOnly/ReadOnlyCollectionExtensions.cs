@@ -184,9 +184,14 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
                 action(self[i]);
         }
 
+        public static bool Contains_<T>(this IReadOnlyList<T> self, T item)
+        {
+            return IndexOf_(self, item) >= 0;
+        }
+
         public static bool Contains_<T>(this IReadOnlyList<T> self, Predicate<T> condition)
         {
-            return self.IndexOf_(condition) >= 0;
+            return IndexOf_(self, condition) >= 0;
         }
 
         public static void ForEach_<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> self, Action<KeyValuePair<TKey, TValue>> action)
