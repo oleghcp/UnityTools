@@ -7,7 +7,7 @@ namespace MenuItems
 {
     public static class SceneMenuItems
     {
-        [MenuItem(nameof(GameObject) + "/Order Children (ext.)/A-Z", false, 11)]
+        [MenuItem(nameof(GameObject) + "/Order Children (ext.)/A-Z", false, 20)]
         private static void OrderChildrenA()
         {
             GameObject gameObject = Selection.activeGameObject;
@@ -15,7 +15,7 @@ namespace MenuItems
             EditorSceneManager.MarkSceneDirty(gameObject.scene);
         }
 
-        [MenuItem(nameof(GameObject) + "/Order Children (ext.)/Z-A", false, 12)]
+        [MenuItem(nameof(GameObject) + "/Order Children (ext.)/Z-A", false, 21)]
         private static void OrderChildrenZ()
         {
             GameObject gameObject = Selection.activeGameObject;
@@ -29,7 +29,7 @@ namespace MenuItems
         [MenuItem(nameof(GameObject) + "/Order Children (ext.)/Z-A", true)]
         private static bool OrderChildrenAvailable()
         {
-            return Selection.activeGameObject != null;
+            return Selection.activeGameObject != null && Selection.activeGameObject.transform.childCount > 0;
         }
     }
 }
