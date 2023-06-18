@@ -33,9 +33,9 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
                 return;
             }
 
-            EditorGUILayout.LabelField($"Task ID: {target.Id}");
+            EditorGUILayout.LabelField($"Task {target.Id}");
             GUI.color = target.IsWaiting ? Colours.Blue : Colours.Lime;
-            EditorGUILayout.LabelField(target.IsWaiting ? "Paused" : "Running");
+            EditorGUILayout.LabelField(target.IsWaiting ? "Waiting" : "Running");
             GUI.color = Colours.White;
         }
 
