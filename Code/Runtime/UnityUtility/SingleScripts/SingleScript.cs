@@ -19,7 +19,9 @@ namespace UnityUtility.SingleScripts
             {
                 if (_instance == null)
                 {
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2023_1_OR_NEWER
+                    T instance = FindAnyObjectByType<T>(FindObjectsInactive.Include);
+#elif UNITY_2020_1_OR_NEWER
                     T instance = FindObjectOfType<T>(true);
 #else
                     T instance = FindObjectOfType<T>();
