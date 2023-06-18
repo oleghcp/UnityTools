@@ -8,12 +8,12 @@ namespace UnityUtility.Async
         private readonly TaskRunner _owner;
 
         private IEnumerator _curRoutine;
-        private bool _isPaused;
+        private bool _isWaitingForPrev;
         private bool _isStopped;
         private CancellationToken _token;
 
         public bool IsEmpty => _curRoutine == null;
-        public bool IsPaused => _isPaused;
+        public bool IsWaiting => _isWaitingForPrev;
         public object Current => _curRoutine.Current;
 
         public RoutineIterator(TaskRunner owner)
@@ -21,16 +21,16 @@ namespace UnityUtility.Async
             _owner = owner;
         }
 
-        public void Initialize(IEnumerator routine, in CancellationToken token, bool paused)
+        public void Initialize(IEnumerator routine, in CancellationToken token, bool waiting)
         {
             _curRoutine = routine;
             _token = token;
-            _isPaused = paused;
+            _isWaitingForPrev = waiting;
         }
 
-        public void Pause(bool value)
+        public void WakeUp()
         {
-            _isPaused = value;
+            _isWaitingForPrev = false;
         }
 
         public void Stop()
@@ -41,7 +41,7 @@ namespace UnityUtility.Async
         public void Reset()
         {
             _curRoutine = null;
-            _isPaused = false;
+            _isWaitingForPrev = false;
             _isStopped = false;
             _token = default;
         }
@@ -54,7 +54,7 @@ namespace UnityUtility.Async
                 return false;
             }
 
-            if (_isPaused || _curRoutine.MoveNext())
+            if (_isWaitingForPrev || _curRoutine.MoveNext())
             {
                 return true;
             }

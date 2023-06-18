@@ -19,8 +19,6 @@ namespace UnityUtility.Async
         /// </summary>
         public bool IsAlive => IsAliveInternal();
 
-        public bool IsPaused => IsAliveInternal() && _task.IsPaused;
-
         object IEnumerator.Current => null;
 
         internal TaskInfo(TaskRunner runner)
@@ -56,22 +54,10 @@ namespace UnityUtility.Async
                 _task.OnInterrupted_Event += onInterrupt;
         }
 
-        /// <summary>
-        /// Pauses the task.
-        /// </summary>
-        public void Pause()
+        internal void WakeUp()
         {
             if (IsAliveInternal())
-                _task.Pause();
-        }
-
-        /// <summary>
-        /// Resumes paused task.
-        /// </summary>
-        public void Resume()
-        {
-            if (IsAliveInternal())
-                _task.Resume();
+                _task.WakeUp();
         }
 
         /// <summary>

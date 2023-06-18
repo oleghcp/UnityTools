@@ -15,13 +15,13 @@ namespace UnityUtility.Async
 
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
-        private List<TaskInfo> _continues = new List<TaskInfo>();
+        private List<TaskInfo> _continues;
 
         private bool _enabled = true;
         private long _id;
 
         internal TaskDispatcher Owner => _owner;
-        public bool IsPaused => _iterator.IsPaused;
+        public bool IsWaiting => _iterator.IsWaiting;
         public long Id => _id;
 
         public TaskRunner SetUp(TaskDispatcher owner)
@@ -37,10 +37,10 @@ namespace UnityUtility.Async
                 _owner.ReleaseRunner(this);
         }
 
-        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool paused = false)
+        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool sleeping = false)
         {
             _id = TaskSystem.IdProvider.GetNewId();
-            _iterator.Initialize(routine, token, paused);
+            _iterator.Initialize(routine, token, sleeping);
             TaskInfo task = new TaskInfo(this);
             StartCoroutine(_iterator);
             return task;
@@ -48,18 +48,14 @@ namespace UnityUtility.Async
 
         public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)
         {
-            TaskInfo task = _owner.GetRunner().RunAsync(routine, token, true);
-            return _continues.Place(task);
+            if (_continues == null)
+                _continues = new List<TaskInfo>();
+            return _continues.Place(_owner.GetRunner().RunAsync(routine, token, true));
         }
 
-        public void Pause()
+        public void WakeUp()
         {
-            _iterator.Pause(true);
-        }
-
-        public void Resume()
-        {
-            _iterator.Pause(false);
+            _iterator.WakeUp();
         }
 
         public void Stop()
@@ -87,10 +83,12 @@ namespace UnityUtility.Async
         {
             _id = 0L;
 
-            if (_continues.Count > 0)
+            if (_continues.HasAnyData())
             {
                 foreach (TaskInfo item in _continues)
-                    item.Resume();
+                {
+                    item.WakeUp();
+                }
                 _continues.Clear();
             }
         }
