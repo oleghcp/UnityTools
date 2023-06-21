@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityUtility.Async;
-using UnityUtility.CSharp.Collections;
 using UnityUtility.Mathematics;
 using UnityUtility.SaveLoad.SaveProviderStuff;
 using UnityUtility.Tools;
@@ -99,7 +98,7 @@ namespace UnityUtility.SaveLoad
                         list = new List<SaveLoadFieldAttribute>();
 
                     a.Field = fields[i];
-                    a.Key = _keyGenerator.Generate(t, a.Field.Name, ownerId);
+                    a.Key = _keyGenerator.Generate(t, a.Key ?? a.Field.Name, ownerId);
 
                     list.Add(a);
 
