@@ -28,6 +28,16 @@ namespace UnityUtility.SaveLoad
         private IKeyGenerator _keyGenerator;
         private Dictionary<object, List<SaveLoadFieldAttribute>> _fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
 
+        public SaveProvider()
+        {
+            _saver = new PlayerPrefsSaver();
+            _keyGenerator = new BaseKeyGenerator();
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
         public SaveProvider(ISaver saver)
         {
             if (saver == null)
@@ -42,7 +52,6 @@ namespace UnityUtility.SaveLoad
         /// </summary>
         /// <param name="saver">Object which saves and loads objects data. Default saver is UnityEngine.PlayerPrefs wrapper.</param>
         /// <param name="keyGenerator">Object which generates keys for key-value storage.</param>
-        /// 
         public SaveProvider(ISaver saver, IKeyGenerator keyGenerator)
         {
             if (saver == null)
