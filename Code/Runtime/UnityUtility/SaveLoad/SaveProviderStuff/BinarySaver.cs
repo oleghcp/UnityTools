@@ -65,21 +65,34 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
         {
             return getRoutine().StartAsync();
 
-            void asyncSave()
-            {
-                string path = Path.Combine(_dataPath, version);
-                BinaryFileUtility.Save(path, _storage);
-            }
-
             IEnumerator getRoutine()
             {
-                Task task = Task.Run(asyncSave);
+                Task<string> task = Task.Run(asyncSave);
 
                 while (!task.IsCompleted)
                 {
                     yield return null;
                 }
+
+                if (task.Result != null)
+                    Debug.LogError(task.Result);
             }
+
+            string asyncSave()
+            {
+                string path = Path.Combine(_dataPath, version);
+
+                try
+                {
+                    BinaryFileUtility.Save(path, _storage);
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+
+                return null;
+            }            
         }
 
         void ISaver.DeleteKey(string key)
