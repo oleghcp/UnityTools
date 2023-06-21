@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Runtime.UnityUtility.Async;
 using UnityEngine;
 using UnityUtility.Async;
 using UnityUtility.CSharp;
@@ -68,11 +69,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
             IEnumerator getRoutine()
             {
                 Task<string> task = Task.Run(asyncSave);
-
-                while (!task.IsCompleted)
-                {
-                    yield return null;
-                }
+                yield return new WaitForTask(task);
 
                 if (task.Result != null)
                     Debug.LogError(task.Result);
@@ -82,17 +79,11 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
             {
                 string path = Path.Combine(_dataPath, version);
 
-                try
-                {
-                    BinaryFileUtility.Save(path, _storage);
-                }
-                catch (Exception e)
-                {
-                    return e.Message;
-                }
+                try { BinaryFileUtility.Save(path, _storage); }
+                catch (Exception e) { return e.Message; }
 
                 return null;
-            }            
+            }
         }
 
         void ISaver.DeleteKey(string key)
