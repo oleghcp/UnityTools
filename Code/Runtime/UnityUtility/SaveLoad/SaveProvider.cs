@@ -113,8 +113,8 @@ namespace UnityUtility.SaveLoad
 
                     if (initFields)
                     {
-                        object value = a.DefValue != null ? _saver.Get(a.Key, a.DefValue)
-                                                          : _saver.Get(a.Key, a.Field.FieldType);
+                        object value = a.DefaultValue != null ? _saver.Get(a.Key, a.DefaultValue)
+                                                              : _saver.Get(a.Key, a.Field.FieldType);
                         a.Field.SetValue(fieldsOwner, value);
                     }
                 }
