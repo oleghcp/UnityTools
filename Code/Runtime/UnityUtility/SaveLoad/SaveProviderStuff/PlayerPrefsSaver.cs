@@ -24,7 +24,7 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
             PlayerPrefs.Save();
         }
 
-        TaskInfo ISaver.SaveVersionAsync(string version, int keysPerFrame)
+        TaskInfo ISaver.SaveVersionAsync(string version)
         {
             PlayerPrefs.Save();
             return default;

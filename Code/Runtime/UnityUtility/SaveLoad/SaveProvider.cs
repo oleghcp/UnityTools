@@ -219,7 +219,7 @@ namespace UnityUtility.SaveLoad
                     {
                         _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
 
-                        if (++counter >= stepsPerFrame)
+                        if (++counter >= spf)
                         {
                             counter = 0;
                             yield return null;
@@ -227,7 +227,7 @@ namespace UnityUtility.SaveLoad
                     }
                 }
 
-                yield return _saver.SaveVersionAsync(version, spf);
+                yield return _saver.SaveVersionAsync(version);
             }
         }
 

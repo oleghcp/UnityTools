@@ -13,7 +13,7 @@ namespace UnityUtility.SaveLoad
         bool LoadVersion(string version);
         bool DeleteVersion(string version);
         void SaveVersion(string version);
-        TaskInfo SaveVersionAsync(string version, int keysPerFrame);
+        TaskInfo SaveVersionAsync(string version);
     }
 
     public interface IKeyGenerator
