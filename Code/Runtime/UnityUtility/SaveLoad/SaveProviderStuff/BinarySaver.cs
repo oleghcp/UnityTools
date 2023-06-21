@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityUtility.Async;
 using UnityUtility.CSharp;
@@ -59,12 +61,25 @@ namespace UnityUtility.SaveLoad.SaveProviderStuff
             BinaryFileUtility.Save(path, _storage);
         }
 
-        //TODO: make it async
         TaskInfo ISaver.SaveVersionAsync(string version)
         {
-            string path = Path.Combine(_dataPath, version);
-            BinaryFileUtility.Save(path, _storage);
-            return default;
+            return getRoutine().StartAsync();
+
+            void asyncSave()
+            {
+                string path = Path.Combine(_dataPath, version);
+                BinaryFileUtility.Save(path, _storage);
+            }
+
+            IEnumerator getRoutine()
+            {
+                Task task = Task.Run(asyncSave);
+
+                while (!task.IsCompleted)
+                {
+                    yield return null;
+                }
+            }
         }
 
         void ISaver.DeleteKey(string key)
