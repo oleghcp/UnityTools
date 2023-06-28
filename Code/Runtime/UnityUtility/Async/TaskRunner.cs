@@ -77,16 +77,22 @@ namespace UnityUtility.Async
         {
             OnCoroutineEndedInternal();
 
-            try { OnInterrupted_Event?.Invoke(); }
-            finally { OnInterrupted_Event = null; }
+            if (OnInterrupted_Event != null)
+            {
+                try { OnInterrupted_Event(); }
+                finally { OnInterrupted_Event = null; }
+            }
         }
 
         public void OnCoroutineEnded()
         {
             OnCoroutineEndedInternal();
 
-            try { OnCompleted_Event?.Invoke(_iterator.Current); }
-            finally { OnCompleted_Event = null; }
+            if (OnCompleted_Event != null)
+            {
+                try { OnCompleted_Event(_iterator.Current); }
+                finally { OnCompleted_Event = null; }
+            }
         }
 
         private void OnCoroutineEndedInternal()

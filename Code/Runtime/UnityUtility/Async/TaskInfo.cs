@@ -40,7 +40,7 @@ namespace UnityUtility.Async
             return TaskSystem.StartAsyncLocally(routine, token);
         }
 
-        public void OnComlete(Action<object> onComplete)
+        public void AddOnComleteListener(Action<object> onComplete)
         {
             if (IsAliveInternal())
                 _task.OnCompleted_Event += onComplete;
@@ -48,7 +48,7 @@ namespace UnityUtility.Async
                 onComplete(null);
         }
 
-        public void OnInterrupt(Action onInterrupt)
+        public void AddOnInterruptListener(Action onInterrupt)
         {
             if (IsAliveInternal())
                 _task.OnInterrupted_Event += onInterrupt;
