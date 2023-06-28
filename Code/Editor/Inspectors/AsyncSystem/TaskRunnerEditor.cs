@@ -9,7 +9,6 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
     internal class TaskRunnerEditor : Editor<TaskRunner>
     {
         private long _id;
-        private bool _paused;
         private string _startPoint;
 
         private void Awake()
@@ -32,24 +31,19 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
                 return;
             }
 
-            if (target.IsWaiting)
-                EditorGUILayout.LabelField($"Task {target.Id} (Waiting)", EditorStyles.boldLabel);
-            else
-                EditorGUILayout.LabelField($"Task {target.Id}", EditorStyles.boldLabel);
-
+            EditorGUILayout.LabelField($"Task {target.Id}", EditorStyles.boldLabel);
             EditorGUILayout.LabelField(_startPoint);
         }
 
         private void Init()
         {
             _id = target.Id;
-            _paused = target.IsWaiting;
             _startPoint = GetStartLine(target.StackTrace);
         }
 
         private void Update()
         {
-            if (_id != target.Id || _paused != target.IsWaiting)
+            if (_id != target.Id)
             {
                 Init();
                 Repaint();
@@ -63,7 +57,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
 
             for (int i = lines.Length - 1; i >= 0; i--)
             {
-                if (lines[i].Contains(nameof(TaskSystem.StartAsync)) || lines[i].Contains(nameof(TaskInfo.ContinueWith)))
+                if (lines[i].Contains(nameof(TaskSystem.StartAsync)))
                 {
                     index = i + 1;
                     break;

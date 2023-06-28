@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections;
-using System.Threading;
 
 namespace UnityUtility.Async
 {
-    public struct TaskResult
+    public readonly struct TaskResult
     {
-        public object Result;
-        public bool Successful;
+        public object Result { get; }
+        public bool Successful { get; }
+
+        internal TaskResult(object result, bool successful)
+        {
+            Result = result;
+            Successful = successful;
+        }
     }
 
     public readonly struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
@@ -32,29 +37,12 @@ namespace UnityUtility.Async
             _id = (_task = runner).Id;
         }
 
-        /// <summary>
-        /// Creates a continuation that executes when the target task completes.
-        /// </summary>
-        public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token = default)
-        {
-            if (IsAliveInternal())
-                return _task.ContinueWith(routine, token);
-
-            return default;
-        }
-
         public void AddComleteListener(Action<TaskResult> onComplete)
         {
             if (IsAliveInternal())
                 _task.OnCompleted_Event += onComplete;
             else
                 onComplete(default);
-        }
-
-        internal void WakeUp()
-        {
-            if (IsAliveInternal())
-                _task.WakeUp();
         }
 
         /// <summary>

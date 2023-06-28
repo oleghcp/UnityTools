@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
 using UnityUtility.Pool;
 
 namespace UnityUtility.Async
@@ -14,7 +13,6 @@ namespace UnityUtility.Async
 
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
-        private List<TaskInfo> _continues;
         private bool _enabled = true;
         private long _id;
 
@@ -22,7 +20,6 @@ namespace UnityUtility.Async
         internal string StackTrace { get; private set; }
 #endif
         internal TaskDispatcher Owner => _owner;
-        public bool IsWaiting => _iterator.IsWaiting;
         public long Id => _id;
 
         public TaskRunner SetUp(TaskDispatcher owner)
@@ -38,33 +35,17 @@ namespace UnityUtility.Async
                 _owner.ReleaseRunner(this);
         }
 
-        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool sleeping = false)
+        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token)
         {
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
 
             _id = TaskSystem.IdProvider.GetNewId();
-            _iterator.Initialize(routine, token, sleeping);
+            _iterator.Initialize(routine, token);
             TaskInfo task = new TaskInfo(this);
             StartCoroutine(_iterator);
             return task;
-        }
-
-        public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)
-        {
-#if UNITY_EDITOR
-            StackTrace = Environment.StackTrace;
-#endif
-
-            if (_continues == null)
-                _continues = new List<TaskInfo>();
-            return _continues.Place(_owner.GetRunner().RunAsync(routine, token, true));
-        }
-
-        public void WakeUp()
-        {
-            _iterator.WakeUp();
         }
 
         public void Stop()
@@ -89,23 +70,15 @@ namespace UnityUtility.Async
 
             if (OnCompleted_Event != null)
             {
-                try { OnCompleted_Event(new TaskResult { Result = _iterator.Current, Successful = true, }); }
+                try { OnCompleted_Event(new TaskResult(_iterator.Current, true)); }
                 finally { OnCompleted_Event = null; }
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnCoroutineEndedInternal()
         {
             _id = 0L;
-
-            if (_continues.HasAnyData())
-            {
-                foreach (TaskInfo item in _continues)
-                {
-                    item.WakeUp();
-                }
-                _continues.Clear();
-            }
         }
 
         void IPoolable.Reinit()
