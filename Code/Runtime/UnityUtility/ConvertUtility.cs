@@ -7,7 +7,7 @@ namespace UnityUtility
     //This code is from https://www.pvladov.com/
     public static class ConvertUtility
     {
-        private const string SYMBOLS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private static readonly string _symbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
@@ -20,8 +20,8 @@ namespace UnityUtility
         {
             const int bitsInLong = 64;
 
-            if (radix < 2 || radix > SYMBOLS.Length)
-                throw ThrowErrors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
+            if (radix < 2 || radix > _symbols.Length)
+                throw ThrowErrors.RadixOutOfRange(nameof(radix), _symbols.Length);
 
             if (decimalNumber == 0)
                 return "0";
@@ -33,7 +33,7 @@ namespace UnityUtility
             while (currentNumber != 0)
             {
                 int remainder = (int)(currentNumber % radix);
-                charArray[index--] = SYMBOLS[remainder];
+                charArray[index--] = _symbols[remainder];
                 currentNumber /= radix;
             }
 
@@ -56,8 +56,8 @@ namespace UnityUtility
         /// <returns></returns>
         public static long ParseStringCustomRadixToDecimal(string number, int radix)
         {
-            if (radix < 2 || radix > SYMBOLS.Length)
-                throw ThrowErrors.RadixOutOfRange(nameof(radix), SYMBOLS.Length);
+            if (radix < 2 || radix > _symbols.Length)
+                throw ThrowErrors.RadixOutOfRange(nameof(radix), _symbols.Length);
 
             if (number.IsNullOrEmpty())
                 return 0;
@@ -77,7 +77,7 @@ namespace UnityUtility
                     break;
                 }
 
-                int digit = SYMBOLS.IndexOf(c);
+                int digit = _symbols.IndexOf(c);
                 if (digit == -1)
                     throw new ArgumentException("Invalid character in the arbitrary numeral system number", nameof(number));
 

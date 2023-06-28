@@ -6,7 +6,7 @@ namespace UnityUtilityEditor.CodeGenerating
 {
     public static class GeneratingTools
     {
-        public const string TAB = "    ";
+        public static readonly string Tab = "    ";
 
         public static void CreateCsFile(string text, string rootFolder, string className, string nameSpace, bool refreshAssets = true)
         {

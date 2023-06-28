@@ -44,8 +44,8 @@ namespace UnityUtilityEditor.CodeGenerating
                    .Append("namespace ").AppendLine(config.Namespace)
                    .AppendLine("{")
                    .AppendLine("#pragma warning disable IDE1006")
-                   .Append(GeneratingTools.TAB).Append("public static class ").AppendLine(config.ClassName)
-                   .Append(GeneratingTools.TAB).Append('{').AppendLine();
+                   .Append(GeneratingTools.Tab).Append("public static class ").AppendLine(config.ClassName)
+                   .Append(GeneratingTools.Tab).Append('{').AppendLine();
 
             if (config.TagFields)
             {
@@ -53,8 +53,8 @@ namespace UnityUtilityEditor.CodeGenerating
 
                 foreach (var item in tags.EnumerateArrayElements())
                 {
-                    builder.Append(GeneratingTools.TAB)
-                           .Append(GeneratingTools.TAB)
+                    builder.Append(GeneratingTools.Tab)
+                           .Append(GeneratingTools.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("string ")
@@ -78,8 +78,8 @@ namespace UnityUtilityEditor.CodeGenerating
 
                 foreach (var layer in SortingLayer.layers)
                 {
-                    builder.Append(GeneratingTools.TAB)
-                           .Append(GeneratingTools.TAB)
+                    builder.Append(GeneratingTools.Tab)
+                           .Append(GeneratingTools.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
@@ -106,8 +106,8 @@ namespace UnityUtilityEditor.CodeGenerating
                     if (item.stringValue.IsNullOrWhiteSpace())
                         continue;
 
-                    builder.Append(GeneratingTools.TAB)
-                           .Append(GeneratingTools.TAB)
+                    builder.Append(GeneratingTools.Tab)
+                           .Append(GeneratingTools.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
@@ -124,8 +124,8 @@ namespace UnityUtilityEditor.CodeGenerating
 
                 foreach (var maskInfo in config.LayerMasks)
                 {
-                    builder.Append(GeneratingTools.TAB)
-                           .Append(GeneratingTools.TAB)
+                    builder.Append(GeneratingTools.Tab)
+                           .Append(GeneratingTools.Tab)
                            .Append("public ");
 
                     switch (config.MaskFieldType)
@@ -169,7 +169,7 @@ namespace UnityUtilityEditor.CodeGenerating
                 }
             }
 
-            builder.Append(GeneratingTools.TAB)
+            builder.Append(GeneratingTools.Tab)
                    .Append('}')
                    .AppendLine()
                    .Append('}')

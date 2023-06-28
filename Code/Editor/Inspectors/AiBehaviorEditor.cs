@@ -25,7 +25,7 @@ namespace UnityUtilityEditor.Inspectors
             GUI.color = Colours.Lime;
             EditorGUILayout.LabelField("Current:", GetCurrentStateInfo());
             GUI.color = Colours.White;
-            EditorGUILayout.LabelField(Helper.SPACE, "↑");
+            EditorGUILayout.LabelField(Helper.Space, "↑");
             EditorGUILayout.LabelField("Previous:", GetPrevStateInfo());
             EditorGUILayout.EndVertical();
         }

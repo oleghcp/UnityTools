@@ -9,9 +9,10 @@ namespace UnityUtilityEditor.Drawers.Shooting
     [CustomPropertyDrawer(typeof(DragOptions))]
     internal class DragOptionsDrawer : PropertyDrawer
     {
+        private readonly string _dragWord = "Drag";
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            const string dragWord = "Drag";
             string methodPropName = nameof(DragOptions.Method);
             string valuePropName = nameof(DragOptions.Value);
 
@@ -20,12 +21,12 @@ namespace UnityUtilityEditor.Drawers.Shooting
 
             Rect linePos = position;
             linePos.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(linePos, methodProp, EditorGuiUtility.TempContent($"{dragWord} {methodPropName}"));
+            EditorGUI.PropertyField(linePos, methodProp, EditorGuiUtility.TempContent($"{_dragWord} {methodPropName}"));
 
             if (methodProp.enumValueIndex != 0)
             {
                 linePos = EditorGuiUtility.GetLinePosition(position, 1);
-                EditorGUI.PropertyField(linePos, valueProp, EditorGuiUtility.TempContent($"{dragWord} {valuePropName}"));
+                EditorGUI.PropertyField(linePos, valueProp, EditorGuiUtility.TempContent($"{_dragWord} {valuePropName}"));
             }
         }
 

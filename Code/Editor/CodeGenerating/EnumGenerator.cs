@@ -27,7 +27,7 @@ namespace UnityUtilityEditor.CodeGenerating
                    .Append("namespace ")
                    .AppendLine(nameSpace)
                    .AppendLine("{")
-                   .Append(GeneratingTools.TAB)
+                   .Append(GeneratingTools.Tab)
                    .Append("public enum ")
                    .Append(enumName);
 
@@ -36,14 +36,14 @@ namespace UnityUtilityEditor.CodeGenerating
             else
                 builder.Append(" : ").AppendLine(enumType.GetName().ToLower());
 
-            builder.Append(GeneratingTools.TAB)
+            builder.Append(GeneratingTools.Tab)
                    .Append('{')
                    .AppendLine();
 
             foreach (var (name, intValue) in enumValues)
             {
-                builder.Append(GeneratingTools.TAB)
-                       .Append(GeneratingTools.TAB)
+                builder.Append(GeneratingTools.Tab)
+                       .Append(GeneratingTools.Tab)
                        .Append(name)
                        .Append(" = ")
                        .Append(intValue)
@@ -51,7 +51,7 @@ namespace UnityUtilityEditor.CodeGenerating
                        .AppendLine();
             }
 
-            builder.Append(GeneratingTools.TAB)
+            builder.Append(GeneratingTools.Tab)
                    .Append('}')
                    .AppendLine()
                    .Append('}')

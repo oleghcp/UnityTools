@@ -16,6 +16,8 @@ namespace UnityUtility
     /// </summary>
     public static class RngExtensions
     {
+        private static readonly string _symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
         public static int Next(this IRng self, in DiapasonInt range)
         {
             return self.Next(range.Min, range.Max);
@@ -511,25 +513,24 @@ namespace UnityUtility
             if (length == 0)
                 return string.Empty;
 
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             const int stackLenCup = 512;
 
 #if UNITY_2021_2_OR_NEWER
             Span<char> charArray = length > stackLenCup ? new char[length] : stackalloc char[length];
-            for (int i = 0; i < length; i++) { charArray[i] = chars.GetRandomChar(self); }
+            for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
             return new string(charArray);
 #else
             if (length > stackLenCup)
             {
                 char[] charArray = new char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = chars.GetRandomChar(self); }
+                for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
                 return new string(charArray);
             }
 
             unsafe
             {
                 char* charArray = stackalloc char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = chars.GetRandomChar(self); }
+                for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
                 return new string(charArray);
             }
 #endif

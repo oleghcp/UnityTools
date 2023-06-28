@@ -8,11 +8,11 @@ namespace UnityUtilityEditor.Window.NodeBased
 {
     public class NodeDrawer
     {
-        private const string LABEL = "{...}";
+        private readonly string _label = "{...}";
 
         internal Predicate<SerializedProperty> IgnoreCondition;
 
-        protected virtual string ShortDrawingView => LABEL;
+        protected virtual string ShortDrawingView => _label;
         public Predicate<SerializedProperty> IsServiceField => IgnoreCondition;
 
         internal void OnHeaderGui(bool rootNode, SerializedProperty nameProperty, ref bool renaming)

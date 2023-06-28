@@ -6,7 +6,7 @@ namespace UnityUtility.Tools
 {
     public static class Helper
     {
-        public const string SPACE = " ";
+        public static readonly string Space = " ";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetDateTimeString()

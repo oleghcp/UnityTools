@@ -41,7 +41,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
         {
             Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
-            EditorGUI.ObjectField(lineRect, property, typeof(ScriptableObject), EditorGuiUtility.TempContent(Helper.SPACE));
+            EditorGUI.ObjectField(lineRect, property, typeof(ScriptableObject), EditorGuiUtility.TempContent(Helper.Space));
             EditorGUI.PrefixLabel(lineRect, label);
             property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
 
