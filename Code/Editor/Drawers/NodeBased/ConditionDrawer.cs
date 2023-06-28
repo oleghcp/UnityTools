@@ -38,16 +38,16 @@ namespace UnityUtilityEditor.Drawers.NodeBased
                 return;
             }
 
-            const float weight = 0.75f;
+            const float weightFactor = 0.75f;
 
             Rect rect = position;
-            rect.width *= weight;
-            DrawContent(position, property);
+            rect.width *= weightFactor;
+            DrawContent(rect, property);
 
             SerializedProperty notProp = property.FindPropertyRelative(Condition.NotFieldName);
 
             rect.x += rect.width;
-            rect.width = position.width * (1f - weight);
+            rect.width = position.width * (1f - weightFactor);
             notProp.boolValue = EditorGui.ToggleButton(rect, "Not", notProp.boolValue);
         }
 

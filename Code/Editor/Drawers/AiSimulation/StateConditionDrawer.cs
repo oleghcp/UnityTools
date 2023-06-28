@@ -18,16 +18,16 @@ namespace UnityUtilityEditor.Drawers.AiSimulation
                 return;
             }
 
-            const float weight = 0.75f;
+            const float weightFactor = 0.75f;
 
             Rect rect = position;
-            rect.width *= weight;
-            Draw(position, property);
+            rect.width *= weightFactor;
+            Draw(rect, property);
 
             SerializedProperty notProp = property.FindPropertyRelative(StateCondition.NotFieldName);
 
             rect.x += rect.width;
-            rect.width = position.width * (1f - weight);
+            rect.width = position.width * (1f - weightFactor);
             notProp.boolValue = EditorGui.ToggleButton(rect, "Not", notProp.boolValue);
         }
 
