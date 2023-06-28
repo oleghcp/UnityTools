@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine;
 
 namespace UnityUtility.Async
 {
@@ -7,10 +8,11 @@ namespace UnityUtility.Async
     {
         public static IEnumerator GetRunDelayedRoutine(float seconds, Action run, bool scaledTime)
         {
-            if (scaledTime)
-                yield return TaskSystem.GetWaitInstruction(seconds);
-            else
-                yield return TaskSystem.GetWaitUnscaledInstruction(seconds);
+            while (seconds > 0f)
+            {
+                yield return null;
+                seconds -= scaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
+            }
 
             run();
         }
