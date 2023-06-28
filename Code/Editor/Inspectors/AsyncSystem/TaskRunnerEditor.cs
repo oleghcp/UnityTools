@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
 using UnityUtility.Async;
 using UnityUtilityEditor.Engine;
 
@@ -11,11 +10,11 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
     {
         private long _id;
         private bool _paused;
+        private string _startPoint = string.Empty;
 
         private void Awake()
         {
-            _id = target.Id;
-            _paused = target.IsWaiting;
+            Init();
 
             EditorApplication.update += Update;
         }
@@ -33,20 +32,34 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
                 return;
             }
 
-            EditorGUILayout.LabelField($"Task {target.Id}");
-            GUI.color = target.IsWaiting ? Colours.Blue : Colours.Lime;
-            EditorGUILayout.LabelField(target.IsWaiting ? "Waiting" : "Running");
-            GUI.color = Colours.White;
+            if (target.IsWaiting)
+                EditorGUILayout.LabelField($"Task {target.Id} (Waiting)", EditorStyles.boldLabel);
+            else
+                EditorGUILayout.LabelField($"Task {target.Id}", EditorStyles.boldLabel);
+
+            EditorGUILayout.LabelField(_startPoint);
+        }
+
+        private void Init()
+        {
+            _id = target.Id;
+            _paused = target.IsWaiting;
+            _startPoint = GetStackTraceStartPoint(target.StackTrace);
         }
 
         private void Update()
         {
             if (_id != target.Id || _paused != target.IsWaiting)
             {
-                _id = target.Id;
-                _paused = target.IsWaiting;
+                Init();
                 Repaint();
             }
+        }
+
+        private string GetStackTraceStartPoint(string stackTrace)
+        {
+            int index = stackTrace.LastIndexOf(" in ");
+            return stackTrace.Substring(index + 4 + Application.dataPath.Length);
         }
     }
 }

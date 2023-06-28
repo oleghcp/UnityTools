@@ -16,10 +16,12 @@ namespace UnityUtility.Async
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
         private List<TaskInfo> _continues;
-
         private bool _enabled = true;
         private long _id;
 
+#if UNITY_EDITOR
+        internal string StackTrace { get; private set; }
+#endif
         internal TaskDispatcher Owner => _owner;
         public bool IsWaiting => _iterator.IsWaiting;
         public long Id => _id;
@@ -39,6 +41,10 @@ namespace UnityUtility.Async
 
         public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token, bool sleeping = false)
         {
+#if UNITY_EDITOR
+            StackTrace = Environment.StackTrace;
+#endif
+
             _id = TaskSystem.IdProvider.GetNewId();
             _iterator.Initialize(routine, token, sleeping);
             TaskInfo task = new TaskInfo(this);
@@ -48,6 +54,10 @@ namespace UnityUtility.Async
 
         public TaskInfo ContinueWith(IEnumerator routine, in CancellationToken token)
         {
+#if UNITY_EDITOR
+            StackTrace = Environment.StackTrace;
+#endif
+
             if (_continues == null)
                 _continues = new List<TaskInfo>();
             return _continues.Place(_owner.GetRunner().RunAsync(routine, token, true));
