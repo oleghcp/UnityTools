@@ -10,8 +10,7 @@ namespace UnityUtility.Async
 {
     internal class TaskRunner : MonoBehaviour, IPoolable
     {
-        public event Action<object> OnCompleted_Event;
-        public event Action OnInterrupted_Event;
+        public event Action<TaskResult> OnCompleted_Event;
 
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
@@ -77,10 +76,10 @@ namespace UnityUtility.Async
         {
             OnCoroutineEndedInternal();
 
-            if (OnInterrupted_Event != null)
+            if (OnCompleted_Event != null)
             {
-                try { OnInterrupted_Event(); }
-                finally { OnInterrupted_Event = null; }
+                try { OnCompleted_Event(default); }
+                finally { OnCompleted_Event = null; }
             }
         }
 
@@ -90,7 +89,7 @@ namespace UnityUtility.Async
 
             if (OnCompleted_Event != null)
             {
-                try { OnCompleted_Event(_iterator.Current); }
+                try { OnCompleted_Event(new TaskResult { Result = _iterator.Current, Successful = true, }); }
                 finally { OnCompleted_Event = null; }
             }
         }

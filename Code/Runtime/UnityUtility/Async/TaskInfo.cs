@@ -4,6 +4,12 @@ using System.Threading;
 
 namespace UnityUtility.Async
 {
+    public struct TaskResult
+    {
+        public object Result;
+        public bool Successful;
+    }
+
     public readonly struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
     {
         private readonly long _id;
@@ -34,24 +40,15 @@ namespace UnityUtility.Async
             if (IsAliveInternal())
                 return _task.ContinueWith(routine, token);
 
-            if (_task != null)
-                return _task.Owner.GetRunner().RunAsync(routine, token);
-
-            return TaskSystem.StartAsyncLocally(routine, token);
+            return default;
         }
 
-        public void AddOnComleteListener(Action<object> onComplete)
+        public void AddComleteListener(Action<TaskResult> onComplete)
         {
             if (IsAliveInternal())
                 _task.OnCompleted_Event += onComplete;
             else
-                onComplete(null);
-        }
-
-        public void AddOnInterruptListener(Action onInterrupt)
-        {
-            if (IsAliveInternal())
-                _task.OnInterrupted_Event += onInterrupt;
+                onComplete(default);
         }
 
         internal void WakeUp()
