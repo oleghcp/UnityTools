@@ -10,7 +10,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
     {
         private long _id;
         private bool _paused;
-        private string _startPoint = string.Empty;
+        private string _startPoint;
 
         private void Awake()
         {
@@ -44,7 +44,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
         {
             _id = target.Id;
             _paused = target.IsWaiting;
-            _startPoint = GetStackTraceStartPoint(target.StackTrace);
+            _startPoint = GetStartLine(target.StackTrace);
         }
 
         private void Update()
@@ -56,10 +56,26 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
             }
         }
 
-        private string GetStackTraceStartPoint(string stackTrace)
+        private string GetStartLine(string stackTrace)
         {
-            int index = stackTrace.LastIndexOf(" in ");
-            return stackTrace.Substring(index + 4 + Application.dataPath.Length);
+            string[] lines = stackTrace.Split('\n');
+            int index = -1;
+
+            for (int i = lines.Length - 1; i >= 0; i--)
+            {
+                if (lines[i].Contains(nameof(TaskSystem.StartAsync)) || lines[i].Contains(nameof(TaskInfo.ContinueWith)))
+                {
+                    index = i + 1;
+                    break;
+                }
+            }
+
+            if (index < 0)
+                return string.Empty;
+
+            string targetLine = lines[index];
+            index = targetLine.LastIndexOf(" in ");
+            return targetLine.Substring(index + 4 + Application.dataPath.Length);
         }
     }
 }
