@@ -141,6 +141,11 @@ namespace UnityUtility.CSharp
             return Array.FindIndex(self, condition);
         }
 
+        public static int LastIndexOf<T>(this T[] self, Predicate<T> condition)
+        {
+            return Array.FindLastIndex(self, condition);
+        }
+
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
         /// </summary>
@@ -199,6 +204,11 @@ namespace UnityUtility.CSharp
         public static T Find<T>(this T[] self, Predicate<T> match)
         {
             return Array.Find(self, match);
+        }
+
+        public static T FindLast<T>(this T[] self, Predicate<T> match)
+        {
+            return Array.FindLast(self, match);
         }
 
         /// <summary>

@@ -236,12 +236,45 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
+        public static T Find<T>(this IList<T> self, Predicate<T> match)
+        {
+            for (int i = 0; i < self.Count; i++)
+            {
+                if (match(self[i]))
+                    return self[i];
+            }
+
+            return default;
+        }
+
+        public static T FindLast<T>(this IList<T> self, Predicate<T> match)
+        {
+            for (int i = self.Count - 1; i >= 0; i--)
+            {
+                if (match(self[i]))
+                    return self[i];
+            }
+
+            return default;
+        }
+
         /// <summary>
         /// Returns an index of the first entrance of an element that matches the specified condition or -1 if the element is not found.
         /// </summary>
         public static int IndexOf<T>(this IList<T> self, Predicate<T> condition)
         {
             for (int i = 0; i < self.Count; i++)
+            {
+                if (condition(self[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public static int LastIndexOf<T>(this IList<T> self, Predicate<T> condition)
+        {
+            for (int i = self.Count - 1; i >= 0; i--)
             {
                 if (condition(self[i]))
                     return i;

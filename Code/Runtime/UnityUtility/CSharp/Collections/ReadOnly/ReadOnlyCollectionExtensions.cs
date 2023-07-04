@@ -31,6 +31,28 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
             return GetSubArray_(self, startIndex, self.Count - startIndex);
         }
 
+        public static T Find_<T>(this IReadOnlyList<T> self, Predicate<T> match)
+        {
+            for (int i = 0; i < self.Count; i++)
+            {
+                if (match(self[i]))
+                    return self[i];
+            }
+
+            return default;
+        }
+
+        public static T FindLast_<T>(this IReadOnlyList<T> self, Predicate<T> match)
+        {
+            for (int i = self.Count - 1; i >= 0; i--)
+            {
+                if (match(self[i]))
+                    return self[i];
+            }
+
+            return default;
+        }
+
         public static int IndexOf_<T>(this IReadOnlyList<T> self, T item)
         {
             EqualityComparer<T> comparer = EqualityComparer<T>.Default;
@@ -47,6 +69,17 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
         public static int IndexOf_<T>(this IReadOnlyList<T> self, Predicate<T> condition)
         {
             for (int i = 0; i < self.Count; i++)
+            {
+                if (condition(self[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public static int LatIndexOf_<T>(this IReadOnlyList<T> self, Predicate<T> condition)
+        {
+            for (int i = self.Count - 1; i >= 0; i--)
             {
                 if (condition(self[i]))
                     return i;
