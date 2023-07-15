@@ -40,7 +40,6 @@ namespace UnityUtility.Async
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
-
             _id = TaskSystem.IdProvider.GetNewId();
             _iterator.Initialize(routine, token);
             TaskInfo task = new TaskInfo(this);
@@ -90,6 +89,9 @@ namespace UnityUtility.Async
         {
             _iterator.Reset();
             _enabled = false;
+#if UNITY_EDITOR
+            StackTrace = null;
+#endif
         }
     }
 }
