@@ -1,5 +1,4 @@
-﻿using Unity.CodeEditor;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Async;
@@ -39,16 +38,16 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
             }
 
             EditorGUILayout.BeginHorizontal();
-            
+
             EditorGUILayout.LabelField($"Task {target.Id}", EditorStyles.boldLabel);
-            
+
             if (GUILayout.Button("Full Stack Trace", _hyperLinkStyle))
                 StackTraceWindow.Create(target.StackTrace);
-            
+
             EditorGUILayout.EndHorizontal();
 
             if (GUILayout.Button(_startPoint, _hyperLinkStyle))
-            {                
+            {
                 //string args = $"-g \"{filePath}\":{lineIndex}";
                 //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
                 //{
@@ -58,7 +57,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
                 //    CreateNoWindow = true
                 //};
                 //System.Diagnostics.Process.Start(startInfo);
-            }                
+            }
         }
 
         private void Init()
@@ -81,9 +80,12 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
         {
             string[] lines = stackTrace.Split('\n');
 
+            string searchLine1 = $"{nameof(RoutineExtensions)}.cs";
+            string searchLine2 = $"{nameof(TaskSystem)}.cs";
+
             for (int i = lines.Length - 1; i >= 0; i--)
             {
-                if (lines[i].Contains(nameof(TaskSystem.StartAsync)))
+                if (lines[i].Contains(searchLine1) || lines[i].Contains(searchLine2))
                 {
                     string targetLine = lines[i + 1];
                     int index = targetLine.LastIndexOf(" in ");
