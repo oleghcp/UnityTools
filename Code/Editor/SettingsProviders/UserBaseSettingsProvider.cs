@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityUtility.CSharp;
 using UnityUtilityEditor.Configs;
 using UnityUtilityEditor.Engine;
 
@@ -37,6 +38,9 @@ namespace UnityUtilityEditor.SettingsProviders
             EditorGUILayout.Space();
 
             DrawNamespaceRootFolder();
+            string editorFolderNamespace = EditorGUILayout.TextField("Editor Folder Namespace", LibrarySettings.EditorFolderNamespace);
+            if (editorFolderNamespace.HasUsefulData())
+                LibrarySettings.EditorFolderNamespace = editorFolderNamespace;
         }
 
         private bool DrawToggle(string label, bool curValue)

@@ -116,8 +116,14 @@ namespace UnityUtilityEditor
 
             string pathToNamespace(string path)
             {
-                return path.Replace('/', '.')
-                           .RemoveWhiteSpaces();
+                string[] names = path.Split('/');
+
+                int index = names.IndexOf(nameof(Editor));
+                if (index >= 0)
+                    names[index] = LibrarySettings.EditorFolderNamespace;
+
+                return names.ConcatToString('.')
+                            .RemoveWhiteSpaces();
             }
         }
     }

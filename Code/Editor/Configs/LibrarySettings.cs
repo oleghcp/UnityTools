@@ -19,36 +19,41 @@ namespace UnityUtilityEditor.Configs
         private string _suppressedWarningsInIde = "CS0649";
         [SerializeField]
         private int _namespaceFolderRootSkipSteps;
+        [SerializeField]
+        private string _editorFolderNamespace = "EditorCode";
 
         private static LibrarySettings _instance;
 
+        private static LibrarySettings Instance => _instance ?? (_instance = Load());
+
         public static bool OpenFoldersByDoubleClick
         {
-            get => Get()._openFoldersByDoubleClick;
-            set => SetField(ref Get()._openFoldersByDoubleClick, value);
+            get => Instance._openFoldersByDoubleClick;
+            set => SetField(ref Instance._openFoldersByDoubleClick, value);
         }
 
         public static bool OpenScriptableAssetsAsCode
         {
-            get => Get()._openScriptableAssetsAsCode;
-            set => SetField(ref Get()._openScriptableAssetsAsCode, value);
+            get => Instance._openScriptableAssetsAsCode;
+            set => SetField(ref Instance._openScriptableAssetsAsCode, value);
         }
 
         public static string SuppressedWarningsInIde
         {
-            get => Get()._suppressedWarningsInIde;
-            set => SetField(ref Get()._suppressedWarningsInIde, value);
+            get => Instance._suppressedWarningsInIde;
+            set => SetField(ref Instance._suppressedWarningsInIde, value);
         }
 
         public static int NamespaceFolderRootSkipSteps
         {
-            get => Get()._namespaceFolderRootSkipSteps.ClampMin(0);
-            set => SetField(ref Get()._namespaceFolderRootSkipSteps, value);
+            get => Instance._namespaceFolderRootSkipSteps.ClampMin(0);
+            set => SetField(ref Instance._namespaceFolderRootSkipSteps, value);
         }
 
-        private static LibrarySettings Get()
+        public static string EditorFolderNamespace
         {
-            return _instance ?? (_instance = Load());
+            get => Instance._editorFolderNamespace;
+            set => SetField(ref Instance._editorFolderNamespace, value);
         }
 
         private static void Save(LibrarySettings instance)
@@ -81,7 +86,7 @@ namespace UnityUtilityEditor.Configs
                 return;
 
             field = value;
-            Save(Get());
+            Save(Instance);
         }
     }
 }
