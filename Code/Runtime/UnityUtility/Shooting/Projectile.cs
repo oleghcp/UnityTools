@@ -9,7 +9,7 @@ namespace UnityUtility.Shooting
 {
     [DisallowMultipleComponent]
     [AddComponentMenu(nameof(UnityUtility) + "/Projectile")]
-    public sealed class Projectile : MonoBehaviour
+    public sealed class Projectile : MonoBehaviour, IProjectile
     {
         [SerializeField]
         private bool _playOnAwake;
@@ -18,7 +18,7 @@ namespace UnityUtility.Shooting
         [SerializeField]
         private bool _autodestruct;
         [SerializeField]
-        private bool _doubleCollisionCheck = true;
+        private bool _doubleCollisionCheck;
         [SerializeField]
         private ProjectileCaster _casting;
         [SerializeField]
@@ -155,10 +155,29 @@ namespace UnityUtility.Shooting
             set => _casting.InitialPrecastBackOffset = value;
         }
 
-        public IRotationProvider RotationProvider { get => _rotationProvider; set => _rotationProvider = value; }
-        public ITimeProvider TimeProvider { get => _timeProvider; set => _timeProvider = value; }
-        public IGravityProvider GravityProvider { get => _gravityProvider; set => _gravityProvider = value; }
-        public IProjectileEventListener Listener { get => _listener; set => _listener = value; }
+        public IRotationProvider RotationProvider
+        {
+            get => _rotationProvider;
+            set => _rotationProvider = value;
+        }
+
+        public ITimeProvider TimeProvider
+        {
+            get => _timeProvider;
+            set => _timeProvider = value;
+        }
+
+        public IGravityProvider GravityProvider
+        {
+            get => _gravityProvider;
+            set => _gravityProvider = value;
+        }
+
+        public IProjectileEventListener Listener
+        {
+            get => _listener;
+            set => _listener = value;
+        }
 
         private void Start()
         {
@@ -166,26 +185,14 @@ namespace UnityUtility.Shooting
                 Play();
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            _listener?.PreUpdate(_isPlaying);
+            ProjectileRunner.I.Add(this);
+        }
 
-            if (_isPlaying)
-            {
-                if (_currentTime >= _timer)
-                {
-                    _isPlaying = false;
-                    InvokeTimeOut();
-                }
-                else
-                {
-                    float deltaTime = GetDeltaTime();
-                    _currentTime += deltaTime;
-                    UpdateState(transform.position, deltaTime, 1f);
-                }
-            }
-
-            _listener?.PostUpdate(_isPlaying);
+        private void OnDisable()
+        {
+            ProjectileRunner.I.Remove(this);
         }
 
 #if UNITY_EDITOR
@@ -208,6 +215,28 @@ namespace UnityUtility.Shooting
             _casting.ReflectedCastNear = 0.1f;
         }
 #endif
+
+        void IProjectile.OnTick()
+        {
+            _listener?.PreUpdate(_isPlaying);
+
+            if (_isPlaying)
+            {
+                if (_currentTime >= _timer)
+                {
+                    _isPlaying = false;
+                    InvokeTimeOut();
+                }
+                else
+                {
+                    float deltaTime = GetDeltaTime();
+                    _currentTime += deltaTime;
+                    UpdateState(transform.position, deltaTime, 1f);
+                }
+            }
+
+            _listener?.PostUpdate(_isPlaying);
+        }
 
         public void Play()
         {
