@@ -82,7 +82,7 @@ namespace UnityUtility.CSharp.Collections
                 action(item);
         }
 
-        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, T newElement)
+        public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement)
         {
             foreach (T item in self)
             {
@@ -92,7 +92,7 @@ namespace UnityUtility.CSharp.Collections
             yield return newElement;
         }
 
-        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, T newElement1, T newElement2)
+        public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement1, T newElement2)
         {
             foreach (T item in self)
             {
@@ -103,7 +103,7 @@ namespace UnityUtility.CSharp.Collections
             yield return newElement2;
         }
 
-        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
+        public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
         {
             foreach (T item in self)
             {
@@ -115,7 +115,7 @@ namespace UnityUtility.CSharp.Collections
             yield return newElement3;
         }
 
-        public static IEnumerable<T> Add<T>(this IEnumerable<T> self, params T[] newElements)
+        public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, params T[] newElements)
         {
             foreach (T item in self)
             {
@@ -128,7 +128,7 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
-        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, T newElement)
+        public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, T newElement)
         {
             yield return newElement;
 
@@ -138,7 +138,7 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
-        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, T newElement1, T newElement2)
+        public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, T newElement1, T newElement2)
         {
             yield return newElement1;
             yield return newElement2;
@@ -149,7 +149,7 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
-        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
+        public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
         {
             yield return newElement1;
             yield return newElement2;
@@ -161,7 +161,7 @@ namespace UnityUtility.CSharp.Collections
             }
         }
 
-        public static IEnumerable<T> Insert<T>(this IEnumerable<T> self, params T[] newElements)
+        public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, params T[] newElements)
         {
             for (int i = 0; i < newElements.Length; i++)
             {
