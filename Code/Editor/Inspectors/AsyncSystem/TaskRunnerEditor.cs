@@ -12,16 +12,23 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
     [CustomEditor(typeof(TaskRunner))]
     internal class TaskRunnerEditor : Editor<TaskRunner>
     {
+        private static GUIStyle _hyperLinkStyle;
+        private static string _inactiveLabel = "Inactive";
+        private static string _stackTraceButtonLabel = "Stack Trace";
+        private static GUILayoutOption[] _buttonOptions = new GUILayoutOption[] { GUILayout.Height(EditorGUIUtility.singleLineHeight) };
+
         private long _id;
         private string _startPoint;
-        private GUIStyle _hyperLinkStyle;
 
         private void Awake()
         {
-            _hyperLinkStyle = new GUIStyle(EditorStyles.label);
-            _hyperLinkStyle.normal.textColor = Colours.Sky;
-            _hyperLinkStyle.hover.textColor = Colours.Sky;
-            _hyperLinkStyle.active.textColor = Colours.Lime;
+            if (_hyperLinkStyle == null)
+            {
+                _hyperLinkStyle = new GUIStyle(EditorStyles.label);
+                _hyperLinkStyle.normal.textColor = Colours.Sky;
+                _hyperLinkStyle.hover.textColor = Colours.Sky;
+                _hyperLinkStyle.active.textColor = Colours.Lime;
+            }
             Init();
             EditorApplication.update += Update;
         }
@@ -35,15 +42,15 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
         {
             if (target.Id == 0L)
             {
-                EditorGUILayout.HelpBox("Inactive", MessageType.Info);
+                EditorGUILayout.HelpBox(_inactiveLabel, MessageType.Info);
                 return;
             }
 
             EditorGUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField($"Task {target.Id}", EditorStyles.boldLabel);
+            GUILayout.Label($"Task {target.Id}", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Full Stack Trace", _hyperLinkStyle))
+            if (GUILayout.Button(_stackTraceButtonLabel, _buttonOptions))
                 StackTraceWindow.Create(target.StackTrace);
 
             EditorGUILayout.EndHorizontal();
