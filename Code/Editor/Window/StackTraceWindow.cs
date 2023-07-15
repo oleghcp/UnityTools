@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityUtility.Async;
 using UnityUtilityEditor.Engine;
 
 namespace UnityUtilityEditor.Window
@@ -24,7 +25,13 @@ namespace UnityUtilityEditor.Window
 
         public void SetUp(string stackTrace)
         {
-            _stackTrace = stackTrace.Substring(stackTrace.IndexOf('\n') + 1);
+            int index = stackTrace.IndexOf(nameof(RoutineExtensions));
+            if (index < 0)
+                index = stackTrace.IndexOf(nameof(TaskSystem));
+
+            _stackTrace = stackTrace.Substring(index);
+            _stackTrace = _stackTrace.Substring(_stackTrace.IndexOf('\n') + 1);
+
             Vector2 textSize = EditorStyles.textArea.CalcSize(EditorGuiUtility.TempContent(_stackTrace));
             _options = new GUILayoutOption[]
             {
