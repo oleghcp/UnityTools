@@ -2,8 +2,10 @@
 using UnityEngine;
 using UnityUtility;
 using UnityUtility.Async;
+using UnityUtility.IO;
 using UnityUtilityEditor.Engine;
 using UnityUtilityEditor.Window;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityUtilityEditor.Inspectors.AsyncSystem
 {
@@ -47,24 +49,14 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
             EditorGUILayout.EndHorizontal();
 
             if (GUILayout.Button(_startPoint, _hyperLinkStyle))
-            {
-                //string args = $"-g \"{filePath}\":{lineIndex}";
-                //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
-                //{
-                //    FileName = CodeEditor.CurrentEditorPath,
-                //    Arguments = args,
-                //    UseShellExecute = false,
-                //    CreateNoWindow = true
-                //};
-                //System.Diagnostics.Process.Start(startInfo);
-            }
+                OpenCode();
         }
 
         private void Init()
         {
             _id = target.Id;
             _startPoint = _id == 0L ? string.Empty
-                                    : GetStartLine(target.StackTrace);
+                                    : GetStartLine(target.StackTrace, Application.dataPath.Length);
         }
 
         private void Update()
@@ -76,7 +68,7 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
             }
         }
 
-        private static string GetStartLine(string stackTrace)
+        private static string GetStartLine(string stackTrace, int offset = 0)
         {
             string[] lines = stackTrace.Split('\n');
 
@@ -89,11 +81,26 @@ namespace UnityUtilityEditor.Inspectors.AsyncSystem
                 {
                     string targetLine = lines[i + 1];
                     int index = targetLine.LastIndexOf(" in ");
-                    return targetLine.Substring(index + 4 + Application.dataPath.Length);
+                    return targetLine.Substring(index + 4 + offset);
                 }
             }
 
             return string.Empty;
+        }
+
+        private void OpenCode()
+        {
+            int offset = PathUtility.GetParentPath(Application.dataPath).Length + 1;
+            string startPoint = GetStartLine(target.StackTrace, offset);
+
+            int index = startPoint.LastIndexOf(':');
+            string filePath = startPoint.Substring(0, index);
+            string lineNumber = startPoint.Substring(index + 1);
+
+            UnityObject scriptAsst = AssetDatabase.LoadAssetAtPath(filePath, typeof(UnityObject));
+
+            EditorUtilityExt.OpenCsProject();
+            AssetDatabase.OpenAsset(scriptAsst, int.Parse(lineNumber));
         }
     }
 }
