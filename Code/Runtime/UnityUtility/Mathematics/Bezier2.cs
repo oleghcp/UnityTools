@@ -12,6 +12,8 @@ namespace UnityUtility.Mathematics
         [SerializeField]
         private Vector2[] _points;
 
+        private Vector2[] _helpPoints;
+
         public int Count => _points.Length;
         public ref Vector2 this[int index] => ref _points[index + 1];
 
@@ -25,9 +27,11 @@ namespace UnityUtility.Mathematics
 
         public Vector2 Evaluate(float ratio)
         {
-            Span<Vector2> tmp = stackalloc Vector2[_points.Length];
-            _points.CopyTo(tmp);
-            return EvaluateInternal(tmp, ratio);
+            if (_helpPoints == null)
+                _helpPoints = new Vector2[_points.Length];
+
+            _points.CopyTo(_helpPoints, 0);
+            return EvaluateInternal(_helpPoints, ratio);
         }
 
         public static Vector2 Evaluate(Vector2 orig, Vector2 dest, Vector2 helpPoint, float ratio)
@@ -60,6 +64,25 @@ namespace UnityUtility.Mathematics
         }
 
         private static Vector2 EvaluateInternal(Span<Vector2> tmp, float ratio)
+        {
+            ratio = ratio.Clamp01();
+            int counter = tmp.Length - 1;
+            int times = counter;
+
+            for (int i = 0; i < times; i++)
+            {
+                for (int j = 0; j < counter; j++)
+                {
+                    tmp[j] = Vector2.LerpUnclamped(tmp[j], tmp[j + 1], ratio);
+                }
+
+                counter--;
+            }
+
+            return tmp[0];
+        }
+
+        private static Vector2 EvaluateInternal(Vector2[] tmp, float ratio)
         {
             ratio = ratio.Clamp01();
             int counter = tmp.Length - 1;
