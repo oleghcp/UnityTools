@@ -33,7 +33,9 @@ namespace UnityUtility.Collections
 
         public bool IsReadOnly => !_mutable;
 
-        public int Count
+        int IReadOnlyCollection<bool>.Count => _length;
+
+        public int Length
         {
             get => _length;
             set => SetLength(value);
@@ -455,7 +457,7 @@ namespace UnityUtility.Collections
             return BitMask.EmptyFor(_array[lastElement], GetAppendixLength());
         }
 
-        public int GetCount()
+        public int GetFlagsCount()
         {
             int lastElement = GetArraySize(_length) - 1;
 

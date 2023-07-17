@@ -114,9 +114,9 @@ namespace UnityUtilityEditor.Window
 
         private void CreateForFlagsInternal(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
         {
-            if (flags.Count != displayedOptions.Length)
+            if (flags.Length != displayedOptions.Length)
             {
-                Debug.LogError($"Flags count ({flags.Count}) != displayed options count ({displayedOptions.Length}).");
+                Debug.LogError($"Flags count ({flags.Length}) != displayed options count ({displayedOptions.Length}).");
                 return;
             }
 
@@ -133,8 +133,8 @@ namespace UnityUtilityEditor.Window
                 _items.Add(item);
             }
 
-            _items.Insert(0, Data.CreateItem(_flags.Count, NOTHING_ITEM, flags.IsEmpty(), () => _flags.SetAll(false)));
-            _items.Insert(1, Data.CreateItem(_flags.Count, EVERYTHING_ITEM, allFor(), setAllTrue));
+            _items.Insert(0, Data.CreateItem(_flags.Length, NOTHING_ITEM, flags.IsEmpty(), () => _flags.SetAll(false)));
+            _items.Insert(1, Data.CreateItem(_flags.Length, EVERYTHING_ITEM, allFor(), setAllTrue));
             _items.Insert(2, Data.CreateSeparator());
 
             ShowMenu(buttonRect);
@@ -154,7 +154,7 @@ namespace UnityUtilityEditor.Window
             {
                 for (int i = 0; i < _items.Count; i++)
                 {
-                    if ((uint)_items[i].Id >= (uint)_flags.Count)
+                    if ((uint)_items[i].Id >= (uint)_flags.Length)
                         continue;
 
                     if (_items[i].Text.HasAnyData())
@@ -330,7 +330,7 @@ namespace UnityUtilityEditor.Window
             {
                 for (int i = 0; i < _items.Count; i++)
                 {
-                    if ((uint)_items[i].Id >= (uint)_flags.Count)
+                    if ((uint)_items[i].Id >= (uint)_flags.Length)
                         continue;
 
                     if (_items[i].Text.HasAnyData() && !_flags[_items[i].Id])

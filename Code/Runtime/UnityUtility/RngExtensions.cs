@@ -197,9 +197,9 @@ namespace UnityUtility
         /// </summary>
         public static int RandomFlag(this IRng self, BitList mask)
         {
-            int rn = self.Next(mask.GetCount());
+            int rn = self.Next(mask.GetFlagsCount());
 
-            for (int i = 0; i < mask.Count; i++)
+            for (int i = 0; i < mask.Length; i++)
             {
                 if (mask.Get(i))
                 {

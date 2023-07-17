@@ -74,7 +74,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
 
             Span<int> intBlocks = stackalloc int[intBlocksCount];
             intBlocks.Fill(i => arrayProp.GetArrayElementAtIndex(i).intValue);
-            BitList bits = new BitList(intBlocks) { Count = names.Length };
+            BitList bits = new BitList(intBlocks) { Length = names.Length };
             string buttonText = GetDropdownButtonText(bits, names);
 
             position.width -= smallButtonWidth;
@@ -107,7 +107,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
             if (all())
                 return DropDownWindow.EVERYTHING_ITEM;
 
-            if (bits.GetCount() == 1)
+            if (bits.GetFlagsCount() == 1)
             {
                 int index = first();
                 if (index >= 0)
@@ -118,7 +118,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
 
             bool none()
             {
-                for (int i = 0; i < bits.Count; i++)
+                for (int i = 0; i < bits.Length; i++)
                 {
                     if (displayedOptions[i].HasAnyData() && bits[i])
                         return false;
@@ -129,7 +129,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
 
             bool all()
             {
-                for (int i = 0; i < bits.Count; i++)
+                for (int i = 0; i < bits.Length; i++)
                 {
                     if (displayedOptions[i].HasAnyData() && !bits[i])
                         return false;
@@ -140,7 +140,7 @@ namespace UnityUtilityEditor.Drawers.Attributes
 
             int first()
             {
-                for (int i = 0; i < bits.Count; i++)
+                for (int i = 0; i < bits.Length; i++)
                 {
                     if (displayedOptions[i].HasAnyData() && bits[i])
                         return i;
