@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityUtility.Rng;
 
 namespace UnityUtility
 {
@@ -123,6 +124,12 @@ namespace UnityUtility
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => new Color(0.5f, 0f, 1f, 1f);
+        }
+
+        public static Color Random
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => RandomNumberGenerator.Default.GetRandomColor();
         }
     }
 }
