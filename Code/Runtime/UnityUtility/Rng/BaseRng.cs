@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using UnityUtility.Tools;
 
 namespace UnityUtility.Rng
@@ -21,10 +20,12 @@ namespace UnityUtility.Rng
             return UnityEngine.Mathf.LerpUnclamped(minValue, maxValue, (float)Sample());
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Next(float maxValue)
         {
-            return Next(0f, maxValue);
+            if (maxValue < 0f)
+                throw ThrowErrors.NegativeParameter(nameof(maxValue));
+
+            return UnityEngine.Mathf.LerpUnclamped(0f, maxValue, (float)Sample());
         }
 
 #if !UNITY_2021_2_OR_NEWER
