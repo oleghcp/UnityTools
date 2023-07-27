@@ -123,6 +123,25 @@ namespace UnityUtility.CSharp.Collections
         }
 
         /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void Sort<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            self.Sort((a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        /// <param name="comparison">Reference to comparing function.</param>
+        public static void Sort<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+        {
+            self.Sort((a, b) => comparison(keySelector(a), keySelector(b)));
+        }
+
+        /// <summary>
         /// Sorts by selected key in descending order.
         /// </summary>
         /// <param name="keySelector">Reference to selecting function.</param>
@@ -208,6 +227,53 @@ namespace UnityUtility.CSharp.Collections
             int compare(TSource a, TSource b)
             {
                 return comparer.Compare(keySelector(a), keySelector(b));
+            }
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            if (self.Count <= 1)
+                return;
+
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self, compare);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, compare);
+
+            int compare(TSource a, TSource b)
+            {
+                return comparer.Compare(keySelector(a), keySelector(b));
+            }
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        /// <param name="comparison">Reference to comparing function.</param>
+        public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+        {
+            if (self.Count <= 1)
+                return;
+
+            if (self.Count < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            {
+                CollectionUtility.SelectionSort(self, compare);
+                return;
+            }
+
+            CollectionUtility.QuickSort(self, 0, self.Count - 1, compare);
+
+            int compare(TSource a, TSource b)
+            {
+                return comparison(keySelector(a), keySelector(b));
             }
         }
 
