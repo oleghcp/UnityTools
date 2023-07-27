@@ -116,6 +116,24 @@ namespace UnityUtility.CSharp
         }
 
         /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+        {
+            Array.Sort(self, (a, b) => comparison(keySelector(a), keySelector(b)));
+        }
+
+        /// <summary>
+        /// Sorts by selected key.
+        /// </summary>
+        /// <param name="keySelector">Reference to selecting function.</param>
+        public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+        }
+
+        /// <summary>
         /// Sorts by selected key in descending order.
         /// </summary>
         /// <param name="keySelector">Reference to selecting function.</param>
