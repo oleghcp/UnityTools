@@ -13,7 +13,12 @@ namespace UnityUtility.Strings
         private char[] _space1, _space2;
         private StringComparison _comparison;
 
-        public AlphanumComparer(StringComparison comparison = StringComparison.CurrentCulture)
+        public AlphanumComparer()
+        {
+            _comparison = StringComparison.CurrentCulture;
+        }
+
+        public AlphanumComparer(StringComparison comparison)
         {
             _comparison = comparison;
         }
