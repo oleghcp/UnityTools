@@ -62,7 +62,7 @@ namespace UnityUtility.Strings
                     return result;
             }
 
-            return x.Length - y.Length;
+            return x.Length.CompareTo(y.Length);
         }
 
         private static void UpdateArray(ref char[] array, int length)
@@ -73,23 +73,18 @@ namespace UnityUtility.Strings
 
         private static int FillSpaceArray(string compString, char[] space, ref int marker)
         {
-            int length = compString.Length;
             char ch = compString[marker];
 
             int i = 0;
             do
             {
                 space[i++] = ch;
-                marker++;
 
-                if (marker < length)
-                {
-                    ch = compString[marker];
-                }
-                else
-                {
+                if (++marker >= compString.Length)
                     break;
-                }
+
+                ch = compString[marker];
+
             } while (char.IsDigit(ch) == char.IsDigit(space[0]));
 
             return i;
