@@ -1,97 +1,99 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityUtility.CSharp;
 
 namespace UnityUtility.Strings
 {
     /// <summary>
-    /// From http://www.dotnetperls.com/alphanumeric-sorting
+    /// Based on http://www.dotnetperls.com/alphanumeric-sorting
     /// </summary>
     [Serializable]
-    public class AlphanumComparer : StringComparer
+    public class AlphanumComparer : IComparer<string>
     {
-        public override int Compare(string x, string y)
+        [NonSerialized]
+        private char[] _space1, _space2;
+        private StringComparison _comparison;
+
+        public AlphanumComparer(StringComparison comparison = StringComparison.CurrentCulture)
         {
-            if (x == null)
+            _comparison = comparison;
+        }
+
+        public int Compare(string x, string y)
+        {
+            if (x == null || y == null)
                 return 0;
 
-            if (y == null)
-                return 0;
-
-            int len1 = x.Length;
-            int len2 = y.Length;
             int marker1 = 0;
             int marker2 = 0;
 
             // Walk through two the strings with two markers.
-            while (marker1 < len1 && marker2 < len2)
+            while (marker1 < x.Length && marker2 < y.Length)
             {
-                char ch1 = x[marker1];
-                char ch2 = y[marker2];
-
-                // Some buffers we can build up characters in for each chunk.
-                var space1 = new char[len1];
-                int loc1 = 0;
-                var space2 = new char[len2];
-                int loc2 = 0;
+                UpdateArray(ref _space1, x.Length);
+                UpdateArray(ref _space2, y.Length);
 
                 // Walk through all following characters that are digits or
                 // characters in BOTH strings starting at the appropriate marker.
                 // Collect char arrays.
-                do
-                {
-                    space1[loc1++] = ch1;
-                    marker1++;
-
-                    if (marker1 < len1)
-                    {
-                        ch1 = x[marker1];
-                    }
-                    else
-                    {
-                        break;
-                    }
-                } while (char.IsDigit(ch1) == char.IsDigit(space1[0]));
-
-                do
-                {
-                    space2[loc2++] = ch2;
-                    marker2++;
-
-                    if (marker2 < len2)
-                    {
-                        ch2 = y[marker2];
-                    }
-                    else
-                    {
-                        break;
-                    }
-                } while (char.IsDigit(ch2) == char.IsDigit(space2[0]));
+                int length1 = FillSpaceArray(x, _space1, ref marker1);
+                int length2 = FillSpaceArray(y, _space2, ref marker2);
 
                 // If we have collected numbers, compare them numerically.
                 // Otherwise, if we have strings, compare them alphabetically.
-                var str1 = new string(space1);
-                var str2 = new string(space2);
+                string string1 = new string(_space1, 0, length1);
+                string string2 = new string(_space2, 0, length2);
 
                 int result;
 
-                if (char.IsDigit(space1[0]) && char.IsDigit(space2[0]))
+                if (char.IsDigit(_space1[0]) && char.IsDigit(_space2[0]))
                 {
-                    int thisNumericChunk = int.Parse(str1);
-                    int thatNumericChunk = int.Parse(str2);
+                    int thisNumericChunk = int.Parse(string1);
+                    int thatNumericChunk = int.Parse(string2);
                     result = thisNumericChunk.CompareTo(thatNumericChunk);
                 }
                 else
                 {
-                    result = string.Compare(str1.RemoveWhiteSpaces(),
-                                            str2.RemoveWhiteSpaces(),
-                                            StringComparison.InvariantCultureIgnoreCase);
+                    result = string.Compare(string1.RemoveWhiteSpaces(),
+                                            string2.RemoveWhiteSpaces(),
+                                            _comparison);
                 }
 
                 if (result != 0)
                     return result;
             }
 
-            return len1 - len2;
+            return x.Length - y.Length;
+        }
+
+        private static void UpdateArray(ref char[] array, int length)
+        {
+            if (array == null || array.Length < length)
+                array = new char[length];
+        }
+
+        private static int FillSpaceArray(string compString, char[] space, ref int marker)
+        {
+            int length = compString.Length;
+            char ch = compString[marker];
+
+            int i = 0;
+            do
+            {
+                space[i++] = ch;
+                marker++;
+
+                if (marker < length)
+                {
+                    ch = compString[marker];
+                }
+                else
+                {
+                    break;
+                }
+            } while (char.IsDigit(ch) == char.IsDigit(space[0]));
+
+            return i;
         }
     }
 }
