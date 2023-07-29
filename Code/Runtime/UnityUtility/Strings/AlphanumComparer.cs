@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityUtility.CSharp;
 
 namespace UnityUtility.Strings
@@ -8,7 +7,7 @@ namespace UnityUtility.Strings
     /// Based on http://www.dotnetperls.com/alphanumeric-sorting
     /// </summary>
     [Serializable]
-    public class AlphanumComparer : IComparer<string>
+    public class AlphanumComparer : StringComparer
     {
         [NonSerialized]
         private char[] _space1, _space2;
@@ -19,7 +18,7 @@ namespace UnityUtility.Strings
             _comparison = comparison;
         }
 
-        public int Compare(string x, string y)
+        public override int Compare(string x, string y)
         {
             if (x == null || y == null)
                 return 0;
@@ -36,13 +35,13 @@ namespace UnityUtility.Strings
                 // Walk through all following characters that are digits or
                 // characters in BOTH strings starting at the appropriate marker.
                 // Collect char arrays.
-                int length1 = FillSpaceArray(x, _space1, ref marker1);
-                int length2 = FillSpaceArray(y, _space2, ref marker2);
+                int stringLength1 = FillSpaceArray(x, _space1, ref marker1);
+                int stringLength2 = FillSpaceArray(y, _space2, ref marker2);
 
                 // If we have collected numbers, compare them numerically.
                 // Otherwise, if we have strings, compare them alphabetically.
-                string string1 = new string(_space1, 0, length1);
-                string string2 = new string(_space2, 0, length2);
+                string string1 = new string(_space1, 0, stringLength1);
+                string string2 = new string(_space2, 0, stringLength2);
 
                 int result;
 
