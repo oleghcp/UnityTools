@@ -79,8 +79,9 @@ namespace UnityUtility.Strings
         private static int FillSpaceArray(string compString, char[] space, ref int marker)
         {
             char ch = compString[marker];
-
+            bool isDigit = char.IsDigit(ch);
             int i = 0;
+
             do
             {
                 space[i++] = ch;
@@ -90,7 +91,7 @@ namespace UnityUtility.Strings
 
                 ch = compString[marker];
 
-            } while (char.IsDigit(ch) == char.IsDigit(space[0]));
+            } while (char.IsDigit(ch) == isDigit);
 
             return i;
         }
