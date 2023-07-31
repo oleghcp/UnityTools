@@ -10,7 +10,7 @@ namespace UnityUtility.Strings
     public class AlphanumComparer : StringComparer
     {
         [NonSerialized]
-        private char[] _space1, _space2;
+        private char[] _bufCharArray;
         private StringComparison _comparison;
 
         public AlphanumComparer()
@@ -30,31 +30,21 @@ namespace UnityUtility.Strings
 
             int marker1 = 0;
             int marker2 = 0;
+            int maxLength = Math.Max(x.Length, y.Length);
 
-            // Walk through two the strings with two markers.
             while (marker1 < x.Length && marker2 < y.Length)
             {
-                UpdateArray(ref _space1, x.Length);
-                UpdateArray(ref _space2, y.Length);
+                UpdateBufArray(maxLength);
 
-                // Walk through all following characters that are digits or
-                // characters in BOTH strings starting at the appropriate marker.
-                // Collect char arrays.
-                int stringLength1 = FillSpaceArray(x, _space1, ref marker1);
-                int stringLength2 = FillSpaceArray(y, _space2, ref marker2);
-
-                // If we have collected numbers, compare them numerically.
-                // Otherwise, if we have strings, compare them alphabetically.
-                string string1 = new string(_space1, 0, stringLength1);
-                string string2 = new string(_space2, 0, stringLength2);
+                string string1 = GetSubstring(x, ref marker1);
+                string string2 = GetSubstring(y, ref marker2);
 
                 int result;
 
-                if (char.IsDigit(_space1[0]) && char.IsDigit(_space2[0]))
+                if (int.TryParse(string1, out int num1) &&
+                    int.TryParse(string2, out int num2))
                 {
-                    int thisNumericChunk = int.Parse(string1);
-                    int thatNumericChunk = int.Parse(string2);
-                    result = thisNumericChunk.CompareTo(thatNumericChunk);
+                    result = num1.CompareTo(num2);
                 }
                 else
                 {
@@ -70,13 +60,13 @@ namespace UnityUtility.Strings
             return x.Length.CompareTo(y.Length);
         }
 
-        private static void UpdateArray(ref char[] array, int length)
+        private void UpdateBufArray(int length)
         {
-            if (array == null || array.Length < length)
-                array = new char[length];
+            if (_bufCharArray == null || _bufCharArray.Length < length)
+                _bufCharArray = new char[length];
         }
 
-        private static int FillSpaceArray(string compString, char[] space, ref int marker)
+        private string GetSubstring(string compString, ref int marker)
         {
             char ch = compString[marker];
             bool isDigit = char.IsDigit(ch);
@@ -84,7 +74,7 @@ namespace UnityUtility.Strings
 
             do
             {
-                space[i++] = ch;
+                _bufCharArray[i++] = ch;
 
                 if (++marker >= compString.Length)
                     break;
@@ -93,7 +83,7 @@ namespace UnityUtility.Strings
 
             } while (char.IsDigit(ch) == isDigit);
 
-            return i;
+            return new string(_bufCharArray, 0, i);
         }
     }
 }
