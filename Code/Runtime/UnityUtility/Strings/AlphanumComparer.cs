@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityUtility.CSharp;
 
 namespace UnityUtility.Strings
 {
@@ -13,9 +12,9 @@ namespace UnityUtility.Strings
         private char[] _bufCharArray;
         private StringComparison _comparison;
 
-        public AlphanumComparer()
+        public AlphanumComparer() : this(StringComparison.CurrentCulture)
         {
-            _comparison = StringComparison.CurrentCulture;
+
         }
 
         public AlphanumComparer(StringComparison comparison)
@@ -34,10 +33,11 @@ namespace UnityUtility.Strings
 
             while (marker1 < x.Length && marker2 < y.Length)
             {
-                UpdateBufArray(maxLength);
+                if (_bufCharArray == null || _bufCharArray.Length < maxLength)
+                    _bufCharArray = new char[maxLength];
 
-                string string1 = GetSubstring(x, ref marker1);
-                string string2 = GetSubstring(y, ref marker2);
+                string string1 = GetSubstring(x, _bufCharArray, ref marker1);
+                string string2 = GetSubstring(y, _bufCharArray, ref marker2);
 
                 int result;
 
@@ -48,9 +48,7 @@ namespace UnityUtility.Strings
                 }
                 else
                 {
-                    result = string.Compare(string1.RemoveWhiteSpaces(),
-                                            string2.RemoveWhiteSpaces(),
-                                            _comparison);
+                    result = string.Compare(string1, string2, _comparison);
                 }
 
                 if (result != 0)
@@ -60,13 +58,7 @@ namespace UnityUtility.Strings
             return x.Length.CompareTo(y.Length);
         }
 
-        private void UpdateBufArray(int length)
-        {
-            if (_bufCharArray == null || _bufCharArray.Length < length)
-                _bufCharArray = new char[length];
-        }
-
-        private string GetSubstring(string compString, ref int marker)
+        private static string GetSubstring(string compString, char[] bufArray, ref int marker)
         {
             char ch = compString[marker];
             bool isDigit = char.IsDigit(ch);
@@ -74,7 +66,7 @@ namespace UnityUtility.Strings
 
             do
             {
-                _bufCharArray[i++] = ch;
+                bufArray[i++] = ch;
 
                 if (++marker >= compString.Length)
                     break;
@@ -83,7 +75,7 @@ namespace UnityUtility.Strings
 
             } while (char.IsDigit(ch) == isDigit);
 
-            return new string(_bufCharArray, 0, i);
+            return new string(bufArray, 0, i);
         }
     }
 }
