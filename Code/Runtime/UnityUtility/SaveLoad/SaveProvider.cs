@@ -27,7 +27,14 @@ namespace UnityUtility.SaveLoad
 
         private ISaver _saver;
         private IKeyGenerator _keyGenerator;
-        private Dictionary<object, List<SaveLoadFieldAttribute>> _fields = new Dictionary<object, List<SaveLoadFieldAttribute>>();
+        private Dictionary<object, List<SaveLoadFieldAttribute>> _storage = new Dictionary<object, List<SaveLoadFieldAttribute>>();
+        private int _asyncSaveFieldsPerFrame = 50;
+
+        public int AsyncSaveFieldsPerFrame
+        {
+            get => _asyncSaveFieldsPerFrame;
+            set => _asyncSaveFieldsPerFrame = value.ClampMin(1);
+        }
 
         public SaveProvider()
         {
@@ -122,7 +129,7 @@ namespace UnityUtility.SaveLoad
             }
 
             if (list != null)
-                _fields.Add(fieldsOwner, list);
+                _storage.Add(fieldsOwner, list);
         }
 
         /// <summary>
@@ -134,7 +141,7 @@ namespace UnityUtility.SaveLoad
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
-            if (!_fields.Remove(fieldsOwner, out var aList))
+            if (!_storage.Remove(fieldsOwner, out var aList))
                 return;
 
             switch (option)
@@ -160,7 +167,7 @@ namespace UnityUtility.SaveLoad
             switch (option)
             {
                 case UnregOption.SaveObjectState:
-                    foreach (var aList in _fields.Values)
+                    foreach (var aList in _storage.Values)
                     {
                         foreach (var attribute in aList)
                             _saver.DeleteKey(attribute.Key);
@@ -168,7 +175,7 @@ namespace UnityUtility.SaveLoad
                     break;
 
                 case UnregOption.DeleteObjectState:
-                    foreach (var (fieldsOwner, aList) in _fields)
+                    foreach (var (fieldsOwner, aList) in _storage)
                     {
                         foreach (var attribute in aList)
                             _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
@@ -176,7 +183,7 @@ namespace UnityUtility.SaveLoad
                     break;
             }
 
-            _fields.Clear();
+            _storage.Clear();
         }
 
         public bool Load(string version)
@@ -195,18 +202,31 @@ namespace UnityUtility.SaveLoad
         /// <summary>
         /// Saves all registered data.
         /// </summary>
-        public void Save(string version)
+        public void Save(string version, bool collectFields = true)
         {
-            Collect();
+            if (collectFields)
+            {
+                foreach (var (fieldsOwner, aList) in _storage)
+                {
+                    for (int i = 0; i < aList.Count; i++)
+                    {
+                        _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+                    }
+                }
+            }
+
             _saver.SaveVersion(version);
         }
 
         /// <summary>
         /// Saves all registered data asynchronously.
         /// </summary>
-        public TaskInfo SaveAsync(string version, int stepsPerFrame = 10)
+        public TaskInfo SaveAsync(string version, bool collectFields = true)
         {
-            return getRoutine(stepsPerFrame.ClampMin(1)).StartAsync();
+            if (collectFields)
+                return getRoutine(_asyncSaveFieldsPerFrame).StartAsync();
+
+            return _saver.SaveVersionAsync(version);
 
             IEnumerator getRoutine(int spf)
             {
@@ -214,7 +234,7 @@ namespace UnityUtility.SaveLoad
 
                 yield return null;
 
-                foreach (var (fieldsOwner, aList) in _fields)
+                foreach (var (fieldsOwner, aList) in _storage)
                 {
                     for (int i = 0; i < aList.Count; i++)
                     {
@@ -229,17 +249,6 @@ namespace UnityUtility.SaveLoad
                 }
 
                 yield return _saver.SaveVersionAsync(version);
-            }
-        }
-
-        private void Collect()
-        {
-            foreach (var (fieldsOwner, aList) in _fields)
-            {
-                for (int i = 0; i < aList.Count; i++)
-                {
-                    _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
-                }
             }
         }
     }
