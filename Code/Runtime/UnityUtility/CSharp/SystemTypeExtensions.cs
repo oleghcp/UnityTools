@@ -6,6 +6,16 @@ namespace UnityUtility.CSharp
 {
     public static class SystemTypeExtensions
     {
+        public static WeakReference<T> ToWeak<T>(this T self) where T : class
+        {
+            return new WeakReference<T>(self);
+        }
+
+        public static WeakReference<T> ToWeak<T>(this T self, bool trackResurrection) where T : class
+        {
+            return new WeakReference<T>(self, trackResurrection);
+        }
+
         public static string ToString(this int self, int radix)
         {
             return ConvertUtility.DecimalToStringWithCustomRadix(self, radix);
