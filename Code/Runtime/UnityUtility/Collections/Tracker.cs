@@ -17,19 +17,11 @@ namespace UnityUtility.Collections
             }
         }
 
-        public void Force()
+        public void ForceInvoke()
         {
             for (int i = 0; i < _nodes.Count; i++)
             {
-                _nodes[i].Force();
-            }
-        }
-
-        public void Cache()
-        {
-            for (int i = 0; i < _nodes.Count; i++)
-            {
-                _nodes[i].Cache();
+                _nodes[i].ForceInvoke();
             }
         }
 

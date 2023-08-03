@@ -7,8 +7,7 @@ namespace UnityUtility.Collections
     {
         bool Changed { get; }
         void Check();
-        void Force();
-        void Cache();
+        void ForceInvoke();
     }
 
     public interface ITrackerNode<T> : ITrackerNode
@@ -32,6 +31,7 @@ namespace UnityUtility.Collections
         public BaseNode(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
         {
             _getter = getter;
+            _cache = getter.Invoke();
             _onChangedCallback1 = onChangedCallback1;
             _onChangedCallback2 = onChangedCallback2;
         }
@@ -48,16 +48,10 @@ namespace UnityUtility.Collections
             }
         }
 
-        public void Force()
+        public void ForceInvoke()
         {
-            _cache = _getter();
             _onChangedCallback1?.Invoke();
             _onChangedCallback2?.Invoke(_cache);
-        }
-
-        public void Cache()
-        {
-            _cache = _getter();
         }
 
         protected abstract bool Equal(T a, T b);
@@ -104,12 +98,10 @@ namespace UnityUtility.Collections
                 _onChangedCallback();
         }
 
-        public void Force()
+        public void ForceInvoke()
         {
             _onChangedCallback();
         }
-
-        public void Cache() { }
     }
 
     internal class PrevDependentNode : BaseDependentNode
@@ -175,12 +167,10 @@ namespace UnityUtility.Collections
                 _onChangedCallback(_previousNode.Value);
         }
 
-        public void Force()
+        public void ForceInvoke()
         {
             _onChangedCallback(_previousNode.Value);
         }
-
-        public void Cache() { }
     }
     #endregion
 }
