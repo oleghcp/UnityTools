@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityUtility.Mathematics;
 
@@ -491,6 +492,27 @@ namespace UnityUtility.Engine
             return Quaternion.LookRotation(value);
         }
 
+        public static Vector3 AveragePosition(this IList<Vector3> self)
+        {
+            return MathUtility.AveragePosition(self);
+        }
+
+        public static Vector2 AveragePosition(this IList<Vector2> self)
+        {
+            return MathUtility.AveragePosition(self);
+        }
+
+        public static Vector3 AveragePosition(this IEnumerable<Vector3> self)
+        {
+            return MathUtility.AveragePosition(self);
+        }
+
+        public static Vector2 AveragePosition(this IEnumerable<Vector2> self)
+        {
+            return MathUtility.AveragePosition(self);
+        }
+
+        #region Deconstruction
         public static void Deconstruct(this in Vector2 value, out float x, out float y)
         {
             x = value.x;
@@ -516,5 +538,6 @@ namespace UnityUtility.Engine
             y = value.y;
             z = value.z;
         }
+        #endregion
     }
 }
