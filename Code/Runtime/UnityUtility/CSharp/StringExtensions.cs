@@ -9,9 +9,9 @@ namespace UnityUtility.CSharp
         /// <summary>
         /// Returns the element at the specified index from the end of a string.
         /// </summary>
-        public static char FromEnd(this string self, int reverseIndex)
+        public static char FromEnd(this string self, int index)
         {
-            return self[self.Length - (reverseIndex + 1)];
+            return self[self.Length - (index + 1)];
         }
 
         /// <summary>

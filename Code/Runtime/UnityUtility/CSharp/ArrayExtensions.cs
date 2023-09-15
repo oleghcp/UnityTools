@@ -167,9 +167,9 @@ namespace UnityUtility.CSharp
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
         /// </summary>
-        public static ref T FromEnd<T>(this T[] self, int reverseIndex)
+        public static ref T FromEnd<T>(this T[] self, int index)
         {
-            return ref self[self.Length - (reverseIndex + 1)];
+            return ref self[self.Length - (index + 1)];
         }
 
         /// <summary>

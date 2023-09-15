@@ -400,9 +400,9 @@ namespace UnityUtility.CSharp.Collections
         /// <summary>
         /// Returns the element at the specified index from the end of a collection.
         /// </summary>
-        public static T FromEnd<T>(this IList<T> self, int reverseIndex)
+        public static T FromEnd<T>(this IList<T> self, int index)
         {
-            return self[self.Count - (reverseIndex + 1)];
+            return self[self.Count - (index + 1)];
         }
 
         /// <summary>

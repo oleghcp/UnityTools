@@ -151,9 +151,9 @@ namespace UnityUtility.CSharp.Collections.ReadOnly
             return self != null && self.Count > 0;
         }
 
-        public static T FromEnd_<T>(this IReadOnlyList<T> self, int reverseIndex)
+        public static T FromEnd_<T>(this IReadOnlyList<T> self, int index)
         {
-            return self[self.Count - (reverseIndex + 1)];
+            return self[self.Count - (index + 1)];
         }
 
 #if UNITY_2021_2_OR_NEWER
