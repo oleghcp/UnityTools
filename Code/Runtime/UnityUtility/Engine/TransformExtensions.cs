@@ -242,14 +242,6 @@ namespace UnityUtility.Engine
         }
 
         /// <summary>
-        /// Transforms rotation from local space to world space.
-        /// </summary>
-        public static Quaternion TransformRotation(this Transform self, in Quaternion rotation)
-        {
-            return self.rotation * rotation;
-        }
-
-        /// <summary>
         /// Increases sibling index by one.
         /// </summary>
         public static void IncreaseSiblingIndex(this Transform self)
