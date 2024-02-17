@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace UnityUtility.Async
 {
@@ -42,7 +43,7 @@ namespace UnityUtility.Async
             if (IsAliveInternal())
                 _task.OnCompleted_Event += onComplete;
             else
-                onComplete(default);
+                throw new InvalidOperationException("Task isn't alive.");
         }
 
         /// <summary>
@@ -93,6 +94,7 @@ namespace UnityUtility.Async
         }
         #endregion
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsAliveInternal()
         {
             return _task != null && _task.Id == _id;
