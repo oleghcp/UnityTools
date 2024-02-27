@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     internal class GraphCamera
     {

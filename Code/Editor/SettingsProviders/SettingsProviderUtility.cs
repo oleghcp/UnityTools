@@ -1,4 +1,4 @@
-﻿namespace UnityUtilityEditor.SettingsProviders
+﻿namespace OlegHcpEditor.SettingsProviders
 {
     public static class SettingsProviderUtility
     {

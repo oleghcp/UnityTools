@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Engine;
+using OlegHcp.CSharp;
+using OlegHcp.Engine;
 
-namespace UnityUtilityEditor.Window.ShapeWizards
+namespace OlegHcpEditor.Window.ShapeWizards
 {
     internal class CreateRectPlaneWizard : CreateMeshWizard
     {

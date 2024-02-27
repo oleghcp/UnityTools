@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////
 
 #if UNITY_2020_2_OR_NEWER && !UNITY_2021_2_OR_NEWER
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
 namespace System
 {

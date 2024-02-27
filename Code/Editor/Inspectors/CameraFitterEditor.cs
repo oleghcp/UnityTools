@@ -2,12 +2,12 @@
 using MenuItems;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.Mathematics;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.MenuItems;
+using OlegHcp;
+using OlegHcp.Mathematics;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.MenuItems;
 
-namespace UnityUtilityEditor.Inspectors
+namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(CameraFitter))]
     internal class CameraFitterEditor : Editor<CameraFitter>

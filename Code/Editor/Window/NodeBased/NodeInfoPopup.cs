@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Window.NodeBased.NodeDrawing;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     internal class NodeInfoPopup : EditorWindow
     {

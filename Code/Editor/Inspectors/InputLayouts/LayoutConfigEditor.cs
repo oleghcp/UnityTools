@@ -2,16 +2,16 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Collections;
-using UnityUtility.Controls;
-using UnityUtility.Controls.ControlStuff;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window;
+using OlegHcp.Collections;
+using OlegHcp.Controls;
+using OlegHcp.Controls.ControlStuff;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window;
 
 #if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
-namespace UnityUtilityEditor.Inspectors.InputLayouts
+namespace OlegHcpEditor.Inspectors.InputLayouts
 {
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor<LayoutConfig>
@@ -319,7 +319,7 @@ namespace UnityUtilityEditor.Inspectors.InputLayouts
     }
 }
 #else
-namespace UnityUtilityEditor.Inspectors.InputLayouts
+namespace OlegHcpEditor.Inspectors.InputLayouts
 {
     [CustomEditor(typeof(LayoutConfig))]
     internal class LayoutConfigEditor : Editor<LayoutConfig>

@@ -6,13 +6,13 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class AddressablesAnalysisResultsWindow : EditorWindow
     {

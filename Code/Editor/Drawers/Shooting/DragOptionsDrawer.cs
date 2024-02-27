@@ -1,10 +1,10 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Shooting;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Shooting;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Shooting
+namespace OlegHcpEditor.Drawers.Shooting
 {
     [CustomPropertyDrawer(typeof(DragOptions))]
     internal class DragOptionsDrawer : PropertyDrawer

@@ -2,10 +2,10 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Sound.SoundStuff;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Sound.SoundStuff;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Inspectors.Sound
+namespace OlegHcpEditor.Inspectors.Sound
 {
     [CustomEditor(typeof(AudioInfo), true)]
     internal class AudioInfoEditor : Editor<AudioInfo>

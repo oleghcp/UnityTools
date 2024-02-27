@@ -1,13 +1,13 @@
 ﻿using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Configs;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Configs;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor
+namespace OlegHcpEditor
 {
 #pragma warning disable IDE0051
     internal static class AssetOpenEditor

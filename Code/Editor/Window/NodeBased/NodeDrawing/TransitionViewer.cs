@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Mathematics;
-using UnityUtility.NodeBased;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Mathematics;
+using OlegHcp.NodeBased;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
+namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 {
     internal enum TransitionViewType
     {

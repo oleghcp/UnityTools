@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityUtilityEditor.SettingsProviders
+namespace OlegHcpEditor.SettingsProviders
 {
     internal class ProjectBaseSettingsProvider : SettingsProvider
     {

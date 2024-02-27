@@ -3,11 +3,11 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.Rendering.PostProcessing;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtility.PostProcessing;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.PostProcessing;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Inspectors.PostProcessing
+namespace OlegHcpEditor.Inspectors.PostProcessing
 {
     [PostProcessEditor(typeof(Fog))]
     internal class FogEditor : PostProcessEffectEditor<Fog>
@@ -81,7 +81,7 @@ namespace UnityUtilityEditor.Inspectors.PostProcessing
         private void CreateShaders()
         {
             const string extension = ".shader";
-            string destFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Shaders/{nameof(UnityUtility)}/{nameof(PostProcessing)}";
+            string destFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Shaders/{nameof(OlegHcp)}/{nameof(PostProcessing)}";
             Directory.CreateDirectory(destFolder);
 
             CreateAssetFromTemplate("610b257f6f84e644ab720a276f478350", destFolder, extension, "f7ed684984420634fbe1a903eb536700");

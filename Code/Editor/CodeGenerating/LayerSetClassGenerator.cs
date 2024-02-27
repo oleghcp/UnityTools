@@ -1,12 +1,12 @@
 ﻿using System.Text;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcpEditor.Configs;
+using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtilityEditor.Configs;
-using UnityUtilityEditor.Engine;
 
-namespace UnityUtilityEditor.CodeGenerating
+namespace OlegHcpEditor.CodeGenerating
 {
     internal static class LayerSetClassGenerator
     {
@@ -32,7 +32,10 @@ namespace UnityUtilityEditor.CodeGenerating
 
                     case LayerSetConfig.LayerMaskFieldType.IntMask:
                         builder.AppendLine()
-                               .AppendLine("using UnityUtility;");
+                               .Append("using ")
+                               .Append(nameof(OlegHcp))
+                               .Append(';')
+                               .AppendLine();
                         break;
 
                     default:

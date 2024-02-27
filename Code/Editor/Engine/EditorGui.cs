@@ -1,16 +1,16 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.Collections;
-using UnityUtility.CSharp;
-using UnityUtility.Mathematics;
-using UnityUtility.NumericEntities;
-using UnityUtilityEditor.Drawers;
-using UnityUtilityEditor.Window;
+using OlegHcp;
+using OlegHcp.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.Mathematics;
+using OlegHcp.NumericEntities;
+using OlegHcpEditor.Drawers;
+using OlegHcpEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class EditorGui
     {

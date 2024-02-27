@@ -3,12 +3,12 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Drawers
+namespace OlegHcpEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(AssetRef<>))]
     internal class AssetRefDrawer : PropertyDrawer

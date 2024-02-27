@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnityUtility/PostProcessing/ExpFog"
+﻿Shader "Hidden/OlegHcp/PostProcessing/ExpFog"
 {
     HLSLINCLUDE
             

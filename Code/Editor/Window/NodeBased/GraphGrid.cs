@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
+using OlegHcp;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     internal class GraphGrid
     {

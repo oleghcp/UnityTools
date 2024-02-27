@@ -4,16 +4,16 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Engine;
-using UnityUtility.NodeBased;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Engine;
+using OlegHcp.NodeBased;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window.NodeBased.NodeDrawing;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     internal class GraphMap
     {

@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.Mathematics;
+using OlegHcp;
+using OlegHcp.Mathematics;
 
-namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
+namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 {
     internal class PointViewer
     {

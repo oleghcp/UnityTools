@@ -1,13 +1,13 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(TypeNameAttribute))]
     internal class TypeNameDrawer : AttributeDrawer<TypeNameAttribute>

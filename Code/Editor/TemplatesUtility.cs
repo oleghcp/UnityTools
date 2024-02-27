@@ -2,13 +2,13 @@
 using System.IO;
 using System.Text;
 using UnityEditor;
-using UnityUtility.CSharp;
-using UnityUtility.IO;
-using UnityUtilityEditor.Configs;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp;
+using OlegHcp.IO;
+using OlegHcpEditor.Configs;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor
+namespace OlegHcpEditor
 {
     internal static class TemplatesUtility
     {

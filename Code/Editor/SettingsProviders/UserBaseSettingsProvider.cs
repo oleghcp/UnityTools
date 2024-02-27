@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtilityEditor.Configs;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp;
+using OlegHcpEditor.Configs;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.SettingsProviders
+namespace OlegHcpEditor.SettingsProviders
 {
     internal class UserBaseSettingsProvider : SettingsProvider
     {

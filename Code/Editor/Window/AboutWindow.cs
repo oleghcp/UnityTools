@@ -3,9 +3,9 @@ using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.Engine;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class AboutWindow : EditorWindow
     {

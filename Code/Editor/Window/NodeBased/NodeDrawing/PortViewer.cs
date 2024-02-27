@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtilityEditor.Window.NodeBased.NodeDrawing
+namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 {
     internal enum PortType : byte { In, Out }
 

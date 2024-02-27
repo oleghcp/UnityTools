@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     internal class GraphEditorStyles
     {

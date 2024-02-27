@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Inspector;
-using UnityUtility.Tools;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp;
+using OlegHcp.Inspector;
+using OlegHcp.Tools;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DrawObjectFieldsAttribute))]
     internal class DrawObjectFieldsDrawer : AttributeDrawer<DrawObjectFieldsAttribute>

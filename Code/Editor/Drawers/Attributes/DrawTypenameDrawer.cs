@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DrawTypenameAttribute))]
     internal class DrawTypenameDrawer : SerializeReferenceDrawer

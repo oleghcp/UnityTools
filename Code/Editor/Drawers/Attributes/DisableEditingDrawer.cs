@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.Inspector;
+using OlegHcp.Inspector;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DisableEditingAttribute))]
     internal class DisableEditingDrawer : PropertyDrawer

@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(EnumMenuAttribute), true)]
     internal sealed class EnumMenuDrawer : PropertyDrawer

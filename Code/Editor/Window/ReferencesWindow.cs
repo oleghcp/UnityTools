@@ -2,10 +2,10 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtilityEditor.Engine;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class ReferencesWindow : EditorWindow
     {

@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.IO;
+using OlegHcp.CSharp;
+using OlegHcp.IO;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class AssetDatabaseExt
     {

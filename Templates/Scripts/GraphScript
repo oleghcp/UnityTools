@@ -1,9 +1,9 @@
-﻿using UnityUtility.NodeBased;
+﻿using OlegHcp.NodeBased;
 using UnityEngine; 
 
 namespace #NAMESPACE#
 { 
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Graph/" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]
+    [CreateAssetMenu(menuName = nameof(OlegHcp) + "/Graph/" + nameof(#SCRIPTNAME#), fileName = nameof(#SCRIPTNAME#))]
     public class #SCRIPTNAME# : Graph</*your node type*/> 
     {
 

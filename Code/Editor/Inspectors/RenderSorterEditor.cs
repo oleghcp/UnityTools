@@ -1,12 +1,12 @@
 ﻿using MenuItems;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.MenuItems;
-using static UnityUtilityEditor.Drawers.Attributes.SortingLayerIDDrawer;
+using OlegHcp;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.MenuItems;
+using static OlegHcpEditor.Drawers.Attributes.SortingLayerIDDrawer;
 
-namespace UnityUtilityEditor.Inspectors
+namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(RenderSorter))]
     internal class RenderSorterEditor : Editor<RenderSorter>

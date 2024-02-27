@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.NodeBased;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Drawers.Attributes;
-using UnityUtilityEditor.Engine;
+using OlegHcp.NodeBased;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Drawers.Attributes;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.NodeBased
+namespace OlegHcpEditor.Drawers.NodeBased
 {
     [CustomPropertyDrawer(typeof(Condition), true)]
     internal class ConditionDrawer : PropertyDrawer

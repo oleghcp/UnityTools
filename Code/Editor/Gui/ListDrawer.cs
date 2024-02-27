@@ -5,10 +5,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp.Collections;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Gui
+namespace OlegHcpEditor.Gui
 {
     public interface IListElementDrawer<T>
     {

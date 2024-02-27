@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtility.Sound;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.Sound;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Inspectors.Sound
+namespace OlegHcpEditor.Inspectors.Sound
 {
     [CustomEditor(typeof(SoundsPreset))]
     internal class SoundsPresetEditor : AudioPresetEditor
