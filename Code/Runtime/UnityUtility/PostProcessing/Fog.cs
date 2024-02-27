@@ -20,9 +20,9 @@ namespace OlegHcp.PostProcessing
         {
             switch (mode)
             {
-                case FogMode.Linear: return "Hidden/UnityUtility/PostProcessing/LinearFog";
-                case FogMode.Exponential: return "Hidden/UnityUtility/PostProcessing/ExpFog";
-                case FogMode.ExponentialSquared: return "Hidden/UnityUtility/PostProcessing/ESFog";
+                case FogMode.Linear: return "Hidden/OlegHcp/PostProcessing/LinearFog";
+                case FogMode.Exponential: return "Hidden/OlegHcp/PostProcessing/ExpFog";
+                case FogMode.ExponentialSquared: return "Hidden/OlegHcp/PostProcessing/ESFog";
                 default: throw new UnsupportedValueException(mode);
             }
         }
