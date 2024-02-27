@@ -1,6 +1,6 @@
 ﻿{
-    "name": "com.oleghcp.unityutility",
-    "displayName": "Unity Utility",
+    "name": "com.oleghcp.tools",
+    "displayName": "OlegHcpTools",
     "author": {
         "name": "Oleg Pulkin",
         "email": "oleghcp@gmail.com"
@@ -8,7 +8,7 @@
     "version": "1.3.18",
     "unity": "2019.4",
     "description": "A set of helpful code stuff for Unity.",
-    "keywords": [ "Unity", "Utility" ],
+    "keywords": [ "Oleg", "hcp", "tools" ],
     "license": "MIT",
     "dependencies": {},
     "samples": []
