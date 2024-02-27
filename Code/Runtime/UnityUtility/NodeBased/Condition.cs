@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.NodeBased.Service;
+using OlegHcp.NodeBased.Service;
 
-namespace UnityUtility.NodeBased
+namespace OlegHcp.NodeBased
 {
     [Serializable]
     public abstract class Condition

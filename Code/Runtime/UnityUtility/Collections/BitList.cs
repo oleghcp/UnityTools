@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections.Iterators;
-using UnityUtility.Tools;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections.Iterators;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Collections
+namespace OlegHcp.Collections
 {
     //Based on System.Collections.BitArray
     [Serializable]

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.NodeBased.Service
+namespace OlegHcp.NodeBased.Service
 {
     internal enum NodeType : byte
     {

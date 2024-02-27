@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.Rng
+namespace OlegHcp.Rng
 {
     [Serializable]
     public class XorshiftRng : RandomNumberGenerator

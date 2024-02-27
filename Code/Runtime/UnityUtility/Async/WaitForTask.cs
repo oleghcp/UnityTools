@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace Runtime.UnityUtility.Async
+namespace OlegHcp.Async
 {
     public class WaitForTask : CustomYieldInstruction
     {

@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using UnityUtility.IO;
+using OlegHcp.IO;
 
-namespace UnityUtility.CSharp.IO
+namespace OlegHcp.CSharp.IO
 {
     public static class IOExtensions
     {

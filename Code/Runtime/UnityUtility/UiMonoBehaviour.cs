@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public abstract class UiMonoBehaviour : MonoBehaviour
     {

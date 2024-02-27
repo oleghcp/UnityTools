@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Inspector;
+using OlegHcp.Engine;
+using OlegHcp.Inspector;
 
-namespace UnityUtility.AiSimulation
+namespace OlegHcp.AiSimulation
 {
     internal interface IStateSet
     {
@@ -28,7 +28,7 @@ namespace UnityUtility.AiSimulation
     }
 
     [DisallowMultipleComponent]
-    [AddComponentMenu(nameof(UnityUtility) + "/Ai Behavior")]
+    [AddComponentMenu(nameof(OlegHcp) + "/Ai Behavior")]
     public class AiBehavior : MonoBehaviour
     {
         [SerializeField, CertainTypes(typeof(IStateSet))]

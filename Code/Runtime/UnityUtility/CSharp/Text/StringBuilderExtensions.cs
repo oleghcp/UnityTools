@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace UnityUtility.CSharp.Text
+namespace OlegHcp.CSharp.Text
 {
     public static class StringBuilderExtensions
     {

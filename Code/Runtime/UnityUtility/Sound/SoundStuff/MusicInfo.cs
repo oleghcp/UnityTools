@@ -2,14 +2,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
-using UnityUtility.Pool;
-using UnityUtility.Tools;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.Pool;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Sound.SoundStuff
+namespace OlegHcp.Sound.SoundStuff
 {
-    [AddComponentMenu(nameof(UnityUtility) + "/Music Info")]
+    [AddComponentMenu(nameof(OlegHcp) + "/Music Info")]
     public sealed class MusicInfo : AudioInfo, IPoolable, IDisposable
     {
         [SerializeField]

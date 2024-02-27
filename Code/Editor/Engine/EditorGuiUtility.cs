@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Mathematics;
+using OlegHcp.CSharp;
+using OlegHcp.Mathematics;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class EditorGuiUtility
     {

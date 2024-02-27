@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Mathematics;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Mathematics;
 
-namespace UnityUtilityEditor.Window.ShapeWizards
+namespace OlegHcpEditor.Window.ShapeWizards
 {
     internal class CreateShapeWizard : CreateMeshWizard
     {

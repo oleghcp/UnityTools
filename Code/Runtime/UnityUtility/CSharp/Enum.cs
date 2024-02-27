@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.CSharp
+namespace OlegHcp.CSharp
 {
     public static class Enum<TEnum> where TEnum : Enum
     {

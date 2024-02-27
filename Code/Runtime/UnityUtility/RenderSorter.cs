@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     [RequireComponent(typeof(Renderer))]
     [DisallowMultipleComponent]
-    [AddComponentMenu(nameof(UnityUtility) + "/Render Sorter")]
+    [AddComponentMenu(nameof(OlegHcp) + "/Render Sorter")]
     public sealed class RenderSorter : MonoBehaviour
     {
         [SerializeField]

@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using UnityEngine;
 
-namespace UnityUtility.Controls.ControlStuff
+namespace OlegHcp.Controls.ControlStuff
 {
     internal class GamepadInputConverter
     {

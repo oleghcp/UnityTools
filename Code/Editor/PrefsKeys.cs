@@ -1,4 +1,4 @@
-﻿namespace UnityUtilityEditor
+﻿namespace OlegHcpEditor
 {
     internal static class PrefsKeys
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using UnityUtility.Rng;
-using UnityUtility.Tools;
+using OlegHcp.Rng;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp.Collections
+namespace OlegHcp.CSharp.Collections
 {
     public static class CollectionExtensions
     {

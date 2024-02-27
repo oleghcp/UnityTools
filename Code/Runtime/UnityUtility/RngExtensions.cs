@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityUtility.Collections;
-using UnityUtility.CSharp;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
-using UnityUtility.NumericEntities;
-using UnityUtility.Tools;
+using OlegHcp.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.NumericEntities;
+using OlegHcp.Tools;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     /// <summary>
     /// Class for generating random data.

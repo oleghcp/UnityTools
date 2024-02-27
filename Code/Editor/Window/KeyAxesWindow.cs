@@ -2,10 +2,10 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Controls;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Controls;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class KeyAxesWindow : EditorWindow
     {

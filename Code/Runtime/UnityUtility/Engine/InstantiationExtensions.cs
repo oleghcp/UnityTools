@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtility.Engine
+namespace OlegHcp.Engine
 {
     public static class InstantiationExtensions
     {

@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp.Collections.Iterators
+namespace OlegHcp.CSharp.Collections.Iterators
 {
     public struct Enumerator<T> : IEnumerator<T>
     {

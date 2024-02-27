@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnityUtility.CSharp.Collections
+namespace OlegHcp.CSharp.Collections
 {
     public static class EnumerableExtensions
     {

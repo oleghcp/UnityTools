@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     internal class SpacedList
     {

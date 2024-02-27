@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using UnityUtility.CSharp.Collections;
+using OlegHcp.CSharp.Collections;
 
-namespace UnityUtility.Pool.Storages
+namespace OlegHcp.Pool.Storages
 {
     public class StackStorage<T> : Stack<T>, IPoolStorage<T> where T : class, IPoolable
     {

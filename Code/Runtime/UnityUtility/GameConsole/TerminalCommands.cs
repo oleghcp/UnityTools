@@ -2,10 +2,10 @@
 using System;
 using UnityEngine;
 using UnityEngine.Scripting;
-using UnityUtility.Mathematics;
-using static UnityUtility.GameConsole.CommandsHelper;
+using OlegHcp.Mathematics;
+using static OlegHcp.GameConsole.CommandsHelper;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     public class TerminalCommands
     {

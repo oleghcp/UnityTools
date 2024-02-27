@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using UnityEngine;
-using UnityUtility.IO;
+using OlegHcp.IO;
 
-namespace UnityUtilityEditor.Window.NodeBased.Stuff
+namespace OlegHcpEditor.Window.NodeBased.Stuff
 {
     [Serializable]
     internal class GraphEditorSettings

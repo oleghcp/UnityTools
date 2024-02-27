@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.SingleScripts
+namespace OlegHcp.SingleScripts
 {
     /// <summary>
     /// Represents implementation of ScriptableObject singleton with lazy initialization.

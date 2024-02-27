@@ -3,9 +3,9 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
-using UnityUtility.Pool;
+using OlegHcp.Pool;
 
-namespace UnityUtility.Async
+namespace OlegHcp.Async
 {
     internal class TaskRunner : MonoBehaviour, IPoolable
     {

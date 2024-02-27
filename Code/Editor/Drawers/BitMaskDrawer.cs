@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.Collections;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.Collections;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers
+namespace OlegHcpEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(BitList))]
     [CustomPropertyDrawer(typeof(IntMask))]

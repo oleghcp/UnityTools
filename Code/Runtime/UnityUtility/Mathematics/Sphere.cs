@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Engine;
-using UnityUtility.Tools;
+using OlegHcp.CSharp;
+using OlegHcp.Engine;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Mathematics
+namespace OlegHcp.Mathematics
 {
     [Serializable]
     public struct Sphere : IEquatable<Sphere>, IFormattable

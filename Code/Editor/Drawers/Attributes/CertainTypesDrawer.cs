@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(CertainTypesAttribute))]
     public class CertainTypesDrawer : AttributeDrawer<CertainTypesAttribute>

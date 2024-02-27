@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.AiSimulation;
-using UnityUtility.Tools;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.AiSimulation;
+using OlegHcp.Tools;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Inspectors
+namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(AiBehavior))]
     public class AiBehaviorEditor : Editor<AiBehavior>

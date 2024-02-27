@@ -1,4 +1,4 @@
-﻿namespace UnityUtility.NumericEntities
+﻿namespace OlegHcp.NumericEntities
 {
     internal static class NumericHelper
     {

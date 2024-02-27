@@ -1,7 +1,7 @@
 ﻿#if INCLUDE_UNITY_UI
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     public class TerminalOptions
     {

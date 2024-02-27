@@ -1,6 +1,6 @@
 ﻿#if INCLUDE_UNITY_UI
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     public interface ITerminalSwitchTrigger
     {

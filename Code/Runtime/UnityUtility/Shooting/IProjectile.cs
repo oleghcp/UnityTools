@@ -1,4 +1,4 @@
-﻿namespace UnityUtility.Shooting
+﻿namespace OlegHcp.Shooting
 {
     internal interface IProjectile
     {

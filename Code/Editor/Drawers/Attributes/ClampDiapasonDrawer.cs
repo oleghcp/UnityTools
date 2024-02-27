@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Inspector;
-using UnityUtility.Mathematics;
-using UnityUtility.NumericEntities;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Inspector;
+using OlegHcp.Mathematics;
+using OlegHcp.NumericEntities;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(ClampDiapasonAttribute))]
     internal class ClampDiapasonDrawer : AttributeDrawer<ClampDiapasonAttribute>

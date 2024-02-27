@@ -1,12 +1,12 @@
 ﻿#if INCLUDE_AUDIO
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Mathematics;
-using UnityUtility.Pool;
-using UnityUtility.SaveLoad;
-using UnityUtility.Sound.SoundStuff;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Mathematics;
+using OlegHcp.Pool;
+using OlegHcp.SaveLoad;
+using OlegHcp.Sound.SoundStuff;
 
-namespace UnityUtility.Sound
+namespace OlegHcp.Sound
 {
     public class MusicProvider
     {

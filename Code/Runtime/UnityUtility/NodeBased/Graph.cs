@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityUtility.NodeBased.Service;
+using OlegHcp.NodeBased.Service;
 
-namespace UnityUtility.NodeBased
+namespace OlegHcp.NodeBased
 {
     public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
     {

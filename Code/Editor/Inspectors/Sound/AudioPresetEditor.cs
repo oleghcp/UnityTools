@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Inspectors.Sound
+namespace OlegHcpEditor.Inspectors.Sound
 {
     internal abstract class AudioPresetEditor : Editor
     {

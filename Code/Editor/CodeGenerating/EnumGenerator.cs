@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityUtility.CSharp;
+using OlegHcp.CSharp;
 
-namespace UnityUtilityEditor.CodeGenerating
+namespace OlegHcpEditor.CodeGenerating
 {
     public static class EnumGenerator
     {

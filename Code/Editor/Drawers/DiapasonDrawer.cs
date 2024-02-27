@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtility.NumericEntities;
+using OlegHcp.Mathematics;
+using OlegHcp.NumericEntities;
 
-namespace UnityUtilityEditor.Drawers
+namespace OlegHcpEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(Diapason))]
     internal class DiapasonDrawer : PropertyDrawer

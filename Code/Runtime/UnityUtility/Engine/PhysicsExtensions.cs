@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility.Engine
+namespace OlegHcp.Engine
 {
 #pragma warning disable UNT0014
     public static class PhysicsExtensions

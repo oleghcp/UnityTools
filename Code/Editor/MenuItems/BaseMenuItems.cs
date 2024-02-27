@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.IO;
-using UnityUtility.Tools;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window;
-using UnityUtilityEditor.Window.ShapeWizards;
+using OlegHcp.CSharp;
+using OlegHcp.IO;
+using OlegHcp.Tools;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window;
+using OlegHcpEditor.Window.ShapeWizards;
 using Window;
 
-namespace UnityUtilityEditor.MenuItems
+namespace OlegHcpEditor.MenuItems
 {
     internal static class BaseMenuItems
     {

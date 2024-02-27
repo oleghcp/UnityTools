@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.Collections
+namespace OlegHcp.Collections
 {
     #region Publics
     public interface ITrackerNode

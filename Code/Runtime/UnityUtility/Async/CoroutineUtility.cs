@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace UnityUtility.Async
+namespace OlegHcp.Async
 {
     internal static class CoroutineUtility
     {

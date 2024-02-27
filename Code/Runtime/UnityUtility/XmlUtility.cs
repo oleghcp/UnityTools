@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     /// <summary>
     /// Utility functions to work with XML data.

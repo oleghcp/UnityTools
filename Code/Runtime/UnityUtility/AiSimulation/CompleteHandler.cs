@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.AiSimulation
+namespace OlegHcp.AiSimulation
 {
     [Serializable]
     public abstract class CompleteHandler

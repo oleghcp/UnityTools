@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.AiSimulation.Simple
+namespace OlegHcp.AiSimulation.Simple
 {
     [Serializable]
     public abstract class BehaviorState

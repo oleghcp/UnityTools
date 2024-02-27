@@ -2,10 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections.Iterators;
-using UnityUtility.Tools;
+using OlegHcp.CSharp.Collections.Iterators;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp.Collections.ReadOnly
+namespace OlegHcp.CSharp.Collections.ReadOnly
 {
     public readonly struct ReadOnlySegment<T> : IReadOnlyList<T>, IEquatable<ReadOnlySegment<T>>
     {

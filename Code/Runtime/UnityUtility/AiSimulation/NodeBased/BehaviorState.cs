@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.NodeBased;
+using OlegHcp.NodeBased;
 
-namespace UnityUtility.AiSimulation.NodeBased
+namespace OlegHcp.AiSimulation.NodeBased
 {
     [Serializable]
     public abstract class BehaviorState : Node<BehaviorState>

@@ -1,4 +1,4 @@
-﻿namespace UnityUtility.Pool
+﻿namespace OlegHcp.Pool
 {
     public interface IPoolable
     {

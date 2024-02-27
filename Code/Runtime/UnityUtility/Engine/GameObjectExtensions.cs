@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityUtility.Engine
+namespace OlegHcp.Engine
 {
     public static class GameObjectExtensions
     {

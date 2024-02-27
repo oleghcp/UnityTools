@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window.ShapeWizards
+namespace OlegHcpEditor.Window.ShapeWizards
 {
     internal abstract class CreateMeshWizard : ScriptableWizard
     {

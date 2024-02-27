@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Controls.ControlStuff;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Controls.ControlStuff;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window.GamepadAxes
+namespace OlegHcpEditor.Window.GamepadAxes
 {
     internal class GamepadAxesDrawer
     {

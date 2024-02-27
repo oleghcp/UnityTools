@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtility.Tools;
+using OlegHcp.Mathematics;
+using OlegHcp.Tools;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     [Serializable]
     public struct IntervalChecker

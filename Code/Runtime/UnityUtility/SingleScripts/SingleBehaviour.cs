@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Tools;
+using OlegHcp.Engine;
+using OlegHcp.Tools;
 
-namespace UnityUtility.SingleScripts
+namespace OlegHcp.SingleScripts
 {
     /// <summary>
     /// Represents implementation of MonoBehaviour singleton. It has no dynamic creation of an instance.

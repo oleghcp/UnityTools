@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityUtility.Rng;
-using UnityUtility.Tools;
+using OlegHcp.Rng;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp
+namespace OlegHcp.CSharp
 {
     public static class StringExtensions
     {

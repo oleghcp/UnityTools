@@ -4,12 +4,12 @@ using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Collections;
-using UnityUtility.CSharp;
-using UnityUtilityEditor.Window;
+using OlegHcp.Collections;
+using OlegHcp.CSharp;
+using OlegHcpEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class EditorUtilityExt
     {

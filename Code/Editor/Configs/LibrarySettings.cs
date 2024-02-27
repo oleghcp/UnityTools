@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Mathematics;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Configs
+namespace OlegHcpEditor.Configs
 {
     [Serializable]
     internal class LibrarySettings

@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.SingleScripts
+namespace OlegHcp.SingleScripts
 {
     public abstract class SingleScript<T> : ScriptableObject where T : SingleScript<T>
     {

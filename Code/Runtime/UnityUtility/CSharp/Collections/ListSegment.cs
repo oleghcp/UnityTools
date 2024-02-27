@@ -2,10 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections.Iterators;
-using UnityUtility.Tools;
+using OlegHcp.CSharp.Collections.Iterators;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp.Collections
+namespace OlegHcp.CSharp.Collections
 {
     public readonly struct ListSegment<T> : IList<T>, IEquatable<ListSegment<T>>
     {

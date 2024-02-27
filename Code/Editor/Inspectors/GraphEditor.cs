@@ -1,13 +1,13 @@
 ﻿using MenuItems;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.MenuItems;
-using UnityUtilityEditor.Window;
+using OlegHcp;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.MenuItems;
+using OlegHcpEditor.Window;
 
-namespace UnityUtilityEditor.Inspectors
+namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(RawGraph), true)]
     internal class GraphEditor : Editor<RawGraph>

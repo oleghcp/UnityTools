@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Inspector;
-using UnityUtility.NodeBased;
+using OlegHcp.Inspector;
+using OlegHcp.NodeBased;
 
-namespace UnityUtility.AiSimulation.NodeBased
+namespace OlegHcp.AiSimulation.NodeBased
 {
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/State Graph")]
+    [CreateAssetMenu(menuName = nameof(OlegHcp) + "/Ai/State Graph")]
     public class AiStateGraph : Graph<BehaviorState>, IStateSet
     {
         [SerializeReference, ReferenceSelection]

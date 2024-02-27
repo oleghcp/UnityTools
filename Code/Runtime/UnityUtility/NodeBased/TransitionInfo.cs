@@ -1,6 +1,6 @@
-﻿using UnityUtility.NodeBased.Service;
+﻿using OlegHcp.NodeBased.Service;
 
-namespace UnityUtility.NodeBased
+namespace OlegHcp.NodeBased
 {
     public struct TransitionInfo<TNode> where TNode : Node<TNode>
     {

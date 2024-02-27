@@ -1,4 +1,4 @@
-﻿namespace UnityUtility
+﻿namespace OlegHcp
 {
     public sealed class UnsupportedValueException : System.Exception
     {

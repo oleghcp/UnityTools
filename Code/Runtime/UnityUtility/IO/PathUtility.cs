@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using UnityUtility.CSharp;
-using UnityUtility.Mathematics;
-using UnityUtility.Tools;
+using OlegHcp.CSharp;
+using OlegHcp.Mathematics;
+using OlegHcp.Tools;
 
-namespace UnityUtility.IO
+namespace OlegHcp.IO
 {
     public static class PathUtility
     {

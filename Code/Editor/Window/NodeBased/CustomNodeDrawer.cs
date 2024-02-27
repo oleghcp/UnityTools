@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityUtility.CSharp;
-using UnityUtility.NodeBased.Service;
+using OlegHcp.CSharp;
+using OlegHcp.NodeBased.Service;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class CustomNodeDrawerAttribute : Attribute

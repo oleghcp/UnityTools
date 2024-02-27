@@ -1,10 +1,10 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using System;
 using UnityEngine;
-using UnityUtility.Controls.ControlStuff;
-using UnityUtility.CSharp;
+using OlegHcp.Controls.ControlStuff;
+using OlegHcp.CSharp;
 
-namespace UnityUtility.Controls
+namespace OlegHcp.Controls
 {
     public sealed class GamepadInputObtainer : IInputObtainer
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
 
 namespace System
 {

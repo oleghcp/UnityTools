@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
     public class InfoPanel : UiMonoBehaviour, IPointerClickHandler

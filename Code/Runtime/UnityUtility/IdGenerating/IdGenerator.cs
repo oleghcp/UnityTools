@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace UnityUtility.IdGenerating
+namespace OlegHcp.IdGenerating
 {
     public interface IIdGenerator<T>
     {

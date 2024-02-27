@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     /// <summary>
     /// A set of common math functions.

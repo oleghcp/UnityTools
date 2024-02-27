@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     internal static class Managers
     {

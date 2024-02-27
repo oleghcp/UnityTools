@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UnityUtility.CSharp
+namespace OlegHcp.CSharp
 {
     public static class ConcatToStringExtensions
     {

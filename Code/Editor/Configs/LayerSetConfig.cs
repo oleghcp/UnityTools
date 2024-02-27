@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtilityEditor.Engine;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Configs
+namespace OlegHcpEditor.Configs
 {
     [Serializable]
     internal class LayerSetConfig

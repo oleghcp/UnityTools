@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Rng
+namespace OlegHcp.Rng
 {
 #if !UNITY_2021_2_OR_NEWER
     [Serializable]

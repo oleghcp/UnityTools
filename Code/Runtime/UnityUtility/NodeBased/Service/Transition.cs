@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Inspector;
+using OlegHcp.Inspector;
 
-namespace UnityUtility.NodeBased.Service
+namespace OlegHcp.NodeBased.Service
 {
     [Serializable]
     internal struct Transition

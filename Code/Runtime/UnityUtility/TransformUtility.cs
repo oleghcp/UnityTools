@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Mathematics;
+using OlegHcp.CSharp;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public static class TransformUtility
     {

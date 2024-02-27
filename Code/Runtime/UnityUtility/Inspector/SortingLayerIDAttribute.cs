@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.Inspector
+namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class SortingLayerIDAttribute : PropertyAttribute { }

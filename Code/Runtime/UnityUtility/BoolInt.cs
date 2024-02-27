@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     [Serializable]
     public struct BoolInt : IEquatable<BoolInt>, IComparable<BoolInt>

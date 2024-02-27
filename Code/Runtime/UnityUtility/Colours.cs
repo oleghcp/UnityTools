@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.Rng;
+using OlegHcp.Rng;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public static class Colours
     {

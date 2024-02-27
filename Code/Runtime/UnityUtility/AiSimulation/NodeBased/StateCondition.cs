@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityUtility.NodeBased;
-using UnityUtility.NodeBased.Service;
+using OlegHcp.NodeBased;
+using OlegHcp.NodeBased.Service;
 
-namespace UnityUtility.AiSimulation.NodeBased
+namespace OlegHcp.AiSimulation.NodeBased
 {
     [Serializable]
     public abstract class StateCondition : Condition

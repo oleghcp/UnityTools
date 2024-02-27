@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UnityUtility.Strings
+namespace OlegHcp.Strings
 {
     [Serializable]
     public abstract class StringComparer : IComparer, IComparer<string>

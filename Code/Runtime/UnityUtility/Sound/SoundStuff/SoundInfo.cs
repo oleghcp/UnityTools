@@ -2,14 +2,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
-using UnityUtility.Pool;
-using UnityUtility.Tools;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.Pool;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Sound.SoundStuff
+namespace OlegHcp.Sound.SoundStuff
 {
-    [AddComponentMenu(nameof(UnityUtility) + "/Sound Info")]
+    [AddComponentMenu(nameof(OlegHcp) + "/Sound Info")]
     public sealed class SoundInfo : AudioInfo, IPoolable, IDisposable
     {
         internal object Sender;

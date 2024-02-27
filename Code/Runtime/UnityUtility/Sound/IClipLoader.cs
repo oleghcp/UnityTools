@@ -1,7 +1,7 @@
 ﻿#if INCLUDE_AUDIO
 using UnityEngine;
 
-namespace UnityUtility.Sound
+namespace OlegHcp.Sound
 {
     public interface IClipLoader
     {

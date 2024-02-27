@@ -1,11 +1,11 @@
 ﻿#if INCLUDE_UNITY_UI
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Engine;
-using UnityUtility.Pool;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Engine;
+using OlegHcp.Pool;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
     internal class LogController : UiMonoBehaviour, IObjectFactory<LogLine>

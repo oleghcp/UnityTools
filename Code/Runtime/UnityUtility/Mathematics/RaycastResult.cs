@@ -1,4 +1,4 @@
-﻿namespace UnityUtility.Mathematics
+﻿namespace OlegHcp.Mathematics
 {
     public enum RaycastResult
     {

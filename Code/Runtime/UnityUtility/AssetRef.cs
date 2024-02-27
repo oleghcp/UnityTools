@@ -6,7 +6,7 @@ using System;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public enum RefType
     {

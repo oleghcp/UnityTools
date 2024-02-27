@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
 using UnityEditor;
-using UnityUtilityEditor.Configs;
+using OlegHcpEditor.Configs;
 
-namespace UnityUtilityEditor
+namespace OlegHcpEditor
 {
     public class CsprojFilePostprocessor : AssetPostprocessor
     {

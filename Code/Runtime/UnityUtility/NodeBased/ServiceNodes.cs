@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtility.NodeBased.Service;
+using OlegHcp.NodeBased.Service;
 
-namespace UnityUtility.NodeBased
+namespace OlegHcp.NodeBased
 {
     [Serializable]
     internal sealed class HubNode : RawNode

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace UnityUtility.SingleScripts
+namespace OlegHcp.SingleScripts
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public abstract class CreateInstanceAttribute : Attribute

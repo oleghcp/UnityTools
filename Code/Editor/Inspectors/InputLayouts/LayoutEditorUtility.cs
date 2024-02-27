@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
-using UnityUtility.Collections;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Collections;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Inspectors.InputLayouts
+namespace OlegHcpEditor.Inspectors.InputLayouts
 {
     internal class LayoutEditorUtility
     {

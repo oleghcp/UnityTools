@@ -1,14 +1,14 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     //Based on https://forum.unity.com/threads/serializereference-genericserializedreferenceinspectorui.813366/
     [CustomPropertyDrawer(typeof(ReferenceSelectionAttribute))]

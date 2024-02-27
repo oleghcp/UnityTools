@@ -3,11 +3,11 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Inspector;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp;
+using OlegHcp.Inspector;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Attributes
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(InitListAttribute))]
     internal class InitListDrawer : SerializeReferenceDrawer

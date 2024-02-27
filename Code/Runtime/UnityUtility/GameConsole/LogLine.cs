@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityUtility.CSharp;
-using UnityUtility.Pool;
+using OlegHcp.CSharp;
+using OlegHcp.Pool;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
     internal class LogLine : UiMonoBehaviour, IPoolable, IPointerClickHandler

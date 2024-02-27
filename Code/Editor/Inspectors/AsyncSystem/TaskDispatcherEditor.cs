@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.Async;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Async;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Inspectors.AsyncSystem
+namespace OlegHcpEditor.Inspectors.AsyncSystem
 {
     [CustomEditor(typeof(TaskDispatcher))]
     internal class TaskDispatcherEditor : Editor

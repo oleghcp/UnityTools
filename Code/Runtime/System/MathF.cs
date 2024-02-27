@@ -1,6 +1,6 @@
 ﻿#if !UNITY_2021_2_OR_NEWER
 using System.Runtime.CompilerServices;
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
 namespace System
 {

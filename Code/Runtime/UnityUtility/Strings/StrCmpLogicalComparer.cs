@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace UnityUtility.Strings
+namespace OlegHcp.Strings
 {
     [Serializable]
     public class StrCmpLogicalComparer : StringComparer

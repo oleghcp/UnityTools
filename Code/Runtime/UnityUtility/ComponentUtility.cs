@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public static class ComponentUtility
     {

@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Mathematics;
-using UnityUtility.Pool;
-using UnityUtility.SaveLoad;
-using UnityUtility.Sound.SoundStuff;
-using UnityUtility.Tools;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Mathematics;
+using OlegHcp.Pool;
+using OlegHcp.SaveLoad;
+using OlegHcp.Sound.SoundStuff;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Sound
+namespace OlegHcp.Sound
 {
     public class SoundsProvider
     {

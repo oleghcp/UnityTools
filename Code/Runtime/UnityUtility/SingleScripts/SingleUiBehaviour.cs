@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility.SingleScripts
+namespace OlegHcp.SingleScripts
 {
     /// <summary>
     /// SingleScript with RectTransform.

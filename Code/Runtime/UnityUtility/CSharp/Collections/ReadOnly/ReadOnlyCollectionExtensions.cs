@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.Rng;
-using UnityUtility.Tools;
+using OlegHcp.Rng;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp.Collections.ReadOnly
+namespace OlegHcp.CSharp.Collections.ReadOnly
 {
     public static class ReadOnlyCollectionExtensions
     {

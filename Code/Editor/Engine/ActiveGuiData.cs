@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     internal class DragAndDropData
     {

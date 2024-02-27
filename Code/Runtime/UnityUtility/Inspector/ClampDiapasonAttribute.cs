@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.Inspector
+namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class ClampDiapasonAttribute : PropertyAttribute

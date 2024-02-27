@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityUtility.CSharp;
-using UnityUtility.Tools;
+using OlegHcp.CSharp;
+using OlegHcp.Tools;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     //This code is from https://www.pvladov.com/
     public static class ConvertUtility

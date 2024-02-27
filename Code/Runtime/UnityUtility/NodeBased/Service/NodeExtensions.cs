@@ -1,4 +1,4 @@
-﻿namespace UnityUtility.NodeBased.Service
+﻿namespace OlegHcp.NodeBased.Service
 {
     internal static class NodeExtensions
     {

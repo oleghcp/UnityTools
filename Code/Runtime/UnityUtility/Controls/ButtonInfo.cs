@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
 #if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
-namespace UnityUtility.Controls
+namespace OlegHcp.Controls
 {
     public struct ButtonInfo : IEquatable<ButtonInfo>
     {

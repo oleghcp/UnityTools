@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.NumericEntities;
+using OlegHcp.NumericEntities;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class EditorGuiLayout
     {

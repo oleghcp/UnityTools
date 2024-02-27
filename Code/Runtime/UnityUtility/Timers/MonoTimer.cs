@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityUtility.Async;
-using UnityUtility.Mathematics;
-using UnityUtility.Tools;
+using OlegHcp.Async;
+using OlegHcp.Mathematics;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Timers
+namespace OlegHcp.Timers
 {
     public sealed class MonoTimer : ITimer
     {

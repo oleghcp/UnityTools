@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityUtility.Mathematics;
-using UnityUtility.Tools;
+using OlegHcp.Mathematics;
+using OlegHcp.Tools;
 
-namespace UnityUtility.NumericEntities
+namespace OlegHcp.NumericEntities
 {
     [Serializable]
     public sealed class ModifiableInt : IModifiableEntity<int>

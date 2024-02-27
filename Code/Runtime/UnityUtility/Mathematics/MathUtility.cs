@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 using static System.MathF;
 
-namespace UnityUtility.Mathematics
+namespace OlegHcp.Mathematics
 {
     public static class MathUtility
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
+using OlegHcp.CSharp;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
 
-namespace UnityUtilityEditor.Window.ShapeWizards
+namespace OlegHcpEditor.Window.ShapeWizards
 {
     internal class CreateFiguredPlaneWizard : CreateMeshWizard
     {

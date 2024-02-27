@@ -1,11 +1,11 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtility.Shooting;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.Shooting;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.Shooting
+namespace OlegHcpEditor.Drawers.Shooting
 {
     [CustomPropertyDrawer(typeof(CastOptions))]
     internal class CastOptionsDrawer : PropertyDrawer

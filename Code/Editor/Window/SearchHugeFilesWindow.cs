@@ -3,14 +3,14 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.IO;
-using UnityUtility.Mathematics;
-using UnityUtilityEditor.Engine;
+using OlegHcp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.IO;
+using OlegHcp.Mathematics;
+using OlegHcpEditor.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class SearchHugeFilesWindow : EditorWindow
     {

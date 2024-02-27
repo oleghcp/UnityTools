@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Engine;
+using OlegHcp.Engine;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public sealed class ApplicationUtility : MonoBehaviour
     {

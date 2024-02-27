@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility.Tools
+namespace OlegHcp.Tools
 {
     internal class DebugErrors
     {

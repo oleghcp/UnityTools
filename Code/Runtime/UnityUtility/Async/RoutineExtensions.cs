@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Threading;
 
-namespace UnityUtility.Async
+namespace OlegHcp.Async
 {
     public static class RoutineExtensions
     {

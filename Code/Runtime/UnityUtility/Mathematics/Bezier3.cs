@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Tools;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Mathematics
+namespace OlegHcp.Mathematics
 {
     [Serializable]
     public sealed class Bezier3

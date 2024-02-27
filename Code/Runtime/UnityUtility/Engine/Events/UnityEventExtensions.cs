@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtility.Engine.Events
+namespace OlegHcp.Engine.Events
 {
     public static class UnityEventExtensions
     {

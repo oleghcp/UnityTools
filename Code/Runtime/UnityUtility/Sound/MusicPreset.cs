@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.CSharp;
+using OlegHcp.CSharp;
 
-namespace UnityUtility.Sound
+namespace OlegHcp.Sound
 {
     [Serializable]
     internal class MPreset
@@ -18,7 +18,7 @@ namespace UnityUtility.Sound
     }
 
 #if INCLUDE_AUDIO
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Sound/Music Preset", fileName = "MusicPreset")]
+    [CreateAssetMenu(menuName = nameof(OlegHcp) + "/Sound/Music Preset", fileName = "MusicPreset")]
 #endif
     public sealed class MusicPreset : ScriptableObject
     {

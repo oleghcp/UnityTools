@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace UnityUtility.Sound.SoundStuff
+namespace OlegHcp.Sound.SoundStuff
 {
     public sealed class DefaultClipLoader : IClipLoader
     {

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Engine;
-using UnityUtility.IdGenerating;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Engine;
+using OlegHcp.IdGenerating;
 
-namespace UnityUtility.Async
+namespace OlegHcp.Async
 {
     /// <summary>
     /// Static coroutine runner. Allows to run coroutines from non-behaviuor objects.

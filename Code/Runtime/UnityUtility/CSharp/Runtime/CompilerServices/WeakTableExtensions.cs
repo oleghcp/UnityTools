@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace UnityUtility.CSharp.Runtime.CompilerServices
+namespace OlegHcp.CSharp.Runtime.CompilerServices
 {
     public static class WeakTableExtensions
     {

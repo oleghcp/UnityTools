@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.Rng.BytesBased
+namespace OlegHcp.Rng.BytesBased
 {
     public class BytesBasedRng : RandomNumberGenerator
     {

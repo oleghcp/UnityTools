@@ -1,10 +1,10 @@
 ﻿#if INCLUDE_PHYSICS_2D
 using System;
 using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     [Serializable]
     internal struct ProjectileMover2D

@@ -1,7 +1,8 @@
 {
-    "name": "UnityUtilityEditor",
+    "name": "OlegHcpEditor",
+    "rootNamespace": "",
     "references": [
-        "UnityUtility",
+        "OlegHcp",
         "Unity.Addressables",
         "Unity.Postprocessing.Runtime",
         "Unity.Postprocessing.Editor"

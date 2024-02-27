@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 #if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
-using UnityUtility.Controls.ControlStuff;
+using OlegHcp.Controls.ControlStuff;
 
-namespace UnityUtility.Controls
+namespace OlegHcp.Controls
 {
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Input/Layout Config", fileName = "LayoutConfig")]
+    [CreateAssetMenu(menuName = nameof(OlegHcp) + "/Input/Layout Config", fileName = "LayoutConfig")]
     public sealed class LayoutConfig : ScriptableObject
     {
         [SerializeField, HideInInspector]
@@ -40,7 +40,7 @@ namespace UnityUtility.Controls
     }
 }
 #else
-namespace UnityUtility.Controls
+namespace OlegHcp.Controls
 {
     public sealed class LayoutConfig : ScriptableObject
     { }

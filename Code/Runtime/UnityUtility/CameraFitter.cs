@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public enum AspectMode
     {
@@ -11,7 +11,7 @@ namespace UnityUtility
 
     [RequireComponent(typeof(Camera))]
     [DisallowMultipleComponent]
-    [AddComponentMenu(nameof(UnityUtility) + "/Camera Fitter")]
+    [AddComponentMenu(nameof(OlegHcp) + "/Camera Fitter")]
     public sealed class CameraFitter : MonoBehaviour
     {
         [SerializeField]

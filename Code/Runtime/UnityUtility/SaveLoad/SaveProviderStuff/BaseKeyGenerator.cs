@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Text;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Text;
 
-namespace UnityUtility.SaveLoad.SaveProviderStuff
+namespace OlegHcp.SaveLoad.SaveProviderStuff
 {
     public class BaseKeyGenerator : IKeyGenerator
     {

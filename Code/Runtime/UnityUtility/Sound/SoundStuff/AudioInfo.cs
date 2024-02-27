@@ -1,7 +1,7 @@
 ﻿#if INCLUDE_AUDIO
 using UnityEngine;
 
-namespace UnityUtility.Sound.SoundStuff
+namespace OlegHcp.Sound.SoundStuff
 {
     [DisallowMultipleComponent]
     public abstract class AudioInfo : MonoBehaviour

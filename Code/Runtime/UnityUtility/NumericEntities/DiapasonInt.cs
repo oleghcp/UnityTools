@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine.Serialization;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.NumericEntities
+namespace OlegHcp.NumericEntities
 {
     [Serializable]
     public struct DiapasonInt

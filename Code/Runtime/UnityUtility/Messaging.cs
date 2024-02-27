@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.CSharp.Runtime.CompilerServices;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.CSharp.Runtime.CompilerServices;
 #endif
 using System.Reflection;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public static class Messaging
     {

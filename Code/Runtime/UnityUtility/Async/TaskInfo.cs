@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 
-namespace UnityUtility.Async
+namespace OlegHcp.Async
 {
     public readonly struct TaskResult
     {

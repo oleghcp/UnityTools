@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.Mathematics;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window.NodeBased
+namespace OlegHcpEditor.Window.NodeBased
 {
     internal class GraphSidePanel
     {

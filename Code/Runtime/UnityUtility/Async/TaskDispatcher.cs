@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Pool;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Pool;
 
-namespace UnityUtility.Async
+namespace OlegHcp.Async
 {
     internal class TaskDispatcher : MonoBehaviour, IObjectFactory<TaskRunner>
     {

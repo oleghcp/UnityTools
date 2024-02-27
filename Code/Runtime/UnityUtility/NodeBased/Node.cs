@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityUtility.NodeBased.Service;
+using OlegHcp.NodeBased.Service;
 
-namespace UnityUtility.NodeBased
+namespace OlegHcp.NodeBased
 {
     [Serializable]
     public abstract class Node<TNode> : RawNode, IEnumerableNode<TNode> where TNode : Node<TNode>

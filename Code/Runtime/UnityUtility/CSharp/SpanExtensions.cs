@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Rng;
-using UnityUtility.Tools;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Rng;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp
+namespace OlegHcp.CSharp
 {
     public static class SpanExtensions
     {

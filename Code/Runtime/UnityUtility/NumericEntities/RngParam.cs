@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Rng;
+using OlegHcp.Rng;
 
-namespace UnityUtility.NumericEntities
+namespace OlegHcp.NumericEntities
 {
     [Serializable]
     public struct RngParam

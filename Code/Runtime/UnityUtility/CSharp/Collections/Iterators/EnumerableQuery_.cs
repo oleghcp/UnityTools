@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UnityUtility.CSharp.Collections.Iterators
+namespace OlegHcp.CSharp.Collections.Iterators
 {
     public readonly struct EnumerableQuery_<T> : IEnumerable<T>
     {

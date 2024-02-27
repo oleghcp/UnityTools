@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.Rng.BytesBased
+namespace OlegHcp.Rng.BytesBased
 {
     [Serializable]
     internal class Xorshift64Bytes : IRandomBytesProvider

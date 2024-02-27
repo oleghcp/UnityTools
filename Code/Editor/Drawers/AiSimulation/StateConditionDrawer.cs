@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.AiSimulation.Simple;
-using UnityUtilityEditor.Drawers.Attributes;
-using UnityUtilityEditor.Engine;
+using OlegHcp.AiSimulation.Simple;
+using OlegHcpEditor.Drawers.Attributes;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Drawers.AiSimulation
+namespace OlegHcpEditor.Drawers.AiSimulation
 {
     [CustomPropertyDrawer(typeof(StateCondition), true)]
     internal class StateConditionDrawer : ReferenceSelectionDrawer

@@ -1,5 +1,6 @@
 {
-    "name": "UnityUtility",
+    "name": "OlegHcp",
+    "rootNamespace": "",
     "references": [
         "Unity.Addressables",
         "Unity.Postprocessing.Runtime"

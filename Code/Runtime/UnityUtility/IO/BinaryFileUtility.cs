@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace UnityUtility.IO
+namespace OlegHcp.IO
 {
     public class BinaryFileUtility
     {

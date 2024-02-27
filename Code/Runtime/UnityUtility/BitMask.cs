@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public static class BitMask
     {

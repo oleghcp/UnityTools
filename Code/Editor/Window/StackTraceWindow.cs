@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.Async;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Async;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class StackTraceWindow : EditorWindow
     {

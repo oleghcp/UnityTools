@@ -1,4 +1,4 @@
-﻿namespace UnityUtility
+﻿namespace OlegHcp
 {
     public enum RectTransformStretch
     {

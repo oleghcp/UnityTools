@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Rng
+namespace OlegHcp.Rng
 {
     [Serializable]
     public abstract class RandomNumberGenerator : IRng

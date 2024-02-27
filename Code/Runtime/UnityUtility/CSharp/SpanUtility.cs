@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.Tools;
+using OlegHcp.Tools;
 
-namespace UnityUtility.CSharp
+namespace OlegHcp.CSharp
 {
     internal static class SpanUtility
     {

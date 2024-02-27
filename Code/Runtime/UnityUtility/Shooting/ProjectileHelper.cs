@@ -1,9 +1,9 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using System;
-using UnityUtility.CSharp;
-using UnityUtility.Tools;
+using OlegHcp.CSharp;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     internal static class ProjectileHelper
     {

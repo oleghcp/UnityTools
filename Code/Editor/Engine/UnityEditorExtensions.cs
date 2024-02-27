@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.NumericEntities;
+using OlegHcp;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.NumericEntities;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class UnityEditorExtensions
     {

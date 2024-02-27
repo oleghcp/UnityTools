@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Scripting;
 
-namespace UnityUtility.PostProcessing
+namespace OlegHcp.PostProcessing
 {
     [Serializable]
-    [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "UnityUtility/Fog")]
+    [PostProcess(typeof(FogRenderer), PostProcessEvent.BeforeTransparent, "OlegHcp/Fog")]
     public class Fog : PostProcessEffectSettings
     {
         public ShaderParameter Shader = new ShaderParameter() { overrideState = true };

@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.NumericEntities;
-using UnityUtility.Tools;
-using UnityUtilityEditor.Engine;
-using static UnityUtility.NumericEntities.RngParam;
+using OlegHcp.NumericEntities;
+using OlegHcp.Tools;
+using OlegHcpEditor.Engine;
+using static OlegHcp.NumericEntities.RngParam;
 
-namespace UnityUtilityEditor.Drawers
+namespace OlegHcpEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(RngParam))]
     internal class RngParamDrawer : PropertyDrawer

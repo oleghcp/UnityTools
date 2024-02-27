@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace UnityUtility.NodeBased.Service
+namespace OlegHcp.NodeBased.Service
 {
     public struct NodeEnumerator<TNode> : IEnumerator<TransitionInfo<TNode>> where TNode : Node<TNode>
     {

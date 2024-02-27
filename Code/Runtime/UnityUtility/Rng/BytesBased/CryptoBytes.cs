@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace UnityUtility.Rng.BytesBased
+namespace OlegHcp.Rng.BytesBased
 {
     internal class CryptoBytes : IRandomBytesProvider
     {

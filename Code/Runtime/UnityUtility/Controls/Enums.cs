@@ -1,8 +1,8 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using UnityEngine;
-using UnityUtility.Controls.ControlStuff;
+using OlegHcp.Controls.ControlStuff;
 
-namespace UnityUtility.Controls
+namespace OlegHcp.Controls
 {
     public enum GamepadType : byte
     {

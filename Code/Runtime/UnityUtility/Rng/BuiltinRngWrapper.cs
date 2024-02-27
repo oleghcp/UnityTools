@@ -1,7 +1,7 @@
 ﻿using System;
 using static UnityEngine.Random;
 
-namespace UnityUtility.Rng
+namespace OlegHcp.Rng
 {
     internal class BuiltinRngWrapper : IRng
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtility.Async;
+using OlegHcp.Async;
 
-namespace UnityUtility.SaveLoad
+namespace OlegHcp.SaveLoad
 {
     public interface ISaver
     {

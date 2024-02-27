@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility.AiSimulation
+namespace OlegHcp.AiSimulation
 {
     [Serializable]
     public abstract class PermanentState

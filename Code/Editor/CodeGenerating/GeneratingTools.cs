@@ -2,7 +2,7 @@
 using System.Text;
 using UnityEditor;
 
-namespace UnityUtilityEditor.CodeGenerating
+namespace OlegHcpEditor.CodeGenerating
 {
     public static class GeneratingTools
     {

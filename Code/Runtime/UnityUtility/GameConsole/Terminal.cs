@@ -8,16 +8,16 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.CSharp.Text;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
-using UnityUtility.SingleScripts;
-using UnityUtility.Tools;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.CSharp.Text;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
+using OlegHcp.SingleScripts;
+using OlegHcp.Tools;
 using static UnityEngine.RectTransform;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
     public sealed class Terminal : SingleUiBehaviour<Terminal>
@@ -424,7 +424,7 @@ namespace UnityUtility.GameConsole
 
             if (terminal == null)
             {
-                Debug.LogError($"No Terminal.prefab found. Create terminal prefab using {nameof(UnityUtility)} menu item.");
+                Debug.LogError($"No Terminal.prefab found. Create terminal prefab using {nameof(OlegHcp)} menu item.");
                 return false;
             }
 

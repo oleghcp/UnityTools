@@ -4,14 +4,14 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityUtility.Collections;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
-using UnityUtilityEditor.Engine;
+using OlegHcp.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class DropDownWindow : EditorWindow
     {

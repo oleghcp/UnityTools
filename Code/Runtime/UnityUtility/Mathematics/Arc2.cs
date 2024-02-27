@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using static System.MathF;
 
-namespace UnityUtility.Mathematics
+namespace OlegHcp.Mathematics
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]

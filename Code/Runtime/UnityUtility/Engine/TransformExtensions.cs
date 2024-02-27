@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
 
-namespace UnityUtility.Engine
+namespace OlegHcp.Engine
 {
     public static class TransformExtensions
     {

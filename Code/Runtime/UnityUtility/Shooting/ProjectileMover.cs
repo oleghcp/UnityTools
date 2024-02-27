@@ -1,11 +1,11 @@
 ﻿#if INCLUDE_PHYSICS
 using System;
 using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Inspector;
-using UnityUtility.Mathematics;
+using OlegHcp.Engine;
+using OlegHcp.Inspector;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     [Serializable]
     internal struct ProjectileMover

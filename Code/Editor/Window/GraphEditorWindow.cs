@@ -1,13 +1,13 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityUtility.NodeBased;
-using UnityUtility.NodeBased.Service;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window.NodeBased;
-using UnityUtilityEditor.Window.NodeBased.NodeDrawing;
-using UnityUtilityEditor.Window.NodeBased.Stuff;
+using OlegHcp.NodeBased;
+using OlegHcp.NodeBased.Service;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window.NodeBased;
+using OlegHcpEditor.Window.NodeBased.NodeDrawing;
+using OlegHcpEditor.Window.NodeBased.Stuff;
 
-namespace UnityUtilityEditor.Window
+namespace OlegHcpEditor.Window
 {
     internal class GraphEditorWindow : EditorWindow
     {

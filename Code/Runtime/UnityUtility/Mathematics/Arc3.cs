@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityUtility.Engine;
+using OlegHcp.Engine;
 
-namespace UnityUtility.Mathematics
+namespace OlegHcp.Mathematics
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]

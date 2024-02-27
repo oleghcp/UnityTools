@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityUtility.Rng.BytesBased;
+using OlegHcp.Rng.BytesBased;
 
-namespace UnityUtility.Rng
+namespace OlegHcp.Rng
 {
     [Serializable]
     public class Xorshift64Rng : BytesBasedRng

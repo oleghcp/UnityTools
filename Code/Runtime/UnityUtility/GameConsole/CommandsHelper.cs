@@ -1,9 +1,9 @@
 ﻿#if INCLUDE_UNITY_UI
 using System;
 using System.Globalization;
-using UnityUtility.CSharp.Collections;
+using OlegHcp.CSharp.Collections;
 
-namespace UnityUtility.GameConsole
+namespace OlegHcp.GameConsole
 {
     public static class CommandsHelper
     {

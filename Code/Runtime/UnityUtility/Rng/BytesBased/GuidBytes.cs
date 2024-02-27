@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.Rng.BytesBased
+namespace OlegHcp.Rng.BytesBased
 {
     internal class GuidBytes : IRandomBytesProvider
     {

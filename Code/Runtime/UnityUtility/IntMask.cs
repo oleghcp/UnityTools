@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     [Serializable]
     public struct IntMask : IEquatable<IntMask>

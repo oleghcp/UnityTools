@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.NumericEntities
+namespace OlegHcp.NumericEntities
 {
     public interface IAccumEntity<T> where T : struct, IComparable<T>, IEquatable<T>
     {

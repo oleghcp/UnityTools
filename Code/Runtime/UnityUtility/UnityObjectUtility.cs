@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public static class UnityObjectUtility
     {

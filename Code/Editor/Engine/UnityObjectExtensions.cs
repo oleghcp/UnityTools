@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityUtility.Engine;
+using OlegHcp.Engine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class UnityObjectExtensions
     {

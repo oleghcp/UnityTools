@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.CSharp.Collections;
-using UnityUtilityEditor.Engine;
-using UnityUtilityEditor.Window;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.MenuItems
+namespace OlegHcpEditor.MenuItems
 {
     internal static class AssetMenuItems
     {

@@ -2,13 +2,13 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityUtility.Engine;
-using UnityUtility.Mathematics;
+using OlegHcp.Engine;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu(nameof(UnityUtility) + "/Projectile")]
+    [AddComponentMenu(nameof(OlegHcp) + "/Projectile")]
     public sealed class Projectile : MonoBehaviour, IProjectile
     {
         [SerializeField]

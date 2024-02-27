@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace UnityUtilityEditor.Engine
+namespace OlegHcpEditor.Engine
 {
     public static class AssetExtensions
     {

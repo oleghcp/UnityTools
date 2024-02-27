@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.Async;
-using UnityUtility.CSharp;
-using UnityUtility.Mathematics;
+using OlegHcp.Async;
+using OlegHcp.CSharp;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.SaveLoad.SaveProviderStuff
+namespace OlegHcp.SaveLoad.SaveProviderStuff
 {
     public class PlayerPrefsSaver : ISaver
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     internal class ProjectileRunner
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
-using UnityUtility.CSharp;
-using UnityUtility.Inspector;
+using OlegHcp.CSharp;
+using OlegHcp.Inspector;
 
-namespace UnityUtility.AiSimulation.Simple
+namespace OlegHcp.AiSimulation.Simple
 {
-    [CreateAssetMenu(menuName = nameof(UnityUtility) + "/Ai/State Set")]
+    [CreateAssetMenu(menuName = nameof(OlegHcp) + "/Ai/State Set")]
     public class AiStateSet : ScriptableObject, IStateSet
     {
         [SerializeReference, ReferenceSelection]

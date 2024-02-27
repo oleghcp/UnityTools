@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.Tools
+namespace OlegHcp.Tools
 {
     internal static class ThrowErrors
     {

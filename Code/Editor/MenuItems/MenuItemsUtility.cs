@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.IO;
-using UnityUtilityEditor.Engine;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.IO;
+using OlegHcpEditor.Engine;
 
-namespace UnityUtilityEditor.MenuItems
+namespace OlegHcpEditor.MenuItems
 {
     public static class MenuItemsUtility
     {

@@ -1,9 +1,9 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using System;
 using UnityEngine;
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     [Serializable]
     internal struct DragOptions

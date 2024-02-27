@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.Pool.Storages;
+using OlegHcp.Pool.Storages;
 
-namespace UnityUtility.Pool
+namespace OlegHcp.Pool
 {
     /// <summary>
     /// Object pool implementation.

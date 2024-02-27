@@ -1,7 +1,7 @@
 ﻿#if INCLUDE_AUDIO
-using UnityUtility.Pool;
+using OlegHcp.Pool;
 
-namespace UnityUtility.Sound.SoundStuff
+namespace OlegHcp.Sound.SoundStuff
 {
     public class DynamicMusSourceCreator : IObjectFactory<MusicInfo>
     {

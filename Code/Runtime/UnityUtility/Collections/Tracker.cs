@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityUtility.CSharp.Collections;
-using UnityUtility.Tools;
+using OlegHcp.CSharp.Collections;
+using OlegHcp.Tools;
 
-namespace UnityUtility.Collections
+namespace OlegHcp.Collections
 {
     public class Tracker : IRefreshable
     {

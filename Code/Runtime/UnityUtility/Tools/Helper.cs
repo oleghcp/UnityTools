@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using UnityUtility.CSharp;
+using OlegHcp.CSharp;
 
-namespace UnityUtility.Tools
+namespace OlegHcp.Tools
 {
     public static class Helper
     {

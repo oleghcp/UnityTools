@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility
+namespace OlegHcp
 {
     public class ObjectNotFoundException : Exception
     {

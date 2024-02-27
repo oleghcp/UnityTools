@@ -1,6 +1,6 @@
-﻿using UnityUtility.Rng.BytesBased;
+﻿using OlegHcp.Rng.BytesBased;
 
-namespace UnityUtility.Rng
+namespace OlegHcp.Rng
 {
     public class GuidRng : BytesBasedRng
     {

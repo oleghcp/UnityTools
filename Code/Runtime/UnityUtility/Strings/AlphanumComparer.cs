@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityUtility.Strings
+namespace OlegHcp.Strings
 {
     /// <summary>
     /// Based on http://www.dotnetperls.com/alphanumeric-sorting

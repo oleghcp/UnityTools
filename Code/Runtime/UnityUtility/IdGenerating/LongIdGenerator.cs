@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.Scripting;
 
-namespace UnityUtility.IdGenerating
+namespace OlegHcp.IdGenerating
 {
     [Serializable]
     public class LongIdGenerator : IdGenerator<long>

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityUtility.Mathematics;
+using OlegHcp.Mathematics;
 
-namespace UnityUtility.Engine
+namespace OlegHcp.Engine
 {
     public static class RectExtensions
     {

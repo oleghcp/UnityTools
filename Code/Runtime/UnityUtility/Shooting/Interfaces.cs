@@ -1,7 +1,7 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
 using UnityEngine;
 
-namespace UnityUtility.Shooting
+namespace OlegHcp.Shooting
 {
     public interface ITimeProvider
     {

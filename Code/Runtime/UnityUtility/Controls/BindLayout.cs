@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityUtility.Controls.ControlStuff;
-using UnityUtility.CSharp;
+using OlegHcp.Controls.ControlStuff;
+using OlegHcp.CSharp;
 
-namespace UnityUtility.Controls
+namespace OlegHcp.Controls
 {
     [Serializable]
     public struct KeyAxes
