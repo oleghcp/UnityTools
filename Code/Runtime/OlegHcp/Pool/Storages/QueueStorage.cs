@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿#if !UNITY_2021_2_OR_NEWER
+using System.Collections.Generic;
+#endif
+using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Pool.Storages
 {
