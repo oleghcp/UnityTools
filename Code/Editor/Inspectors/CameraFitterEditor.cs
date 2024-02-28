@@ -1,11 +1,10 @@
 ﻿using System;
-using MenuItems;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors
 {
@@ -19,32 +18,53 @@ namespace OlegHcpEditor.Inspectors
         private SerializedProperty _horizontal;
 
         private Func<Vector2> _getSizeOfMainGameView;
-        private float _currentViewRatio;
         private bool _widthToHeight;
+
+        private bool _orthographic;
+        private float _currentViewRatio;
 
         private void OnEnable()
         {
-            SerializedProperty cameraProp = serializedObject.FindProperty(CameraFitter.CameraFieldName);
-            if (cameraProp.objectReferenceValue == null)
-            {
-                cameraProp.objectReferenceValue = target.GetComponent<Camera>();
-                serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
-
-            _camera = (Camera)cameraProp.objectReferenceValue;
-
             _mode = serializedObject.FindProperty(CameraFitter.ModeFieldName);
             _vertical = serializedObject.FindProperty(CameraFitter.VerticalFieldName);
             _horizontal = serializedObject.FindProperty(CameraFitter.HorizontalFieldName);
+
+            SerializedProperty cameraProp = serializedObject.FindProperty(CameraFitter.CameraFieldName);
+
+            if (cameraProp.objectReferenceValue == null)
+                cameraProp.objectReferenceValue = target.GetComponent<Camera>();
+
+            EditorApplication.update += OnUpdate;
+
             _widthToHeight = EditorPrefs.GetBool(PrefsKeys.WIDTH_TO_HEIGHT);
 
+            _camera = (Camera)cameraProp.objectReferenceValue;
             _getSizeOfMainGameView = Delegate.CreateDelegate(typeof(Func<Vector2>), Type.GetType("UnityEditor.GameView,UnityEditor"), "GetSizeOfMainGameView") as Func<Vector2>;
+
             _currentViewRatio = GetGeameViewRatio();
+            _orthographic = _camera.orthographic;
+
+            if (_vertical.floatValue == 0f)
+            {
+                _vertical.floatValue = _orthographic ? _camera.orthographicSize
+                                                     : _camera.fieldOfView;
+            }
+
+            if (_horizontal.floatValue == 0f)
+                _horizontal.floatValue = _vertical.floatValue;
+
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void OnDisable()
         {
             EditorPrefs.SetBool(PrefsKeys.WIDTH_TO_HEIGHT, _widthToHeight);
+            EditorApplication.update -= OnUpdate;
+        }
+
+        private void OnUpdate()
+        {
+            CheckAndApplyParamChanges(false);
         }
 
         public override void OnInspectorGUI()
@@ -53,24 +73,18 @@ namespace OlegHcpEditor.Inspectors
             Draw();
             serializedObject.ApplyModifiedProperties();
 
-            float ratio = GetGeameViewRatio();
-            if (ratio != _currentViewRatio || GUI.changed)
-            {
-                _currentViewRatio = ratio;
-                target.ApplyChanges(ratio);
-                EditorUtility.SetDirty(_camera);
-            }
+            CheckAndApplyParamChanges(GUI.changed);
         }
 
         private void OnSceneGUI()
         {
-            if (!target.Camera.orthographic)
+            if (!_camera.orthographic)
                 return;
 
             if (_mode.enumValueIndex != ((int)AspectMode.EnvelopeAspect))
                 return;
 
-            Transform transform = target.Camera.transform;
+            Transform transform = target.transform;
             Handles.color = Colours.Red;
 
             Vector3 upVector = transform.up * _vertical.floatValue;
@@ -96,9 +110,10 @@ namespace OlegHcpEditor.Inspectors
         {
             EditorGUILayout.PropertyField(_mode);
 
-            bool ortho = target.Camera.orthographic;
+            bool ortho = _camera.orthographic;
+            int mode = _mode.enumValueIndex;
 
-            switch ((AspectMode)_mode.enumValueIndex)
+            switch ((AspectMode)mode)
             {
                 case AspectMode.FixedHeight:
                     drawFixedSide(_vertical, "Vertical");
@@ -195,10 +210,21 @@ namespace OlegHcpEditor.Inspectors
             return _widthToHeight ? "Width / Height" : "Height / Width";
         }
 
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
-        private static void ResetMenuItem()
+        private void CheckAndApplyParamChanges(bool anythingElse)
         {
+            float ratio = GetGeameViewRatio();
+            bool ortho = _camera.orthographic;
 
+            if (ratio != _currentViewRatio || _orthographic != ortho || anythingElse)
+            {
+                _currentViewRatio = ratio;
+                _orthographic = ortho;
+                target.ApplyChanges(ratio, ortho);
+                EditorUtility.SetDirty(_camera);
+            }
         }
+
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
+        private static void ResetMenuItem(MenuCommand command) { }
     }
 }

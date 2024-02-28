@@ -19,10 +19,11 @@ namespace OlegHcp
         [SerializeField]
         private AspectMode _aspectMode;
         [SerializeField]
-        private float _targetVertical = 30f;
+        private float _targetVertical;
         [SerializeField]
-        private float _targetHorizontal = 40f;
+        private float _targetHorizontal;
 
+        private bool _orthographic;
         private float _currentAspect;
 
 #if UNITY_EDITOR
@@ -44,20 +45,20 @@ namespace OlegHcp
 
                 _aspectMode = value;
 
-                ApplyChanges(_currentAspect);
+                ApplyChanges(_currentAspect, _orthographic);
             }
         }
 
         private void Awake()
         {
-            RatioChanged();
-            ApplyChanges(_currentAspect);
+            ParamsChanged();
+            ApplyChanges(_currentAspect, _orthographic);
         }
 
         private void LateUpdate()
         {
-            if (RatioChanged())
-                ApplyChanges(_currentAspect);
+            if (ParamsChanged())
+                ApplyChanges(_currentAspect, _orthographic);
         }
 
         public float GetEnvelopeRatio()
@@ -70,33 +71,31 @@ namespace OlegHcp
             return hTan / vTan;
         }
 
-        internal void ApplyChanges(float currentAspect)
+        internal void ApplyChanges(float currentAspect, bool orthographic)
         {
-            if (_camera.orthographic)
+            if (orthographic)
                 orthoInit();
             else
                 perspInit();
 
-            bool ortho = _camera.orthographic;
-
             switch (_aspectMode)
             {
                 case AspectMode.FixedHeight:
-                    if (ortho)
+                    if (orthographic)
                         _camera.orthographicSize = _targetVertical;
                     else
                         _camera.fieldOfView = _targetVertical;
                     break;
 
                 case AspectMode.FixedWidth:
-                    if (ortho)
+                    if (orthographic)
                         _camera.orthographicSize = _targetVertical = _targetHorizontal * currentAspect;
                     else
                         _camera.fieldOfView = _targetVertical = ScreenUtility.GetAspectAngle(_targetHorizontal, currentAspect);
                     break;
 
                 case AspectMode.EnvelopeAspect:
-                    if (ortho)
+                    if (orthographic)
                         orthoInit();
                     else
                         perspInit();
@@ -130,14 +129,16 @@ namespace OlegHcp
             }
         }
 
-        private bool RatioChanged()
+        private bool ParamsChanged()
         {
+            bool ortho = _camera.orthographic;
             float newRatio = (float)Screen.height / Screen.width;
 
-            if (_currentAspect == newRatio)
+            if (_currentAspect == newRatio && _orthographic == ortho)
                 return false;
 
             _currentAspect = newRatio;
+            _orthographic = ortho;
             return true;
         }
     }
