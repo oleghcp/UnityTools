@@ -12,7 +12,6 @@ namespace OlegHcpEditor.Inspectors
     [CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor<Transform>
     {
-        private const string EDITOR_TYPE_NAME = "UnityEditor.TransformInspector";
         private const string UNDO_NAME = "Transform";
         private const string BUTTON_NAME = "X";
         private const float VERTICAL_OFFSET = 2f;
@@ -49,7 +48,7 @@ namespace OlegHcpEditor.Inspectors
         private void OnEnable()
         {
             Type type = Assembly.GetAssembly(typeof(Editor))
-                                .GetType(EDITOR_TYPE_NAME);
+                                .GetType("UnityEditor.TransformInspector");
             _builtInEditor = CreateEditor(target, type);
 
 #if UNITY_2021_1_OR_NEWER
