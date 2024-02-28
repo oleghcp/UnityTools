@@ -20,13 +20,6 @@ namespace OlegHcp
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExistsAndAlive(object obj)
-        {
-            return !IsNullOrDead(obj);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static T CreateDelegate<T>(Type classType, string methodName) where T : Delegate
         {
             return (T)Delegate.CreateDelegate(typeof(T), classType, methodName);
