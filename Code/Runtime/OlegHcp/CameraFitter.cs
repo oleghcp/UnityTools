@@ -51,7 +51,58 @@ namespace OlegHcp
                     return;
 
                 _aspectMode = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
 
+        public float TargetVerticalSize
+        {
+            get => _targetVerticalSize;
+            set
+            {
+                if (_targetVerticalSize == value)
+                    return;
+
+                _targetVerticalSize = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
+
+        public float TargetHorizontalSize
+        {
+            get => _targetHorizontalSize;
+            set
+            {
+                if (_targetHorizontalSize == value)
+                    return;
+
+                _targetHorizontalSize = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
+
+        public float TargetVerticalFov
+        {
+            get => _targetVerticalFov;
+            set
+            {
+                if (_targetVerticalFov == value)
+                    return;
+
+                _targetVerticalFov = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
+
+        public float TargetHorizontalFov
+        {
+            get => _targetHorizontalFov;
+            set
+            {
+                if (_targetHorizontalFov == value)
+                    return;
+
+                _targetHorizontalFov = value;
                 ApplyChanges(_currentAspect, _orthographic);
             }
         }
@@ -80,11 +131,6 @@ namespace OlegHcp
 
         internal void ApplyChanges(float currentAspect, bool orthographic)
         {
-            if (orthographic)
-                orthoInit();
-            else
-                perspInit();
-
             switch (_aspectMode)
             {
                 case AspectMode.FixedHeight:
@@ -103,36 +149,26 @@ namespace OlegHcp
 
                 case AspectMode.EnvelopeAspect:
                     if (orthographic)
-                        orthoInit();
+                    {
+                        if (currentAspect <= _targetVerticalSize / _targetHorizontalSize)
+                            _camera.orthographicSize = _targetVerticalSize;
+                        else
+                            _camera.orthographicSize = _targetHorizontalSize * currentAspect;
+                    }
                     else
-                        perspInit();
+                    {
+                        float vTan = ScreenUtility.GetHalfFovTan(_targetVerticalFov);
+                        float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontalFov);
+
+                        if (currentAspect <= vTan / hTan)
+                            _camera.fieldOfView = _targetVerticalFov;
+                        else
+                            _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontalFov, currentAspect);
+                    }
                     break;
 
                 default:
                     throw new UnsupportedValueException(_aspectMode);
-            }
-
-            void orthoInit()
-            {
-                float targetRatio = _targetVerticalSize / _targetHorizontalSize;
-
-                if (targetRatio >= currentAspect)
-                    _camera.orthographicSize = _targetVerticalSize;
-                else
-                    _camera.orthographicSize = _targetHorizontalSize * currentAspect;
-            }
-
-            void perspInit()
-            {
-                float vTan = ScreenUtility.GetHalfFovTan(_targetVerticalFov);
-                float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontalFov);
-
-                float targetRatio = vTan / hTan;
-
-                if (targetRatio >= currentAspect)
-                    _camera.fieldOfView = _targetVerticalFov;
-                else
-                    _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontalFov, currentAspect);
             }
         }
 
@@ -141,12 +177,14 @@ namespace OlegHcp
             bool ortho = _camera.orthographic;
             float newRatio = (float)Screen.height / Screen.width;
 
-            if (_currentAspect == newRatio && _orthographic == ortho)
-                return false;
+            if (_currentAspect != newRatio || _orthographic != ortho)
+            {
+                _currentAspect = newRatio;
+                _orthographic = ortho;
+                return true;
+            }
 
-            _currentAspect = newRatio;
-            _orthographic = ortho;
-            return true;
+            return false;
         }
     }
 }
