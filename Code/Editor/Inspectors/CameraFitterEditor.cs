@@ -14,9 +14,10 @@ namespace OlegHcpEditor.Inspectors
         private Camera _camera;
 
         private SerializedProperty _mode;
-        private SerializedProperty _vertical;
-        private SerializedProperty _horizontal;
-
+        private SerializedProperty _verticalSize;
+        private SerializedProperty _horizontalSize;
+        private SerializedProperty _verticalFov;
+        private SerializedProperty _horizontalFov;
         private Func<Vector2> _getSizeOfMainGameView;
         private bool _widthToHeight;
 
@@ -26,8 +27,10 @@ namespace OlegHcpEditor.Inspectors
         private void OnEnable()
         {
             _mode = serializedObject.FindProperty(CameraFitter.ModeFieldName);
-            _vertical = serializedObject.FindProperty(CameraFitter.VerticalFieldName);
-            _horizontal = serializedObject.FindProperty(CameraFitter.HorizontalFieldName);
+            _verticalSize = serializedObject.FindProperty(CameraFitter.VerticalFieldSizeName);
+            _horizontalSize = serializedObject.FindProperty(CameraFitter.HorizontalFieldSizeName);
+            _verticalFov = serializedObject.FindProperty(CameraFitter.VerticalFieldFovName);
+            _horizontalFov = serializedObject.FindProperty(CameraFitter.HorizontalFieldFovName);
 
             SerializedProperty cameraProp = serializedObject.FindProperty(CameraFitter.CameraFieldName);
 
@@ -44,14 +47,17 @@ namespace OlegHcpEditor.Inspectors
             _currentViewRatio = GetGameViewRatio();
             _orthographic = _camera.orthographic;
 
-            if (_vertical.floatValue == 0f)
-            {
-                _vertical.floatValue = _orthographic ? _camera.orthographicSize
-                                                     : _camera.fieldOfView;
-            }
+            if (_verticalSize.floatValue == 0f)
+                _verticalSize.floatValue = _camera.orthographicSize;
 
-            if (_horizontal.floatValue == 0f)
-                _horizontal.floatValue = _vertical.floatValue;
+            if (_verticalFov.floatValue == 0f)
+                _verticalFov.floatValue = _camera.fieldOfView;
+
+            if (_horizontalSize.floatValue == 0f)
+                _horizontalSize.floatValue = _verticalSize.floatValue;
+
+            if (_horizontalFov.floatValue == 0f)
+                _horizontalFov.floatValue = _verticalFov.floatValue;
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -87,8 +93,8 @@ namespace OlegHcpEditor.Inspectors
             Transform transform = target.transform;
             Handles.color = Colours.Red;
 
-            Vector3 upVector = transform.up * _vertical.floatValue;
-            Vector3 rightVector = transform.right * _horizontal.floatValue;
+            Vector3 upVector = transform.up * _verticalSize.floatValue;
+            Vector3 rightVector = transform.right * _horizontalSize.floatValue;
 
             Vector3 left = transform.position - rightVector;
             Vector3 right = transform.position + rightVector;
@@ -111,37 +117,42 @@ namespace OlegHcpEditor.Inspectors
             EditorGUILayout.PropertyField(_mode);
 
             bool ortho = _camera.orthographic;
-            int mode = _mode.enumValueIndex;
 
-            switch ((AspectMode)mode)
+            switch ((AspectMode)_mode.enumValueIndex)
             {
                 case AspectMode.FixedHeight:
-                    drawFixedSide(_vertical, "Vertical");
+                    if (ortho)
+                        drawSize(_verticalSize, "Vertical Size");
+                    else
+                        drawFov(_verticalFov, "Vertical Fov");
                     break;
 
                 case AspectMode.FixedWidth:
-                    drawFixedSide(_horizontal, "Horizontal");
+                    if (ortho)
+                        drawSize(_horizontalSize, "Horizontal Size");
+                    else
+                        drawFov(_horizontalFov, "Horizontal Fov");
                     break;
 
                 case AspectMode.EnvelopeAspect:
                     if (ortho)
                     {
-                        float ratio = drawRatio(_horizontal.floatValue, _vertical.floatValue);
-                        drawSize(_vertical, "Target Vertical Size");
+                        float ratio = drawRatio(_horizontalSize.floatValue, _verticalSize.floatValue);
+                        drawSize(_verticalSize, "Target Vertical Size");
 
-                        _horizontal.floatValue = GetWidth(_vertical.floatValue, ratio);
-                        drawSize(_horizontal, "Target Horizontal Size");
+                        _horizontalSize.floatValue = GetWidth(_verticalSize.floatValue, ratio);
+                        drawSize(_horizontalSize, "Target Horizontal Size");
                     }
                     else
                     {
-                        float hTan = ScreenUtility.GetHalfFovTan(_horizontal.floatValue);
-                        float vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
+                        float hTan = ScreenUtility.GetHalfFovTan(_horizontalFov.floatValue);
+                        float vTan = ScreenUtility.GetHalfFovTan(_verticalFov.floatValue);
                         float ratio = drawRatio(hTan, vTan);
-                        drawFov(_vertical, "Target Vertical Fov");
+                        drawFov(_verticalFov, "Target Vertical Fov");
 
-                        vTan = ScreenUtility.GetHalfFovTan(_vertical.floatValue);
-                        _horizontal.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
-                        drawFov(_horizontal, "Target Horizontal Fov");
+                        vTan = ScreenUtility.GetHalfFovTan(_verticalFov.floatValue);
+                        _horizontalFov.floatValue = ScreenUtility.GetFovFromHalfTan(GetWidth(vTan, ratio));
+                        drawFov(_horizontalFov, "Target Horizontal Fov");
                     }
                     break;
 
@@ -149,17 +160,9 @@ namespace OlegHcpEditor.Inspectors
                     throw new UnsupportedValueException((AspectMode)_mode.enumValueIndex);
             }
 
-            void drawFixedSide(SerializedProperty property, string side)
-            {
-                if (ortho)
-                    drawSize(property, $"{side} Size");
-                else
-                    drawFov(property, $"{side} Fov");
-            }
-
             void drawSize(SerializedProperty property, string label)
             {
-                property.floatValue = EditorGUILayout.FloatField(label, property.floatValue).ClampMin(0f);
+                property.floatValue = EditorGUILayout.FloatField(label, property.floatValue).ClampMin(0.01f);
             }
 
             void drawFov(SerializedProperty property, string label)
