@@ -96,9 +96,9 @@ namespace OlegHcp
 
                 case AspectMode.FixedWidth:
                     if (orthographic)
-                        _camera.orthographicSize = _targetVerticalSize = _targetHorizontalSize * currentAspect;
+                        _camera.orthographicSize = _targetHorizontalSize * currentAspect;
                     else
-                        _camera.fieldOfView = _targetVerticalFov = ScreenUtility.GetAspectAngle(_targetHorizontalFov, currentAspect);
+                        _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontalFov, currentAspect);
                     break;
 
                 case AspectMode.EnvelopeAspect:

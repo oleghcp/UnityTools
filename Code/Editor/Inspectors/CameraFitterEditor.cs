@@ -223,7 +223,6 @@ namespace OlegHcpEditor.Inspectors
                 _currentViewRatio = ratio;
                 _orthographic = ortho;
                 target.ApplyChanges(ratio, ortho);
-                EditorUtility.SetDirty(_camera);
             }
         }
 
