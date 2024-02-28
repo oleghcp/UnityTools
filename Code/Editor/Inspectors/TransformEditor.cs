@@ -198,16 +198,17 @@ namespace OlegHcpEditor.Inspectors
         {
             using (SerializedObject serializedObject = new SerializedObject(command.context))
             {
-                SerializedProperty orderProp = serializedObject.FindProperty("m_RootOrder");
-                int rootOrder = orderProp.intValue;
+                using (SerializedProperty orderProp = serializedObject.FindProperty("m_RootOrder"))
+                {
+                    int rootOrder = orderProp.intValue;
 
-                Undo.RecordObject(command.context, "Paste Values from Clipboard");
-                EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
+                    Undo.RecordObject(command.context, "Paste Values from Clipboard");
+                    EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
 
-                serializedObject.Update();
-                orderProp.intValue = rootOrder;
-                serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                orderProp.Dispose();
+                    serializedObject.Update();
+                    orderProp.intValue = rootOrder;
+                    serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                }
             }
         }
     }
