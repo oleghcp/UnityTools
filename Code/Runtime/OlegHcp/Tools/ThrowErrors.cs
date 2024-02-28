@@ -41,7 +41,7 @@ namespace OlegHcp.Tools
 
         public static ArgumentNullException NullParameter(string paramName)
         {
-            return new ArgumentNullException(paramName, "Argument cannot be null.");
+            return new ArgumentNullException(paramName, "Value cannot be null.");
         }
 
         public static ArgumentException InvalidArrayArgument(string paramName)
@@ -82,6 +82,11 @@ namespace OlegHcp.Tools
         public static InvalidOperationException RangeDoesNotContain(string valuesName)
         {
             return new InvalidOperationException($"The range does not contain {valuesName} values.");
+        }
+
+        public static FormatException IncorrectInputString()
+        {
+            return new FormatException("Input string was not in a correct format.");
         }
 
         public static ArgumentOutOfRangeException RadixOutOfRange(string paramName, int symbolsLength)
