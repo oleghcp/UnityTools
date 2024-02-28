@@ -41,7 +41,7 @@ namespace OlegHcpEditor.Inspectors
             _camera = (Camera)cameraProp.objectReferenceValue;
             _getSizeOfMainGameView = Delegate.CreateDelegate(typeof(Func<Vector2>), Type.GetType("UnityEditor.GameView,UnityEditor"), "GetSizeOfMainGameView") as Func<Vector2>;
 
-            _currentViewRatio = GetGeameViewRatio();
+            _currentViewRatio = GetGameViewRatio();
             _orthographic = _camera.orthographic;
 
             if (_vertical.floatValue == 0f)
@@ -189,7 +189,7 @@ namespace OlegHcpEditor.Inspectors
 #endif
         }
 
-        private float GetGeameViewRatio()
+        private float GetGameViewRatio()
         {
             Vector2 res = _getSizeOfMainGameView();
             return res.y / res.x;
@@ -212,7 +212,7 @@ namespace OlegHcpEditor.Inspectors
 
         private void CheckAndApplyParamChanges(bool anythingElse)
         {
-            float ratio = GetGeameViewRatio();
+            float ratio = GetGameViewRatio();
             bool ortho = _camera.orthographic;
 
             if (ratio != _currentViewRatio || _orthographic != ortho || anythingElse)
@@ -225,6 +225,6 @@ namespace OlegHcpEditor.Inspectors
         }
 
         [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
-        private static void ResetMenuItem(MenuCommand command) { }
+        private static void ResetMenuItem() { }
     }
 }
