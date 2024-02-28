@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using OlegHcp.Mathematics;
 using OlegHcp.Tools;
 using UnityEngine;
 
@@ -85,7 +84,7 @@ namespace OlegHcp
 
         public override string ToString()
         {
-            return $"{_value.ToBool()} ({_value})";
+            return $"{_value > 0} ({_value})";
         }
 
         public override bool Equals(object obj)

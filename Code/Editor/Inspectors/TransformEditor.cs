@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using MenuItems;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors
 {
@@ -118,7 +117,7 @@ namespace OlegHcpEditor.Inspectors
             bool hasParent = target.parent;
 
             GUI.enabled = hasParent;
-            _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames).ToBool();
+            _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames) > 0;
             GUI.enabled = true;
         }
 

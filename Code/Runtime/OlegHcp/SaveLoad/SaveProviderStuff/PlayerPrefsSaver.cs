@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.Async;
 using OlegHcp.CSharp;
 using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcp.SaveLoad.SaveProviderStuff
 {
@@ -89,7 +89,7 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
                 case TypeCode.String: return PlayerPrefs.GetString(key);
                 case TypeCode.Int32: return PlayerPrefs.GetInt(key);
                 case TypeCode.Single: return PlayerPrefs.GetFloat(key);
-                case TypeCode.Boolean: return PlayerPrefs.GetInt(key).ToBool();
+                case TypeCode.Boolean: return PlayerPrefs.GetInt(key) > 0;
                 case TypeCode.Object: return JsonUtility.FromJson(PlayerPrefs.GetString(key), type);
                 default: throw new UnsupportedValueException(type.GetTypeCode());
             }
