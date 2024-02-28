@@ -1,6 +1,6 @@
-﻿using UnityEditor;
+﻿using OlegHcp.CSharp;
+using UnityEditor;
 using UnityEngine;
-using OlegHcp.CSharp;
 using UnityObject = UnityEngine.Object;
 
 namespace Window

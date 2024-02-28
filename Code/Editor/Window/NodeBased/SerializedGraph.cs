@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.IdGenerating;
@@ -8,6 +6,8 @@ using OlegHcp.Mathematics;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window.NodeBased.NodeDrawing;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased
 {

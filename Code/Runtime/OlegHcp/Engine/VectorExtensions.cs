@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcp.Engine
 {

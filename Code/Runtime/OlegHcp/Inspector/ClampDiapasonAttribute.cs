@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcp.Inspector
 {

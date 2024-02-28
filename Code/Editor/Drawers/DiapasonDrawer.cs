@@ -1,7 +1,7 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp.Mathematics;
+﻿using OlegHcp.Mathematics;
 using OlegHcp.NumericEntities;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Drawers
 {

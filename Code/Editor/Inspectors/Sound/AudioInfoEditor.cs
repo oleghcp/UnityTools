@@ -1,9 +1,9 @@
 ﻿#if INCLUDE_AUDIO
 using System;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.Sound.SoundStuff;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors.Sound
 {

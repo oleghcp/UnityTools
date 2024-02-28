@@ -1,11 +1,10 @@
-﻿using MenuItems;
-using UnityEditor;
-using UnityEngine;
-using OlegHcp;
+﻿using OlegHcp;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
 using OlegHcpEditor.Window;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors
 {

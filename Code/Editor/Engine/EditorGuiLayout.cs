@@ -1,7 +1,7 @@
 ﻿using System;
+using OlegHcp.NumericEntities;
 using UnityEditor;
 using UnityEngine;
-using OlegHcp.NumericEntities;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Engine

@@ -1,9 +1,9 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using System;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.Controls;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window
 {

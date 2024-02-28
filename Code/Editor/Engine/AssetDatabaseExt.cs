@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.IO;
+using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Engine

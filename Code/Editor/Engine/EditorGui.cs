@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.Collections;
 using OlegHcp.CSharp;
@@ -8,6 +6,8 @@ using OlegHcp.Mathematics;
 using OlegHcp.NumericEntities;
 using OlegHcpEditor.Drawers;
 using OlegHcpEditor.Window;
+using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Engine

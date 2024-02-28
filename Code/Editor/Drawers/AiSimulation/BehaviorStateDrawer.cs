@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.AiSimulation.Simple;
 using OlegHcpEditor.Drawers.Attributes;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Drawers.AiSimulation
 {

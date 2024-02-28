@@ -1,6 +1,6 @@
-﻿using UnityEditor;
-using OlegHcp.Collections;
+﻿using OlegHcp.Collections;
 using OlegHcpEditor.Engine;
+using UnityEditor;
 
 namespace OlegHcpEditor.Inspectors.InputLayouts
 {

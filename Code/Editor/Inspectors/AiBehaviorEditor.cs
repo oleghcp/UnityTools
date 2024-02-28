@@ -1,9 +1,9 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp;
+﻿using OlegHcp;
 using OlegHcp.AiSimulation;
 using OlegHcp.Tools;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors
 {
@@ -35,7 +35,7 @@ namespace OlegHcpEditor.Inspectors
             if (target.CurrentState == null)
                 return NONE_WORD;
 
-            return $"{target.CurrentState.GetType().Name} ({target.Status})" ;
+            return $"{target.CurrentState.GetType().Name} ({target.Status})";
         }
 
         private string GetPrevStateInfo()

@@ -1,6 +1,6 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
-using UnityEngine;
 using OlegHcp.Controls.ControlStuff;
+using UnityEngine;
 
 namespace OlegHcp.Controls
 {

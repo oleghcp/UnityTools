@@ -1,8 +1,8 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.Shooting;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Drawers.Shooting
 {

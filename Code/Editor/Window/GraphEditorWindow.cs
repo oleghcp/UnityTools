@@ -1,11 +1,10 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp.NodeBased;
-using OlegHcp.NodeBased.Service;
+﻿using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window.NodeBased;
 using OlegHcpEditor.Window.NodeBased.NodeDrawing;
 using OlegHcpEditor.Window.NodeBased.Stuff;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window
 {

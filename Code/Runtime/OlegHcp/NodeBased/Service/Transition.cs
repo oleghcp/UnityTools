@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using OlegHcp.Inspector;
 
 namespace OlegHcp.NodeBased.Service
 {

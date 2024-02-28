@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 using OlegHcp.Async;
 using OlegHcp.Mathematics;
 using OlegHcp.Tools;
+using UnityEngine;
 
 namespace OlegHcp.Timers
 {

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.Collections;
 using OlegHcp.Controls;
 using OlegHcp.Controls.ControlStuff;
@@ -9,6 +7,8 @@ using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window;
+using UnityEditor;
+using UnityEngine;
 
 #if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 namespace OlegHcpEditor.Inspectors.InputLayouts

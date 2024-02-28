@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.Rng;
+using UnityEngine;
 
 namespace OlegHcp.NumericEntities
 {

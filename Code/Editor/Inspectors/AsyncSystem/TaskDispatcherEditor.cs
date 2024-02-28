@@ -1,7 +1,7 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp.Async;
+﻿using OlegHcp.Async;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors.AsyncSystem
 {

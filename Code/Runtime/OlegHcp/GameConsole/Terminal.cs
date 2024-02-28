@@ -5,9 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.CSharp.Text;
@@ -15,6 +12,9 @@ using OlegHcp.Engine;
 using OlegHcp.Mathematics;
 using OlegHcp.SingleScripts;
 using OlegHcp.Tools;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static UnityEngine.RectTransform;
 
 namespace OlegHcp.GameConsole

@@ -1,8 +1,8 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp;
+﻿using OlegHcp;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased
 {

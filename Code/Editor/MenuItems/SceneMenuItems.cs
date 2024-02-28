@@ -1,7 +1,7 @@
-﻿using UnityEditor;
+﻿using OlegHcp.Engine;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using OlegHcp.Engine;
 
 namespace MenuItems
 {

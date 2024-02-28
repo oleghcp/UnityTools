@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.NodeBased;
+using UnityEngine;
 
 namespace OlegHcp.AiSimulation.NodeBased
 {

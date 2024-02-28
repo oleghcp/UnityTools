@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
-using UnityEditor;
 using OlegHcpEditor.Configs;
+using UnityEditor;
 
 namespace OlegHcpEditor
 {

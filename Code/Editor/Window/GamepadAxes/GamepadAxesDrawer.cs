@@ -1,10 +1,10 @@
 ﻿#if !UNITY_2019_3_OR_NEWER || ENABLE_LEGACY_INPUT_MANAGER
 using System.Collections.Generic;
 using System.Text;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.Controls.ControlStuff;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.GamepadAxes
 {
