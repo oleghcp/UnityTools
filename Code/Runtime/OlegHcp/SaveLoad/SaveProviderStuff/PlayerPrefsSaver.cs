@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OlegHcp.Async;
 using OlegHcp.CSharp;
 using OlegHcp.Mathematics;
@@ -28,6 +29,16 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
         {
             PlayerPrefs.Save();
             return default;
+        }
+
+        string[] ISaver.GetVersionList()
+        {
+            throw new NotImplementedException();
+        }
+
+        void ISaver.GetVersionList(List<string> versions)
+        {
+            throw new NotImplementedException();
         }
 
         void ISaver.DeleteKey(string key)

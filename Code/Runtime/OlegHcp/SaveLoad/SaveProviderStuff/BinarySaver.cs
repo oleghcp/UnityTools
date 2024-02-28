@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using OlegHcp.Async;
 using OlegHcp.CSharp;
@@ -48,7 +49,8 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
 
             if (File.Exists(path))
             {
-                _storage = BinaryFileUtility.Load<Dictionary<string, object>>(path);
+                try { _storage = BinaryFileUtility.Load<Dictionary<string, object>>(path); }
+                catch (Exception) { return false; }
                 return true;
             }
 
@@ -83,6 +85,21 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
 
                 return null;
             }
+        }
+
+        string[] ISaver.GetVersionList()
+        {
+            return Directory.EnumerateFiles(_dataPath)
+                            .Select(Path.GetFileName)
+                            .ToArray();
+        }
+
+        void ISaver.GetVersionList(List<string> versions)
+        {
+            IEnumerable<string> collection = Directory.EnumerateFiles(_dataPath)
+                                                      .Select(Path.GetFileName);
+            versions.Clear();
+            versions.AddRange(collection);
         }
 
         void ISaver.DeleteKey(string key)
