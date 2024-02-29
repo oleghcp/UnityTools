@@ -3,7 +3,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Engine
 {
-    internal static class Managers
+    public static class Managers
     {
         public static UnityObject GetTagManager()
         {
