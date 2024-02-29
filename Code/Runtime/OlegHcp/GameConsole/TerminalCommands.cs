@@ -1,8 +1,8 @@
 ﻿#if INCLUDE_UNITY_UI
 using System;
+using OlegHcp.Mathematics;
 using UnityEngine;
 using UnityEngine.Scripting;
-using OlegHcp.Mathematics;
 using static OlegHcp.GameConsole.CommandsHelper;
 
 namespace OlegHcp.GameConsole

@@ -1,7 +1,7 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp.Inspector;
+﻿using OlegHcp.Inspector;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Drawers.Attributes
 {

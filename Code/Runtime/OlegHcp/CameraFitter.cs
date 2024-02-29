@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace OlegHcp
 {
@@ -18,18 +19,25 @@ namespace OlegHcp
         private Camera _camera;
         [SerializeField]
         private AspectMode _aspectMode;
-        [SerializeField]
-        private float _targetVertical = 30f;
-        [SerializeField]
-        private float _targetHorizontal = 40f;
+        [SerializeField, FormerlySerializedAs("_targetVertical")]
+        private float _targetVerticalSize;
+        [SerializeField, FormerlySerializedAs("_targetHorizontal")]
+        private float _targetHorizontalSize;
+        [SerializeField, FormerlySerializedAs("_targetVertical")]
+        private float _targetVerticalFov;
+        [SerializeField, FormerlySerializedAs("_targetHorizontal")]
+        private float _targetHorizontalFov;
 
+        private bool _orthographic;
         private float _currentAspect;
 
 #if UNITY_EDITOR
         internal static string CameraFieldName => nameof(_camera);
         internal static string ModeFieldName => nameof(_aspectMode);
-        internal static string VerticalFieldName => nameof(_targetVertical);
-        internal static string HorizontalFieldName => nameof(_targetHorizontal);
+        internal static string VerticalFieldSizeName => nameof(_targetVerticalSize);
+        internal static string HorizontalFieldSizeName => nameof(_targetHorizontalSize);
+        internal static string VerticalFieldFovName => nameof(_targetVerticalFov);
+        internal static string HorizontalFieldFovName => nameof(_targetHorizontalFov);
 #endif
 
         public Camera Camera => _camera;
@@ -43,102 +51,140 @@ namespace OlegHcp
                     return;
 
                 _aspectMode = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
 
-                ApplyChanges(_currentAspect);
+        public float TargetVerticalSize
+        {
+            get => _targetVerticalSize;
+            set
+            {
+                if (_targetVerticalSize == value)
+                    return;
+
+                _targetVerticalSize = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
+
+        public float TargetHorizontalSize
+        {
+            get => _targetHorizontalSize;
+            set
+            {
+                if (_targetHorizontalSize == value)
+                    return;
+
+                _targetHorizontalSize = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
+
+        public float TargetVerticalFov
+        {
+            get => _targetVerticalFov;
+            set
+            {
+                if (_targetVerticalFov == value)
+                    return;
+
+                _targetVerticalFov = value;
+                ApplyChanges(_currentAspect, _orthographic);
+            }
+        }
+
+        public float TargetHorizontalFov
+        {
+            get => _targetHorizontalFov;
+            set
+            {
+                if (_targetHorizontalFov == value)
+                    return;
+
+                _targetHorizontalFov = value;
+                ApplyChanges(_currentAspect, _orthographic);
             }
         }
 
         private void Awake()
         {
-            RatioChanged();
-            ApplyChanges(_currentAspect);
+            ParamsChanged();
+            ApplyChanges(_currentAspect, _orthographic);
         }
 
         private void LateUpdate()
         {
-            if (RatioChanged())
-                ApplyChanges(_currentAspect);
+            if (ParamsChanged())
+                ApplyChanges(_currentAspect, _orthographic);
         }
 
         public float GetEnvelopeRatio()
         {
             if (_camera.orthographic)
-                return _targetHorizontal / _targetVertical;
+                return _targetHorizontalSize / _targetVerticalSize;
 
-            float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
-            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
+            float vTan = ScreenUtility.GetHalfFovTan(_targetVerticalFov);
+            float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontalFov);
             return hTan / vTan;
         }
 
-        internal void ApplyChanges(float currentAspect)
+        internal void ApplyChanges(float currentAspect, bool orthographic)
         {
-            if (_camera.orthographic)
-                orthoInit();
-            else
-                perspInit();
-
-            bool ortho = _camera.orthographic;
-
             switch (_aspectMode)
             {
                 case AspectMode.FixedHeight:
-                    if (ortho)
-                        _camera.orthographicSize = _targetVertical;
+                    if (orthographic)
+                        _camera.orthographicSize = _targetVerticalSize;
                     else
-                        _camera.fieldOfView = _targetVertical;
+                        _camera.fieldOfView = _targetVerticalFov;
                     break;
 
                 case AspectMode.FixedWidth:
-                    if (ortho)
-                        _camera.orthographicSize = _targetVertical = _targetHorizontal * currentAspect;
+                    if (orthographic)
+                        _camera.orthographicSize = _targetHorizontalSize * currentAspect;
                     else
-                        _camera.fieldOfView = _targetVertical = ScreenUtility.GetAspectAngle(_targetHorizontal, currentAspect);
+                        _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontalFov, currentAspect);
                     break;
 
                 case AspectMode.EnvelopeAspect:
-                    if (ortho)
-                        orthoInit();
+                    if (orthographic)
+                    {
+                        if (currentAspect <= _targetVerticalSize / _targetHorizontalSize)
+                            _camera.orthographicSize = _targetVerticalSize;
+                        else
+                            _camera.orthographicSize = _targetHorizontalSize * currentAspect;
+                    }
                     else
-                        perspInit();
+                    {
+                        float vTan = ScreenUtility.GetHalfFovTan(_targetVerticalFov);
+                        float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontalFov);
+
+                        if (currentAspect <= vTan / hTan)
+                            _camera.fieldOfView = _targetVerticalFov;
+                        else
+                            _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontalFov, currentAspect);
+                    }
                     break;
 
                 default:
                     throw new UnsupportedValueException(_aspectMode);
             }
-
-            void orthoInit()
-            {
-                float targetRatio = _targetVertical / _targetHorizontal;
-
-                if (targetRatio >= currentAspect)
-                    _camera.orthographicSize = _targetVertical;
-                else
-                    _camera.orthographicSize = _targetHorizontal * currentAspect;
-            }
-
-            void perspInit()
-            {
-                float vTan = ScreenUtility.GetHalfFovTan(_targetVertical);
-                float hTan = ScreenUtility.GetHalfFovTan(_targetHorizontal);
-
-                float targetRatio = vTan / hTan;
-
-                if (targetRatio >= currentAspect)
-                    _camera.fieldOfView = _targetVertical;
-                else
-                    _camera.fieldOfView = ScreenUtility.GetAspectAngle(_targetHorizontal, currentAspect);
-            }
         }
 
-        private bool RatioChanged()
+        private bool ParamsChanged()
         {
+            bool ortho = _camera.orthographic;
             float newRatio = (float)Screen.height / Screen.width;
 
-            if (_currentAspect == newRatio)
-                return false;
+            if (_currentAspect != newRatio || _orthographic != ortho)
+            {
+                _currentAspect = newRatio;
+                _orthographic = ortho;
+                return true;
+            }
 
-            _currentAspect = newRatio;
-            return true;
+            return false;
         }
     }
 }

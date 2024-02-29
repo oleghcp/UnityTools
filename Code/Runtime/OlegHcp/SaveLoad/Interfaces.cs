@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using OlegHcp.Async;
 
 namespace OlegHcp.SaveLoad
 {
     public interface ISaver
     {
-        void DeleteKey(string key);
-        void Set(string key, object value);
-        object Get(string key, object defaltValue);
-        object Get(string key, Type type);
-
         bool LoadVersion(string version);
         bool DeleteVersion(string version);
         void SaveVersion(string version);
         TaskInfo SaveVersionAsync(string version);
+        string[] GetVersionList();
+        void GetVersionList(List<string> versions);
+
+        void DeleteKey(string key);
+        void Set(string key, object value);
+        object Get(string key, object defaltValue);
+        object Get(string key, Type type);
     }
 
     public interface IKeyGenerator

@@ -1,8 +1,8 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp.CSharp;
+﻿using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Inspectors.Sound

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.Tools;
 using OlegHcpEditor.CodeGenerating;
 using OlegHcpEditor.Configs;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Gui;
+using UnityEditor;
+using UnityEngine;
 using static OlegHcpEditor.Configs.LayerSetConfig;
 
 namespace OlegHcpEditor.Window

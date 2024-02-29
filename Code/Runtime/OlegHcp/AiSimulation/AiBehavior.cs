@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using OlegHcp.Engine;
+﻿using OlegHcp.Engine;
 using OlegHcp.Inspector;
+using UnityEngine;
 
 namespace OlegHcp.AiSimulation
 {

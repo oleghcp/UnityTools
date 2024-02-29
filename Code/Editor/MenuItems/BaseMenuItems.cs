@@ -1,12 +1,12 @@
 ﻿using System.IO;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.IO;
 using OlegHcp.Tools;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window;
 using OlegHcpEditor.Window.ShapeWizards;
+using UnityEditor;
+using UnityEngine;
 using Window;
 
 namespace OlegHcpEditor.MenuItems

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.NumericEntities;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Engine
 {

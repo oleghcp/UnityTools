@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.Mathematics;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Engine
 {

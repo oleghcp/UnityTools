@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.IMGUI.Controls;
-using UnityEngine;
 using OlegHcp.Collections;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.ShapeWizards
 {

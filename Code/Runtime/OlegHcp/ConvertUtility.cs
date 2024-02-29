@@ -56,20 +56,42 @@ namespace OlegHcp
         /// <returns></returns>
         public static long ParseStringCustomRadixToDecimal(string number, int radix)
         {
+            if (number == null)
+                throw ThrowErrors.NullParameter(nameof(number));
+
             if (radix < 2 || radix > _symbols.Length)
                 throw ThrowErrors.RadixOutOfRange(nameof(radix), _symbols.Length);
 
-            if (number.IsNullOrEmpty())
-                return 0;
+            if (number == string.Empty)
+                throw ThrowErrors.IncorrectInputString();
 
+            if (TryParse(number, radix, out long result))
+                return result;
+
+            throw ThrowErrors.IncorrectInputString();
+        }
+
+        public static bool TryParseStringCustomRadixToDecimal(string number, int radix, out long result)
+        {
+            if (radix < 2 || radix > _symbols.Length || number.IsNullOrEmpty())
+            {
+                result = 0;
+                return false;
+            }
+
+            return TryParse(number, radix, out result);
+        }
+
+        private static bool TryParse(string number, int radix, out long result)
+        {
             // Make sure the arbitrary numeral system number is in upper case
             number = number.ToUpperInvariant();
 
-            long result = 0;
+            result = 0;
             long multiplier = 1;
             for (int i = number.Length - 1; i >= 0; i--)
             {
-                var c = number[i];
+                char c = number[i];
                 if (i == 0 && c == '-')
                 {
                     // This is the negative sign symbol
@@ -78,28 +100,18 @@ namespace OlegHcp
                 }
 
                 int digit = _symbols.IndexOf(c);
+
                 if (digit == -1)
-                    throw new ArgumentException("Invalid character in the arbitrary numeral system number", nameof(number));
+                {
+                    result = 0;
+                    return false;
+                }
 
                 result += digit * multiplier;
                 multiplier *= radix;
             }
 
-            return result;
-        }
-
-        public static bool TryParseStringCustomRadixToDecimal(string number, int radix, out long result)
-        {
-            try
-            {
-                result = ParseStringCustomRadixToDecimal(number, radix);
-                return true;
-            }
-            catch (ArgumentException)
-            {
-                result = default;
-                return false;
-            }
+            return true;
         }
     }
 }

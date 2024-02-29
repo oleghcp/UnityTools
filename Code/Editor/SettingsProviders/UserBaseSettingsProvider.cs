@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcpEditor.Configs;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.SettingsProviders
 {

@@ -1,9 +1,8 @@
-﻿using MenuItems;
-using UnityEditor;
-using UnityEngine;
-using OlegHcp;
+﻿using OlegHcp;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
+using UnityEditor;
+using UnityEngine;
 using static OlegHcpEditor.Drawers.Attributes.SortingLayerIDDrawer;
 
 namespace OlegHcpEditor.Inspectors

@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.Mathematics;
 using OlegHcp.Tools;
+using UnityEngine;
 
 namespace OlegHcp
 {

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.Mathematics;
-using OlegHcp.NodeBased;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 {

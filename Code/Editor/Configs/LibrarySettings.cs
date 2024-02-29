@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using UnityEngine;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
+using UnityEngine;
 
 namespace OlegHcpEditor.Configs
 {

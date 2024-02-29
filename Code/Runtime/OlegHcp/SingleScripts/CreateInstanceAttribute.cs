@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace OlegHcp.SingleScripts
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class)]
     public abstract class CreateInstanceAttribute : Attribute
     {
         public abstract void Create();

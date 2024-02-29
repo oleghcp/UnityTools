@@ -759,14 +759,6 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// Converts the integer value to boolean.
-        /// </summary>
-        public static bool ToBool(this int value)
-        {
-            return value > 0;
-        }
-
-        /// <summary>
         /// Casts float value to integer.
         /// </summary>
         public static int ToInt(this float value, RoundingWay rounding)

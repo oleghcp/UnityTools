@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.Engine;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.ShapeWizards
 {

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
@@ -12,6 +10,8 @@ using OlegHcp.NodeBased;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window.NodeBased.NodeDrawing;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
+using UnityEngine;
 
 namespace OlegHcp.Mathematics
 {

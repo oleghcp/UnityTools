@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using OlegHcp.Mathematics;
+﻿using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcp.Engine
 {

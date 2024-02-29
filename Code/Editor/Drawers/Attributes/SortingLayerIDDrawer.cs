@@ -1,10 +1,10 @@
 ﻿using System;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.Inspector;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Drawers.Attributes
 {

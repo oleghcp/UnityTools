@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Reflection;
-using MenuItems;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(Transform))]
     internal class TransformEditor : Editor<Transform>
     {
-        private const string EDITOR_TYPE_NAME = "UnityEditor.TransformInspector";
         private const string UNDO_NAME = "Transform";
         private const string BUTTON_NAME = "X";
         private const float VERTICAL_OFFSET = 2f;
@@ -50,7 +48,7 @@ namespace OlegHcpEditor.Inspectors
         private void OnEnable()
         {
             Type type = Assembly.GetAssembly(typeof(Editor))
-                                .GetType(EDITOR_TYPE_NAME);
+                                .GetType("UnityEditor.TransformInspector");
             _builtInEditor = CreateEditor(target, type);
 
 #if UNITY_2021_1_OR_NEWER
@@ -118,7 +116,7 @@ namespace OlegHcpEditor.Inspectors
             bool hasParent = target.parent;
 
             GUI.enabled = hasParent;
-            _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames).ToBool();
+            _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames) > 0;
             GUI.enabled = true;
         }
 
@@ -199,16 +197,17 @@ namespace OlegHcpEditor.Inspectors
         {
             using (SerializedObject serializedObject = new SerializedObject(command.context))
             {
-                SerializedProperty orderProp = serializedObject.FindProperty("m_RootOrder");
-                int rootOrder = orderProp.intValue;
+                using (SerializedProperty orderProp = serializedObject.FindProperty("m_RootOrder"))
+                {
+                    int rootOrder = orderProp.intValue;
 
-                Undo.RecordObject(command.context, "Paste Values from Clipboard");
-                EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
+                    Undo.RecordObject(command.context, "Paste Values from Clipboard");
+                    EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
 
-                serializedObject.Update();
-                orderProp.intValue = rootOrder;
-                serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                orderProp.Dispose();
+                    serializedObject.Update();
+                    orderProp.intValue = rootOrder;
+                    serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                }
             }
         }
     }

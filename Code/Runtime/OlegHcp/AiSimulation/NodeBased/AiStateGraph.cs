@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.Inspector;
 using OlegHcp.NodeBased;
+using UnityEngine;
 
 namespace OlegHcp.AiSimulation.NodeBased
 {

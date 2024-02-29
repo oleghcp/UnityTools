@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine.Serialization;
 using OlegHcp.Tools;
+using UnityEngine.Serialization;
 
 namespace OlegHcp.NumericEntities
 {

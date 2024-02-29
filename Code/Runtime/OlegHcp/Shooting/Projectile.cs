@@ -1,9 +1,9 @@
 ﻿#if INCLUDE_PHYSICS
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcp.Shooting
 {

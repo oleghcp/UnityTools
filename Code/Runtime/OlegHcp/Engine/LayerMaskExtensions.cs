@@ -2,7 +2,7 @@
 
 namespace OlegHcp.Engine
 {
-    public static class LayerMaskExtensions 
+    public static class LayerMaskExtensions
     {
         public static bool HasLayer(this LayerMask mask, int layer)
         {

@@ -1,10 +1,10 @@
 ﻿#if INCLUDE_UNITY_UI
 using System.Collections;
+using OlegHcp.CSharp;
+using OlegHcp.Pool;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using OlegHcp.CSharp;
-using OlegHcp.Pool;
 
 namespace OlegHcp.GameConsole
 {

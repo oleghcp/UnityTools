@@ -4,7 +4,7 @@ using OlegHcp.NodeBased.Service;
 
 namespace OlegHcpEditor.Window.NodeBased
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class)]
     public sealed class CustomNodeDrawerAttribute : Attribute
     {
         internal Type NodeType { get; }

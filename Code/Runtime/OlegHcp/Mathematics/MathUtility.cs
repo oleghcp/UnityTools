@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using OlegHcp.Tools;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
-using OlegHcp.Tools;
 using static System.MathF;
 
 namespace OlegHcp.Mathematics

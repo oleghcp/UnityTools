@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.Inspector;
+using UnityEngine;
 
 namespace OlegHcp.AiSimulation.Simple
 {

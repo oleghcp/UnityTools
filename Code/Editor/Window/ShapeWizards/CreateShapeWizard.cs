@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEngine;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Mathematics;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.ShapeWizards
 {

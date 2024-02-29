@@ -96,5 +96,15 @@ namespace OlegHcp.Engine
             float y = self.height;
             return Sprite.Create(self, new Rect(0f, 0f, x, y), new Vector2(x * 0.5f, y * 0.5f), pixelsPerUnit, extrude, meshType, border);
         }
+
+        public static bool IsNullOrDead(this object self)
+        {
+            return UnityObjectUtility.IsNullOrDead(self);
+        }
+
+        public static bool ExistsAndAlive(this object self)
+        {
+            return !UnityObjectUtility.IsNullOrDead(self);
+        }
     }
 }

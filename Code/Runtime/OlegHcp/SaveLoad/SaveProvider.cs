@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using OlegHcp.Async;
+#if !UNITY_2021_2_OR_NEWER
 using OlegHcp.CSharp.Collections;
+#endif
 using OlegHcp.Mathematics;
 using OlegHcp.SaveLoad.SaveProviderStuff;
 using OlegHcp.Tools;
@@ -100,8 +102,8 @@ namespace OlegHcp.SaveLoad
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
-            Type t = fieldsOwner.GetType();
-            FieldInfo[] fields = t.GetFields(FIELD_MASK);
+            Type type = fieldsOwner.GetType();
+            FieldInfo[] fields = type.GetFields(FIELD_MASK);
 
             List<SaveLoadFieldAttribute> list = null;
 
@@ -109,22 +111,22 @@ namespace OlegHcp.SaveLoad
             {
                 SaveLoadFieldAttribute a = fields[i].GetCustomAttribute<SaveLoadFieldAttribute>();
 
-                if (a != null)
+                if (a == null)
+                    continue;
+
+                if (list == null)
+                    list = new List<SaveLoadFieldAttribute>();
+
+                a.Field = fields[i];
+                a.Key = _keyGenerator.Generate(type, a.Key ?? a.Field.Name, ownerId);
+
+                list.Add(a);
+
+                if (initFields)
                 {
-                    if (list == null)
-                        list = new List<SaveLoadFieldAttribute>();
-
-                    a.Field = fields[i];
-                    a.Key = _keyGenerator.Generate(t, a.Key ?? a.Field.Name, ownerId);
-
-                    list.Add(a);
-
-                    if (initFields)
-                    {
-                        object value = a.DefaultValue != null ? _saver.Get(a.Key, a.DefaultValue)
-                                                              : _saver.Get(a.Key, a.Field.FieldType);
-                        a.Field.SetValue(fieldsOwner, value);
-                    }
+                    object value = a.DefaultValue != null ? _saver.Get(a.Key, a.DefaultValue)
+                                                          : _saver.Get(a.Key, a.Field.FieldType);
+                    a.Field.SetValue(fieldsOwner, value);
                 }
             }
 
@@ -250,6 +252,16 @@ namespace OlegHcp.SaveLoad
 
                 yield return _saver.SaveVersionAsync(version);
             }
+        }
+
+        public string[] GetVersionList()
+        {
+            return _saver.GetVersionList();
+        }
+
+        public void GetVersionList(List<string> versions)
+        {
+            _saver.GetVersionList(versions);
         }
     }
 }

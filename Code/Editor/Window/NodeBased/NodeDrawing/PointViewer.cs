@@ -1,7 +1,7 @@
-﻿using UnityEditor;
-using UnityEngine;
-using OlegHcp;
+﻿using OlegHcp;
 using OlegHcp.Mathematics;
+using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 {

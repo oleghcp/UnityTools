@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.IO;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Window

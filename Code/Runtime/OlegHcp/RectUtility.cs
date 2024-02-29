@@ -3,6 +3,17 @@ using UnityEngine;
 
 namespace OlegHcp
 {
+    public enum RectTransformStretch
+    {
+        Left,
+        Right,
+        Top,
+        Bottom,
+        MiddleHorizontal,
+        MiddleVertical,
+        Full,
+    }
+
     public static class RectUtility
     {
         public static Vector2 GetAnchor(TextAnchor anchor)
