@@ -1,6 +1,5 @@
 ﻿using System;
 using OlegHcp.Tools;
-using UR = UnityEngine.Random;
 
 namespace OlegHcp
 {
@@ -17,19 +16,9 @@ namespace OlegHcp
     [Serializable]
     public abstract class RandomNumberGenerator : IRng
     {
-        private static IRng _default;
+        private static IRng _default = new BuiltIn();
 
-        public static IRng Default
-        {
-            get => _default ?? (_default = new BuiltinRngWrapper());
-            set
-            {
-                if (value == null)
-                    throw ThrowErrors.NullParameter("value");
-
-                _default = value;
-            }
-        }
+        public static IRng Default => _default;
 
         public abstract void NextBytes(byte[] buffer);
         public abstract void NextBytes(Span<byte> buffer);
@@ -73,33 +62,33 @@ namespace OlegHcp
         protected abstract float NextInternal(float minValue, float maxValue);
 
         #region Builtin
-        private class BuiltinRngWrapper : IRng
+        private class BuiltIn : IRng
         {
             public int Next(int minValue, int maxValue)
             {
-                return UR.Range(minValue, maxValue);
+                return UnityEngine.Random.Range(minValue, maxValue);
             }
 
             public int Next(int maxValue)
             {
-                return UR.Range(0, maxValue);
+                return UnityEngine.Random.Range(0, maxValue);
             }
 
             public float Next(float minValue, float maxValue)
             {
-                return UR.Range(minValue, maxValue);
+                return UnityEngine.Random.Range(minValue, maxValue);
             }
 
             public float Next(float maxValue)
             {
-                return UR.Range(0f, maxValue);
+                return UnityEngine.Random.Range(0f, maxValue);
             }
 
             public void NextBytes(byte[] buffer)
             {
                 for (int i = 0; i < buffer.Length; i++)
                 {
-                    buffer[i] = (byte)UR.Range(0, 256);
+                    buffer[i] = (byte)UnityEngine.Random.Range(0, 256);
                 };
             }
 
@@ -107,7 +96,7 @@ namespace OlegHcp
             {
                 for (int i = 0; i < buffer.Length; i++)
                 {
-                    buffer[i] = (byte)UR.Range(0, 256);
+                    buffer[i] = (byte)UnityEngine.Random.Range(0, 256);
                 };
             }
         }
