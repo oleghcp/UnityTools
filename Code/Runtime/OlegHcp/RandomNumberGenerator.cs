@@ -1,8 +1,19 @@
 ﻿using System;
 using OlegHcp.Tools;
+using UR = UnityEngine.Random;
 
-namespace OlegHcp.Rng
+namespace OlegHcp
 {
+    public interface IRng
+    {
+        int Next(int minValue, int maxValue);
+        int Next(int maxValue);
+        float Next(float minValue, float maxValue);
+        float Next(float maxValue);
+        void NextBytes(byte[] buffer);
+        void NextBytes(Span<byte> buffer);
+    }
+
     [Serializable]
     public abstract class RandomNumberGenerator : IRng
     {
@@ -60,5 +71,46 @@ namespace OlegHcp.Rng
 
         protected abstract int NextInternal(int minValue, int maxValue);
         protected abstract float NextInternal(float minValue, float maxValue);
+
+        #region Builtin
+        private class BuiltinRngWrapper : IRng
+        {
+            public int Next(int minValue, int maxValue)
+            {
+                return UR.Range(minValue, maxValue);
+            }
+
+            public int Next(int maxValue)
+            {
+                return UR.Range(0, maxValue);
+            }
+
+            public float Next(float minValue, float maxValue)
+            {
+                return UR.Range(minValue, maxValue);
+            }
+
+            public float Next(float maxValue)
+            {
+                return UR.Range(0f, maxValue);
+            }
+
+            public void NextBytes(byte[] buffer)
+            {
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    buffer[i] = (byte)UR.Range(0, 256);
+                };
+            }
+
+            public void NextBytes(Span<byte> buffer)
+            {
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    buffer[i] = (byte)UR.Range(0, 256);
+                };
+            }
+        }
+        #endregion
     }
 }
