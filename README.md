@@ -1,5 +1,17 @@
 # OlegHCP Unity Tools
 
-A set of helpful code stuff for Unity.
-
+Helpful code stuff for Unity.  
 © Oleg Pulkin
+
+
+## Usage
+
+For using the library as a unity package add next line into \Packages\manifest.json:
+
+```json
+"dependencies": {
+    "com.oleghcp.unitytools": "https://github.com/oleghcp/UnityTools.git",
+```
+
+Also it can be downloaded manually from github and placed into assets folder.  
+Mind that assembly definitions are used.
