@@ -43,19 +43,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DisableEditing.png)
 
 ### DrawFlagsAttribute
 
@@ -79,7 +67,8 @@ using UnityEngine;
 
 public class MyClass : MonoBehaviour
 {
-    [SerializeField, DrawFlags(typeof(FlagExample))]
+    [SerializeField]
+    [DrawFlags(typeof(FlagExample))]
     private IntMask _mask;
 
     public void DoSomething(FlagExample flag)
@@ -93,3 +82,31 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/IntMask.png)
+
+### DrawObjectFieldsAttribute
+
+```csharp
+using UnityEngine;
+
+public class TestSo : ScriptableObject
+{
+    [SerializeField]
+    private int _foo;
+    [SerializeField]
+    private string _bar;
+}
+```
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [DrawObjectFields(true)]
+    private TestSo _ref;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DrawObjectFields.png)
