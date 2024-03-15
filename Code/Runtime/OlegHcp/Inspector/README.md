@@ -265,3 +265,27 @@ public class ClassC : Data
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitList.png)
+
+### LayerFieldAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [LayerField]
+    private int _layer;
+
+    private void Awake()
+    {
+        if (gameObject.layer == _layer)
+        {
+            // Do something
+        }
+    }
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/LayerField.png)
