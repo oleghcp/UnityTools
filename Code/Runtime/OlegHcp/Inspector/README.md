@@ -1,3 +1,16 @@
+### CertainTypesAttribute
+
+Allows to assign objects only of the specified types in inspector
+
+```csharp
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [CertainTypes(typeof(GameObject), typeof(MonoBehaviour))]
+    private UnityEngine.Object _ref;
+}
+```
+
 ### DrawFlagsAttribute
 
 Is used for IntMask and BitList fields.
