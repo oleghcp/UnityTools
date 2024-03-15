@@ -362,3 +362,44 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/SortingLayerID.png)
+
+### TypeNameAttribute
+
+```csharp
+using System;
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [TypeName(typeof(Data))]
+    private string _typename;
+}
+
+[Serializable]
+public abstract class Data
+{
+
+}
+
+[Serializable]
+public class ClassA : Data
+{
+    public int FiledA;
+}
+
+[Serializable]
+public class ClassB : Data
+{
+    public float FiledB;
+}
+
+[Serializable]
+public class ClassC : Data
+{
+    public string FiledC;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Typename.png)
