@@ -276,7 +276,7 @@ namespace OlegHcp.CSharp
         /// <summary>
         /// Returns new array contained elements got by converting the array.
         /// </summary>
-        /// <param name="converter">Conveting function.</param>
+        /// <param name="converter">Converting function.</param>
         public static TOut[] GetConverted<TIn, TOut>(this TIn[] self, Converter<TIn, TOut> converter)
         {
             return Array.ConvertAll(self, converter);
