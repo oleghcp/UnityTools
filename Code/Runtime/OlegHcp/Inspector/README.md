@@ -3,6 +3,9 @@
 Allows to assign objects only of the specified types in inspector
 
 ```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
 public class MyClass : MonoBehaviour
 {
     [SerializeField]
@@ -10,6 +13,49 @@ public class MyClass : MonoBehaviour
     private UnityEngine.Object _ref;
 }
 ```
+
+### ClampDiapasonAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using OlegHcp.NumericEntities;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [ClampDiapason(0f, 1f)]
+    private Diapason _diapason;
+}
+```
+
+### DisableEditingAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [DisableEditing]
+    private string _text = "Qwerty";
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### DrawFlagsAttribute
 
