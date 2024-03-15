@@ -1,3 +1,60 @@
+### ReferenceSelectionAttribute
+
+```csharp
+using System;
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeReference]
+    [ReferenceSelection]
+    private Data _data;
+
+    private void Start()
+    {
+        if (_data is ClassA a)
+        {
+
+        }
+        else if (_data is ClassB b)
+        {
+
+        }
+        else if (_data is ClassC c)
+        {
+
+        }
+    }
+}
+
+[Serializable]
+public abstract class Data
+{
+
+}
+
+[Serializable]
+public class ClassA : Data
+{
+    public int FiledA;
+}
+
+[Serializable]
+public class ClassB : Data
+{
+    public float FiledB;
+}
+
+[Serializable]
+public class ClassC : Data
+{
+    public string FiledC;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/ReferenceSelection.png)
+
 ### CertainTypesAttribute
 
 Allows to assign objects only of the specified types in inspector
