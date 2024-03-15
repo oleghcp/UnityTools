@@ -1,4 +1,4 @@
-### BitList
+## BitList
 
 Based on `System.Collections.BitArray` and supports Unity serialization
 
@@ -35,7 +35,7 @@ public class MyClass
 }
 ```
 
-### Tracker
+## Tracker
 
 ```csharp
 using OlegHcp.Collections;
