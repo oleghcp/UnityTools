@@ -165,3 +165,36 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Identifier.png)
+
+### InitToggleAttribute
+
+```csharp
+using System;
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeReference]
+    [InitToggle]
+    private Data _data;
+
+    private void Start()
+    {
+        if (_data != null)
+        {
+            // Do something
+        }
+    }
+
+    [Serializable]
+    private class Data
+    {
+        public int Foo;
+        public string Bar;
+    }
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitToggle1.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitToggle2.png)
