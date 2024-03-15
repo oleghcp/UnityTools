@@ -147,3 +147,21 @@ public class MyClass : MonoBehaviour
     private UnityEngine.Object _folderAsset;
 }
 ```
+
+### IdentifierAttribute
+
+Generates unique string id
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [Identifier(true)]
+    private string _id;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Identifier.png)
