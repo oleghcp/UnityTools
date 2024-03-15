@@ -131,3 +131,19 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/EnumMenu.png)
+
+### FolderRequiredAttribute
+
+Allows to assign only folder assets in inspector
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [FolderRequired]
+    private UnityEngine.Object _folderAsset;
+}
+```
