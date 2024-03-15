@@ -23,7 +23,7 @@ namespace OlegHcp.Collections
         public bool IsAlive => _currentNode != null;
         public bool AtStart => _startNode == _currentNode;
 
-        public StateMachine() { }
+        //public StateMachine() { }
 
         //public StateMachine(RawGraph graph)
         //{
