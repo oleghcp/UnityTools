@@ -110,3 +110,24 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DrawObjectFields.png)
+
+### EnumMenuAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public enum MyEnum
+{
+    A, B, C, D, E, F,
+}
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [EnumMenu]
+    private MyEnum _foo;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/EnumMenu.png)
