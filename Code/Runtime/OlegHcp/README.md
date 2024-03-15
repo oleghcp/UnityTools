@@ -1,0 +1,606 @@
+### ApplicationUtility
+
+```csharp
+using OlegHcp;
+
+public class MyClass
+{
+    public MyClass()
+    {
+        ApplicationUtility.OnTick_Event += OnUpdate;
+        ApplicationUtility.OnApplicationQuit_Event += OnApplicationQuit;
+    }
+
+    private void OnUpdate(float deltaTime)
+    {
+        // Per frame code
+    }
+
+    private void OnApplicationQuit()
+    {
+        // Do something on quit
+    }
+}
+```
+
+### AssetRef
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    private AssetRef<MonoBehaviour> _ref;
+
+    private void Start()
+    {
+        if (_ref.Type == RefType.Async) //For addressables
+        {
+            AsyncOperationHandle<GameObject> handle = _ref.AsyncRef.InstantiateAsync();
+        }
+        else
+        {
+            MonoBehaviour instance = Instantiate(_ref.Asset);
+        }
+    }
+}
+```
+
+![](https://previews.dropbox.com/p/thumb/ACM37KOd-aC6OZ19I6KlqOx_0TGViiYwvwivQl5cE50T7XJ3_MGoV6XCo7FD-rg8XTjsmlPuPolrbc2drCqoosHRfi9euekJnRQ3U59m1B6LEOEsppGVGD2HBrmTxS27rphX5KVIcRpxzi0nmCZI-DW9CXF6gxjZvqpUdFOBqutqZmshDyWirVYwVVFlpief8W4T1f2qzcLSHbZgXTRNWlkK2thvl8tgFGAg9mz5aUQPR7ES08CvcAtUFV-8q9T3UgeVlt0UMKBsDY48uPyg-tuVYtwrLQjf4D-KtSLFojHi0lBRRe_MXcOiC8zpop3ww7UR19dUvejyEz5Jj1oxjsMz/p.png)
+
+### BitMask
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass
+{
+    private void MyMethod()
+    {
+        // Uses flag indices from 0 till 31
+        int mask32 = BitMask.CreateMask(0, 1, 3);
+
+        if (BitMask.HasFlag(mask32, 3))
+        {
+            // Do something
+        }
+
+        BitMask.AddFlag(ref mask32, 2);
+
+        int anotherMask32 = BitMask.CreateMask(1, 2, 3);
+
+        // The mask size is 4 in this example because of using 4 flags: 0, 1, 2, 3
+        // The maximal mask size is 32
+        if (BitMask.Intersects(mask32, anotherMask32, 4))
+        {
+            // Do something
+        }
+
+        BitMask.RemoveFlag(ref anotherMask32, 1);
+
+        // And so on
+    }
+}
+```
+
+### BoolInt
+
+```csharp
+public class MyClass : MonoBehaviour
+{
+    private BoolInt _someBoolState = new BoolInt(true);
+
+    public void AddBoolState()
+    {
+        _someBoolState++;
+    }
+
+    public void RemoveBoolState()
+    {
+        _someBoolState--;
+    }
+
+    private void Update()
+    {
+        if (_someBoolState)
+        {
+            // Do something
+        }
+    }
+}
+```
+
+### CameraFitter
+
+
+![](https://previews.dropbox.com/p/thumb/ACPvnl6YZKt8CUGyFdSv6pb8pRW7Fx_WuykMr99tgz3RW_TYelCmkQpULxx6gixPvWXRhVBrS_OaANLoRlSXGbFW2hj7TmN-nKCRrViGDnXAzev1x9Gzsn8brhuNItJex-c28cSXswc_H2-fZYUwlcOcmFztdVGlF-fs4IiY4nDBR16X6dBkxTLJYdvs9jKc61ZlKKgyr8AiKKdtAVZOnHsK83h6mFBfDt9-_y-zdTgcgScYcvTZaaGrAWGdK4URmyNmy-GQrffJE5jaM4OivXSGvJ1KyjK-bFnMTVhNzUIgzY2Y5d45efm6dlP_E2S99GbYRh-B5fn_0mY-iriA6Lzr/p.png)
+
+![](https://previews.dropbox.com/p/thumb/ACMOokeQFZCdgeESqgVX5ZmRyLqR3-JlarhlFhM9orchaYZe0k4ppbulG_9LsHu0ZE-vbAnF-3NtQ5ihHnayyrPmhjeSUXHpu8VrG4wvtbbwAWkCuhZ8hwVlLkoXRv1t1AV4PuMDyc4lnHiwlnzPJphAIoqQTlBzyka5WBkXJqXn3XxQcl7bMYVtp4k2uxfErVwS_A3tjdjxPACHr2xpQL5FdvHCD-3PXWRMG5gLenzTAXyw7mak4bV52PNzDUbXaT2jvLvA0EqSHlCpIgqPsbmETexbkmne565WMmoBcOfqiJ4-stO8DYvqgASK5B04hcYl6xvdVdB8yBKV7S2Tdsic/p.png)
+
+### Colours
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private void Start()
+    {
+        Color color1 = Colours.Orange;
+        Color color2 = Colours.Cyan;
+        Color color3 = Colours.Random;
+    }
+}
+```
+
+### ComponentUtility
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private Camera _camera;
+    private Light _light;
+
+    private void Start()
+    {
+        // GameObject with name New Light
+        _light = ComponentUtility.CreateInstance<Light>("New Light");
+
+        // Create as a child 
+        _camera = ComponentUtility.CreateInstance<Camera>(transform);
+    }
+}
+```
+
+
+### ConvertUtility
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private void Start()
+    {
+        long num = 0xFFFF;
+
+        // Convert long number to string with custom radix
+        string hexString = ConvertUtility.DecimalToStringWithCustomRadix(num, 16);
+        // Result: string "FFFF"
+
+        //parse string to long with the same radix
+        long num2 = ConvertUtility.ParseStringCustomRadixToDecimal(hexString, 16);
+    }
+}
+```
+
+### FpsCounter
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private FpsCounter _fpsCounter = new FpsCounter();
+
+    private void Update()
+    {
+        _fpsCounter.Update(Time.deltaTime);
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.Label($"FPS: {_fpsCounter.FrameRate}");
+    }
+}
+```
+
+### IntervalChecker
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    private float _interval = 1f;
+
+    private IntervalChecker _intervalChecker;
+
+    private void Awake()
+    {
+        _intervalChecker = new IntervalChecker(_interval);
+    }
+
+    private void Update()
+    {
+        // Returns true each second
+        if (_intervalChecker.SmoothCheckDelta(Time.deltaTime))
+        {
+            // Do something
+        }
+    }
+}
+```
+
+### IntMask
+
+```csharp
+using OlegHcp;
+
+public class MyClass
+{
+    private void MyMethod()
+    {
+        // Uses flag indices from 0 till 31
+        IntMask mask32 = BitMask.CreateMask(0, 1, 3);
+
+        if (mask32[0])
+        {
+            // Do something
+        }
+
+        mask32[2] = true;
+
+        IntMask anotherMask32 = BitMask.CreateMask(1, 2, 3);
+
+        // The mask size is 4 in this example because of using 4 flags: 0, 1, 2, 3
+        // The maximal mask size is 32
+        if (mask32.Intersects(anotherMask32, 4))
+        {
+            // Do something
+        }
+
+        anotherMask32[1] = false;
+
+        // And so on
+    }
+}
+```
+
+### Messaging
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private TestClass _obj = new TestClass();
+
+    private void Start()
+    {
+        // Call MyMethod()
+        _obj.SendMsg("MyMethod");
+
+        // Calling non-existent method do nothing
+        _obj.SendMsg("Qwerty");
+
+        // Messaging uses reflection so try not to abuse it
+    }
+}
+
+public class TestClass
+{
+    public void MyMethod()
+    {
+        // Do something
+    }
+}
+```
+
+### Randomizing
+
+##### Default
+
+```csharp
+using System;
+using OlegHcp;
+
+public class MyClass
+{
+    private void DoSomething()
+    {
+        // Unity built-in generator as an instance
+        IRng rng = RandomNumberGenerator.Default;
+
+        // Random numbers
+        int randomNum1 = rng.Next(0, 100);
+        float randomNum2 = rng.Next(0f, 100f);
+
+        // Random bytes
+        Span<byte> bytes = stackalloc byte[10];
+        rng.NextBytes(bytes);
+    }
+}
+```
+
+##### Alternative
+
+```csharp
+using OlegHcp;
+using OlegHcp.Rng;
+
+public class MyClass
+{
+    private void DoSomething()
+    {
+        // Based on System.Random
+        IRng rng1 = new BaseRng();
+
+        // Based on System.Security.Cryptography.RNGCryptoServiceProvider
+        IRng rng2 = new CryptoRng();
+
+        // Based on System.Guid
+        IRng rng3 = new GuidRng();
+
+        IRng rng4 = new XorshiftRng();
+        IRng rng5 = new Xorshift64Rng();
+    }
+}
+```
+
+##### RngExtensions
+
+```csharp
+using OlegHcp;
+using OlegHcp.Rng;
+using UnityEngine;
+
+public class MyClass
+{
+    private void DoSomething()
+    {
+        IRng rng = new BaseRng();
+
+        if (rng.Chance(0.5f))
+        {
+            // Do something with chance 0.5f
+        }
+
+        float[] weights = { 2f, 5f, 100f };
+        int index = rng.Random(weights);
+
+        IntMask mask = BitMask.CreateMask(0, 1, 3);
+        int flagIndex = rng.RandomFlag((int)mask, 4); // Returns 0, 1 or 3
+
+        // Returns a random number with chance offset to max values.
+        float num1 = rng.Ascending(0f, 100f, 1f);
+
+        // Returns a random number with chance offset to min values.
+        float num2 = rng.Descending(0f, 100f, 1f);
+
+        // Returns a random number with chance offset to average values.
+        float num3 = rng.Average(0f, 100f, 1f);
+
+        // Returns a random number with chance offset to min and max values.
+        float num4 = rng.MinMax(0f, 100f, 1f);
+
+        int evenNum = rng.RandomEven(0, 100);
+
+        int oddNum = rng.RandomOdd(0, 100);
+
+        Vector2 point1 = rng.GetOnUnitCircle();
+        Vector3 point2 = rng.GetOnUnitSphere();
+
+        Vector2 point3 = rng.GetInsideUnitCircle();
+        Vector3 point4 = rng.GetInsideUnitSphere();
+
+        Vector2 point5 = rng.GetInBounds(Rect.MinMaxRect(0f, 0f, 100f, 100f));
+        Vector3 point6 = rng.GetInBounds(new Bounds(Vector3.zero, Vector3.one * 100f));
+
+        int stringSize = 25;
+        string line = rng.GetAlphanumeric(stringSize);
+    }
+}
+```
+
+### RectUtility
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private void DoSomething1()
+    {
+        RectTransform rectTransform = transform as RectTransform;
+
+        Vector2 anchor = RectUtility.GetAnchor(TextAnchor.UpperCenter);
+        rectTransform.anchorMin = anchor;
+        rectTransform.anchorMax = anchor;
+    }
+
+    private void DoSomething2()
+    {
+        RectTransform rectTransform = transform as RectTransform;
+
+        Rect rect = RectUtility.GetAnchor(RectTransformStretch.MiddleHorizontal, out Vector2 pivot);
+
+        rectTransform.anchorMin = rect.min;
+        rectTransform.anchorMax = rect.max;
+        rectTransform.pivot = pivot;
+    }
+
+    private void DoSomething()
+    {
+        // It is like Rect.MinMaxRect();
+        RectInt rectInt = RectUtility.MinMaxRectInt(0, 0, 100, 100);
+    }
+}
+```
+
+### RenderSorter
+
+![](https://previews.dropbox.com/p/thumb/ACOSIg_9shd7tCiPvn8WiQZBeo0x6uRY1aQ0XZBcLWcScRGVVB6Ku8zWWEI5rsFQa5tpVvuKQ5l2wsUrTx-PEpctRnFdzqOTBOztFGyhE5iGiWFrZUmQZMgHtYLCH4SJMIHjK9VFfPSqQ9en5X1x6McWJ038d0RHMgLc3dJc3jIyrD-s6RGDboN2wnxBh0axUtgleJMcO_O3DQxOjGBEAs1D3S-wFEjSpy5AQd8yYslmrBq4R-rSwOpD0q065zFZRcB9cdmnpdW8UPpbVHGOo-btgvKzgVjVJRxe-YSSamV6v-xA4b25xZAS5uqxVmM4S7TIYCwtEvu_cgvxnov93lnC/p.png)
+
+
+### ScreenUtility
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass
+{
+    private void DoSomething1()
+    {
+        Vector2 cameraSize = ScreenUtility.GetOrthographicSize(Camera.main.orthographicSize);
+        float height = cameraSize.y * 2f;
+        float width = cameraSize.x * 2f;
+    }
+
+    private void DoSomething2()
+    {
+        float remoteness = 100f;
+        Vector2 remoteRectSize = ScreenUtility.GetPerspectiveSize(Camera.main.fieldOfView, remoteness);
+        float height = remoteRectSize.y * 2f;
+        float width = remoteRectSize.x * 2f;
+    }
+
+    private void DoSomething3()
+    {
+        float verticalFieldOfView = 60f;
+        // vertical fov to horizontal
+        float horizontalOfView = ScreenUtility.GetAspectAngle(verticalFieldOfView, Screen.width / Screen.height);
+    }
+
+    private void DoSomething4()
+    {
+        float horizontalOfView = 60f;
+        // horizontal fov to vertical
+        float verticalFieldOfView = ScreenUtility.GetAspectAngle(horizontalOfView, Screen.height / Screen.width);
+    }
+}
+```
+
+### TransformUtility
+
+```csharp
+using System.Collections.Generic;
+using System.Linq;
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private void Start()
+    {
+        List<Transform> children = new List<Transform>();
+
+        foreach (Transform child in transform)
+        {
+            children.Add(child);
+        }
+
+        children = children.OrderBy(item => item.name)
+                           .ToList();
+
+        TransformUtility.OrderSiblingsByList(children);
+    }
+}
+```
+
+![](https://previews.dropbox.com/p/thumb/ACNh41Pez-V7Tm7h3amSNiLByXMNYNA4YV9kmG_i5JRfEps0V4YWJ60EIVWsyi3VfWmLFwQqXv_YXXCCdo7RgJTGgdSvAl8ti69TxX_BSunOunxtQzNGn873tNkFgfbjIP3B0BDsKOYUXhr21ifWu353sOXuaLTxxi7_Ju6hnL-c0fEgTH53DY67LrA0qLkt6a9jd8Se5nYiV3yFHnUiX_uMSi35o_WMskvrECWYAlyg9XFnEweDsMHLo1oSRKdO5x9r1hDnfncPDuOpbn7h79e_yMyUA1o9_WPbNZoGM4e0Ng8rLbMVwO3IZ8B71i6VfBhzkF-k0XrCb8YdudreHjMT/p.png)
+
+```csharp
+using System.Collections.Generic;
+using System.Linq;
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    private void Start()
+    {
+        List<Transform> children = new List<Transform>();
+
+        foreach (Transform child in transform)
+        {
+            children.Add(child);
+        }
+
+        Vector3[] positions = children.Select(item => item.position)
+                                      .ToArray();
+
+        TransformUtility.AlignPositions(positions, transform.position, Vector3.right, 0.5f);
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            children[i].position = positions[i];
+        }
+    }
+}
+```
+
+![](https://previews.dropbox.com/p/thumb/ACPuhoAQ4YE5_BjqJMmZ2ZrnSrV8_U0MdBXwVtJ5Vd_uGsO3sJ9dZNt-LHZkldjQNsyF6F2JzGDkici1ew2-_BbqDh-qi6_dlZxfFXZ3UPrH5QX6eWn8N7zH0hAM42a926Ef0hIyoSZGVIz0SJ4eoGcQlIIQf5RyRvRkLu1Fb2cUITKq78iKenktJRXcE8SVZIWQgHBQPCgoW22WYTn9e41ENydIz9UTVxl8awdKW1-WZ5Z3rdJpl5Sw5yr29x0JuYGushyDcS9oVh0pHDfBgGpyaAc6uPSBLys8e8WxKtqkZJDSEU18MDi3XVqN8LGTLjTAcvyKo4GscbgLh9ljNWNm/p.png)
+
+### UiMonoBehaviour
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : UiMonoBehaviour
+{
+    private void Start()
+    {
+        // Inherited property
+        rectTransform.anchoredPosition = Vector3.zero;
+    }
+}
+```
+
+### UnityObjectUtility
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    public void DoSomething1(GameObject obj)
+    {
+        // Check whether it's asset reference
+        if (!UnityObjectUtility.IsAsset(obj))
+            Destroy(obj);
+    }
+
+    public void DoSomething2(ISomeInterface obj)
+    {
+        // Object can be instance of MonoBehaviour but null checking is useless int this case
+        if (!UnityObjectUtility.IsNullOrDead(obj))
+        {
+            // Do something
+        }
+    }
+}
+```
+
+### XmlUtility
+
+```csharp
+using OlegHcp;
+
+public class MyClass
+{
+    public void DoSomething(int[] nums)
+    {
+        string xml = XmlUtility.ToXml(nums);
+
+        int[] nums2 = XmlUtility.FromXml<int[]>(xml);
+    }
+}
+```
