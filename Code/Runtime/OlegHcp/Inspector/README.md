@@ -198,3 +198,70 @@ public class MyClass : MonoBehaviour
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitToggle1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitToggle2.png)
+
+### InitListAttribute
+
+```csharp
+using System;
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeReference]
+    [InitList(typeof(ListEnum))]
+    private Data _data;
+
+    private void Start()
+    {
+        if (_data is ClassA a)
+        {
+
+        }
+        else if (_data is ClassB b)
+        {
+
+        }
+        else if (_data is ClassC c)
+        {
+
+        }
+    }
+}
+
+public enum ListEnum
+{
+    [BindSubclass(typeof(ClassA))]
+    A,
+    [BindSubclass(typeof(ClassB))]
+    B,
+    [BindSubclass(typeof(ClassC))]
+    C,
+}
+
+[Serializable]
+public class Data
+{
+
+}
+
+[Serializable]
+public class ClassA : Data
+{
+    public int FiledA;
+}
+
+[Serializable]
+public class ClassB : Data
+{
+    public float FiledB;
+}
+
+[Serializable]
+public class ClassC : Data
+{
+    public string FiledC;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitList.png)
