@@ -129,10 +129,6 @@ namespace OlegHcp.NumericEntities
                         sum += _pureValue * modifier.Value;
                         break;
 
-                    case ModifierType.RelativeDivider:
-                        sum += (float)_pureValue / modifier.Value;
-                        break;
-
                     default:
                         throw new UnsupportedValueException(modifier.Modification);
                 }
