@@ -31,7 +31,7 @@ Also has indicators of tool handles if they are switched to center and global va
 
 #### Create Script From Template
 
-Template can be modified
+Template can be modified.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateScriptFromTemplate.png)
 
@@ -41,11 +41,14 @@ Template can be modified
 
 #### Find References In Project
 
+Text searching finds addressable references but can be used only if asses tex serialization is used.
+
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/FindReferencesInProject.png)
 
 #### Create Asset Based On ScriptableObject
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset1.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset2.png)
 
 #### Destroy Subasset
 
