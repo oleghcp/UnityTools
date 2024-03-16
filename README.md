@@ -55,27 +55,25 @@ Also has indicators of tool handles if they are switched to center and global va
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform2.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform3.png)
 
-### Create Script From Template
+### Asset Context Menu
 
-Template can be modified.
+- **Create Script From Template**. Template can be modified.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateScriptFromTemplate.png)
 
-### Show Asset Guid
+- **Show Asset Guid**
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/ShowAssetGuid.png)
 
-### Find References In Project
-
-Text searching finds addressable references but can be used only if asses tex serialization is used.
+- **Find References In Project**. Text searching finds addressable references but can be used only if asses tex serialization is used.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/FindReferencesInProject.png)
 
-### Create Asset Based On ScriptableObject
+- **Create Asset Based On ScriptableObject**
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset2.png)
 
-### Destroy Subasset
+- **Destroy Subasset**
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DestroySubasset.png)
