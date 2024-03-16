@@ -123,11 +123,7 @@ namespace OlegHcp.SaveLoad
                 list.Add(a);
 
                 if (initFields)
-                {
-                    object value = a.DefaultValue != null ? _saver.Get(a.Key, a.DefaultValue)
-                                                          : _saver.Get(a.Key, a.Field.FieldType);
-                    a.Field.SetValue(fieldsOwner, value);
-                }
+                    InitField(fieldsOwner, a);
             }
 
             if (list != null)
@@ -188,9 +184,22 @@ namespace OlegHcp.SaveLoad
             _storage.Clear();
         }
 
-        public bool Load(string version)
+        public bool Load(string version, bool initializeFields = false)
         {
-            return _saver.LoadVersion(version);
+            bool loaded = _saver.LoadVersion(version);
+
+            if (loaded && initializeFields)
+            {
+                foreach (var (fieldsOwner, aList) in _storage)
+                {
+                    for (int i = 0; i < aList.Count; i++)
+                    {
+                        InitField(fieldsOwner, aList[i]);
+                    }
+                }
+            }
+
+            return loaded;
         }
 
         /// <summary>
@@ -262,6 +271,13 @@ namespace OlegHcp.SaveLoad
         public void GetVersionList(List<string> versions)
         {
             _saver.GetVersionList(versions);
+        }
+
+        private void InitField(object fieldsOwner, SaveLoadFieldAttribute a)
+        {
+            object value = a.DefaultValue != null ? _saver.Get(a.Key, a.DefaultValue)
+                                                  : _saver.Get(a.Key, a.Field.FieldType);
+            a.Field.SetValue(fieldsOwner, value);
         }
     }
 }
