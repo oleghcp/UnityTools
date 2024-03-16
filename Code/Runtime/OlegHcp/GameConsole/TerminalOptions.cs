@@ -11,7 +11,7 @@ namespace OlegHcp.GameConsole
         public bool AddSpaceAfterName = true;
         public bool ShowDebugLogs = true;
 
-        /// <summary>Value of termial height relative screen (from 0f to 1f).</summary>
+        /// <summary>Value of terminal height relative screen (from 0f to 1f).</summary>
         public float TargetHeight
         {
             get => _targetHeight;

@@ -116,7 +116,7 @@ namespace OlegHcp.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
-        /// <param name="commands">An object which contans command functions.</param>
+        /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
@@ -129,7 +129,7 @@ namespace OlegHcp.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
-        /// <param name="commands">An object which contans command functions.</param>
+        /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
@@ -142,7 +142,7 @@ namespace OlegHcp.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
-        /// <param name="commands">An object which contans command functions.</param>
+        /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
@@ -155,7 +155,7 @@ namespace OlegHcp.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
-        /// <param name="commands">An object which contans command functions.</param>
+        /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
@@ -168,7 +168,7 @@ namespace OlegHcp.GameConsole
         /// public string commandname(string[] options).
         /// It should return error description (if options are parsed with error) or null (if options parsed well or there are no options at all). 
         /// </summary>
-        /// <param name="commands">An object which contans command functions.</param>
+        /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
             if (CreateTerminalInternal(createEventSystem))
@@ -178,7 +178,7 @@ namespace OlegHcp.GameConsole
         /// <summary>
         /// Sets a new command container.
         /// </summary>
-        /// <param name="commands">An object which contans command functions.</param>
+        /// <param name="commands">An object which contains command functions.</param>
         public void SetCommands(TerminalCommands commands)
         {
             if (commands == null)

@@ -1,8 +1,8 @@
-## MonoTimer
+## Terminal
 
-Ingame terminal for input commands and output log messages.  
-Supports command substitution by Tab key and keeps list of previous commands.
-Default openning by backtick key like in Quake
+Ingame terminal for commands input and log messages output.  
+Supports command substitution by Tab key and keeps list of previous commands.  
+Default openning by Backtick key like in Quake buy it can be overridden.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Terminal1.png)
 
@@ -53,3 +53,12 @@ public class Example : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Terminal2.png)
+
+## Terminal Switch Override
+
+```csharp
+internal class Terminal : ITerminalSwitchTrigger
+{
+    public bool SwitchThisFrame => Input.GetKeyDown(KeyCode.Escape);
+}
+```
