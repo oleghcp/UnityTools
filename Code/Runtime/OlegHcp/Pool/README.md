@@ -6,11 +6,13 @@ using UnityEngine;
 
 public class ExampleObject : MonoBehaviour, IPoolable
 {
+    // On get object from pool
     public void Reinit()
     {
         gameObject.SetActive(true);
     }
 
+    // On release object to pool
     public void CleanUp()
     {
         gameObject.SetActive(false);
