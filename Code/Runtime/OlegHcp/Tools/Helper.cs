@@ -8,42 +8,6 @@ namespace OlegHcp.Tools
     {
         public static readonly string Space = " ";
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDateTimeString()
-        {
-            return GetDateTimeString(DateTime.Now);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDateTimeString(in DateTime dateTime)
-        {
-            return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}";
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDateTimeStringWithSeconds()
-        {
-            return GetDateTimeStringWithSeconds(DateTime.Now);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDateTimeStringWithSeconds(in DateTime dateTime)
-        {
-            return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}.{dateTime.Second:D2}";
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDateTimeStringWithMilliseconds()
-        {
-            return GetDateTimeStringWithMilliseconds(DateTime.Now);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetDateTimeStringWithMilliseconds(in DateTime dateTime)
-        {
-            return $"{dateTime.Year}.{dateTime.Month:D2}.{dateTime.Day:D2}_{dateTime.Hour:D2}.{dateTime.Minute:D2}.{dateTime.Second:D2}_{dateTime.Millisecond:D3}";
-        }
-
         public static void Swap<T>(ref T a, ref T b)
         {
             (b, a) = (a, b);
