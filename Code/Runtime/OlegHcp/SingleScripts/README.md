@@ -1,6 +1,6 @@
 ## MonoSingleton
 
-Abstract generic class derived from MonoBehaviour.  
+Abstract generic class derived from `MonoBehaviour`.  
 Has lazy initialization with creating instance in runtime.
 
 ```csharp
@@ -31,7 +31,7 @@ public class MyClass
 
 ## CreateInstanceAttribute
 
-Alternative MonoSingleton instancing
+Alternative `MonoSingleton` instancing
 
 ```csharp
 using OlegHcp.SingleScripts;
@@ -59,10 +59,24 @@ public class MySingleton : MonoSingleton<MySingleton>
 
 ## SingleBehaviour
 
-Same as MonoSingleton but script have to be saved in scene before using. The instance property just looking for it in scene when called first time.
+Same as `MonoSingleton` but script have to be saved in scene before using. The instance property just looking for it in scene when called first time.
 
 ```csharp
 public class MySingleton : SingleBehaviour<MySingleton>
 {
    ...
 ```
+
+## SingleUiBehaviour
+
+Same as `SingleBehaviour` just has `rectTransform` property
+
+## ScriptableSingleton
+
+Abstract generic class derived from `ScriptableObject`.  
+Has lazy initialization with creating instance in runtime.
+Can be modified with `CreateInstanceAttribute`
+
+## SingleScript
+
+Like `SingleBehaviour` should be loaded manualy. The instance property just looking for it in scene when called first time.
