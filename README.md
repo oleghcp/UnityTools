@@ -26,3 +26,27 @@ Also has indicators of tool handles if they are switched to center and global va
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform2.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform3.png)
+
+### Asset Context Menu
+
+#### Create Script From Template
+
+Template can be modified
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateScriptFromTemplate.png)
+
+#### Show Asset Guid
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/ShowAssetGuid.png)
+
+#### Find References In Project
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/FindReferencesInProject.png)
+
+#### Create Asset Based On ScriptableObject
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset1.png)
+
+#### Destroy Subasset
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DestroySubasset.png)
