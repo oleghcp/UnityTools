@@ -18,6 +18,10 @@ Mind that assembly definitions are used.
 
 ## Editor Stuff Overview
 
+### Preferences
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Preferences.png)
+
 ### Custom Transform Editor
 
 Has quick reset buttons and can be switched between local and world view.  
@@ -27,29 +31,27 @@ Also has indicators of tool handles if they are switched to center and global va
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform2.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Transform3.png)
 
-### Asset Context Menu
-
-#### Create Script From Template
+### Create Script From Template
 
 Template can be modified.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateScriptFromTemplate.png)
 
-#### Show Asset Guid
+### Show Asset Guid
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/ShowAssetGuid.png)
 
-#### Find References In Project
+### Find References In Project
 
 Text searching finds addressable references but can be used only if asses tex serialization is used.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/FindReferencesInProject.png)
 
-#### Create Asset Based On ScriptableObject
+### Create Asset Based On ScriptableObject
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CreateAsset2.png)
 
-#### Destroy Subasset
+### Destroy Subasset
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DestroySubasset.png)
