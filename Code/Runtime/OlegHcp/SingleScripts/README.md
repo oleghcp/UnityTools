@@ -7,17 +7,11 @@ Has lazy initialization with creating instance in runtime.
 public class MySingleton : MonoSingleton<MySingleton>
 {
     // Used instead of Awake()
-    protected override void Construct()
-    {
-
-    }
+    protected override void Construct() { }
 
     // Used instead of OnDestroy()
-    protected override void Destruct()
-    {
+    protected override void Destruct()  { }
 
-    }
-	
     public void DoSome()
     {
         // Do something
@@ -37,7 +31,7 @@ public class MyClass
 
 ## CreateInstanceAttribute
 
-Alternative instancing
+Alternative MonoSingleton instancing
 
 ```csharp
 using OlegHcp.SingleScripts;
@@ -47,16 +41,10 @@ using UnityEngine;
 public class MySingleton : MonoSingleton<MySingleton>
 {
     // Called on Awake
-    protected override void Construct()
-    {
-
-    }
+    protected override void Construct() { }
 
     // Called on OnDestroy
-    protected override void Destruct()
-    {
-
-    }
+    protected override void Destruct() { }
 
     private class CreatingAttribute : CreateInstanceAttribute
     {
@@ -67,4 +55,14 @@ public class MySingleton : MonoSingleton<MySingleton>
         }
     }
 }
+```
+
+## SingleBehaviour
+
+Same as MonoSingleton but script have to be saved in scene before using. The instance property just looking for it in scene when called first time.
+
+```csharp
+public class MySingleton : SingleBehaviour<MySingleton>
+{
+   ...
 ```
