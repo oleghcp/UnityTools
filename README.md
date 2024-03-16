@@ -6,7 +6,7 @@ Helpful code stuff for Unity.
 
 ## Usage
 
-For using the library as a unity package add next line into \Packages\manifest.json:
+For using the library as a unity package add next line to \Packages\manifest.json:
 
 ```json
 "dependencies": {
