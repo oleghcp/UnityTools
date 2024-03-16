@@ -18,7 +18,7 @@ namespace OlegHcp.Shooting
         [SerializeField]
         private bool _autodestruct;
         [SerializeField]
-        private bool _doubleCollisionCheck;
+        private bool _doubleCollisionCheck = true;
         [SerializeField]
         private ProjectileCaster _casting;
         [SerializeField]
