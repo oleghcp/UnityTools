@@ -22,7 +22,7 @@ public class Example
 
 ## MathUtility
 
-Some useful math fanctions
+Some useful math functions
 
 ```csharp
 using OlegHcp.Mathematics;
