@@ -2,7 +2,7 @@
 using OlegHcp.CSharp;
 using OlegHcp.NodeBased.Service;
 
-namespace OlegHcpEditor.Window.NodeBased
+namespace OlegHcpEditor.NodeBased
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class CustomNodeDrawerAttribute : Attribute

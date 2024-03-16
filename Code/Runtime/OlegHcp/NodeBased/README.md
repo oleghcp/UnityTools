@@ -55,3 +55,22 @@ public class Example : MonoBehaviour
     }
 }
 ```
+
+### Custom Node View
+
+```csharp
+using OlegHcpEditor.NodeBased;
+using UnityEditor;
+
+[CustomNodeDrawer(typeof(ExampleNode))]
+public class ExampleNodeDrawer : NodeDrawer
+{
+    protected override void OnGui(SerializedProperty property, float width)
+    {
+        EditorGUIUtility.labelWidth = width * 0.5f;
+        EditorGUILayout.LabelField("Overridden", "Qwerty");
+    }
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased5.png)

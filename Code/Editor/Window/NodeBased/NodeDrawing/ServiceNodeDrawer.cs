@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
+namespace OlegHcpEditor.NodeBased
 {
     internal class ServiceNodeDrawer : NodeDrawer
     {
