@@ -22,9 +22,9 @@ public class MyClass
 using OlegHcp.IO;
 using UnityEngine;
 
-public class MyClass : MonoBehaviour
+public class MyClass
 {
-    private void Start()
+    public void DoSomething()
     {
         string parent = PathUtility.GetParentPath("D:/Foo/Bar/Name", 2);
 

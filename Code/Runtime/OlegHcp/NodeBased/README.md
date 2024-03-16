@@ -5,18 +5,14 @@
 ```csharp
 using System;
 using OlegHcp.NodeBased;
-using UnityEngine;
 
-namespace Assets.Code
+[Serializable]
+public class ExampleNode : Node<ExampleNode>
 {
-    [Serializable]
-    public class DialogueNode : Node<DialogueNode>
-    {
-        [SerializeField]
-        private string _text;
+    [UnityEngine.SerializeField]
+    private string _text;
 
-        public string Text => _text;
-    }
+    public string Text => _text;
 }
 ```
 
@@ -26,15 +22,36 @@ namespace Assets.Code
 using OlegHcp.NodeBased;
 using UnityEngine;
 
-namespace Assets.Code
+[CreateAssetMenu(menuName = nameof(OlegHcp) + "/Graph/" + nameof(ExampleGraph), fileName = nameof(ExampleGraph))]
+public class ExampleGraph : Graph<ExampleNode>
 {
-    [CreateAssetMenu(menuName = nameof(OlegHcp) + "/Graph/" + nameof(DialogueGraph), fileName = nameof(DialogueGraph))]
-    public class DialogueGraph : Graph<DialogueNode>
-    {
 
-    }
 }
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased3.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased4.png)
+
+```csharp
+using OlegHcp.NodeBased;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private ExampleGraph _graph;
+
+    private void DoSomething()
+    {
+        ExampleNode node = _graph.RootNode;
+
+        foreach (TransitionInfo<ExampleNode> item in node)
+        {
+            if (!item.IsExit)
+            {
+                Debug.Log(item.NextNode.Text);
+            }
+        }
+    }
+}
+```
