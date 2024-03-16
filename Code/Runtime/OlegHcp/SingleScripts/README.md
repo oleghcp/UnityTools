@@ -1,4 +1,4 @@
-## MonoSingleton<T>
+## MonoSingleton
 
 Abstract generic class derived from MonoBehaviour.  
 Has lazy initialization with creating instance in runtime.
@@ -31,6 +31,40 @@ public class MyClass
     public void MyMethod()
     {
         MySingleton.I.DoSome();
+    }
+}
+```
+
+## CreateInstanceAttribute
+
+Alternative instancing
+
+```csharp
+using OlegHcp.SingleScripts;
+using UnityEngine;
+
+[Creating]
+public class MySingleton : MonoSingleton<MySingleton>
+{
+    // Called on Awake
+    protected override void Construct()
+    {
+
+    }
+
+    // Called on OnDestroy
+    protected override void Destruct()
+    {
+
+    }
+
+    private class CreatingAttribute : CreateInstanceAttribute
+    {
+        public override void Create()
+        {
+            var aaset = Resources.Load(/*prefab path*/);
+            UnityEngine.Object.Instantiate(asset);
+        }
     }
 }
 ```
