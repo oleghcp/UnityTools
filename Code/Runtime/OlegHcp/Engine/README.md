@@ -21,6 +21,76 @@ public class Example : MonoBehaviour
 }
 ```
 
+## TransformExtensions
+
+```csharp
+using System.Collections.Generic;
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private Transform _other;
+
+    private void DoSomething1()
+    {
+        _other.SetParent(gameObject);
+
+        foreach (Transform child in transform.EnumerateChildren(true))
+        {
+            // Do something
+        }
+
+        Transform[] topChildren = transform.GetTopChildren();
+        List<Transform> allChildren = transform.GetAllChildren();
+
+        foreach (Transform parent in transform.EnumerateParents())
+        {
+            // Do something
+        }
+
+        Transform otherParent = transform.GetParent(item => item.gameObject.name == "Name");
+
+        Vector3 back = transform.Back();
+        Vector3 left = transform.Left();
+        Vector3 down = transform.Down();
+
+        _other.Free();
+
+        _other.SetParent(transform, new Vector3());
+
+        _other.SetLocalPositionAndRotation(new Vector3(), Quaternion.identity);
+        _other.SetParams(transform);
+
+        _other.IncreaseSiblingIndex();
+        _other.DecreaseSiblingIndex();
+        _other.MoveSiblingIndex(-2);
+
+        _other.OrderChildren(item => item.gameObject.name);
+
+        transform.DestroyChildren();
+    }
+
+    private void DoSomething2()
+    {
+        RectTransform rectTransform = gameObject.GetRectTransform();
+
+        rectTransform.Move(Vector2.one);
+
+        rectTransform.SetSizeWithCurrentAnchors(Vector2.one * 100f);
+
+        rectTransform.SetAnchor(OlegHcp.RectTransformStretch.MiddleHorizontal, true);
+        rectTransform.SetAnchor(TextAnchor.UpperLeft, true);
+
+        rectTransform.SetPivot(TextAnchor.UpperCenter);
+
+        rectTransform.SetLeft(0f);
+        rectTransform.SetTop(1f);
+    }
+}
+```
+
 ## GameObjectExtensions
 
 ```csharp
@@ -224,4 +294,3 @@ public class Example : MonoBehaviour
     }
 }
 ```
-
