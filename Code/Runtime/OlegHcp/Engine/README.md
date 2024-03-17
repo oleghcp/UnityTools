@@ -268,6 +268,64 @@ public class Example : MonoBehaviour
 }
 ```
 
+## VectorExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private Transform _other;
+
+    private void Start()
+    {
+        Vector3 position = transform.position;
+
+        Vector3 newPosition1 = position.AlterX(100f);
+        Vector3 newPosition2 = position.AlterY(100f);
+        Vector3 newPosition3 = position.AlterZ(100f);
+
+        Vector3 newPosition4 = position.IncreaseX(100f);
+        Vector3 newPosition5 = position.DecreaseY(100f);
+
+        Vector3 vector1 = transform.forward.Abs();
+        Vector3 vector2 = transform.forward.Invert();
+
+        float precision = 0.1f;
+        if (position.Equals(_other.position, precision))
+        {
+            // Do something
+        }
+
+        Vector2 point1 = position.XY();
+        Vector2 point2 = position.XZ();
+        Vector2 point3 = position.YZ();
+
+        position = point1.To_XYz(100f);
+        position = point1.To_XyZ(100f);
+        position = point1.To_XYz(100f);
+
+        Vector3 newDirection1 = transform.forward.GetRotated(Vector3.up, 90f);
+
+        Vector3 newDirection2 = Vector3.one.GetNormalized(out float prevMagnitude);      
+
+        if (prevMagnitude > 0f)
+        {
+            // Do something
+        }
+
+        Vector3 projectVector = Vector3.one.Project(Vector3.up);
+
+        Vector3 clamped = position.GetClamped(new Bounds(Vector3.zero, Vector3.one));
+
+        // Deconstruction
+        var (x, y, z) = position;
+    }
+}
+```
+
 ## QuaternionExtensions
 
 ```csharp
