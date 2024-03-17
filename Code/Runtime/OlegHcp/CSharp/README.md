@@ -408,3 +408,22 @@ public class Example
     }
 }
 ```
+
+## WeakTableExtensions
+
+```csharp
+using System.Runtime.CompilerServices;
+using OlegHcp.CSharp.Runtime.CompilerServices;
+
+public class Example
+{
+    private void DoSomething(ConditionalWeakTable<object, ObjectData> weakTable)
+    {
+        object obj = new object();
+
+        ObjectData data = weakTable.Place(obj, new ObjectData());
+
+        data = weakTable.GetOrCreateValue(obj);
+    }
+}
+```

@@ -10,7 +10,7 @@ namespace OlegHcp.CSharp.Runtime.CompilerServices
             return value;
         }
 
-        public static TValue GetOrCreate<TKey, TValue>(this ConditionalWeakTable<TKey, TValue> self, TKey key) where TKey : class where TValue : class, new()
+        public static TValue GetOrCreateValue<TKey, TValue>(this ConditionalWeakTable<TKey, TValue> self, TKey key) where TKey : class where TValue : class, new()
         {
             if (self.TryGetValue(key, out TValue value))
                 return value;
