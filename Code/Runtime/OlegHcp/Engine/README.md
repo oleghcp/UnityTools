@@ -152,6 +152,28 @@ public class Example : MonoBehaviour
 }
 ```
 
+## QuaternionExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    private void Start()
+    {
+        Quaternion rotation = transform.rotation;
+
+        Vector3 right = rotation.Right();
+        Vector3 left = rotation.Left();
+        Vector3 up = rotation.Up();
+
+        // Deconstruction
+        var (x, y, z, w) = rotation;
+    }
+}
+```
+
 ## ColorExtensions
 
 ```csharp
