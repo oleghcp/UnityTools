@@ -1,3 +1,36 @@
+## GameObjectExtensions
+
+```csharp
+using System.Collections.Generic;
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject _other;
+
+    private void Start()
+    {
+        RectTransform rectTransform = gameObject.GetRectTransform();
+
+        _other.SetParent(gameObject);
+
+        GameObject parent = gameObject.GetParent();
+
+        foreach (GameObject child in gameObject.EnumerateChildren(true))
+        {
+            // Do something
+        }
+
+        GameObject[] topChildren = gameObject.GetTopChildren();
+        List<GameObject> allChildren = gameObject.GetAllChildren();
+
+        gameObject.DestroyChildren();
+    }
+}
+```
+
 ## CameraExtensions
 
 ```csharp
