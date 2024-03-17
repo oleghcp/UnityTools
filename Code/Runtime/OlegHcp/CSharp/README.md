@@ -11,11 +11,10 @@ public class Example
     private void DoSomething()
     {
         Vector3[] array = new Vector3[100];
-        IRng rng = RandomNumberGenerator.Default;
 
-        array.Fill(index => new Vector3(rng.Next(100f),
-                                        rng.Next(100f),
-                                        rng.Next(100f)));        
+        array.Fill(index => new Vector3(RandomNumberGenerator.Default.Next(100f),
+                                        RandomNumberGenerator.Default.Next(100f),
+                                        RandomNumberGenerator.Default.Next(100f)));        
         
         array.Sort(item => item.magnitude);
 
@@ -120,7 +119,41 @@ public class Example
 }
 ```
 
+## SpanExtensions
 
+```csharp
+using System;
+using System.Collections.Generic;
+using OlegHcp;
+using OlegHcp.CSharp;
+using UnityEngine;
 
+public class Example
+{
+    private void DoSomething()
+    {
+        Span<Vector3> span = stackalloc Vector3[20];
 
+        span.Fill(index => new Vector3(RandomNumberGenerator.Default.Next(100f),
+                                       RandomNumberGenerator.Default.Next(100f),
+                                       RandomNumberGenerator.Default.Next(100f)));
 
+        span.Sort(item => item.magnitude);
+
+        int index = span.IndexOf(item => item.magnitude > 50f);
+
+        if (index >= 0)
+        {
+            // Do something
+        }
+
+        span.ForEach(item => Debug.Log(item));
+
+        span.Shuffle();
+
+        Vector3 vector = span.GetRandomItem();
+
+        List<Vector3> list = span.ToList();
+    }
+}
+```
