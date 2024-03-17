@@ -32,7 +32,7 @@ Mind that assembly definitions are used.
 * [Numeric entities](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/NumericEntities). Structs and classes for work with numeric parameters like ranges or character stats.
 * [Object pool](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Pool). ObjectPool implementation.
 * [PostProcessing](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/PostProcessing). Fog effect for built-in render pipeline
-* [Randomization](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Rng). Random number generators.
+* [Randomization](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Rng). Custom random number generators.
 * [Game saving](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/SaveLoad). Save/load system.
 * [Projectiles](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Shooting). Projectile implementation.
 * [Singletons](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/SingleScripts). Singletons based on `MonoBehaviour` and `ScriptableObject`.
