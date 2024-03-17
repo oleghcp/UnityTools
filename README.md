@@ -20,7 +20,7 @@ Mind that assembly definitions are used.
 
 ### Runtime Code
 
-* [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp).
+* [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like ApplicationUtility, BitMask, RandomNumberGenerator, CameraFitter, etc.
 * [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allow to run coroutines in non-MonoBehaviour classes.
 * [Collections](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Collections). Some specific collections.
 * [.Net tools](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/CSharp). Tools and extensions for base .Net api stuff (arrays, collections, strings, etc).
@@ -38,9 +38,13 @@ Mind that assembly definitions are used.
 * [Projectiles](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Shooting). Projectile implementation.
 * [Singletons](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/SingleScripts). Singletons based on `MonoBehaviour` and `ScriptableObject`.
 * [Strings](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Strings). Alphanumeric sorting.
-* [Timer](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Timers).
+* [Timer](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Timers). Simple timer.
 
 ### Editor Code
+
+* [Editor and gui utilities](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/Engine). Tools and extensions for base unity editor stuff.
+* [Enum generator](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/CodeGenerating). Code generating for creating enums. Useful for generating enums based on serialized assets.
+* [Node drawer](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/NodeBased). Custom node drawing for the graph editor.
 
 ## Editor Stuff Overview
 
