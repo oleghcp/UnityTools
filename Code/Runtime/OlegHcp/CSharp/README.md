@@ -39,6 +39,32 @@ public class Example
 }
 ```
 
+## StringExtensions
+
+```csharp
+using OlegHcp.CSharp;
+
+public class Example
+{
+    private void DoSomething(string str)
+    {
+        if (str.IsNullOrEmpty())
+        {
+            // Do something
+        }
+
+        if (str.HasAnyData())
+        {
+            // Do something
+        }
+
+        string newString = str.RemoveWhiteSpaces();
+
+        char ch = str.GetRandomChar();
+    }
+}
+```
+
 ## CommonExtensions
 
 ```csharp
@@ -119,6 +145,21 @@ public class Example
 }
 ```
 
+## Enum
+
+```csharp
+using OlegHcp.CSharp;
+using UnityEngine;
+
+public class Example
+{
+    private void DoSomething()
+    {
+        int nameCount = Enum<KeyCode>.Count;
+    }
+}
+```
+
 ## SpanExtensions
 
 ```csharp
@@ -157,3 +198,4 @@ public class Example
     }
 }
 ```
+
