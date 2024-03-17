@@ -349,3 +349,42 @@ public class Example
     }
 }
 ```
+
+## Iterators
+
+Useful for collection wrappers.
+
+```csharp
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections.Iterators;
+
+public class ExampleWrapper<T>
+{
+    private T[] _items;
+
+    public ExampleWrapper(T[] items)
+    {
+        _items = items.GetCopy();
+    }
+
+    public ArrayEnumerator<T> GetEnumerator()
+    {
+        return new ArrayEnumerator<T>(_items);
+    }
+}
+```
+
+```csharp
+public class Example
+{
+    private void DoSomething()
+    {
+        ExampleWrapper<int> wrapper = new ExampleWrapper<int>(new[] { 0, 1, 2, 3, 4, 5 });
+
+        foreach (int item in wrapper)
+        {
+            UnityEngine.Debug.Log(item);
+        }
+    }
+}
+```
