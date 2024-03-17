@@ -301,3 +301,51 @@ public class Example
     }
 }
 ```
+
+## ReadOnlyCollectionExtensions
+
+```csharp
+using System.Collections.Generic;
+using OlegHcp.CSharp.Collections.ReadOnly;
+using UnityEngine;
+
+public class Example
+{
+    private void DoSomething1(IReadOnlyList<Vector3> list)
+    {
+        if (list.IsNullOrEmpty_())
+        {
+            return;
+        }
+
+        int index = list.IndexOf_(item => item.magnitude > 50f);
+
+        if (index >= 0)
+        {
+            // Do something
+        }
+
+        list.ForEach_(item => Debug.Log(item));
+
+        int indexOfMax = list.IndexOfMax_(item => item.magnitude);
+        int indexOfMin = list.IndexOfMin_(item => item.magnitude);
+
+        Vector3[] array = list.GetSubArray_(10, 50);
+
+        ReadOnlySegment<Vector3> segment = list.Slice_(10, 50);
+
+        foreach (Vector3 item in segment)
+        {
+            // Do something
+        }
+
+        Vector3 randomItem = list.GetRandomItem_();
+
+    }
+
+    private void DoSomething2(IReadOnlyDictionary<int, Vector3> dict)
+    {
+        dict.ForEach_(item => Debug.Log($"{item.Key} : {item.Value}"));
+    }
+}
+```
