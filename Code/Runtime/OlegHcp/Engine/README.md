@@ -80,6 +80,48 @@ public class Example : MonoBehaviour
 }
 ```
 
+## PhysicsExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private LayerMask _mask;
+
+    private void Start()
+    {
+        Physics.Raycast(new Vector3(), Vector3.right, out RaycastHit hitInfo);
+
+        if (hitInfo.Hit())
+        {
+            // Do something
+        }
+
+        int layer = hitInfo.GetLayer();
+        var component1 = hitInfo.GetComponent<MonoBehaviour>();
+        var component2 = hitInfo.GetComponentInParent<MonoBehaviour>();
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        int layer = hit.GetLayer();
+
+        if (_mask.HasLayer(layer))
+        {
+            // Do something
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        int layer = collision.GetLayer();
+    }
+}
+```
+
 ## CameraExtensions
 
 ```csharp
