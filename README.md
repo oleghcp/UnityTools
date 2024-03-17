@@ -9,10 +9,11 @@ For Unity 2019.4 or higher.
 For using the library as a unity package add next line to dependencies in \Packages\manifest.json:
 
 ```
-    "com.oleghcp.unitytools": "https://github.com/oleghcp/UnityTools.git",
+"com.oleghcp.unitytools": "https://github.com/oleghcp/UnityTools.git",
 ```
 
-Also it can be downloaded manually from github and placed into assets folder.  
+Also it can be [downloaded](https://github.com/oleghcp/UnityTools/archive/refs/heads/master.zip) manually from github and placed into assets folder.  
+
 Mind that assembly definitions are used.
 
 ## Code Overview
