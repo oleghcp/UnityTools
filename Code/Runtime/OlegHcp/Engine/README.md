@@ -1,3 +1,26 @@
+## InstantiationExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject _asset;
+
+    private GameObject _instance;
+
+    private void Start()
+    {
+        _instance = _asset.Install();
+        _instance = _asset.Install(transform);
+        _instance = _asset.Install(new Vector3());
+        _instance = _asset.Install(transform, Vector3.zero, Quaternion.identity, true);
+    }
+}
+```
+
 ## GameObjectExtensions
 
 ```csharp
@@ -27,6 +50,32 @@ public class Example : MonoBehaviour
         List<GameObject> allChildren = gameObject.GetAllChildren();
 
         gameObject.DestroyChildren();
+    }
+}
+```
+
+## LayerMaskExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private LayerMask _mask;
+
+    private void Start()
+    {
+        if (_mask.HasLayer(4))
+        {
+            // Do something
+        }
+
+        if (_mask.HasLayer("Layer name"))
+        {
+            // Do something
+        }
     }
 }
 ```
