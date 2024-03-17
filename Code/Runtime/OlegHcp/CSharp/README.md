@@ -199,3 +199,80 @@ public class Example
 }
 ```
 
+## CollectionExtensions
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
+using UnityEngine;
+
+public class Example
+{
+    private void DoSomething1(List<Vector3> list)
+    {
+        if (list.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        list.DisplaceRight();
+        list.DisplaceLeft();
+
+        list.Sort(item => item.magnitude);
+
+        list.Expand(10, () => new Vector3());
+
+        int index = list.IndexOf(item => item.magnitude > 50f);
+
+        if (index >= 0)
+        {
+            // Do something
+        }
+
+        int indexOfMax = list.IndexOfMax(item => item.magnitude);
+        int indexOfMin = list.IndexOfMin(item => item.magnitude);
+
+        Vector3[] array = list.GetSubArray(10, 50);
+
+        ListSegment<Vector3> segment = list.Slice(10, 50);
+
+        foreach (Vector3 item in segment)
+        {
+            // Do something
+        }
+
+        list.Shuffle();
+
+        Vector3 randomItem = list.GetRandomItem();
+
+        Vector3 newItem1 = list.Place(new Vector3());
+        Vector3 newItem2 = list.Push(20, new Vector3());
+
+        Vector3 oldItem1 = list.PullOut(20);
+        Vector3 oldItem2 = list.Pop();
+    }
+
+    private void DoSomething2(Dictionary<int, Vector3> dict)
+    {
+        Vector3 newValue = dict.Place(100, new Vector3());
+
+        if (dict.TryAdd(200, new Vector3()))
+        {
+            // Do something
+        }
+
+        (int key, Vector3 value) pair = (20, Vector3.right);
+        dict.Add(pair);
+
+        ReadOnlyDictionary<int, Vector3> readonlyDict = dict.AsReadOnly();
+
+        readonlyDict.ForEach(item => Debug.Log($"{item.Key} : {item.Value}"));
+
+        Vector3 value = readonlyDict.GetOrCreateValue(150, key => new Vector3());
+    }
+}
+```
+
