@@ -389,6 +389,26 @@ public class Example
 }
 ```
 
+## StringBuilderExtensions
+
+```csharp
+using System.Text;
+using OlegHcp.CSharp.Text;
+
+public class Example
+{
+    private void DoSomething()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        string str = builder.Append("Hello")
+                            .Append(' ')
+                            .Append("World!")
+                            .Cut(); // Return and clear
+    }
+}
+```
+
 ## IOExtensions
 
 ```csharp
