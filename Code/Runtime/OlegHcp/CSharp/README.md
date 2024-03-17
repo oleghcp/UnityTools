@@ -388,3 +388,23 @@ public class Example
     }
 }
 ```
+
+## IOExtensions
+
+```csharp
+using System.IO;
+using OlegHcp.CSharp.IO;
+
+public class Example
+{
+    private void DoSomething1(DirectoryInfo directory)
+    {
+        string parentPath = directory.GetParentPath();
+    }
+
+    private void DoSomething2(FileInfo file)
+    {
+        string parentPath = file.GetParentPath();
+    }
+}
+```
