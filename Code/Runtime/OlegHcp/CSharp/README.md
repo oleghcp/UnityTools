@@ -4,26 +4,28 @@
 using System;
 using OlegHcp;
 using OlegHcp.CSharp;
+using UnityEngine;
 
 public class Example
 {
     private void DoSomething()
     {
-        int[] array = new int[100];
+        Vector3[] array = new Vector3[100];
+        IRng rng = RandomNumberGenerator.Default;
 
-        array.Fill(index => RandomNumberGenerator.Default.Next(0, 100));
-        array.Sort();
+        array.Fill(index => new Vector3(rng.Next(100f), rng.Next(100f), rng.Next(100f)));
+        array.Sort(item => item.magnitude);
 
-        int index = array.IndexOf(50);
+        int index = array.IndexOf(item => item.magnitude > 50f);
 
         if (index >= 0)
         {
             // Do something
         }
 
-        array.ForEach(item => UnityEngine.Debug.Log(item));
+        array.ForEach(item => Debug.Log(item));
 
-        ArraySegment<int> segment = array.Slice(10, 50);
+        ArraySegment<Vector3> segment = array.Slice(10, 50);
 
         array.Clear();
     }
