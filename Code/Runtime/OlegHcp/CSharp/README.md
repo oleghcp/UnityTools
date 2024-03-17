@@ -276,3 +276,28 @@ public class Example
 }
 ```
 
+## EnumerableExtensions
+
+```csharp
+using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
+using UnityEngine;
+
+public class Example
+{
+    private void DoSomething(IEnumerable<Vector3> collection)
+    {
+        if (collection.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        Vector3 min = collection.GetWithMin(item => item.magnitude);
+        Vector3 max = collection.GetWithMax(item => item.magnitude);
+
+        collection.InsertItem(new Vector3(), new Vector3(), new Vector3())
+                  .AppendItem(new Vector3(), new Vector3())
+                  .ForEach(item => Debug.Log(item)); 
+    }
+}
+```
