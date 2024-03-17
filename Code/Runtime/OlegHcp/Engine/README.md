@@ -21,6 +21,52 @@ public class Example : MonoBehaviour
 }
 ```
 
+## UnityObjectExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject _other;
+
+    [SerializeField]
+    private MeshRenderer _renderer;
+
+    private void Start()
+    {
+        // Supports interface references
+        if (gameObject.IsNullOrDead())
+        {
+            // Do something
+        }
+
+        if (gameObject.ExistsAndAlive())
+        {
+            // Do something
+        }
+
+        gameObject.Destroy();
+        gameObject.Destroy(5f);
+
+        _other.Immortalize(); // DontDestroyOnLoad
+
+        if (_other.IsAsset())
+        {
+            // Do something
+        }
+
+        Mesh mesh1 = _renderer.GetMesh();
+        Mesh mesh2 = _renderer.GetSharedMesh();
+
+        _renderer.SetMesh(new Mesh());
+        _renderer.SetSharedMesh(new Mesh());
+    }
+}
+```
+
 ## TransformExtensions
 
 ```csharp
