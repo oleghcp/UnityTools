@@ -20,7 +20,7 @@ Mind that assembly definitions are used.
 
 ### Runtime Code
 
-* [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like ApplicationUtility, BitMask, RandomNumberGenerator, CameraFitter, etc.
+* [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like `ApplicationUtility`, `BitMask`, `RandomNumberGenerator`, `CameraFitter`, etc.
 * [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allow to run coroutines in non-MonoBehaviour classes.
 * [Collections](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Collections). Some specific collections.
 * [.Net tools](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/CSharp). Tools and extensions for base .Net api stuff (arrays, collections, strings, etc).
