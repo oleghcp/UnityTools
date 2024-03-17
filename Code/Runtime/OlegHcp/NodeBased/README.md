@@ -1,6 +1,6 @@
 ## Node Based
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased1.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/NodeBased1.png)
 
 ```csharp
 using System;
@@ -16,7 +16,7 @@ public class ExampleNode : Node<ExampleNode>
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased2.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/NodeBased2.png)
 
 ```csharp
 using OlegHcp.NodeBased;
@@ -29,8 +29,8 @@ public class ExampleGraph : Graph<ExampleNode>
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased3.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased4.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/NodeBased3.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/NodeBased4.png)
 
 ```csharp
 using OlegHcp.NodeBased;
@@ -86,4 +86,4 @@ public class ExampleNodeDrawer : NodeDrawer
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/NodeBased5.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/NodeBased5.png)

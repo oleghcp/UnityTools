@@ -17,7 +17,7 @@ public class Example : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Diapason.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Diapason.png)
 
 ## RngParam
 
@@ -37,7 +37,7 @@ public class Example : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/RngParam.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngParam.png)
 
 ## AccumFloat/AccumInt
 

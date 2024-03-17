@@ -2,4 +2,4 @@
 
 Fog effect for built-in render pipeline
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Fog.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Fog.png)

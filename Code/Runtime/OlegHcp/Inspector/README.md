@@ -53,7 +53,7 @@ public class ClassC : Data
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/ReferenceSelection.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ReferenceSelection.png)
 
 ## CertainTypesAttribute
 
@@ -100,7 +100,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DisableEditing.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DisableEditing.png)
 
 ## DrawFlagsAttribute
 
@@ -138,7 +138,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/IntMask.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/IntMask.png)
 
 ## DrawObjectFieldsAttribute
 
@@ -166,7 +166,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/DrawObjectFields.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DrawObjectFields.png)
 
 ## EnumMenuAttribute
 
@@ -187,7 +187,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/EnumMenu.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/EnumMenu.png)
 
 ## FolderRequiredAttribute
 
@@ -221,7 +221,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Identifier.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Identifier.png)
 
 ## InitToggleAttribute
 
@@ -253,8 +253,8 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitToggle1.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitToggle2.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/InitToggle1.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/InitToggle2.png)
 
 ## InitListAttribute
 
@@ -321,7 +321,7 @@ public class ClassC : Data
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/InitList.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/InitList.png)
 
 ## LayerFieldAttribute
 
@@ -345,7 +345,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/LayerField.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/LayerField.png)
 
 ## SortingLayerIDAttribute
 
@@ -361,7 +361,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/SortingLayerID.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/SortingLayerID.png)
 
 ## TypeNameAttribute
 
@@ -402,4 +402,4 @@ public class ClassC : Data
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Typename.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Typename.png)

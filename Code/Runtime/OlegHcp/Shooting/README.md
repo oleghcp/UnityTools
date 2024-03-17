@@ -1,6 +1,6 @@
 ## Projectile
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/Projectile.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Projectile.png)
 
 ```csharp
 using OlegHcp.Shooting;

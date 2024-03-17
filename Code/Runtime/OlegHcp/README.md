@@ -49,7 +49,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/AssetRef.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AssetRef.png)
 
 ## BitMask
 
@@ -116,8 +116,8 @@ public class MyClass : MonoBehaviour
 
 ## CameraFitter
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CameraFitter1.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/CameraFitter2.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CameraFitter1.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CameraFitter2.png)
 
 ## Colours
 
@@ -442,7 +442,7 @@ public class MyClass : MonoBehaviour
 
 ## RenderSorter
 
-![](https://github.com/oleghcp/UnityTools/blob/workflow/corrections/_images/RenderSorter.png?raw=true)
+![](https://github.com/oleghcp/UnityTools/blob/master/_images/RenderSorter.png?raw=true)
 
 ## ScreenUtility
 
@@ -510,7 +510,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/OrderSiblingsByList.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderSiblingsByList.png)
 
 ```csharp
 using System.Collections.Generic;
@@ -542,7 +542,7 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/workflow/corrections/_images/AlignPositions.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AlignPositions.png)
 
 ## UiMonoBehaviour
 
