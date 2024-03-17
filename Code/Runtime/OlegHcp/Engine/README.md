@@ -196,3 +196,32 @@ public class Example : MonoBehaviour
     }
 }
 ```
+
+## RectExtensions
+
+```csharp
+using OlegHcp;
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    private void Start()
+    {
+        RectTransform rectTransform = gameObject.GetRectTransform();
+        Rect rect = rectTransform.rect;
+
+        float diagonal = rect.GetDiagonal();
+
+        Rect newRect1 = rect.GetMultiplied(new Vector2(2f, 2f));
+        Rect newRect2 = rect.GetExpanded(new Vector2(2f, 2f), new Vector2(0.5f, 0.5f));
+
+        RectInt intRect = RectUtility.MinMaxRectInt(0, 0, 100, 100);
+        Rect newRect = intRect.ToRect();
+
+        // Deconstruction
+        var (x, y, width, height) = rect;
+    }
+}
+```
+
