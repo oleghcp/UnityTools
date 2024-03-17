@@ -2,7 +2,7 @@
 
 In-game terminal for commands input and log messages output.  
 Supports command substitution by Tab key and keeps list of previous commands.  
-Default openning by Backtick key like in Quake buy it can be overridden.
+Default openning by Backtick key like in Quake but it can be overridden.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Terminal1.png)
 
