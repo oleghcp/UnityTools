@@ -398,3 +398,25 @@ public class Example : MonoBehaviour
     }
 }
 ```
+
+## UnityEventExtensions
+
+```csharp
+using OlegHcp.Engine.Events;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private UnityEvent _event;
+
+    private void Start()
+    {
+        foreach (Object listener in _event.EnumerateListeners())
+        {
+            // Do something
+        }
+    }
+}
+```
