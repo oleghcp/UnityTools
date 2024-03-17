@@ -127,7 +127,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Returns transform of gameobject as RectTransform if posible. Otherwise returns null.
+        /// Returns transform of gameobject as RectTransform if possible. Otherwise returns null.
         /// </summary>
         public static RectTransform GetRectTransform(this GameObject self)
         {

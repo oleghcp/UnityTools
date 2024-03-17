@@ -4,7 +4,7 @@ using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
 
-namespace OlegHcpEditor.Window.NodeBased
+namespace OlegHcpEditor.NodeBased
 {
     public class NodeDrawer
     {

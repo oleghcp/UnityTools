@@ -599,7 +599,7 @@ namespace OlegHcp.CSharp.Collections
         }
 
         /// <summary>
-        /// Removes the element at the specified index of the lsit and returns that element.
+        /// Removes the element at the specified index of the list and returns that element.
         /// </summary>
         public static T PullOut<T>(this IList<T> self, int index)
         {
@@ -609,7 +609,7 @@ namespace OlegHcp.CSharp.Collections
         }
 
         /// <summary>
-        /// Removes the last element of the lsit and returns that element.
+        /// Removes the last element of the list and returns that element.
         /// </summary>
         public static T Pop<T>(this IList<T> self)
         {

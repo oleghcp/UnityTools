@@ -54,8 +54,8 @@ namespace OlegHcpEditor.Window
             _tags = _tagManager.FindProperty("tags");
             _layers = _tagManager.FindProperty("layers");
 
-            _listDrawer = new ListDrawer<MaskField>(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks)),
-                                                    new LayerMaskFieldDrawer());
+            string labelName = ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks));
+            _listDrawer = new ListDrawer<MaskField>(labelName, new LayerMaskFieldDrawer());
         }
 
         private void OnGUI()
@@ -96,7 +96,7 @@ namespace OlegHcpEditor.Window
             if (_altConfigVersion.LayerFields)
             {
                 _altConfigVersion.MaskFieldType = (LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.MaskFieldType)), config.MaskFieldType);
-                var drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
+                LayerMaskFieldDrawer drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
                 drawer.Names = _layers.EnumerateArrayElements()
                                       .Select(item => item.stringValue)
                                       .ToArray();
@@ -143,7 +143,7 @@ namespace OlegHcpEditor.Window
                 return;
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            foreach (var item in collection)
+            foreach (T item in collection)
             {
                 drawer(item);
             }

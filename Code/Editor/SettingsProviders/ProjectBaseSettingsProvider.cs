@@ -1,24 +1,24 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿//using System.Collections.Generic;
+//using UnityEditor;
+//using UnityEngine;
 
-namespace OlegHcpEditor.SettingsProviders
-{
-    internal class ProjectBaseSettingsProvider : SettingsProvider
-    {
-        public ProjectBaseSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
-        {
-        }
+//namespace OlegHcpEditor.SettingsProviders
+//{
+//    internal class ProjectBaseSettingsProvider : SettingsProvider
+//    {
+//        public ProjectBaseSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
+//        {
+//        }
 
-        [SettingsProvider]
-        private static SettingsProvider CreateProvider()
-        {
-            return new ProjectBaseSettingsProvider($"{SettingsProviderUtility.PROJECT_SECTION_NAME}/{LibConstants.LIB_NAME}", SettingsScope.Project);
-        }
+//        [SettingsProvider]
+//        private static SettingsProvider CreateProvider()
+//        {
+//            return new ProjectBaseSettingsProvider($"{SettingsProviderUtility.PROJECT_SECTION_NAME}/{LibConstants.LIB_NAME}", SettingsScope.Project);
+//        }
 
-        public override void OnGUI(string searchContext)
-        {
-            GUILayout.Label($"{LibConstants.LIB_NAME} Settings");
-        }
-    }
-}
+//        public override void OnGUI(string searchContext)
+//        {
+//            GUILayout.Label($"{LibConstants.LIB_NAME} Settings");
+//        }
+//    }
+//}

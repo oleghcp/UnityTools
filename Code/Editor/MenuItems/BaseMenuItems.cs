@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using OlegHcp.CSharp;
 using OlegHcp.IO;
-using OlegHcp.Tools;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window;
 using OlegHcpEditor.Window.ShapeWizards;
@@ -117,13 +117,13 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(MAIN_MENU_NAME + "Capture Screen/Take Screenshot")]
         private static void Screenshot()
         {
-            ScreenCapture.CaptureScreenshot($"Screenshot_{Helper.GetDateTimeString()}.png");
+            ScreenCapture.CaptureScreenshot($"Screenshot_{DateTime.Now:yyyy.MM.dd_HH.mm.ss}.png");
         }
 
         [MenuItem(MAIN_MENU_NAME + "Capture Screen/Take Screenshot as")]
         private static void ScreenshotAs()
         {
-            string path = EditorUtility.SaveFilePanel("Take Screenshot", Application.dataPath, $"Screenshot_{Helper.GetDateTimeString()}", "png");
+            string path = EditorUtility.SaveFilePanel("Take Screenshot", Application.dataPath, $"Screenshot_{DateTime.Now:yyyy.MM.dd_HH.mm.ss}", "png");
             if (path.HasUsefulData())
                 ScreenCapture.CaptureScreenshot(path);
         }

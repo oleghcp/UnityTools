@@ -50,7 +50,6 @@ namespace OlegHcp.NumericEntities
     {
         PureAdditive,
         RelativeMultiplier,
-        RelativeDivider,
     }
 
     public interface IModifier<T> where T : struct, IComparable<T>, IEquatable<T>

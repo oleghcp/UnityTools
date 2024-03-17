@@ -9,6 +9,7 @@ using OlegHcp.Engine;
 using OlegHcp.NodeBased;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
+using OlegHcpEditor.NodeBased;
 using OlegHcpEditor.Window.NodeBased.NodeDrawing;
 using UnityEditor;
 using UnityEngine;

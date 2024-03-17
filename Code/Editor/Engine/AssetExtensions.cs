@@ -8,7 +8,7 @@ namespace OlegHcpEditor.Engine
     {
         public static bool IsFolder(this UnityObject self)
         {
-            return ProjectWindowUtil.IsFolder(self.GetInstanceID());
+            return AssetDatabase.IsValidFolder(AssetDatabase.GetAssetPath(self));
         }
 
         public static bool IsNativeAsset(this UnityObject self)

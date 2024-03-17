@@ -5,6 +5,7 @@ using OlegHcp;
 using OlegHcp.Mathematics;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
+using OlegHcpEditor.NodeBased;
 using UnityEditor;
 using UnityEngine;
 
