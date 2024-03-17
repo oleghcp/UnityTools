@@ -69,7 +69,7 @@ namespace OlegHcpEditor.CodeGenerating
         UShort,
         Int,
         UInt,
-        Loung,
+        Long,
         ULong,
     }
 }
