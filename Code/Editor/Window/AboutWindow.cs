@@ -32,6 +32,9 @@ namespace OlegHcpEditor.Window
 
         private void OnGUI()
         {
+            Vector2 offset = Vector2.one * 3f;
+            GUILayout.BeginArea(new Rect(offset, position.size - offset * 2f), EditorStyles.helpBox);
+
             using (new EditorGuiLayout.HorizontalCenteringScope())
             {
                 EditorGUILayout.BeginVertical();
@@ -48,6 +51,8 @@ namespace OlegHcpEditor.Window
 
                 EditorGUILayout.EndVertical();
             }
+
+            GUILayout.EndArea();
         }
 
         [Serializable]

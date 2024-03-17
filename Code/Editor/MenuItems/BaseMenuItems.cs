@@ -107,13 +107,15 @@ namespace OlegHcpEditor.MenuItems
             SearchHugeFilesWindow.Create();
         }
 
-#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
         [MenuItem(MAIN_MENU_NAME + "Addressables/Analysis Results")]
         private static void OpenAddressablesAnalysisResultsWindow()
         {
+#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
             EditorWindow.GetWindow<AddressablesAnalysisResultsWindow>(false, "Analysis Results", true);
-        }
+#else
+            EditorWindow.GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
 #endif
+        }
         [MenuItem(MAIN_MENU_NAME + "Capture Screen/Take Screenshot")]
         private static void Screenshot()
         {
