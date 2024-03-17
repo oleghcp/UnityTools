@@ -6,10 +6,9 @@ For Unity 2019.4 or higher.
 
 ## Usage
 
-For using the library as a unity package add next line to \Packages\manifest.json:
+For using the library as a unity package add next line to dependencies in \Packages\manifest.json:
 
 ```
-"dependencies": {
     "com.oleghcp.unitytools": "https://github.com/oleghcp/UnityTools.git",
 ```
 
