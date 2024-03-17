@@ -20,7 +20,6 @@ public class MyClass
 
 ```csharp
 using OlegHcp.IO;
-using UnityEngine;
 
 public class MyClass
 {
