@@ -27,3 +27,26 @@ public class Example : MonoBehaviour
     }
 }
 ```
+
+## ColorExtensions
+
+```csharp
+using OlegHcp.Engine;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private Color _color;
+
+    private void Start()
+    {
+        Color newColor1 = _color.AlterR(0.5f);
+        Color newColor2 = _color.AlterG(0.5f);
+        Color newColor3 = _color.AlterB(0.5f);
+
+        // Deconstruction
+        var (r, g, b, a) = _color;
+    }
+}
+```
