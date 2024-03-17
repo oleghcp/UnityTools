@@ -29,6 +29,11 @@ public class Example
         array.ForEach(item => Debug.Log(item));
 
         ArraySegment<Vector3> segment = array.Slice(10, 50);
+        
+        foreach (Vector3 item in segment)
+        {
+            // Do something
+        }
 
         array.Clear();
     }
@@ -88,4 +93,34 @@ public class Example
     }
 }
 ```
+
+## ConcatToStringExtensions
+
+```csharp
+using System.Collections.Generic;
+using OlegHcp.CSharp;
+using UnityEngine;
+
+public class Example
+{
+    private void DoSomething1(object[] array)
+    {
+        string str = array.ConcatToString('.');
+    }
+
+    private void DoSomething1(IEnumerable<object> array)
+    {
+        string str = array.ConcatToString("->");
+    }
+
+    private void DoSomething2(Vector2[] array)
+    {
+        string str = array.ConcatToString(" | ");
+    }
+}
+```
+
+
+
+
 
