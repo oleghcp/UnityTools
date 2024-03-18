@@ -1,6 +1,6 @@
 # OlegHCP Unity Tools
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)
+[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
 
 Helpful code stuff for Unity.  
 Supports 2019.4 or newer.  
