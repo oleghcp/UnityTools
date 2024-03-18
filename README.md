@@ -2,7 +2,7 @@
 
 Helpful code stuff for Unity.  
 Supports 2019.4 or newer.  
-© Oleg Pulkin
+Discussion [thread](https://forum.unity.com/threads/my-unity-tools.640321/).
 
 ## Usage
 
