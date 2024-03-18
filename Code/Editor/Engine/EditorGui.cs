@@ -14,6 +14,25 @@ namespace OlegHcpEditor.Engine
 {
     public static class EditorGui
     {
+        // TODO: remove when fixed
+        #region Crutch for broken PropertyField for Unity 2022 or newer
+        internal static void PropertyFieldIndented(in Rect position, SerializedProperty property, GUIContent label, bool includeChildren)
+        {
+#if UNITY_2022_2_OR_NEWER
+            using (new EditorGUI.IndentLevelScope(-1))
+#endif
+                EditorGUI.PropertyField(position, property, label, includeChildren);
+        }
+
+        internal static bool FoldoutIndented(in Rect position, bool foldout, GUIContent content, bool toggleOnLabelClick)
+        {
+#if UNITY_2022_2_OR_NEWER
+            using (new EditorGUI.IndentLevelScope(-1))
+#endif
+                return EditorGUI.Foldout(position, foldout, content, toggleOnLabelClick);
+        }
+        #endregion
+
         internal static void ErrorLabel(in Rect position, GUIContent label, string message)
         {
             EditorGUI.LabelField(position, label, EditorGuiUtility.TempContent(message));

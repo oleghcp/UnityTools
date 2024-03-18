@@ -28,7 +28,7 @@ namespace OlegHcpEditor.Drawers
             property.FindPropertyRelative(RngParam.RangeFieldName)
                     .Draw(lineRect, EditorGuiUtility.TempContent(Helper.Space));
             EditorGUI.PrefixLabel(lineRect, EditorGuiUtility.TempContent(name));
-            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
+            property.isExpanded = EditorGui.FoldoutIndented(lineRect, property.isExpanded, GUIContent.none, true);
 
             if (!property.isExpanded)
                 return;
