@@ -21,7 +21,7 @@ Mind that assembly definitions are used.
 ### Runtime Code
 
 * [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like `ApplicationUtility`, `BitMask`, `RandomNumberGenerator`, `CameraFitter`, etc.
-* [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allow to run coroutines in non-MonoBehaviour classes.
+* [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allows to run coroutines in non-MonoBehaviour classes.
 * [Collections](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Collections). Some specific collections.
 * [.Net tools](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/CSharp). Tools and extensions for base .Net api stuff (arrays, collections, strings, etc).
 * [Unity tools](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Engine). Tools and extensions for base Unity api stuff (game objects, transforms, vectors, etc).
@@ -59,11 +59,11 @@ Mind that assembly definitions are used.
 | Menu Item | Description |
 | - | - |
 | Tools/OlegHcp/Addressables/Analysis Results | Converts analysis results from bundle-duplicates to duplicate-bundles. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Addressables1.png) |
-| Tools/OlegHcp/Assets/Create Scriptable Object Asset | Allow to create assets based on `ScriptableObject` without `CreateAssetMenuAttribute`. |
+| Tools/OlegHcp/Assets/Create Scriptable Object Asset | Allows to create assets based on `ScriptableObject` without `CreateAssetMenuAttribute`. |
 | Tools/OlegHcp/Assets/Find Asset By Guid | Searching assets by guid. |
 | Tools/OlegHcp/Assets/Meshes/ | Create simple mesh assets using mesh generating. |
 | Tools/OlegHcp/CaptureScreen/ | Creates screenshots and saves them to a file. |
-| Tools/OlegHcp/Code/Generate Layer Set Class | Allow to generate static class with layer and mask constants. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/LayerSet1.png) |
+| Tools/OlegHcp/Code/Generate Layer Set Class | Allows to generate static class with layer and mask constants. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/LayerSet1.png) |
 | Tools/OlegHcp/Files/Convert Code Files to UTF8 | Converts project code files to UTF8 including shaders. |
 | Tools/OlegHcp/Files/Convert Text Files to UTF8 | Converts all text files to UTF8 including code files. |
 | Tools/OlegHcp/Files/Find Huge Files | Searches files by given size. |
