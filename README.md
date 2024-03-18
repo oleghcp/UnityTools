@@ -1,7 +1,7 @@
 # OlegHCP Unity Tools
 
 Helpful code stuff for Unity.  
-For Unity 2019.4 or higher.  
+Supports 2019.4 or newer.  
 © Oleg Pulkin
 
 ## Usage
@@ -59,9 +59,9 @@ Mind that assembly definitions are used.
 | Menu Item | Description |
 | - | - |
 | Tools/OlegHcp/Addressables/Analysis Results | Converts analysis results from bundle-duplicates to duplicate-bundles. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Addressables1.png) |
-| Tools/OlegHcp/Assets/Create Scriptable Object Asset | Allows to create assets based on `ScriptableObject` without `CreateAssetMenuAttribute`. |
-| Tools/OlegHcp/Assets/Find Asset By Guid | Searching assets by guid. |
-| Tools/OlegHcp/Assets/Meshes/ | Create simple mesh assets using mesh generating. |
+| Tools/OlegHcp/Assets/Create Scriptable Object Asset | Allows to create assets based on `ScriptableObject` without `CreateAssetMenuAttribute`. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CreateAsset2.png) |
+| Tools/OlegHcp/Assets/Find Asset By Guid | Asset searching by guid. |
+| Tools/OlegHcp/Assets/Meshes/ | Creates simple mesh assets using mesh generating. |
 | Tools/OlegHcp/CaptureScreen/ | Creates screenshots and saves them to a file. |
 | Tools/OlegHcp/Code/Generate Layer Set Class | Allows to generate static class with layer and mask constants. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/LayerSet1.png) |
 | Tools/OlegHcp/Files/Convert Code Files to UTF8 | Converts project code files to UTF8 including shaders. |
