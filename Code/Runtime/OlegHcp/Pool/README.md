@@ -28,7 +28,7 @@ public static class ExamplePool
 {
     private static ObjectPool<ExampleObject> _pool = new ObjectPool<ExampleObject>(CreateObject);
 
-    public static ExampleObject GetObjects()
+    public static ExampleObject GetObject()
     {
         return _pool.Get();
     }
