@@ -282,7 +282,7 @@ public class MyClass : MonoBehaviour
         // Call MyMethod()
         _obj.SendMsg("MyMethod");
 
-        // Calling non-existent method do nothing
+        // Call of non-existent method doesn't do anything
         _obj.SendMsg("Qwerty");
 
         // Messaging uses reflection so try not to abuse it
