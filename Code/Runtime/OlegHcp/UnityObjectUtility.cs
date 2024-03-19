@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using OlegHcp.CSharp;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -28,26 +29,27 @@ namespace OlegHcp
         /// <summary>
         /// Returns true if a game object is asset reference. For scene objects returns false.
         /// </summary>
-        public static bool IsAsset(GameObject self)
+        public static bool IsAsset(GameObject gameObject)
         {
-            return !self.scene.IsValid();
+            return !gameObject.scene.IsValid();
         }
 
         /// <summary>
-        /// Returns true if a Component is asset reference. For scene objects returns false.
+        /// Returns true if the component is asset reference. For scene objects returns false.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAsset(Component self)
+        public static bool IsAsset(Component component)
         {
-            return IsAsset(self.gameObject);
+            return IsAsset(component.gameObject);
         }
 
         /// <summary>
-        /// Returns true if UnityEngine.Object is asset reference.
+        /// Returns true if ScriptableObject is asset reference.
         /// </summary>
-        public static bool IsAsset(UnityObject self)
+        public static bool IsAsset(ScriptableObject obj)
         {
-            return self.GetInstanceID() > 0;
+            return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+                               .Contains(obj);
         }
     }
 }
