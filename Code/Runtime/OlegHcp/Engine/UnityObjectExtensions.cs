@@ -31,7 +31,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Returns true if a game object is asset reference. For scene objects returns false.
+        /// Returns true if the game object is asset reference. For scene objects returns false.
         /// </summary>
         public static bool IsAsset(this GameObject self)
         {
@@ -39,7 +39,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Returns true if a Component is asset reference. For scene objects returns false.
+        /// Returns true if the component is asset reference. For scene objects returns false.
         /// </summary>
         public static bool IsAsset(this Component self)
         {
@@ -47,9 +47,9 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Returns true if UnityEngine.Object is asset reference.
+        /// Returns true if ScriptableObject is asset reference.
         /// </summary>
-        public static bool IsAsset(this UnityObject self)
+        public static bool IsAsset(this ScriptableObject self)
         {
             return UnityObjectUtility.IsAsset(self);
         }
