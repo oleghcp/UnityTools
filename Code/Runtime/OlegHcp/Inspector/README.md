@@ -1,3 +1,26 @@
+## InspectorButtonAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private int _foo;
+    [SerializeField]
+    private string _bar;
+
+    [InspectorButton("Do something", 30f)]
+    public void MyMethod()
+    {
+
+    }
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/InspectorButton.png)
+
 ## ReferenceSelectionAttribute
 
 ```csharp
