@@ -577,7 +577,7 @@ public class MyClass : MonoBehaviour
 
     public void DoSomething2(ISomeInterface obj)
     {
-        // Object can be instance of MonoBehaviour but null checking is useless int this case
+        // Object can be instance of MonoBehaviour but null checking is useless because of interface reference
         if (!UnityObjectUtility.IsNullOrDead(obj))
         {
             // Do something

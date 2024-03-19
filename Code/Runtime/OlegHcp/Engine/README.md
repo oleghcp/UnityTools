@@ -37,7 +37,6 @@ public class Example : MonoBehaviour
 
     private void Start()
     {
-        // Supports interface references
         if (gameObject.IsNullOrDead())
         {
             // Do something
