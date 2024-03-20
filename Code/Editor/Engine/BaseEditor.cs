@@ -20,7 +20,7 @@ namespace OlegHcpEditor.Engine
         {
             var methods = GetMethodList();
 
-            if (methods.Length == 0 && targets.Count > 1)
+            if (methods.Length == 0 || targets.Count > 1)
                 return;
 
             EditorGUILayout.Space();
