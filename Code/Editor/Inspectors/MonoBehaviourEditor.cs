@@ -8,6 +8,10 @@ namespace OlegHcpEditor.Inspectors
     [CustomEditor(typeof(MonoBehaviour), true)]
     internal class MonoBehaviourEditor : BaseEditor<MonoBehaviour>
     {
-
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            DrawMethodButtons();
+        }
     }
 }

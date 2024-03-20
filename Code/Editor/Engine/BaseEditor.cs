@@ -16,12 +16,6 @@ namespace OlegHcpEditor.Engine
 
         private (MethodInfo method, InspectorButtonAttribute a)[] _methods;
 
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-            DrawMethodButtons();
-        }
-
         protected void DrawMethodButtons()
         {
             var methods = GetMethodList();

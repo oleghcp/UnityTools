@@ -8,6 +8,10 @@ namespace OlegHcpEditor.Inspectors
     [CustomEditor(typeof(ScriptableObject), true)]
     internal class ScriptableObjectEditor : BaseEditor<ScriptableObject>
     {
-
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            DrawMethodButtons();
+        }
     }
 }
