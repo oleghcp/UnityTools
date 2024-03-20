@@ -12,7 +12,7 @@ public class Example : MonoBehaviour
     private string _bar;
 
     [InspectorButton("Do something", 30f)]
-    public void MyMethod()
+    private void MyMethod()
     {
 
     }

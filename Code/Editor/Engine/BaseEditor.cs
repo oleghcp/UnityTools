@@ -30,9 +30,10 @@ namespace OlegHcpEditor.Engine
             for (int i = 0; i < methods.Length; i++)
             {
                 var (method, a) = methods[i];
+                string buttonName = a.ButtonName.IsNullOrEmpty() ? method.Name : a.ButtonName;
 
-                if (GUILayout.Button(a.ButtonName.IsNullOrEmpty() ? method.Name : a.ButtonName, GUILayout.Height(a.Size)))
-                    method.Invoke(method.IsStatic ? null : targetObject, null);
+                if (GUILayout.Button(buttonName, GUILayout.Height(a.Size)))
+                    method.Invoke(targetObject, null);
             }
         }
 
