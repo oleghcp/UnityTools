@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using OlegHcp.CSharp;
@@ -11,6 +12,8 @@ namespace OlegHcpEditor.Engine
 {
     public abstract class BaseEditor<T> : Editor<T>, IReadOnlyList<T> where T : UnityObject
     {
+        private static Dictionary<Type, (MethodInfo method, InspectorButtonAttribute a)[]> _globalStorage;
+
         private (MethodInfo method, InspectorButtonAttribute a)[] _methods;
 
         public override void OnInspectorGUI()
@@ -43,11 +46,20 @@ namespace OlegHcpEditor.Engine
         {
             if (_methods == null)
             {
-                _methods = target.GetType()
-                                 .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
-                                 .Select(item => (item, item.GetCustomAttribute<InspectorButtonAttribute>(true)))
-                                 .Where(item => item.Item2 != null)
-                                 .ToArray();
+                if (_globalStorage == null)
+                    _globalStorage = new Dictionary<Type, (MethodInfo method, InspectorButtonAttribute a)[]>();
+
+                Type targetType = target.GetType();
+
+                if (!_globalStorage.TryGetValue(targetType, out _methods))
+                {
+                    _methods = targetType.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+                                         .Select(item => (item, item.GetCustomAttribute<InspectorButtonAttribute>(true)))
+                                         .Where(item => item.Item2 != null)
+                                         .ToArray();
+
+                    _globalStorage.Add(targetType, _methods);
+                }
             }
 
             return _methods;
