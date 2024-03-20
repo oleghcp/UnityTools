@@ -79,7 +79,7 @@ namespace OlegHcpEditor.Inspectors
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical(_areaOptions);
-            DrawButtons();
+            DrawResetButtons();
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical();
@@ -120,7 +120,7 @@ namespace OlegHcpEditor.Inspectors
             GUI.enabled = true;
         }
 
-        private void DrawButtons()
+        private void DrawResetButtons()
         {
             serializedObject.Update();
 
