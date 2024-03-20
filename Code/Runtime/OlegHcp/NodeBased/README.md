@@ -45,11 +45,11 @@ public class Example : MonoBehaviour
     {
         ExampleNode node = _graph.RootNode;
 
-        foreach (TransitionInfo<ExampleNode> item in node)
+        foreach (TransitionInfo<ExampleNode> transition in node)
         {
-            if (!item.IsExit)
+            if (!transition.IsExit)
             {
-                Debug.Log(item.NextNode.Text);
+                Debug.Log(transition.NextNode.Text);
             }
         }
     }
