@@ -48,8 +48,12 @@ namespace OlegHcp
         /// </summary>
         public static bool IsAsset(ScriptableObject obj)
         {
+#if UNITY_2020_3_OR_NEWER
             return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                                .Contains(obj);
+#else
+            return !UnityObject.FindObjectsOfType(obj.GetType()).Contains(obj);
+#endif
         }
     }
 }
