@@ -6,34 +6,57 @@ using OlegHcp.CSharp;
 using OlegHcp.Inspector;
 using UnityEditor;
 using UnityEngine;
-using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Engine
 {
-    public abstract class BaseEditor<T> : Editor<T>, IReadOnlyList<T> where T : UnityObject
+    public abstract class MethodButtonsEditor : Editor
     {
         private static Dictionary<Type, (MethodInfo method, InspectorButtonAttribute a)[]> _globalStorage;
 
         private (MethodInfo method, InspectorButtonAttribute a)[] _methods;
 
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+            DrawMethodButtons();
+        }
+
         protected void DrawMethodButtons()
         {
             var methods = GetMethodList();
 
-            if (methods.Length == 0 || targets.Count > 1)
+            if (methods.Length == 0)
                 return;
 
             EditorGUILayout.Space();
 
-            UnityObject targetObject = serializedObject.targetObject;
+            Span<bool> pressed = stackalloc bool[methods.Length];
 
             for (int i = 0; i < methods.Length; i++)
             {
                 var (method, a) = methods[i];
                 string buttonName = a.ButtonName.IsNullOrEmpty() ? method.Name : a.ButtonName;
 
-                if (GUILayout.Button(buttonName, GUILayout.Height(a.Size)))
-                    method.Invoke(targetObject, null);
+                pressed[i] = GUILayout.Button(buttonName, GUILayout.Height(a.Size));
+            }
+
+            for (int i = 0; i < pressed.Length; i++)
+            {
+                if (!pressed[i])
+                    continue;
+
+                MethodInfo method = methods[i].method;
+
+                if (method.IsStatic)
+                {
+                    method.Invoke(null, null);
+                    continue;
+                }
+
+                for (int j = 0; j < targets.Length; j++)
+                {
+                    method.Invoke(targets[j], null);
+                }
             }
         }
 
