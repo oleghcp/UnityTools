@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public static class EditorStylesExt
     {

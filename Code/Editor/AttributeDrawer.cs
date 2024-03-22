@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public abstract class AttributeDrawer<TAttribute> : PropertyDrawer where TAttribute : PropertyAttribute
     {

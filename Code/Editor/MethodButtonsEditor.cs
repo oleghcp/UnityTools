@@ -7,7 +7,7 @@ using OlegHcp.Inspector;
 using UnityEditor;
 using UnityEngine;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public abstract class MethodButtonsEditor : Editor
     {

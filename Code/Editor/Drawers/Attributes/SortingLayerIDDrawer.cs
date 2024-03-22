@@ -2,7 +2,7 @@
 using OlegHcp.CSharp;
 using OlegHcp.Inspector;
 using OlegHcp.Mathematics;
-using OlegHcpEditor.Engine;
+using OlegHcpEditor.Utils;
 using UnityEditor;
 using UnityEngine;
 

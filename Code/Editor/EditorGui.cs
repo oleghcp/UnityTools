@@ -5,12 +5,13 @@ using OlegHcp.CSharp;
 using OlegHcp.Mathematics;
 using OlegHcp.NumericEntities;
 using OlegHcpEditor.Drawers;
+using OlegHcpEditor.Utils;
 using OlegHcpEditor.Window;
 using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public static class EditorGui
     {
@@ -21,7 +22,7 @@ namespace OlegHcpEditor.Engine
 #if UNITY_2022_2_OR_NEWER
             using (new EditorGUI.IndentLevelScope(-1))
 #endif
-                EditorGUI.PropertyField(position, property, label, includeChildren);
+            EditorGUI.PropertyField(position, property, label, includeChildren);
         }
 
         internal static bool FoldoutIndented(in Rect position, bool foldout, GUIContent content, bool toggleOnLabelClick)
@@ -29,7 +30,7 @@ namespace OlegHcpEditor.Engine
 #if UNITY_2022_2_OR_NEWER
             using (new EditorGUI.IndentLevelScope(-1))
 #endif
-                return EditorGUI.Foldout(position, foldout, content, toggleOnLabelClick);
+            return EditorGUI.Foldout(position, foldout, content, toggleOnLabelClick);
         }
         #endregion
 

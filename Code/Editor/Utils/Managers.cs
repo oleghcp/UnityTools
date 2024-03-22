@@ -1,21 +1,21 @@
 ﻿using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor.Utils
 {
     public static class Managers
     {
         public static UnityObject GetTagManager()
         {
-            return GetAsset("TagManager");
+            return GetManagerAsset("TagManager");
         }
 
         public static UnityObject GetInputManager()
         {
-            return GetAsset("InputManager");
+            return GetManagerAsset("InputManager");
         }
 
-        private static UnityObject GetAsset(string assetName)
+        public static UnityObject GetManagerAsset(string assetName)
         {
             string assetPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}{assetName}{AssetDatabaseExt.ASSET_EXTENSION}";
             return AssetDatabase.LoadAssetAtPath(assetPath, typeof(UnityObject));

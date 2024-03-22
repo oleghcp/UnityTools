@@ -2,7 +2,6 @@
 using System.Reflection;
 using OlegHcp;
 using OlegHcp.Mathematics;
-using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
 using UnityEditor;
 using UnityEngine;

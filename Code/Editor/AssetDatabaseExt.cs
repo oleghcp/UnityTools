@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public static class AssetDatabaseExt
     {
