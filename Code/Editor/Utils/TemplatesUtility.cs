@@ -8,7 +8,7 @@ using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace OlegHcpEditor
+namespace OlegHcpEditor.Utils
 {
     internal static class TemplatesUtility
     {

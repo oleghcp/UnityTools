@@ -3,6 +3,7 @@ using System.IO;
 using OlegHcp.CSharp;
 using OlegHcp.IO;
 using OlegHcpEditor.Engine;
+using OlegHcpEditor.Utils;
 using OlegHcpEditor.Window;
 using OlegHcpEditor.Window.ShapeWizards;
 using UnityEditor;

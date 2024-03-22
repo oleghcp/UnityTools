@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using OlegHcp.CSharp;
 using OlegHcpEditor.Engine;
+using OlegHcpEditor.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -78,7 +79,7 @@ namespace OlegHcpEditor.Window
 
             EditorGUILayout.Space();
 
-            _targetRoot = EditorGUILayout.ObjectField("Parrent Asset", _targetRoot, typeof(UnityObject), false);
+            _targetRoot = EditorGUILayout.ObjectField("Parent Asset", _targetRoot, typeof(UnityObject), false);
 
             GUILayout.Space(20f);
 

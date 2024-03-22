@@ -1,21 +1,34 @@
 ## InspectorButtonAttribute
 
 ```csharp
+using System;
 using OlegHcp.Inspector;
 using UnityEngine;
 
-public class Example : MonoBehaviour
+public class ExampleClass : MonoBehaviour
 {
     [SerializeField]
-    private int _foo;
-    [SerializeField]
-    private string _bar;
+    private string _text;
 
-    [InspectorButton("Do something", 30f)]
-    private void MyMethod()
+    [InspectorButton("Do something 1", 25f)]
+    private void ExampleMethod1()
+    {
+        Debug.Log(_text);
+    }
+
+    [InspectorButton("Do something 2", 25f)]
+    private static void ExampleMethod2()
+    {
+        Debug.Log(DateTime.Now);
+    }
+
+#if UNITY_EDITOR
+    [UnityEditor.CustomEditor(typeof(ExampleClass)), UnityEditor.CanEditMultipleObjects]
+    private class Editor : OlegHcpEditor.Engine.MethodButtonsEditor
     {
 
     }
+#endif
 }
 ```
 

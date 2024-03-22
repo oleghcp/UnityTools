@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public abstract class Editor<T> : Editor, IReadOnlyList<T> where T : UnityObject
     {

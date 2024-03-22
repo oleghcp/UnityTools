@@ -1,4 +1,4 @@
-﻿namespace OlegHcpEditor
+﻿namespace OlegHcpEditor.Utils
 {
     internal static class PrefsKeys
     {

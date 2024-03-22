@@ -2,7 +2,7 @@
 using OlegHcpEditor.Window;
 using UnityEngine;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public class DropDownMenu
     {

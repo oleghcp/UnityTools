@@ -1,6 +1,4 @@
-﻿using OlegHcpEditor.Engine;
-
-namespace OlegHcpEditor
+﻿namespace OlegHcpEditor.Utils
 {
     internal static class LibConstants
     {

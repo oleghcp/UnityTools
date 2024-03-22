@@ -5,7 +5,7 @@ using OlegHcp.CSharp.Collections;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor.Utils
 {
     internal class DragAndDropData
     {

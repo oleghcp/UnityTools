@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using OlegHcp.CSharp;
 using OlegHcp.Mathematics;
+using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
 
-namespace OlegHcpEditor.Engine
+namespace OlegHcpEditor
 {
     public static class EditorGuiUtility
     {
