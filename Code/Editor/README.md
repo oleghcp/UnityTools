@@ -208,16 +208,6 @@ public class DropDownMenu
 }
 ```
 
-### Managers
-
-```csharp
-public static class Managers
-{
-    public static UnityObject GetTagManager();
-    public static UnityObject GetInputManager();
-}
-```
-
 ### Editor
 
 ```csharp

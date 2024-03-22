@@ -24,7 +24,7 @@ public class ExampleClass : MonoBehaviour
 
 #if UNITY_EDITOR
     [UnityEditor.CustomEditor(typeof(ExampleClass)), UnityEditor.CanEditMultipleObjects]
-    private class Editor : OlegHcpEditor.Engine.MethodButtonsEditor
+    private class Editor : OlegHcpEditor.MethodButtonsEditor
     {
 
     }
