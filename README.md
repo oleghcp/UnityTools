@@ -4,7 +4,7 @@
 
 Helpful code stuff for Unity.  
 Supports 2019.4 or newer.  
-Discussion [thread](https://forum.unity.com/threads/my-unity-tools.640321/).
+Discussion [thread](https://forum.unity.com/threads/my-unity-tools.641218/).
 
 ## Usage
 
