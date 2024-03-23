@@ -85,9 +85,7 @@ Also has indicators of tool handles if they are switched to center and global va
 
 ### Asset Context Menu
 
-- **Order Children**
-
-Sorts siblings by name.
+- **Order Children**. Sorts siblings by name.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderChildren1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderChildren2.png)
