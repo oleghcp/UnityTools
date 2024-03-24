@@ -29,6 +29,11 @@ namespace OlegHcp.Managing
             return _storage.Remove(typeof(T));
         }
 
+        public void UnregisterAll()
+        {
+            _storage.Clear();
+        }
+
         public T Get<T>(bool error = true) where T : class, IService
         {
             if (_storage.TryGetValue(typeof(T), out IService value))
