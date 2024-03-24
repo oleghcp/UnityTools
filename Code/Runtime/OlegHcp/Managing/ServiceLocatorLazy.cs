@@ -80,9 +80,6 @@ namespace OlegHcp.Managing
 
             public DefaultFactory(Func<T> creator)
             {
-                if (creator == null)
-                    throw new ArgumentNullException(nameof(creator));
-
                 _create = creator;
             }
 
