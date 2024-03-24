@@ -1,4 +1,5 @@
 ﻿using System;
+using OlegHcp.Managing;
 
 namespace OlegHcp.Tools
 {
@@ -94,7 +95,7 @@ namespace OlegHcp.Tools
             return new ArgumentOutOfRangeException(paramName, $"The radix must be >= 2 and <= {symbolsLength}");
         }
 
-        public static InvalidOperationException EmptyTraker()
+        public static InvalidOperationException EmptyTracker()
         {
             return new InvalidOperationException("Tracker does not yet contain nodes.");
         }
@@ -102,6 +103,11 @@ namespace OlegHcp.Tools
         public static InvalidOperationException ContainsModifier()
         {
             return new InvalidOperationException("Modifier already added.");
+        }
+
+        public static ServiceNotFoundException ServiceNotRegistered(Type type)
+        {
+            return new ServiceNotFoundException($"Service {type.Name} not registered.");
         }
     }
 }

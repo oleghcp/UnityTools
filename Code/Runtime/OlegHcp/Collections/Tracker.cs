@@ -63,7 +63,7 @@ namespace OlegHcp.Collections
         public ITrackerNode AddNodeBasedOnPrev(Action onChangedCallback)
         {
             if (_nodes.Count == 0)
-                throw ThrowErrors.EmptyTraker();
+                throw ThrowErrors.EmptyTracker();
 
             return _nodes.Place(new PrevDependentNode(onChangedCallback, _nodes.FromEnd(0)));
         }
@@ -71,7 +71,7 @@ namespace OlegHcp.Collections
         public ITrackerNode AddNodeBasedOnPrev<T>(Action<T> onChangedCallback)
         {
             if (_nodes.Count == 0)
-                throw ThrowErrors.EmptyTraker();
+                throw ThrowErrors.EmptyTracker();
 
             return _nodes.Place(new DependentNodeWithValue<T>(onChangedCallback, _nodes.FromEnd(0)));
         }
