@@ -12,6 +12,17 @@ namespace OlegHcp.Managing
     {
         private Dictionary<Type, Data> _storage = new Dictionary<Type, Data>();
 
+        public T Get<T>(bool error = true) where T : class, IService
+        {
+            if (_storage.TryGetValue(typeof(T), out Data value))
+                return (T)value.Service;
+
+            if (error)
+                throw ThrowErrors.ServiceNotRegistered(typeof(T));
+
+            return null;
+        }
+
         public void Register<T>(IObjectFactory<T> factory, bool error = true) where T : class, IService
         {
             if (factory == null)
@@ -32,28 +43,22 @@ namespace OlegHcp.Managing
             Register(new DefaultFactory<T>(creator), error);
         }
 
-        public T Get<T>(bool error = true) where T : class, IService
+        public bool RemoveInstance<T>(bool dispose = true) where T : class, IService
         {
-            if (_storage.TryGetValue(typeof(T), out Data value))
-                return (T)value.Service;
-
-            if (error)
-                throw ThrowErrors.ServiceNotRegistered(typeof(T));
-
-            return null;
-        }
-
-        public void Clear(bool full = true)
-        {
-            if (full)
+            if (_storage.Remove(typeof(T), out Data value))
             {
-                _storage.Clear();
-                return;
+                value.Clear(dispose);
+                return true;
             }
 
+            return false;
+        }
+
+        public void ClearInstances(bool dispose = true)
+        {
             foreach (Data item in _storage.Values)
             {
-                item.Clear();
+                item.Clear(dispose);
             }
         }
 
@@ -69,8 +74,11 @@ namespace OlegHcp.Managing
                 _factory = factory;
             }
 
-            public void Clear()
+            public void Clear(bool dispose)
             {
+                if (dispose && _service is IDisposable disposable)
+                    disposable.Dispose();
+
                 _service = null;
             }
         }
