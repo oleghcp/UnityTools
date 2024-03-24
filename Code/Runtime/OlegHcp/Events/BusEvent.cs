@@ -17,6 +17,7 @@ namespace OlegHcp.Events
         private object _owner;
 
         public Type SignalType { get; }
+        public object Owner => _owner;
 
         public BusEvent(Type signalType)
         {

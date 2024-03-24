@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using OlegHcp.CSharp.Collections;
+using OlegHcp.Tools;
 
 namespace OlegHcp.Events
 {
-    public interface ISignal
-    {
-
-    }
+    public interface ISignal { }
 
     public class SignalBus
     {
@@ -21,7 +20,7 @@ namespace OlegHcp.Events
         public void Subscribe<T>(int priority, Action<T> callback) where T : ISignal
         {
             if (callback == null)
-                throw new ArgumentNullException();
+                throw ThrowErrors.NullParameter(nameof(callback));
 
             GetEvent(typeof(T)).Add(callback, priority);
         }
@@ -29,7 +28,7 @@ namespace OlegHcp.Events
         public void Unsubscribe<T>(Action<T> callback) where T : ISignal
         {
             if (callback == null)
-                throw new ArgumentNullException();
+                throw ThrowErrors.NullParameter(nameof(callback));
 
             if (_storage.TryGetValue(typeof(T), out BusEvent @event))
                 @event.Remove(callback);
@@ -38,14 +37,14 @@ namespace OlegHcp.Events
         public IEvent RegisterEventOwner<T>(object owner) where T : ISignal
         {
             if (owner == null)
-                throw new ArgumentNullException();
+                throw ThrowErrors.NullParameter(nameof(owner));
 
             BusEvent @event = GetEvent(typeof(T));
 
             if (@event.TrySetOwner(owner))
                 return @event;
 
-            throw new Exception();
+            throw new OwnerRegisteringException($"Event {@event.SignalType.Name} already has owner: {@event.Owner.GetType().Name}.");
         }
 
         private BusEvent GetEvent(Type type)
@@ -55,5 +54,13 @@ namespace OlegHcp.Events
 
             return _storage.Place(type, new BusEvent(type));
         }
+    }
+
+    public class OwnerRegisteringException : Exception
+    {
+        public OwnerRegisteringException() : base() { }
+        public OwnerRegisteringException(string message) : base(message) { }
+        public OwnerRegisteringException(string message, Exception innerException) : base(message, innerException) { }
+        public OwnerRegisteringException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }
