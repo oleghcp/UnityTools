@@ -33,7 +33,8 @@ Mind that assembly definitions are used.
 * [Mathematics](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Mathematics). Math tools and structs.
 * [Graph editor](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/NodeBased). Tool for creating graphs based on linked nodes. Useful for creating dialogues.
 * [Numeric entities](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/NumericEntities). Structs and classes for work with numeric parameters like ranges or character stats.
-* [Object pool](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Pool). ObjectPool implementation.
+* [ObjectPool](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Pool). ObjectPool implementation.
+* [SignalBus](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Events). SignalBus implementation.
 * [PostProcessing](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/PostProcessing). Fog effect for built-in render pipeline
 * [Randomization](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Rng). Custom random number generators.
 * [Game saving](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/SaveLoad). Save/load system.
