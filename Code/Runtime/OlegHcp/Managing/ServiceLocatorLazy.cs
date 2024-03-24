@@ -43,13 +43,14 @@ namespace OlegHcp.Managing
             return null;
         }
 
-        public void ClearRegistrations()
+        public void Clear(bool full = true)
         {
-            _storage.Clear();
-        }
+            if (full)
+            {
+                _storage.Clear();
+                return;
+            }
 
-        public void ClearInstances()
-        {
             foreach (Data item in _storage.Values)
             {
                 item.Clear();
