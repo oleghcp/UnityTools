@@ -90,7 +90,7 @@ Also has indicators of tool handles if they are switched to center and global va
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderChildren1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderChildren2.png)
 
-- **Create Script From Template**. Template can be modified.
+- **Create Script From Template**. Template can be modified: \your_project\UserSettings\Templates\C#ScriptTemplate.cs.txt.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CreateScriptFromTemplate.png)
 
