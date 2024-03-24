@@ -20,6 +20,8 @@ public class ExampleObject : MonoBehaviour, IPoolable
 }
 ```
 
+Stored object can be IDisposable.
+
 ```csharp
 using OlegHcp.Pool;
 using UnityEngine;
@@ -50,7 +52,7 @@ public static class ExamplePool
 }
 ```
 
-Custom implenetation of pool storage
+### Custom implenetation of pool storage
 
 ```csharp
 using OlegHcp.Pool;
