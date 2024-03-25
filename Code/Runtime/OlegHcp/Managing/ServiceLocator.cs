@@ -12,77 +12,61 @@ namespace OlegHcp.Managing
 {
     public interface IService { }
 
-    public interface IInitialContext<out T> where T : class, IService
+    public interface IInitialContext<out TService> where TService : class, IService
     {
-        T GetOrCreateInstance();
+        TService GetOrCreateInstance();
     }
 
     public class ServiceLocator
     {
-        private protected Dictionary<Type, Data> _storage = new Dictionary<Type, Data>();
+        private protected Dictionary<Type, InitialContextData> _storage = new Dictionary<Type, InitialContextData>();
 
-        public T Get<T>(bool error = true) where T : class, IService
+        public TService Get<TService>(bool error = true) where TService : class, IService
         {
-            if (_storage.TryGetValue(typeof(T), out Data value))
-                return (T)value.Service;
+            if (_storage.TryGetValue(typeof(TService), out InitialContextData value))
+                return (TService)value.Service;
 
             if (error)
-                throw ThrowErrors.ServiceNotRegistered(typeof(T));
+                throw ThrowErrors.ServiceNotRegistered(typeof(TService));
 
             return null;
         }
 
-        public void Register<T>(IInitialContext<T> context, bool error = true) where T : class, IService
+        public void Add<TService>(IInitialContext<TService> context, bool error = true) where TService : class, IService
         {
             if (context == null)
                 throw ThrowErrors.NullParameter(nameof(context));
 
-            if (_storage.TryAdd(typeof(T), new Data(context)))
-                return;
-
-            if (error)
-                throw new InvalidOperationException($"Service {typeof(T)} already registered.");
+            AddInternal(context, error);
         }
 
-        public void Register<T>(Func<T> instanceProvider, bool error = true) where T : class, IService
+        public void Add<TService>(Func<TService> instanceProvider, bool error = true) where TService : class, IService
         {
             if (instanceProvider == null)
                 throw ThrowErrors.NullParameter(nameof(instanceProvider));
 
-            Register(new DefaultInitialContext<T>(instanceProvider), error);
+            AddInternal(new DefaultInitialContext<TService>(instanceProvider), error);
         }
 
-        private protected class Data
+        private void AddInternal<TService>(IInitialContext<TService> context, bool error) where TService : class, IService
         {
-            private IService _service;
-            private IInitialContext<IService> _context;
+            if (_storage.TryAdd(typeof(TService), new InitialContextData(context)))
+                return;
 
-            public IService Service => _service ?? (_service = _context.GetOrCreateInstance());
-
-            public Data(IInitialContext<IService> context)
-            {
-                _context = context;
-            }
-
-            public void Clear(bool dispose)
-            {
-                if (dispose && _service is IDisposable disposable)
-                    disposable.Dispose();
-
-                _service = null;
-            }
+            if (error)
+                throw new InvalidOperationException($"Service {typeof(TService)} already registered.");
         }
 
-        private class DefaultInitialContext<T> : IInitialContext<T> where T : class, IService
+        private class DefaultInitialContext<TService> : IInitialContext<TService> where TService : class, IService
         {
-            private Func<T> _provider;
+            private Func<TService> _provider;
 
-            public DefaultInitialContext(Func<T> provider)
+            public DefaultInitialContext(Func<TService> provider)
             {
                 _provider = provider;
             }
 
-            T IInitialContext<T>.GetOrCreateInstance()
+            TService IInitialContext<TService>.GetOrCreateInstance()
             {
                 return _provider.Invoke();
             }
