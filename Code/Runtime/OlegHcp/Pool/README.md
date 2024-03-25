@@ -20,7 +20,7 @@ public class ExampleObject : MonoBehaviour, IPoolable
 }
 ```
 
-Stored object can be IDisposable.
+Stored objects can be IDisposable.
 
 ```csharp
 using OlegHcp.Pool;

@@ -16,6 +16,8 @@ public static class Locator
 }
 ```
 
+Stored services can be IDisposable.
+
 ```csharp
 using OlegHcp;
 using UnityEngine;
