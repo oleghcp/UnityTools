@@ -6,16 +6,16 @@
 
         public DirtyServiceLocator(ICommonInitialContext commonContext) : base(commonContext) { }
 
-        public bool Remove<TService>(bool dispose = true) where TService : class, IService
+        public bool Remove<TService>(bool disposeIfPossible = true) where TService : class, IService
         {
             _contextCache.RemoveContext<TService>();
-            return RemoveInstance<TService>(dispose);
+            return RemoveInstance<TService>(disposeIfPossible);
         }
 
-        public void RemoveAll(bool dispose = true)
+        public void RemoveAll(bool disposeIfPossible = true)
         {
             _contextCache.Clear();
-            RemoveAllInstances(dispose);
+            RemoveAllInstances(disposeIfPossible);
         }
     }
 }

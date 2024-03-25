@@ -5,8 +5,6 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Managing
 {
-    public interface IService { }
-
     public interface ICommonInitialContext
     {
         bool TryGetOrCreateInstance(Type serviceType, out IService service);
@@ -17,7 +15,7 @@ namespace OlegHcp.Managing
         TService GetOrCreateInstance();
     }
 
-    public class ServiceLocator
+    public class ServiceLocator : IServiceLocator
     {
         private protected InitialContextStorage _contextCache;
         private protected Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
