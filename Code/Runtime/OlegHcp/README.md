@@ -1,4 +1,4 @@
-## ApplicationUtility
+﻿## ApplicationUtility
 
 ```csharp
 using OlegHcp;

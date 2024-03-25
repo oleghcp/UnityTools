@@ -75,9 +75,9 @@ namespace OlegHcp.Pool
         /// <summary>
         /// Clears object pool.
         /// </summary>
-        public void Clear(bool dispose = false)
+        public void Clear(bool disposeIfPossible = false)
         {
-            if (dispose)
+            if (disposeIfPossible)
             {
                 while (_storage.TryGet(out T value))
                 {

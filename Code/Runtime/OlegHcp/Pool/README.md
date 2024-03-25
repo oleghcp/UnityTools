@@ -1,4 +1,4 @@
-## ObjectPool
+﻿## ObjectPool
 
 ```csharp
 using OlegHcp.Pool;

@@ -1,4 +1,4 @@
-## MathExtensions
+﻿## MathExtensions
 
 Extension methods for numbers
 

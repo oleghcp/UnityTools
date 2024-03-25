@@ -1,4 +1,4 @@
-## BinaryFileUtility
+﻿## BinaryFileUtility
 
 ```csharp
 using OlegHcp.IO;

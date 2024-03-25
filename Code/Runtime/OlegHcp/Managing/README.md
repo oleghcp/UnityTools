@@ -1,18 +1,13 @@
-## ServiceLocator
+﻿## ServiceLocator
 
 ```csharp
 using OlegHcp.Managing;
 
-public static class Locator
+public static class Services
 {
     private static DirtyServiceLocator _serviceLocator = new DirtyServiceLocator();
 
-    public static ServiceLocator Current => _serviceLocator;
-
-    public static void Clear()
-    {
-        _serviceLocator.RemoveAll();
-    }
+    public static DirtyServiceLocator Locator => _serviceLocator;
 }
 ```
 
@@ -32,14 +27,16 @@ namespace Assets.PrivateStuff.Testing
 
         private void Awake()
         {
-            Locator.Current.Add<IServiceA>(() => _serviceA);
-            Locator.Current.Add(() => new ServiceB());
-            Locator.Current.Add(() => ComponentUtility.CreateInstance<ServiceC>());
+            Services.Locator.AddContext<IServiceA>(() => _serviceA);
+            Services.Locator.AddContext(new ServiceB());
+            Services.Locator.AddContext(ComponentUtility.CreateInstance<ServiceC>);
         }
 
         private void OnDestroy()
         {
-            Locator.Clear();
+            Services.Locator.Remove<IServiceA>();
+            Services.Locator.Remove<ServiceB>();
+            Services.Locator.Remove<ServiceC>();
         }
     }
 }
@@ -52,9 +49,9 @@ public class ExampleClass : MonoBehaviour
 {
     private void Start()
     {
-        IServiceA s1 = Locator.Current.Get<IServiceA>();
-        ServiceB s2 = Locator.Current.Get<ServiceB>();
-        ServiceC s3 = Locator.Current.Get<ServiceC>();
+        IServiceA s1 = Services.Locator.Get<IServiceA>();
+        ServiceB s2 = Services.Locator.Get<ServiceB>();
+        ServiceC s3 = Services.Locator.Get<ServiceC>();
 
         // Do something
     }

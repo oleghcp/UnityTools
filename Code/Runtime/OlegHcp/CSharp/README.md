@@ -1,4 +1,4 @@
-## ArrayExtensions
+﻿## ArrayExtensions
 
 ```csharp
 using System;

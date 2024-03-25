@@ -1,4 +1,4 @@
-## InstantiationExtensions
+﻿## InstantiationExtensions
 
 ```csharp
 using OlegHcp.Engine;

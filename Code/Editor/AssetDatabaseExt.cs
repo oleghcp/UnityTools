@@ -72,7 +72,7 @@ namespace OlegHcpEditor
 
         public static void ConvertTextFilesToUtf8()
         {
-            ConvertToUtf8("*.txt", "*.xml", "*.json", "*.cs", "*.shader", "*.cginc");
+            ConvertToUtf8("*.txt", "*.md", "*.xml", "*.json", "*.cs", "*.shader", "*.cginc");
         }
 
         public static void ConvertToUtf8(params string[] extensions)
