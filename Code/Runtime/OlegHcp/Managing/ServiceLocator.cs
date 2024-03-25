@@ -1,68 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using OlegHcp.Tools;
-
-#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
 
 namespace OlegHcp.Managing
 {
+    public interface IService { }
+
+    public interface ICommonInitialContext
+    {
+        bool TryGetOrCreateInstance(Type serviceType, out IService service);
+    }
+
+    public interface IInitialContext<TService> where TService : class, IService
+    {
+        TService GetOrCreateInstance();
+    }
+
     public class ServiceLocator
     {
-        private Dictionary<Type, IService> _storage = new Dictionary<Type, IService>();
+        private protected InitialContextStorage _contextCache;
+        private protected Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
 
-        public T Get<T>(bool error = true) where T : class, IService
+        public ServiceLocator()
         {
-            if (_storage.TryGetValue(typeof(T), out IService value))
-                return (T)value;
+            _contextCache = new InitialContextStorage();
+        }
+
+        public ServiceLocator(ICommonInitialContext commonContext)
+        {
+            _contextCache = new InitialContextStorage(commonContext);
+        }
+
+        public TService Get<TService>(bool error = true) where TService : class, IService
+        {
+            Type serviceType = typeof(TService);
+
+            if (_serviceCache.TryGetValue(serviceType, out IService service))
+                return (TService)service;
+
+            if (_contextCache.TryGetOrCreateInstance<TService>(out service))
+            {
+                _serviceCache.Add(serviceType, service);
+                return (TService)service;
+            }
 
             if (error)
-                throw ThrowErrors.ServiceNotRegistered(typeof(T));
+                throw ThrowErrors.ServiceNotRegistered(typeof(TService));
 
             return null;
         }
 
-        public void Register<T>(T service, bool error = true) where T : class, IService
+        public void AddContext<TService>(IInitialContext<TService> context, bool error = true) where TService : class, IService
         {
-            if (service == null)
-                throw ThrowErrors.NullParameter(nameof(service));
+            if (context == null)
+                throw ThrowErrors.NullParameter(nameof(context));
 
-            if (_storage.TryAdd(typeof(T), service))
+            if (_contextCache.AddContext(context))
                 return;
 
             if (error)
-                throw new InvalidOperationException($"Service {typeof(T).Name} already registered.");
+                throw new InvalidOperationException($"Service {typeof(TService)} already registered.");
         }
 
-        public bool Unregister<T>(bool dispose = true) where T : class, IService
+        public void AddContext<TService>(Func<TService> instanceProvider, bool error = true) where TService : class, IService
         {
-            if (!dispose)
-                return _storage.Remove(typeof(T));
+            if (instanceProvider == null)
+                throw ThrowErrors.NullParameter(nameof(instanceProvider));
 
-            if (_storage.Remove(typeof(T), out IService value))
+            if (_contextCache.AddContext(new DefaultInitialContext<TService>(instanceProvider)))
+                return;
+
+            if (error)
+                throw new InvalidOperationException($"Service {typeof(TService)} already registered.");
+        }
+
+        private class DefaultInitialContext<TService> : IInitialContext<TService> where TService : class, IService
+        {
+            private Func<TService> _provider;
+
+            public DefaultInitialContext(Func<TService> provider)
             {
-                if (value is IDisposable disposable)
-                    disposable.Dispose();
-
-                return true;
+                _provider = provider;
             }
 
-            return false;
-        }
-
-        public void UnregisterAll(bool dispose = true)
-        {
-            if (dispose)
+            TService IInitialContext<TService>.GetOrCreateInstance()
             {
-                foreach (var value in _storage.Values)
-                {
-                    if (value is IDisposable disposable)
-                        disposable.Dispose();
-                }
+                return _provider.Invoke();
             }
-
-            _storage.Clear();
         }
+    }
+
+    public class ServiceNotFoundException : Exception
+    {
+        public ServiceNotFoundException() : base() { }
+        public ServiceNotFoundException(string message) : base(message) { }
+        public ServiceNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+        public ServiceNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }
