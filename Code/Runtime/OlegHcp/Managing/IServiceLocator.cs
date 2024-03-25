@@ -4,6 +4,6 @@
 
     public interface IServiceLocator
     {
-        TService Get<TService>(bool error = true) where TService : class, IService;
+        TService Get<TService>(bool throwIfNotFound = true) where TService : class, IService;
     }
 }

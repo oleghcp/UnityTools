@@ -6,12 +6,8 @@ using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Managing
 {
-    public class BoldServiceLocator : ServiceLocator
+    public class BoldServiceLocator : SimpleServiceLocator
     {
-        public BoldServiceLocator() { }
-
-        public BoldServiceLocator(ICommonInitialContext commonContext) : base(commonContext) { }
-
         public bool RemoveInstance<TService>(bool disposeIfPossible = true) where TService : class, IService
         {
             if (_serviceCache.Remove(typeof(TService), out IService service))
@@ -22,20 +18,6 @@ namespace OlegHcp.Managing
             }
 
             return false;
-        }
-
-        public void RemoveAllInstances(bool disposeIfPossible = true)
-        {
-            if (disposeIfPossible)
-            {
-                foreach (IService service in _serviceCache.Values)
-                {
-                    if (service is IDisposable disposable)
-                        disposable.Dispose();
-                }
-            }
-
-            _serviceCache.Clear();
         }
     }
 }
