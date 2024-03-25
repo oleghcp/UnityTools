@@ -9,7 +9,7 @@ namespace OlegHcp.Managing
 
     public interface ICommonInitialContext
     {
-        bool TryGetOrCreateInstance<TService>(out TService service) where TService : class, IService;
+        bool TryGetOrCreateInstance(Type serviceType, out IService service);
     }
 
     public interface IInitialContext<TService> where TService : class, IService

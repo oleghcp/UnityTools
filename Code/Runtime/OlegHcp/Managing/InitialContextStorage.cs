@@ -31,7 +31,14 @@ namespace OlegHcp.Managing
                 return true;
             }
 
-            return _commonContext.TryGetOrCreateInstance(out service);
+            if (_commonContext.TryGetOrCreateInstance(typeof(TService), out IService newService))
+            {
+                service = (TService)newService;
+                return true;
+            }
+
+            service = default;
+            return false;
         }
 
         public bool AddContext<TService>(IInitialContext<TService> context) where TService : class, IService
@@ -51,7 +58,7 @@ namespace OlegHcp.Managing
 
         private class DefaultInitialContext : ICommonInitialContext
         {
-            bool ICommonInitialContext.TryGetOrCreateInstance<TService>(out TService service)
+            bool ICommonInitialContext.TryGetOrCreateInstance(Type type, out IService service)
             {
                 service = default;
                 return false;

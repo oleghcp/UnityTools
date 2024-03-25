@@ -2,6 +2,10 @@
 {
     public class DirtyServiceLocator : BoldServiceLocator
     {
+        public DirtyServiceLocator() { }
+
+        public DirtyServiceLocator(ICommonInitialContext commonContext) : base(commonContext) { }
+
         public bool Remove<TService>(bool dispose = true) where TService : class, IService
         {
             _contextCache.RemoveContext<TService>();

@@ -8,6 +8,10 @@ namespace OlegHcp.Managing
 {
     public class BoldServiceLocator : ServiceLocator
     {
+        public BoldServiceLocator() { }
+
+        public BoldServiceLocator(ICommonInitialContext commonContext) : base(commonContext) { }
+
         public bool RemoveInstance<TService>(bool dispose = true) where TService : class, IService
         {
             if (_serviceCache.Remove(typeof(TService), out IService service))
