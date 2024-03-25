@@ -39,10 +39,10 @@ namespace OlegHcp.Managing
             if (_serviceCache.TryGetValue(serviceType, out IService service))
                 return (TService)service;
 
-            if (_contextCache.TryGetOrCreateInstance(out TService newService))
+            if (_contextCache.TryGetOrCreateInstance<TService>(out service))
             {
-                _serviceCache.Add(serviceType, newService);
-                return newService;
+                _serviceCache.Add(serviceType, service);
+                return (TService)service;
             }
 
             if (error)

@@ -22,7 +22,7 @@ namespace OlegHcp.Managing
             _commonContext = commonContext;
         }
 
-        public bool TryGetOrCreateInstance<TService>(out TService service) where TService : class, IService
+        public bool TryGetOrCreateInstance<TService>(out IService service) where TService : class, IService
         {
             if (_contextCache.TryGetValue(typeof(TService), out object value))
             {
@@ -31,14 +31,7 @@ namespace OlegHcp.Managing
                 return true;
             }
 
-            if (_commonContext.TryGetOrCreateInstance(typeof(TService), out IService newService))
-            {
-                service = (TService)newService;
-                return true;
-            }
-
-            service = default;
-            return false;
+            return _commonContext.TryGetOrCreateInstance(typeof(TService), out service);
         }
 
         public bool AddContext<TService>(IInitialContext<TService> context) where TService : class, IService
