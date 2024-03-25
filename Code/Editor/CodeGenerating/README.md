@@ -1,4 +1,4 @@
-## OlegHcpEditor.CodeGenerating
+﻿## OlegHcpEditor.CodeGenerating
 
 ### EnumGenerator
 

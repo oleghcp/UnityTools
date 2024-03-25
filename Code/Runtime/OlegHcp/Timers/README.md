@@ -1,4 +1,4 @@
-## MonoTimer
+﻿## MonoTimer
 
 ```csharp
 using OlegHcp;

@@ -1,4 +1,4 @@
-## SignalBus
+﻿## SignalBus
 
 ```csharp
 using OlegHcp.Events;

@@ -1,4 +1,4 @@
-## ServiceLocator
+﻿## ServiceLocator
 
 ```csharp
 using OlegHcp.Managing;

@@ -1,4 +1,4 @@
-## Diapason and DiapasonInt
+﻿## Diapason and DiapasonInt
 
 ```csharp
 using OlegHcp.NumericEntities;

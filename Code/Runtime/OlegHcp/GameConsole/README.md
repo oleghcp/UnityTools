@@ -1,4 +1,4 @@
-## Terminal
+﻿## Terminal
 
 In-game terminal for commands input and log messages output.  
 Supports command substitution by Tab key and keeps list of previous commands.  

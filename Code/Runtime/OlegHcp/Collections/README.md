@@ -1,4 +1,4 @@
-## BitList
+﻿## BitList
 
 Based on `System.Collections.BitArray` and supports Unity serialization
 

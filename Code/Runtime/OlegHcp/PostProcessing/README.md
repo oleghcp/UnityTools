@@ -1,4 +1,4 @@
-## Fog
+﻿## Fog
 
 Fog effect for built-in render pipeline
 

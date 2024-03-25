@@ -1,4 +1,4 @@
-## InspectorButtonAttribute
+﻿## InspectorButtonAttribute
 
 ```csharp
 using System;

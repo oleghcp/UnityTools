@@ -1,4 +1,4 @@
-## OlegHcpEditor.Engine
+﻿## OlegHcpEditor.Engine
 
 ### UnityEditorExtensions
 

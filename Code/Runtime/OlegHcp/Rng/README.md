@@ -1,4 +1,4 @@
-## Random Number Generators
+﻿## Random Number Generators
 
 ```csharp
 using OlegHcp;

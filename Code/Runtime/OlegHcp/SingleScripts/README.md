@@ -1,4 +1,4 @@
-## MonoSingleton
+﻿## MonoSingleton
 
 Abstract generic class derived from `MonoBehaviour`.  
 Has lazy initialization with creating instance in runtime.

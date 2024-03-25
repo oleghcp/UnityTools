@@ -1,4 +1,4 @@
-## AlphanumComparer
+﻿## AlphanumComparer
 
 ```csharp
 using System.Collections.Generic;
