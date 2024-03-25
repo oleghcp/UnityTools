@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using OlegHcp.Tools;
+using System.Runtime.Serialization;
+
 
 #if !UNITY_2021_2_OR_NEWER
 using OlegHcp.CSharp.Collections;
@@ -8,14 +10,21 @@ using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Managing
 {
+    public interface IService { }
+
+    public interface IInitialContext<out T> where T : class, IService
+    {
+        T GetOrCreateInstance();
+    }
+
     public class ServiceLocator
     {
-        private Dictionary<Type, IService> _storage = new Dictionary<Type, IService>();
+        private protected Dictionary<Type, Data> _storage = new Dictionary<Type, Data>();
 
         public T Get<T>(bool error = true) where T : class, IService
         {
-            if (_storage.TryGetValue(typeof(T), out IService value))
-                return (T)value;
+            if (_storage.TryGetValue(typeof(T), out Data value))
+                return (T)value.Service;
 
             if (error)
                 throw ThrowErrors.ServiceNotRegistered(typeof(T));
@@ -23,46 +32,68 @@ namespace OlegHcp.Managing
             return null;
         }
 
-        public void Register<T>(T service, bool error = true) where T : class, IService
+        public void Register<T>(IInitialContext<T> context, bool error = true) where T : class, IService
         {
-            if (service == null)
-                throw ThrowErrors.NullParameter(nameof(service));
+            if (context == null)
+                throw ThrowErrors.NullParameter(nameof(context));
 
-            if (_storage.TryAdd(typeof(T), service))
+            if (_storage.TryAdd(typeof(T), new Data(context)))
                 return;
 
             if (error)
-                throw new InvalidOperationException($"Service {typeof(T).Name} already registered.");
+                throw new InvalidOperationException($"Service {typeof(T)} already registered.");
         }
 
-        public bool Unregister<T>(bool dispose = true) where T : class, IService
+        public void Register<T>(Func<T> instanceProvider, bool error = true) where T : class, IService
         {
-            if (!dispose)
-                return _storage.Remove(typeof(T));
+            if (instanceProvider == null)
+                throw ThrowErrors.NullParameter(nameof(instanceProvider));
 
-            if (_storage.Remove(typeof(T), out IService value))
+            Register(new DefaultInitialContext<T>(instanceProvider), error);
+        }
+
+        private protected class Data
+        {
+            private IService _service;
+            private IInitialContext<IService> _context;
+
+            public IService Service => _service ?? (_service = _context.GetOrCreateInstance());
+
+            public Data(IInitialContext<IService> context)
             {
-                if (value is IDisposable disposable)
+                _context = context;
+            }
+
+            public void Clear(bool dispose)
+            {
+                if (dispose && _service is IDisposable disposable)
                     disposable.Dispose();
 
-                return true;
+                _service = null;
             }
-
-            return false;
         }
 
-        public void UnregisterAll(bool dispose = true)
+        private class DefaultInitialContext<T> : IInitialContext<T> where T : class, IService
         {
-            if (dispose)
+            private Func<T> _provider;
+
+            public DefaultInitialContext(Func<T> provider)
             {
-                foreach (var value in _storage.Values)
-                {
-                    if (value is IDisposable disposable)
-                        disposable.Dispose();
-                }
+                _provider = provider;
             }
 
-            _storage.Clear();
+            T IInitialContext<T>.GetOrCreateInstance()
+            {
+                return _provider.Invoke();
+            }
         }
+    }
+
+    public class ServiceNotFoundException : Exception
+    {
+        public ServiceNotFoundException() : base() { }
+        public ServiceNotFoundException(string message) : base(message) { }
+        public ServiceNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+        public ServiceNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }
