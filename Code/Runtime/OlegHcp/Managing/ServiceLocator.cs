@@ -1,29 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.Tools;
 using System.Runtime.Serialization;
-
-#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
+using OlegHcp.Tools;
 
 namespace OlegHcp.Managing
 {
     public interface IService { }
 
-    public interface IInitialContext<out TService> where TService : class, IService
+    public interface ICommonInitialContext
+    {
+        bool TryGetOrCreateInstance<TService>(out TService service) where TService : class, IService;
+    }
+
+    public interface IInitialContext<TService> where TService : class, IService
     {
         TService GetOrCreateInstance();
     }
 
     public class ServiceLocator
     {
-        private protected Dictionary<Type, ServiceLocatorData> _storage = new Dictionary<Type, ServiceLocatorData>();
+        private protected InitialContextStorage _contextCache;
+        private protected Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
+
+        public ServiceLocator()
+        {
+            _contextCache = new InitialContextStorage();
+        }
+
+        public ServiceLocator(ICommonInitialContext commonContext)
+        {
+            _contextCache = new InitialContextStorage(commonContext);
+        }
 
         public TService Get<TService>(bool error = true) where TService : class, IService
         {
-            if (_storage.TryGetValue(typeof(TService), out ServiceLocatorData value))
-                return (TService)value.Service;
+            Type serviceType = typeof(TService);
+
+            if (_serviceCache.TryGetValue(serviceType, out IService service))
+                return (TService)service;
+
+            if (_contextCache.TryGetOrCreateInstance(out TService newService))
+            {
+                _serviceCache.Add(serviceType, newService);
+                return newService;
+            }
 
             if (error)
                 throw ThrowErrors.ServiceNotRegistered(typeof(TService));
@@ -31,25 +51,24 @@ namespace OlegHcp.Managing
             return null;
         }
 
-        public void Add<TService>(IInitialContext<TService> context, bool error = true) where TService : class, IService
+        public void AddContext<TService>(IInitialContext<TService> context, bool error = true) where TService : class, IService
         {
             if (context == null)
                 throw ThrowErrors.NullParameter(nameof(context));
 
-            AddInternal(context, error);
+            if (_contextCache.AddContext(context))
+                return;
+
+            if (error)
+                throw new InvalidOperationException($"Service {typeof(TService)} already registered.");
         }
 
-        public void Add<TService>(Func<TService> instanceProvider, bool error = true) where TService : class, IService
+        public void AddContext<TService>(Func<TService> instanceProvider, bool error = true) where TService : class, IService
         {
             if (instanceProvider == null)
                 throw ThrowErrors.NullParameter(nameof(instanceProvider));
 
-            AddInternal(new DefaultInitialContext<TService>(instanceProvider), error);
-        }
-
-        private void AddInternal<TService>(IInitialContext<TService> context, bool error) where TService : class, IService
-        {
-            if (_storage.TryAdd(typeof(TService), new ServiceLocatorData(context)))
+            if (_contextCache.AddContext(new DefaultInitialContext<TService>(instanceProvider)))
                 return;
 
             if (error)

@@ -1,12 +1,19 @@
-﻿namespace OlegHcp.Managing
+﻿using System;
+
+#if !UNITY_2021_2_OR_NEWER
+using OlegHcp.CSharp.Collections;
+#endif
+
+namespace OlegHcp.Managing
 {
     public class BoldServiceLocator : ServiceLocator
     {
         public bool RemoveInstance<TService>(bool dispose = true) where TService : class, IService
         {
-            if (_storage.TryGetValue(typeof(TService), out ServiceLocatorData value))
+            if (_serviceCache.Remove(typeof(TService), out IService service))
             {
-                value.ClearInstance(dispose);
+                if (dispose && service is IDisposable disposable)
+                    disposable.Dispose();
                 return true;
             }
 
@@ -15,10 +22,16 @@
 
         public void RemoveAllInstances(bool dispose = true)
         {
-            foreach (ServiceLocatorData item in _storage.Values)
+            if (dispose)
             {
-                item.ClearInstance(dispose);
+                foreach (IService service in _serviceCache.Values)
+                {
+                    if (service is IDisposable disposable)
+                        disposable.Dispose();
+                }
             }
+
+            _serviceCache.Clear();
         }
     }
 }

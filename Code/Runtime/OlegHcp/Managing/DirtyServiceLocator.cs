@@ -1,33 +1,17 @@
-﻿#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
-
-namespace OlegHcp.Managing
+﻿namespace OlegHcp.Managing
 {
     public class DirtyServiceLocator : BoldServiceLocator
     {
         public bool Remove<TService>(bool dispose = true) where TService : class, IService
         {
-            if (_storage.Remove(typeof(TService), out ServiceLocatorData value))
-            {
-                value.ClearInstance(dispose);
-                return true;
-            }
-
-            return false;
+            _contextCache.RemoveContext<TService>();
+            return RemoveInstance<TService>(dispose);
         }
 
         public void RemoveAll(bool dispose = true)
         {
-            if (dispose)
-            {
-                foreach (ServiceLocatorData value in _storage.Values)
-                {
-                    value.ClearInstance(true);
-                }
-            }
-
-            _storage.Clear();
+            _contextCache.Clear();
+            RemoveAllInstances(dispose);
         }
     }
 }
