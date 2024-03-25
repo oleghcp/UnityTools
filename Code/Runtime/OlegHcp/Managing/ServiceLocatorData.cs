@@ -2,14 +2,14 @@
 
 namespace OlegHcp.Managing
 {
-    internal class InitialContextData
+    internal class ServiceLocatorData
     {
         private IInitialContext<IService> _context;
         private IService _service;
 
         public IService Service => _service ?? (_service = _context.GetOrCreateInstance());
 
-        public InitialContextData(IInitialContext<IService> context)
+        public ServiceLocatorData(IInitialContext<IService> context)
         {
             _context = context;
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using OlegHcp.Tools;
 using System.Runtime.Serialization;
 
-
 #if !UNITY_2021_2_OR_NEWER
 using OlegHcp.CSharp.Collections;
 #endif
@@ -19,11 +18,11 @@ namespace OlegHcp.Managing
 
     public class ServiceLocator
     {
-        private protected Dictionary<Type, InitialContextData> _storage = new Dictionary<Type, InitialContextData>();
+        private protected Dictionary<Type, ServiceLocatorData> _storage = new Dictionary<Type, ServiceLocatorData>();
 
         public TService Get<TService>(bool error = true) where TService : class, IService
         {
-            if (_storage.TryGetValue(typeof(TService), out InitialContextData value))
+            if (_storage.TryGetValue(typeof(TService), out ServiceLocatorData value))
                 return (TService)value.Service;
 
             if (error)
@@ -50,7 +49,7 @@ namespace OlegHcp.Managing
 
         private void AddInternal<TService>(IInitialContext<TService> context, bool error) where TService : class, IService
         {
-            if (_storage.TryAdd(typeof(TService), new InitialContextData(context)))
+            if (_storage.TryAdd(typeof(TService), new ServiceLocatorData(context)))
                 return;
 
             if (error)

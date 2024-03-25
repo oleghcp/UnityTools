@@ -8,7 +8,7 @@ namespace OlegHcp.Managing
     {
         public bool Remove<TService>(bool dispose = true) where TService : class, IService
         {
-            if (_storage.Remove(typeof(TService), out InitialContextData value))
+            if (_storage.Remove(typeof(TService), out ServiceLocatorData value))
             {
                 value.ClearInstance(dispose);
                 return true;
@@ -21,7 +21,7 @@ namespace OlegHcp.Managing
         {
             if (dispose)
             {
-                foreach (InitialContextData value in _storage.Values)
+                foreach (ServiceLocatorData value in _storage.Values)
                 {
                     value.ClearInstance(true);
                 }
