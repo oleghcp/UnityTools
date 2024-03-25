@@ -44,6 +44,10 @@ public class MyClass
 }
 ```
 
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/TaskSystem.png)
+
+### Other Functions
+
 ```csharp
 using OlegHcp.Async;
 using UnityEngine;
@@ -72,6 +76,33 @@ public class MyClass
         {
             // Do something
         }
+    }
+    
+    public void Start3()
+    {
+        TaskSystem.RunDelayed(10f, perFrameFunction);
+
+        void perFrameFunction()
+        {
+            // Do something
+        }
+    }
+}
+```
+
+### Cached Yield Instructions
+
+```csharp
+using OlegHcp.Async;
+using UnityEngine;
+public class ExampleClass : MonoBehaviour
+{
+    // Cached yield instructions
+    private IEnumerator GetRoutine()
+    {
+        yield return TaskSystem.WaitForEndOfFrame;
+        yield return TaskSystem.WaitForFixedUpdate;
+        yield return TaskSystem.GetWaitInstruction(10f);
     }
 }
 ```
