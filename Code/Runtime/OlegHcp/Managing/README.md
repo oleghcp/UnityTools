@@ -44,7 +44,6 @@ namespace Assets.PrivateStuff.Testing
 ```
 
 ```csharp
-using OlegHcp.Managing;
 using UnityEngine;
 
 public class ExampleClass : MonoBehaviour
