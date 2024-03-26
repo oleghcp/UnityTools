@@ -2,8 +2,8 @@
 
 [![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
 
-Helpful code stuff for Unity.  
-Supports 2019.4 or newer.  
+The package is a set of C# utility code stuff for projects based on Unity Engine.  
+It works under 2019.4 and newer.  
 Discussion [thread](https://forum.unity.com/threads/my-unity-tools.641218/).
 
 ## Usage
@@ -112,3 +112,15 @@ Also has indicators of tool handles if they are switched to center and global va
 - **Destroy Subasset**
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DestroySubasset.png)
+
+## License
+
+This package is released under the [MIT license](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md).
+
+## Stargazers
+
+[![Stargazers repo roster for @oleghcp/UnityTools](https://reporoster.com/stars/oleghcp/UnityTools)](https://github.com/oleghcp/UnityTools/stargazers)
+
+---
+
+**I hope my package becomes useful tool for your game development work.**
