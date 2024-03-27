@@ -1,14 +1,20 @@
-﻿# OlegHCP Unity Tools
+﻿[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
 
-[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
+[![](https://img.shields.io/github/stars/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/stargazers)
+[![](https://img.shields.io/badge/Unity-2019.4%2B-teal)](https://unity.com/releases/editor/archive)
+[![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master/)
+[![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
+
+# Social [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Helpful%20toolset%20for%20Unity%20&url=https://github.com/oleghcp/UnityTools&hashtags=unity,unitytools,csharp,asset,unityscript)
+[Unity forum thread 1](https://forum.unity.com/threads/my-unity-tools.641218/).  
+[Unity forum thread 2](https://forum.unity.com/threads/my-unity-tools.640321/).
+
+# About
 
 The package is a set of C# utility code stuff for projects based on Unity Engine.  
 It works under 2019.4 and newer.  
-Discussions:
-* [Thread 1](https://forum.unity.com/threads/my-unity-tools.641218/).
-* [Thread 2](https://forum.unity.com/threads/my-unity-tools.640321/).
 
-## Usage
+# Usage
 
 For using the library as a unity package add next line to dependencies in \Packages\manifest.json:
 
@@ -20,9 +26,9 @@ Also it can be [downloaded](https://github.com/oleghcp/UnityTools/archive/refs/h
 
 Mind that assembly definitions are used.
 
-## Code Overview
+# Code Overview
 
-### Runtime Code
+## Runtime Code
 
 * [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like `ApplicationUtility`, `BitMask`, `RandomNumberGenerator`, `CameraFitter`, etc.
 * [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allows to run coroutines in non-MonoBehaviour classes.
@@ -46,20 +52,20 @@ Mind that assembly definitions are used.
 * [Strings](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Strings). Alphanumeric sorting.
 * [Timer](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Timers). Simple timer.
 
-### Editor Code
+## Editor Code
 
 * [Editor classes](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor). Editor and gui utilities.
 * [Extesions](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/Engine). Extensions for base unity editor stuff.
 * [Enum generator](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/CodeGenerating). Code generating for creating enums. Useful for generating enums based on serialized assets.
 * [Node drawer](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/NodeBased). Custom node drawing for the graph editor.
 
-## Editor Stuff Overview
+# Editor Stuff Overview
 
-### Preferences
+## Preferences
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Preferences.png)
 
-### Base Menu
+## Base Menu
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/BaseMenu.png)
 
@@ -78,7 +84,7 @@ Mind that assembly definitions are used.
 | Tools/OlegHcp/Folders/Open Persistent Data Folder | Opens folder which is located at `Application.persistentDataPath`. |
 | Tools/OlegHcp/Folders/Remove Empty Folders | Removes empty folders within Assets folder. |
 
-### Custom Transform Editor
+## Custom Transform Editor
 
 Has quick reset buttons and can be switched between local and world view.  
 Also has indicators of tool handles if they are switched to center and global value.
@@ -87,7 +93,7 @@ Also has indicators of tool handles if they are switched to center and global va
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform2.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform3.png)
 
-### Asset Context Menu
+## Asset Context Menu
 
 - **Order Children**. Sorts siblings by name.
 
@@ -115,14 +121,14 @@ Also has indicators of tool handles if they are switched to center and global va
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DestroySubasset.png)
 
-## License
+# License
 
 This package is released under the [MIT license](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md).
 
-## Stargazers
+# Stargazers
 
 [![Stargazers repo roster for @oleghcp/UnityTools](https://reporoster.com/stars/oleghcp/UnityTools)](https://github.com/oleghcp/UnityTools/stargazers)
 
 ---
 
-**I hope my humble package becomes useful tool for your game development work.**
+**I hope my humble package becomes useful tool for your game development work and makes it more convenient.**
