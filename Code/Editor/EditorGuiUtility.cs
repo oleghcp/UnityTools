@@ -24,7 +24,7 @@ namespace OlegHcpEditor
             return TempContent(label, null, tooltip);
         }
 
-        public static GUIContent TempContent(Texture2D image, string tooltip = null)
+        public static GUIContent TempContent(Texture image, string tooltip = null)
         {
             return TempContent(null, image, tooltip);
         }
@@ -98,7 +98,7 @@ namespace OlegHcpEditor
             return height.ClampMin(EditorGUIUtility.singleLineHeight);
         }
 
-        private static GUIContent TempContent(string label, Texture2D image, string tooltip)
+        private static GUIContent TempContent(string label, Texture image, string tooltip)
         {
             if (_commonContent == null)
                 _commonContent = new GUIContent();

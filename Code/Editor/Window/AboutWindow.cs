@@ -13,10 +13,11 @@ namespace OlegHcpEditor.Window
         private string _version;
         private string _description1;
         private string _description2;
+        private Texture texture;
 
         private void OnEnable()
         {
-            minSize = maxSize = new Vector2(350f, 150f);
+            minSize = maxSize = new Vector2(370f, 430f);
 
             Assembly assembly = Assembly.Load(LibConstants.LIB_NAME) ?? Assembly.GetExecutingAssembly();
 
@@ -27,7 +28,9 @@ namespace OlegHcpEditor.Window
             string json = File.ReadAllText(path);
             VersionInfo package = JsonUtility.FromJson<VersionInfo>(json);
             _version = package.version;
-            _description2 = $"Supports Unity {package.unity} or higher";
+            _description2 = $"Supports Unity {package.unity} and newer";
+
+            texture = AssetDatabaseExt.LoadAssetByGuid<Texture>("74fd7fb2ede339c4ca4d9254d386e300");
         }
 
         private void OnGUI()
@@ -38,6 +41,10 @@ namespace OlegHcpEditor.Window
             using (new EditorGuiLayout.HorizontalCenteringScope())
             {
                 EditorGUILayout.BeginVertical();
+
+                GUILayout.Space(20f);
+
+                GUILayout.Label(EditorGuiUtility.TempContent(texture));
 
                 GUILayout.Space(20f);
 
