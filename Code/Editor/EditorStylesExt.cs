@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using OlegHcp;
+using UnityEditor;
 using UnityEngine;
 
 namespace OlegHcpEditor
@@ -8,6 +9,7 @@ namespace OlegHcpEditor
         public static GUIStyle DropArea { get; }
         public static GUIStyle DropDown { get; }
         public static GUIStyle Rect { get; }
+        public static GUIStyle HyperLink { get; }
 
         static EditorStylesExt()
         {
@@ -32,6 +34,11 @@ namespace OlegHcpEditor
             };
             Rect.normal.background = Load($"{path}pre button.png");
             Rect.contentOffset = new Vector2(2f, 0f);
+
+            HyperLink = new GUIStyle(EditorStyles.label);
+            HyperLink.normal.textColor = Colours.Sky;
+            HyperLink.hover.textColor = Colours.Sky;
+            HyperLink.active.textColor = Colours.Lime;
         }
 
         private static Texture2D Load(string path)

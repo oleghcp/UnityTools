@@ -1,7 +1,5 @@
-﻿using OlegHcp;
-using OlegHcp.Async;
+﻿using OlegHcp.Async;
 using OlegHcp.IO;
-using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window;
 using UnityEditor;
 using UnityEngine;
@@ -23,12 +21,8 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
         private void Awake()
         {
             if (_hyperLinkStyle == null)
-            {
-                _hyperLinkStyle = new GUIStyle(EditorStyles.label);
-                _hyperLinkStyle.normal.textColor = Colours.Sky;
-                _hyperLinkStyle.hover.textColor = Colours.Sky;
-                _hyperLinkStyle.active.textColor = Colours.Lime;
-            }
+                _hyperLinkStyle = EditorStylesExt.HyperLink;
+
             Init();
             EditorApplication.update += Update;
         }
