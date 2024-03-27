@@ -4,7 +4,9 @@
 
 The package is a set of C# utility code stuff for projects based on Unity Engine.  
 It works under 2019.4 and newer.  
-Discussion [thread](https://forum.unity.com/threads/my-unity-tools.641218/).
+Discussions:
+* [Thread 1](https://forum.unity.com/threads/my-unity-tools.641218/).
+* [Thread 2](https://forum.unity.com/threads/my-unity-tools.641218/).
 
 ## Usage
 
@@ -123,4 +125,4 @@ This package is released under the [MIT license](https://github.com/oleghcp/Unit
 
 ---
 
-**I hope my package becomes useful tool for your game development work.**
+**I hope my humble package becomes useful tool for your game development work.**
