@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
@@ -47,12 +46,7 @@ namespace OlegHcp.Events
 
         public void Remove(object handler)
         {
-            int index = _subscriptions.IndexOf(item => item.GetHashCode() == handler.GetHashCode());
-
-            if (index < 0)
-                return;
-
-            _subscriptions.RemoveAt(index);
+            _subscriptions.Remove(new EventSubscription(handler));
         }
 
         public override void Invoke<TSignal>()
