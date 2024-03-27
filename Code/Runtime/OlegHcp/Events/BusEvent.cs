@@ -5,13 +5,13 @@ using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
-    public interface IEvent
+    public abstract class BusEvent
     {
-        void Invoke<T>(T signal) where T : ISignal;
-        void UnregisterOwner();
+        public abstract void Invoke<TSignal>(TSignal signal) where TSignal : ISignal;
+        public abstract void UnregisterOwner();
     }
 
-    internal class BusEvent : IEvent
+    internal class InternalEvent : BusEvent
     {
         private HashSet<EventSubscription> _callbacks = new HashSet<EventSubscription>();
         private object _owner;
@@ -19,7 +19,7 @@ namespace OlegHcp.Events
         public Type SignalType { get; }
         public object Owner => _owner;
 
-        public BusEvent(Type signalType)
+        public InternalEvent(Type signalType)
         {
             SignalType = signalType;
         }
@@ -33,22 +33,22 @@ namespace OlegHcp.Events
             return true;
         }
 
-        public void UnregisterOwner()
+        public override void UnregisterOwner()
         {
             _owner = null;
         }
 
-        public void Add<T>(Action<T> callback, int priority) where T : ISignal
+        public void Add<TSignal>(Action<TSignal> callback, int priority) where TSignal : ISignal
         {
             _callbacks.Add(new EventSubscription(callback, priority));
         }
 
-        public void Remove<T>(Action<T> callback) where T : ISignal
+        public void Remove<TSignal>(Action<TSignal> callback) where TSignal : ISignal
         {
             _callbacks.Remove(new EventSubscription(callback));
         }
 
-        public void Invoke<T>(T signal) where T : ISignal
+        public override void Invoke<TSignal>(TSignal signal)
         {
             _callbacks.OrderBy(item => item.Priority)
                       .ForEach(item => item.Invoke(signal));
