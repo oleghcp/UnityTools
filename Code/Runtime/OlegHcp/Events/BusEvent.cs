@@ -40,7 +40,9 @@ namespace OlegHcp.Events
 
         public void Add(object handler, int priority)
         {
-            _changed = priority != int.MaxValue;
+            if (priority != int.MaxValue)
+                _changed = true;
+
             _subscriptions.Add(new EventSubscription(handler, priority));
         }
 
