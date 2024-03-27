@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
-    public interface IEvent
+    public abstract class BusEvent
     {
-        void Invoke<T>(T signal) where T : ISignal;
-        void UnregisterOwner();
+        public abstract void Invoke<TSignal>(TSignal signal) where TSignal : ISignal;
+        public abstract void Invoke<TSignal>() where TSignal : ISignal;
+        public abstract void UnregisterOwner();
     }
 
-    internal class BusEvent : IEvent
+    internal class InternalEvent : BusEvent
     {
-        private HashSet<EventSubscription> _callbacks = new HashSet<EventSubscription>();
+        private List<EventSubscription> _subscriptions = new List<EventSubscription>();
         private object _owner;
+        private bool _changed;
 
         public Type SignalType { get; }
         public object Owner => _owner;
 
-        public BusEvent(Type signalType)
+        public InternalEvent(Type signalType)
         {
             SignalType = signalType;
         }
@@ -33,25 +33,39 @@ namespace OlegHcp.Events
             return true;
         }
 
-        public void UnregisterOwner()
+        public override void UnregisterOwner()
         {
             _owner = null;
         }
 
-        public void Add<T>(Action<T> callback, int priority) where T : ISignal
+        public void Add(object handler, int priority)
         {
-            _callbacks.Add(new EventSubscription(callback, priority));
+            _changed = priority != int.MaxValue;
+            _subscriptions.Add(new EventSubscription(handler, priority));
         }
 
-        public void Remove<T>(Action<T> callback) where T : ISignal
+        public void Remove(object handler)
         {
-            _callbacks.Remove(new EventSubscription(callback));
+            _subscriptions.Remove(new EventSubscription(handler));
         }
 
-        public void Invoke<T>(T signal) where T : ISignal
+        public override void Invoke<TSignal>()
         {
-            _callbacks.OrderBy(item => item.Priority)
-                      .ForEach(item => item.Invoke(signal));
+            Invoke(default(TSignal));
+        }
+
+        public override void Invoke<TSignal>(TSignal signal)
+        {
+            if (_changed)
+            {
+                _subscriptions.Sort();
+                _changed = false;
+            }
+
+            for (int i = 0; i < _subscriptions.Count; i++)
+            {
+                _subscriptions[i].Invoke(signal);
+            }
         }
     }
 }

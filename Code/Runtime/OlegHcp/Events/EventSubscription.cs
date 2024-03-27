@@ -2,27 +2,31 @@
 
 namespace OlegHcp.Events
 {
-    internal struct EventSubscription : IEquatable<EventSubscription>
+    internal struct EventSubscription : IEquatable<EventSubscription>, IComparable<EventSubscription>
     {
-        private Delegate _callback;
+        private object _handler;
+        private int _priority;
 
-        public int Priority { get; }
-        public Delegate Callback => _callback;
-
-        public EventSubscription(Delegate callback, int priority = int.MaxValue)
+        public EventSubscription(object handler, int priority = int.MaxValue)
         {
-            _callback = callback;
-            Priority = priority;
+            _handler = handler;
+            _priority = priority;
         }
 
-        public void Invoke<T>(T signal) where T : ISignal
+        public void Invoke<TSignal>(TSignal signal) where TSignal : ISignal
         {
-            ((Action<T>)_callback).Invoke(signal);
+            if (_handler is Action<TSignal> func)
+            {
+                func.Invoke(signal);
+                return;
+            }
+
+            ((IEventListener<TSignal>)_handler).HandleEvent(signal);
         }
 
         public bool Equals(EventSubscription other)
         {
-            return _callback == other._callback;
+            return _handler == other._handler;
         }
 
         public override bool Equals(object other)
@@ -32,7 +36,12 @@ namespace OlegHcp.Events
 
         public override int GetHashCode()
         {
-            return _callback.GetHashCode();
+            return _handler.GetHashCode();
+        }
+
+        public int CompareTo(EventSubscription other)
+        {
+            return _priority.CompareTo(other._priority);
         }
 
         public static bool operator ==(EventSubscription a, EventSubscription b)

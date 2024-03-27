@@ -65,7 +65,7 @@ using UnityEngine;
 
 public class ExampleEventOwner : MonoBehaviour
 {
-    private IEvent _event;
+    private BusEvent _event;
 
     private void Awake()
     {
