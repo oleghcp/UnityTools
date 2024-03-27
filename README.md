@@ -6,7 +6,7 @@ The package is a set of C# utility code stuff for projects based on Unity Engine
 It works under 2019.4 and newer.  
 Discussions:
 * [Thread 1](https://forum.unity.com/threads/my-unity-tools.641218/).
-* [Thread 2](https://forum.unity.com/threads/my-unity-tools.641218/).
+* [Thread 2](https://forum.unity.com/threads/my-unity-tools.640321/).
 
 ## Usage
 
