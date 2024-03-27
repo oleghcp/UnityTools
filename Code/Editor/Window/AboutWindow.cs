@@ -9,15 +9,22 @@ namespace OlegHcpEditor.Window
 {
     internal class AboutWindow : EditorWindow
     {
+        private string _url = "https://github.com/oleghcp/UnityTools";
         private string _copyright;
         private string _version;
         private string _description1;
         private string _description2;
         private Texture texture;
+        private GUIStyle _hyperLinkStyle;
 
         private void OnEnable()
         {
-            minSize = maxSize = new Vector2(370f, 430f);
+            minSize = maxSize = new Vector2(370f, 455f);
+
+            texture = AssetDatabaseExt.LoadAssetByGuid<Texture>("74fd7fb2ede339c4ca4d9254d386e300");
+
+            if (_hyperLinkStyle == null)
+                _hyperLinkStyle = EditorStylesExt.HyperLink;
 
             Assembly assembly = Assembly.Load(LibConstants.LIB_NAME) ?? Assembly.GetExecutingAssembly();
 
@@ -29,8 +36,6 @@ namespace OlegHcpEditor.Window
             VersionInfo package = JsonUtility.FromJson<VersionInfo>(json);
             _version = package.version;
             _description2 = $"Supports Unity {package.unity} and newer";
-
-            texture = AssetDatabaseExt.LoadAssetByGuid<Texture>("74fd7fb2ede339c4ca4d9254d386e300");
         }
 
         private void OnGUI()
@@ -51,6 +56,11 @@ namespace OlegHcpEditor.Window
                 GUILayout.Label(_description1);
                 GUILayout.Label(_description2);
                 GUILayout.Label($"Version {_version}");
+
+                EditorGUILayout.Space();
+
+                if (GUILayout.Button(_url, _hyperLinkStyle))
+                    Application.OpenURL(_url);
 
                 EditorGUILayout.Space();
 
