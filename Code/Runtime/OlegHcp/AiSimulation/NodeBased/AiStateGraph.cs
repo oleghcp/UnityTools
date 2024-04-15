@@ -78,7 +78,7 @@ namespace OlegHcp.AiSimulation.NodeBased
                 {
                     for (int i = 0; i < _currentState.CompleteHandlers.Length; i++)
                     {
-                        _currentState.CompleteHandlers[i].OnComlete(_permanentState);
+                        _currentState.CompleteHandlers[i].OnComplete(_permanentState);
                     }
                 }
             }
