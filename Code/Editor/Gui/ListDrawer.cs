@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using OlegHcp.CSharp.Collections;
-using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -111,7 +110,7 @@ namespace OlegHcpEditor.Gui
 #if !UNITY_2020_3_OR_NEWER
             using (new EditorGUILayout.VerticalScope())
 #endif
-            _drawer.DoLayoutList();
+                _drawer.DoLayoutList();
 
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             EditorGUILayout.EndHorizontal();

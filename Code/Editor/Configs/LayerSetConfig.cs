@@ -1,5 +1,4 @@
 ﻿using System;
-using OlegHcpEditor.Engine;
 
 namespace OlegHcpEditor.Configs
 {

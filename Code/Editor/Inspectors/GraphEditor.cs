@@ -1,6 +1,5 @@
 ﻿using OlegHcp;
 using OlegHcp.NodeBased.Service;
-using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
 using OlegHcpEditor.Window;
 using UnityEditor;

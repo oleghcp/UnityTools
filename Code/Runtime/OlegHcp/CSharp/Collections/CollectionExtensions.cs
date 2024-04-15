@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using OlegHcp.Rng;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections

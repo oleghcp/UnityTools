@@ -1,5 +1,4 @@
 ﻿using System;
-using OlegHcp.Rng;
 using UnityEngine;
 
 namespace OlegHcp.NumericEntities
@@ -86,9 +85,9 @@ namespace OlegHcp.NumericEntities
             internal static string IntensityFieldName = nameof(_intensity);
 #endif
 
-            public Option(RngMode mehod, float intensity)
+            public Option(RngMode mode, float intensity)
             {
-                _mode = mehod;
+                _mode = mode;
                 _intensity = intensity;
             }
         }
