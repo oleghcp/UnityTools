@@ -15,7 +15,7 @@ namespace OlegHcp.SaveLoad
 
         void DeleteKey(string key);
         void Set(string key, object value);
-        object Get(string key, object defaltValue);
+        object Get(string key, object defaultValue);
         object Get(string key, Type type);
     }
 
