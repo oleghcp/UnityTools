@@ -98,10 +98,10 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
             string filePath = startPoint.Substring(0, index);
             string lineNumber = startPoint.Substring(index + 1);
 
-            UnityObject scriptAsst = AssetDatabase.LoadAssetAtPath(filePath, typeof(UnityObject));
+            UnityObject scriptAsset = AssetDatabase.LoadAssetAtPath(filePath, typeof(UnityObject));
 
             EditorUtilityExt.OpenCsProject();
-            AssetDatabase.OpenAsset(scriptAsst, int.Parse(lineNumber));
+            AssetDatabase.OpenAsset(scriptAsset, int.Parse(lineNumber));
         }
     }
 }

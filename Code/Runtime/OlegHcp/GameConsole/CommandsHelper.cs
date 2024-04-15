@@ -35,9 +35,9 @@ namespace OlegHcp.GameConsole
 
         public static bool ParseInt(string[] opt, Action<int> func)
         {
-            if (opt.HasAnyData() && int.TryParse(opt[0], out int parced))
+            if (opt.HasAnyData() && int.TryParse(opt[0], out int parsed))
             {
-                func(parced);
+                func(parsed);
                 return true;
             }
 
@@ -47,9 +47,9 @@ namespace OlegHcp.GameConsole
 
         public static bool ParseFloat(string[] opt, Action<float> func)
         {
-            if (opt.HasAnyData() && float.TryParse(opt[0], NumberStyles.Number, CultureInfo.InvariantCulture, out float parced))
+            if (opt.HasAnyData() && float.TryParse(opt[0], NumberStyles.Number, CultureInfo.InvariantCulture, out float parsed))
             {
-                func(parced);
+                func(parsed);
                 return true;
             }
 

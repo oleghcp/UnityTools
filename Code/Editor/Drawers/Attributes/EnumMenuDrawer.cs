@@ -1,6 +1,5 @@
 ﻿using System;
 using OlegHcp.Inspector;
-using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
 

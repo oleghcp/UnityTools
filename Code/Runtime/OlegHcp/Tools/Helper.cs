@@ -45,13 +45,13 @@ namespace OlegHcp.Tools
 
         internal static string SimplifyTypeName(string assemblyQualifiedName)
         {
-            const char devider = ',';
+            const char divider = ',';
 
             bool first = false;
 
             for (int i = 0; i < assemblyQualifiedName.Length; i++)
             {
-                if (assemblyQualifiedName[i] != devider) { continue; }
+                if (assemblyQualifiedName[i] != divider) { continue; }
                 if (!first) { first = true; }
                 else { return assemblyQualifiedName.Substring(0, i); }
             }

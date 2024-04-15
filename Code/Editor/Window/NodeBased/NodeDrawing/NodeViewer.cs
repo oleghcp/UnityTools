@@ -34,7 +34,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private float _height;
 
         private Vector2 _position;
-        private Vector2 _dragedPosition;
+        private Vector2 _draggedPosition;
 
         private float _width;
         private Rect _screenRect;
@@ -264,7 +264,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     {
                         if (e.button == 0)
                         {
-                            _dragedPosition = _position;
+                            _draggedPosition = _position;
                             SelectInternal(true);
                             _isDragging = true;
                             needLock = true;
@@ -430,8 +430,8 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             if (_window.GridSnapping)
             {
-                _dragedPosition += mouseDelta * _window.Camera.Size;
-                _position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));
+                _draggedPosition += mouseDelta * _window.Camera.Size;
+                _position = new Vector2(_draggedPosition.x.Round(GraphGrid.SMALL_STEP), _draggedPosition.y.Round(GraphGrid.SMALL_STEP));
             }
             else
             {
@@ -445,7 +445,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                 return;
 
             _isSelected = on;
-            _map.OnNodeSelectionChanched(this, on);
+            _map.OnNodeSelectionChanged(this, on);
         }
     }
 }

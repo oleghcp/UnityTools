@@ -4,13 +4,13 @@ namespace OlegHcp.Shooting
 {
     internal class ProjectileRunner
     {
-        private static ProjectileRunner _intance;
+        private static ProjectileRunner _instance;
         private SpacedList _items = new SpacedList();
         private Stack<IProjectile> _newItems = new Stack<IProjectile>();
         private Stack<IProjectile> _deadItems = new Stack<IProjectile>();
         private bool _locked;
 
-        public static ProjectileRunner I => _intance ?? (_intance = new ProjectileRunner());
+        public static ProjectileRunner I => _instance ?? (_instance = new ProjectileRunner());
 
         public ProjectileRunner()
         {

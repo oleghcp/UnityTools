@@ -27,10 +27,6 @@ namespace OlegHcp.Sound.SoundStuff
         internal override AudioSource AudioSource => _audioSource;
         internal bool Fading => _fading;
 
-        ///////////////
-        //Unity Funcs//
-        ///////////////
-
         private void Awake()
         {
             gameObject.Immortalize();
@@ -49,10 +45,6 @@ namespace OlegHcp.Sound.SoundStuff
 
             ApplicationUtility.OnUpdate_Event += _update;
         }
-
-        ////////////////
-        //Public Funcs//
-        ////////////////        
 
         internal void Play(MusicProvider provider, AudioClip clip, MPreset preset)
         {
@@ -110,10 +102,6 @@ namespace OlegHcp.Sound.SoundStuff
             _audioSource.UnPause();
         }
 
-        ///////////////
-        //Inner Funcs//
-        ///////////////
-
         private void PlayInternal()
         {
             _audioSource.loop = _preset.Looped;
@@ -156,10 +144,6 @@ namespace OlegHcp.Sound.SoundStuff
                 gameObject.Destroy();
         }
         #endregion
-
-        ////////////
-        //Routines//
-        ////////////
 
         private IEnumerator Rise()
         {

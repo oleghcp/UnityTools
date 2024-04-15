@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
-using UnityEditor;
-using UnityEngine;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcpEditor.Engine;
+using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Window

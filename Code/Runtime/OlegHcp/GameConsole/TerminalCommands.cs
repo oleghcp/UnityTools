@@ -13,7 +13,7 @@ namespace OlegHcp.GameConsole
         [TerminalCommand, Preserve]
         protected void help()
         {
-            Terminal.I.WriteCommanList();
+            Terminal.I.WriteCommandList();
         }
 #endif
 

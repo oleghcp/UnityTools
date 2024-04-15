@@ -1,5 +1,4 @@
 ﻿using System;
-using OlegHcp.Rng;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp

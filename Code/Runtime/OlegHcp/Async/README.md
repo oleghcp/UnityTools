@@ -17,7 +17,7 @@ public class MyClass
         _task = RunAsyncStuff().StartAsyncLocally();
 
         // Complete callback
-        _task.AddComleteListener(onComplete);
+        _task.AddCompleteListener(onComplete);
 
         void onComplete(TaskResult resultInfo)
         {

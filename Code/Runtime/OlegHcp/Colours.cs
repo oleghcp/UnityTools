@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using OlegHcp.Rng;
 using UnityEngine;
 
 namespace OlegHcp

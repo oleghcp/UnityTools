@@ -140,7 +140,7 @@ public class MyClass : MonoBehaviour
 
 ## DrawFlagsAttribute
 
-Is used for IntMask and BitList fields.
+Is used for `IntMask` and `BitList` fields.
 
 ```csharp
 public enum FlagExample

@@ -56,9 +56,9 @@ namespace OlegHcp.GameConsole
 
         private IEnumerator GetSizeRoutine()
         {
-            int couner = 0;
+            int counter = 0;
 
-            while (couner++ < _initSizeCount)
+            while (counter++ < _initSizeCount)
             {
                 yield return null;
                 rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _text.preferredHeight);

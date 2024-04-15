@@ -10,7 +10,7 @@ namespace OlegHcp.AiSimulation.NodeBased
         [SerializeField]
         private bool _interruptible = true;
         [SerializeReference]
-        private CompleteHandler[] _onComlete;
+        private CompleteHandler[] _onComplete;
 
         private GameObject _gameObject;
         private Transform _transform;
@@ -22,7 +22,7 @@ namespace OlegHcp.AiSimulation.NodeBased
 #pragma warning restore IDE1006
 
         protected PermanentState PermanentState => _permanentState;
-        internal CompleteHandler[] CompleteHandlers => _onComlete;
+        internal CompleteHandler[] CompleteHandlers => _onComplete;
         public bool Interruptible => _interruptible;
 
         internal void SetUp(PermanentState permanentState, GameObject gameObject)

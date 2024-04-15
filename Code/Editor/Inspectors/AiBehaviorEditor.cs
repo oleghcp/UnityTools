@@ -1,7 +1,6 @@
 ﻿using OlegHcp;
 using OlegHcp.AiSimulation;
 using OlegHcp.Tools;
-using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
 

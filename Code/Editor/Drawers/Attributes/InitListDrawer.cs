@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using OlegHcp.CSharp;
 using OlegHcp.Inspector;
-using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,16 +45,16 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             object getEnumValue()
             {
-                Type bindedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
+                Type boundType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
 
-                if (bindedType == null)
+                if (boundType == null)
                     return null;
 
                 for (int i = 0; i < _enumValues.Length; i++)
                 {
                     object value = _enumValues[i].GetValue(null);
 
-                    if (GetBindedType(value) == bindedType)
+                    if (GetBoundType(value) == boundType)
                         return value;
                 }
 
@@ -72,7 +71,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             object getInstance()
             {
-                Type newType = GetBindedType(newEnumValue);
+                Type newType = GetBoundType(newEnumValue);
 
                 if (newType == null)
                     return null;
@@ -81,7 +80,7 @@ namespace OlegHcpEditor.Drawers.Attributes
                 {
                     Debug.LogWarning(error);
 
-                    Type oldType = GetBindedType(oldEnumValue);
+                    Type oldType = GetBoundType(oldEnumValue);
 
                     if (invalidType(oldType, out error))
                     {
@@ -99,13 +98,13 @@ namespace OlegHcpEditor.Drawers.Attributes
             {
                 if (type.IsValueType || !type.IsAssignableTo(EditorUtilityExt.GetFieldType(this)))
                 {
-                    error = $"Binded type ({type.Name}) is not subclass.";
+                    error = $"Bound type ({type.Name}) is not subclass.";
                     return true;
                 }
 
                 if (type.IsAbstract || type.IsInterface)
                 {
-                    error = $"Binded type ({type.Name}) is abstract.";
+                    error = $"Bound type ({type.Name}) is abstract.";
                     return true;
                 }
 
@@ -114,7 +113,7 @@ namespace OlegHcpEditor.Drawers.Attributes
             }
         }
 
-        private Type GetBindedType(object enumValue)
+        private Type GetBoundType(object enumValue)
         {
             if (enumValue == null)
                 return null;

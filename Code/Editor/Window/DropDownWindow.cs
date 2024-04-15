@@ -6,7 +6,6 @@ using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
-using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;

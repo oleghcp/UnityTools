@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.Rng;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections.ReadOnly

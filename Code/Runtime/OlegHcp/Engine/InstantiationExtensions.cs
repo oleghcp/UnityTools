@@ -14,7 +14,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject as a child of the specified parent.
+        /// Instantiates game object as a child of the specified parent.
         /// </summary>
         public static GameObject Install(this GameObject self, Transform parent, bool worldPositionStays)
         {
@@ -22,7 +22,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject as a child with default local position and rotation.
+        /// Instantiates game object as a child with default local position and rotation.
         /// </summary>
         public static GameObject Install(this GameObject self, Transform parent)
         {
@@ -30,7 +30,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject as a child of the specified parent.
+        /// Instantiates game object as a child of the specified parent.
         /// </summary>
         public static T Install<T>(this T self, Transform parent, bool worldPositionStays) where T : Component
         {
@@ -46,7 +46,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject to the specified position.
+        /// Instantiates game object to the specified position.
         /// </summary>
         public static GameObject Install(this GameObject self, in Vector3 position)
         {
@@ -54,7 +54,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject to the specified position with the specified rotation.
+        /// Instantiates game object to the specified position with the specified rotation.
         /// </summary>
         public static GameObject Install(this GameObject self, in Vector3 position, in Quaternion rotation)
         {
@@ -118,7 +118,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset as a child of the specified parent.
+        /// Instantiates game object asset as a child of the specified parent.
         /// </summary>
         public static GameObject Install(this LazyLoadReference<GameObject> self, Transform parent, bool worldPositionStays)
         {
@@ -126,7 +126,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset as a child with default local position and rotation.
+        /// Instantiates game object asset as a child with default local position and rotation.
         /// </summary>
         public static GameObject Install(this LazyLoadReference<GameObject> self, Transform parent)
         {
@@ -134,7 +134,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset as a child of the specified parent.
+        /// Instantiates game object asset as a child of the specified parent.
         /// </summary>
         public static T Install<T>(this LazyLoadReference<T> self, Transform parent, bool worldPositionStays) where T : Component
         {
@@ -150,7 +150,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset to the specified position.
+        /// Instantiates game object asset to the specified position.
         /// </summary>
         public static GameObject Install(this LazyLoadReference<GameObject> self, in Vector3 position)
         {
@@ -158,7 +158,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset to the specified position with the specified rotation.
+        /// Instantiates game object asset to the specified position with the specified rotation.
         /// </summary>
         public static GameObject Install(this LazyLoadReference<GameObject> self, in Vector3 position, in Quaternion rotation)
         {
@@ -190,7 +190,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset as a child with the specified position and rotation.
+        /// Instantiates game object asset as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
         public static GameObject Install(this LazyLoadReference<GameObject> self, Transform parent, in Vector3 targetPos, in Quaternion targetRot, bool local)
@@ -199,7 +199,7 @@ namespace OlegHcp.Engine
         }
 
         /// <summary>
-        /// Instantiates gameobject asset as a child with the specified position and rotation.
+        /// Instantiates game object asset as a child with the specified position and rotation.
         /// </summary>
         /// <param name="local">If true targetPos and targetRot are considered as local, otherwise as world.</param>
         public static T Install<T>(this LazyLoadReference<T> self, Transform parent, in Vector3 targetPos, in Quaternion targetRot, bool local) where T : Component

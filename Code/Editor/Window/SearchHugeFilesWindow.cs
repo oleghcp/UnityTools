@@ -81,7 +81,7 @@ namespace OlegHcpEditor.Window
                     EditorGUILayout.BeginHorizontal();
                     bool clicked = GUILayout.Button(container.Asset.GetAssetIcon(), EditorStyles.label, _iconOptions);
                     clicked |= GUILayout.Button(container.Path, EditorStyles.label);
-                    GUILayout.Label(SizeToLable(container.Size, _sizeToolbarNames));
+                    GUILayout.Label(SizeToLabel(container.Size, _sizeToolbarNames));
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
 
@@ -143,7 +143,7 @@ namespace OlegHcpEditor.Window
             }
         }
 
-        private string SizeToLable(long size, string[] sizeToolbarNames)
+        private string SizeToLabel(long size, string[] sizeToolbarNames)
         {
             if (size <= 1024)
                 return convert(size, sizeToolbarNames[0]);
