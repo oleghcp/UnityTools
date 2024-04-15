@@ -121,12 +121,12 @@ namespace OlegHcp.Shooting
             return hitInfo.point + hitInfo.normal * castRadius;
         }
 
-        public void LockVelocity(ref Vector3 veclocity)
+        public void LockVelocity(ref Vector3 velocity)
         {
             for (int i = 0; i < 3; i++)
             {
                 if (_freezePosition[i])
-                    veclocity[i] = 0f;
+                    velocity[i] = 0f;
             }
         }
 
