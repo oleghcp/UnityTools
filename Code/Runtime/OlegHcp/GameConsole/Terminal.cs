@@ -207,7 +207,7 @@ namespace OlegHcp.GameConsole
             _options = options;
         }
 
-        public void WriteCommanList()
+        public void WriteCommandList()
         {
             FindCmd(string.Empty);
         }
