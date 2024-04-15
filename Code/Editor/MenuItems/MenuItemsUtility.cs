@@ -103,21 +103,28 @@ namespace OlegHcpEditor.MenuItems
 
         private static bool IsValidExtension(string extension)
         {
-            return extension == AssetDatabaseExt.ASSET_EXTENSION ||
-                   extension == AssetDatabaseExt.PREFAB_EXTENSION ||
-                   extension == ".unity" ||
-                   extension == ".mat" ||
-                   extension == ".spriteatlas" ||
-                   extension == ".spriteatlasv2" ||
-                   extension == ".controller" ||
-                   extension == ".overrideController" ||
-                   extension == ".preset" ||
-                   extension == ".mask" ||
-                   extension == ".playable" ||
-                   extension == ".guiskin" ||
-                   extension == ".scenetemplate" ||
-                   extension == ".terrainlayer" ||
-                   extension == ".shadervariants";
+            switch (extension)
+            {
+                case AssetDatabaseExt.ASSET_EXTENSION:
+                case AssetDatabaseExt.PREFAB_EXTENSION:
+                case ".unity":
+                case ".mat":
+                case ".spriteatlas":
+                case ".spriteatlasv2":
+                case ".controller":
+                case ".overrideController":
+                case ".preset":
+                case ".mask":
+                case ".playable":
+                case ".guiskin":
+                case ".scenetemplate":
+                case ".terrainlayer":
+                case ".shadervariants":
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }
