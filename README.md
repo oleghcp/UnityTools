@@ -12,7 +12,7 @@
 # About
 
 The package is a set of C# utility code stuff for projects based on Unity Engine.  
-It works under 2019.4 and newer.  
+It works with Unity 2019.4 and newer.  
 
 # Usage
 
@@ -24,7 +24,7 @@ For using the library as a unity package add next line to dependencies in \Packa
 
 Also it can be [downloaded](https://github.com/oleghcp/UnityTools/archive/refs/heads/master.zip) manually from github and placed into assets folder.  
 
-Mind that assembly definitions are used.
+Mind that it uses assembly definitions.
 
 # Code Overview
 
@@ -44,7 +44,7 @@ Mind that assembly definitions are used.
 * [ObjectPool](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Pool). ObjectPool implementation.
 * [SignalBus](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Events). SignalBus implementation.
 * [ServiceLocator](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Managing). ServiceLocator implementation.
-* [PostProcessing](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/PostProcessing). Fog effect for built-in render pipeline
+* [PostProcessing](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/PostProcessing). Fog effect for the built-in render pipeline
 * [Randomization](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Rng). Custom random number generators.
 * [Game saving](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/SaveLoad). Save/load system.
 * [Projectiles](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Shooting). Projectile implementation.
