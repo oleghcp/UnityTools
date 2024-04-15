@@ -79,8 +79,8 @@ namespace OlegHcpEditor.Utils
 
         private static void CreateEditableTemplate(string templatePath, string baseTemplateGuid)
         {
-            string sorceTemplatePath = AssetDatabase.GUIDToAssetPath(baseTemplateGuid);
-            string text = File.ReadAllText(sorceTemplatePath);
+            string sourceTemplatePath = AssetDatabase.GUIDToAssetPath(baseTemplateGuid);
+            string text = File.ReadAllText(sourceTemplatePath);
             Directory.CreateDirectory(TEMPLATES_FOLDER);
             File.WriteAllText(templatePath, text);
         }
