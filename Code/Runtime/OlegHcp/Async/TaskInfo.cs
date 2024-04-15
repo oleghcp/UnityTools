@@ -38,7 +38,7 @@ namespace OlegHcp.Async
             _id = (_task = runner).Id;
         }
 
-        public void AddComleteListener(Action<TaskResult> onComplete)
+        public void AddCompleteListener(Action<TaskResult> onComplete)
         {
             if (IsAliveInternal())
                 _task.OnCompleted_Event += onComplete;
