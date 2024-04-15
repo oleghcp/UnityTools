@@ -13,7 +13,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private TransitionViewer _transitionViewer;
         private GraphEditorWindow _window;
         private bool _isDragged;
-        private Vector2 _dragedPosition;
+        private Vector2 _draggedPosition;
         private Vector2 _position;
 
         public Vector2 Position => _position;
@@ -49,7 +49,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                         {
                             if (e.control)
                             {
-                                _dragedPosition = Position;
+                                _draggedPosition = Position;
                                 _isDragged = e.control;
                                 needLock = true;
                             }
@@ -87,8 +87,8 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             if (_window.GridSnapping)
             {
-                _dragedPosition += mouseDelta * _window.Camera.Size;
-                _position = new Vector2(_dragedPosition.x.Round(GraphGrid.SMALL_STEP), _dragedPosition.y.Round(GraphGrid.SMALL_STEP));
+                _draggedPosition += mouseDelta * _window.Camera.Size;
+                _position = new Vector2(_draggedPosition.x.Round(GraphGrid.SMALL_STEP), _draggedPosition.y.Round(GraphGrid.SMALL_STEP));
             }
             else
             {

@@ -63,7 +63,7 @@ namespace OlegHcpEditor.Window.NodeBased
                 GUILayout.FlexibleSpace();
                 DrawMiddle();
                 GUILayout.FlexibleSpace();
-                DrawRigt();
+                DrawRight();
                 GUILayout.Space(5f);
             }
             GUILayout.FlexibleSpace();
@@ -149,7 +149,7 @@ namespace OlegHcpEditor.Window.NodeBased
             }
         }
 
-        private void DrawRigt()
+        private void DrawRight()
         {
             _transitionViewType = EditorGUILayout.Popup(_transitionViewType, _transitionViewNames, GUILayout.Width(100f));
 

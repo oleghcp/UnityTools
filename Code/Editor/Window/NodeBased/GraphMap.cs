@@ -114,10 +114,10 @@ namespace OlegHcpEditor.Window.NodeBased
                 return;
             }
 
-            PortViewer sourse = targetPort.Type == PortType.Out ? targetPort : _selectedPort;
+            PortViewer source = targetPort.Type == PortType.Out ? targetPort : _selectedPort;
             PortViewer dest = targetPort.Type == PortType.In ? targetPort : _selectedPort;
 
-            sourse.Node.CreateTransition(dest);
+            source.Node.CreateTransition(dest);
 
             _selectedPort = null;
         }
@@ -195,7 +195,7 @@ namespace OlegHcpEditor.Window.NodeBased
             _nodeViewers.ForEach(item => item.Save());
         }
 
-        public void OnNodeSelectionChanched(NodeViewer node, bool on)
+        public void OnNodeSelectionChanged(NodeViewer node, bool on)
         {
             if (on)
                 _selectedNodes.Add(node);

@@ -27,7 +27,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private PortViewer _destination;
         private List<PointViewer> _points;
 
-        private bool _controlPresed;
+        private bool _controlPressed;
         private Vector3[] _trianglePoints = new Vector3[4];
         private Vector3[] _linePoints = new Vector3[2];
 
@@ -112,19 +112,19 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
             for (int i = 0; i < _points.Count; i++)
             {
-                Vector2 nexpoint = _window.Camera.WorldToScreen(_points[i].Position);
+                Vector2 nextPoint = _window.Camera.WorldToScreen(_points[i].Position);
 
-                float startTangentFactor = i == 0 ? GetTangentFactor(prevPoint, nexpoint)
-                                                  : GetPointTangentFactor(prevPoint, nexpoint);
-                float endTangentFactor = GetPointTangentFactor(prevPoint, nexpoint);
+                float startTangentFactor = i == 0 ? GetTangentFactor(prevPoint, nextPoint)
+                                                  : GetPointTangentFactor(prevPoint, nextPoint);
+                float endTangentFactor = GetPointTangentFactor(prevPoint, nextPoint);
 
                 Vector2 startTangentDir = i == 0 ? Vector2.right : -prevEndTangentDir;
-                prevEndTangentDir = new Vector2(prevPoint.x - nexpoint.x, 0f).normalized;
+                prevEndTangentDir = new Vector2(prevPoint.x - nextPoint.x, 0f).normalized;
 
-                DrawSpline(prevPoint, nexpoint, startTangentFactor, endTangentFactor, startTangentDir, prevEndTangentDir, targetColor);
+                DrawSpline(prevPoint, nextPoint, startTangentFactor, endTangentFactor, startTangentDir, prevEndTangentDir, targetColor);
                 _points[i].Draw(targetColor);
 
-                prevPoint = nexpoint;
+                prevPoint = nextPoint;
             }
 
             DrawSpline(prevPoint, destPoint, GetPointTangentFactor(prevPoint, destPoint), GetTangentFactor(prevPoint, destPoint), -prevEndTangentDir, Vector2.left, targetColor);
@@ -154,7 +154,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
         public bool ProcessEvents(Event e)
         {
-            _controlPresed = e.control;
+            _controlPressed = e.control;
 
             bool needLock = false;
 
@@ -188,7 +188,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             if (Event.current.button != 0)
                 return;
 
-            if (_controlPresed)
+            if (_controlPressed)
                 _source.Node.RemoveTransition(this);
             else
                 ShowTransitionInfoWindow();
