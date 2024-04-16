@@ -5,16 +5,16 @@ namespace OlegHcp.Tools
 {
     internal class CallbackKeeper : MonoBehaviour
     {
-        public event Action<bool> OnApplicationPause_Event;
-        public event Action<bool> OnApplicationFocus_Event;
-        public event Action OnApplicationQuit_Event;
+        public static event Action<bool> OnApplicationPause_Event;
+        public static event Action<bool> OnApplicationFocus_Event;
+        public static event Action OnApplicationQuit_Event;
 
-        public event Action OnUpdate_Event;
-        public event Action<float> OnTick_Event;
-        public event Action OnLateUpdate_Event;
-        public event Action<float> OnLateTick_Event;
-        public event Action OnFixedUpdate_Event;
-        public event Action<float> OnFixedTick_Event;
+        public static event Action OnUpdate_Event;
+        public static event Action<float> OnTick_Event;
+        public static event Action OnLateUpdate_Event;
+        public static event Action<float> OnLateTick_Event;
+        public static event Action OnFixedUpdate_Event;
+        public static event Action<float> OnFixedTick_Event;
 
 #if UNITY_EDITOR
         private void OnDestroy()
