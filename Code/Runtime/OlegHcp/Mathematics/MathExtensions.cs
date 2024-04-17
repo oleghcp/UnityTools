@@ -634,7 +634,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// Loops the value t, so that it is never larger than length and never smaller than 0.
+        /// Loops the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static float Repeat(this float value, float length)
         {
@@ -642,7 +642,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// Loops the value t, so that it is never larger than length and never smaller than 0.
+        /// Loops the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static double Repeat(this double value, double length)
         {
@@ -650,7 +650,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// Loops the value t, so that it is never larger than length and never smaller than 0.
+        /// Loops the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static int Repeat(this int value, int length)
         {
@@ -659,7 +659,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// Loops the value t, so that it is never larger than length and never smaller than 0.
+        /// Loops the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static long Repeat(this long value, long length)
         {
@@ -668,7 +668,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
+        /// PingPongs the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static float PingPong(this float value, float length)
         {
@@ -676,7 +676,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
+        /// PingPongs the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static double PingPong(this double value, float length)
         {
@@ -685,7 +685,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
+        /// PingPongs the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static int PingPong(this int value, int length)
         {
@@ -694,7 +694,7 @@ namespace OlegHcp.Mathematics
         }
 
         /// <summary>
-        /// PingPongs the value t, so that it is never larger than length and never smaller than 0.
+        /// PingPongs the value, so that it is never larger than length and never smaller than 0.
         /// </summary>
         public static long PingPong(this long value, int length)
         {
