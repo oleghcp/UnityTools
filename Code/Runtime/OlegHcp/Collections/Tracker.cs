@@ -5,7 +5,7 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Collections
 {
-    public class Tracker : IRefreshable
+    public class Tracker
     {
         private List<ITrackerNode> _nodes = new List<ITrackerNode>();
 
