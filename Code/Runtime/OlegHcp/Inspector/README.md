@@ -49,43 +49,47 @@ public class MyClass : MonoBehaviour
 
     private void Start()
     {
-        if (_data is ClassA a)
-        {
-
-        }
-        else if (_data is ClassB b)
-        {
-
-        }
-        else if (_data is ClassC c)
-        {
-
-        }
+        _data.DoSomething();
     }
 }
 
 [Serializable]
 public abstract class Data
 {
-
+    public abstract DoSomething();
 }
 
 [Serializable]
 public class ClassA : Data
 {
-    public int FiledA;
+    public int FieldA;
+    
+    public override DoSomething()
+    {
+        Debug.Log(FieldA);
+    }
 }
 
 [Serializable]
 public class ClassB : Data
 {
-    public float FiledB;
+    public float FieldB;
+    
+    public override DoSomething()
+    {
+        Debug.Log(FieldB);
+    }
 }
 
 [Serializable]
 public class ClassC : Data
 {
-    public string FiledC;
+    public string FieldC;
+    
+    public override DoSomething()
+    {
+        Debug.Log(FieldC);
+    }
 }
 ```
 
@@ -294,6 +298,8 @@ public class MyClass : MonoBehaviour
 
 ## InitListAttribute
 
+It is similar to `ReferenceSelectionAttribute`, but uses binding to a custom `enum`.
+
 ```csharp
 using System;
 using OlegHcp.Inspector;
@@ -307,18 +313,7 @@ public class MyClass : MonoBehaviour
 
     private void Start()
     {
-        if (_data is ClassA a)
-        {
-
-        }
-        else if (_data is ClassB b)
-        {
-
-        }
-        else if (_data is ClassC c)
-        {
-
-        }
+        _data.DoSomething();
     }
 }
 
@@ -330,30 +325,6 @@ public enum ListEnum
     B,
     [BindSubclass(typeof(ClassC))]
     C,
-}
-
-[Serializable]
-public class Data
-{
-
-}
-
-[Serializable]
-public class ClassA : Data
-{
-    public int FiledA;
-}
-
-[Serializable]
-public class ClassB : Data
-{
-    public float FiledB;
-}
-
-[Serializable]
-public class ClassC : Data
-{
-    public string FiledC;
 }
 ```
 
@@ -414,28 +385,16 @@ public class MyClass : MonoBehaviour
 }
 
 [Serializable]
-public abstract class Data
-{
-
-}
+public abstract class Data { }
 
 [Serializable]
-public class ClassA : Data
-{
-    public int FiledA;
-}
+public class ClassA : Data { }
 
 [Serializable]
-public class ClassB : Data
-{
-    public float FiledB;
-}
+public class ClassB : Data { }
 
 [Serializable]
-public class ClassC : Data
-{
-    public string FiledC;
-}
+public class ClassC : Data { }
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Typename.png)
