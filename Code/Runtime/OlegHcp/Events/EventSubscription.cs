@@ -6,27 +6,26 @@ namespace OlegHcp.Events
     {
         private object _handler;
         private int _priority;
+        private int _hashCode;
 
-        public EventSubscription(object handler, int priority = int.MaxValue)
+        public EventSubscription(object handler, int priority)
         {
             _handler = handler;
             _priority = priority;
+            _hashCode = handler.GetHashCode();
         }
 
         public void Invoke<TSignal>(TSignal signal) where TSignal : ISignal
         {
             if (_handler is Action<TSignal> func)
-            {
                 func.Invoke(signal);
-                return;
-            }
-
-            ((IEventListener<TSignal>)_handler).HandleEvent(signal);
+            else
+                ((IEventListener<TSignal>)_handler).HandleEvent(signal);
         }
 
         public bool Equals(EventSubscription other)
         {
-            return _handler == other._handler;
+            return _hashCode == other._hashCode;
         }
 
         public override bool Equals(object other)
@@ -36,7 +35,7 @@ namespace OlegHcp.Events
 
         public override int GetHashCode()
         {
-            return _handler.GetHashCode();
+            return _hashCode;
         }
 
         public int CompareTo(EventSubscription other)
@@ -52,6 +51,11 @@ namespace OlegHcp.Events
         public static bool operator !=(EventSubscription a, EventSubscription b)
         {
             return !a.Equals(b);
+        }
+
+        public static implicit operator EventSubscription(int hash)
+        {
+            return new EventSubscription { _hashCode = hash };
         }
     }
 }

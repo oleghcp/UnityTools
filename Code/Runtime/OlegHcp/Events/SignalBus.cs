@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Events
@@ -16,50 +15,6 @@ namespace OlegHcp.Events
     {
         private Dictionary<Type, InternalEvent> _storage = new Dictionary<Type, InternalEvent>();
 
-        public void Subscribe<TSignal>(Action<TSignal> callback) where TSignal : ISignal
-        {
-            Subscribe(int.MaxValue, callback);
-        }
-
-        public void Subscribe<TSignal>(int priority, Action<TSignal> callback) where TSignal : ISignal
-        {
-            if (callback == null)
-                throw ThrowErrors.NullParameter(nameof(callback));
-
-            GetEvent(typeof(TSignal)).Add(callback, priority);
-        }
-
-        public void Subscribe<TSignal>(IEventListener<TSignal> listener) where TSignal : ISignal
-        {
-            Subscribe(int.MaxValue, listener);
-        }
-
-        public void Subscribe<TSignal>(int priority, IEventListener<TSignal> listener) where TSignal : ISignal
-        {
-            if (listener == null)
-                throw ThrowErrors.NullParameter(nameof(listener));
-
-            GetEvent(typeof(TSignal)).Add(listener, priority);
-        }
-
-        public void Unsubscribe<TSignal>(Action<TSignal> callback) where TSignal : ISignal
-        {
-            if (callback == null)
-                throw ThrowErrors.NullParameter(nameof(callback));
-
-            if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
-                @event.Remove(callback);
-        }
-
-        public void Unsubscribe<TSignal>(IEventListener<TSignal> listener) where TSignal : ISignal
-        {
-            if (listener == null)
-                throw ThrowErrors.NullParameter(nameof(listener));
-
-            if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
-                @event.Remove(listener);
-        }
-
         public BusEvent RegisterEventOwner<TSignal>(object owner) where TSignal : ISignal
         {
             if (owner == null)
@@ -73,12 +28,63 @@ namespace OlegHcp.Events
             throw new OwnerRegisteringException($"Event {@event.SignalType.Name} already has owner: {@event.Owner.GetType().Name}.");
         }
 
-        private InternalEvent GetEvent(Type type)
+        public SubscriptionToken Subscribe<TSignal>(Action<TSignal> callback, int priority = int.MaxValue) where TSignal : ISignal
         {
-            if (_storage.TryGetValue(type, out InternalEvent @event))
-                return @event;
+            if (callback == null)
+                throw ThrowErrors.NullParameter(nameof(callback));
 
-            return _storage.Place(type, new InternalEvent(type));
+            return SubscribeInternal(callback, typeof(TSignal), priority);
+        }
+
+        public SubscriptionToken Subscribe<TSignal>(IEventListener<TSignal> listener, int priority = int.MaxValue) where TSignal : ISignal
+        {
+            if (listener == null)
+                throw ThrowErrors.NullParameter(nameof(listener));
+
+            return SubscribeInternal(listener, typeof(TSignal), priority);
+        }
+
+        public void Unsubscribe<TSignal>(Action<TSignal> callback) where TSignal : ISignal
+        {
+            if (callback == null)
+                throw ThrowErrors.NullParameter(nameof(callback));
+
+            if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
+                @event.Unsubscribe(callback);
+        }
+
+        public void Unsubscribe<TSignal>(IEventListener<TSignal> listener) where TSignal : ISignal
+        {
+            if (listener == null)
+                throw ThrowErrors.NullParameter(nameof(listener));
+
+            if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
+                @event.Unsubscribe(listener);
+        }
+
+        public void Unsubscribe(SubscriptionToken token)
+        {
+            if (_storage.TryGetValue(token.SignalType, out InternalEvent @event))
+                @event.Unsubscribe(token);
+        }
+
+        private SubscriptionToken SubscribeInternal(object handler, Type signalType, int priority)
+        {
+            InternalEvent @event = GetEvent(signalType);
+            int hash = @event.Subscribe(handler, priority);
+            return new SubscriptionToken
+            {
+                Hash = hash,
+                SignalType = signalType,
+            };
+        }
+
+        private InternalEvent GetEvent(Type signalType)
+        {
+            if (!_storage.TryGetValue(signalType, out InternalEvent @event))
+                _storage.Add(signalType, new InternalEvent(signalType));
+
+            return @event;
         }
     }
 }
