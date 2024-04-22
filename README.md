@@ -108,7 +108,7 @@ Also has indicators of tool handles if they are switched to center and global va
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ShowAssetGuid.png)
 
-- **Find References In Project**. Text searching finds addressable references but can be used only if asses tex serialization is used.
+- **Find References In Project**. The search via text also finds addressable references.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/FindReferencesInProject.png)
 
