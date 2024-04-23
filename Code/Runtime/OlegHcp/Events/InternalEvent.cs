@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
     internal class InternalEvent : BusEvent
     {
         private List<EventSubscription> _subscriptions = new List<EventSubscription>();
-
+        private Stack<EventSubscription> _newItems;
+        private Stack<int> _deadItems;
         private object _owner;
         private bool _changed;
+        private bool _locked;
 
         public Type SignalType { get; }
         public object Owner => _owner;
@@ -36,24 +37,39 @@ namespace OlegHcp.Events
 
         public int Subscribe(object handler, int priority)
         {
-            if (priority != int.MaxValue)
-                _changed = true;
-
             EventSubscription s = new EventSubscription(handler, priority);
-            _subscriptions.Add(s);
+
+            if (_locked)
+            {
+                if (_newItems == null)
+                    _newItems = new Stack<EventSubscription>();
+                _newItems.Push(s);
+            }
+            else
+            {
+                AddItem(s);
+            }
+
             return s.GetHashCode();
         }
 
         public void Unsubscribe(int hash)
         {
-            int index = _subscriptions.IndexOf(item => item.GetHashCode() == hash);
-    
-            if (index >= 0)
-                _subscriptions.RemoveAt(index);
+            if (_locked)
+            {
+                if (_deadItems == null)
+                    _deadItems = new Stack<int>();
+                _deadItems.Push(hash);
+            }
+            else
+            {
+                RemoveItem(hash);
+            }
         }
 
         public override void Invoke<TSignal>(TSignal signal)
         {
+            _locked = true;
             if (_changed)
             {
                 _subscriptions.Sort();
@@ -64,6 +80,49 @@ namespace OlegHcp.Events
             {
                 _subscriptions[i].Invoke(signal);
             }
+            _locked = false;
+
+            if (_deadItems != null)
+            {
+                while (_deadItems.Count > 0)
+                {
+                    RemoveItem(_deadItems.Pop());
+                }
+            }
+
+            if (_newItems != null)
+            {
+                while (_newItems.Count > 0)
+                {
+                    AddItem(_newItems.Pop());
+                }
+            }
+        }
+
+        private void AddItem(in EventSubscription subscription)
+        {
+            if (subscription.Priority != int.MaxValue)
+                _changed = true;
+
+            _subscriptions.Add(subscription);
+        }
+
+        private void RemoveItem(int hash)
+        {
+            int index = -1;
+
+            for (int i = 0; i < _subscriptions.Count; i++)
+            {
+                EventSubscription s = _subscriptions[i];
+                if (s.GetHashCode() == hash)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index >= 0)
+                _subscriptions.RemoveAt(index);
         }
     }
 }
