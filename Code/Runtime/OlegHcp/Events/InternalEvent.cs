@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
@@ -12,7 +13,7 @@ namespace OlegHcp.Events
         private bool _changed;
         private bool _locked;
 
-        public Type SignalType { get; }
+        public override Type SignalType { get; }
         public object Owner => _owner;
         public override bool HasOwner => _owner != null;
 
@@ -69,6 +70,9 @@ namespace OlegHcp.Events
 
         public override void Invoke<TSignal>(TSignal signal)
         {
+            if (typeof(TSignal) != SignalType)
+                throw new ArgumentException("Wrong signal type.");
+
             _locked = true;
             if (_changed)
             {
@@ -82,20 +86,14 @@ namespace OlegHcp.Events
             }
             _locked = false;
 
-            if (_deadItems != null)
+            while (_deadItems.HasAnyData())
             {
-                while (_deadItems.Count > 0)
-                {
-                    RemoveItem(_deadItems.Pop());
-                }
+                RemoveItem(_deadItems.Pop());
             }
 
-            if (_newItems != null)
+            while (_newItems.HasAnyData())
             {
-                while (_newItems.Count > 0)
-                {
-                    AddItem(_newItems.Pop());
-                }
+                AddItem(_newItems.Pop());
             }
         }
 
