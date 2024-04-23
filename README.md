@@ -1,7 +1,7 @@
 ﻿[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
 
 [![](https://img.shields.io/github/stars/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/stargazers)
-[![](https://img.shields.io/badge/Unity-2019.4%2B-teal)](https://unity.com/releases/editor/archive)
+[![](https://img.shields.io/badge/unity-2019.4%2B-teal)](https://unity.com/releases/editor/archive)
 [![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master/)
 [![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
 
@@ -125,10 +125,6 @@ Also has indicators of tool handles if they are switched to center and global va
 
 This package is released under the [MIT license](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md).
 
-# Stargazers
-
-[![Stargazers repo roster for @oleghcp/UnityTools](https://reporoster.com/stars/oleghcp/UnityTools)](https://github.com/oleghcp/UnityTools/stargazers)
-
 ---
 
-**I hope my humble package becomes useful tool for your game development work and makes it more convenient.**
+**I hope my humble package becomes a useful tool for your game development work and makes it more convenient.**
