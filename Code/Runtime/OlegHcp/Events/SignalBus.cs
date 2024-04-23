@@ -66,7 +66,7 @@ namespace OlegHcp.Events
         public void Unsubscribe(SubscriptionToken token)
         {
             if (_storage.TryGetValue(token.SignalType, out InternalEvent @event))
-                @event.Unsubscribe(token);
+                @event.Unsubscribe(token.Hash);
         }
 
         private SubscriptionToken SubscribeInternal(object handler, Type signalType, int priority)
