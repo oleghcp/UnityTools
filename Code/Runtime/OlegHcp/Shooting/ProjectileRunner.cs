@@ -5,7 +5,7 @@ namespace OlegHcp.Shooting
     internal class ProjectileRunner
     {
         private static ProjectileRunner _instance;
-        private SpacedList _items = new SpacedList();
+        private List<IProjectile> _items = new List<IProjectile>();
         private Stack<IProjectile> _newItems = new Stack<IProjectile>();
         private Stack<IProjectile> _deadItems = new Stack<IProjectile>();
         private bool _locked;
@@ -22,7 +22,7 @@ namespace OlegHcp.Shooting
             if (_locked)
                 _newItems.Push(projectile);
             else
-                _items.Insert(projectile);
+                _items.Add(projectile);
         }
 
         public void Remove(IProjectile projectile)
@@ -38,7 +38,7 @@ namespace OlegHcp.Shooting
             _locked = true;
             for (int i = 0; i < _items.Count; i++)
             {
-                _items[i]?.OnTick();
+                _items[i].OnUpdate();
             }
             _locked = false;
 
@@ -49,7 +49,7 @@ namespace OlegHcp.Shooting
 
             while (_newItems.Count > 0)
             {
-                _items.Insert(_newItems.Pop());
+                _items.Add(_newItems.Pop());
             }
         }
     }

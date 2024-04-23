@@ -205,7 +205,7 @@ namespace OlegHcp.Shooting
         }
 #endif
 
-        void IProjectile.OnTick()
+        void IProjectile.OnUpdate()
         {
             _listener?.PreUpdate(_isPlaying);
 
