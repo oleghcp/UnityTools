@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
     internal class InternalEvent : BusEvent
     {
         private List<EventSubscription> _subscriptions = new List<EventSubscription>();
+
         private object _owner;
         private bool _changed;
 
@@ -42,14 +44,12 @@ namespace OlegHcp.Events
             return s.GetHashCode();
         }
 
-        public void Unsubscribe(object handler)
-        {
-            _subscriptions.Remove(handler.GetHashCode());
-        }
-
         public void Unsubscribe(int hash)
         {
-            _subscriptions.Remove(hash);
+            int index = _subscriptions.IndexOf(item => item.GetHashCode() == hash);
+    
+            if (index >= 0)
+                _subscriptions.RemoveAt(index);
         }
 
         public override void Invoke<TSignal>(TSignal signal)

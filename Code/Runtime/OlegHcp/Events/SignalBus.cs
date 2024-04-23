@@ -51,7 +51,7 @@ namespace OlegHcp.Events
                 throw ThrowErrors.NullParameter(nameof(callback));
 
             if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
-                @event.Unsubscribe(callback);
+                @event.Unsubscribe(callback.GetHashCode());
         }
 
         public void Unsubscribe<TSignal>(IEventListener<TSignal> listener) where TSignal : ISignal
@@ -60,7 +60,7 @@ namespace OlegHcp.Events
                 throw ThrowErrors.NullParameter(nameof(listener));
 
             if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
-                @event.Unsubscribe(listener);
+                @event.Unsubscribe(listener.GetHashCode());
         }
 
         public void Unsubscribe(SubscriptionToken token)

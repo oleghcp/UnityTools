@@ -52,10 +52,5 @@ namespace OlegHcp.Events
         {
             return !a.Equals(b);
         }
-
-        public static implicit operator EventSubscription(int hash)
-        {
-            return new EventSubscription { _hashCode = hash };
-        }
     }
 }
