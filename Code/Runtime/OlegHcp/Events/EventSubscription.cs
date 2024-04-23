@@ -8,7 +8,7 @@ namespace OlegHcp.Events
         private int _priority;
         private int _hashCode;
 
-        public int Priority => Priority;
+        public int Priority => _priority;
 
         public EventSubscription(object handler, int priority)
         {
