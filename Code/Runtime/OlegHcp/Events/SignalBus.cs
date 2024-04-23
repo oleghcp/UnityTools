@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Events
@@ -20,7 +21,7 @@ namespace OlegHcp.Events
             if (owner == null)
                 throw ThrowErrors.NullParameter(nameof(owner));
 
-            InternalEvent @event = GetEvent(typeof(TSignal));
+            InternalEvent @event = GetOrCreateEvent(typeof(TSignal));
 
             if (@event.TrySetOwner(owner))
                 return @event;
@@ -70,7 +71,7 @@ namespace OlegHcp.Events
 
         private SubscriptionToken SubscribeInternal(object handler, Type signalType, int priority)
         {
-            InternalEvent @event = GetEvent(signalType);
+            InternalEvent @event = GetOrCreateEvent(signalType);
             int hash = @event.Subscribe(handler, priority);
             return new SubscriptionToken
             {
@@ -79,12 +80,12 @@ namespace OlegHcp.Events
             };
         }
 
-        private InternalEvent GetEvent(Type signalType)
+        private InternalEvent GetOrCreateEvent(Type signalType)
         {
-            if (!_storage.TryGetValue(signalType, out InternalEvent @event))
-                _storage.Add(signalType, new InternalEvent(signalType));
+            if (_storage.TryGetValue(signalType, out InternalEvent @event))
+                return @event;
 
-            return @event;
+            return _storage.Place(signalType, new InternalEvent(signalType));
         }
     }
 }
