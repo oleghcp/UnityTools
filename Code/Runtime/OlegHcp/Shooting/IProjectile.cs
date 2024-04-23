@@ -2,6 +2,6 @@
 {
     internal interface IProjectile
     {
-        void OnTick();
+        void OnUpdate();
     }
 }
