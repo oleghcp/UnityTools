@@ -25,7 +25,7 @@ public class ExampleEventListener1 : IDisposable
     public ExampleEventListener1()
     {
         // Subscribe with priority 1
-        EventBus.Current.Subscribe<ExampleSignal>(1, OnGotEvent);
+        EventBus.Current.Subscribe<ExampleSignal>(OnGotEvent, 1);
     }
 
     private void OnGotEvent(ExampleSignal signal)
@@ -44,7 +44,7 @@ public class ExampleEventListener2 : IDisposable
     public ExampleEventListener2()
     {
         // Subscribe with priority 2 which is lower than 1 and will executed after
-        EventBus.Current.Subscribe<ExampleSignal>(2, OnGotEvent);
+        EventBus.Current.Subscribe<ExampleSignal>(OnGotEvent, 2);
     }
 
     private void OnGotEvent(ExampleSignal signal)
