@@ -83,7 +83,6 @@ namespace OlegHcp.CSharp
         }
 #endif
 
-        #region Sort
         public static void Sort<T, TComparer>(Span<T> span, int left, int right, TComparer comparer)
             where T : unmanaged
             where TComparer : IComparer<T>
@@ -106,6 +105,5 @@ namespace OlegHcp.CSharp
             Sort(span, left, j, comparer);
             Sort(span, i, right, comparer);
         }
-        #endregion
     }
 }

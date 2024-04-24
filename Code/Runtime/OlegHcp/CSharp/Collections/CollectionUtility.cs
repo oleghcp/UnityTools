@@ -5,7 +5,6 @@ namespace OlegHcp.CSharp.Collections
 {
     internal static class CollectionUtility
     {
-        #region Sort
         public static void Sort<T, TComp>(IList<T> collection, int left, int right, TComp comparer) where TComp : IComparer<T>
         {
             if (left >= right)
@@ -26,7 +25,6 @@ namespace OlegHcp.CSharp.Collections
             Sort(collection, left, j, comparer);
             Sort(collection, i, right, comparer);
         }
-        #endregion
 
         #region Min/max selection
         public static void Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
