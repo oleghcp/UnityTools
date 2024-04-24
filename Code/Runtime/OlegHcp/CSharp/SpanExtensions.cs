@@ -7,20 +7,20 @@ namespace OlegHcp.CSharp
 {
     public static class SpanExtensions
     {
-        public static void Sort<T, TKey>(this Span<T> self, Func<T, TKey> selector)
+        public static void Sort<T, TKey>(this Span<T> self, Func<T, TKey> keySelector)
             where T : unmanaged
             where TKey : IComparable<TKey>
         {
-            if (self.Length < CollectionUtility.QUICK_SORT_MIN_SIZE)
+            var keyComparer = new CollectionUtility.KeyComparerA<T, TKey>
             {
-                SpanUtility.SelectionSort(self, selector);
-                return;
-            }
+                KeySelector = keySelector,
+                Comparer = Comparer<TKey>.Default,
+            };
 
-            SpanUtility.QuickSort(self, 0, self.Length - 1, selector);
+            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
-        public static int Sum(this in Span<int> self)
+        public static int Sum(this Span<int> self)
         {
             int sum = 0;
 
@@ -32,7 +32,7 @@ namespace OlegHcp.CSharp
             return sum;
         }
 
-        public static float Sum(this in Span<float> self)
+        public static float Sum(this Span<float> self)
         {
             float sum = 0;
 
@@ -44,7 +44,7 @@ namespace OlegHcp.CSharp
             return sum;
         }
 
-        public static void CopyTo<T>(this in Span<T> self, T[] destination) where T : unmanaged
+        public static void CopyTo<T>(this Span<T> self, T[] destination) where T : unmanaged
         {
             if (self.Length > destination.Length)
                 throw new ArgumentException("Destination too short.");
@@ -55,7 +55,7 @@ namespace OlegHcp.CSharp
             }
         }
 
-        public static List<T> ToList<T>(this in Span<T> self) where T : unmanaged
+        public static List<T> ToList<T>(this Span<T> self) where T : unmanaged
         {
             List<T> dest = new List<T>(self.Length * 2);
 
@@ -67,7 +67,7 @@ namespace OlegHcp.CSharp
             return dest;
         }
 
-        public static int IndexOf<T>(this in Span<T> self, Predicate<T> condition) where T : unmanaged
+        public static int IndexOf<T>(this Span<T> self, Predicate<T> condition) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -88,7 +88,7 @@ namespace OlegHcp.CSharp
             SpanUtility.Shuffle(self, RandomNumberGenerator.Default);
         }
 
-        public static T Find<T>(this in Span<T> self, Predicate<T> match) where T : unmanaged
+        public static T Find<T>(this Span<T> self, Predicate<T> match) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -99,13 +99,13 @@ namespace OlegHcp.CSharp
             return default;
         }
 
-        public static void ForEach<T>(this in Span<T> self, Action<T> action) where T : unmanaged
+        public static void ForEach<T>(this Span<T> self, Action<T> action) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
                 action(self[i]);
         }
 
-        public static bool Contains<T>(this in Span<T> self, Predicate<T> condition) where T : unmanaged, IEquatable<T>
+        public static bool Contains<T>(this Span<T> self, Predicate<T> condition) where T : unmanaged, IEquatable<T>
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -116,12 +116,12 @@ namespace OlegHcp.CSharp
             return false;
         }
 
-        public static T Min<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
+        public static T Min<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
             return SpanUtility.Min(self);
         }
 
-        public static T Max<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
+        public static T Max<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
             return SpanUtility.Max(self);
         }
@@ -178,7 +178,7 @@ namespace OlegHcp.CSharp
             }
         }
 
-        public static T GetRandomItem<T>(this in Span<T> self, IRng generator) where T : unmanaged
+        public static T GetRandomItem<T>(this Span<T> self, IRng generator) where T : unmanaged
         {
             if (self.Length == 0)
                 throw ThrowErrors.NoElements();
@@ -186,13 +186,13 @@ namespace OlegHcp.CSharp
             return self[generator.Next(self.Length)];
         }
 
-        public static T GetRandomItem<T>(this in Span<T> self) where T : unmanaged
+        public static T GetRandomItem<T>(this Span<T> self) where T : unmanaged
         {
             return GetRandomItem(self, RandomNumberGenerator.Default);
         }
 
 #if UNITY_2021_2_OR_NEWER
-        public static int Sum(this in ReadOnlySpan<int> self)
+        public static int Sum(this ReadOnlySpan<int> self)
         {
             int sum = 0;
 
@@ -204,7 +204,7 @@ namespace OlegHcp.CSharp
             return sum;
         }
 
-        public static float Sum(this in ReadOnlySpan<float> self)
+        public static float Sum(this ReadOnlySpan<float> self)
         {
             float sum = 0;
 
@@ -216,7 +216,7 @@ namespace OlegHcp.CSharp
             return sum;
         }
 
-        public static void CopyTo<T>(this in ReadOnlySpan<T> self, T[] destination) where T : unmanaged
+        public static void CopyTo<T>(this ReadOnlySpan<T> self, T[] destination) where T : unmanaged
         {
             if (self.Length > destination.Length)
                 throw new ArgumentException("Destination too short.");
@@ -227,7 +227,7 @@ namespace OlegHcp.CSharp
             }
         }
 
-        public static List<T> ToList<T>(this in ReadOnlySpan<T> self) where T : unmanaged
+        public static List<T> ToList<T>(this ReadOnlySpan<T> self) where T : unmanaged
         {
             List<T> dest = new List<T>(self.Length * 2);
 
@@ -239,7 +239,7 @@ namespace OlegHcp.CSharp
             return dest;
         }
 
-        public static int IndexOf<T>(this in ReadOnlySpan<T> self, Predicate<T> condition) where T : unmanaged
+        public static int IndexOf<T>(this ReadOnlySpan<T> self, Predicate<T> condition) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -250,7 +250,7 @@ namespace OlegHcp.CSharp
             return -1;
         }
 
-        public static T Find<T>(this in ReadOnlySpan<T> self, Predicate<T> match) where T : unmanaged
+        public static T Find<T>(this ReadOnlySpan<T> self, Predicate<T> match) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -261,13 +261,13 @@ namespace OlegHcp.CSharp
             return default;
         }
 
-        public static void ForEach<T>(this in ReadOnlySpan<T> self, Action<T> action) where T : unmanaged
+        public static void ForEach<T>(this ReadOnlySpan<T> self, Action<T> action) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
                 action(self[i]);
         }
 
-        public static bool Contains<T>(this in ReadOnlySpan<T> self, Predicate<T> condition) where T : unmanaged, IEquatable<T>
+        public static bool Contains<T>(this ReadOnlySpan<T> self, Predicate<T> condition) where T : unmanaged, IEquatable<T>
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -278,17 +278,17 @@ namespace OlegHcp.CSharp
             return false;
         }
 
-        public static T Min<T>(this in ReadOnlySpan<T> self) where T : unmanaged, IComparable<T>
+        public static T Min<T>(this ReadOnlySpan<T> self) where T : unmanaged, IComparable<T>
         {
             return SpanUtility.Min(self);
         }
 
-        public static T Max<T>(this in ReadOnlySpan<T> self) where T : unmanaged, IComparable<T>
+        public static T Max<T>(this ReadOnlySpan<T> self) where T : unmanaged, IComparable<T>
         {
             return SpanUtility.Max(self);
         }
 
-        public static T GetRandomItem<T>(this in ReadOnlySpan<T> self, IRng generator) where T : unmanaged
+        public static T GetRandomItem<T>(this ReadOnlySpan<T> self, IRng generator) where T : unmanaged
         {
             if (self.Length == 0)
                 throw ThrowErrors.NoElements();
@@ -296,7 +296,7 @@ namespace OlegHcp.CSharp
             return self[generator.Next(self.Length)];
         }
 
-        public static T GetRandomItem<T>(this in ReadOnlySpan<T> self) where T : unmanaged
+        public static T GetRandomItem<T>(this ReadOnlySpan<T> self) where T : unmanaged
         {
             return GetRandomItem(self, RandomNumberGenerator.Default);
         }

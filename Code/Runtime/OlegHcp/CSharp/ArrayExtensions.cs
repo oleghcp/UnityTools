@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using OlegHcp.Tools;
 
+#if UNITY_2021_2_OR_NEWER
+using OlegHcp.CSharp.Collections;
+#endif
+
 namespace OlegHcp.CSharp
 {
     public static class ArrayExtensions
@@ -111,8 +115,21 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
         {
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-            Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+#if UNITY_2021_2_OR_NEWER
+            var keyComparer = new CollectionUtility.KeyComparerA<TSource, TKey>
+            {
+                KeySelector = keySelector,
+                Comparer = Comparer<TKey>.Default,
+            };
+
+            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+#else
+            if (self.Length > 1)
+            {
+                Comparer<TKey> comparer = Comparer<TKey>.Default;
+                Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+            }
+#endif
         }
 
         /// <summary>
@@ -121,7 +138,18 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
         {
-            Array.Sort(self, (a, b) => comparison(keySelector(a), keySelector(b)));
+#if UNITY_2021_2_OR_NEWER
+            var keyComparer = new CollectionUtility.KeyComparerB<TSource, TKey>
+            {
+                KeySelector = keySelector,
+                Comparison = comparison,
+            };
+
+            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+#else
+            if (self.Length > 1)
+                Array.Sort(self, (a, b) => comparison(keySelector(a), keySelector(b)));
+#endif
         }
 
         /// <summary>
@@ -130,7 +158,31 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
-            Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+#if UNITY_2021_2_OR_NEWER
+            var keyComparer = new CollectionUtility.KeyComparerA<TSource, TKey>
+            {
+                KeySelector = keySelector,
+                Comparer = comparer,
+            };
+
+            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+#else
+            if (self.Length > 1)
+                Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
+#endif
+        }
+
+        public static void SortDescending<T>(this T[] self)
+        {
+#if UNITY_2021_2_OR_NEWER
+            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
+#else
+            if (self.Length > 1)
+            {
+                Comparer<T> comparer = Comparer<T>.Default;
+                Array.Sort(self, (a, b) => -comparer.Compare(a, b));
+            }
+#endif
         }
 
         /// <summary>
@@ -139,8 +191,21 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void SortDescending<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
         {
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-            Array.Sort(self, (a, b) => -comparer.Compare(keySelector(a), keySelector(b)));
+#if UNITY_2021_2_OR_NEWER
+            var keyComparer = new CollectionUtility.DescendingKeyComparer<TSource, TKey>
+            {
+                KeySelector = keySelector,
+                Comparer = Comparer<TKey>.Default,
+            };
+
+            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+#else
+            if (self.Length > 1)
+            {
+                Comparer<TKey> comparer = Comparer<TKey>.Default;
+                Array.Sort(self, (a, b) => -comparer.Compare(keySelector(a), keySelector(b)));
+            }
+#endif
         }
 
         /// <summary>
