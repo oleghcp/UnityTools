@@ -122,7 +122,7 @@ namespace OlegHcp.CSharp
                 Comparer = Comparer<TKey>.Default,
             };
 
-            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
 #else
             if (self.Length > 1)
             {
@@ -145,7 +145,7 @@ namespace OlegHcp.CSharp
                 Comparison = comparison,
             };
 
-            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
 #else
             if (self.Length > 1)
                 Array.Sort(self, (a, b) => comparison(keySelector(a), keySelector(b)));
@@ -165,7 +165,7 @@ namespace OlegHcp.CSharp
                 Comparer = comparer,
             };
 
-            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
 #else
             if (self.Length > 1)
                 Array.Sort(self, (a, b) => comparer.Compare(keySelector(a), keySelector(b)));
@@ -175,7 +175,7 @@ namespace OlegHcp.CSharp
         public static void SortDescending<T>(this T[] self)
         {
 #if UNITY_2021_2_OR_NEWER
-            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
+            ArrayUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
 #else
             if (self.Length > 1)
             {
@@ -198,7 +198,7 @@ namespace OlegHcp.CSharp
                 Comparer = Comparer<TKey>.Default,
             };
 
-            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
 #else
             if (self.Length > 1)
             {
