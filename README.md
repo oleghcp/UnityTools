@@ -1,6 +1,5 @@
 ﻿[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
 
-[![](https://img.shields.io/github/stars/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/stargazers)
 [![](https://img.shields.io/badge/unity-2019.4%2B-teal)](https://unity.com)
 [![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master)
 [![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
