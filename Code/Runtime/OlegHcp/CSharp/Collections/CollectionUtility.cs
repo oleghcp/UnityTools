@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections
 {
@@ -89,35 +90,25 @@ namespace OlegHcp.CSharp.Collections
 
         public static int Min<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
         {
+            if (collection.Count <= 0)
+                throw ThrowErrors.NoElements();
+
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
+            result = collection[0];
+            minKey = keySelector(result);
             int index = -1;
-            minKey = default;
-            result = default;
 
-            bool nonFirstIteration = false;
-
-            for (int i = 0; i < collection.Count; i++)
+            for (int i = 1; i < collection.Count; i++)
             {
                 TSource item = collection[i];
+                TKey key = keySelector(item);
 
-                if (nonFirstIteration)
+                if (comparer.Compare(key, minKey) < 0)
                 {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, minKey) < 0)
-                    {
-                        minKey = key;
-                        result = item;
-                        index = i;
-                    }
-                }
-                else
-                {
-                    minKey = keySelector(item);
+                    minKey = key;
                     result = item;
                     index = i;
-                    nonFirstIteration = true;
                 }
             }
 
@@ -126,35 +117,25 @@ namespace OlegHcp.CSharp.Collections
 
         public static int Max<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey maxKey)
         {
+            if (collection.Count <= 0)
+                throw ThrowErrors.NoElements();
+
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
+            result = collection[0];
+            maxKey = keySelector(result);
             int index = -1;
-            maxKey = default;
-            result = default;
 
-            bool nonFirstIteration = false;
-
-            for (int i = 0; i < collection.Count; i++)
+            for (int i = 1; i < collection.Count; i++)
             {
                 TSource item = collection[i];
+                TKey key = keySelector(item);
 
-                if (nonFirstIteration)
+                if (comparer.Compare(key, maxKey) > 0)
                 {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, maxKey) > 0)
-                    {
-                        maxKey = key;
-                        result = item;
-                        index = i;
-                    }
-                }
-                else
-                {
-                    maxKey = keySelector(item);
+                    maxKey = key;
                     result = item;
                     index = i;
-                    nonFirstIteration = true;
                 }
             }
 
@@ -163,35 +144,25 @@ namespace OlegHcp.CSharp.Collections
 
         public static int Min<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
         {
+            if (collection.Count <= 0)
+                throw ThrowErrors.NoElements();
+
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
+            result = collection[0];
+            minKey = keySelector(result);
             int index = -1;
-            minKey = default;
-            result = default;
 
-            bool nonFirstIteration = false;
-
-            for (int i = 0; i < collection.Count; i++)
+            for (int i = 1; i < collection.Count; i++)
             {
                 TSource item = collection[i];
+                TKey key = keySelector(item);
 
-                if (nonFirstIteration)
+                if (comparer.Compare(key, minKey) < 0)
                 {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, minKey) < 0)
-                    {
-                        minKey = key;
-                        result = item;
-                        index = i;
-                    }
-                }
-                else
-                {
-                    minKey = keySelector(item);
+                    minKey = key;
                     result = item;
                     index = i;
-                    nonFirstIteration = true;
                 }
             }
 
@@ -200,35 +171,25 @@ namespace OlegHcp.CSharp.Collections
 
         public static int Max<TSource, TKey>(IReadOnlyList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey maxKey)
         {
+            if (collection.Count <= 0)
+                throw ThrowErrors.NoElements();
+
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
+            result = collection[0];
+            maxKey = keySelector(result);
             int index = -1;
-            maxKey = default;
-            result = default;
 
-            bool nonFirstIteration = false;
-
-            for (int i = 0; i < collection.Count; i++)
+            for (int i = 1; i < collection.Count; i++)
             {
                 TSource item = collection[i];
+                TKey key = keySelector(item);
 
-                if (nonFirstIteration)
+                if (comparer.Compare(key, maxKey) > 0)
                 {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, maxKey) > 0)
-                    {
-                        maxKey = key;
-                        result = item;
-                        index = i;
-                    }
-                }
-                else
-                {
-                    maxKey = keySelector(item);
+                    maxKey = key;
                     result = item;
                     index = i;
-                    nonFirstIteration = true;
                 }
             }
 
