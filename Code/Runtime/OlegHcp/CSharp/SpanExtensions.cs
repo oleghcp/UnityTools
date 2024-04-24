@@ -20,6 +20,24 @@ namespace OlegHcp.CSharp
             SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
+        public static void SortDescending<T>(this Span<T> self) where T : unmanaged
+        {
+            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default, });
+        }
+
+        public static void SortDescending<T, TKey>(this Span<T> self, Func<T, TKey> keySelector)
+            where T : unmanaged
+            where TKey : IComparable<TKey>
+        {
+            var keyComparer = new CollectionUtility.DescendingKeyComparer<T, TKey>
+            {
+                KeySelector = keySelector,
+                Comparer = Comparer<TKey>.Default,
+            };
+
+            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+        }
+
         public static int Sum(this Span<int> self)
         {
             int sum = 0;
