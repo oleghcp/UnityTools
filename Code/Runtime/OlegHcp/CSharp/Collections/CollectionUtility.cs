@@ -3,30 +3,9 @@ using System.Collections.Generic;
 
 namespace OlegHcp.CSharp.Collections
 {
-    internal static class CollectionUtility
+    public static class CollectionUtility
     {
         #region Sort
-        public static void Sort<T>(IList<T> collection, int left, int right) where T : IComparable<T>
-        {
-            if (left >= right)
-                return;
-
-            int i = left, j = right;
-            T pivot = collection[left];
-
-            while (i <= j)
-            {
-                while (collection[i].CompareTo(pivot) < 0) { i++; }
-                while (collection[j].CompareTo(pivot) > 0) { j--; }
-
-                if (i <= j)
-                    collection.Swap(i++, j--);
-            }
-
-            Sort(collection, left, j);
-            Sort(collection, i, right);
-        }
-
         public static void Sort<T, TComp>(IList<T> collection, int left, int right, TComp comparer) where TComp : IComparer<T>
         {
             if (left >= right)
@@ -46,27 +25,6 @@ namespace OlegHcp.CSharp.Collections
 
             Sort(collection, left, j, comparer);
             Sort(collection, i, right, comparer);
-        }
-
-        public static void Sort<T>(IList<T> collection, int left, int right, Comparison<T> comparison)
-        {
-            if (left >= right)
-                return;
-
-            int i = left, j = right;
-            T pivot = collection[left];
-
-            while (i <= j)
-            {
-                while (comparison(collection[i], pivot) < 0) { i++; }
-                while (comparison(collection[j], pivot) > 0) { j--; }
-
-                if (i <= j)
-                    collection.Swap(i++, j--);
-            }
-
-            Sort(collection, left, j, comparison);
-            Sort(collection, i, right, comparison);
         }
         #endregion
 
@@ -281,15 +239,26 @@ namespace OlegHcp.CSharp.Collections
         #endregion
 
         #region Comparers
+        public struct DefaultComparer<T> : IComparer<T>
+        {
+            public Comparison<T> Comparison;
+
+            public int Compare(T x, T y) => Comparison(x, y);
+        }
+
+        public struct DescendingComparer<T> : IComparer<T>
+        {
+            public IComparer<T> Comparer;
+
+            public int Compare(T x, T y) => -Comparer.Compare(x, y);
+        }
+
         public struct KeyComparerA<TSource, TKey> : IComparer<TSource>
         {
             public Func<TSource, TKey> KeySelector;
             public IComparer<TKey> Comparer;
 
-            public int Compare(TSource x, TSource y)
-            {
-                return Comparer.Compare(KeySelector(x), KeySelector(y));
-            }
+            public int Compare(TSource x, TSource y) => Comparer.Compare(KeySelector(x), KeySelector(y));
         }
 
         public struct KeyComparerB<TSource, TKey> : IComparer<TSource>
@@ -297,20 +266,7 @@ namespace OlegHcp.CSharp.Collections
             public Func<TSource, TKey> KeySelector;
             public Comparison<TKey> Comparison;
 
-            public int Compare(TSource x, TSource y)
-            {
-                return Comparison(KeySelector(x), KeySelector(y));
-            }
-        }
-
-        public struct DescendingComparer<T> : IComparer<T>
-        {
-            public IComparer<T> Comparer;
-
-            public int Compare(T x, T y)
-            {
-                return -Comparer.Compare(x, y);
-            }
+            public int Compare(TSource x, TSource y) => Comparison(KeySelector(x), KeySelector(y));
         }
 
         public struct DescendingKeyComparer<TSource, TKey> : IComparer<TSource>
@@ -318,10 +274,7 @@ namespace OlegHcp.CSharp.Collections
             public Func<TSource, TKey> KeySelector;
             public IComparer<TKey> Comparer;
 
-            public int Compare(TSource x, TSource y)
-            {
-                return -Comparer.Compare(KeySelector(x), KeySelector(y));
-            }
+            public int Compare(TSource x, TSource y) => -Comparer.Compare(KeySelector(x), KeySelector(y));
         }
         #endregion
     }

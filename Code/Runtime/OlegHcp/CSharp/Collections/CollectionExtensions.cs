@@ -111,9 +111,9 @@ namespace OlegHcp.CSharp.Collections
             (self[j], self[i]) = (self[i], self[j]);
         }
 
-        public static void Sort<T>(this IList<T> self) where T : IComparable<T>
+        public static void Sort<T>(this IList<T> self)
         {
-            CollectionUtility.Sort(self, 0, self.Count - 1);
+            CollectionUtility.Sort(self, 0, self.Count - 1, Comparer<T>.Default);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace OlegHcp.CSharp.Collections
         /// <param name="comparison">Reference to comparing function.</param>
         public static void Sort<T>(this IList<T> self, Comparison<T> comparison)
         {
-            CollectionUtility.Sort(self, 0, self.Count - 1, comparison);
+            CollectionUtility.Sort(self, 0, self.Count - 1, new CollectionUtility.DefaultComparer<T> { Comparison = comparison });
         }
 
         /// <summary>
