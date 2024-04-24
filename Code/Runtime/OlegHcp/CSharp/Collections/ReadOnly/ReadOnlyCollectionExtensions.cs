@@ -8,9 +8,6 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
     {
         public static T[] GetSubArray_<T>(this IReadOnlyList<T> self, int startIndex, int length)
         {
-            if (self == null)
-                throw new NullReferenceException();
-
             if ((uint)startIndex >= (uint)self.Count)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 

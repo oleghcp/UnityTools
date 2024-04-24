@@ -242,9 +242,6 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static T[] GetSubArray<T>(this T[] self, int startIndex, int length)
         {
-            if (self == null)
-                throw new NullReferenceException();
-
             if ((uint)startIndex >= (uint)self.Length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
@@ -269,9 +266,6 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static T[] GetCopy<T>(this T[] self)
         {
-            if (self == null)
-                throw new NullReferenceException();
-
             if (self.Length == 0)
                 return self;
 
