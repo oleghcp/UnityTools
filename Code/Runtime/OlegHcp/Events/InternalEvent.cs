@@ -74,26 +74,33 @@ namespace OlegHcp.Events
                 throw new ArgumentException("Wrong signal type.");
 
             _locked = true;
+
             if (_changed)
             {
                 _subscriptions.Sort();
                 _changed = false;
             }
 
-            for (int i = 0; i < _subscriptions.Count; i++)
+            try
             {
-                _subscriptions[i].Invoke(signal);
+                for (int i = 0; i < _subscriptions.Count; i++)
+                {
+                    _subscriptions[i].Invoke(signal);
+                }
             }
-            _locked = false;
-
-            while (_deadItems.HasAnyData())
+            finally
             {
-                RemoveItem(_deadItems.Pop());
-            }
+                _locked = false;
 
-            while (_newItems.HasAnyData())
-            {
-                AddItem(_newItems.Pop());
+                while (_deadItems.HasAnyData())
+                {
+                    RemoveItem(_deadItems.Pop());
+                }
+
+                while (_newItems.HasAnyData())
+                {
+                    AddItem(_newItems.Pop());
+                }
             }
         }
 

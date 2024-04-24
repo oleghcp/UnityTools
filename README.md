@@ -1,8 +1,7 @@
 ﻿[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Logo.png)](https://github.com/oleghcp/UnityTools)
 
-[![](https://img.shields.io/github/stars/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/stargazers)
-[![](https://img.shields.io/badge/unity-2019.4%2B-teal)](https://unity.com/releases/editor/archive)
-[![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master/)
+[![](https://img.shields.io/badge/unity-2019.4%2B-teal)](https://unity.com)
+[![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master)
 [![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
 
 # Social [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Useful%20toolset%20for%20Unity%20&url=https://github.com/oleghcp/UnityTools&hashtags=unity,unitytools,csharp,asset,unityscript)
@@ -16,13 +15,13 @@ It works with Unity 2019.4 and newer.
 
 # Usage
 
-For using the library as a unity package add next line to dependencies in \Packages\manifest.json:
+For using the library as a unity package add the next line to dependencies in \Packages\manifest.json:
 
 ```
 "com.oleghcp.unitytools": "https://github.com/oleghcp/UnityTools.git",
 ```
 
-Also it can be [downloaded](https://github.com/oleghcp/UnityTools/archive/refs/heads/master.zip) manually from github and placed into assets folder.  
+Also it can be [downloaded](https://github.com/oleghcp/UnityTools/archive/refs/heads/master.zip) manually from github and placed into the assets folder.  
 
 Mind that it uses assembly definitions.
 

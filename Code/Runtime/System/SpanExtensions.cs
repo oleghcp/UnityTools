@@ -7,7 +7,7 @@ namespace System
     public static class SpanExtensions
     {
 #if !UNITY_2021_2_OR_NEWER
-        public static void CopyTo<T>(this in Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
+        public static void CopyTo<T>(this Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
         {
             if (self.Length > destination.Length)
                 throw new ArgumentException("Destination too short.");
@@ -18,7 +18,7 @@ namespace System
             }
         }
 
-        public static bool TryCopyTo<T>(this in Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
+        public static bool TryCopyTo<T>(this Span<T> self, Span<T> destination) where T : unmanaged, IEquatable<T>
         {
             if ((uint)self.Length <= (uint)destination.Length)
             {
@@ -31,7 +31,7 @@ namespace System
             return false;
         }
 
-        public static int IndexOf<T>(this in Span<T> self, T item) where T : unmanaged, IEquatable<T>
+        public static int IndexOf<T>(this Span<T> self, T item) where T : unmanaged, IEquatable<T>
         {
             for (int i = 0; i < self.Length; i++)
             {
@@ -42,48 +42,30 @@ namespace System
             return -1;
         }
 
-        public static void Reverse<T>(this in Span<T> self) where T : unmanaged
+        public static void Reverse<T>(this Span<T> self) where T : unmanaged
         {
             self.Reverse(0, self.Length);
         }
 #endif
 
-        public static unsafe void Sort<T>(this in Span<T> self) where T : unmanaged, IComparable<T>
+        public static unsafe void Sort<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
-            if (self.Length < CollectionUtility.QUICK_SORT_MIN_SIZE)
-            {
-                SpanUtility.SelectionSort(self);
-                return;
-            }
-
-            SpanUtility.QuickSort(self, 0, self.Length - 1);
+            SpanUtility.Sort(self, 0, self.Length - 1, Comparer<T>.Default);
         }
 
-        public static unsafe void Sort<T>(this in Span<T> self, Comparison<T> comparison) where T : unmanaged
+        public static unsafe void Sort<T>(this Span<T> self, Comparison<T> comparison) where T : unmanaged
         {
-            if (self.Length < CollectionUtility.QUICK_SORT_MIN_SIZE)
-            {
-                SpanUtility.SelectionSort(self, comparison);
-                return;
-            }
-
-            SpanUtility.QuickSort(self, 0, self.Length - 1, comparison);
+            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DefaultComparer<T> { Comparison = comparison });
         }
 
-        public static unsafe void Sort<T, TComparer>(this in Span<T> self, TComparer comparer)
+        public static unsafe void Sort<T, TComparer>(this Span<T> self, TComparer comparer)
             where T : unmanaged
             where TComparer : IComparer<T>
         {
-            if (self.Length < CollectionUtility.QUICK_SORT_MIN_SIZE)
-            {
-                SpanUtility.SelectionSort(self, comparer);
-                return;
-            }
-
-            SpanUtility.QuickSort(self, 0, self.Length - 1, comparer);
+            SpanUtility.Sort(self, 0, self.Length - 1, comparer);
         }
 
-        public static bool Contains<T>(this in Span<T> self, T item) where T : unmanaged, IEquatable<T>
+        public static bool Contains<T>(this Span<T> self, T item) where T : unmanaged, IEquatable<T>
         {
             for (int i = 0; i < self.Length; i++)
             {
