@@ -84,48 +84,6 @@ namespace OlegHcp.CSharp
 #endif
 
         #region Sort
-        public static void Sort<T>(Span<T> span, int left, int right) where T : unmanaged, IComparable<T>
-        {
-            if (left >= right)
-                return;
-
-            int i = left, j = right;
-            T pivot = span[left];
-
-            while (i <= j)
-            {
-                while (span[i].CompareTo(pivot) < 0) { i++; }
-                while (span[j].CompareTo(pivot) > 0) { j--; }
-
-                if (i <= j)
-                    Helper.Swap(ref span[i++], ref span[j--]);
-            }
-
-            Sort(span, left, j);
-            Sort(span, i, right);
-        }
-
-        public static void Sort<T>(Span<T> span, int left, int right, Comparison<T> comparison) where T : unmanaged
-        {
-            if (left >= right)
-                return;
-
-            int i = left, j = right;
-            T pivot = span[left];
-
-            while (i <= j)
-            {
-                while (comparison(span[i], pivot) < 0) { i++; }
-                while (comparison(span[j], pivot) > 0) { j--; }
-
-                if (i <= j)
-                    Helper.Swap(ref span[i++], ref span[j--]);
-            }
-
-            Sort(span, left, j, comparison);
-            Sort(span, i, right, comparison);
-        }
-
         public static void Sort<T, TComparer>(Span<T> span, int left, int right, TComparer comparer)
             where T : unmanaged
             where TComparer : IComparer<T>

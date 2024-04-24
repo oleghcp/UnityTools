@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OlegHcp.CSharp.Collections
 {
-    public static class CollectionUtility
+    internal static class CollectionUtility
     {
         #region Sort
         public static void Sort<T, TComp>(IList<T> collection, int left, int right, TComp comparer) where TComp : IComparer<T>

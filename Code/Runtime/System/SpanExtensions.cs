@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using OlegHcp.CSharp;
+using OlegHcp.CSharp.Collections;
 
 namespace System
 {
@@ -49,12 +50,12 @@ namespace System
 
         public static unsafe void Sort<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
-            SpanUtility.Sort(self, 0, self.Length - 1);
+            SpanUtility.Sort(self, 0, self.Length - 1, Comparer<T>.Default);
         }
 
         public static unsafe void Sort<T>(this Span<T> self, Comparison<T> comparison) where T : unmanaged
         {
-            SpanUtility.Sort(self, 0, self.Length - 1, comparison);
+            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DefaultComparer<T> { Comparison = comparison });
         }
 
         public static unsafe void Sort<T, TComparer>(this Span<T> self, TComparer comparer)
