@@ -50,19 +50,19 @@ namespace System
 
         public static unsafe void Sort<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
-            SpanUtility.Sort(self, 0, self.Length - 1, Comparer<T>.Default);
+            SortUtility.Sort(self, 0, self.Length - 1, Comparer<T>.Default);
         }
 
         public static unsafe void Sort<T>(this Span<T> self, Comparison<T> comparison) where T : unmanaged
         {
-            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DefaultComparer<T> { Comparison = comparison });
+            SortUtility.Sort(self, 0, self.Length - 1, new SortUtility.DefaultComparer<T> { Comparison = comparison });
         }
 
         public static unsafe void Sort<T, TComparer>(this Span<T> self, TComparer comparer)
             where T : unmanaged
             where TComparer : IComparer<T>
         {
-            SpanUtility.Sort(self, 0, self.Length - 1, comparer);
+            SortUtility.Sort(self, 0, self.Length - 1, comparer);
         }
 
         public static bool Contains<T>(this Span<T> self, T item) where T : unmanaged, IEquatable<T>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp
@@ -11,31 +10,31 @@ namespace OlegHcp.CSharp
             where T : unmanaged
             where TKey : IComparable<TKey>
         {
-            var keyComparer = new CollectionUtility.KeyComparerA<T, TKey>
+            var keyComparer = new SortUtility.KeyComparerA<T, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = Comparer<TKey>.Default,
             };
 
-            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
         public static void SortDescending<T>(this Span<T> self) where T : unmanaged
         {
-            SpanUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default, });
+            SortUtility.Sort(self, 0, self.Length - 1, new SortUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default, });
         }
 
         public static void SortDescending<T, TKey>(this Span<T> self, Func<T, TKey> keySelector)
             where T : unmanaged
             where TKey : IComparable<TKey>
         {
-            var keyComparer = new CollectionUtility.DescendingKeyComparer<T, TKey>
+            var keyComparer = new SortUtility.DescendingKeyComparer<T, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = Comparer<TKey>.Default,
             };
 
-            SpanUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
         public static int Sum(this Span<int> self)
@@ -170,6 +169,84 @@ namespace OlegHcp.CSharp
             }
 
             return num;
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the minimum parameter value.
+        /// </summary>
+        public static int IndexOfMin<TSource, TKey>(this Span<TSource> self, Func<TSource, TKey> keySelector) where TSource : unmanaged
+        {
+            return self.IndexOfMin(keySelector, out _);
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the minimum parameter value.
+        /// </summary>
+        public static int IndexOfMin<TSource, TKey>(this Span<TSource> self, Func<TSource, TKey> keySelector, out TKey minKey) where TSource : unmanaged
+        {
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            if (self.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            int index = 0;
+            minKey = keySelector(self[index]);
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                TSource item = self[i];
+                TKey key = keySelector(item);
+
+                if (comparer.Compare(key, minKey) < 0)
+                {
+                    minKey = key;
+                    index = i;
+                }
+            }
+
+            return index;
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the maximum parameter value.
+        /// </summary>
+        public static int IndexOfMax<TSource, TKey>(this Span<TSource> self, Func<TSource, TKey> keySelector) where TSource : unmanaged
+        {
+            return self.IndexOfMax(keySelector, out _);
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the maximum parameter value.
+        /// </summary>
+        public static int IndexOfMax<TSource, TKey>(this Span<TSource> self, Func<TSource, TKey> keySelector, out TKey maxKey) where TSource : unmanaged
+        {
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            if (self.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            int index = 0;
+            maxKey = keySelector(self[index]);
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                TSource item = self[i];
+                TKey key = keySelector(item);
+
+                if (comparer.Compare(key, maxKey) > 0)
+                {
+                    maxKey = key;
+                    index = i;
+                }
+            }
+
+            return index;
         }
 
         public static void Reverse<T>(this Span<T> self, int startIndex, int length) where T : unmanaged

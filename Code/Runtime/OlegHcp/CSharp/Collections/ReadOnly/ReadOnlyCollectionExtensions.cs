@@ -84,24 +84,70 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
             return -1;
         }
 
-        public static int IndexOfMin_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector)
+        public static int IndexOfMin_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            return CollectionUtility.Min(self, selector, out _, out _);
+            return self.IndexOfMin_(keySelector, out _);
         }
 
-        public static int IndexOfMax_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector)
+        public static int IndexOfMin_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> keySelector, out TKey minKey)
         {
-            return CollectionUtility.Max(self, selector, out _, out _);
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            if (self.Count <= 0)
+                throw ThrowErrors.NoElements();
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            int index = 0;
+            minKey = keySelector(self[index]);
+
+            for (int i = 1; i < self.Count; i++)
+            {
+                TSource item = self[i];
+                TKey key = keySelector(item);
+
+                if (comparer.Compare(key, minKey) < 0)
+                {
+                    minKey = key;
+                    index = i;
+                }
+            }
+
+            return index;
         }
 
-        public static int IndexOfMin_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector, out TKey min)
+        public static int IndexOfMax_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            return CollectionUtility.Min(self, selector, out _, out min);
+            return self.IndexOfMax_(keySelector, out _);
         }
 
-        public static int IndexOfMax_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> selector, out TKey max)
+        public static int IndexOfMax_<TSource, TKey>(this IReadOnlyList<TSource> self, Func<TSource, TKey> keySelector, out TKey maxKey)
         {
-            return CollectionUtility.Max(self, selector, out _, out max);
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            if (self.Count <= 0)
+                throw ThrowErrors.NoElements();
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            int index = 0;
+            maxKey = keySelector(self[index]);
+
+            for (int i = 1; i < self.Count; i++)
+            {
+                TSource item = self[i];
+                TKey key = keySelector(item);
+
+                if (comparer.Compare(key, maxKey) > 0)
+                {
+                    maxKey = key;
+                    index = i;
+                }
+            }
+
+            return index;
         }
 
         public static T GetRandomItem_<T>(this IReadOnlyList<T> self, IRng generator)

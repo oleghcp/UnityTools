@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp
@@ -112,13 +111,13 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
         {
-            var keyComparer = new CollectionUtility.KeyComparerA<TSource, TKey>
+            var keyComparer = new SortUtility.KeyComparerA<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = Comparer<TKey>.Default,
             };
 
-            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
         /// <summary>
@@ -127,13 +126,13 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
         {
-            var keyComparer = new CollectionUtility.KeyComparerB<TSource, TKey>
+            var keyComparer = new SortUtility.KeyComparerB<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparison = comparison,
             };
 
-            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
         /// <summary>
@@ -142,18 +141,18 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
-            var keyComparer = new CollectionUtility.KeyComparerA<TSource, TKey>
+            var keyComparer = new SortUtility.KeyComparerA<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = comparer,
             };
 
-            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
         public static void SortDescending<T>(this T[] self)
         {
-            ArrayUtility.Sort(self, 0, self.Length - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
+            SortUtility.Sort(self, 0, self.Length - 1, new SortUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
         }
 
         /// <summary>
@@ -162,13 +161,13 @@ namespace OlegHcp.CSharp
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void SortDescending<TSource, TKey>(this TSource[] self, Func<TSource, TKey> keySelector)
         {
-            var keyComparer = new CollectionUtility.DescendingKeyComparer<TSource, TKey>
+            var keyComparer = new SortUtility.DescendingKeyComparer<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = Comparer<TKey>.Default,
             };
 
-            ArrayUtility.Sort(self, 0, self.Length - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Length - 1, keyComparer);
         }
 
         /// <summary>

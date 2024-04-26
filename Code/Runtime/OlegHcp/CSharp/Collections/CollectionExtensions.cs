@@ -113,7 +113,7 @@ namespace OlegHcp.CSharp.Collections
 
         public static void Sort<T>(this IList<T> self)
         {
-            CollectionUtility.Sort(self, 0, self.Count - 1, Comparer<T>.Default);
+            SortUtility.Sort(self, 0, self.Count - 1, Comparer<T>.Default);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace OlegHcp.CSharp.Collections
         /// </summary>
         public static void Sort<T, TComp>(this IList<T> self, TComp comparer) where TComp : IComparer<T>
         {
-            CollectionUtility.Sort(self, 0, self.Count - 1, comparer);
+            SortUtility.Sort(self, 0, self.Count - 1, comparer);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace OlegHcp.CSharp.Collections
         /// <param name="comparison">Reference to comparing function.</param>
         public static void Sort<T>(this IList<T> self, Comparison<T> comparison)
         {
-            CollectionUtility.Sort(self, 0, self.Count - 1, new CollectionUtility.DefaultComparer<T> { Comparison = comparison });
+            SortUtility.Sort(self, 0, self.Count - 1, new SortUtility.DefaultComparer<T> { Comparison = comparison });
         }
 
         /// <summary>
@@ -139,13 +139,13 @@ namespace OlegHcp.CSharp.Collections
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            var keyComparer = new CollectionUtility.KeyComparerA<TSource, TKey>
+            var keyComparer = new SortUtility.KeyComparerA<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = Comparer<TKey>.Default,
             };
 
-            CollectionUtility.Sort(self, 0, self.Count - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Count - 1, keyComparer);
         }
 
         /// <summary>
@@ -154,13 +154,13 @@ namespace OlegHcp.CSharp.Collections
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
-            var keyComparer = new CollectionUtility.KeyComparerA<TSource, TKey>
+            var keyComparer = new SortUtility.KeyComparerA<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = comparer,
             };
 
-            CollectionUtility.Sort(self, 0, self.Count - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Count - 1, keyComparer);
         }
 
         /// <summary>
@@ -170,18 +170,18 @@ namespace OlegHcp.CSharp.Collections
         /// <param name="comparison">Reference to comparing function.</param>
         public static void Sort<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
         {
-            var keyComparer = new CollectionUtility.KeyComparerB<TSource, TKey>
+            var keyComparer = new SortUtility.KeyComparerB<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparison = comparison,
             };
 
-            CollectionUtility.Sort(self, 0, self.Count - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Count - 1, keyComparer);
         }
 
         public static void SortDescending<T>(this IList<T> self) where T : IComparable<T>
         {
-            CollectionUtility.Sort(self, 0, self.Count - 1, new CollectionUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
+            SortUtility.Sort(self, 0, self.Count - 1, new SortUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
         }
 
         /// <summary>
@@ -190,13 +190,13 @@ namespace OlegHcp.CSharp.Collections
         /// <param name="keySelector">Reference to selecting function.</param>
         public static void SortDescending<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            var keyComparer = new CollectionUtility.DescendingKeyComparer<TSource, TKey>
+            var keyComparer = new SortUtility.DescendingKeyComparer<TSource, TKey>
             {
                 KeySelector = keySelector,
                 Comparer = Comparer<TKey>.Default,
             };
 
-            CollectionUtility.Sort(self, 0, self.Count - 1, keyComparer);
+            SortUtility.Sort(self, 0, self.Count - 1, keyComparer);
         }
 
         public static T Find<T>(this IList<T> self, Predicate<T> match)
@@ -251,10 +251,38 @@ namespace OlegHcp.CSharp.Collections
         /// </summary>
         public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
+            return self.IndexOfMin(keySelector, out _);
+        }
+
+        /// <summary>
+        /// Returns an index of an element with the minimum parameter value.
+        /// </summary>
+        public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, out TKey minKey)
+        {
             if (keySelector == null)
                 throw ThrowErrors.NullParameter(nameof(keySelector));
 
-            return CollectionUtility.Min(self, keySelector, out _, out _);
+            if (self.Count <= 0)
+                throw ThrowErrors.NoElements();
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            int index = 0;
+            minKey = keySelector(self[index]);
+
+            for (int i = 1; i < self.Count; i++)
+            {
+                TSource item = self[i];
+                TKey key = keySelector(item);
+
+                if (comparer.Compare(key, minKey) < 0)
+                {
+                    minKey = key;
+                    index = i;
+                }
+            }
+
+            return index;
         }
 
         /// <summary>
@@ -262,32 +290,38 @@ namespace OlegHcp.CSharp.Collections
         /// </summary>
         public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector)
         {
-            if (keySelector == null)
-                throw ThrowErrors.NullParameter(nameof(keySelector));
-
-            return CollectionUtility.Max(self, keySelector, out _, out _);
-        }
-
-        /// <summary>
-        /// Returns an index of an element with the minimum parameter value.
-        /// </summary>
-        public static int IndexOfMin<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, out TKey min)
-        {
-            if (keySelector == null)
-                throw ThrowErrors.NullParameter(nameof(keySelector));
-
-            return CollectionUtility.Min(self, keySelector, out _, out min);
+            return self.IndexOfMax(keySelector, out _);
         }
 
         /// <summary>
         /// Returns an index of an element with the maximum parameter value.
         /// </summary>
-        public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, out TKey max)
+        public static int IndexOfMax<TSource, TKey>(this IList<TSource> self, Func<TSource, TKey> keySelector, out TKey maxKey)
         {
             if (keySelector == null)
                 throw ThrowErrors.NullParameter(nameof(keySelector));
 
-            return CollectionUtility.Max(self, keySelector, out _, out max);
+            if (self.Count <= 0)
+                throw ThrowErrors.NoElements();
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            int index = 0;
+            maxKey = keySelector(self[index]);
+
+            for (int i = 1; i < self.Count; i++)
+            {
+                TSource item = self[i];
+                TKey key = keySelector(item);
+
+                if (comparer.Compare(key, maxKey) > 0)
+                {
+                    maxKey = key;
+                    index = i;
+                }
+            }
+
+            return index;
         }
 
         /// <summary>
