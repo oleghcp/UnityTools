@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections
 {
@@ -8,37 +9,91 @@ namespace OlegHcp.CSharp.Collections
         /// <summary>
         /// Returns an element with the minimum parameter value.
         /// </summary>
-        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector)
+        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> keySelector)
         {
-            CollectionUtility.Min(self, selector, out TSource res, out _);
-            return res;
-        }
-
-        /// <summary>
-        /// Returns an element with the maximum parameter value.
-        /// </summary>
-        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector)
-        {
-            CollectionUtility.Max(self, selector, out TSource res, out _);
-            return res;
+            return self.GetWithMin(keySelector, out _);
         }
 
         /// <summary>
         /// Returns an element with the minimum parameter value.
         /// </summary>
-        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector, out TKey min)
+        public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> keySelector, out TKey minKey)
         {
-            CollectionUtility.Min(self, selector, out TSource res, out min);
-            return res;
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            TSource result = default;
+            minKey = default;
+            bool nonFirstIteration = false;
+
+            foreach (var item in self)
+            {
+                if (nonFirstIteration)
+                {
+                    TKey key = keySelector(item);
+
+                    if (comparer.Compare(key, minKey) < 0)
+                    {
+                        minKey = key;
+                        result = item;
+                    }
+                }
+                else
+                {
+                    minKey = keySelector(item);
+                    result = item;
+                    nonFirstIteration = true;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Returns an element with the maximum parameter value.
         /// </summary>
-        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> selector, out TKey max)
+        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> keySelector)
         {
-            CollectionUtility.Max(self, selector, out TSource res, out max);
-            return res;
+            return self.GetWithMax(keySelector, out _);
+        }
+
+        /// <summary>
+        /// Returns an element with the maximum parameter value.
+        /// </summary>
+        public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> keySelector, out TKey maxKey)
+        {
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            maxKey = default;
+            TSource result = default;
+            bool nonFirstIteration = false;
+
+            foreach (var item in self)
+            {
+                if (nonFirstIteration)
+                {
+                    TKey key = keySelector(item);
+
+                    if (comparer.Compare(key, maxKey) > 0)
+                    {
+                        maxKey = key;
+                        result = item;
+                    }
+                }
+                else
+                {
+                    maxKey = keySelector(item);
+                    result = item;
+                    nonFirstIteration = true;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -78,12 +133,18 @@ namespace OlegHcp.CSharp.Collections
         /// </summary>
         public static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
         {
+            if (action == null)
+                throw ThrowErrors.NullParameter(nameof(action));
+
             foreach (var item in self)
                 action(item);
         }
 
         public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             foreach (T item in self)
             {
                 yield return item;
@@ -94,6 +155,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement1, T newElement2)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             foreach (T item in self)
             {
                 yield return item;
@@ -105,6 +169,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             foreach (T item in self)
             {
                 yield return item;
@@ -117,6 +184,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, params T[] newElements)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             foreach (T item in self)
             {
                 yield return item;
@@ -130,6 +200,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, T newElement)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             yield return newElement;
 
             foreach (T item in self)
@@ -140,6 +213,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, T newElement1, T newElement2)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             yield return newElement1;
             yield return newElement2;
 
@@ -151,6 +227,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, T newElement1, T newElement2, T newElement3)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             yield return newElement1;
             yield return newElement2;
             yield return newElement3;
@@ -163,6 +242,9 @@ namespace OlegHcp.CSharp.Collections
 
         public static IEnumerable<T> InsertItem<T>(this IEnumerable<T> self, params T[] newElements)
         {
+            if (self == null)
+                throw new NullReferenceException();
+
             for (int i = 0; i < newElements.Length; i++)
             {
                 yield return newElements[i];

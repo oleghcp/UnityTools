@@ -28,66 +28,6 @@ namespace OlegHcp.CSharp.Collections
         }
 
         #region Min/max selection
-        public static void Min<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
-        {
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-
-            minKey = default;
-            result = default;
-
-            bool nonFirstIteration = false;
-
-            foreach (var item in collection)
-            {
-                if (nonFirstIteration)
-                {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, minKey) < 0)
-                    {
-                        minKey = key;
-                        result = item;
-                    }
-                }
-                else
-                {
-                    minKey = keySelector(item);
-                    result = item;
-                    nonFirstIteration = true;
-                }
-            }
-        }
-
-        public static void Max<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey maxKey)
-        {
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-
-            maxKey = default;
-            result = default;
-
-            bool nonFirstIteration = false;
-
-            foreach (var item in collection)
-            {
-                if (nonFirstIteration)
-                {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, maxKey) > 0)
-                    {
-                        maxKey = key;
-                        result = item;
-                    }
-                }
-                else
-                {
-                    maxKey = keySelector(item);
-                    result = item;
-                    nonFirstIteration = true;
-                }
-            }
-        }
-
         public static int Min<TSource, TKey>(IList<TSource> collection, Func<TSource, TKey> keySelector, out TSource result, out TKey minKey)
         {
             if (collection.Count <= 0)
