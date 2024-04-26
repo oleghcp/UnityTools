@@ -179,7 +179,7 @@ namespace OlegHcp.CSharp.Collections
             SortUtility.Sort(self, 0, self.Count - 1, keyComparer);
         }
 
-        public static void SortDescending<T>(this IList<T> self) where T : IComparable<T>
+        public static void SortDescending<T>(this IList<T> self)
         {
             SortUtility.Sort(self, 0, self.Count - 1, new SortUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default });
         }

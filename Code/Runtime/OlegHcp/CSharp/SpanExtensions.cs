@@ -6,9 +6,7 @@ namespace OlegHcp.CSharp
 {
     public static class SpanExtensions
     {
-        public static void Sort<T, TKey>(this Span<T> self, Func<T, TKey> keySelector)
-            where T : unmanaged
-            where TKey : IComparable<TKey>
+        public static void Sort<T, TKey>(this Span<T> self, Func<T, TKey> keySelector) where T : unmanaged
         {
             var keyComparer = new SortUtility.KeyComparerA<T, TKey>
             {
@@ -24,9 +22,7 @@ namespace OlegHcp.CSharp
             SortUtility.Sort(self, 0, self.Length - 1, new SortUtility.DescendingComparer<T> { Comparer = Comparer<T>.Default, });
         }
 
-        public static void SortDescending<T, TKey>(this Span<T> self, Func<T, TKey> keySelector)
-            where T : unmanaged
-            where TKey : IComparable<TKey>
+        public static void SortDescending<T, TKey>(this Span<T> self, Func<T, TKey> keySelector) where T : unmanaged
         {
             var keyComparer = new SortUtility.DescendingKeyComparer<T, TKey>
             {
@@ -139,32 +135,34 @@ namespace OlegHcp.CSharp
             return false;
         }
 
-        public static T Min<T>(this Span<T> self) where T : unmanaged, IComparable<T>
+        public static T Min<T>(this Span<T> self) where T : unmanaged
         {
             if (self.Length <= 0)
                 throw ThrowErrors.NoElements();
 
+            Comparer<T> comparer = Comparer<T>.Default;
             T num = self[0];
 
             for (int i = 1; i < self.Length; i++)
             {
-                if (self[i].CompareTo(num) < 0)
+                if (comparer.Compare(self[i], num) < 0)
                     num = self[i];
             }
 
             return num;
         }
 
-        public static T Max<T>(this Span<T> self) where T : unmanaged, IComparable<T>
+        public static T Max<T>(this Span<T> self) where T : unmanaged
         {
             if (self.Length <= 0)
                 throw ThrowErrors.NoElements();
 
+            Comparer<T> comparer = Comparer<T>.Default;
             T num = self[0];
 
             for (int i = 1; i < self.Length; i++)
             {
-                if (self[i].CompareTo(num) > 0)
+                if (comparer.Compare(self[i], num) > 0)
                     num = self[i];
             }
 

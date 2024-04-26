@@ -83,7 +83,7 @@ namespace OlegHcp.CSharp
         /// <summary>
         /// Sorts the elements in an entire System.Array using the System.IComparable`1 generic interface implementation of each element of the System.Array.
         /// </summary>
-        public static void Sort<T>(this T[] self) where T : IComparable<T>
+        public static void Sort<T>(this T[] self)
         {
             Array.Sort(self);
         }
