@@ -108,7 +108,7 @@ namespace OlegHcp.CSharp.Collections
 
         public static void Swap<T>(this IList<T> self, int i, int j)
         {
-            (self[j], self[i]) = (self[i], self[j]);
+            (self[i], self[j]) = (self[j], self[i]);
         }
 
         public static void Sort<T>(this IList<T> self)

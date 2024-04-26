@@ -78,7 +78,7 @@ namespace OlegHcp.CSharp
 
         public static void Swap<T>(this T[] self, int i, int j)
         {
-            Helper.Swap(ref self[i], ref self[j]);
+            (self[i], self[j]) = (self[j], self[i]);
         }
 
         /// <summary>

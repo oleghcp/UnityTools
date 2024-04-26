@@ -98,12 +98,18 @@ namespace OlegHcp.CSharp
 
         public static void Shuffle<T>(this Span<T> self, IRng generator) where T : unmanaged
         {
-            SpanUtility.Shuffle(self, generator);
+            int last = self.Length;
+
+            while (last > 1)
+            {
+                int cur = generator.Next(last--);
+                self.Swap(cur, last);
+            }
         }
 
         public static void Shuffle<T>(this Span<T> self) where T : unmanaged
         {
-            SpanUtility.Shuffle(self, RandomNumberGenerator.Default);
+            self.Shuffle(RandomNumberGenerator.Default);
         }
 
         public static T Find<T>(this Span<T> self, Predicate<T> match) where T : unmanaged
@@ -136,12 +142,34 @@ namespace OlegHcp.CSharp
 
         public static T Min<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
-            return SpanUtility.Min(self);
+            if (self.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            T num = self[0];
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                if (self[i].CompareTo(num) < 0)
+                    num = self[i];
+            }
+
+            return num;
         }
 
         public static T Max<T>(this Span<T> self) where T : unmanaged, IComparable<T>
         {
-            return SpanUtility.Max(self);
+            if (self.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            T num = self[0];
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                if (self[i].CompareTo(num) > 0)
+                    num = self[i];
+            }
+
+            return num;
         }
 
         public static void Reverse<T>(this Span<T> self, int startIndex, int length) where T : unmanaged
@@ -151,13 +179,13 @@ namespace OlegHcp.CSharp
 
             for (int i = 0; i < length; i++)
             {
-                Helper.Swap(ref self[startIndex + i], ref self[backIndex - i]);
+                self.Swap(startIndex + i, backIndex - i);
             }
         }
 
         public static void Swap<T>(this Span<T> self, int i, int j) where T : unmanaged
         {
-            Helper.Swap(ref self[i], ref self[j]);
+            (self[i], self[j]) = (self[j], self[i]);
         }
 
         public static void Fill<T>(this Span<T> self, T value, int startIndex, int count) where T : unmanaged
@@ -298,12 +326,34 @@ namespace OlegHcp.CSharp
 
         public static T Min<T>(this ReadOnlySpan<T> self) where T : unmanaged, IComparable<T>
         {
-            return SpanUtility.Min(self);
+            if (self.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            T num = self[0];
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                if (self[i].CompareTo(num) < 0)
+                    num = self[i];
+            }
+
+            return num;
         }
 
         public static T Max<T>(this ReadOnlySpan<T> self) where T : unmanaged, IComparable<T>
         {
-            return SpanUtility.Max(self);
+            if (self.Length <= 0)
+                throw ThrowErrors.NoElements();
+
+            T num = self[0];
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                if (self[i].CompareTo(num) > 0)
+                    num = self[i];
+            }
+
+            return num;
         }
 
         public static T GetRandomItem<T>(this ReadOnlySpan<T> self, IRng generator) where T : unmanaged
