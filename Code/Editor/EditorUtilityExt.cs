@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using OlegHcp.Collections;
 using OlegHcp.CSharp;
@@ -53,8 +54,36 @@ namespace OlegHcpEditor
 
         public static Type GetFieldType(PropertyDrawer drawer)
         {
-            Type fieldType = drawer.fieldInfo.FieldType;
-            return fieldType.IsArray ? fieldType.GetElementType() : fieldType;
+            return GetFieldType(drawer.fieldInfo);
+        }
+
+        public static Type GetFieldType(FieldInfo fieldInfo)
+        {
+            Type fieldType = fieldInfo.FieldType;
+            return fieldType.IsArray ? fieldType.GetElementType()
+                                     : fieldType;
+        }
+
+        public static object FindContainer(FieldInfo targetField, object root)
+        {
+            Type rootType = root.GetType();
+
+            IEnumerable<FieldInfo> fields = rootType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
+                                                    .Where(item => item.IsPublic || item.IsDefined(typeof(SerializeField)) || item.IsDefined(typeof(SerializeReference)));
+            foreach (FieldInfo field in fields)
+            {
+                if (targetField == field)
+                    return root;
+
+                if (GetFieldType(field).GetTypeCode() != TypeCode.Object)
+                    continue;
+
+                object result = FindContainer(targetField, field.GetValue(root));
+                if (result != null)
+                    return result;
+            }
+
+            return null;
         }
 
         public static void DisplayDropDownList(Vector2 position, string[] displayedOptions, Predicate<int> checkEnabled, Action<int> onItemSelected)
