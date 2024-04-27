@@ -354,6 +354,22 @@ public class MyClass : MonoBehaviour
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/LayerField.png)
 
+## TagFieldAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    [TagField]
+    private string _tag;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/TagField.png)
+
 ## SortingLayerIDAttribute
 
 ```csharp
@@ -369,6 +385,41 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/SortingLayerID.png)
+
+## ClampCurveAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    [ClampCurve(0f, 0f, 1f, 1f)]
+    private AnimationCurve _curve;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ClampCurve.png)
+
+## SeparatorAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField]
+    private string _before;
+
+    [SerializeField]
+    [Separator]
+    private string _after;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Separator.png)
 
 ## TypeNameAttribute
 
