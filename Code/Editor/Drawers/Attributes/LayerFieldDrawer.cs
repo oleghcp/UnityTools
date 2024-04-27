@@ -13,7 +13,7 @@ namespace OlegHcpEditor.Drawers.Attributes
         {
             if (EditorUtilityExt.GetFieldType(this).GetTypeCode() != TypeCode.Int32)
             {
-                EditorGui.ErrorLabel(position, label, $"Use {nameof(LayerFieldAttribute)} with int.");
+                EditorGui.ErrorLabel(position, label, $"Use {nameof(LayerFieldAttribute)} with {nameof(Int32)}.");
                 return;
             }
 
