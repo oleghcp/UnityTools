@@ -9,7 +9,7 @@ using UnityObject = UnityEngine.Object;
 namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(CertainTypesAttribute))]
-    public class CertainTypesDrawer : AttributeDrawer<CertainTypesAttribute>
+    internal class CertainTypesDrawer : AttributeDrawer<CertainTypesAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
