@@ -1,4 +1,20 @@
-﻿## InspectorButtonAttribute
+﻿## DisableEditingAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [DisableEditing]
+    private string _text = "Qwerty";
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DisableEditing.png)
+
+## InspectorButtonAttribute
 
 ```csharp
 using System;
@@ -126,21 +142,21 @@ public class MyClass : MonoBehaviour
 }
 ```
 
-## DisableEditingAttribute
+## ClampCurveAttribute
 
 ```csharp
 using OlegHcp.Inspector;
 using UnityEngine;
 
-public class MyClass : MonoBehaviour
+public class Example : MonoBehaviour
 {
     [SerializeField]
-    [DisableEditing]
-    private string _text = "Qwerty";
+    [ClampCurve(0f, 0f, 1f, 1f)]
+    private AnimationCurve _curve;
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DisableEditing.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ClampCurve.png)
 
 ## DrawFlagsAttribute
 
@@ -385,22 +401,6 @@ public class MyClass : MonoBehaviour
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/SortingLayerID.png)
-
-## ClampCurveAttribute
-
-```csharp
-using OlegHcp.Inspector;
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    [SerializeField]
-    [ClampCurve(0f, 0f, 1f, 1f)]
-    private AnimationCurve _curve;
-}
-```
-
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ClampCurve.png)
 
 ## SeparatorAttribute
 
