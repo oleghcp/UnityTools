@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using OlegHcp.CSharp;
 
 namespace OlegHcp.Tools
@@ -90,6 +93,25 @@ namespace OlegHcp.Tools
 
                 default: throw new UnsupportedValueException(type.GetTypeCode());
             }
+        }
+
+        public static object CloneObject(object source)
+        {
+            if (source is null)
+                throw new ArgumentNullException(nameof(source));
+
+            Type type = source.GetType();
+
+            if (!type.IsSerializable)
+                throw new SerializationException($"Type {type} is not marked as serializable.");
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, source);
+                stream.Seek(0, SeekOrigin.Begin);
+                return formatter.Deserialize(stream);
+            };
         }
     }
 }
