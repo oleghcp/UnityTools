@@ -9,9 +9,9 @@ namespace OlegHcpEditor.Drawers.Attributes
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            GUI.enabled = false;
-            EditorGUI.PropertyField(position, property, label);
-            GUI.enabled = true;
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUI.PropertyField(position, property, label, true);
+            EditorGUI.EndDisabledGroup();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
