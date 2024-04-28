@@ -32,6 +32,11 @@ namespace OlegHcp.NumericEntities
         public int Excess => (_filler - _threshold).ClampMin(0);
         public int Shortage => (_threshold - _filler).Clamp(0, _threshold);
 
+#if UNITY_EDITOR
+        internal static string ThresholdFieldName => nameof(_threshold);
+        internal static string FillerFieldName => nameof(_filler);
+#endif
+
         public FilledInt(int threshold)
         {
             if (threshold < 0)
