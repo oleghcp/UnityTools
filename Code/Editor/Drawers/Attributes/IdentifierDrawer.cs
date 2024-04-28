@@ -13,7 +13,7 @@ namespace OlegHcpEditor.Drawers.Attributes
         {
             if (EditorUtilityExt.GetFieldType(this).GetTypeCode() != TypeCode.String)
             {
-                EditorGui.ErrorLabel(position, label, $"Use {nameof(IdentifierAttribute)} with String.");
+                EditorGui.ErrorLabel(position, label, $"Use {nameof(IdentifierAttribute)} with {nameof(String)}.");
                 return;
             }
 
@@ -23,20 +23,19 @@ namespace OlegHcpEditor.Drawers.Attributes
             if (attribute.Editable)
             {
                 EditorGUI.PropertyField(position, property, label);
+                return;
             }
-            else
-            {
-                position = EditorGUI.PrefixLabel(position, label);
 
-                Rect buttonRect = position;
-                buttonRect.width = EditorGuiUtility.SmallButtonWidth;
-                buttonRect.x -= EditorGuiUtility.SmallButtonWidth + EditorGuiUtility.StandardHorizontalSpacing;
+            position = EditorGUI.PrefixLabel(position, label);
 
-                if (GUI.Button(buttonRect, EditorGuiUtility.TempContent("*", "Copy to clipboard")))
-                    GUIUtility.systemCopyBuffer = property.stringValue;
+            Rect buttonRect = position;
+            buttonRect.width = EditorGuiUtility.SmallButtonWidth;
+            buttonRect.x -= EditorGuiUtility.SmallButtonWidth + EditorGuiUtility.StandardHorizontalSpacing;
 
-                GUI.Label(position, EditorGuiUtility.TempContent(property.stringValue));
-            }
+            if (GUI.Button(buttonRect, EditorGuiUtility.TempContent("*", "Copy to clipboard")))
+                GUIUtility.systemCopyBuffer = property.stringValue;
+
+            GUI.Label(position, EditorGuiUtility.TempContent(property.stringValue));
         }
     }
 }
