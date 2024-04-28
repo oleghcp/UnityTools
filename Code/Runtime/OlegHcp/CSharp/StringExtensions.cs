@@ -1,4 +1,5 @@
 ﻿using System;
+using OlegHcp.Strings;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp
@@ -47,7 +48,7 @@ namespace OlegHcp.CSharp
 
         public static string RemoveWhiteSpaces(this string self)
         {
-            return self.Replace(Helper.Space, string.Empty);
+            return self.Replace(StringUtility.Space, string.Empty);
         }
 
         public static char GetRandomChar(this string self, IRng generator)

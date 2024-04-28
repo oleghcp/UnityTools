@@ -1,6 +1,6 @@
 ﻿using OlegHcp.CSharp;
 using OlegHcp.Inspector;
-using OlegHcp.Tools;
+using OlegHcp.Strings;
 using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
@@ -41,7 +41,7 @@ namespace OlegHcpEditor.Drawers.Attributes
         {
             Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
-            EditorGUI.ObjectField(lineRect, property, typeof(ScriptableObject), EditorGuiUtility.TempContent(Helper.Space));
+            EditorGUI.ObjectField(lineRect, property, typeof(ScriptableObject), EditorGuiUtility.TempContent(StringUtility.Space));
             EditorGUI.PrefixLabel(lineRect, label);
             property.isExpanded = EditorGui.FoldoutIndented(lineRect, property.isExpanded, GUIContent.none, true);
 

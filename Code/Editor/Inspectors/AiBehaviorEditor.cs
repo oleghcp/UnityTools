@@ -1,6 +1,6 @@
 ﻿using OlegHcp;
 using OlegHcp.AiSimulation;
-using OlegHcp.Tools;
+using OlegHcp.Strings;
 using UnityEditor;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ namespace OlegHcpEditor.Inspectors
             GUI.color = Colours.Lime;
             EditorGUILayout.LabelField("Current:", GetCurrentStateInfo());
             GUI.color = Colours.White;
-            EditorGUILayout.LabelField(Helper.Space, "↑");
+            EditorGUILayout.LabelField(StringUtility.Space, "↑");
             EditorGUILayout.LabelField("Previous:", GetPrevStateInfo());
             EditorGUILayout.EndVertical();
         }

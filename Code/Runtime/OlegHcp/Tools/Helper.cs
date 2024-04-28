@@ -9,8 +9,6 @@ namespace OlegHcp.Tools
 {
     public static class Helper
     {
-        public static readonly string Space = " ";
-
         public static void Swap<T>(ref T a, ref T b)
         {
             (b, a) = (a, b);
@@ -44,22 +42,6 @@ namespace OlegHcp.Tools
 #else
             return hc0 ^ hc1 << 2 ^ hc2 >> 2 ^ hc3 >> 1;
 #endif
-        }
-
-        internal static string SimplifyTypeName(string assemblyQualifiedName)
-        {
-            const char divider = ',';
-
-            bool first = false;
-
-            for (int i = 0; i < assemblyQualifiedName.Length; i++)
-            {
-                if (assemblyQualifiedName[i] != divider) { continue; }
-                if (!first) { first = true; }
-                else { return assemblyQualifiedName.Substring(0, i); }
-            }
-
-            return null;
         }
 
         public static object GetDefaultValue(Type type)
@@ -112,6 +94,22 @@ namespace OlegHcp.Tools
                 stream.Seek(0, SeekOrigin.Begin);
                 return formatter.Deserialize(stream);
             };
+        }
+
+        internal static string SimplifyTypeName(string assemblyQualifiedName)
+        {
+            const char divider = ',';
+
+            bool first = false;
+
+            for (int i = 0; i < assemblyQualifiedName.Length; i++)
+            {
+                if (assemblyQualifiedName[i] != divider) { continue; }
+                if (!first) { first = true; }
+                else { return assemblyQualifiedName.Substring(0, i); }
+            }
+
+            return null;
         }
     }
 }

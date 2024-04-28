@@ -1,5 +1,5 @@
 ﻿using OlegHcp.NumericEntities;
-using OlegHcp.Tools;
+using OlegHcp.Strings;
 using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
@@ -26,7 +26,7 @@ namespace OlegHcpEditor.Drawers
             Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
             property.FindPropertyRelative(RngParam.RangeFieldName)
-                    .Draw(lineRect, EditorGuiUtility.TempContent(Helper.Space));
+                    .Draw(lineRect, EditorGuiUtility.TempContent(StringUtility.Space));
             EditorGUI.PrefixLabel(lineRect, EditorGuiUtility.TempContent(name));
             property.isExpanded = EditorGui.FoldoutIndented(lineRect, property.isExpanded, GUIContent.none, true);
 
