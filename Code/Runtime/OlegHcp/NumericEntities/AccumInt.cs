@@ -17,6 +17,10 @@ namespace OlegHcp.NumericEntities
         public int Got => _got;
         public int Spent => _spent;
 
+#if UNITY_EDITOR
+        internal static string GotFieldName => nameof(_got);
+#endif
+
         public AccumInt(int got, int spent)
         {
             if (spent > got)
