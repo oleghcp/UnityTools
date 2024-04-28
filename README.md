@@ -50,6 +50,7 @@ Mind that it uses assembly definitions.
 * [Singletons](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/SingleScripts). Singletons based on `MonoBehaviour` and `ScriptableObject`.
 * [Strings](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Strings). Alphanumeric sorting.
 * [Timer](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Timers). Simple timer.
+* [Helper](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Tools). Small tool class.
 
 ## Editor Code
 
