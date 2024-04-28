@@ -40,6 +40,11 @@ namespace OlegHcp.NumericEntities
         public bool IsFull => _curValue == _capacity;
         public bool IsEmpty => _curValue <= 0f;
 
+#if UNITY_EDITOR
+        internal static string CapacityFieldName => nameof(_capacity);
+        internal static string ValueFieldName => nameof(_curValue);
+#endif
+
         public SpendingFloat(float capacity)
         {
             if (capacity < 0f)
