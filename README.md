@@ -87,11 +87,13 @@ Mind that it uses assembly definitions.
 ## Custom Transform Editor
 
 Has quick reset buttons and can be switched between local and world view.  
-Also has indicators of tool handles if they are switched to center and global value.
+Has indicators of tool handles if they are switched to center and global value.
+Transform parameters can be copied to the clipboard as json string.
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform1.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform2.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform3.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform4.png)
 
 ## Asset Context Menu
 
