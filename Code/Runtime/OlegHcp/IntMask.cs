@@ -99,7 +99,7 @@ namespace OlegHcp
         #region Regular Stuff
         public override int GetHashCode()
         {
-            return _mask.GetHashCode();
+            return _mask;
         }
 
         public bool Equals(IntMask other)
