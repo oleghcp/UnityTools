@@ -99,7 +99,7 @@ namespace OlegHcp.NumericEntities
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(_capacity.GetHashCode(), _curValue.GetHashCode());
+            return HashCode.Combine(_capacity, _curValue);
         }
 
         public static implicit operator float(SpendingFloat entity)

@@ -73,7 +73,7 @@ namespace OlegHcp.NumericEntities
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(_got.GetHashCode(), _spent.GetHashCode());
+            return HashCode.Combine(_got, _spent);
         }
 
         public static implicit operator float(AccumFloat entity)

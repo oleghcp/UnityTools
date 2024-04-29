@@ -7,7 +7,6 @@ using OlegHcp.Mathematics;
 using OlegHcp.Pool;
 using OlegHcp.SaveLoad;
 using OlegHcp.Sound.SoundStuff;
-using OlegHcp.Tools;
 using UnityEngine;
 
 namespace OlegHcp.Sound
@@ -227,7 +226,7 @@ namespace OlegHcp.Sound
 
             public SoundKey(object sender, string name)
             {
-                _hash = Helper.GetHashCode(sender.GetHashCode(), name.GetHashCode());
+                _hash = HashCode.Combine(sender, name);
             }
 
             public override bool Equals(object obj) => obj is SoundKey soundKey && Equals(soundKey);

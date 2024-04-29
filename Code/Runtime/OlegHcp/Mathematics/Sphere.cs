@@ -2,7 +2,6 @@
 using System.Globalization;
 using OlegHcp.CSharp;
 using OlegHcp.Engine;
-using OlegHcp.Tools;
 using UnityEngine;
 
 namespace OlegHcp.Mathematics
@@ -109,7 +108,7 @@ namespace OlegHcp.Mathematics
         #region Regular Stuff
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(Position.GetHashCode(), Radius.GetHashCode());
+            return HashCode.Combine(Position, Radius);
         }
 
         public override bool Equals(object obj)

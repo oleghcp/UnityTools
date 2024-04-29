@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using OlegHcp.Tools;
 using UnityEngine;
 
 namespace OlegHcp
@@ -79,7 +78,7 @@ namespace OlegHcp
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(_value, _throwIfNegative.GetHashCode());
+            return HashCode.Combine(_value, _throwIfNegative);
         }
 
         public override string ToString()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using OlegHcp.CSharp;
@@ -12,36 +11,6 @@ namespace OlegHcp.Tools
         public static void Swap<T>(ref T a, ref T b)
         {
             (b, a) = (a, b);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetHashCode(int hc0, int hc1)
-        {
-#if UNITY_2021_2_OR_NEWER
-            return HashCode.Combine(hc0, hc1);
-#else
-            return hc0 ^ hc1 << 2;
-#endif
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetHashCode(int hc0, int hc1, int hc2)
-        {
-#if UNITY_2021_2_OR_NEWER
-            return HashCode.Combine(hc0, hc1, hc2);
-#else
-            return hc0 ^ hc1 << 2 ^ hc2 >> 2;
-#endif
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int GetHashCode(int hc0, int hc1, int hc2, int hc3)
-        {
-#if UNITY_2021_2_OR_NEWER
-            return HashCode.Combine(hc0, hc1, hc2, hc3);
-#else
-            return hc0 ^ hc1 << 2 ^ hc2 >> 2 ^ hc3 >> 1;
-#endif
         }
 
         public static object GetDefaultValue(Type type)

@@ -94,7 +94,7 @@ namespace OlegHcp.NumericEntities
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(_filler.GetHashCode(), _threshold.GetHashCode());
+            return HashCode.Combine(_filler, _threshold);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace OlegHcp.NumericEntities
 
         public override int GetHashCode()
         {
-            return Helper.GetHashCode(Min.GetHashCode(), Max.GetHashCode());
+            return HashCode.Combine(Min, Max);
         }
 
         public static implicit operator (float min, float max)(Diapason value)
