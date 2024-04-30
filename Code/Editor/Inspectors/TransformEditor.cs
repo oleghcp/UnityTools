@@ -194,19 +194,14 @@ namespace OlegHcpEditor.Inspectors
         [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(Transform) + "/Paste Values from Clipboard (ext.)")]
         private static void PastFromClipboard(MenuCommand command)
         {
-            using (SerializedObject serializedObject = new SerializedObject(command.context))
+            try
             {
-                using (SerializedProperty orderProp = serializedObject.FindProperty("m_RootOrder"))
-                {
-                    int rootOrder = orderProp.intValue;
-
-                    Undo.RecordObject(command.context, "Paste Values from Clipboard");
-                    EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
-
-                    serializedObject.Update();
-                    orderProp.intValue = rootOrder;
-                    serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                }
+                Undo.RecordObject(command.context, "Paste Values from Clipboard");
+                EditorJsonUtility.FromJsonOverwrite(GUIUtility.systemCopyBuffer, command.context);
+            }
+            catch (ArgumentException e)
+            {
+                Debug.LogWarning(e.Message);
             }
         }
     }
