@@ -12,28 +12,43 @@ namespace OlegHcp
     {
         /// <summary>
         /// Converts position form screen space to a position in UI canvas coordinates with origin at the left bottom corner.
-        /// <param name="canvasHeight">Canvas rectTransform height.</param>
         /// </summary>
-        public static Vector2 ScreenToUI(in Vector2 screenPos, float canvasHeight)
+        public static Vector2 ScreenToUi(in Vector2 screenPosition, Vector2 canvasSize)
         {
-            float canvasWidth = canvasHeight * Screen.width / Screen.height;
-
-            return new Vector2
+            Vector2 positionRatio = new Vector2()
             {
-                x = canvasWidth * (screenPos.x / Screen.width),
-                y = canvasHeight * (screenPos.y / Screen.height),
+                x = screenPosition.x / Screen.width,
+                y = screenPosition.y / Screen.height,
             };
+
+            return Vector2.Scale(positionRatio, canvasSize);
+        }
+
+        /// <summary>
+        /// Converts position form screen space to a position in UI canvas coordinates with origin at the left bottom corner.
+        /// </summary>
+        public static Vector2 ScreenToEnvelopeUi(in Vector2 screenPosition, Vector2 canvasSize, Vector2 canvasReferenceResolution)
+        {
+            Vector2 offset = (canvasSize - canvasReferenceResolution) * 0.5f;
+            return ScreenToUi(screenPosition, canvasSize) - offset;
         }
 
         /// <summary>
         /// Converts 2D position from world space to a position in UI canvas coordinates with origin at the left bottom corner.
         /// </summary>
-        /// <param name="canvasHeight">Canvas rectTransform height.</param>
-        /// <param name="camera">A camera which is used to converting.</param>
-        public static Vector2 WorldToUI(in Vector3 worldPos, float canvasHeight, Camera camera)
+        public static Vector2 WorldToUi(in Vector3 worldPos, Vector2 canvasSize, Camera camera)
         {
             Vector2 screenPos = camera.WorldToScreenPoint(worldPos);
-            return ScreenToUI(screenPos, canvasHeight);
+            return ScreenToUi(screenPos, canvasSize);
+        }
+
+        /// <summary>
+        /// Converts 2D position from world space to a position in UI canvas coordinates with origin at the left bottom corner.
+        /// </summary>
+        public static Vector2 WorldToEnvelopeUi(in Vector3 worldPos, Vector2 canvasSize, Vector2 canvasReferenceResolution, Camera camera)
+        {
+            Vector2 screenPos = camera.WorldToScreenPoint(worldPos);
+            return ScreenToEnvelopeUi(screenPos, canvasSize, canvasReferenceResolution);
         }
 
         /// <summary>

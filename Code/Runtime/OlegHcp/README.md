@@ -447,39 +447,17 @@ public class MyClass : MonoBehaviour
 ## ScreenUtility
 
 ```csharp
-using OlegHcp;
-using UnityEngine;
-
-public class MyClass
+public static class ScreenUtility
 {
-    private void DoSomething1()
-    {
-        Vector2 cameraSize = ScreenUtility.GetOrthographicSize(Camera.main.orthographicSize);
-        float height = cameraSize.y * 2f;
-        float width = cameraSize.x * 2f;
-    }
-
-    private void DoSomething2()
-    {
-        float remoteness = 100f;
-        Vector2 remoteRectSize = ScreenUtility.GetPerspectiveSize(Camera.main.fieldOfView, remoteness);
-        float height = remoteRectSize.y * 2f;
-        float width = remoteRectSize.x * 2f;
-    }
-
-    private void DoSomething3()
-    {
-        float verticalFieldOfView = 60f;
-        // vertical fov to horizontal
-        float horizontalOfView = ScreenUtility.GetAspectAngle(verticalFieldOfView, Screen.width / Screen.height);
-    }
-
-    private void DoSomething4()
-    {
-        float horizontalOfView = 60f;
-        // horizontal fov to vertical
-        float verticalFieldOfView = ScreenUtility.GetAspectAngle(horizontalOfView, Screen.height / Screen.width);
-    }
+    public static Vector2 ScreenToUi(in Vector2 screenPosition, Vector2 canvasSize);
+    public static Vector2 ScreenToEnvelopeUi(in Vector2 screenPosition, Vector2 canvasSize, Vector2 canvasReferenceResolution);
+    public static Vector2 WorldToUi(in Vector3 worldPos, Vector2 canvasSize, Camera camera);
+    public static Vector2 WorldToEnvelopeUi(in Vector3 worldPos, Vector2 canvasSize, Vector2 canvasReferenceResolution, Camera camera);
+    public static float GetPathScreenFactor(float cameraOrthographicSize);
+    public static float GetPathScreenFactor(float verticalFieldOfView, float distance);
+    public static Vector2 GetOrthographicSize(float cameraOrthographicSize);
+    public static Vector2 GetPerspectiveSize(float verticalFieldOfView, float remoteness);
+    public static float GetAspectAngle(float fieldOfView, float aspectRatio);
 }
 ```
 
