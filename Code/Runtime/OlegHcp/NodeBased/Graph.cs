@@ -19,13 +19,9 @@ namespace OlegHcp.NodeBased
             get
             {
                 if (_nodeList == null)
-                {
-                    _nodeList = Dict.Values
-                                    .Where(item => item.RealNode())
-                                    .Select(item => (TNode)item)
+                    _nodeList = Dict.Where(item => item.Value.RealNode())
+                                    .Select(item => (TNode)item.Value)
                                     .ToArray();
-                }
-
                 return _nodeList;
             }
         }
@@ -33,6 +29,11 @@ namespace OlegHcp.NodeBased
         public new TNode GetNodeById(int id)
         {
             return base.GetNodeById(id) as TNode;
+        }
+
+        public override Type GetNodeRootType()
+        {
+            return typeof(TNode);
         }
 
         public IEnumerableNode<TNode> EnumerateFromAny()
@@ -80,11 +81,6 @@ namespace OlegHcp.NodeBased
         //                                   states[transition.NextNode]);
         //    }
         //}
-
-        public override Type GetNodeRootType()
-        {
-            return typeof(TNode);
-        }
 
         private class NodeWrapper : IEnumerableNode<TNode>
         {
