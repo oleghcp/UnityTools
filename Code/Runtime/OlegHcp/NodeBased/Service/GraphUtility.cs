@@ -14,7 +14,7 @@ namespace OlegHcp.NodeBased.Service
             else if (type == typeof(CommonNode))
                 return NodeType.Common;
             else
-                return NodeType.Real;
+                return NodeType.Regular;
         }
     }
 #endif

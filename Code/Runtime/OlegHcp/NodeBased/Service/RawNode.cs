@@ -5,7 +5,7 @@ namespace OlegHcp.NodeBased.Service
 {
     internal enum NodeType : byte
     {
-        Real,
+        Regular,
         Hub,
         Exit,
         Common,

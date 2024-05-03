@@ -10,7 +10,7 @@ namespace OlegHcp.NodeBased
     {
         public Graph<TNode> Graph => Owner as Graph<TNode>;
         public bool IsRoot => Owner.RootNode == this;
-        internal override NodeType NodeType => NodeType.Real;
+        internal override NodeType NodeType => NodeType.Regular;
 
         public NodeEnumerator<TNode> GetEnumerator()
         {

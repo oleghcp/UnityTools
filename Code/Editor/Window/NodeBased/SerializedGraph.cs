@@ -76,7 +76,7 @@ namespace OlegHcpEditor.Window.NodeBased
             nodeProp.managedReferenceValue = newNodeAsset;
 
             SerializedProperty rootNodeIdProp = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
-            if (rootNodeIdProp.intValue == 0 && nodeType.RealNode())
+            if (rootNodeIdProp.intValue == 0 && nodeType.IsRegular())
                 rootNodeIdProp.intValue = newNodeAsset.Id;
 
             return nodeProp;
@@ -115,7 +115,7 @@ namespace OlegHcpEditor.Window.NodeBased
                     foreach (SerializedProperty item in _nodesProperty.EnumerateArrayElements())
                     {
                         Type type = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(item.managedReferenceFullTypename);
-                        if (GraphUtility.GetNodeType(type).RealNode())
+                        if (GraphUtility.GetNodeType(type).IsRegular())
                         {
                             rootNodeIdProp.intValue = item.FindPropertyRelative(RawNode.IdFieldName).intValue;
                             replaced = true;
@@ -140,7 +140,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
             switch (nodeType)
             {
-                case NodeType.Real: return $"{type.Name} {id}";
+                case NodeType.Regular: return $"{type.Name} {id}";
                 case NodeType.Hub: return $"{nodeType.GetName()} {id}";
                 case NodeType.Common: return "Any";
                 case NodeType.Exit: return nodeType.GetName();

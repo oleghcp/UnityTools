@@ -47,7 +47,7 @@ namespace OlegHcpEditor.Window.NodeBased
             EditorGUILayout.Space(2f);
             _scrollPosition.y = EditorGUILayout.BeginScrollView(_scrollPosition, EditorStyles.helpBox).y;
 
-            if (_nodeEditor.Type.RealNode())
+            if (_nodeEditor.Type.IsRegular())
             {
                 EditorGUILayout.LabelField(_nodeType.FullName);
                 EditorGUILayout.LabelField($"Local Id: {_nodeEditor.Id}");

@@ -28,7 +28,7 @@ namespace OlegHcp.NodeBased.Service
 
         internal RawNode GetNodeById(int id)
         {
-            if (Dict.TryGetValue(id, out RawNode value) && value.RealNode())
+            if (Dict.TryGetValue(id, out RawNode value) && value.IsRegular())
                 return value;
 
             return null;

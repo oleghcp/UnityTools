@@ -71,7 +71,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             {
                 if (_widthVersion != _window.OnGuiCounter)
                 {
-                    _width = _type.ServiceNode() ? SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
+                    _width = _type.IsServiceNode() ? SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
                     _widthVersion = _window.OnGuiCounter;
                 }
 
@@ -343,12 +343,12 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
             switch (_type)
             {
-                case NodeType.Real:
+                case NodeType.Regular:
                     genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
-                    if (_window.RootNodeId == _id && _type.RealNode())
+                    if (_window.RootNodeId == _id && _type.IsRegular())
                         genericMenu.AddDisabledItem(new GUIContent("Set as root"));
                     else
                         genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
