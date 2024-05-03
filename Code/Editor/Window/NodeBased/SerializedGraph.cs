@@ -61,7 +61,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public SerializedProperty CreateNode(Vector2 position, Type type)
         {
-            NodeType nodeType = RawNode.GetNodeType(type);
+            NodeType nodeType = GraphUtility.GetNodeType(type);
 
             RawNode newNodeAsset = Activator.CreateInstance(type) as RawNode;
 
@@ -115,7 +115,7 @@ namespace OlegHcpEditor.Window.NodeBased
                     foreach (SerializedProperty item in _nodesProperty.EnumerateArrayElements())
                     {
                         Type type = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(item.managedReferenceFullTypename);
-                        if (RawNode.GetNodeType(type).RealNode())
+                        if (GraphUtility.GetNodeType(type).RealNode())
                         {
                             rootNodeIdProp.intValue = item.FindPropertyRelative(RawNode.IdFieldName).intValue;
                             replaced = true;
@@ -136,7 +136,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public static string GetDefaultNodeName(Type type, int id)
         {
-            NodeType nodeType = RawNode.GetNodeType(type);
+            NodeType nodeType = GraphUtility.GetNodeType(type);
 
             switch (nodeType)
             {

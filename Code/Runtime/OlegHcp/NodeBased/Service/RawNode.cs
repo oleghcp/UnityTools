@@ -27,7 +27,7 @@ namespace OlegHcp.NodeBased.Service
 
         public int LocalId => Id;
         public string Name => NodeName;
-        internal virtual NodeType NodeType => NodeType.Real;
+        internal abstract NodeType NodeType { get; }
 
 #if UNITY_EDITOR
         internal static string PositionFieldName => nameof(Position);
@@ -35,18 +35,6 @@ namespace OlegHcp.NodeBased.Service
         internal static string NameFieldName => nameof(NodeName);
         internal static string GraphFieldName => nameof(Owner);
         internal static string ArrayFieldName => nameof(Next);
-
-        internal static NodeType GetNodeType(Type type)
-        {
-            if (type == typeof(ExitNode))
-                return NodeType.Exit;
-            else if (type == typeof(HubNode))
-                return NodeType.Hub;
-            else if (type == typeof(CommonNode))
-                return NodeType.Common;
-            else
-                return NodeType.Real;
-        }
 #endif
     }
 }

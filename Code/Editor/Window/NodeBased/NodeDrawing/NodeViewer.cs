@@ -134,7 +134,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
             _id = nodeProp.FindPropertyRelative(RawNode.IdFieldName).intValue;
             _systemType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(nodeProp.managedReferenceFullTypename);
-            _type = RawNode.GetNodeType(_systemType);
+            _type = GraphUtility.GetNodeType(_systemType);
             _position = nodeProp.FindPropertyRelative(RawNode.PositionFieldName).vector2Value;
             _transitionViewers = new List<TransitionViewer>();
             _in = new PortViewer(this, PortType.In, _map);
