@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OlegHcp.Pool;
+using OlegHcp.Tools;
 
 namespace OlegHcp.Pathfinding
 {
@@ -44,9 +45,9 @@ namespace OlegHcp.Pathfinding
             if (rightNode == null)
             {
                 leftNode = _last;
-                _last = newNode;
                 newNode.Left = leftNode;
                 leftNode.Right = newNode;
+                _last = newNode;
                 return;
             }
 
@@ -68,7 +69,7 @@ namespace OlegHcp.Pathfinding
         public TValue Pop()
         {
             if (_values.Count == 0)
-                throw new Exception();
+                throw ThrowErrors.NoElements();
 
             ListNode lastNode = _last;
             TValue element = lastNode.Element;
