@@ -5,7 +5,7 @@
 ```csharp
 public class PathFinder
 {
-    public void FindPath(PathNode startNode, PathNode endNode, List<PathNode> result);
+    public void Find(PathNode origin, PathNode target, List<PathNode> result);
 }
 ```
 
