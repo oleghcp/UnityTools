@@ -40,6 +40,7 @@ Mind that it uses assembly definitions.
 * [Mathematics](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Mathematics). Math tools and structs.
 * [Graph editor](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/NodeBased). Tool for creating graphs based on linked nodes. Useful for creating dialogues.
 * [Numeric entities](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/NumericEntities). Structs and classes for work with numeric parameters like ranges or character stats.
+* [Pathfinding](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Pathfinding). Simple implementation of A* pathfinding or something that pretends to be A*.
 * [ObjectPool](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Pool). ObjectPool implementation.
 * [SignalBus](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Events). SignalBus implementation.
 * [ServiceLocator](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Managing). ServiceLocator implementation.

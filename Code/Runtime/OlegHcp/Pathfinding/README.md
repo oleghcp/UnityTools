@@ -88,6 +88,8 @@ public struct NodePosition : IEquatable<NodePosition>
 }
 ```
 
+Generate grid of nodes.
+
 ```csharp
 public class Example : MonoBehaviour
 {
@@ -168,6 +170,7 @@ public class Example : MonoBehaviour
                 NodePosition pos = new NodePosition(i, j);
 
                 // Create a node if the current cell is not an obstacle
+                // otherwise keep cell as null
                 if (c != '█')
                     grid[i, j] = new ExamplePathNode(pos);
 
@@ -225,6 +228,7 @@ public class Example : MonoBehaviour
 
         void tryAddNeighbor(PathNode neighbor, float cost)
         {
+            // Null is unavailable cell
             if (neighbor == null)
                 return;
 
@@ -255,4 +259,3 @@ public class Example : MonoBehaviour
     }
 }
 ```
-
