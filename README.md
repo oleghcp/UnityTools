@@ -32,8 +32,8 @@ Mind that it uses assembly definitions.
 * [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like `ApplicationUtility`, `BitMask`, `RandomNumberGenerator`, `CameraFitter`, etc.
 * [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allows to run coroutines in non-MonoBehaviour classes.
 * [Collections](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Collections). Some specific collections.
-* [.Net Extesions](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/CSharp). Extensions for base .Net api stuff (arrays, collections, strings, etc).
-* [Unity Extesions](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Engine). Extensions for base Unity api stuff (game objects, transforms, vectors, etc).
+* [.Net Extensions](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/CSharp). Extensions for base .Net api stuff (arrays, collections, strings, etc).
+* [Unity Extensions](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Engine). Extensions for base Unity api stuff (game objects, transforms, vectors, etc).
 * [Terminal](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/GameConsole). Simple in-game console for commands and messages.
 * [Inspector](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Inspector). Attribute classes for Unity inspector.
 * [Input/Output](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/IO). A few classes for work with files and paths.
@@ -56,7 +56,7 @@ Mind that it uses assembly definitions.
 ## Editor Code
 
 * [Editor classes](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor). Editor and gui utilities.
-* [Extesions](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/Engine). Extensions for base unity editor stuff.
+* [Extensions](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/Engine). Extensions for base unity editor stuff.
 * [Enum generator](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/CodeGenerating). Code generating for creating enums. Useful for generating enums based on serialized assets.
 * [Node drawer](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/NodeBased). Custom node drawing for the graph editor.
 
