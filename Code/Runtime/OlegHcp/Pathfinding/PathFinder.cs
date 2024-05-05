@@ -10,10 +10,10 @@ namespace OlegHcp.Pathfinding
         private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();
         private HashSet<int> _acceptableBuffer = new HashSet<int>();
 
-        public void FindPath(PathNode startNode, PathNode endNode, List<PathNode> result)
+        public void Find(PathNode origin, PathNode target, List<PathNode> result)
         {
-            _frontBuffer.Push(startNode, startNode.PassCost);
-            while (_frontBuffer.Count > 0 && !_acceptableBuffer.Contains(endNode.Id))
+            _frontBuffer.Push(origin, origin.PassCost);
+            while (_frontBuffer.Count > 0 && !_acceptableBuffer.Contains(target.Id))
             {
                 PathNode current = _frontBuffer.Pop();
                 _acceptableBuffer.Add(current.Id);
@@ -33,15 +33,15 @@ namespace OlegHcp.Pathfinding
 
             result.Clear();
 
-            if (_acceptableBuffer.Contains(endNode.Id))
+            if (_acceptableBuffer.Contains(target.Id))
             {
-                int count = endNode.PathNumber;
+                int count = target.PathNumber;
                 result.SetCount(count);
 
                 for (int i = count - 1; i >= 0; i--)
                 {
-                    result[i] = endNode;
-                    endNode = endNode.Parent;
+                    result[i] = target;
+                    target = target.Parent;
                 }
             }
 
