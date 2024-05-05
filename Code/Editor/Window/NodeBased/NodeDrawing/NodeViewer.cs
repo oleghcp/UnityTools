@@ -348,7 +348,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
-                    if (_window.RootNodeId == _id && _type.IsRegular())
+                    if (_window.RootNodeId == _id)
                         genericMenu.AddDisabledItem(new GUIContent("Set as root"));
                     else
                         genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));

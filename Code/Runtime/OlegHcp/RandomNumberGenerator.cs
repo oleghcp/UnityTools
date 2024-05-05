@@ -28,6 +28,9 @@ namespace OlegHcp
             if (minValue > maxValue)
                 throw ThrowErrors.MinMax(nameof(minValue), nameof(maxValue));
 
+            if (minValue == maxValue)
+                return minValue;
+
             return NextInternal(minValue, maxValue);
         }
 
