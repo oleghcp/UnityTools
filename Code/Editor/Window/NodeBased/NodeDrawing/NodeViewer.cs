@@ -348,10 +348,10 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
-                    if (_window.RootNodeId == _id)
-                        genericMenu.AddDisabledItem(new GUIContent("Set as root"));
-                    else
+                    if (_window.RootNodeId != _id)
                         genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
+                    else
+                        genericMenu.AddDisabledItem(new GUIContent("Set as root"));
 
                     //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _field.CopySelectedNode());
                     //genericMenu.AddSeparator(null);
