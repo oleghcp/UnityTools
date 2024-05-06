@@ -28,68 +28,64 @@ namespace OlegHcpEditor.Drawers.Attributes
                 GUI.color = Colours.Orange;
 
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(label), FocusType.Keyboard))
-                ShowContextMenu(position, property, rootTypes);
-
-            GUI.color = Colours.White;
-        }
-
-        private static void ShowContextMenu(in Rect buttonPosition, SerializedProperty property, params Type[] rootTypes)
-        {
-            Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
-
-            if (fieldType == null)
             {
-                Debug.LogError("Can not get type from typename.");
-                return;
-            }
+                Type fieldType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFieldTypename);
 
-            DropDownWindow menu = ScriptableObject.CreateInstance<DropDownWindow>();
-
-            Type assignedType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(property.managedReferenceFullTypename);
-            menu.AddItem("Null", assignedType == null, () => assignField(property, null));
-
-            if (rootTypes.IsNullOrEmpty())
-            {
-                addMenuItem(fieldType);
-
-                TypeCache.GetTypesDerivedFrom(fieldType)
-                         .ForEach(type => addMenuItem(type));
-            }
-            else
-            {
-                foreach (Type rootType in rootTypes)
+                if (fieldType == null)
                 {
-                    if (!rootType.IsAssignableTo(fieldType))
-                    {
-                        Debug.LogWarning($"{rootType.Name} is not subclass of {fieldType.Name}");
-                        continue;
-                    }
+                    Debug.LogError("Can not get type from type name.");
+                    return;
+                }
 
-                    addMenuItem(rootType);
+                DropDownWindow menu = ScriptableObject.CreateInstance<DropDownWindow>();
 
-                    TypeCache.GetTypesDerivedFrom(rootType)
+                menu.AddItem("Null", assignedType == null, () => assignField(property, null));
+
+                if (rootTypes.IsNullOrEmpty())
+                {
+                    addMenuItem(fieldType);
+
+                    TypeCache.GetTypesDerivedFrom(fieldType)
                              .ForEach(type => addMenuItem(type));
                 }
-            }
-
-            menu.ShowMenu(buttonPosition);
-
-            void addMenuItem(Type type)
-            {
-                if (!type.IsAbstract && !type.IsInterface)
+                else
                 {
-                    string entryName = $"{type.Name}  ({type.Namespace})";
-                    menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
+                    foreach (Type rootType in rootTypes)
+                    {
+                        if (!rootType.IsAssignableTo(fieldType))
+                        {
+                            Debug.LogWarning($"{rootType.Name} is not subclass of {fieldType.Name}");
+                            continue;
+                        }
+
+                        addMenuItem(rootType);
+
+                        TypeCache.GetTypesDerivedFrom(rootType)
+                                 .ForEach(type => addMenuItem(type));
+                    }
+                }
+
+                menu.ShowMenu(position);
+
+                void addMenuItem(Type type)
+                {
+                    if (!type.IsAbstract && !type.IsInterface)
+                    {
+                        string entryName = $"{type.Name}  ({type.Namespace})";
+                        menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
+                    }
+                }
+
+                void assignField(SerializedProperty prop, object newValue)
+                {
+                    prop.serializedObject.Update();
+                    prop.managedReferenceValue = newValue;
+                    prop.isExpanded = false;
+                    prop.serializedObject.ApplyModifiedProperties();
                 }
             }
 
-            void assignField(SerializedProperty prop, object newValue)
-            {
-                prop.serializedObject.Update();
-                prop.managedReferenceValue = newValue;
-                prop.isExpanded = false;
-                prop.serializedObject.ApplyModifiedProperties();
-            }
+            GUI.color = Colours.White;
         }
     }
 }

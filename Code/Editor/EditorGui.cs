@@ -17,7 +17,7 @@ namespace OlegHcpEditor
     {
         // TODO: remove when fixed
         #region Crutch for broken PropertyField for Unity 2022 or newer
-        internal static void PropertyFieldIndented(in Rect position, SerializedProperty property, GUIContent label, bool includeChildren)
+        public static void PropertyFieldIndented(in Rect position, SerializedProperty property, GUIContent label, bool includeChildren)
         {
 #if UNITY_2022_2_OR_NEWER
             using (new EditorGUI.IndentLevelScope(-1))
@@ -25,7 +25,7 @@ namespace OlegHcpEditor
             EditorGUI.PropertyField(position, property, label, includeChildren);
         }
 
-        internal static bool FoldoutIndented(in Rect position, bool foldout, GUIContent content, bool toggleOnLabelClick)
+        public static bool FoldoutIndented(in Rect position, bool foldout, GUIContent content, bool toggleOnLabelClick)
         {
 #if UNITY_2022_2_OR_NEWER
             using (new EditorGUI.IndentLevelScope(-1))

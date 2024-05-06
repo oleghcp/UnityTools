@@ -65,16 +65,6 @@ namespace OlegHcp.Tools
             return new IndexOutOfRangeException("The index is out of range.");
         }
 
-        public static ArgumentOutOfRangeException NegativeTime(string paramName)
-        {
-            return new ArgumentOutOfRangeException(paramName, "Time cannot be negative.");
-        }
-
-        public static InvalidOperationException DisposingNonEditable()
-        {
-            return new InvalidOperationException("Non-editable objects cannot be disposed. Probably it is a prefab reference.");
-        }
-
         public static ArgumentOutOfRangeException MinMax(string minName, string maxName)
         {
             return new ArgumentOutOfRangeException(minName, $"{minName} cannot be greater than {maxName}.");
