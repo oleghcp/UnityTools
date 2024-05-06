@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using OlegHcp;
 using OlegHcpEditor.Utils;
 using UnityEditor;
 using UnityEngine;
@@ -19,12 +20,9 @@ namespace OlegHcpEditor.Window
 
         private void OnEnable()
         {
-            minSize = maxSize = new Vector2(370f, 455f);
-
-            texture = AssetDatabaseExt.LoadAssetByGuid<Texture>("74fd7fb2ede339c4ca4d9254d386e300");
-
-            if (_hyperLinkStyle == null)
-                _hyperLinkStyle = EditorStylesExt.HyperLink;
+            minSize = maxSize = new Vector2(370f, 250f);
+            _hyperLinkStyle = EditorStylesExt.HyperLink;
+            texture = AssetDatabaseExt.LoadAssetByGuid<Texture>("5e0a2d512fc222f4a84f493ffd6d6b83");
 
             Assembly assembly = Assembly.Load(LibConstants.LIB_NAME) ?? Assembly.GetExecutingAssembly();
 
@@ -40,16 +38,17 @@ namespace OlegHcpEditor.Window
 
         private void OnGUI()
         {
+            GUI.backgroundColor = Colours.Black;
             Vector2 offset = Vector2.one * 3f;
             GUILayout.BeginArea(new Rect(offset, position.size - offset * 2f), EditorStyles.helpBox);
-
             using (new EditorGuiLayout.HorizontalCenteringScope())
             {
                 EditorGUILayout.BeginVertical();
 
                 GUILayout.Space(20f);
 
-                GUILayout.Label(EditorGuiUtility.TempContent(texture));
+                Rect rect = EditorGUILayout.GetControlRect(false, 50f);
+                GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit);
 
                 GUILayout.Space(20f);
 
@@ -68,8 +67,8 @@ namespace OlegHcpEditor.Window
 
                 EditorGUILayout.EndVertical();
             }
-
             GUILayout.EndArea();
+            GUI.backgroundColor = Colours.White;
         }
 
         [Serializable]
