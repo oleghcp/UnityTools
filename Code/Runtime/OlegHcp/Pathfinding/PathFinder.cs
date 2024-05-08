@@ -12,6 +12,8 @@ namespace OlegHcp.Pathfinding
 
         public void Find(PathNode origin, PathNode target, List<PathNode> result)
         {
+            result.Clear();
+
             _frontBuffer.Push(origin, origin.PassCost);
             while (_frontBuffer.Count > 0 && !_acceptableBuffer.Contains(target.Id))
             {
@@ -30,8 +32,6 @@ namespace OlegHcp.Pathfinding
                     _frontBuffer.Push(neighbor, neighbor.PassCost);
                 }
             }
-
-            result.Clear();
 
             if (_acceptableBuffer.Contains(target.Id))
             {

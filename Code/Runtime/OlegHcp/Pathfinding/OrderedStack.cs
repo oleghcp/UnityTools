@@ -6,24 +6,23 @@ using OlegHcp.Tools;
 namespace OlegHcp.Pathfinding
 {
     [Serializable]
-    internal class OrderedStack<TValue, TPriority> where TValue : IEquatable<TValue> where TPriority : IComparable<TPriority>
+    internal class OrderedStack<TValue, TPriority> : HashSet<TValue>
+        where TValue : IEquatable<TValue>
+        where TPriority : IComparable<TPriority>
     {
-        private HashSet<TValue> _values = new HashSet<TValue>();
         private ObjectPool<ListNode> _objectPool = new ObjectPool<ListNode>(() => new ListNode());
 
         private ListNode _first;
         private ListNode _last;
 
-        public int Count => _values.Count;
-
         public void Push(TValue value, TPriority priority)
         {
-            if (!_values.Add(value))
+            if (!Add(value))
                 return;
 
             ListNode newNode = _objectPool.Get().SetUp(value, priority);
 
-            if (_values.Count == 1)
+            if (Count == 1)
             {
                 _first = newNode;
                 _last = newNode;
@@ -68,14 +67,14 @@ namespace OlegHcp.Pathfinding
 
         public TValue Pop()
         {
-            if (_values.Count == 0)
+            if (Count == 0)
                 throw ThrowErrors.NoElements();
 
             ListNode lastNode = _last;
             TValue element = lastNode.Element;
-            _values.Remove(element);
+            Remove(element);
 
-            if (_values.Count == 0)
+            if (Count == 0)
             {
                 _first = null;
                 _last = null;
@@ -91,14 +90,9 @@ namespace OlegHcp.Pathfinding
             return element;
         }
 
-        public bool Contains(TValue element)
+        public new void Clear()
         {
-            return _values.Contains(element);
-        }
-
-        public void Clear()
-        {
-            if (_values.Count == 0)
+            if (Count == 0)
                 return;
 
             for (ListNode n = _first?.Right; n != null; n = n.Right)
@@ -111,7 +105,7 @@ namespace OlegHcp.Pathfinding
 
             _first = null;
             _last = null;
-            _values.Clear();
+            base.Clear();
         }
 
         [Serializable]
@@ -119,8 +113,8 @@ namespace OlegHcp.Pathfinding
         {
             public TValue Element;
             public TPriority Priority;
-            public ListNode Right;
             public ListNode Left;
+            public ListNode Right;
 
             public ListNode SetUp(TValue value, TPriority priority)
             {
