@@ -37,6 +37,7 @@ namespace OlegHcpEditor.SettingsProviders
 
             EditorGUILayout.Space();
 
+            GUILayout.Label("Creating script from template via menu item \"Create/C# Script (ext.)\"", EditorStyles.boldLabel);
             DrawNamespaceRootFolder();
             string editorFolderNamespace = EditorGUILayout.TextField("Editor Folder Namespace", LibrarySettings.EditorFolderNamespace);
             if (editorFolderNamespace.HasUsefulData())
