@@ -58,6 +58,7 @@ namespace OlegHcpEditor.Window
 
                 EditorGUILayout.Space();
 
+                GUILayout.Label("Sources and documentation:");
                 if (GUILayout.Button(_url, _hyperLinkStyle))
                     Application.OpenURL(_url);
 
