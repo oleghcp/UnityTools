@@ -112,20 +112,12 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
             _storage[key] = value;
         }
 
-        object ISaver.Get(string key, object defaultValue)
+        bool ISaver.TryLoadValue(string key, Type type, out object value)
         {
-            if (_storage.TryGetValue(key, out object value))
-                return value;
+            if (_storage.TryGetValue(key, out value))
+                return true;
 
-            return defaultValue;
-        }
-
-        object ISaver.Get(string key, Type type)
-        {
-            if (_storage.TryGetValue(key, out object value))
-                return value;
-
-            return type.GetDefaultValue();
+            return false;
         }
     }
 }

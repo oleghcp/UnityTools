@@ -15,8 +15,7 @@ namespace OlegHcp.SaveLoad
 
         void DeleteKey(string key);
         void SaveValue(string key, object value);
-        object Get(string key, object defaultValue);
-        object Get(string key, Type type);
+        bool TryLoadValue(string key, Type type, out object value);
     }
 
     public interface IKeyGenerator

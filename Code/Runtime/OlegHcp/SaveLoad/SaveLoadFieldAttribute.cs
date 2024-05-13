@@ -10,15 +10,6 @@ namespace OlegHcp.SaveLoad
     public sealed class SaveLoadFieldAttribute : Attribute
     {
         internal FieldInfo Field { get; set; }
-        internal object DefaultValue { get; }
-
-        public string Key { get; set; }
-
-        public SaveLoadFieldAttribute() { }
-
-        public SaveLoadFieldAttribute(object defaultValue)
-        {
-            DefaultValue = defaultValue;
-        }
+        internal string Key { get; set; }
     }
 }

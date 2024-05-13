@@ -275,9 +275,8 @@ namespace OlegHcp.SaveLoad
 
         private void InitField(object fieldsOwner, SaveLoadFieldAttribute a)
         {
-            object value = a.DefaultValue != null ? _saver.Get(a.Key, a.DefaultValue)
-                                                  : _saver.Get(a.Key, a.Field.FieldType);
-            a.Field.SetValue(fieldsOwner, value);
+            if (_saver.TryLoadValue(a.Key, a.Field.FieldType, out var value))
+                a.Field.SetValue(fieldsOwner, value);
         }
     }
 }

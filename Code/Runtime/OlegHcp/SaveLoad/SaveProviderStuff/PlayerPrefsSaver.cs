@@ -77,20 +77,16 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
             }
         }
 
-        object ISaver.Get(string key, object defaultValue)
+        bool ISaver.TryLoadValue(string key, Type type, out object value)
         {
             if (PlayerPrefs.HasKey(key))
-                return GetInternal(key, defaultValue.GetType());
+            {
+                value = GetInternal(key, type);
+                return true;
+            }
 
-            return defaultValue;
-        }
-
-        object ISaver.Get(string key, Type type)
-        {
-            if (PlayerPrefs.HasKey(key))
-                return GetInternal(key, type);
-
-            return type.GetDefaultValue();
+            value = null;
+            return false;
         }
 
         private object GetInternal(string key, Type type)
