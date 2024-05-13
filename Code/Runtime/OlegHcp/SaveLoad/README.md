@@ -32,25 +32,42 @@ public static class SaveSystem
 using System;
 using OlegHcp.SaveLoad;
 
-public class Example : IDisposable
+public class Example : MonoBehaviour
 {
     [SaveLoadField]
     private int _field1;
 
     // With optional default value
-    [SaveLoadField(3.14f)]
-    private float _field2;
+    [SaveLoadField]
+    private float _field2 = 3.14f;
 
-    [SaveLoadField("DefaultValue")]
-    private string _field3;
+    [SaveLoadField]
+    private string _field3 = "DefaultValue";
 
-    public Example()
+    private void Start()
     {
-        // Add the object to the saver with initializing fields by saved values
+        SaveSystem.LoadAndInitCurrent("Save1");
+
+        // Add the object to the saver with initializing fields if they were saved, otherwise the fields have default values
         SaveSystem.SaveProvider.RegMember(this);
+   
+        Debug.Log(_field1);
+        Debug.Log(_field2);
+        Debug.Log(_field3);
     }
 
-    public void Dispose()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _field1 = int.MaxValue;
+            _field2 = float.MaxValue;
+            _field3 = "Hello World!";
+            SaveSystem.SaveData("Save1");
+        }
+    }
+
+    private void OnDestroy()
     {
         SaveSystem.SaveProvider.UnregMember(this);
     }
