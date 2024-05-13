@@ -46,7 +46,7 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
             PlayerPrefs.DeleteKey(key);
         }
 
-        void ISaver.Set(string key, object value)
+        void ISaver.SaveValue(string key, object value)
         {
             TypeCode typeCode = value.GetType().GetTypeCode();
 

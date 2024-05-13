@@ -146,7 +146,7 @@ namespace OlegHcp.SaveLoad
             {
                 case UnregOption.SaveObjectState:
                     foreach (var attribute in aList)
-                        _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                        _saver.SaveValue(attribute.Key, attribute.Field.GetValue(fieldsOwner));
                     break;
 
                 case UnregOption.DeleteObjectState:
@@ -176,7 +176,7 @@ namespace OlegHcp.SaveLoad
                     foreach (var (fieldsOwner, aList) in _storage)
                     {
                         foreach (var attribute in aList)
-                            _saver.Set(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                            _saver.SaveValue(attribute.Key, attribute.Field.GetValue(fieldsOwner));
                     }
                     break;
             }
@@ -221,7 +221,7 @@ namespace OlegHcp.SaveLoad
                 {
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+                        _saver.SaveValue(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
                     }
                 }
             }
@@ -249,7 +249,7 @@ namespace OlegHcp.SaveLoad
                 {
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        _saver.Set(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+                        _saver.SaveValue(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
 
                         if (++counter >= spf)
                         {

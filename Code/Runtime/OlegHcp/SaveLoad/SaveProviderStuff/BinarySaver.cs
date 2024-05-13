@@ -107,7 +107,7 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
             _storage.Remove(key);
         }
 
-        void ISaver.Set(string key, object value)
+        void ISaver.SaveValue(string key, object value)
         {
             _storage[key] = value;
         }

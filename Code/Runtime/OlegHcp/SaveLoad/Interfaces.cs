@@ -14,7 +14,7 @@ namespace OlegHcp.SaveLoad
         void GetVersionList(List<string> versions);
 
         void DeleteKey(string key);
-        void Set(string key, object value);
+        void SaveValue(string key, object value);
         object Get(string key, object defaultValue);
         object Get(string key, Type type);
     }
