@@ -8,12 +8,20 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
     public class BaseKeyGenerator : IKeyGenerator
     {
         private StringBuilder _builder = new StringBuilder();
+        private bool _considerNamespace;
 
-        public string Generate(Type objectType, string fieldName, string objectID = null)
+        public BaseKeyGenerator(bool considerNamespace = true)
+        {
+            _considerNamespace = considerNamespace;
+        }
+
+        public string Generate(Type objectType, string fieldName, string objectID)
         {
             const char separator = '.';
 
-            _builder.Append(objectType.FullName)
+            string typeName = _considerNamespace ? objectType.FullName
+                                                 : objectType.Name;
+            _builder.Append(typeName)
                     .Append(separator)
                     .Append(fieldName);
 

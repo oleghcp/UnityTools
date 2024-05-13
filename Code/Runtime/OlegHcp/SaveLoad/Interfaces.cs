@@ -20,6 +20,6 @@ namespace OlegHcp.SaveLoad
 
     public interface IKeyGenerator
     {
-        string Generate(Type objectType, string fieldName, string objectID = null);
+        string Generate(Type objectType, string fieldName, string objectID);
     }
 }
