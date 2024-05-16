@@ -185,10 +185,21 @@ namespace OlegHcp.GameConsole
                 throw ThrowErrors.NullParameter(nameof(commands));
 
             _cmdContainer = commands;
-            _commands = _cmdContainer.GetType()
-                                     .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                                     .Where(method => method.GetCustomAttribute(typeof(TerminalCommandAttribute)) != null)
-                                     .ToDictionary(item => item.Name);
+            _commands.Clear();
+            commands.GetType()
+                    .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .ForEach(handleMethod);
+
+            void handleMethod(MethodInfo method)
+            {
+                var attribute = method.GetCustomAttribute<TerminalCommandAttribute>();
+                if (attribute != null)
+                {
+                    string name = attribute.CommandName.HasUsefulData() ? attribute.CommandName
+                                                                        : method.Name;
+                    _commands.Add(name, method);
+                }
+            }
         }
 
         public void SetSwitchTrigger(ITerminalSwitchTrigger switchTrigger)

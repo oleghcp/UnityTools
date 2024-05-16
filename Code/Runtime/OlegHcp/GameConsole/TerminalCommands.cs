@@ -9,29 +9,34 @@ namespace OlegHcp.GameConsole
 {
     public class TerminalCommands
     {
+        private const string NULL = "Null";
+
 #if UNITY_EDITOR || TOUCH_SCREEN
         [TerminalCommand, Preserve]
-        protected void help()
+        internal bool help()
         {
             Terminal.I.WriteCommandList();
+            return false;
         }
 #endif
 
         [TerminalCommand, Preserve]
-        protected void clear()
+        internal bool clear()
         {
             Terminal.I.Clear();
+            return false;
         }
 
         [TerminalCommand, Preserve]
-        protected void endian()
+        internal bool endian()
         {
-            string message = BitConverter.IsLittleEndian ? "little" : "big";
-            Terminal.I.WriteLine(message, LogType.Log);
+            string endianType = BitConverter.IsLittleEndian ? "little" : "big";
+            WriteLine($"Endian: {endianType}", LogType.Log);
+            return false;
         }
 
         [TerminalCommand, Preserve]
-        protected bool quit()
+        internal bool quit()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -42,21 +47,78 @@ namespace OlegHcp.GameConsole
         }
 
         [TerminalCommand, Preserve]
-        protected bool time_scale(string[] opt)
+        internal bool time_scale(string[] opt)
         {
             return ParseFloat(opt, scale => Time.timeScale = scale);
         }
 
         [TerminalCommand, Preserve]
-        protected bool frame_rate(string[] opt)
+        internal bool frame_rate(string[] opt)
         {
             return ParseInt(opt, frameRate => Application.targetFrameRate = frameRate);
         }
 
         [TerminalCommand, Preserve]
-        protected bool vsync(string[] opt)
+        internal bool vsync(string[] opt)
         {
             return ParseOnOff(opt, value => QualitySettings.vSyncCount = value.ToInt());
+        }
+
+        [TerminalCommand, Preserve]
+        internal bool set_resolution(string[] opt)
+        {
+            bool successState = true;
+
+            if (opt.Length != 2)
+            {
+                logError();
+                return false;
+            }
+
+            Span<int> nums = stackalloc int[opt.Length];
+
+            for (int i = 0; i < opt.Length; i++)
+            {
+                successState &= int.TryParse(opt[i], out nums[i]);
+            }
+
+            if (successState)
+                Screen.SetResolution(nums[0], nums[1], Screen.fullScreen);
+            else
+                logError();
+
+            return successState;
+
+            void logError()
+            {
+                Terminal.I.WriteCmdError("Options: width height");
+            }
+        }
+
+        [TerminalCommand, Preserve]
+        internal void switch_fullscreen()
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+        }
+
+        protected void WriteLine(string text)
+        {
+            Terminal.I.WriteLine(text ?? NULL, Colours.White);
+        }
+
+        protected void WriteLine(string text, in Color color)
+        {
+            Terminal.I.WriteLine(text ?? NULL, color);
+        }
+
+        protected void WriteLine(string text, LogType logType)
+        {
+            Terminal.I.WriteLine(text ?? NULL, logType);
+        }
+
+        protected void WriteLine(object obj)
+        {
+            Terminal.I.WriteLine(obj?.ToString() ?? NULL, Colours.White);
         }
     }
 }
