@@ -33,7 +33,7 @@ public struct PathTransition
 
 ### Example with rect grid
 
-Implement abstract `PathNode` with a custom position sruct.
+Implementing abstract `PathNode` with a custom position struct.
 
 ```csharp
 public class ExamplePathNode : PathNode
@@ -88,7 +88,7 @@ public struct NodePosition : IEquatable<NodePosition>
 }
 ```
 
-Generate grid of nodes.
+Generating grid of nodes.
 
 ```csharp
 public class Example : MonoBehaviour
