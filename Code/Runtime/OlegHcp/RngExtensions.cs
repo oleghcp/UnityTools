@@ -60,27 +60,27 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, IList<float> weights, float weightOfNone = 0f)
         {
-            if (weights.Count == 0)
-                return -1;
-
-            float sum = weights.Sum();
-
-            float target;
-            do { target = self.Next(sum + weightOfNone); }
-            while (target == sum + weightOfNone);
-
-            int startIndex = self.Next(weights.Count);
-            int count = weights.Count + startIndex;
-            sum = 0f;
-
-            for (int i = startIndex; i < count; i++)
+            if (weights.Count > 0)
             {
-                int index = i % weights.Count;
+                float sum = weights.Sum();
 
-                if (weights[index] + sum > target)
-                    return index;
+                float target;
+                do { target = self.Next(sum + weightOfNone); }
+                while (target == sum + weightOfNone);
 
-                sum += weights[index];
+                int startIndex = self.Next(weights.Count);
+                int count = weights.Count + startIndex;
+                sum = 0f;
+
+                for (int i = startIndex; i < count; i++)
+                {
+                    int index = i % weights.Count;
+
+                    if (weights[index] + sum > target)
+                        return index;
+
+                    sum += weights[index];
+                }
             }
 
             return -1;
@@ -91,27 +91,27 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
         {
-            if (weights.Length == 0)
-                return -1;
-
-            float sum = weights.Sum();
-
-            float target;
-            do { target = self.Next(sum + weightOfNone); }
-            while (target == sum + weightOfNone);
-
-            int startIndex = self.Next(weights.Length);
-            int count = weights.Length + startIndex;
-            sum = 0f;
-
-            for (int i = startIndex; i < count; i++)
+            if (weights.Length > 0)
             {
-                int index = i % weights.Length;
+                float sum = weights.Sum();
 
-                if (weights[index] + sum > target)
-                    return index;
+                float target;
+                do { target = self.Next(sum + weightOfNone); }
+                while (target == sum + weightOfNone);
 
-                sum += weights[index];
+                int startIndex = self.Next(weights.Length);
+                int count = weights.Length + startIndex;
+                sum = 0f;
+
+                for (int i = startIndex; i < count; i++)
+                {
+                    int index = i % weights.Length;
+
+                    if (weights[index] + sum > target)
+                        return index;
+
+                    sum += weights[index];
+                }
             }
 
             return -1;
@@ -134,22 +134,22 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, IList<int> weights, int weightOfNone = 0)
         {
-            if (weights.Count == 0)
-                return -1;
-
-            int target = self.Next(weights.Sum() + weightOfNone);
-            int startIndex = self.Next(weights.Count);
-            int count = weights.Count + startIndex;
-            int sum = 0;
-
-            for (int i = startIndex; i < count; i++)
+            if (weights.Count > 0)
             {
-                int index = i % weights.Count;
+                int target = self.Next(weights.Sum() + weightOfNone);
+                int startIndex = self.Next(weights.Count);
+                int count = weights.Count + startIndex;
+                int sum = 0;
 
-                if (weights[index] + sum > target)
-                    return index;
+                for (int i = startIndex; i < count; i++)
+                {
+                    int index = i % weights.Count;
 
-                sum += weights[index];
+                    if (weights[index] + sum > target)
+                        return index;
+
+                    sum += weights[index];
+                }
             }
 
             return -1;
@@ -160,22 +160,22 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, Span<int> weights, int weightOfNone = 0)
         {
-            if (weights.Length == 0)
-                return -1;
-
-            int target = self.Next(weights.Sum() + weightOfNone);
-            int startIndex = self.Next(weights.Length);
-            int count = weights.Length + startIndex;
-            int sum = 0;
-
-            for (int i = startIndex; i < count; i++)
+            if (weights.Length > 0)
             {
-                int index = i % weights.Length;
+                int target = self.Next(weights.Sum() + weightOfNone);
+                int startIndex = self.Next(weights.Length);
+                int count = weights.Length + startIndex;
+                int sum = 0;
 
-                if (weights[index] + sum > target)
-                    return index;
+                for (int i = startIndex; i < count; i++)
+                {
+                    int index = i % weights.Length;
 
-                sum += weights[index];
+                    if (weights[index] + sum > target)
+                        return index;
+
+                    sum += weights[index];
+                }
             }
 
             return -1;
