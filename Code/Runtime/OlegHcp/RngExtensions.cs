@@ -11,9 +11,6 @@ using UnityEngine;
 
 namespace OlegHcp
 {
-    /// <summary>
-    /// Class for generating random data.
-    /// </summary>
     public static class RngExtensions
     {
         private static readonly string _symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -63,6 +60,9 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, IList<float> weights, float weightOfNone = 0f)
         {
+            if (weights.Count == 0)
+                return -1;
+
             float sum = weights.Sum();
 
             float target;
@@ -91,6 +91,9 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, Span<float> weights, float weightOfNone = 0f)
         {
+            if (weights.Length == 0)
+                return -1;
+
             float sum = weights.Sum();
 
             float target;
@@ -131,6 +134,9 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, IList<int> weights, int weightOfNone = 0)
         {
+            if (weights.Count == 0)
+                return -1;
+
             int target = self.Next(weights.Sum() + weightOfNone);
             int startIndex = self.Next(weights.Count);
             int count = weights.Count + startIndex;
@@ -154,6 +160,9 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, Span<int> weights, int weightOfNone = 0)
         {
+            if (weights.Length == 0)
+                return -1;
+
             int target = self.Next(weights.Sum() + weightOfNone);
             int startIndex = self.Next(weights.Length);
             int count = weights.Length + startIndex;
