@@ -226,9 +226,17 @@ namespace OlegHcp
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
         public static float Ascending(this IRng self, float min, float max, float offsetIntensity)
         {
-            if (min > max)
-                throw ThrowErrors.MinMax(nameof(min), nameof(max));
+            if (min < max)
+                return AscendingInternal(self, min, max, offsetIntensity);
 
+            if (min == max)
+                return min;
+
+            throw ThrowErrors.MinMax(nameof(min), nameof(max));
+        }
+
+        private static float AscendingInternal(IRng self, float min, float max, float offsetIntensity)
+        {
             float range = max - min;
             float rnd = self.Next(0f, 1f);
             return (1f - rnd.Pow(offsetIntensity.ClampMin(0f) + 1f)) * range + min;
@@ -258,9 +266,17 @@ namespace OlegHcp
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
         public static float Descending(this IRng self, float min, float max, float offsetIntensity)
         {
-            if (min > max)
-                throw ThrowErrors.MinMax(nameof(min), nameof(max));
+            if (min < max)
+                return DescendingInternal(self, min, max, offsetIntensity);
 
+            if (min == max)
+                return min;
+
+            throw ThrowErrors.MinMax(nameof(min), nameof(max));
+        }
+
+        private static float DescendingInternal(IRng self, float min, float max, float offsetIntensity)
+        {
             float range = max - min;
             float rnd = self.Next(0f, 1f);
             return rnd.Pow(offsetIntensity.ClampMin(0f) + 1f) * range + min;
@@ -290,8 +306,16 @@ namespace OlegHcp
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
         public static float MinMax(this IRng self, float min, float max, float offsetIntensity)
         {
-            return self.Next(0, 2) == 0 ? Ascending(self, (max + min) * 0.5f, max, offsetIntensity)
-                                        : Descending(self, min, (max + min) * 0.5f, offsetIntensity);
+            if (min < max)
+            {
+                return self.Next(0, 2) == 0 ? AscendingInternal(self, (max + min) * 0.5f, max, offsetIntensity)
+                                            : DescendingInternal(self, min, (max + min) * 0.5f, offsetIntensity);
+            }
+
+            if (min == max)
+                return min;
+
+            throw ThrowErrors.MinMax(nameof(min), nameof(max));
         }
 
         /// <summary>
@@ -318,8 +342,16 @@ namespace OlegHcp
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
         public static float Average(this IRng self, float min, float max, float offsetIntensity)
         {
-            return self.Next(0, 2) == 0 ? Ascending(self, min, (max + min) * 0.5f, offsetIntensity)
-                                        : Descending(self, (max + min) * 0.5f, max, offsetIntensity);
+            if (min < max)
+            {
+                return self.Next(0, 2) == 0 ? AscendingInternal(self, min, (max + min) * 0.5f, offsetIntensity)
+                                            : DescendingInternal(self, (max + min) * 0.5f, max, offsetIntensity);
+            }
+
+            if (min == max)
+                return min;
+
+            throw ThrowErrors.MinMax(nameof(min), nameof(max));
         }
 
         /// <summary>
@@ -522,7 +554,7 @@ namespace OlegHcp
             if (length == 0)
                 return string.Empty;
 
-            const int stackLenCup = 512;
+            const int stackLenCup = 256;
 
 #if UNITY_2021_2_OR_NEWER
             Span<char> charArray = length > stackLenCup ? new char[length] : stackalloc char[length];
