@@ -5,8 +5,7 @@
 [![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
 
 # Social [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Useful%20toolset%20for%20Unity%20&url=https://github.com/oleghcp/UnityTools&hashtags=unity,unitytools,csharp,asset,unityscript)
-[Unity forum thread 1](https://forum.unity.com/threads/my-unity-tools.641218/).  
-[Unity forum thread 2](https://forum.unity.com/threads/my-unity-tools.640321/).
+[Unity Discussions Topic](https://discussions.unity.com/t/oleghcp-unitytools/1486467).
 
 # About
 
@@ -29,7 +28,7 @@ Mind that it uses assembly definitions.
 
 ## Runtime Code
 
-* [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools like `ApplicationUtility`, `BitMask`, `RandomNumberGenerator`, `CameraFitter`, etc.
+* [Base stuff](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp). Common tools: `ApplicationUtility`, `BitMask`, `RandomNumberGenerator`, `CameraFitter`, etc.
 * [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Async). Allows to run coroutines in non-MonoBehaviour classes.
 * [Collections](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/Collections). Some specific collections.
 * [.Net Extensions](https://github.com/oleghcp/UnityTools/tree/master/Code/Runtime/OlegHcp/CSharp). Extensions for base .Net api stuff (arrays, collections, strings, etc).
