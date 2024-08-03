@@ -3,10 +3,10 @@
 ```csharp
 using OlegHcp.Events;
 
-public static class EventBus
+public static class Signals
 {
     private static SignalBus _signalBus = new SignalBus();
-    public static SignalBus Current => _signalBus;
+    public static SignalBus Bus => _signalBus;
 }
 ```
 
@@ -25,7 +25,7 @@ public class ExampleEventListener1 : IDisposable
     public ExampleEventListener1()
     {
         // Subscribe with priority 1
-        EventBus.Current.Subscribe<ExampleSignal>(OnGotEvent, 1);
+        Signals.Bus.Subscribe<ExampleSignal>(OnGotEvent, 1);
     }
 
     private void OnGotEvent(ExampleSignal signal)
@@ -35,7 +35,7 @@ public class ExampleEventListener1 : IDisposable
 
     public void Dispose()
     {
-        EventBus.Current.Unsubscribe<ExampleSignal>(OnGotEvent);
+        Signals.Bus.Unsubscribe<ExampleSignal>(OnGotEvent);
     }
 }
 
@@ -44,7 +44,7 @@ public class ExampleEventListener2 : IDisposable
     public ExampleEventListener2()
     {
         // Subscribe with priority 2 which is lower than 1 and will executed after
-        EventBus.Current.Subscribe<ExampleSignal>(OnGotEvent, 2);
+        Signals.Bus.Subscribe<ExampleSignal>(OnGotEvent, 2);
     }
 
     private void OnGotEvent(ExampleSignal signal)
@@ -54,7 +54,7 @@ public class ExampleEventListener2 : IDisposable
 
     public void Dispose()
     {
-        EventBus.Current.Unsubscribe<ExampleSignal>(OnGotEvent);
+        Signals.Bus.Unsubscribe<ExampleSignal>(OnGotEvent);
     }
 }
 ```
@@ -69,7 +69,7 @@ public class ExampleEventOwner : MonoBehaviour
 
     private void Awake()
     {
-        _event = EventBus.Current.RegisterEventOwner<ExampleSignal>(this);
+        _event = Signals.Bus.RegisterEventOwner<ExampleSignal>(this);
     }
 
     private void Update()
