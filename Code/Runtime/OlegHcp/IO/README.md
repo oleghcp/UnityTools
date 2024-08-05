@@ -35,3 +35,12 @@ public class MyClass
     }
 }
 ```
+
+## DirectoryUtility
+
+```csharp
+public static class DirectoryUtility
+{
+    public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive, bool overwrite);
+}
+```
