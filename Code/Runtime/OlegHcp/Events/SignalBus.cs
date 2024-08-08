@@ -74,12 +74,13 @@ namespace OlegHcp.Events
 
         public void Invoke<TSignal>(TSignal signal) where TSignal : ISignal
         {
-            InternalEvent @event = GetOrCreateEvent(typeof(TSignal));
+            if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
+            {
+                if (@event.HasOwner)
+                    throw new InvalidOperationException(GetOwnerErrorMessage(@event));
 
-            if (@event.HasOwner)
-                throw new InvalidOperationException(GetOwnerErrorMessage(@event));
-
-            @event.Invoke(signal);
+                @event.Invoke(signal);
+            }
         }
 
         private SubscriptionToken SubscribeInternal(object handler, Type signalType, int priority)
