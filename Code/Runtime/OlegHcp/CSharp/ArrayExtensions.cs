@@ -175,7 +175,7 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static int IndexOf<T>(this T[] self, T item)
         {
-            return (self as IList<T>).IndexOf(item);
+            return Array.IndexOf(self, item);
         }
 
         /// <summary>
@@ -362,5 +362,66 @@ namespace OlegHcp.CSharp
             return new Collections.Iterators.ArrayEnumerableQuery<T>(self, startIndex);
         }
 #endif
+
+        public static void DisplaceLeft<T>(this T[] self)
+        {
+            if (self.Length < 2)
+                return;
+
+            T tmp = self[0];
+
+            for (int i = 1; i < self.Length; i++)
+            {
+                self[i - 1] = self[i];
+            }
+
+            self[self.Length - 1] = tmp;
+        }
+
+        public static void DisplaceRight<T>(this T[] self)
+        {
+            if (self.Length < 2)
+                return;
+
+            T tmp = self.FromEnd(0);
+
+            for (int i = self.Length - 2; i >= 0; i--)
+            {
+                self[i + 1] = self[i];
+            }
+
+            self[0] = tmp;
+        }
+
+        public static void MoveElement<T>(this T[] self, int oldIndex, int newIndex)
+        {
+            if ((uint)oldIndex >= (uint)self.Length)
+                throw new ArgumentOutOfRangeException(nameof(oldIndex));
+
+            if ((uint)newIndex >= (uint)self.Length)
+                throw new ArgumentOutOfRangeException(nameof(newIndex));
+
+            if (newIndex == oldIndex)
+                return;
+
+            T value = self[oldIndex];
+
+            if (newIndex > oldIndex)
+            {
+                for (int i = oldIndex; i < newIndex; i++)
+                {
+                    self[i] = self[i + 1];
+                }
+            }
+            else
+            {
+                for (int i = oldIndex; i > newIndex; i--)
+                {
+                    self[i] = self[i - 1];
+                }
+            }
+
+            self[newIndex] = value;
+        }
     }
 }

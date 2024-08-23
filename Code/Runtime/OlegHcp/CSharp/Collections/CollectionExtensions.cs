@@ -1,111 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections
 {
     public static class CollectionExtensions
     {
-        /// <summary>
-        /// Adds a number of items equals <paramref name="expandSize"/> to the collection.
-        /// </summary>
-        public static void Expand<T>(this ICollection<T> self, int expandSize, T value = default)
-        {
-            if (expandSize < 0)
-                throw ThrowErrors.NegativeParameter(nameof(expandSize));
-
-            for (int i = 0; i < expandSize; i++)
-            {
-                self.Add(value);
-            }
-        }
-
-        /// <summary>
-        /// Adds a number of items equals <paramref name="expandSize"/> to the collection.
-        /// </summary>
-        public static void Expand<T>(this ICollection<T> self, int expandSize, Func<T> factory)
-        {
-            if (expandSize < 0)
-                throw ThrowErrors.NegativeParameter(nameof(expandSize));
-
-            for (int i = 0; i < expandSize; i++)
-            {
-                self.Add(factory());
-            }
-        }
-
-        /// <summary>
-        /// Increases or decrease the number of items in the list to the specified count.
-        /// </summary>
-        public static void SetCount<T>(this IList<T> self, int newCount, T value = default)
-        {
-            if (newCount < 0)
-                throw ThrowErrors.NegativeParameter(nameof(newCount));
-
-            while (self.Count < newCount)
-            {
-                self.Add(value);
-            }
-
-            while (self.Count > newCount)
-            {
-                self.RemoveAt(self.Count - 1);
-            }
-        }
-
-        /// <summary>
-        /// Increases or decrease the number of items in the list to the specified count.
-        /// </summary>
-        public static void SetCount<T>(this IList<T> self, int newCount, Func<T> factory)
-        {
-            if (newCount < 0)
-                throw ThrowErrors.NegativeParameter(nameof(newCount));
-
-            if (factory == null)
-                throw ThrowErrors.NullParameter(nameof(factory));
-
-            while (self.Count < newCount)
-            {
-                self.Add(factory());
-            }
-
-            while (self.Count > newCount)
-            {
-                self.RemoveAt(self.Count - 1);
-            }
-        }
-
-        public static void DisplaceLeft<T>(this IList<T> self)
-        {
-            if (self.Count <= 1)
-                return;
-
-            T tmp = self[0];
-
-            for (int i = 1; i < self.Count; i++)
-            {
-                self[i - 1] = self[i];
-            }
-
-            self[self.Count - 1] = tmp;
-        }
-
-        public static void DisplaceRight<T>(this IList<T> self)
-        {
-            if (self.Count <= 1)
-                return;
-
-            T tmp = self.FromEnd(0);
-
-            for (int i = self.Count - 2; i >= 0; i--)
-            {
-                self[i + 1] = self[i];
-            }
-
-            self[0] = tmp;
-        }
-
         public static void Swap<T>(this IList<T> self, int i, int j)
         {
             (self[i], self[j]) = (self[j], self[i]);
@@ -578,105 +478,136 @@ namespace OlegHcp.CSharp.Collections
         }
 
         /// <summary>
-        /// Adds an element to the dictionary and returns that element.
+        /// Adds a number of items equals <paramref name="expandSize"/> to the collection.
         /// </summary>
-        public static TValue Place<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue newItem)
+        public static void Expand<T>(this ICollection<T> self, int expandSize, T value = default)
         {
-            self.Add(key, newItem);
-            return newItem;
+            if (expandSize < 0)
+                throw ThrowErrors.NegativeParameter(nameof(expandSize));
+
+            for (int i = 0; i < expandSize; i++)
+            {
+                self.Add(value);
+            }
         }
 
-#if !UNITY_2021_2_OR_NEWER
         /// <summary>
-        /// Removes the element with the specified key from the dictionary and returns it or default value.
+        /// Adds a number of items equals <paramref name="expandSize"/> to the collection.
         /// </summary>
-        public static bool Remove<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, out TValue value)
+        public static void Expand<T>(this ICollection<T> self, int expandSize, Func<T> factory)
         {
-            if (self.TryGetValue(key, out value))
+            if (expandSize < 0)
+                throw ThrowErrors.NegativeParameter(nameof(expandSize));
+
+            for (int i = 0; i < expandSize; i++)
             {
-                self.Remove(key);
-                return true;
+                self.Add(factory());
+            }
+        }
+
+        /// <summary>
+        /// Increases or decrease the number of items in the list to the specified count.
+        /// </summary>
+        public static void SetCount<T>(this IList<T> self, int newCount, T value = default)
+        {
+            if (newCount < 0)
+                throw ThrowErrors.NegativeParameter(nameof(newCount));
+
+            while (self.Count < newCount)
+            {
+                self.Add(value);
             }
 
-            return false;
+            while (self.Count > newCount)
+            {
+                self.RemoveAt(self.Count - 1);
+            }
         }
 
         /// <summary>
-        /// Attempts to add the specified key and value to the dictionary.
+        /// Increases or decrease the number of items in the list to the specified count.
         /// </summary>
-        public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue value)
+        public static void SetCount<T>(this IList<T> self, int newCount, Func<T> factory)
         {
-            if (self.ContainsKey(key))
-                return false;
+            if (newCount < 0)
+                throw ThrowErrors.NegativeParameter(nameof(newCount));
 
-            self.Add(key, value);
-            return true;
-        }
-#endif
+            if (factory == null)
+                throw ThrowErrors.NullParameter(nameof(factory));
 
-        /// <summary>
-        /// Returns a read-only System.Collections.ObjectModel.ReadOnlyDictionary`2 wrapper for the current dictionary.
-        /// </summary>        
-        public static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> self)
-        {
-            return new ReadOnlyDictionary<TKey, TValue>(self);
-        }
+            while (self.Count < newCount)
+            {
+                self.Add(factory());
+            }
 
-        /// <summary>
-        /// Performs the specified action on each element of the System.Collections.Generic.IDictionary`2.
-        /// </summary>
-        public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> self, Action<KeyValuePair<TKey, TValue>> action)
-        {
-            foreach (var item in self)
-                action(item);
+            while (self.Count > newCount)
+            {
+                self.RemoveAt(self.Count - 1);
+            }
         }
 
-        /// <summary>
-        /// Performs the specified action on each element of the System.Collections.Generic.IDictionary`2.
-        /// </summary>
-        public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> self, Action<TKey, TValue> action)
+        public static void DisplaceLeft<T>(this IList<T> self)
         {
-            foreach (var item in self)
-                action(item.Key, item.Value);
+            if (self.Count < 2)
+                return;
+
+            T tmp = self[0];
+
+            for (int i = 1; i < self.Count; i++)
+            {
+                self[i - 1] = self[i];
+            }
+
+            self[self.Count - 1] = tmp;
         }
 
-        public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in KeyValuePair<TKey, TValue> keyValuePair)
+        public static void DisplaceRight<T>(this IList<T> self)
         {
-            self.Add(keyValuePair.Key, keyValuePair.Value);
+            if (self.Count < 2)
+                return;
+
+            T tmp = self.FromEnd(0);
+
+            for (int i = self.Count - 2; i >= 0; i--)
+            {
+                self[i + 1] = self[i];
+            }
+
+            self[0] = tmp;
         }
 
-        public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> self, in (TKey key, TValue value) pair)
+        public static void MoveElement<T>(this IList<T> self, int oldIndex, int newIndex)
         {
-            self.Add(pair.key, pair.value);
-        }
+            if ((uint)oldIndex >= (uint)self.Count)
+                throw new ArgumentOutOfRangeException(nameof(oldIndex));
 
-        public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key)
-        {
-            self.TryGetValue(key, out TValue value);
-            return value;
-        }
+            if ((uint)newIndex >= (uint)self.Count)
+                throw new ArgumentOutOfRangeException(nameof(newIndex));
 
-        public static TValue GetOrCreateValue<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key) where TValue : new()
-        {
-            if (!self.TryGetValue(key, out TValue value))
-                self.Add(key, value = new TValue());
-            return value;
-        }
+            if (newIndex == oldIndex)
+                return;
 
-        public static TValue GetOrCreateValue<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, Func<TKey, TValue> creator)
-        {
-            if (!self.TryGetValue(key, out TValue value))
-                self.Add(key, value = creator(key));
-            return value;
+            T value = self[oldIndex];
+
+            if (newIndex > oldIndex)
+            {
+                for (int i = oldIndex; i < newIndex; i++)
+                {
+                    self[i] = self[i + 1];
+                }
+            }
+            else
+            {
+                for (int i = oldIndex; i > newIndex; i--)
+                {
+                    self[i] = self[i - 1];
+                }
+            }
+
+            self[newIndex] = value;
         }
 
 #if !UNITY_2021_2_OR_NEWER
-        public static void Deconstruct<TKey, TValue>(this in KeyValuePair<TKey, TValue> self, out TKey key, out TValue value)
-        {
-            key = self.Key;
-            value = self.Value;
-        }
-
         public static bool TryPeek<T>(this Stack<T> self, out T item)
         {
             if (self.Count > 0)
