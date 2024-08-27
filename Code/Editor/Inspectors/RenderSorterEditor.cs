@@ -28,19 +28,24 @@ namespace OlegHcpEditor.Inspectors
 
         public override void OnInspectorGUI()
         {
+            Draw(_drawer, _renderer);
+        }
+
+        public static void Draw(DrawTool drawer, Renderer target)
+        {
             EditorGUI.BeginChangeCheck();
 
-            int sortingLayerID = _drawer.Draw("Sorting Layer", _renderer.sortingLayerID);
-            int sortingOrder = EditorGUILayout.IntField("Sorting Order", _renderer.sortingOrder);
+            int sortingLayerID = drawer.Draw("Sorting Layer", target.sortingLayerID);
+            int sortingOrder = EditorGUILayout.IntField("Sorting Order", target.sortingOrder);
 
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RegisterCompleteObjectUndo(_renderer, "Renderer sorting");
+                Undo.RegisterCompleteObjectUndo(target, "Renderer sorting");
 
-                _renderer.sortingLayerID = sortingLayerID;
-                _renderer.sortingOrder = sortingOrder;
+                target.sortingLayerID = sortingLayerID;
+                target.sortingOrder = sortingOrder;
 
-                EditorUtility.SetDirty(_renderer);
+                EditorUtility.SetDirty(target);
             }
         }
 

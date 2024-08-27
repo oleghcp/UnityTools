@@ -2,6 +2,7 @@
 using System.Reflection;
 using OlegHcp;
 using OlegHcp.Mathematics;
+using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
 using UnityEditor;
 using UnityEngine;
@@ -62,7 +63,7 @@ namespace OlegHcpEditor.Inspectors
             Tools.pivotModeChanged -= SceneView.RepaintAll;
             Tools.pivotRotationChanged -= SceneView.RepaintAll;
 #endif
-            DestroyImmediate(_builtInEditor);
+            _builtInEditor.DestroyImmediate();
         }
 
         public override void OnInspectorGUI()
