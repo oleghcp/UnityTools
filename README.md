@@ -95,6 +95,10 @@ Transform parameters can be copied to the clipboard as json string.
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform3.png)
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform4.png)
 
+## Custom MeshRenderer Editor
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/MeshRendererEditor.png)
+
 ## Custom AnimationClip Editor
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AnimationClipEditor.png)
