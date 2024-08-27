@@ -63,6 +63,16 @@ namespace OlegHcp.CSharp
             return Helper.GetDefaultValue(self);
         }
 
+        public static object CreateInstance(this Type self, bool allowNonPublicConstructor = false)
+        {
+            return Activator.CreateInstance(self, allowNonPublicConstructor);
+        }
+
+        public static object CreateInstance(this Type self, params object[] args)
+        {
+            return Activator.CreateInstance(self, args);
+        }
+
         public static bool IsAssignableTo(this Type self, Type targetType)
         {
             if (targetType == null)

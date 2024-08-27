@@ -15,7 +15,9 @@ namespace OlegHcp.Tools
 
         public static object GetDefaultValue(Type type)
         {
-            switch (type.GetTypeCode())
+            TypeCode typeCode = type.GetTypeCode();
+
+            switch (typeCode)
             {
                 case TypeCode.Boolean: return default(bool);
                 case TypeCode.Byte: return default(byte);
@@ -42,7 +44,7 @@ namespace OlegHcp.Tools
                 case TypeCode.String:
                     return null;
 
-                default: throw new UnsupportedValueException(type.GetTypeCode());
+                default: throw new UnsupportedValueException(typeCode);
             }
         }
 
