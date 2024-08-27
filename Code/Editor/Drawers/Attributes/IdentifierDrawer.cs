@@ -18,7 +18,7 @@ namespace OlegHcpEditor.Drawers.Attributes
             }
 
             if (property.stringValue.IsNullOrWhiteSpace())
-                property.stringValue = Guid.NewGuid().ToString();
+                property.stringValue = Guid.NewGuid().ToString("N");
 
             if (attribute.Editable)
             {
