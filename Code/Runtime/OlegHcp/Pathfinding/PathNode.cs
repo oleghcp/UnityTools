@@ -17,6 +17,11 @@ namespace OlegHcp.Pathfinding
 
         public int Id => _id;
 
+        protected PathNode()
+        {
+            _id = GetHashCode();
+        }
+
         public PathNode(int id)
         {
             _id = id;
