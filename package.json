@@ -1,15 +1,17 @@
 ﻿{
     "name": "com.oleghcp.unitytools",
     "displayName": "OlegHcp Unity Tools",
-    "author": {
-        "name": "Oleg Pulkin",
-        "email": "oleghcp@gmail.com"
-    },
     "version": "2.3.8",
-    "unity": "2019.4",
     "description": "A set of helpful code stuff for Unity.",
+    "unity": "2019.4",
+    "documentationUrl": "https://github.com/oleghcp/UnityTools",
+    "licensesUrl": "https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md",
     "keywords": [ "oleghcp", "oleg", "hcp", "unitytools", "tools" ],
     "license": "MIT",
     "dependencies": {},
-    "samples": []
+    "author": {
+        "name": "Oleg Pulkin",
+        "email": "oleghcp@gmail.com",
+        "url": "https://github.com/oleghcp"
+    }
 }
