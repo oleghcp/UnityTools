@@ -1,8 +1,7 @@
 ﻿using System;
 using OlegHcp.CSharp;
-using OlegHcp.Tools;
 
-namespace OlegHcp
+namespace OlegHcp.Tools
 {
     //This code is from https://www.pvladov.com/
     public static class ConvertUtility
