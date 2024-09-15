@@ -96,50 +96,6 @@ namespace OlegHcp.CSharp.Collections
             return result;
         }
 
-        /// <summary>
-        /// Indicates whether the specified collection is null or it's length equals zero.
-        /// </summary>    
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> self)
-        {
-            if (self == null)
-                return true;
-
-            if (self is ICollection<T> collection)
-                return collection.Count == 0;
-
-            if (self is IReadOnlyCollection<T> readOnlyColl)
-                return readOnlyColl.Count == 0;
-
-            return !self.GetEnumerator().MoveNext();
-        }
-
-        /// <summary>
-        /// Indicates whether the specified collection is not null and contains at least one element.
-        /// </summary>
-        public static bool HasAnyData<T>(this IEnumerable<T> self)
-        {
-            return !self.IsNullOrEmpty();
-        }
-
-#if !UNITY_2021_2_OR_NEWER
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
-        {
-            return new HashSet<T>(self);
-        }
-#endif
-
-        /// <summary>
-        /// Performs the specified action on each element of the System.Collections.Generic.IEnumerable`1.
-        /// </summary>
-        public static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
-        {
-            if (action == null)
-                throw ThrowErrors.NullParameter(nameof(action));
-
-            foreach (var item in self)
-                action(item);
-        }
-
         public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement)
         {
             if (self == null)
@@ -255,5 +211,91 @@ namespace OlegHcp.CSharp.Collections
                 yield return item;
             }
         }
+
+        /// <summary>
+        /// Indicates whether the specified collection is null or it's length equals zero.
+        /// </summary>    
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> self)
+        {
+            if (self == null)
+                return true;
+
+            if (self is ICollection<T> collection)
+                return collection.Count == 0;
+
+            if (self is IReadOnlyCollection<T> readOnlyColl)
+                return readOnlyColl.Count == 0;
+
+            return !self.GetEnumerator().MoveNext();
+        }
+
+        /// <summary>
+        /// Indicates whether the specified collection is not null and contains at least one element.
+        /// </summary>
+        public static bool HasAnyData<T>(this IEnumerable<T> self)
+        {
+            return !self.IsNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Performs the specified action on each element of the System.Collections.Generic.IEnumerable`1.
+        /// </summary>
+        public static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
+        {
+            if (action == null)
+                throw ThrowErrors.NullParameter(nameof(action));
+
+            foreach (var item in self)
+                action(item);
+        }
+
+        public static void AddTo<T>(this IEnumerable<T> self, List<T> targetCollection)
+        {
+            targetCollection.AddRange(self);
+        }
+
+        public static void AddTo<T>(this IEnumerable<T> self, ICollection<T> targetCollection)
+        {
+            foreach (T item in self)
+            {
+                targetCollection.Add(item);
+            }
+        }
+
+        public static void AddTo<T>(this IEnumerable<T> self, ISet<T> targetCollection)
+        {
+            targetCollection.UnionWith(self);
+        }
+
+        public static void AddTo<T>(this IEnumerable<T> self, Queue<T> targetCollection)
+        {
+            foreach (T item in self)
+            {
+                targetCollection.Enqueue(item);
+            }
+        }
+
+        public static void AddTo<T>(this IEnumerable<T> self, Stack<T> targetCollection)
+        {
+            foreach (T item in self)
+            {
+                targetCollection.Push(item);
+            }
+        }
+
+        public static void AddTo<TKey, TValue>(this IEnumerable<TValue> self, IDictionary<TKey, TValue> targetCollection, Func<TValue, TKey> keySelector)
+        {
+            foreach (TValue item in self)
+            {
+                targetCollection.Add(keySelector(item), item);
+            }
+        }
+
+#if !UNITY_2021_2_OR_NEWER
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
+        {
+            return new HashSet<T>(self);
+        }
+#endif
     }
 }
