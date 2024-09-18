@@ -15,8 +15,11 @@ namespace OlegHcp.Managing
 
     public class SimpleServiceLocator : IServiceLocator
     {
-        private protected Dictionary<Type, object> _contexts = new Dictionary<Type, object>();
-        private protected Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
+        private Dictionary<Type, object> _contexts = new Dictionary<Type, object>();
+        private Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
+
+        private protected Dictionary<Type, object> Contexts => _contexts;
+        private protected Dictionary<Type, IService> ServiceCache => _serviceCache;
 
         public TService Get<TService>(bool throwIfNotFound = true) where TService : class, IService
         {

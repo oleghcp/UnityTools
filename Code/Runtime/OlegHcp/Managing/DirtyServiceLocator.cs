@@ -4,8 +4,14 @@
     {
         public bool Remove<TService>(bool disposeIfPossible = true) where TService : class, IService
         {
-            bool contextRemoved = _contexts.Remove(typeof(TService));
+            bool contextRemoved = Contexts.Remove(typeof(TService));
             return RemoveInstance<TService>(disposeIfPossible) || contextRemoved;
+        }
+
+        public void RemoveAll(bool disposeIfPossible = true)
+        {
+            Contexts.Clear();
+            RemoveAllInstances(disposeIfPossible);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace OlegHcp.Managing
     {
         public bool RemoveInstance<TService>(bool disposeIfPossible = true) where TService : class, IService
         {
-            if (_serviceCache.Remove(typeof(TService), out IService service))
+            if (ServiceCache.Remove(typeof(TService), out IService service))
             {
                 if (disposeIfPossible && service is IDisposable disposable)
                     disposable.Dispose();
@@ -18,6 +18,20 @@ namespace OlegHcp.Managing
             }
 
             return false;
+        }
+
+        public void RemoveAllInstances(bool disposeIfPossible = true)
+        {
+            if (disposeIfPossible)
+            {
+                foreach (var (_, value) in ServiceCache)
+                {
+                    if (value is IDisposable disposable)
+                        disposable.Dispose();
+                }
+            }
+
+            ServiceCache.Clear();
         }
     }
 }

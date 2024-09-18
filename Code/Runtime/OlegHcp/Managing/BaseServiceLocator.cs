@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Managing
@@ -27,10 +28,7 @@ namespace OlegHcp.Managing
                 return (TService)service;
 
             if (_context.TryGetOrCreateInstance(serviceType, out service))
-            {
-                _serviceCache.Add(serviceType, service);
-                return (TService)service;
-            }
+                return (TService)_serviceCache.Place(serviceType, service);
 
             if (throwIfNotFound)
                 throw ThrowErrors.ServiceNotRegistered(typeof(TService));
