@@ -83,6 +83,14 @@ namespace OlegHcp.Events
             }
         }
 
+        public bool HasOwner<TSignal>(TSignal signal)
+        {
+            if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
+                return @event.HasOwner;
+
+            return false;
+        }
+
         private SubscriptionToken SubscribeInternal(object handler, Type signalType, int priority)
         {
             InternalEvent @event = GetOrCreateEvent(signalType);
