@@ -83,6 +83,7 @@ Mind that it uses assembly definitions.
 | Tools/OlegHcp/Folders/Open Project Folder | Opens folder where the project is located. |
 | Tools/OlegHcp/Folders/Open Persistent Data Folder | Opens folder which is located at `Application.persistentDataPath`. |
 | Tools/OlegHcp/Folders/Remove Empty Folders | Removes empty folders within Assets folder. |
+| Tools/OlegHcp/Misc/Generate GUID | Generates new GUID and outputs it to the console. |
 
 ## Custom Transform Editor
 
