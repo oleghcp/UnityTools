@@ -31,6 +31,9 @@ namespace OlegHcp.Managing
             if (ServiceCache.TryGetValue(serviceType, out IService service))
                 return (TService)service;
 
+            if (ThrowIfNotFound)
+                throw new ServiceNotFoundException($"Service {typeof(TService).Name} for current state not found.");
+
             return null;
         }
 
