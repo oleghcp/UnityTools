@@ -6,6 +6,7 @@ using OlegHcp.CSharp;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
 using OlegHcp.NumericEntities;
+using OlegHcp.Strings;
 using OlegHcp.Tools;
 using UnityEngine;
 
@@ -13,8 +14,6 @@ namespace OlegHcp
 {
     public static class RngExtensions
     {
-        private static readonly string _symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
         public static int Next(this IRng self, in DiapasonInt range)
         {
             return self.Next(range.Min, range.Max);
@@ -555,26 +554,33 @@ namespace OlegHcp
                 return string.Empty;
 
             const int stackLenCup = 256;
+            string symbols = StringUtility.Alphanumeric;
 
 #if UNITY_2021_2_OR_NEWER
             Span<char> charArray = length > stackLenCup ? new char[length] : stackalloc char[length];
-            for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
+            for (int i = 0; i < length; i++) { charArray[i] = getChar(); }
             return new string(charArray);
 #else
             if (length > stackLenCup)
             {
                 char[] charArray = new char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
+                for (int i = 0; i < length; i++) { charArray[i] = getChar(); }
                 return new string(charArray);
             }
 
             unsafe
             {
                 char* charArray = stackalloc char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
+                for (int i = 0; i < length; i++) { charArray[i] = getChar(); }
                 return new string(charArray, 0, length);
             }
 #endif
+
+            char getChar()
+            {
+                char ch = symbols.GetRandomChar(self);
+                return (char.IsDigit(ch) || self.Next(2) == 0) ? ch : char.ToLower(ch);
+            }
         }
     }
 }
