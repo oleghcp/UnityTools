@@ -130,5 +130,11 @@ namespace OlegHcpEditor.MenuItems
             if (path.HasUsefulData())
                 ScreenCapture.CaptureScreenshot(path);
         }
+
+        [MenuItem(MAIN_MENU_NAME + "Misc/Generate GUID")]
+        private static void GenerateGuid()
+        {
+            Debug.Log(Guid.NewGuid().ToString("N"));
+        }
     }
 }
