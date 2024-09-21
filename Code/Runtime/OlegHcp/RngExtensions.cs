@@ -572,7 +572,7 @@ namespace OlegHcp
             {
                 char* charArray = stackalloc char[length];
                 for (int i = 0; i < length; i++) { charArray[i] = _symbols.GetRandomChar(self); }
-                return new string(charArray);
+                return new string(charArray, 0, length);
             }
 #endif
         }
