@@ -10,7 +10,7 @@ namespace OlegHcpEditor
         {
             XDocument document = XDocument.Parse(content);
 
-            string warns = LibrarySettings.SuppressedWarningsInIde;
+            string warns = OlegHcpUserSettings.SuppressedWarningsInIde;
             XName xName = document.Root.GetDefaultNamespace() + "NoWarn";
 
             foreach (XElement element in document.Root.Elements())

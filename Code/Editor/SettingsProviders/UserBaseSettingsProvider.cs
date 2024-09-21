@@ -25,23 +25,23 @@ namespace OlegHcpEditor.SettingsProviders
 
             EditorGUIUtility.labelWidth = SettingsProviderUtility.LABEL_WIDTH;
 
-            LibrarySettings.OpenFoldersByDoubleClick = DrawToggle("Open Folders by Double Click", LibrarySettings.OpenFoldersByDoubleClick);
-            if (LibrarySettings.OpenFoldersByDoubleClick)
+            OlegHcpUserSettings.OpenFoldersByDoubleClick = DrawToggle("Open Folders by Double Click", OlegHcpUserSettings.OpenFoldersByDoubleClick);
+            if (OlegHcpUserSettings.OpenFoldersByDoubleClick)
                 EditorGUILayout.HelpBox("Folders opening  by double click works only with one column layout of Project window.", MessageType.Info);
 
-            LibrarySettings.OpenScriptableAssetsAsCode = DrawToggle("Open Scriptable Assets as Code", LibrarySettings.OpenScriptableAssetsAsCode);
+            OlegHcpUserSettings.OpenScriptableAssetsAsCode = DrawToggle("Open Scriptable Assets as Code", OlegHcpUserSettings.OpenScriptableAssetsAsCode);
 
-            LibrarySettings.SuppressedWarningsInIde = DrawText("Suppressed Warnings in IDE",
-                                                               LibrarySettings.SuppressedWarningsInIde,
+            OlegHcpUserSettings.SuppressedWarningsInIde = DrawText("Suppressed Warnings in IDE",
+                                                               OlegHcpUserSettings.SuppressedWarningsInIde,
                                                                "If you specify multiple warning numbers, separate them with a comma. \n Example: CS0649,CS0169");
 
             EditorGUILayout.Space();
 
             GUILayout.Label("Creating script from template via menu item \"Create/C# Script (ext.)\"", EditorStyles.boldLabel);
             DrawNamespaceRootFolder();
-            string editorFolderNamespace = EditorGUILayout.TextField("Editor Folder Namespace", LibrarySettings.EditorFolderNamespace);
+            string editorFolderNamespace = EditorGUILayout.TextField("Editor Folder Namespace", OlegHcpUserSettings.EditorFolderNamespace);
             if (editorFolderNamespace.HasUsefulData())
-                LibrarySettings.EditorFolderNamespace = editorFolderNamespace;
+                OlegHcpUserSettings.EditorFolderNamespace = editorFolderNamespace;
         }
 
         private bool DrawToggle(string label, bool curValue)
@@ -62,7 +62,7 @@ namespace OlegHcpEditor.SettingsProviders
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Namespace Root Folder", GUILayout.Width(SettingsProviderUtility.LABEL_WIDTH));
 
-            int c = LibrarySettings.NamespaceFolderRootSkipSteps + 1;
+            int c = OlegHcpUserSettings.NamespaceFolderRootSkipSteps + 1;
             for (int i = 0; i < c; i++)
             {
                 string text = i == 0 ? "Assets" : "...";
@@ -74,11 +74,11 @@ namespace OlegHcpEditor.SettingsProviders
                 {
                     if (toggled)
                     {
-                        LibrarySettings.NamespaceFolderRootSkipSteps = i + 1;
+                        OlegHcpUserSettings.NamespaceFolderRootSkipSteps = i + 1;
                     }
                     else
                     {
-                        LibrarySettings.NamespaceFolderRootSkipSteps = i;
+                        OlegHcpUserSettings.NamespaceFolderRootSkipSteps = i;
                         break;
                     }
                 }

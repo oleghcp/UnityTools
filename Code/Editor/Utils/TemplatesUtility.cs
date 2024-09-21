@@ -108,7 +108,7 @@ namespace OlegHcpEditor.Utils
             if (!selected.IsFolder())
                 targetPath = PathUtility.GetParentPath(targetPath);
 
-            int steps = LibrarySettings.NamespaceFolderRootSkipSteps;
+            int steps = OlegHcpUserSettings.NamespaceFolderRootSkipSteps;
             string trimmedPath = PathUtility.SkipRootSteps(targetPath, steps);
 
             return trimmedPath.HasAnyData() ? pathToNamespace(trimmedPath)
@@ -120,7 +120,7 @@ namespace OlegHcpEditor.Utils
 
                 int index = names.IndexOf(nameof(Editor));
                 if (index >= 0)
-                    names[index] = LibrarySettings.EditorFolderNamespace;
+                    names[index] = OlegHcpUserSettings.EditorFolderNamespace;
 
                 return names.ConcatToString('.')
                             .RemoveWhiteSpaces();

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace OlegHcpEditor.Configs
 {
     [Serializable]
-    internal class LibrarySettings
+    internal class OlegHcpUserSettings
     {
         private const string FILE_PATH = AssetDatabaseExt.USER_SETTINGS_FOLDER + LibConstants.LIB_NAME + "Settings.json";
 
@@ -22,9 +22,9 @@ namespace OlegHcpEditor.Configs
         [SerializeField]
         private string _editorFolderNamespace = "EditorCode";
 
-        private static LibrarySettings _instance;
+        private static OlegHcpUserSettings _instance;
 
-        private static LibrarySettings Instance => _instance ?? (_instance = Load());
+        private static OlegHcpUserSettings Instance => _instance ?? (_instance = Load());
 
         public static bool OpenFoldersByDoubleClick
         {
@@ -56,7 +56,7 @@ namespace OlegHcpEditor.Configs
             set => SetField(ref Instance._editorFolderNamespace, value);
         }
 
-        private static void Save(LibrarySettings instance)
+        private static void Save(OlegHcpUserSettings instance)
         {
             if (!Directory.Exists(AssetDatabaseExt.USER_SETTINGS_FOLDER))
                 Directory.CreateDirectory(AssetDatabaseExt.USER_SETTINGS_FOLDER);
@@ -65,18 +65,18 @@ namespace OlegHcpEditor.Configs
             File.WriteAllText(FILE_PATH, json);
         }
 
-        private static LibrarySettings Load()
+        private static OlegHcpUserSettings Load()
         {
             if (!File.Exists(FILE_PATH))
             {
-                var instance = new LibrarySettings();
+                var instance = new OlegHcpUserSettings();
                 Save(instance);
                 return instance;
             }
             else
             {
                 string json = File.ReadAllText(FILE_PATH);
-                return JsonUtility.FromJson<LibrarySettings>(json);
+                return JsonUtility.FromJson<OlegHcpUserSettings>(json);
             }
         }
 

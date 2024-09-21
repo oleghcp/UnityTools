@@ -23,13 +23,13 @@ namespace OlegHcpEditor
                 return true;
             }
 
-            if (obj is ScriptableObject scriptableObject && LibrarySettings.OpenScriptableAssetsAsCode)
+            if (obj is ScriptableObject scriptableObject && OlegHcpUserSettings.OpenScriptableAssetsAsCode)
             {
                 EditorUtilityExt.OpenScriptableObjectCode(scriptableObject);
                 return true;
             }
 
-            if (ProjectWindowUtil.IsFolder(instanceID) && LibrarySettings.OpenFoldersByDoubleClick)
+            if (ProjectWindowUtil.IsFolder(instanceID) && OlegHcpUserSettings.OpenFoldersByDoubleClick)
             {
                 EditorUtilityExt.OpenFolder(obj.GetAssetPath());
                 return true;
