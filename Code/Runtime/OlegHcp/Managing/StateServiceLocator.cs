@@ -17,7 +17,8 @@ namespace OlegHcp.Managing
         private HashSet<Type> _requiredTypes = new HashSet<Type>();
         private List<Type> _unnecessaryTypes = new List<Type>();
 
-        public StateServiceLocator(IInitialContext context, IStateTracker stateTracker) : base(context)
+        public StateServiceLocator(IInitialContext context, IStateTracker stateTracker, bool throwIfNotFound = true) 
+            : base(context, throwIfNotFound)
         {
             _stateTracker = stateTracker;
             stateTracker.StateChanged_Event += OnStateChanged;
@@ -30,7 +31,7 @@ namespace OlegHcp.Managing
             if (ServiceCache.TryGetValue(serviceType, out IService service))
                 return (TService)service;
 
-            throw new ServiceNotFoundException($"Service {typeof(TService).Name} for current state not found.");
+            return null;
         }
 
         private void OnStateChanged()
@@ -54,7 +55,7 @@ namespace OlegHcp.Managing
             {
                 if (Context.TryGetOrCreateInstance(serviceType, out IService service))
                     ServiceCache.Add(serviceType, service);
-                else
+                else if (ThrowIfNotFound)
                     throw ThrowErrors.ServiceNotRegistered(serviceType);
             }
         }

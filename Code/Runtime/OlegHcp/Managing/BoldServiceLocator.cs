@@ -8,11 +8,16 @@ namespace OlegHcp.Managing
 {
     public class BoldServiceLocator : SimpleServiceLocator
     {
-        public bool RemoveInstance<TService>(bool disposeIfPossible = true) where TService : class, IService
+        public BoldServiceLocator(bool throwIfNotFound = true) : base(throwIfNotFound)
+        {
+
+        }
+
+        public bool RemoveInstance<TService>() where TService : class, IService
         {
             if (ServiceCache.Remove(typeof(TService), out IService service))
             {
-                if (disposeIfPossible && service is IDisposable disposable)
+                if (service is IDisposable disposable)
                     disposable.Dispose();
                 return true;
             }
@@ -20,15 +25,12 @@ namespace OlegHcp.Managing
             return false;
         }
 
-        public void RemoveAllInstances(bool disposeIfPossible = true)
+        public void RemoveAllInstances()
         {
-            if (disposeIfPossible)
+            foreach (var (_, value) in ServiceCache)
             {
-                foreach (var (_, value) in ServiceCache)
-                {
-                    if (value is IDisposable disposable)
-                        disposable.Dispose();
-                }
+                if (value is IDisposable disposable)
+                    disposable.Dispose();
             }
 
             ServiceCache.Clear();

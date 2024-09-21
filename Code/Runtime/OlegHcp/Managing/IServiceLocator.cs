@@ -1,6 +1,9 @@
 ﻿namespace OlegHcp.Managing
 {
-    public interface IService { }
+    public interface IService
+    {
+
+    }
 
     public interface IServiceLocator
     {

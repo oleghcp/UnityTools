@@ -2,16 +2,21 @@
 {
     public class DirtyServiceLocator : BoldServiceLocator
     {
-        public bool Remove<TService>(bool disposeIfPossible = true) where TService : class, IService
+        public DirtyServiceLocator(bool throwIfNotFound = true) : base(throwIfNotFound)
         {
-            bool contextRemoved = Contexts.Remove(typeof(TService));
-            return RemoveInstance<TService>(disposeIfPossible) || contextRemoved;
+
         }
 
-        public void RemoveAll(bool disposeIfPossible = true)
+        public bool Remove<TService>() where TService : class, IService
+        {
+            bool contextRemoved = Contexts.Remove(typeof(TService));
+            return RemoveInstance<TService>() || contextRemoved;
+        }
+
+        public void RemoveAll()
         {
             Contexts.Clear();
-            RemoveAllInstances(disposeIfPossible);
+            RemoveAllInstances();
         }
     }
 }

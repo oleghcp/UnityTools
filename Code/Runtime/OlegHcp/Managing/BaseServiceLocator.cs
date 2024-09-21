@@ -12,11 +12,15 @@ namespace OlegHcp.Managing
 
     public class BaseServiceLocator : IServiceLocator
     {
+        private bool _throwIfNotFound;
         private protected IInitialContext Context;
         private protected Dictionary<Type, IService> ServiceCache = new Dictionary<Type, IService>();
 
-        public BaseServiceLocator(IInitialContext context)
+        public bool ThrowIfNotFound => _throwIfNotFound;
+
+        public BaseServiceLocator(IInitialContext context, bool throwIfNotFound = true)
         {
+            _throwIfNotFound = throwIfNotFound;
             Context = context;
         }
 
@@ -35,7 +39,10 @@ namespace OlegHcp.Managing
             if (Context.TryGetOrCreateInstance(serviceType, out service))
                 return (TService)ServiceCache.Place(serviceType, service);
 
-            throw ThrowErrors.ServiceNotRegistered(typeof(TService));
+            if (_throwIfNotFound)
+                throw ThrowErrors.ServiceNotRegistered(typeof(TService));
+
+            return null;
         }
     }
 }
