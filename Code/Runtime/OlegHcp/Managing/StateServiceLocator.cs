@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using OlegHcp.Tools;
 
+#if !UNITY_2021_2_OR_NEWER
+using OlegHcp.CSharp.Collections;
+#endif
+
 namespace OlegHcp.Managing
 {
     public interface IStateTracker
@@ -17,7 +21,7 @@ namespace OlegHcp.Managing
         private HashSet<Type> _requiredTypes = new HashSet<Type>();
         private List<Type> _unnecessaryTypes = new List<Type>();
 
-        public StateServiceLocator(IInitialContext context, IStateTracker stateTracker, bool throwIfNotFound = true) 
+        public StateServiceLocator(IInitialContext context, IStateTracker stateTracker, bool throwIfNotFound = true)
             : base(context, throwIfNotFound)
         {
             _stateTracker = stateTracker;
