@@ -14,9 +14,7 @@ namespace OlegHcpEditor.Configs
         [SerializeField]
         private bool _openFoldersByDoubleClick = true;
         [SerializeField]
-        private bool _openScriptableAssetsAsCode = true;
-        [SerializeField]
-        private string _suppressedWarningsInIde = "CS0649";
+        private bool _openScriptableAssetsAsCode;
         [SerializeField]
         private int _namespaceFolderRootSkipSteps;
         [SerializeField]
@@ -36,12 +34,6 @@ namespace OlegHcpEditor.Configs
         {
             get => Instance._openScriptableAssetsAsCode;
             set => SetField(ref Instance._openScriptableAssetsAsCode, value);
-        }
-
-        public static string SuppressedWarningsInIde
-        {
-            get => Instance._suppressedWarningsInIde;
-            set => SetField(ref Instance._suppressedWarningsInIde, value);
         }
 
         public static int NamespaceFolderRootSkipSteps

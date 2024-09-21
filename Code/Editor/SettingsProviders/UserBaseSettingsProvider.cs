@@ -31,10 +31,6 @@ namespace OlegHcpEditor.SettingsProviders
 
             OlegHcpUserSettings.OpenScriptableAssetsAsCode = DrawToggle("Open Scriptable Assets as Code", OlegHcpUserSettings.OpenScriptableAssetsAsCode);
 
-            OlegHcpUserSettings.SuppressedWarningsInIde = DrawText("Suppressed Warnings in IDE",
-                                                               OlegHcpUserSettings.SuppressedWarningsInIde,
-                                                               "If you specify multiple warning numbers, separate them with a comma. \n Example: CS0649,CS0169");
-
             EditorGUILayout.Space();
 
             GUILayout.Label("Creating script from template via menu item \"Create/C# Script (ext.)\"", EditorStyles.boldLabel);
