@@ -12,7 +12,8 @@ namespace OlegHcp.Collections
 
     public interface ITrackerNode<T> : ITrackerNode
     {
-        T Value { get; }
+        T PrevValue { get; }
+        T CurValue { get; }
     }
     #endregion
 
@@ -22,36 +23,49 @@ namespace OlegHcp.Collections
         private Func<T> _getter;
         private Action _onChangedCallback1;
         private Action<T> _onChangedCallback2;
-        private T _cache;
+        private Action<T, T> _onChangedCallback3;
+        private T _prevValue;
+        private T _curValue;
         private bool _changed;
 
         public bool Changed => _changed;
-        public T Value => _cache;
+        public T PrevValue => _prevValue;
+        public T CurValue => _curValue;
 
-        public BaseNode(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
+        public BaseNode(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2, Action<T, T> onChangedCallback3)
         {
             _getter = getter;
-            _cache = getter.Invoke();
+            _curValue = getter.Invoke();
             _onChangedCallback1 = onChangedCallback1;
             _onChangedCallback2 = onChangedCallback2;
+            _onChangedCallback3 = onChangedCallback3;
         }
 
         public void Check()
         {
-            T tmp = _getter();
+            T newValue = _getter();
 
-            if (_changed = !Equal(_cache, tmp))
+            if (_changed = !Equal(_curValue, newValue))
             {
-                _cache = tmp;
-                _onChangedCallback1?.Invoke();
-                _onChangedCallback2?.Invoke(_cache);
+                try
+                {
+                    _onChangedCallback1?.Invoke();
+                    _onChangedCallback2?.Invoke(newValue);
+                    _onChangedCallback3?.Invoke(_curValue, newValue);
+                }
+                finally
+                {
+                    _prevValue = _curValue;
+                    _curValue = newValue;
+                }
             }
         }
 
         public void ForceInvoke()
         {
             _onChangedCallback1?.Invoke();
-            _onChangedCallback2?.Invoke(_cache);
+            _onChangedCallback2?.Invoke(_curValue);
+            _onChangedCallback3?.Invoke(_prevValue, _curValue);
         }
 
         protected abstract bool Equal(T a, T b);
@@ -59,8 +73,8 @@ namespace OlegHcp.Collections
 
     internal class NodeForValueType<T> : BaseNode<T> where T : struct, IEquatable<T>
     {
-        public NodeForValueType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
-            : base(getter, onChangedCallback1, onChangedCallback2)
+        public NodeForValueType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2, Action<T, T> onChangedCallback3)
+            : base(getter, onChangedCallback1, onChangedCallback2, onChangedCallback3)
         { }
 
         protected override bool Equal(T a, T b)
@@ -71,8 +85,8 @@ namespace OlegHcp.Collections
 
     internal class NodeForRefType<T> : BaseNode<T> where T : class
     {
-        public NodeForRefType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2)
-            : base(getter, onChangedCallback1, onChangedCallback2)
+        public NodeForRefType(Func<T> getter, Action onChangedCallback1, Action<T> onChangedCallback2, Action<T, T> onChangedCallback3)
+            : base(getter, onChangedCallback1, onChangedCallback2, onChangedCallback3)
         { }
 
         protected override bool Equal(T a, T b)
@@ -116,6 +130,46 @@ namespace OlegHcp.Collections
         }
     }
 
+    internal class PrevDependentNodeWithValue<T> : ITrackerNode<T>
+    {
+        private Action<T> _onChangedCallback1;
+        private Action<T, T> _onChangedCallback2;
+        private ITrackerNode<T> _previousNode;
+
+        public bool Changed => _previousNode.Changed;
+        public T PrevValue => _previousNode.PrevValue;
+        public T CurValue => _previousNode.CurValue;
+
+        public PrevDependentNodeWithValue(Action<T> onChangedCallback1, Action<T, T> onChangedCallback2, ITrackerNode previousNode)
+        {
+            if (previousNode is ITrackerNode<T> valueNode)
+            {
+                _onChangedCallback1 = onChangedCallback1;
+                _onChangedCallback2 = onChangedCallback2;
+                _previousNode = valueNode;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Previous node does not cache value or value is not {typeof(T)}.");
+            }
+        }
+
+        public void Check()
+        {
+            if (_previousNode.Changed)
+            {
+                _onChangedCallback1?.Invoke(_previousNode.CurValue);
+                _onChangedCallback2?.Invoke(_previousNode.PrevValue, _previousNode.CurValue);
+            }
+        }
+
+        public void ForceInvoke()
+        {
+            _onChangedCallback1?.Invoke(_previousNode.CurValue);
+            _onChangedCallback2?.Invoke(_previousNode.PrevValue, _previousNode.CurValue);
+        }
+    }
+
     internal class MassDependentNode : BaseDependentNode
     {
         private ITrackerNode[] _dependencies;
@@ -137,39 +191,6 @@ namespace OlegHcp.Collections
         public MassDependentNode(Action onChangedCallback, ITrackerNode[] dependencies) : base(onChangedCallback)
         {
             _dependencies = dependencies;
-        }
-    }
-
-    internal class DependentNodeWithValue<T> : ITrackerNode<T>
-    {
-        private Action<T> _onChangedCallback;
-        private ITrackerNode<T> _previousNode;
-
-        public bool Changed => _previousNode.Changed;
-        public T Value => _previousNode.Value;
-
-        public DependentNodeWithValue(Action<T> onChangedCallback, ITrackerNode previousNode)
-        {
-            if (previousNode is ITrackerNode<T> valueNode)
-            {
-                _onChangedCallback = onChangedCallback;
-                _previousNode = valueNode;
-            }
-            else
-            {
-                throw new InvalidOperationException($"Previous node does not cache value or value is not {typeof(T)}.");
-            }
-        }
-
-        public void Check()
-        {
-            if (Changed)
-                _onChangedCallback(_previousNode.Value);
-        }
-
-        public void ForceInvoke()
-        {
-            _onChangedCallback(_previousNode.Value);
         }
     }
     #endregion
