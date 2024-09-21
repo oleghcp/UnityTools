@@ -62,18 +62,18 @@ namespace OlegHcp
             remove { CallbackKeeper.OnFixedTick_Event -= value; }
         }
 
-        private static CallbackKeeper _nstance;
+        private static CallbackKeeper _instance;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
-            _nstance = ComponentUtility.CreateInstance<CallbackKeeper>();
-            _nstance.gameObject.Immortalize();
+            _instance = ComponentUtility.CreateInstance<CallbackKeeper>();
+            _instance.gameObject.Immortalize();
         }
 
         public static IReadOnlyList<GameObject> GetDontDestroyOnLoadObjects()
         {
-            var scene = _nstance.gameObject.scene;
+            var scene = _instance.gameObject.scene;
             List<GameObject> buffer = new List<GameObject>(scene.rootCount);
             scene.GetRootGameObjects(buffer);
             return buffer;
@@ -81,7 +81,7 @@ namespace OlegHcp
 
         public static void GetDontDestroyOnLoadObjects(List<GameObject> buffer)
         {
-            _nstance.gameObject.scene.GetRootGameObjects(buffer);
+            _instance.gameObject.scene.GetRootGameObjects(buffer);
         }
     }
 }
