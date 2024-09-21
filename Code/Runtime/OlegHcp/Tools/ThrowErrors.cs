@@ -97,7 +97,7 @@ namespace OlegHcp.Tools
 
         public static ServiceNotFoundException ServiceNotRegistered(Type type)
         {
-            return new ServiceNotFoundException($"Service {type.Name} not registered.");
+            return new ServiceNotFoundException($"Service {type.Name} not registered in initial context.");
         }
     }
 }

@@ -17,11 +17,17 @@ namespace OlegHcp.Managing
     {
         private Dictionary<Type, object> _contexts = new Dictionary<Type, object>();
         private Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
+        private bool _throwIfNotFound;
 
         private protected Dictionary<Type, object> Contexts => _contexts;
         private protected Dictionary<Type, IService> ServiceCache => _serviceCache;
 
-        public TService Get<TService>(bool throwIfNotFound = true) where TService : class, IService
+        public SimpleServiceLocator(bool throwIfNotFound = true)
+        {
+            _throwIfNotFound = throwIfNotFound;
+        }
+
+        public TService Get<TService>() where TService : class, IService
         {
             Type serviceType = typeof(TService);
 
@@ -36,7 +42,7 @@ namespace OlegHcp.Managing
                 return newService;
             }
 
-            if (throwIfNotFound)
+            if (_throwIfNotFound)
                 throw ThrowErrors.ServiceNotRegistered(typeof(TService));
 
             return null;

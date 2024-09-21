@@ -12,28 +12,30 @@ namespace OlegHcp.Managing
 
     public class BaseServiceLocator : IServiceLocator
     {
-        private protected IInitialContext _context;
-        private protected Dictionary<Type, IService> _serviceCache = new Dictionary<Type, IService>();
+        private protected IInitialContext Context;
+        private protected Dictionary<Type, IService> ServiceCache = new Dictionary<Type, IService>();
 
         public BaseServiceLocator(IInitialContext context)
         {
-            _context = context;
+            Context = context;
         }
 
-        public TService Get<TService>(bool throwIfNotFound = true) where TService : class, IService
+        public TService Get<TService>() where TService : class, IService
+        {
+            return GetInternal<TService>();
+        }
+
+        private protected virtual TService GetInternal<TService>() where TService : class, IService
         {
             Type serviceType = typeof(TService);
 
-            if (_serviceCache.TryGetValue(serviceType, out IService service))
+            if (ServiceCache.TryGetValue(serviceType, out IService service))
                 return (TService)service;
 
-            if (_context.TryGetOrCreateInstance(serviceType, out service))
-                return (TService)_serviceCache.Place(serviceType, service);
+            if (Context.TryGetOrCreateInstance(serviceType, out service))
+                return (TService)ServiceCache.Place(serviceType, service);
 
-            if (throwIfNotFound)
-                throw ThrowErrors.ServiceNotRegistered(typeof(TService));
-
-            return null;
+            throw ThrowErrors.ServiceNotRegistered(typeof(TService));
         }
     }
 }
