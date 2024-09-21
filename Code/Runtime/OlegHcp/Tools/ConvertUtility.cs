@@ -1,13 +1,12 @@
 ﻿using System;
 using OlegHcp.CSharp;
+using OlegHcp.Strings;
 
 namespace OlegHcp.Tools
 {
     //This code is from https://www.pvladov.com/
     public static class ConvertUtility
     {
-        private static readonly string _symbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
         /// specified radix (in the range [2, 36]).
@@ -18,9 +17,10 @@ namespace OlegHcp.Tools
         public static string DecimalToStringWithCustomRadix(long decimalNumber, int radix)
         {
             const int bitsInLong = 64;
+            string symbols = StringUtility.Alphanumeric;
 
-            if (radix < 2 || radix > _symbols.Length)
-                throw ThrowErrors.RadixOutOfRange(nameof(radix), _symbols.Length);
+            if (radix < 2 || radix > symbols.Length)
+                throw ThrowErrors.RadixOutOfRange(nameof(radix), symbols.Length);
 
             if (decimalNumber == 0)
                 return "0";
@@ -32,7 +32,7 @@ namespace OlegHcp.Tools
             while (currentNumber != 0)
             {
                 int remainder = (int)(currentNumber % radix);
-                charArray[index--] = _symbols[remainder];
+                charArray[index--] = symbols[remainder];
                 currentNumber /= radix;
             }
 
@@ -55,11 +55,13 @@ namespace OlegHcp.Tools
         /// <returns></returns>
         public static long ParseStringCustomRadixToDecimal(string number, int radix)
         {
+            string symbols = StringUtility.Alphanumeric;
+
             if (number == null)
                 throw ThrowErrors.NullParameter(nameof(number));
 
-            if (radix < 2 || radix > _symbols.Length)
-                throw ThrowErrors.RadixOutOfRange(nameof(radix), _symbols.Length);
+            if (radix < 2 || radix > symbols.Length)
+                throw ThrowErrors.RadixOutOfRange(nameof(radix), symbols.Length);
 
             if (number == string.Empty)
                 throw ThrowErrors.IncorrectInputString();
@@ -72,7 +74,9 @@ namespace OlegHcp.Tools
 
         public static bool TryParseStringCustomRadixToDecimal(string number, int radix, out long result)
         {
-            if (radix < 2 || radix > _symbols.Length || number.IsNullOrEmpty())
+            string symbols = StringUtility.Alphanumeric;
+
+            if (radix < 2 || radix > symbols.Length || number.IsNullOrEmpty())
             {
                 result = 0;
                 return false;
@@ -83,6 +87,7 @@ namespace OlegHcp.Tools
 
         private static bool TryParse(string number, int radix, out long result)
         {
+            string symbols = StringUtility.Alphanumeric;
             // Make sure the arbitrary numeral system number is in upper case
             number = number.ToUpperInvariant();
 
@@ -98,7 +103,7 @@ namespace OlegHcp.Tools
                     break;
                 }
 
-                int digit = _symbols.IndexOf(c);
+                int digit = symbols.IndexOf(c);
 
                 if (digit == -1)
                 {

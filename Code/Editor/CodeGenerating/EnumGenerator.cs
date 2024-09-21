@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using OlegHcp.CSharp;
+using OlegHcp.Strings;
 
 namespace OlegHcpEditor.CodeGenerating
 {
@@ -27,7 +28,7 @@ namespace OlegHcpEditor.CodeGenerating
                    .Append("namespace ")
                    .AppendLine(nameSpace)
                    .AppendLine("{")
-                   .Append(GeneratingTools.Tab)
+                   .Append(StringUtility.Tab)
                    .Append("public enum ")
                    .Append(enumName);
 
@@ -36,14 +37,14 @@ namespace OlegHcpEditor.CodeGenerating
             else
                 builder.Append(" : ").AppendLine(enumType.GetName().ToLower());
 
-            builder.Append(GeneratingTools.Tab)
+            builder.Append(StringUtility.Tab)
                    .Append('{')
                    .AppendLine();
 
             foreach (var (name, intValue) in enumValues)
             {
-                builder.Append(GeneratingTools.Tab)
-                       .Append(GeneratingTools.Tab)
+                builder.Append(StringUtility.Tab)
+                       .Append(StringUtility.Tab)
                        .Append(name)
                        .Append(" = ")
                        .Append(intValue)
@@ -51,7 +52,7 @@ namespace OlegHcpEditor.CodeGenerating
                        .AppendLine();
             }
 
-            builder.Append(GeneratingTools.Tab)
+            builder.Append(StringUtility.Tab)
                    .Append('}')
                    .AppendLine()
                    .Append('}')

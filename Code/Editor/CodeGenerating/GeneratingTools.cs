@@ -6,8 +6,6 @@ namespace OlegHcpEditor.CodeGenerating
 {
     public static class GeneratingTools
     {
-        public static readonly string Tab = "    ";
-
         public static void CreateCsFile(string text, string rootFolder, string className, string nameSpace, bool refreshAssets = true)
         {
             string dirPath = Path.Combine(rootFolder, $"{nameSpace.Replace('.', '/')}");

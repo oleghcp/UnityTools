@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using OlegHcp;
 using OlegHcp.CSharp;
+using OlegHcp.Strings;
 using OlegHcpEditor.Configs;
 using OlegHcpEditor.Engine;
 using UnityEditor;
@@ -47,8 +48,8 @@ namespace OlegHcpEditor.CodeGenerating
                    .Append("namespace ").AppendLine(config.Namespace)
                    .AppendLine("{")
                    .AppendLine("#pragma warning disable IDE1006")
-                   .Append(GeneratingTools.Tab).Append("public static class ").AppendLine(config.ClassName)
-                   .Append(GeneratingTools.Tab).Append('{').AppendLine();
+                   .Append(StringUtility.Tab).Append("public static class ").AppendLine(config.ClassName)
+                   .Append(StringUtility.Tab).Append('{').AppendLine();
 
             if (config.TagFields)
             {
@@ -56,8 +57,8 @@ namespace OlegHcpEditor.CodeGenerating
 
                 foreach (var item in tags.EnumerateArrayElements())
                 {
-                    builder.Append(GeneratingTools.Tab)
-                           .Append(GeneratingTools.Tab)
+                    builder.Append(StringUtility.Tab)
+                           .Append(StringUtility.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("string ")
@@ -81,8 +82,8 @@ namespace OlegHcpEditor.CodeGenerating
 
                 foreach (var layer in SortingLayer.layers)
                 {
-                    builder.Append(GeneratingTools.Tab)
-                           .Append(GeneratingTools.Tab)
+                    builder.Append(StringUtility.Tab)
+                           .Append(StringUtility.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
@@ -109,8 +110,8 @@ namespace OlegHcpEditor.CodeGenerating
                     if (item.stringValue.IsNullOrWhiteSpace())
                         continue;
 
-                    builder.Append(GeneratingTools.Tab)
-                           .Append(GeneratingTools.Tab)
+                    builder.Append(StringUtility.Tab)
+                           .Append(StringUtility.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
@@ -127,8 +128,8 @@ namespace OlegHcpEditor.CodeGenerating
 
                 foreach (var maskInfo in config.LayerMasks)
                 {
-                    builder.Append(GeneratingTools.Tab)
-                           .Append(GeneratingTools.Tab)
+                    builder.Append(StringUtility.Tab)
+                           .Append(StringUtility.Tab)
                            .Append("public ");
 
                     switch (config.MaskFieldType)
@@ -172,7 +173,7 @@ namespace OlegHcpEditor.CodeGenerating
                 }
             }
 
-            builder.Append(GeneratingTools.Tab)
+            builder.Append(StringUtility.Tab)
                    .Append('}')
                    .AppendLine()
                    .Append('}')
