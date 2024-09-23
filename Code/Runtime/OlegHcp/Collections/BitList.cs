@@ -23,6 +23,7 @@ namespace OlegHcp.Collections
         [SerializeField, HideInInspector]
         private bool _mutable;
 
+        private IndexCollection _indices;
         private int _version;
 
 #if UNITY_EDITOR
@@ -491,13 +492,9 @@ namespace OlegHcp.Collections
         }
         #endregion
 
-        public IEnumerable<int> EnumerateIndices()
+        public IndexCollection EnumerateIndices()
         {
-            for (int i = 0; i < _length; i++)
-            {
-                if (Get(i))
-                    yield return i;
-            }
+            return _indices ?? (_indices = new IndexCollection(this));
         }
 
         public BitList GetCopy(bool mutable)
@@ -582,5 +579,105 @@ namespace OlegHcp.Collections
             int rem = _length % BitMask.SIZE;
             return rem == 0 ? BitMask.SIZE : rem;
         }
+
+        #region IndexCollection
+        public class IndexCollection : IEnumerable<int>
+        {
+            private BitList _bitList;
+
+            public IndexCollection(BitList bitList)
+            {
+                _bitList = bitList;
+            }
+
+            public Enumerator GetEnumerator()
+            {
+                return new Enumerator(_bitList);
+            }
+
+            IEnumerator<int> IEnumerable<int>.GetEnumerator()
+            {
+                return new Enumerator(_bitList);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return new Enumerator(_bitList);
+            }
+
+            public struct Enumerator : IEnumerator<int>
+            {
+                private readonly BitList _collection;
+                private readonly int _version;
+
+                private int _index;
+                private int _count;
+                private int _current;
+
+                public int Current => _current;
+
+                object IEnumerator.Current
+                {
+                    get
+                    {
+                        if (_index == 0 || _index == _count + 1)
+                            throw new InvalidOperationException();
+                        return _current;
+                    }
+                }
+
+                public Enumerator(BitList collection)
+                {
+                    _collection = collection;
+                    _index = 0;
+                    _count = _collection.Length;
+                    _current = default;
+                    _version = collection._version;
+                }
+
+                public void Dispose()
+                {
+                }
+
+                public bool MoveNext()
+                {
+                    if (Changed())
+                        throw ThrowErrors.CollectionChanged();
+
+                    label:
+                    if ((uint)_index < (uint)_count)
+                    {
+                        if (!_collection[_index])
+                        {
+                            _index++;
+                            goto label;
+                        }
+
+                        _current = _index++;
+                        return true;
+                    }
+
+                    _index = _count + 1;
+                    _current = default;
+                    return false;
+                }
+
+                void IEnumerator.Reset()
+                {
+                    if (Changed())
+                        throw ThrowErrors.CollectionChanged();
+
+                    _index = 0;
+                    _current = default;
+                }
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                private bool Changed()
+                {
+                    return _collection._version != _version;
+                }
+            }
+        }
+        #endregion
     }
 }
