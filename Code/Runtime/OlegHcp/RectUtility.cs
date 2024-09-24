@@ -29,7 +29,7 @@ namespace OlegHcp
                 case TextAnchor.LowerLeft: return new Vector2(0f, 0f);
                 case TextAnchor.LowerCenter: return new Vector2(0.5f, 0f);
                 case TextAnchor.LowerRight: return new Vector2(1f, 0f);
-                default: throw new UnsupportedValueException(anchor);
+                default: throw new SwitchExpressionException(anchor);
             }
         }
 
@@ -65,7 +65,7 @@ namespace OlegHcp
                     pivot = new Vector2(0.5f, 0.5f);
                     return Rect.MinMaxRect(0f, 0f, 1f, 1f);
 
-                default: throw new UnsupportedValueException(stretch);
+                default: throw new SwitchExpressionException(stretch);
             }
         }
 

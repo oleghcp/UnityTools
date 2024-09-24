@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.Strings;
@@ -40,7 +41,7 @@ namespace OlegHcpEditor.CodeGenerating
                         break;
 
                     default:
-                        throw new UnsupportedValueException(config.MaskFieldType);
+                        throw new SwitchExpressionException(config.MaskFieldType);
                 }
             }
 
@@ -152,7 +153,7 @@ namespace OlegHcpEditor.CodeGenerating
                             break;
 
                         default:
-                            throw new UnsupportedValueException(config.MaskFieldType);
+                            throw new SwitchExpressionException(config.MaskFieldType);
                     }
 
                     builder.Append(maskInfo.Name.RemoveWhiteSpaces())

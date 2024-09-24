@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.IO;
@@ -139,7 +140,7 @@ namespace OlegHcpEditor.Window
                     break;
 
                 default:
-                    throw new UnsupportedValueException(_sortWayIndex);
+                    throw new SwitchExpressionException(_sortWayIndex);
             }
         }
 
@@ -167,7 +168,7 @@ namespace OlegHcpEditor.Window
                 case 1: return (long)(EditorGUILayout.DoubleField(size / 1024d, GUILayout.Width(WIDTH)) * 1024d).ClampMin(0d);
                 case 2: return (long)(EditorGUILayout.DoubleField(size / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d).ClampMin(0d);
                 case 3: return (long)(EditorGUILayout.DoubleField(size / 1024d / 1024d / 1024d, GUILayout.Width(WIDTH)) * 1024d * 1024d * 1024d).ClampMin(0d);
-                default: throw new UnsupportedValueException(sizeToolbarIndex);
+                default: throw new SwitchExpressionException(sizeToolbarIndex);
             }
         }
 

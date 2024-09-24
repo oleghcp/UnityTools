@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.IdGenerating;
@@ -144,7 +145,7 @@ namespace OlegHcpEditor.Window.NodeBased
                 case NodeType.Hub: return $"{nodeType.GetName()} {id}";
                 case NodeType.Common: return "Any";
                 case NodeType.Exit: return nodeType.GetName();
-                default: throw new UnsupportedValueException(nodeType);
+                default: throw new SwitchExpressionException(nodeType);
             }
         }
     }

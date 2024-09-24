@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace OlegHcp.NumericEntities
@@ -46,7 +47,7 @@ namespace OlegHcp.NumericEntities
                 case RngMode.Descending: return rng.Descending(_range, _params.Intensity);
                 case RngMode.MinMax: return rng.MinMax(_range, _params.Intensity);
                 case RngMode.Average: return rng.Average(_range, _params.Intensity);
-                default: throw new UnsupportedValueException(_params.Mode);
+                default: throw new SwitchExpressionException(_params.Mode);
             }
         }
 

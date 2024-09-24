@@ -1,5 +1,6 @@
 ﻿#if INCLUDE_POST_PROCESSING
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Scripting;
@@ -23,7 +24,7 @@ namespace OlegHcp.PostProcessing
                 case FogMode.Linear: return "Hidden/OlegHcp/PostProcessing/LinearFog";
                 case FogMode.Exponential: return "Hidden/OlegHcp/PostProcessing/ExpFog";
                 case FogMode.ExponentialSquared: return "Hidden/OlegHcp/PostProcessing/ESFog";
-                default: throw new UnsupportedValueException(mode);
+                default: throw new SwitchExpressionException(mode);
             }
         }
 
@@ -76,7 +77,7 @@ namespace OlegHcp.PostProcessing
                         break;
 
                     default:
-                        throw new UnsupportedValueException(settings.Mode.value);
+                        throw new SwitchExpressionException(settings.Mode.value);
                 }
 
                 context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0, preserveDepth: true);

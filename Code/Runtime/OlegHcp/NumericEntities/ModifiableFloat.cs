@@ -130,7 +130,7 @@ namespace OlegHcp.NumericEntities
                         break;
 
                     default:
-                        throw new UnsupportedValueException(modifier.Modification);
+                        throw new SwitchExpressionException(modifier.Modification);
                 }
             }
 

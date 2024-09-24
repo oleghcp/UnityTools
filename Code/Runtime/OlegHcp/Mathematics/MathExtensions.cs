@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace OlegHcp.Mathematics
@@ -775,7 +776,7 @@ namespace OlegHcp.Mathematics
                     return (int)MathF.Floor(value);
 
                 default:
-                    throw new UnsupportedValueException(rounding);
+                    throw new SwitchExpressionException(rounding);
             }
         }
 
@@ -796,7 +797,7 @@ namespace OlegHcp.Mathematics
                     return (int)Math.Floor(value);
 
                 default:
-                    throw new UnsupportedValueException(rounding);
+                    throw new SwitchExpressionException(rounding);
             }
         }
 

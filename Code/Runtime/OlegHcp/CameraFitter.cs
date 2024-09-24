@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace OlegHcp
@@ -168,7 +169,7 @@ namespace OlegHcp
                     break;
 
                 default:
-                    throw new UnsupportedValueException(_aspectMode);
+                    throw new SwitchExpressionException(_aspectMode);
             }
         }
 

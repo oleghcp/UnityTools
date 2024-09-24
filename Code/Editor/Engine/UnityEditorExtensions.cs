@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
@@ -124,7 +125,7 @@ namespace OlegHcpEditor.Engine
                     break;
 #endif
                 default:
-                    throw new UnsupportedValueException(self.propertyType);
+                    throw new SwitchExpressionException(self.propertyType);
             }
             #endregion
         }

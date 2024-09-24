@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.Mathematics;
 using OlegHcp.NodeBased.Service;
@@ -244,7 +245,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     break;
 
                 default:
-                    throw new UnsupportedValueException(_window.TransitionView);
+                    throw new SwitchExpressionException(_window.TransitionView);
             }
         }
 
@@ -379,7 +380,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     break;
 
                 default:
-                    throw new UnsupportedValueException(_type);
+                    throw new SwitchExpressionException(_type);
             }
 
             genericMenu.ShowAsContext();

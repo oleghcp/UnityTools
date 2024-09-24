@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
@@ -251,7 +252,7 @@ namespace OlegHcpEditor.Window.NodeBased
                     break;
 
                 default:
-                    throw new UnsupportedValueException(_window.TransitionView);
+                    throw new SwitchExpressionException(_window.TransitionView);
             }
 
             GUI.changed = true;

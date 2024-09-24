@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using OlegHcp.CSharp;
@@ -44,7 +45,7 @@ namespace OlegHcp.Tools
                 case TypeCode.String:
                     return null;
 
-                default: throw new UnsupportedValueException(typeCode);
+                default: throw new SwitchExpressionException(typeCode);
             }
         }
 

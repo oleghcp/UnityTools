@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace OlegHcp
 {
@@ -54,7 +55,7 @@ namespace OlegHcp
                 case ColorCode.Orange: return Colours.Orange;
                 case ColorCode.Violet: return Colours.Violet;
                 case ColorCode.Random: return Colours.Random;
-                default: throw new UnsupportedValueException(self);
+                default: throw new SwitchExpressionException(self);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.MenuItems;
@@ -157,7 +158,7 @@ namespace OlegHcpEditor.Inspectors
                     break;
 
                 default:
-                    throw new UnsupportedValueException((AspectMode)_mode.enumValueIndex);
+                    throw new SwitchExpressionException((AspectMode)_mode.enumValueIndex);
             }
 
             void drawSize(SerializedProperty property, string label)
