@@ -1,4 +1,5 @@
-﻿namespace System.Runtime.CompilerServices
+﻿#if !UNITY_2021_2_OR_NEWER
+namespace System.Runtime.CompilerServices
 {
     public sealed class SwitchExpressionException : InvalidOperationException
     {
@@ -38,3 +39,4 @@
         }
     }
 }
+#endif

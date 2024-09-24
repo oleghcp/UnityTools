@@ -1,4 +1,7 @@
 ﻿#if UNITY_2020_1_OR_NEWER
+#if INCLUDE_ADDRESSABLES
+using System.Runtime.CompilerServices;
+#endif
 using System;
 using System.Linq;
 using OlegHcp;
