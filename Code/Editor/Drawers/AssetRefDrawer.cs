@@ -65,7 +65,7 @@ namespace OlegHcpEditor.Drawers
 #if INCLUDE_ADDRESSABLES
                     case RefType.Async: return asyncRefProp;
 #endif
-                    default: throw new UnsupportedValueException(prevType);
+                    default: throw new SwitchExpressionException(prevType);
                 }
             }
         }

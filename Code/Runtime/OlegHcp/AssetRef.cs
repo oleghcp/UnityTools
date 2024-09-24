@@ -53,7 +53,7 @@ namespace OlegHcp
 #if INCLUDE_ADDRESSABLES
                     case RefType.Async: return _asyncRef.AssetGUID != null;
 #endif
-                    default: throw new UnsupportedValueException(_type);
+                    default: throw new SwitchExpressionException(_type);
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace OlegHcp
 #if INCLUDE_ADDRESSABLES
                     case RefType.Async: throw new InvalidOperationException("Cannot get instance ID from addressable asset reference.");
 #endif
-                    default: throw new UnsupportedValueException(_type);
+                    default: throw new SwitchExpressionException(_type);
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace OlegHcp
 #if INCLUDE_ADDRESSABLES
                     case RefType.Async: throw new InvalidOperationException("Cannot get asset directly from addressable asset reference.");
 #endif
-                    default: throw new UnsupportedValueException(_type);
+                    default: throw new SwitchExpressionException(_type);
                 }
             }
         }
