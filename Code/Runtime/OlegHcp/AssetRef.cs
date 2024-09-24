@@ -1,8 +1,8 @@
 ﻿#if UNITY_2020_1_OR_NEWER
 #if INCLUDE_ADDRESSABLES
 using UnityEngine.AddressableAssets;
-using System.Runtime.CompilerServices;
 #endif
+using System.Runtime.CompilerServices;
 using System;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
