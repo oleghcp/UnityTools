@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace OlegHcp.Managing
 {
-    public class ServiceNotFoundException : Exception
+    public class ServiceNotFoundException : InvalidOperationException
     {
-        public ServiceNotFoundException() : base() { }
-        public ServiceNotFoundException(string message) : base(message) { }
-        public ServiceNotFoundException(string message, Exception innerException) : base(message, innerException) { }
-        public ServiceNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public ServiceNotFoundException(string serviceName)
+            : base($"Service {serviceName} is not registered in initial context.")
+        {
+
+        }
     }
 }

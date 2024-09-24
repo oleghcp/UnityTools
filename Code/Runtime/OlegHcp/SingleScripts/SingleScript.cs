@@ -28,7 +28,7 @@ namespace OlegHcp.SingleScripts
 #endif
 
                     if (instance == null)
-                        throw new ObjectNotFoundException($"There is no any instance of {typeof(T).Name}.");
+                        throw new ObjectNotFoundException(typeof(T));
 
                     if (instance._locked)
                         throw new InvalidOperationException($"The instance of {typeof(T).Name} is being configured. Avoid recursive calls.");

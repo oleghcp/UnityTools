@@ -40,7 +40,7 @@ namespace OlegHcp.Managing
                 return (TService)ServiceCache.Place(serviceType, service);
 
             if (_throwIfNotFound)
-                throw ThrowErrors.ServiceNotRegistered(typeof(TService));
+                throw new ServiceNotFoundException(typeof(TService).Name);
 
             return null;
         }

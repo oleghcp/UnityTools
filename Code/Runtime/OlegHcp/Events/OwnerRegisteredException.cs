@@ -4,32 +4,10 @@ namespace OlegHcp.Events
 {
     public class OwnerRegisteredException : InvalidOperationException
     {
-        private InternalEvent _event;
-
-        public override string Message
+        internal OwnerRegisteredException(InternalEvent @event)
+            : base($"Event {@event.SignalType.Name} already has owner: {@event.Owner.GetType().Name}.")
         {
-            get
-            {
-                if (_event is null)
-                    return base.Message;
 
-                return base.Message + Environment.NewLine + GetValueMessage(_event);
-            }
-        }
-
-        internal OwnerRegisteredException(InternalEvent @event) : base(GetMessage())
-        {
-            _event = @event;
-        }
-
-        private static string GetMessage()
-        {
-            return $"Event already has owner.";
-        }
-
-        private static string GetValueMessage(InternalEvent @event)
-        {
-            return $"Owner is {@event.Owner.GetType().Name}.";
         }
     }
 }

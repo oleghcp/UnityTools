@@ -36,7 +36,7 @@ namespace OlegHcp.Managing
                 return (TService)service;
 
             if (ThrowIfNotFound)
-                throw new ServiceNotFoundException($"Service {typeof(TService).Name} for current state not found.");
+                throw new ServiceNotFoundException(typeof(TService).Name);
 
             return null;
         }
@@ -63,7 +63,7 @@ namespace OlegHcp.Managing
                 if (Context.TryGetOrCreateInstance(serviceType, out IService service))
                     ServiceCache.Add(serviceType, service);
                 else if (ThrowIfNotFound)
-                    throw ThrowErrors.ServiceNotRegistered(serviceType);
+                    throw new ServiceNotFoundException(serviceType.Name);
             }
         }
     }

@@ -40,7 +40,7 @@ namespace OlegHcp.Managing
             }
 
             if (_throwIfNotFound)
-                throw ThrowErrors.ServiceNotRegistered(typeof(TService));
+                throw new ServiceNotFoundException(typeof(TService).Name);
 
             return null;
         }

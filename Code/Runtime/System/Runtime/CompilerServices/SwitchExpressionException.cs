@@ -4,6 +4,8 @@
     {
         private object _unmatchedValue;
 
+        public object UnmatchedValue => _unmatchedValue;
+
         public override string Message
         {
             get
