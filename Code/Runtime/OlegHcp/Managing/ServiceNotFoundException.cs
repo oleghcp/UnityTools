@@ -4,7 +4,7 @@ namespace OlegHcp.Managing
 {
     public class ServiceNotFoundException : InvalidOperationException
     {
-        public ServiceNotFoundException(string serviceName)
+        internal ServiceNotFoundException(string serviceName)
             : base($"Service {serviceName} is not registered in initial context.")
         {
 
