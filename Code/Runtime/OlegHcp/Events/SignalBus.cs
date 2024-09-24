@@ -26,7 +26,7 @@ namespace OlegHcp.Events
             if (@event.TrySetOwner(owner))
                 return @event;
 
-            throw new OwnerRegisteringException(GetOwnerErrorMessage(@event));
+            throw new OwnerRegisteredException(@event);
         }
 
         public SubscriptionToken Subscribe<TSignal>(Action<TSignal> callback, int priority = int.MaxValue) where TSignal : ISignal
@@ -77,7 +77,7 @@ namespace OlegHcp.Events
             if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
             {
                 if (@event.HasOwner)
-                    throw new InvalidOperationException(GetOwnerErrorMessage(@event));
+                    throw new OwnerRegisteredException(@event);
 
                 @event.Invoke(signal);
             }
@@ -108,11 +108,6 @@ namespace OlegHcp.Events
                 return @event;
 
             return _storage.Place(signalType, new InternalEvent(signalType));
-        }
-
-        private static string GetOwnerErrorMessage(InternalEvent @event)
-        {
-            return $"Event {@event.SignalType.Name} already has owner: {@event.Owner.GetType().Name}.";
         }
     }
 }
