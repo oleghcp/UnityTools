@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
-using OlegHcp.Pool;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 
-namespace Assets.Code.Runtime.OlegHcp.Pool.Storages
+namespace OlegHcp.Pool.Storages
 {
     public class ConcurrentQueueStorage<T> : ConcurrentQueue<T>, IPoolStorage<T> where T : class
     {
+        public ConcurrentQueueStorage() { }
+        public ConcurrentQueueStorage(IEnumerable<T> collection) : base(collection) { }
+
         public bool TryAdd(T value)
         {
             Enqueue(value);
@@ -17,9 +19,11 @@ namespace Assets.Code.Runtime.OlegHcp.Pool.Storages
             return TryDequeue(out value);
         }
 
+#if !UNITY_2021_2_OR_NEWER
         public void Clear()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
+#endif
     }
 }

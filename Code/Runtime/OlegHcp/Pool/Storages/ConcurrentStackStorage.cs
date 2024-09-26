@@ -1,10 +1,13 @@
 ﻿using System.Collections.Concurrent;
-using OlegHcp.Pool;
+using System.Collections.Generic;
 
-namespace Runtime.OlegHcp.Pool.Storages
+namespace OlegHcp.Pool.Storages
 {
     public class ConcurrentStackStorage<T> : ConcurrentStack<T>, IPoolStorage<T> where T : class
     {
+        public ConcurrentStackStorage() { }
+        public ConcurrentStackStorage(IEnumerable<T> collection) : base(collection) { }
+
         public bool TryAdd(T value)
         {
             Push(value);
