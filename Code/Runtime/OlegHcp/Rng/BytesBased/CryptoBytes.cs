@@ -26,7 +26,7 @@ namespace OlegHcp.Rng.BytesBased
 
         public void GetBytes(Span<byte> buffer)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             _rng.GetBytes(buffer);
 #else
             for (int i = 0; i < buffer.Length; i++)

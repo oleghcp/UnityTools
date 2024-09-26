@@ -16,6 +16,11 @@
     ],
     "versionDefines": [
         {
+            "name": "Unity",
+            "expression": "",
+            "define": "UNITY"
+        },
+        {
             "name": "com.unity.modules.physics",
             "expression": "",
             "define": "INCLUDE_PHYSICS"

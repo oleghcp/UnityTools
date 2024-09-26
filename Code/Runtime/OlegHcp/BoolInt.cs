@@ -4,12 +4,18 @@ using UnityEngine;
 
 namespace OlegHcp
 {
+#if UNITY
     [Serializable]
+#endif
     public struct BoolInt : IEquatable<BoolInt>
     {
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _value;
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private bool _throwIfNegative;
 
         public bool ThrowIfNegative => _throwIfNegative;

@@ -13,10 +13,16 @@ namespace OlegHcp
         void NextBytes(Span<byte> buffer);
     }
 
+#if UNITY
     [Serializable]
+#endif
     public abstract class RandomNumberGenerator : IRng
     {
+#if UNITY
         private static IRng _default = new BuiltIn();
+#else
+        private static IRng _default = new Rng.BaseRng();
+#endif
 
         public static IRng Default => _default;
 
@@ -64,6 +70,7 @@ namespace OlegHcp
         protected abstract int NextInternal(int minValue, int maxValue);
         protected abstract float NextInternal(float minValue, float maxValue);
 
+#if UNITY
         #region Builtin
         private class BuiltIn : IRng
         {
@@ -104,5 +111,6 @@ namespace OlegHcp
             }
         }
         #endregion
+#endif
     }
 }

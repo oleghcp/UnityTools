@@ -4,12 +4,18 @@ using UnityEngine.Serialization;
 
 namespace OlegHcp.NumericEntities
 {
+#if UNITY
     [Serializable]
+#endif
     public struct DiapasonInt
     {
+#if UNITY
         [FormerlySerializedAs("x"), FormerlySerializedAs("From")]
+#endif
         public int Min;
+#if UNITY
         [FormerlySerializedAs("y"), FormerlySerializedAs("Before")]
+#endif
         public int Max;
 
 #if UNITY_EDITOR
@@ -20,7 +26,7 @@ namespace OlegHcp.NumericEntities
         public DiapasonInt(int min, int max)
         {
             if (min > max)
-                throw new ArgumentOutOfRangeException(nameof(min), $"{nameof(min)} value cannot be greater than {nameof(max)} value.");
+                throw ThrowErrors.MinMax(nameof(min), nameof(max));
 
             Min = min;
             Max = max;

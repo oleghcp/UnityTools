@@ -411,7 +411,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double Cbrt(this double value)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             return Math.Cbrt(value);
 #else
             return Math.Pow(value, MathUtility.THIRD);
@@ -447,7 +447,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double Cbrt(this long value)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             return Math.Cbrt(value);
 #else
             return Math.Pow(value, MathUtility.THIRD);
@@ -499,7 +499,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double Clamp(this double value, double min, double max)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             return Math.Clamp(value, min, max);
 #else
             if (value < min)
@@ -589,7 +589,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static long Clamp(this long value, long min, long max)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             return Math.Clamp(value, min, max);
 #else
             if (value < min)

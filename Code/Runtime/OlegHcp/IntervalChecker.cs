@@ -5,12 +5,18 @@ using UnityEngine;
 
 namespace OlegHcp
 {
+#if UNITY
     [Serializable]
+#endif
     public struct IntervalChecker
     {
+#if UNITY
         [SerializeField]
+#endif
         private float _interval;
+#if UNITY
         [SerializeField]
+#endif
         private float _currentValue;
 
         public float Interval

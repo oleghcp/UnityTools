@@ -5,12 +5,18 @@ using UnityEngine;
 
 namespace OlegHcp.NumericEntities
 {
+#if UNITY
     [Serializable]
+#endif
     public struct SpendingFloat : ISpendingEntity<float>, IEquatable<SpendingFloat>
     {
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private float _capacity;
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private float _curValue;
 
         public float Capacity

@@ -5,7 +5,9 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Pathfinding
 {
+#if UNITY
     [Serializable]
+#endif
     internal class OrderedStack<TValue, TPriority> : HashSet<TValue>
         where TValue : IEquatable<TValue>
         where TPriority : IComparable<TPriority>
@@ -108,7 +110,9 @@ namespace OlegHcp.Pathfinding
             base.Clear();
         }
 
+#if UNITY
         [Serializable]
+#endif
         private class ListNode : IPoolable
         {
             public TValue Element;

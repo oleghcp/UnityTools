@@ -5,7 +5,9 @@ namespace OlegHcp.Strings
     /// <summary>
     /// Based on http://www.dotnetperls.com/alphanumeric-sorting
     /// </summary>
+#if UNITY
     [Serializable]
+#endif
     public class AlphanumComparer : StringComparer
     {
         [NonSerialized]

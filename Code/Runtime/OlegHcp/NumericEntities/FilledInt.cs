@@ -5,12 +5,18 @@ using UnityEngine;
 
 namespace OlegHcp.NumericEntities
 {
+#if UNITY
     [Serializable]
+#endif
     public struct FilledInt : IFilledEntity<int>, IEquatable<FilledInt>
     {
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _threshold;
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _filler;
 
         public int Threshold

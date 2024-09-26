@@ -14,7 +14,7 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
 
         public T this[int index] => _items[_offset + index];
 
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
         public ReadOnlySegment<T> this[Range range]
         {
             get

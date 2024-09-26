@@ -4,12 +4,18 @@ using UnityEngine.Serialization;
 
 namespace OlegHcp.NumericEntities
 {
+#if UNITY
     [Serializable]
+#endif
     public struct Diapason
     {
+#if UNITY
         [FormerlySerializedAs("x")]
+#endif
         public float Min;
+#if UNITY
         [FormerlySerializedAs("y")]
+#endif
         public float Max;
 
 #if UNITY_EDITOR

@@ -3,12 +3,15 @@ using UnityEngine;
 
 namespace OlegHcp
 {
+#if UNITY
     [Serializable]
+#endif
     public struct IntMask : IEquatable<IntMask>
     {
         private const int SIZE = BitMask.SIZE;
-
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _mask;
 
 #if UNITY_EDITOR

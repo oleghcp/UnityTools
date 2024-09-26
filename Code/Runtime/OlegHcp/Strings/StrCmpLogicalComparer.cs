@@ -4,7 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace OlegHcp.Strings
 {
+#if UNITY
     [Serializable]
+#endif
     public class StrCmpLogicalComparer : StringComparer
     {
         [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]

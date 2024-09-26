@@ -4,7 +4,9 @@ using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Pathfinding
 {
+#if UNITY
     [Serializable]
+#endif
     public class PathFinder
     {
         private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();

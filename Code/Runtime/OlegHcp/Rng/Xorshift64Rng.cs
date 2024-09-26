@@ -3,7 +3,9 @@ using OlegHcp.Rng.BytesBased;
 
 namespace OlegHcp.Rng
 {
+#if UNITY
     [Serializable]
+#endif
     public class Xorshift64Rng : BytesBasedRng
     {
         public Xorshift64Rng() : base(new Xorshift64Bytes())

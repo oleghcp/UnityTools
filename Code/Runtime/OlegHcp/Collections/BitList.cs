@@ -11,16 +11,24 @@ using UnityEngine;
 namespace OlegHcp.Collections
 {
     //Based on System.Collections.BitArray
+#if UNITY
     [Serializable]
+#endif
     public sealed class BitList : ICloneable, IReadOnlyList<bool>, IMutable
     {
         private const int MAX_LENGTH = int.MaxValue / BitMask.SIZE;
 
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int[] _array;
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _length;
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private bool _mutable;
 
         private IndexCollection _indices;
@@ -131,7 +139,7 @@ namespace OlegHcp.Collections
         }
         #endregion
 
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
         public BitList(bool[] values) : this((Span<bool>)values) { }
 #else
         public BitList(bool[] values) : this((ICollection<bool>)values) { }
@@ -174,7 +182,7 @@ namespace OlegHcp.Collections
             }
         }
 
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
         public BitList(int[] intBlocks) : this((Span<int>)intBlocks) { }
 #else
         public BitList(int[] intBlocks) : this((ICollection<int>)intBlocks) { }

@@ -4,12 +4,18 @@ using UnityEngine;
 
 namespace OlegHcp.NumericEntities
 {
+#if UNITY
     [Serializable]
+#endif
     public struct AccumInt : IAccumEntity<int>, IEquatable<AccumInt>
     {
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _got;
+#if UNITY
         [SerializeField, HideInInspector]
+#endif
         private int _spent;
 
         public int Value => _got - _spent;

@@ -3,7 +3,9 @@ using UnityEngine;
 
 namespace OlegHcp.Rng
 {
+#if UNITY
     [Serializable]
+#endif
     public class XorshiftRng : RandomNumberGenerator
     {
         private readonly int _a;

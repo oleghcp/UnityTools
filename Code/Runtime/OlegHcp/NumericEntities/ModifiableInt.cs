@@ -6,7 +6,9 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.NumericEntities
 {
+#if UNITY
     [Serializable]
+#endif
     public sealed class ModifiableInt : IModifiableEntity<int>
     {
         private bool _cachingModifiedValue;

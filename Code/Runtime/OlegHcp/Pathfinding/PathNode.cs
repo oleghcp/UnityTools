@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace OlegHcp.Pathfinding
 {
+#if UNITY
     [Serializable]
+#endif
     public abstract class PathNode : IEquatable<PathNode>
     {
         private int _id;
@@ -42,7 +44,9 @@ namespace OlegHcp.Pathfinding
         }
     }
 
+#if UNITY
     [Serializable]
+#endif
     public struct PathTransition
     {
         public PathNode Neighbor { get; }

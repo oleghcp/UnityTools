@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 namespace OlegHcp.Strings
 {
+#if UNITY
     [Serializable]
+#endif
     public abstract class StringComparer : IComparer, IComparer<string>
     {
         public int Compare(object x, object y)

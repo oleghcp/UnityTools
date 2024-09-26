@@ -11,7 +11,7 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static void Fill<T>(this T[] self, T value)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             Array.Fill(self, value);
 #else
             for (int i = 0; i < self.Length; i++)
@@ -26,7 +26,7 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static void Fill<T>(this T[] self, T value, int startIndex, int count)
         {
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             Array.Fill(self, value, startIndex, count);
 #else
             if ((uint)startIndex >= (uint)self.Length)

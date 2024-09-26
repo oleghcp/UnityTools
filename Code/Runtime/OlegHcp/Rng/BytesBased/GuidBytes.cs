@@ -45,7 +45,7 @@ namespace OlegHcp.Rng.BytesBased
         {
             Guid guid = Guid.NewGuid();
 
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER || !UNITY
             Span<byte> bytes = stackalloc byte[COUNT + 2];
             if (guid.TryWriteBytes(bytes))
             {

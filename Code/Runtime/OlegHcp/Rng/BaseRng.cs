@@ -3,10 +3,10 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Rng
 {
-#if !UNITY_2021_2_OR_NEWER
+#if UNITY && !UNITY_2021_2_OR_NEWER
     [Serializable]
 #endif
-    public sealed class BaseRng : Random, IRng
+    public class BaseRng : Random, IRng
     {
         public BaseRng() : base() { }
 
