@@ -275,8 +275,6 @@ namespace OlegHcp.CSharp.Collections
             return GetSubArray(self, startIndex, self.Count - startIndex);
         }
 
-
-#if UNITY_2021_2_OR_NEWER
         /// <summary>
         /// Returns ListSegment with the specified range.
         /// </summary>
@@ -292,41 +290,6 @@ namespace OlegHcp.CSharp.Collections
         {
             return new ListSegment<T>(self, startIndex);
         }
-
-        /// <summary>
-        /// Enumerates collection within the specified range.
-        /// </summary>
-        [Obsolete("This method is deprecated. Use Slice instead.")]
-        public static ListSegment<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
-        {
-            return new ListSegment<T>(self, startIndex, length);
-        }
-
-        /// <summary>
-        /// Enumerates collection within the specified range.
-        /// </summary>
-        [Obsolete("This method is deprecated. Use Slice instead.")]
-        public static ListSegment<T> Enumerate<T>(this IList<T> self, int startIndex)
-        {
-            return new ListSegment<T>(self, startIndex);
-        }
-#else
-        /// <summary>
-        /// Enumerates collection within the specified range.
-        /// </summary>
-        public static Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex, int length)
-        {
-            return new Iterators.EnumerableQuery<T>(self, startIndex, length);
-        }
-
-        /// <summary>
-        /// Enumerates collection within the specified range.
-        /// </summary>
-        public static Iterators.EnumerableQuery<T> Enumerate<T>(this IList<T> self, int startIndex)
-        {
-            return new Iterators.EnumerableQuery<T>(self, startIndex);
-        }
-#endif
 
         /// <summary>
         /// Copies all the elements of the current collection to the specified Span`1.

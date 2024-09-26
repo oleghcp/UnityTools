@@ -1,5 +1,4 @@
-﻿#if UNITY_2021_2_OR_NEWER
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using OlegHcp.CSharp.Collections.Iterators;
@@ -19,6 +18,7 @@ namespace OlegHcp.CSharp.Collections
             set => _items[_offset + index] = value;
         }
 
+#if UNITY_2021_2_OR_NEWER
         public ListSegment<T> this[Range range]
         {
             get
@@ -27,6 +27,7 @@ namespace OlegHcp.CSharp.Collections
                 return new ListSegment<T>(_items, _offset + offset, length);
             }
         }
+#endif
 
         public IList<T> Items => _items;
         public int Offset => _offset;
@@ -208,4 +209,3 @@ namespace OlegHcp.CSharp.Collections
         }
     }
 }
-#endif

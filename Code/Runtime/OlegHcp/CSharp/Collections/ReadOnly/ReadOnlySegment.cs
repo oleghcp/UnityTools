@@ -1,5 +1,4 @@
-﻿#if UNITY_2021_2_OR_NEWER
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using OlegHcp.CSharp.Collections.Iterators;
@@ -15,6 +14,7 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
 
         public T this[int index] => _items[_offset + index];
 
+#if UNITY_2021_2_OR_NEWER
         public ReadOnlySegment<T> this[Range range]
         {
             get
@@ -23,6 +23,7 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
                 return new ReadOnlySegment<T>(_items, _offset + offset, length);
             }
         }
+#endif
 
         public IReadOnlyList<T> Items => _items;
         public int Offset => _offset;
@@ -171,4 +172,3 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
         }
     }
 }
-#endif

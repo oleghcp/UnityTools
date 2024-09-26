@@ -311,7 +311,6 @@ namespace OlegHcp.CSharp
             return (self as IList<T>).Contains(item);
         }
 
-#if UNITY_2021_2_OR_NEWER
         /// <summary>
         /// Returns ArraySegment with the specified range.
         /// </summary>
@@ -327,41 +326,6 @@ namespace OlegHcp.CSharp
         {
             return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
         }
-
-        /// <summary>
-        /// Enumerates array within the specified range.
-        /// </summary>
-        [Obsolete("This method is deprecated. Use Slice instead.")]
-        public static ArraySegment<T> Enumerate<T>(this T[] self, int startIndex, int length)
-        {
-            return new ArraySegment<T>(self, startIndex, length);
-        }
-
-        /// <summary>
-        /// Enumerates array within the specified range.
-        /// </summary>
-        [Obsolete("This method is deprecated. Use Slice instead.")]
-        public static ArraySegment<T> Enumerate<T>(this T[] self, int startIndex)
-        {
-            return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
-        }
-#else
-        /// <summary>
-        /// Enumerates array within the specified range.
-        /// </summary>
-        public static Collections.Iterators.ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex, int length)
-        {
-            return new Collections.Iterators.ArrayEnumerableQuery<T>(self, startIndex, length);
-        }
-
-        /// <summary>
-        /// Enumerates array within the specified range.
-        /// </summary>
-        public static Collections.Iterators.ArrayEnumerableQuery<T> Enumerate<T>(this T[] self, int startIndex)
-        {
-            return new Collections.Iterators.ArrayEnumerableQuery<T>(self, startIndex);
-        }
-#endif
 
         public static void DisplaceLeft<T>(this T[] self)
         {
