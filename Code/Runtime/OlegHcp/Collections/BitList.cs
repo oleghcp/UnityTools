@@ -33,8 +33,10 @@ namespace OlegHcp.Collections
 #endif
 
         public bool IsReadOnly => !_mutable;
-
+        public int Version => _version;
         int IReadOnlyCollection<bool>.Count => _length;
+        internal IReadOnlyList<int> IntBlocks => _array;
+        public IndexCollection Indices => _indices ?? (_indices = new IndexCollection(this));
 
         public int Length
         {
@@ -47,10 +49,6 @@ namespace OlegHcp.Collections
             get => Get(index);
             set => Set(index, value);
         }
-
-        public int Version => _version;
-
-        internal IReadOnlyList<int> IntBlocks => _array;
 
         public BitList(int length, bool defaultValue)
         {
@@ -491,11 +489,6 @@ namespace OlegHcp.Collections
             return new Enumerator_<bool>(this);
         }
         #endregion
-
-        public IndexCollection EnumerateIndices()
-        {
-            return _indices ?? (_indices = new IndexCollection(this));
-        }
 
         public BitList GetCopy(bool mutable)
         {
