@@ -5,17 +5,11 @@ using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Pool.Storages
 {
-    public class QueueStorage<T> : Queue<T>, IPoolStorage<T> where T : class, IPoolable
+    public class QueueStorage<T> : Queue<T>, IPoolStorage<T> where T : class
     {
-        public QueueStorage()
-        {
+        public QueueStorage() { }
 
-        }
-
-        public QueueStorage(int capacity) : base(capacity)
-        {
-
-        }
+        public QueueStorage(int capacity) : base(capacity) { }
 
         public bool TryAdd(T value)
         {

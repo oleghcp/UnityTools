@@ -7,7 +7,7 @@ namespace OlegHcp.Pool
     /// <summary>
     /// Object pool implementation.
     /// </summary>
-    public sealed class ObjectPool<T> where T : class, IPoolable
+    public sealed class ObjectPool<T> where T : class
     {
         private IPoolStorage<T> _storage;
         private IObjectFactory<T> _factory;
@@ -47,7 +47,7 @@ namespace OlegHcp.Pool
         {
             if (_storage.TryGet(out T value))
             {
-                value.Reinit();
+                (value as IPoolable)?.Reinit();
                 return value;
             }
 
@@ -59,7 +59,7 @@ namespace OlegHcp.Pool
         /// </summary>
         public void Release(T obj)
         {
-            obj.CleanUp();
+            (obj as IPoolable)?.CleanUp();
             if (!_storage.TryAdd(obj))
                 (obj as IDisposable)?.Dispose();
         }
