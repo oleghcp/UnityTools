@@ -1,5 +1,4 @@
 ﻿using System;
-using OlegHcp.Mathematics;
 using OlegHcp.Tools;
 
 namespace OlegHcp.NumericEntities
@@ -19,7 +18,7 @@ namespace OlegHcp.NumericEntities
         private float _spent;
 
         public float Value => _got - _spent;
-        public bool IsEmpty => _got.Approx(_spent);
+        public bool IsEmpty => _spent >= _got;
         public float Got => _got;
         public float Spent => _spent;
 

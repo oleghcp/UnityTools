@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace OlegHcp.Mathematics
 {
@@ -78,13 +77,15 @@ namespace OlegHcp.Mathematics
             return double.IsNaN(value);
         }
 
+#if UNITY
         /// <summary>
         /// Compares two big floating point values if they are similar.
         /// </summary>
         public static bool Approx(this float value, float other)
         {
-            return Mathf.Approximately(value, other);
+            return UnityEngine.Mathf.Approximately(value, other);
         }
+#endif
 
         public static int DigitsCount(this int number)
         {
@@ -459,7 +460,10 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float RatioToValue(this float value, float a, float b)
         {
-            return Mathf.InverseLerp(a, b, value);
+            if (a == b)
+                return 0f;
+
+            return Clamp01((value - a) / (b - a));
         }
 
         /// <summary>
@@ -475,7 +479,10 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float RatioToValue(this int value, int a, int b)
         {
-            return Mathf.InverseLerp(a, b, value);
+            if (a == b)
+                return 0f;
+
+            return Clamp01((value - a) / (b - a));
         }
 
         /// <summary>
@@ -491,17 +498,6 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float Clamp(this float value, float min, float max)
         {
-            return Mathf.Clamp(value, min, max);
-        }
-
-        /// <summary>
-        /// Clamps the value between a minimum float and maximum float value.
-        /// </summary>
-        public static double Clamp(this double value, double min, double max)
-        {
-#if UNITY_2021_2_OR_NEWER || !UNITY
-            return Math.Clamp(value, min, max);
-#else
             if (value < min)
                 return min;
 
@@ -509,7 +505,20 @@ namespace OlegHcp.Mathematics
                 return max;
 
             return value;
-#endif
+        }
+
+        /// <summary>
+        /// Clamps the value between a minimum float and maximum float value.
+        /// </summary>
+        public static double Clamp(this double value, double min, double max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
         }
 
         /// <summary>
@@ -517,7 +526,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float Clamp(this float value, in (float min, float max) range)
         {
-            return Mathf.Clamp(value, range.min, range.max);
+            return Clamp(value, range.min, range.max);
         }
 
         /// <summary>
@@ -565,7 +574,13 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float Clamp01(this float value)
         {
-            return Mathf.Clamp01(value);
+            if (value < 0f)
+                return 0f;
+
+            if (value > 1f)
+                return 1f;
+
+            return value;
         }
 
         /// <summary>        
@@ -581,17 +596,6 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static int Clamp(this int value, int min, int max)
         {
-            return Mathf.Clamp(value, min, max);
-        }
-
-        /// <summary>
-        /// Clamps the value between a minimum int and maximum int value.
-        /// </summary>
-        public static long Clamp(this long value, long min, long max)
-        {
-#if UNITY_2021_2_OR_NEWER || !UNITY
-            return Math.Clamp(value, min, max);
-#else
             if (value < min)
                 return min;
 
@@ -599,7 +603,20 @@ namespace OlegHcp.Mathematics
                 return max;
 
             return value;
-#endif
+        }
+
+        /// <summary>
+        /// Clamps the value between a minimum int and maximum int value.
+        /// </summary>
+        public static long Clamp(this long value, long min, long max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
         }
 
         /// <summary>
@@ -639,7 +656,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float Repeat(this float value, float length)
         {
-            return Mathf.Repeat(value, length);
+            return Clamp(value - Floor(value / length) * length, 0f, length);
         }
 
         /// <summary>
@@ -673,7 +690,8 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float PingPong(this float value, float length)
         {
-            return Mathf.PingPong(value, length);
+            value = Repeat(value, length * 2f);
+            return length - Abs(value - length);
         }
 
         /// <summary>
@@ -708,7 +726,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float ToDegrees(this float value)
         {
-            return value * Mathf.Rad2Deg;
+            return value * MathUtility.Rad2Deg;
         }
 
         /// <summary>
@@ -716,7 +734,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double ToDegrees(this double value)
         {
-            return value * Mathf.Rad2Deg;
+            return value * MathUtility.Rad2Deg;
         }
 
         /// <summary>
@@ -724,7 +742,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static float ToRadians(this float value)
         {
-            return value * Mathf.Deg2Rad;
+            return value * MathUtility.Deg2Rad;
         }
 
         /// <summary>
@@ -732,15 +750,16 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double ToRadians(this double value)
         {
-            return value * Mathf.Deg2Rad;
+            return value * MathUtility.Deg2Rad;
         }
 
+#if UNITY
         /// <summary>
         /// Returns true if the value is power of two.
         /// </summary>
         public static bool IsPoT(this int value)
         {
-            return Mathf.IsPowerOfTwo(value);
+            return UnityEngine.Mathf.IsPowerOfTwo(value);
         }
 
         /// <summary>
@@ -748,8 +767,9 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static int ToClosestPoT(this int value)
         {
-            return Mathf.ClosestPowerOfTwo(value);
+            return UnityEngine.Mathf.ClosestPowerOfTwo(value);
         }
+#endif
 
         /// <summary>
         /// Converts the boolean value to integer.

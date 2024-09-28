@@ -11,6 +11,9 @@ namespace OlegHcp.Mathematics
         internal const double THIRD = 1d / 3d;
 #endif
 
+        public const float Deg2Rad = PI / 180f;
+        public const float Rad2Deg = 57.29578f;
+
         /// <summary>
         /// Rotates an array cell position.
         /// </summary>
