@@ -1,7 +1,6 @@
 ﻿using System;
 using OlegHcp.Mathematics;
 using OlegHcp.Tools;
-using UnityEngine;
 
 namespace OlegHcp.NumericEntities
 {
@@ -11,11 +10,11 @@ namespace OlegHcp.NumericEntities
     public struct SpendingInt : ISpendingEntity<int>, IEquatable<SpendingInt>
     {
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _capacity;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _curValue;
 

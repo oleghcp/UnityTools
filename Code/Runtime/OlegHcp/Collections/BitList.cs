@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections.Iterators;
 using OlegHcp.Tools;
-using UnityEngine;
 
 namespace OlegHcp.Collections
 {
@@ -19,15 +18,15 @@ namespace OlegHcp.Collections
         private const int MAX_LENGTH = int.MaxValue / BitMask.SIZE;
 
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int[] _array;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _length;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private bool _mutable;
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using OlegHcp.Mathematics;
 
 namespace OlegHcp.Rng
 {
@@ -62,7 +62,7 @@ namespace OlegHcp.Rng
         {
             Xorshift32();
             float normalizedRandomFloat = _num32 / (float)uint.MaxValue;
-            return Mathf.LerpUnclamped(minValue, maxValue, normalizedRandomFloat);
+            return MathUtility.LerpUnclamped(minValue, maxValue, normalizedRandomFloat);
         }
 
         private void Xorshift32()

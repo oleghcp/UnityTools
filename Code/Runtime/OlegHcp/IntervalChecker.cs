@@ -1,7 +1,6 @@
 ﻿using System;
 using OlegHcp.Mathematics;
 using OlegHcp.Tools;
-using UnityEngine;
 
 namespace OlegHcp
 {
@@ -11,11 +10,11 @@ namespace OlegHcp
     public struct IntervalChecker
     {
 #if UNITY
-        [SerializeField]
+        [UnityEngine.SerializeField]
 #endif
         private float _interval;
 #if UNITY
-        [SerializeField]
+        [UnityEngine.SerializeField]
 #endif
         private float _currentValue;
 

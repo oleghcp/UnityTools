@@ -10,11 +10,11 @@ namespace OlegHcp.NumericEntities
     public struct AccumInt : IAccumEntity<int>, IEquatable<AccumInt>
     {
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _got;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _spent;
 

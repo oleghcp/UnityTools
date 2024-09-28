@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using OlegHcp.Mathematics;
 
 namespace OlegHcp.Rng.BytesBased
 {
@@ -42,7 +42,7 @@ namespace OlegHcp.Rng.BytesBased
         protected override float NextInternal(float minValue, float maxValue)
         {
             float normalizedRandomFloat = RandomUint16() / (float)ushort.MaxValue;
-            return Mathf.LerpUnclamped(minValue, maxValue, normalizedRandomFloat);
+            return MathUtility.LerpUnclamped(minValue, maxValue, normalizedRandomFloat);
         }
 
         private byte RandomUint8()

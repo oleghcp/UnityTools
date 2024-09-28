@@ -49,6 +49,7 @@ namespace OlegHcp.Tools
             }
         }
 
+#if UNITY
         public static object CloneObject(object source)
         {
             if (source is null)
@@ -67,6 +68,7 @@ namespace OlegHcp.Tools
                 return formatter.Deserialize(stream);
             };
         }
+#endif
 
         internal static string SimplifyTypeName(string assemblyQualifiedName)
         {

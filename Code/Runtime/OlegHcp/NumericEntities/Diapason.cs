@@ -1,6 +1,5 @@
 ﻿using System;
 using OlegHcp.Tools;
-using UnityEngine.Serialization;
 
 namespace OlegHcp.NumericEntities
 {
@@ -10,11 +9,11 @@ namespace OlegHcp.NumericEntities
     public struct Diapason
     {
 #if UNITY
-        [FormerlySerializedAs("x")]
+        [UnityEngine.Serialization.FormerlySerializedAs("x")]
 #endif
         public float Min;
 #if UNITY
-        [FormerlySerializedAs("y")]
+        [UnityEngine.Serialization.FormerlySerializedAs("y")]
 #endif
         public float Max;
 

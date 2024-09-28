@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace OlegHcp
 {
@@ -10,11 +9,11 @@ namespace OlegHcp
     public struct BoolInt : IEquatable<BoolInt>
     {
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _value;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private bool _throwIfNegative;
 

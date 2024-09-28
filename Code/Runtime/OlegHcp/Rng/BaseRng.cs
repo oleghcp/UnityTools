@@ -1,4 +1,5 @@
 ﻿using System;
+using OlegHcp.Mathematics;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Rng
@@ -17,7 +18,7 @@ namespace OlegHcp.Rng
             if (minValue > maxValue)
                 throw ThrowErrors.MinMax(nameof(minValue), nameof(maxValue));
 
-            return UnityEngine.Mathf.LerpUnclamped(minValue, maxValue, (float)Sample());
+            return MathUtility.LerpUnclamped(minValue, maxValue, (float)Sample());
         }
 
         public float Next(float maxValue)
@@ -25,7 +26,7 @@ namespace OlegHcp.Rng
             if (maxValue < 0f)
                 throw ThrowErrors.NegativeParameter(nameof(maxValue));
 
-            return UnityEngine.Mathf.LerpUnclamped(0f, maxValue, (float)Sample());
+            return MathUtility.LerpUnclamped(0f, maxValue, (float)Sample());
         }
 
 #if !UNITY_2021_2_OR_NEWER

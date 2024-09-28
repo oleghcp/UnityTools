@@ -111,5 +111,15 @@ namespace OlegHcp.Mathematics
             }
             buffer.Reverse();
         }
+
+        public static float Lerp(float min, float max, float ratio)
+        {
+            return min + (max - min) * ratio.Clamp01();
+        }
+
+        public static float LerpUnclamped(float min, float max, float ratio)
+        {
+            return min + (max - min) * ratio;
+        }
     }
 }

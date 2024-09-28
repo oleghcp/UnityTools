@@ -1,7 +1,6 @@
 ﻿using System;
 using OlegHcp.Mathematics;
 using OlegHcp.Tools;
-using UnityEngine;
 
 namespace OlegHcp.NumericEntities
 {
@@ -11,11 +10,11 @@ namespace OlegHcp.NumericEntities
     public struct AccumFloat : IAccumEntity<float>, IEquatable<AccumFloat>
     {
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private float _got;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private float _spent;
 

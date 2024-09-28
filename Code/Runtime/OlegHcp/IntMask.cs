@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace OlegHcp
 {
@@ -10,7 +9,7 @@ namespace OlegHcp
     {
         private const int SIZE = BitMask.SIZE;
 #if UNITY
-        [SerializeField, HideInInspector]
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector]
 #endif
         private int _mask;
 
@@ -137,15 +136,17 @@ namespace OlegHcp
             return mask._mask;
         }
 
-        public static implicit operator LayerMask(IntMask intMask)
+#if UNITY
+        public static implicit operator UnityEngine.LayerMask(IntMask intMask)
         {
             return intMask._mask;
         }
 
-        public static implicit operator IntMask(LayerMask layerMask)
+        public static implicit operator IntMask(UnityEngine.LayerMask layerMask)
         {
             return new IntMask(layerMask);
         }
+#endif
         #endregion
     }
 }
