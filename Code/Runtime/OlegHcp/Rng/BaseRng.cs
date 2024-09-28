@@ -29,7 +29,7 @@ namespace OlegHcp.Rng
             return MathUtility.LerpUnclamped(0f, maxValue, (float)Sample());
         }
 
-#if !UNITY_2021_2_OR_NEWER
+#if UNITY && !UNITY_2021_2_OR_NEWER
         public void NextBytes(Span<byte> buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
