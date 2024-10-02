@@ -140,7 +140,7 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(MAIN_MENU_NAME + "Misc/Create csc.rsp")]
         private static void CreateRspFile()
         {
-            string text = "-nowarn:8632,8524/n/r-warnaserror:0108,0114,8509";
+            string text = "-nowarn:8632,8524\n-warnaserror:0108,0114,8509";
             File.WriteAllText($"{AssetDatabaseExt.ASSET_FOLDER}csc.rsp", text);
             AssetDatabase.Refresh();
         }
