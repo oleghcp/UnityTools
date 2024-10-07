@@ -13,6 +13,7 @@ namespace Inspectors
     {
         private SortingLayerDrawTool _drawer;
         private Editor _builtInEditor;
+        private static bool _expanded;
 
         private void OnEnable()
         {
@@ -30,7 +31,16 @@ namespace Inspectors
         public override void OnInspectorGUI()
         {
             _builtInEditor.OnInspectorGUI();
-            _drawer.Draw(target);
+
+            _expanded = EditorGUILayout.Foldout(_expanded, "Sorting (ext.)", true);
+
+            if (!_expanded)
+                return;
+
+            using (new EditorGUI.IndentLevelScope(1))
+            {
+                _drawer.Draw(target);
+            }
         }
     }
 }
