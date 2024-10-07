@@ -381,7 +381,32 @@ namespace OlegHcpEditor.Window
 
         private Vector2 GetWinSize(IList<Data> items)
         {
-            return new Vector2(getWidth(), getHeight());
+            return new Vector2()
+            {
+                x = getWidth(),
+                y = getHeight(),
+            };
+
+            float getWidth()
+            {
+                if (items.Count == 0)
+                    return MIN_WINDOW_WIDTH;
+
+                Data longestLine = items.Where(item => !item.IsSeparator)
+                                        .GetWithMax(item => item.Text.Length);
+                try
+                {
+                    Vector2 size = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(longestLine.Text));
+                    _maxLineLength = size.x * 1.2f;
+                }
+                catch (ArgumentException)
+                {
+                    _maxLineLength = longestLine.Text.Length * 10f;
+                }
+
+                float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLineLength + 2f;
+                return lineWidth.Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
+            }
 
             float getHeight()
             {
@@ -397,27 +422,6 @@ namespace OlegHcpEditor.Window
 
                     return items.Count + 1;
                 }
-            }
-
-            float getWidth()
-            {
-                if (items.Count == 0)
-                    return MIN_WINDOW_WIDTH;
-
-                Data longestLine = items.Where(item => !item.IsSeparator)
-                                        .GetWithMax(item => item.Text.Length);
-                try
-                {
-                    Vector2 size = GUI.skin.label.CalcSize(EditorGuiUtility.TempContent(longestLine.Text));
-                    _maxLineLength = size.x;
-                }
-                catch (ArgumentException)
-                {
-                    _maxLineLength = longestLine.Text.Length * 10f;
-                }
-
-                float lineWidth = EditorGuiUtility.StandardHorizontalSpacing * 5f + EditorGuiUtility.SmallButtonWidth + _maxLineLength + 2f;
-                return (lineWidth + lineWidth * 0.12f).Clamp(MIN_WINDOW_WIDTH, Screen.currentResolution.width * 0.5f);
             }
         }
 
