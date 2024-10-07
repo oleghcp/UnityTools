@@ -19,9 +19,9 @@ namespace OlegHcp.Async
         private bool _unstoppable;
 
 #if UNITY_EDITOR
-        internal string StackTrace { get; private set; }
+        public string StackTrace { get; private set; }
 #endif
-        internal TaskDispatcher Owner => _owner;
+        public TaskDispatcher Owner => _owner;
         public long Id => _id;
         public bool CanBeStopped => !_unstoppable;
 
@@ -38,12 +38,12 @@ namespace OlegHcp.Async
                 _owner.ReleaseRunner(this);
         }
 
-        public TaskInfo RunAsync(IEnumerator routine, bool unstoppable, in CancellationToken token)
+        public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
         {
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
-            _id = TaskSystem.IdProvider.GetNewId();
+            _id = id;
             _unstoppable = unstoppable;
             _iterator.Initialize(routine, token);
             TaskInfo task = new TaskInfo(this);

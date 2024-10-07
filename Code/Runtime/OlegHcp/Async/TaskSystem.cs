@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
-using OlegHcp.CSharp.Collections;
 using OlegHcp.Engine;
 using OlegHcp.IdGenerating;
-using UnityEngine;
 
 namespace OlegHcp.Async
 {
@@ -15,30 +12,15 @@ namespace OlegHcp.Async
     public static class TaskSystem
     {
         private static readonly LongIdGenerator _idProvider = new LongIdGenerator();
-        private static readonly Dictionary<float, WaitForSeconds> _timeInstructions = new Dictionary<float, WaitForSeconds>();
-        private static readonly WaitForEndOfFrame _waitForEndOfFrame = new WaitForEndOfFrame();
-        private static readonly WaitForFixedUpdate _waitForFixedUpdate = new WaitForFixedUpdate();
         private static TaskDispatcher _globals;
         private static TaskDispatcher _locals;
-
-        public static WaitForEndOfFrame WaitForEndOfFrame => _waitForEndOfFrame;
-        public static WaitForFixedUpdate WaitForFixedUpdate => _waitForFixedUpdate;
-        internal static LongIdGenerator IdProvider => _idProvider;
-
-        public static WaitForSeconds GetWaitInstruction(float seconds)
-        {
-            if (_timeInstructions.TryGetValue(seconds, out var instruction))
-                return instruction;
-
-            return _timeInstructions.Place(seconds, new WaitForSeconds(seconds));
-        }
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator routine, in CancellationToken token)
         {
-            return GetGlobal().GetRunner().RunAsync(routine, false, token);
+            return GetGlobalRunner().RunAsync(routine, _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -46,7 +28,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator routine, bool unstoppable = false)
         {
-            return GetGlobal().GetRunner().RunAsync(routine, unstoppable, default);
+            return GetGlobalRunner().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
         }
 
         /// <summary>
@@ -54,7 +36,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator routine, in CancellationToken token)
         {
-            return GetLocal().GetRunner().RunAsync(routine, false, token);
+            return GetLocalRunner().RunAsync(routine, _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -62,7 +44,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator routine, bool unstoppable = false)
         {
-            return GetLocal().GetRunner().RunAsync(routine, unstoppable, default);
+            return GetLocalRunner().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
         }
 
         /// <summary>
@@ -70,7 +52,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), false, token);
+            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -78,7 +60,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return GetLocal().GetRunner().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), false, token);
+            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -86,7 +68,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run, in CancellationToken token = default)
         {
-            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), false, token);
+            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -94,7 +76,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunAfterFramesLocally(int frames, Action run, in CancellationToken token = default)
         {
-            return GetLocal().GetRunner().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), false, token);
+            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -102,7 +84,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), false, token);
+            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -110,7 +92,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetLocal().GetRunner().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), false, token);
+            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -118,7 +100,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo Repeat(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetGlobal().GetRunner().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), false, token);
+            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -126,10 +108,10 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RepeatLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetLocal().GetRunner().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), false, token);
+            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
-        private static TaskDispatcher GetGlobal()
+        private static TaskRunner GetGlobalRunner()
         {
             if (_globals == null)
             {
@@ -137,15 +119,15 @@ namespace OlegHcp.Async
                 _globals.Immortalize();
             }
 
-            return _globals;
+            return _globals.GetRunner();
         }
 
-        private static TaskDispatcher GetLocal()
+        private static TaskRunner GetLocalRunner()
         {
             if (_locals == null)
                 _locals = ComponentUtility.CreateInstance<TaskDispatcher>();
 
-            return _locals;
+            return _locals.GetRunner();
         }
     }
 }
