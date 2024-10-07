@@ -27,9 +27,9 @@ namespace OlegHcp.SaveLoad
     {
         private const BindingFlags FIELD_MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-        private ISaver _saver;
-        private IKeyGenerator _keyGenerator;
-        private Dictionary<object, List<SaveLoadFieldAttribute>> _storage = new Dictionary<object, List<SaveLoadFieldAttribute>>();
+        private readonly ISaver _saver;
+        private readonly IKeyGenerator _keyGenerator;
+        private readonly Dictionary<object, List<SaveLoadFieldAttribute>> _storage = new Dictionary<object, List<SaveLoadFieldAttribute>>();
         private int _asyncSaveFieldsPerFrame = 50;
 
         public int AsyncSaveFieldsPerFrame
@@ -72,14 +72,6 @@ namespace OlegHcp.SaveLoad
 
             _saver = saver;
             _keyGenerator = keyGenerator;
-        }
-
-        public void ReplaceSaver(ISaver saver)
-        {
-            if (saver == null)
-                throw ThrowErrors.NullParameter(nameof(saver));
-
-            _saver = saver;
         }
 
         /// <summary>
@@ -235,7 +227,7 @@ namespace OlegHcp.SaveLoad
         public TaskInfo SaveAsync(string version, bool collectFields = true)
         {
             if (collectFields)
-                return getRoutine(_asyncSaveFieldsPerFrame).StartAsync(true);
+                return TaskSystem.StartAsync(getRoutine(_asyncSaveFieldsPerFrame), true);
 
             return _saver.SaveVersionAsync(version);
 
