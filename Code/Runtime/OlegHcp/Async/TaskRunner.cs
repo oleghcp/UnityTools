@@ -14,14 +14,16 @@ namespace OlegHcp.Async
 
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
-        private bool _enabled = true;
         private long _id;
+        private bool _enabled = true;
+        private bool _unstoppable;
 
 #if UNITY_EDITOR
         internal string StackTrace { get; private set; }
 #endif
         internal TaskDispatcher Owner => _owner;
         public long Id => _id;
+        public bool CanBeStopped => !_unstoppable;
 
         public TaskRunner SetUp(TaskDispatcher owner)
         {
@@ -36,12 +38,13 @@ namespace OlegHcp.Async
                 _owner.ReleaseRunner(this);
         }
 
-        public TaskInfo RunAsync(IEnumerator routine, in CancellationToken token)
+        public TaskInfo RunAsync(IEnumerator routine, bool unstoppable, in CancellationToken token)
         {
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
             _id = TaskSystem.IdProvider.GetNewId();
+            _unstoppable = unstoppable;
             _iterator.Initialize(routine, token);
             TaskInfo task = new TaskInfo(this);
             StartCoroutine(_iterator);
@@ -50,6 +53,9 @@ namespace OlegHcp.Async
 
         public void Stop()
         {
+            if (_unstoppable)
+                throw new InvalidOperationException("Task cannot be stopped.");
+
             _iterator.Stop();
         }
 

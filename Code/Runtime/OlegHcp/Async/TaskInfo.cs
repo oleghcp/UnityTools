@@ -20,7 +20,7 @@ namespace OlegHcp.Async
     public readonly struct TaskInfo : IEquatable<TaskInfo>, IEnumerator
     {
         private readonly long _id;
-        private readonly TaskRunner _task;
+        private readonly TaskRunner _runner;
 
         /// <summary>
         /// Provides task ID.
@@ -32,17 +32,19 @@ namespace OlegHcp.Async
         /// </summary>
         public bool IsAlive => IsAliveInternal();
 
+        public bool CanBeStopped => _runner.CanBeStopped;
+
         object IEnumerator.Current => null;
 
         internal TaskInfo(TaskRunner runner)
         {
-            _id = (_task = runner).Id;
+            _id = (_runner = runner).Id;
         }
 
         public void AddCompleteListener(Action<TaskResult> onComplete)
         {
             if (IsAliveInternal())
-                _task.OnCompleted1_Event += onComplete;
+                _runner.OnCompleted1_Event += onComplete;
             else
                 throw ThrowErrors.DeadTask();
         }
@@ -50,7 +52,7 @@ namespace OlegHcp.Async
         public void AddCompleteListener(Action onComplete)
         {
             if (IsAliveInternal())
-                _task.OnCompleted2_Event += onComplete;
+                _runner.OnCompleted2_Event += onComplete;
             else
                 throw ThrowErrors.DeadTask();
         }
@@ -61,7 +63,7 @@ namespace OlegHcp.Async
         public void Stop()
         {
             if (IsAliveInternal())
-                _task.Stop();
+                _runner.Stop();
         }
 
         #region Regular stuff
@@ -106,7 +108,7 @@ namespace OlegHcp.Async
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsAliveInternal()
         {
-            return _task != null && _task.Id == _id;
+            return _runner != null && _runner.Id == _id;
         }
     }
 }

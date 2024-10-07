@@ -77,7 +77,7 @@ namespace OlegHcp.Timers
             public float CurrentTime;
             public float ExtraTimeScale = 1f;
 
-            private MonoTimer _owner;
+            private readonly MonoTimer _owner;
 
             public object Current => null;
 

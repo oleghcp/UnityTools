@@ -235,7 +235,7 @@ namespace OlegHcp.SaveLoad
         public TaskInfo SaveAsync(string version, bool collectFields = true)
         {
             if (collectFields)
-                return getRoutine(_asyncSaveFieldsPerFrame).StartAsync();
+                return getRoutine(_asyncSaveFieldsPerFrame).StartAsync(true);
 
             return _saver.SaveVersionAsync(version);
 
