@@ -1,20 +1,20 @@
 ﻿using OlegHcp;
+using OlegHcpEditor.Gui;
 using OlegHcpEditor.MenuItems;
 using UnityEditor;
 using UnityEngine;
-using static OlegHcpEditor.Drawers.Attributes.SortingLayerIDDrawer;
 
 namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(RenderSorter))]
     internal class RenderSorterEditor : Editor<RenderSorter>
     {
-        private DrawTool _drawer;
+        private SortingLayerDrawTool _drawer;
         private Renderer _renderer;
 
         private void OnEnable()
         {
-            _drawer = new DrawTool();
+            _drawer = new SortingLayerDrawTool();
 
             SerializedProperty rendererProp = serializedObject.FindProperty(RenderSorter.RendererFieldName);
             _renderer = rendererProp.objectReferenceValue as Renderer;
@@ -28,25 +28,7 @@ namespace OlegHcpEditor.Inspectors
 
         public override void OnInspectorGUI()
         {
-            Draw(_drawer, _renderer);
-        }
-
-        public static void Draw(DrawTool drawer, Renderer target)
-        {
-            EditorGUI.BeginChangeCheck();
-
-            int sortingLayerID = drawer.Draw("Sorting Layer", target.sortingLayerID);
-            int sortingOrder = EditorGUILayout.IntField("Sorting Order", target.sortingOrder);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RegisterCompleteObjectUndo(target, "Renderer sorting");
-
-                target.sortingLayerID = sortingLayerID;
-                target.sortingOrder = sortingOrder;
-
-                EditorUtility.SetDirty(target);
-            }
+            _drawer.Draw(_renderer);
         }
 
         [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
