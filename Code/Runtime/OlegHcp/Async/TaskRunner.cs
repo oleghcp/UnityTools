@@ -9,7 +9,8 @@ namespace OlegHcp.Async
 {
     internal class TaskRunner : MonoBehaviour, IPoolable
     {
-        public event Action<TaskResult> OnCompleted_Event;
+        public event Action<TaskResult> OnCompleted1_Event;
+        public event Action OnCompleted2_Event;
 
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
@@ -55,22 +56,29 @@ namespace OlegHcp.Async
         public void OnCoroutineInterrupted()
         {
             OnCoroutineEndedInternal();
+            OnCompleted2_Event = null;
 
-            if (OnCompleted_Event != null)
-            {
-                try { OnCompleted_Event(default); }
-                finally { OnCompleted_Event = null; }
-            }
+            if (OnCompleted1_Event == null)
+                return;
+
+            try { OnCompleted1_Event(default); }
+            finally { OnCompleted1_Event = null; }
         }
 
         public void OnCoroutineEnded()
         {
             OnCoroutineEndedInternal();
 
-            if (OnCompleted_Event != null)
+            if (OnCompleted1_Event != null)
             {
-                try { OnCompleted_Event(new TaskResult(_iterator.Current, true)); }
-                finally { OnCompleted_Event = null; }
+                try { OnCompleted1_Event(new TaskResult(_iterator.Current, true)); }
+                finally { OnCompleted1_Event = null; }
+            }
+
+            if (OnCompleted2_Event != null)
+            {
+                try { OnCompleted2_Event(); }
+                finally { OnCompleted2_Event = null; }
             }
         }
 

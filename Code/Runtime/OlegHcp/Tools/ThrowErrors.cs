@@ -93,5 +93,10 @@ namespace OlegHcp.Tools
         {
             return new InvalidOperationException("Modifier already added.");
         }
+
+        public static InvalidOperationException DeadTask()
+        {
+            return new InvalidOperationException("Task isn't alive.");
+        }
     }
 }

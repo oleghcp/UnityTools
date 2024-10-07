@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using OlegHcp.Tools;
 
 namespace OlegHcp.Async
 {
@@ -41,9 +42,17 @@ namespace OlegHcp.Async
         public void AddCompleteListener(Action<TaskResult> onComplete)
         {
             if (IsAliveInternal())
-                _task.OnCompleted_Event += onComplete;
+                _task.OnCompleted1_Event += onComplete;
             else
-                throw new InvalidOperationException("Task isn't alive.");
+                throw ThrowErrors.DeadTask();
+        }
+
+        public void AddCompleteListener(Action onComplete)
+        {
+            if (IsAliveInternal())
+                _task.OnCompleted2_Event += onComplete;
+            else
+                throw ThrowErrors.DeadTask();
         }
 
         /// <summary>
