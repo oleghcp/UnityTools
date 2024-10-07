@@ -314,7 +314,7 @@ namespace OlegHcp.CSharp
         /// <summary>
         /// Returns ArraySegment with the specified range.
         /// </summary>
-        public static ArraySegment<T> Slice<T>(this T[] self, int startIndex, int length)
+        public static ArraySegment<T> GetSegment<T>(this T[] self, int startIndex, int length)
         {
             return new ArraySegment<T>(self, startIndex, length);
         }
@@ -322,7 +322,7 @@ namespace OlegHcp.CSharp
         /// <summary>
         /// Returns ArraySegment with the specified range.
         /// </summary>
-        public static ArraySegment<T> Slice<T>(this T[] self, int startIndex)
+        public static ArraySegment<T> GetSegment<T>(this T[] self, int startIndex)
         {
             return new ArraySegment<T>(self, startIndex, self.Length - startIndex);
         }

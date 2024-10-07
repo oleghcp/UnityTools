@@ -198,12 +198,12 @@ namespace OlegHcp.CSharp.Collections.ReadOnly
             return self[self.Count - (index + 1)];
         }
 
-        public static ReadOnlySegment<T> Slice_<T>(this IReadOnlyList<T> self, int startIndex, int length)
+        public static ReadOnlySegment<T> GetSegment_<T>(this IReadOnlyList<T> self, int startIndex, int length)
         {
             return new ReadOnlySegment<T>(self, startIndex, length);
         }
 
-        public static ReadOnlySegment<T> Slice_<T>(this IReadOnlyList<T> self, int startIndex)
+        public static ReadOnlySegment<T> GetSegment_<T>(this IReadOnlyList<T> self, int startIndex)
         {
             return new ReadOnlySegment<T>(self, startIndex);
         }

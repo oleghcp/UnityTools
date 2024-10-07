@@ -278,7 +278,7 @@ namespace OlegHcp.CSharp.Collections
         /// <summary>
         /// Returns ListSegment with the specified range.
         /// </summary>
-        public static ListSegment<T> Slice<T>(this IList<T> self, int startIndex, int length)
+        public static ListSegment<T> GetSegment<T>(this IList<T> self, int startIndex, int length)
         {
             return new ListSegment<T>(self, startIndex, length);
         }
@@ -286,7 +286,7 @@ namespace OlegHcp.CSharp.Collections
         /// <summary>
         /// Returns ListSegment with the specified range.
         /// </summary>
-        public static ListSegment<T> Slice<T>(this IList<T> self, int startIndex)
+        public static ListSegment<T> GetSegment<T>(this IList<T> self, int startIndex)
         {
             return new ListSegment<T>(self, startIndex);
         }
