@@ -40,7 +40,7 @@ namespace OlegHcp.GameConsole
 
         private readonly StringBuilder _stringBuilder = new StringBuilder();
         private readonly Dictionary<string, MethodInfo> _commands = new Dictionary<string, MethodInfo>();
-        private readonly List<string> _cmdHistory = new List<string>();
+        private readonly List<string> _cmdHistory = new List<string>() { string.Empty };
         private PointerEventData _pointerEventData;
         private TerminalOptions _options;
         private ITerminalSwitchTrigger _switchTrigger;
@@ -56,7 +56,6 @@ namespace OlegHcp.GameConsole
         protected override void Construct()
         {
             transform.parent.Immortalize();
-            _cmdHistory.Add(string.Empty);
             _log.SetUp(this);
         }
 
@@ -119,7 +118,7 @@ namespace OlegHcp.GameConsole
         /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(bool createEventSystem = false)
         {
-            if (CreateTerminalInternal(createEventSystem))
+            if (TryCreateTerminal(createEventSystem))
                 I.Init(new TerminalCommands(), new TerminalOptions(), new DefaultTrigger());
         }
 
@@ -132,7 +131,7 @@ namespace OlegHcp.GameConsole
         /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, bool createEventSystem = false)
         {
-            if (CreateTerminalInternal(createEventSystem))
+            if (TryCreateTerminal(createEventSystem))
                 I.Init(commands, new TerminalOptions(), new DefaultTrigger());
         }
 
@@ -145,7 +144,7 @@ namespace OlegHcp.GameConsole
         /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, bool createEventSystem = false)
         {
-            if (CreateTerminalInternal(createEventSystem))
+            if (TryCreateTerminal(createEventSystem))
                 I.Init(commands, options, new DefaultTrigger());
         }
 
@@ -158,7 +157,7 @@ namespace OlegHcp.GameConsole
         /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
-            if (CreateTerminalInternal(createEventSystem))
+            if (TryCreateTerminal(createEventSystem))
                 I.Init(commands, new TerminalOptions(), switchTrigger);
         }
 
@@ -171,7 +170,7 @@ namespace OlegHcp.GameConsole
         /// <param name="commands">An object which contains command functions.</param>
         public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, ITerminalSwitchTrigger switchTrigger, bool createEventSystem = false)
         {
-            if (CreateTerminalInternal(createEventSystem))
+            if (TryCreateTerminal(createEventSystem))
                 I.Init(commands, options, switchTrigger);
         }
 
@@ -282,7 +281,7 @@ namespace OlegHcp.GameConsole
 
         private void EnterCmd(string text)
         {
-            if (NoCommands() || text.IsNullOrWhiteSpace())
+            if (text.IsNullOrWhiteSpace())
                 return;
 
             text = text.ToLower();
@@ -330,9 +329,6 @@ namespace OlegHcp.GameConsole
 
         private void FindCmd(string text)
         {
-            if (NoCommands())
-                return;
-
             text = text.ToLower();
             string[] commands = _commands.Keys
                                          .Where(itm => itm.IndexOf(text) == 0)
@@ -435,7 +431,7 @@ namespace OlegHcp.GameConsole
                 _log.WriteLine(GetTextColor(logType), msg, stackTrace);
         }
 
-        private static bool CreateTerminalInternal(bool createEventSystem)
+        private static bool TryCreateTerminal(bool createEventSystem)
         {
             if (Exists)
             {
@@ -443,9 +439,9 @@ namespace OlegHcp.GameConsole
                 return false;
             }
 
-            GameObject terminal = Resources.Load<GameObject>("Terminal");
+            GameObject terminalAsset = Resources.Load<GameObject>("Terminal");
 
-            if (terminal == null)
+            if (terminalAsset == null)
             {
                 Debug.LogError($"No Terminal.prefab found. Create terminal prefab using {nameof(OlegHcp)} menu item.");
                 return false;
@@ -454,7 +450,8 @@ namespace OlegHcp.GameConsole
             if (createEventSystem && EventSystem.current == null)
                 InstantiateEventSystem();
 
-            return terminal.Install();
+            terminalAsset.Install();
+            return true;
         }
 
         private static void InstantiateEventSystem()
@@ -462,17 +459,6 @@ namespace OlegHcp.GameConsole
             EventSystem eventSystem = ComponentUtility.CreateInstance<EventSystem>();
             eventSystem.gameObject.AddComponent<StandaloneInputModule>();
             eventSystem.Immortalize();
-        }
-
-        private bool NoCommands()
-        {
-            if (_cmdContainer == null)
-            {
-                WriteLine("Commands are not set.", LogType.Error);
-                return true;
-            }
-
-            return false;
         }
 
         private void OnAspectRatioChange()
