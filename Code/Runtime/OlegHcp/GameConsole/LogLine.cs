@@ -20,7 +20,7 @@ namespace OlegHcp.GameConsole
 
         private string _info;
 
-        public void SetText(string text, string info, Color color)
+        public void SetText(string text, string info, in Color color)
         {
             _text.text = text;
             _text.color = color;

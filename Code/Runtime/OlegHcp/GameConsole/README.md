@@ -18,7 +18,8 @@ internal class Commands : TerminalCommands
     {
         Debug.Log("This is a test message.");
 
-        // False value if you need to prevent command name output
+        // Return false value if you need to prevent command name output
+        // Otherwise return true or make void method instead
         return false;
     }
 

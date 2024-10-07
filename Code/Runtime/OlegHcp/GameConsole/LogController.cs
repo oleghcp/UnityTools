@@ -27,7 +27,7 @@ namespace OlegHcp.GameConsole
             _terminal = terminal;
         }
 
-        public void WriteLine(Color color, string text, string info = null)
+        public void WriteLine(in Color color, string text, string info = null)
         {
             getLine().SetText(text, info, color);
 

@@ -103,7 +103,7 @@ namespace OlegHcp.GameConsole
 
         protected void WriteLine(string text)
         {
-            Terminal.I.WriteLine(text ?? NULL, Colours.White);
+            Terminal.I.WriteLine(text ?? NULL);
         }
 
         protected void WriteLine(string text, in Color color)
@@ -118,7 +118,7 @@ namespace OlegHcp.GameConsole
 
         protected void WriteLine(object obj)
         {
-            Terminal.I.WriteLine(obj?.ToString() ?? NULL, Colours.White);
+            Terminal.I.WriteLine(obj?.ToString() ?? NULL);
         }
     }
 }

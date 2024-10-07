@@ -7,6 +7,7 @@ namespace OlegHcp.GameConsole
     {
         private float _targetHeight = 0.75f;
         private int _linesLimit = 100;
+        private float _moveSpeed = 10f;
 
         public bool AddSpaceAfterName = true;
         public bool ShowDebugLogs = true;
@@ -22,6 +23,12 @@ namespace OlegHcp.GameConsole
         {
             get => _linesLimit;
             set => _linesLimit = value.ClampMin(0);
+        }
+
+        public float MoveSpeed
+        {
+            get => _moveSpeed;
+            set => _moveSpeed = value.ClampMin(0f);
         }
     }
 }

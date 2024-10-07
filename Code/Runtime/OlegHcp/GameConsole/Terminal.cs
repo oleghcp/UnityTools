@@ -25,9 +25,6 @@ namespace OlegHcp.GameConsole
     {
         private const float TARGET_CANVAS_SIDE = 720f;
 
-        private readonly Color _cmdColor = Colours.Cyan;
-        private readonly Color _cmdErrorColor = Colours.Teal;
-
         public static event Action<bool> Switched_Event;
 
         [SerializeField]
@@ -41,17 +38,17 @@ namespace OlegHcp.GameConsole
         [SerializeField]
         private GameObject _border;
 
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
+        private readonly Dictionary<string, MethodInfo> _commands = new Dictionary<string, MethodInfo>();
+        private readonly List<string> _cmdHistory = new List<string>();
+        private PointerEventData _pointerEventData;
         private TerminalOptions _options;
         private ITerminalSwitchTrigger _switchTrigger;
-        private PointerEventData _pointerEventData;
-        private StringBuilder _stringBuilder = new StringBuilder();
-        private Dictionary<string, MethodInfo> _commands = new Dictionary<string, MethodInfo>();
-        private List<string> _cmdHistory = new List<string>();
-        private bool _isOn;
         private TerminalCommands _cmdContainer;
         private int _curHistoryIndex;
         private float _ratio;
         private bool _initialized;
+        private bool _isOn;
 
         public bool IsOn => _isOn;
         public TerminalOptions Options => _options;
@@ -234,15 +231,15 @@ namespace OlegHcp.GameConsole
 
         public void WriteCmdError(string txt)
         {
-            _log.WriteLine(_cmdErrorColor, txt);
+            _log.WriteLine(GetCommandColor(true), txt);
         }
 
-        public void WriteLine(string txt, Color color)
+        public void WriteLine(string txt, in Color color)
         {
             _log.WriteLine(color, txt);
         }
 
-        public void WriteLine(string txt, LogType logType)
+        public void WriteLine(string txt, LogType logType = LogType.Log)
         {
             _log.WriteLine(GetTextColor(logType), txt);
         }
@@ -297,14 +294,21 @@ namespace OlegHcp.GameConsole
                 if (method.GetParameters().Length > 0)
                     parameters = new[] { options };
 
-                object success = method.Invoke(_cmdContainer, parameters);
+                try
+                {
+                    object success = method.Invoke(_cmdContainer, parameters);
 
-                if (success == null || (bool)success)
-                    _log.WriteLine(_cmdColor, text);
+                    if (success == null || (bool)success)
+                        _log.WriteLine(GetCommandColor(), text);
+                }
+                catch (Exception e)
+                {
+                    WriteCmdError($"command {command} performed with error: {e.Message}");
+                }
             }
             else
             {
-                _log.WriteLine(_cmdErrorColor, $"unknown command: {command}");
+                WriteCmdError($"unknown command: {command}");
             }
 
             _cmdHistory.Add(text);
@@ -346,7 +350,7 @@ namespace OlegHcp.GameConsole
                                   .Append("   ");
                 }
 
-                _log.WriteLine(_cmdColor, _stringBuilder.Cut());
+                WriteLine(_stringBuilder.Cut());
                 _field.text = $"{text}{getCommon(cmds, text.Length)}";
             }
 
@@ -400,22 +404,18 @@ namespace OlegHcp.GameConsole
         {
             switch (logType)
             {
-                case LogType.Error:
-                case LogType.Assert:
-                    return Colours.Orange;
-
-                case LogType.Exception:
-                    return Colours.Red;
-
-                case LogType.Warning:
-                    return Colours.Yellow;
-
-                case LogType.Log:
-                    return Colours.White;
-
-                default:
-                    throw new SwitchExpressionException(logType);
+                case LogType.Log: return Colours.White;
+                case LogType.Warning: return Colours.Yellow;
+                case LogType.Error: return Colours.Orange;
+                case LogType.Exception: return Colours.Red;
+                case LogType.Assert: return Colours.Magenta;
+                default: throw new SwitchExpressionException(logType);
             }
+        }
+
+        private Color GetCommandColor(bool error = false)
+        {
+            return error ? Colours.Teal : Colours.Cyan;
         }
 
         private void OnDebugLogMessageReceived(string msg, string stackTrace, LogType logType)
@@ -457,7 +457,7 @@ namespace OlegHcp.GameConsole
         {
             if (_cmdContainer == null)
             {
-                _log.WriteLine(GetTextColor(LogType.Error), "Commands are not set.");
+                WriteLine("Commands are not set.", LogType.Error);
                 return true;
             }
 
@@ -500,7 +500,7 @@ namespace OlegHcp.GameConsole
 
             while (ratio < 1f)
             {
-                ratio += Time.unscaledDeltaTime * 10f;
+                ratio += Time.unscaledDeltaTime * _options.MoveSpeed;
                 rectTransform.anchoredPosition = new Vector2(0f, -Mathf.Lerp(hStart, hEnd, ratio));
 
                 yield return null;
