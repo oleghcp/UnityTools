@@ -28,7 +28,7 @@ namespace OlegHcp.GameConsole
         }
 
         [TerminalCommand, Preserve]
-        internal bool endian()
+        internal bool get_endian()
         {
             string endianType = BitConverter.IsLittleEndian ? "little" : "big";
             WriteLine($"Endian: {endianType}", LogType.Log);
@@ -47,19 +47,19 @@ namespace OlegHcp.GameConsole
         }
 
         [TerminalCommand, Preserve]
-        internal bool time_scale(string[] opt)
+        internal bool set_time_scale(string[] opt)
         {
             return ParseFloat(opt, scale => Time.timeScale = scale);
         }
 
         [TerminalCommand, Preserve]
-        internal bool frame_rate(string[] opt)
+        internal bool set_frame_rate(string[] opt)
         {
             return ParseInt(opt, frameRate => Application.targetFrameRate = frameRate);
         }
 
         [TerminalCommand, Preserve]
-        internal bool vsync(string[] opt)
+        internal bool set_vsync(string[] opt)
         {
             return ParseOnOff(opt, value => QualitySettings.vSyncCount = value.ToInt());
         }
