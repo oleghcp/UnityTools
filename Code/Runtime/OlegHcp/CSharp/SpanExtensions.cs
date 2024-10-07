@@ -118,6 +118,14 @@ namespace OlegHcp.CSharp
             return default;
         }
 
+        /// <summary>
+        /// Returns the element at the specified index from the end of a collection.
+        /// </summary>
+        public static ref T FromEnd<T>(this Span<T> self, int index) where T : unmanaged
+        {
+            return ref self[self.Length - (index + 1)];
+        }
+
         public static void ForEach<T>(this Span<T> self, Action<T> action) where T : unmanaged
         {
             for (int i = 0; i < self.Length; i++)
