@@ -71,6 +71,8 @@ namespace OlegHcp.GameConsole
             }
 
             _pointerEventData = new PointerEventData(EventSystem.current);
+
+            WriteLine("Up/Down:  types previous commands\nTab:      completes typing of a command or/and prints available commands\n", Colours.Lime);
         }
 
         protected override void Destruct()
@@ -312,7 +314,8 @@ namespace OlegHcp.GameConsole
                 WriteCmdError($"unknown command: {command}");
             }
 
-            _cmdHistory.Add(text);
+            if (_cmdHistory.Count == 0 || _cmdHistory.FromEnd(0) != text)
+                _cmdHistory.Add(text);
             _curHistoryIndex = 0;
 
             string[] split(string line, out string commandWord)
