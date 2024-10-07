@@ -301,9 +301,10 @@ namespace OlegHcp.GameConsole
                     if (success == null || (bool)success)
                         _log.WriteLine(GetCommandColor(), text);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    WriteCmdError($"command {command} performed with error: {e.Message}");
+                    WriteCmdError($"command {command} performed with errors");
+                    throw;
                 }
             }
             else
@@ -330,28 +331,35 @@ namespace OlegHcp.GameConsole
                 return;
 
             text = text.ToLower();
-            string[] cmds = _commands.Keys.Where(itm => itm.IndexOf(text) == 0).ToArray();
+            string[] commands = _commands.Keys
+                                         .Where(itm => itm.IndexOf(text) == 0)
+                                         .ToArray();
+            switch (commands.Length)
+            {
+                case 0:
+                    _field.text = string.Empty;
+                    break;
 
-            if (cmds.Length == 0)
-            {
-                _field.text = string.Empty;
-            }
-            else if (cmds.Length == 1)
-            {
-                _field.text = _options.AddSpaceAfterName ? $"{cmds[0]} " : cmds[0];
-            }
-            else
-            {
-                cmds.Sort();
+                case 1:
+                    _field.text = _options.AddSpaceAfterName ? $"{commands[0]} " : commands[0];
+                    break;
 
-                for (int i = 0; i < cmds.Length; i++)
+                default:
                 {
-                    _stringBuilder.Append(cmds[i])
-                                  .Append("   ");
-                }
+                    commands.Sort();
 
-                WriteLine(_stringBuilder.Cut());
-                _field.text = $"{text}{getCommon(cmds, text.Length)}";
+                    _stringBuilder.AppendLine();
+                    for (int i = 0; i < commands.Length; i++)
+                    {
+                        _stringBuilder.Append(' ')
+                                      .AppendLine(commands[i]);
+                    }
+
+                    WriteLine(_stringBuilder.Cut(), GetCommandColor());
+                    _field.text = $"{text}{getCommon(commands, text.Length)}";
+
+                    break;
+                }
             }
 
             _field.caretPosition = _field.text.Length;
