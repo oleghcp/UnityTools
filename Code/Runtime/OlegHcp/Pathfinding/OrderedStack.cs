@@ -8,9 +8,7 @@ namespace OlegHcp.Pathfinding
 #if UNITY
     [Serializable]
 #endif
-    internal class OrderedStack<TValue, TPriority> : HashSet<TValue>
-        where TValue : IEquatable<TValue>
-        where TPriority : IComparable<TPriority>
+    internal class OrderedStack<TValue, TPriority> : HashSet<TValue> where TPriority : IComparable<TPriority>
     {
         private ObjectPool<ListNode> _objectPool = new ObjectPool<ListNode>(() => new ListNode());
 
@@ -99,8 +97,7 @@ namespace OlegHcp.Pathfinding
 
             for (ListNode n = _first?.Right; n != null; n = n.Right)
             {
-                if (n.Left != null)
-                    _objectPool.Release(n.Left);
+                _objectPool.Release(n.Left);
             }
 
             _objectPool.Release(_last);

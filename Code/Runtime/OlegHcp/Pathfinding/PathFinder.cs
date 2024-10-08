@@ -9,7 +9,7 @@ namespace OlegHcp.Pathfinding
     public class PathFinder
     {
         private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();
-        private HashSet<int> _acceptableBuffer = new HashSet<int>();
+        private HashSet<PathNode> _acceptableBuffer = new HashSet<PathNode>();
 
         public void Find(PathNode origin, PathNode target, List<PathNode> result, bool directOrder = true)
         {
@@ -18,17 +18,17 @@ namespace OlegHcp.Pathfinding
             _acceptableBuffer.Clear();
 
             _frontBuffer.Push(origin, origin.PassCost);
-            while (_frontBuffer.Count > 0 && !_acceptableBuffer.Contains(target.Id))
+            while (_frontBuffer.Count > 0 && !_acceptableBuffer.Contains(target))
             {
                 PathNode current = _frontBuffer.Pop();
-                _acceptableBuffer.Add(current.Id);
+                _acceptableBuffer.Add(current);
 
                 IReadOnlyList<PathTransition> transitions = current.GetTransitions();
                 for (int i = 0; i < transitions.Count; i++)
                 {
                     var (neighbor, cost) = transitions[i];
 
-                    if (_acceptableBuffer.Contains(neighbor.Id) || _frontBuffer.Contains(neighbor))
+                    if (_acceptableBuffer.Contains(neighbor) || _frontBuffer.Contains(neighbor))
                         continue;
 
                     neighbor.SetParent(current, cost);
@@ -36,7 +36,7 @@ namespace OlegHcp.Pathfinding
                 }
             }
 
-            if (_acceptableBuffer.Contains(target.Id))
+            if (_acceptableBuffer.Contains(target))
             {
                 do
                 {

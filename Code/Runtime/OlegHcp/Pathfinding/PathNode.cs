@@ -6,26 +6,12 @@ namespace OlegHcp.Pathfinding
 #if UNITY
     [Serializable]
 #endif
-    public abstract class PathNode : IEquatable<PathNode>
+    public abstract class PathNode
     {
-        private int _id;
-
         [NonSerialized]
         internal PathNode Parent;
         [NonSerialized]
         internal float PassCost;
-
-        public int Id => _id;
-
-        protected PathNode()
-        {
-            _id = GetHashCode();
-        }
-
-        public PathNode(int id)
-        {
-            _id = id;
-        }
 
         public abstract IReadOnlyList<PathTransition> GetTransitions();
 
@@ -33,11 +19,6 @@ namespace OlegHcp.Pathfinding
         {
             Parent = parent;
             PassCost = parent.PassCost + passCost;
-        }
-
-        public bool Equals(PathNode other)
-        {
-            return ReferenceEquals(other, this);
         }
     }
 
