@@ -14,11 +14,16 @@ namespace OlegHcp.Pathfinding
         public void Find(PathNode origin, PathNode target, List<PathNode> result, bool directOrder = true)
         {
             result.Clear();
+
+            if (origin == target)
+                return;
+
             _frontBuffer.Clear();
             _checkBuffer.Clear();
 
+            bool found = false;
             _frontBuffer.Push(origin, origin.PassCost);
-            while (_frontBuffer.Count > 0 && !_checkBuffer.Contains(target))
+            while (_frontBuffer.Count > 0 && !found)
             {
                 PathNode current = _frontBuffer.Pop();
                 _checkBuffer.Add(current);
@@ -32,21 +37,28 @@ namespace OlegHcp.Pathfinding
                         continue;
 
                     neighbor.SetParent(current, cost);
+
+                    if (neighbor == target)
+                    {
+                        found = true;
+                        break;
+                    }
+
                     _frontBuffer.Push(neighbor, neighbor.PassCost);
                 }
             }
 
-            if (_checkBuffer.Contains(target))
-            {
-                do
-                {
-                    result.Add(target);
-                    target = target.Parent;
-                } while (target != origin);
+            if (!found)
+                return;
 
-                if (directOrder)
-                    result.Reverse();
-            }
+            do
+            {
+                result.Add(target);
+                target = target.Parent;
+            } while (target != origin);
+
+            if (directOrder)
+                result.Reverse();
         }
     }
 }

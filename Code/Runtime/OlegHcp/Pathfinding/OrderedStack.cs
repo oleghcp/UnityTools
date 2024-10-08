@@ -29,39 +29,39 @@ namespace OlegHcp.Pathfinding
                 return;
             }
 
-            ListNode rightNode = null;
-            ListNode leftNode;
+            ListNode nextNode = null;
+            ListNode prevNode;
 
-            for (ListNode n = _first; n != null; n = n.Right)
+            for (ListNode n = _first; n != null; n = n.Next)
             {
                 if (n.Priority.CompareTo(priority) < 0)
                 {
-                    rightNode = n;
+                    nextNode = n;
                     break;
                 }
             }
 
-            if (rightNode == null)
+            if (nextNode == null)
             {
-                leftNode = _last;
-                newNode.Left = leftNode;
-                leftNode.Right = newNode;
+                prevNode = _last;
+                newNode.Prev = prevNode;
+                prevNode.Next = newNode;
                 _last = newNode;
                 return;
             }
 
-            leftNode = rightNode.Left;
-            newNode.Right = rightNode;
-            rightNode.Left = newNode;
+            prevNode = nextNode.Prev;
+            newNode.Next = nextNode;
+            nextNode.Prev = newNode;
 
-            if (leftNode == null)
+            if (prevNode == null)
             {
                 _first = newNode;
             }
             else
             {
-                leftNode.Right = newNode;
-                newNode.Left = leftNode;
+                prevNode.Next = newNode;
+                newNode.Prev = prevNode;
             }
         }
 
@@ -81,8 +81,8 @@ namespace OlegHcp.Pathfinding
             }
             else
             {
-                _last = lastNode.Left;
-                _last.Right = null;
+                _last = lastNode.Prev;
+                _last.Next = null;
             }
 
             _objectPool.Release(lastNode);
@@ -95,9 +95,9 @@ namespace OlegHcp.Pathfinding
             if (Count == 0)
                 return;
 
-            for (ListNode n = _first?.Right; n != null; n = n.Right)
+            for (ListNode n = _first?.Next; n != null; n = n.Next)
             {
-                _objectPool.Release(n.Left);
+                _objectPool.Release(n.Prev);
             }
 
             _objectPool.Release(_last);
@@ -114,8 +114,8 @@ namespace OlegHcp.Pathfinding
         {
             public TValue Element;
             public TPriority Priority;
-            public ListNode Left;
-            public ListNode Right;
+            public ListNode Prev;
+            public ListNode Next;
 
             public ListNode SetUp(TValue value, TPriority priority)
             {
@@ -124,20 +124,14 @@ namespace OlegHcp.Pathfinding
                 return this;
             }
 
-            public void Deconstruct(out TValue element, out TPriority priority)
-            {
-                element = Element;
-                priority = Priority;
-            }
-
             #region IPoolable
             public void Reinit() { }
 
             public void CleanUp()
             {
                 Element = default;
-                Right = null;
-                Left = null;
+                Next = null;
+                Prev = null;
             }
             #endregion
         }
