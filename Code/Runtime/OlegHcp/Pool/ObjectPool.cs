@@ -66,6 +66,16 @@ namespace OlegHcp.Pool
 
         public void Release(IEnumerable<T> range)
         {
+            if (range is IList<T> list)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Release(list[i]);
+                }
+
+                return;
+            }
+
             foreach (T item in range)
             {
                 Release(item);
