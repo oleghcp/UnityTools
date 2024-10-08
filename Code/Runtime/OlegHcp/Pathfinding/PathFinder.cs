@@ -11,19 +11,19 @@ namespace OlegHcp.Pathfinding
         private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();
         private HashSet<PathNode> _checkBuffer = new HashSet<PathNode>();
 
-        public void Find(PathNode origin, PathNode target, List<PathNode> result, bool directOrder = true)
+        public bool Find(PathNode origin, PathNode target, List<PathNode> result, bool directOrder = true)
         {
             result.Clear();
 
             if (origin == target)
-                return;
+                return true;
 
             _frontBuffer.Clear();
             _checkBuffer.Clear();
 
-            bool found = false;
             _frontBuffer.Push(origin, origin.PassCost);
-            while (_frontBuffer.Count > 0 && !found)
+
+            while (_frontBuffer.Count > 0)
             {
                 PathNode current = _frontBuffer.Pop();
                 _checkBuffer.Add(current);
@@ -33,24 +33,27 @@ namespace OlegHcp.Pathfinding
                 {
                     var (neighbor, cost) = transitions[i];
 
-                    if (_checkBuffer.Contains(neighbor) || _frontBuffer.Contains(neighbor))
+                    if (_checkBuffer.Contains(neighbor) ||
+                        _frontBuffer.Contains(neighbor))
                         continue;
 
                     neighbor.SetParent(current, cost);
 
                     if (neighbor == target)
                     {
-                        found = true;
-                        break;
+                        FillResults(origin, target, result, directOrder);
+                        return true;
                     }
 
                     _frontBuffer.Push(neighbor, neighbor.PassCost);
                 }
             }
 
-            if (!found)
-                return;
+            return false;
+        }
 
+        private static void FillResults(PathNode origin, PathNode target, List<PathNode> result, bool directOrder)
+        {
             do
             {
                 result.Add(target);
