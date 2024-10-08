@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OlegHcp.Pool;
+using OlegHcp.Pool.Storages;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Pathfinding
@@ -10,7 +11,7 @@ namespace OlegHcp.Pathfinding
 #endif
     internal class OrderedStack<TValue, TPriority> : HashSet<TValue> where TPriority : IComparable<TPriority>
     {
-        private static ObjectPool<Node> _objectPool = new ObjectPool<Node>(() => new Node());
+        private static ObjectPool<Node> _objectPool = new ObjectPool<Node>(new StackStorage<Node>(), () => new Node());
 
         private Node _first;
         private Node _last;
