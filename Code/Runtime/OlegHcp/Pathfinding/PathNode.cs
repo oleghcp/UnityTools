@@ -14,8 +14,6 @@ namespace OlegHcp.Pathfinding
         internal PathNode Parent;
         [NonSerialized]
         internal float PassCost;
-        [NonSerialized]
-        internal int PathNumber;
 
         public int Id => _id;
 
@@ -35,7 +33,6 @@ namespace OlegHcp.Pathfinding
         {
             Parent = parent;
             PassCost = parent.PassCost + passCost;
-            PathNumber = parent.PathNumber + 1;
         }
 
         public bool Equals(PathNode other)

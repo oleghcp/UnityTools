@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Pathfinding
 {
@@ -12,9 +11,11 @@ namespace OlegHcp.Pathfinding
         private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();
         private HashSet<int> _acceptableBuffer = new HashSet<int>();
 
-        public void Find(PathNode origin, PathNode target, List<PathNode> result)
+        public void Find(PathNode origin, PathNode target, List<PathNode> result, bool directOrder = true)
         {
             result.Clear();
+            _frontBuffer.Clear();
+            _acceptableBuffer.Clear();
 
             _frontBuffer.Push(origin, origin.PassCost);
             while (_frontBuffer.Count > 0 && !_acceptableBuffer.Contains(target.Id))
@@ -37,18 +38,15 @@ namespace OlegHcp.Pathfinding
 
             if (_acceptableBuffer.Contains(target.Id))
             {
-                int count = target.PathNumber;
-                result.SetCount(count);
-
-                for (int i = count - 1; i >= 0; i--)
+                do
                 {
-                    result[i] = target;
+                    result.Add(target);
                     target = target.Parent;
-                }
-            }
+                } while (target != origin);
 
-            _frontBuffer.Clear();
-            _acceptableBuffer.Clear();
+                if (directOrder)
+                    result.Reverse();
+            }
         }
     }
 }
