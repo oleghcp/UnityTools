@@ -9,7 +9,7 @@ namespace OlegHcp.Mathematics
     [Serializable]
     public class Bezier2
     {
-        internal const int REUIRED_COUNT = 3;
+        internal const int REQUIRED_COUNT = 3;
 
         [SerializeField]
         private Vector2[] _points;
@@ -24,7 +24,7 @@ namespace OlegHcp.Mathematics
             if (points == null)
                 throw ThrowErrors.NullParameter(nameof(points));
 
-            if (points.Length < REUIRED_COUNT)
+            if (points.Length < REQUIRED_COUNT)
                 throw ThrowErrors.InvalidBezierPoints(nameof(points));
 
             _points = points;
@@ -58,7 +58,7 @@ namespace OlegHcp.Mathematics
 
         public static Vector2 Evaluate(Span<Vector2> points, float ratio)
         {
-            if (points.Length < REUIRED_COUNT)
+            if (points.Length < REQUIRED_COUNT)
                 throw ThrowErrors.InvalidBezierPoints(nameof(points));
 
             Span<Vector2> tmp = stackalloc Vector2[points.Length];
@@ -71,7 +71,7 @@ namespace OlegHcp.Mathematics
             if (points == null)
                 throw ThrowErrors.NullParameter(nameof(points));
 
-            if (points.Count < REUIRED_COUNT)
+            if (points.Count < REQUIRED_COUNT)
                 throw ThrowErrors.InvalidBezierPoints(nameof(points));
 
             Span<Vector2> tmp = stackalloc Vector2[points.Count];
