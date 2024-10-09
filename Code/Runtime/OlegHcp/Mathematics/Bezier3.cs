@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Tools;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace OlegHcp.Mathematics
         internal const int REQUIRED_COUNT = 3;
 
         private Vector3[] _points;
+        [NonSerialized]
         private Vector3[] _buffer;
 
         public int Count => _points.Length;
@@ -22,7 +24,7 @@ namespace OlegHcp.Mathematics
             set => _points[index] = value;
         }
 
-        public Bezier3(Vector3[] points) 
+        public Bezier3(Vector3[] points)
         {
             if (points == null)
                 throw ThrowErrors.NullParameter(nameof(points));
@@ -35,6 +37,12 @@ namespace OlegHcp.Mathematics
 
         public Vector3 Evaluate(float ratio)
         {
+            if (ratio <= 0f)
+                return _points[0];
+
+            if (ratio >= 1f)
+                return _points.FromEnd(0);
+
             if (_buffer == null)
                 _buffer = new Vector3[_points.Length];
 
@@ -44,7 +52,12 @@ namespace OlegHcp.Mathematics
 
         public static Vector3 Evaluate(in Vector3 origin, in Vector3 destination, in Vector3 controlPoint, float ratio)
         {
-            ratio = ratio.Clamp01();
+            if (ratio <= 0f)
+                return origin;
+
+            if (ratio >= 1f)
+                return destination;
+
             Vector3 p1 = Vector3.LerpUnclamped(origin, controlPoint, ratio);
             Vector3 p2 = Vector3.LerpUnclamped(controlPoint, destination, ratio);
             return Vector3.LerpUnclamped(p1, p2, ratio);
@@ -64,6 +77,12 @@ namespace OlegHcp.Mathematics
             if (points.Length < REQUIRED_COUNT)
                 throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
+            if (ratio <= 0f)
+                return points[0];
+
+            if (ratio >= 1f)
+                return points.FromEnd(0);
+
             Span<Vector3> tmp = stackalloc Vector3[points.Length];
             points.CopyTo(tmp);
             return EvaluateInternal(tmp, ratio);
@@ -77,6 +96,12 @@ namespace OlegHcp.Mathematics
             if (points.Count < REQUIRED_COUNT)
                 throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
+            if (ratio <= 0f)
+                return points[0];
+
+            if (ratio >= 1f)
+                return points.FromEnd(0);
+
             Span<Vector3> tmp = stackalloc Vector3[points.Count];
             points.CopyTo(tmp);
             return EvaluateInternal(tmp, ratio);
@@ -84,7 +109,6 @@ namespace OlegHcp.Mathematics
 
         private static Vector3 EvaluateInternal(Span<Vector3> tmp, float ratio)
         {
-            ratio = ratio.Clamp01();
             int counter = tmp.Length - 1;
             int times = counter;
 
@@ -103,8 +127,6 @@ namespace OlegHcp.Mathematics
 
         private static Vector3 EvaluateInternal(Vector3[] tmp, float ratio)
         {
-            ratio = ratio.Clamp01();
-
             int counter = tmp.Length - 1;
             int times = counter;
 
