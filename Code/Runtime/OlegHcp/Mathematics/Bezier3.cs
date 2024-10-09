@@ -16,7 +16,7 @@ namespace OlegHcp.Mathematics
 
         }
 
-        public Vector3 Evaluate(float ratio)
+        public override Vector3 Evaluate(float ratio)
         {
             if (_helpPoints == null)
                 _helpPoints = new Vector3[Points.Length];

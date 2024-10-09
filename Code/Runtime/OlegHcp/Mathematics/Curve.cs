@@ -5,7 +5,7 @@ using UnityEngine;
 namespace OlegHcp.Mathematics
 {
     [Serializable]
-    public class Curve<TVector>
+    public abstract class Curve<TVector>
     {
         [SerializeField]
         private TVector[] _points;
@@ -24,5 +24,7 @@ namespace OlegHcp.Mathematics
 
             _points = points;
         }
+
+        public abstract TVector Evaluate(float ratio);
     }
 }
