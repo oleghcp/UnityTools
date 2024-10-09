@@ -9,9 +9,11 @@ namespace OlegHcp.Mathematics
     [Serializable]
     public class Bezier3 : Curve<Vector3>
     {
+        internal const int REQUIRED_COUNT = 3;
+
         private Vector3[] _helpPoints;
 
-        public Bezier3(Vector3[] points) : base(points, Bezier2.REQUIRED_COUNT)
+        public Bezier3(Vector3[] points) : base(points, REQUIRED_COUNT)
         {
 
         }
@@ -44,8 +46,8 @@ namespace OlegHcp.Mathematics
 
         public static Vector3 Evaluate(Span<Vector3> points, float ratio)
         {
-            if (points.Length < Bezier2.REQUIRED_COUNT)
-                throw ThrowErrors.InvalidCurvePoints(nameof(points), Bezier2.REQUIRED_COUNT);
+            if (points.Length < REQUIRED_COUNT)
+                throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
             Span<Vector3> tmp = stackalloc Vector3[points.Length];
             points.CopyTo(tmp);
@@ -57,8 +59,8 @@ namespace OlegHcp.Mathematics
             if (points == null)
                 throw ThrowErrors.NullParameter(nameof(points));
 
-            if (points.Count < Bezier2.REQUIRED_COUNT)
-                throw ThrowErrors.InvalidCurvePoints(nameof(points), Bezier2.REQUIRED_COUNT);
+            if (points.Count < REQUIRED_COUNT)
+                throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
             Span<Vector3> tmp = stackalloc Vector3[points.Count];
             points.CopyTo(tmp);
