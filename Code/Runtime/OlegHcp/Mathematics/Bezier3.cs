@@ -7,7 +7,7 @@ using UnityEngine;
 namespace OlegHcp.Mathematics
 {
     [Serializable]
-    public sealed class Bezier3
+    public class Bezier3
     {
         [SerializeField]
         private Vector3[] _points;

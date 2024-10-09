@@ -13,7 +13,7 @@ namespace OlegHcp.Collections
 #if UNITY
     [Serializable]
 #endif
-    public sealed class BitList : ICloneable, IReadOnlyList<bool>, IMutable
+    public class BitList : ICloneable, IReadOnlyList<bool>, IMutable
     {
         private const int MAX_LENGTH = int.MaxValue / BitMask.SIZE;
 
