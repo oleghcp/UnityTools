@@ -7,33 +7,21 @@ using UnityEngine;
 namespace OlegHcp.Mathematics
 {
     [Serializable]
-    public class Bezier3
+    public class Bezier3 : Curve<Vector3>
     {
-        [SerializeField]
-        private Vector3[] _points;
-
         private Vector3[] _helpPoints;
 
-        public int Count => _points.Length;
-        public ref Vector3 this[int index] => ref _points[index];
-
-        public Bezier3(Vector3[] points)
+        public Bezier3(Vector3[] points) : base(points, Bezier2.REQUIRED_COUNT)
         {
-            if (points == null)
-                throw ThrowErrors.NullParameter(nameof(points));
 
-            if (points.Length < Bezier2.REQUIRED_COUNT)
-                throw ThrowErrors.InvalidCurvePoints(nameof(points), Bezier2.REQUIRED_COUNT);
-
-            _points = points;
         }
 
         public Vector3 Evaluate(float ratio)
         {
             if (_helpPoints == null)
-                _helpPoints = new Vector3[_points.Length];
+                _helpPoints = new Vector3[Points.Length];
 
-            _points.CopyTo(_helpPoints, 0);
+            Points.CopyTo(_helpPoints, 0);
             return EvaluateInternal(_helpPoints, ratio);
         }
 
