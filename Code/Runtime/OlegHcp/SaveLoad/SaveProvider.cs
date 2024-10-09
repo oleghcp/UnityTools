@@ -23,7 +23,7 @@ namespace OlegHcp.SaveLoad
     /// <summary>
     /// Keeps, saves and loads game data.
     /// </summary>
-    public sealed class SaveProvider
+    public class SaveProvider
     {
         private const BindingFlags FIELD_MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 

@@ -7,7 +7,7 @@ namespace OlegHcp.Pool
     /// <summary>
     /// Object pool implementation.
     /// </summary>
-    public sealed class ObjectPool<T> where T : class
+    public class ObjectPool<T> where T : class
     {
         private IPoolStorage<T> _storage;
         private IObjectFactory<T> _factory;

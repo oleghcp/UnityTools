@@ -6,7 +6,7 @@ namespace OlegHcp
     /// Counts FPS.
     /// </summary>
     [Serializable]
-    public sealed class FpsCounter
+    public class FpsCounter
     {
         private const float DEFAULT_REFRESH_TIME = 0.5f;
 
