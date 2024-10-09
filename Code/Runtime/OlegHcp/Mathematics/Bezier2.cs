@@ -25,7 +25,7 @@ namespace OlegHcp.Mathematics
                 throw ThrowErrors.NullParameter(nameof(points));
 
             if (points.Length < REQUIRED_COUNT)
-                throw ThrowErrors.InvalidBezierPoints(nameof(points));
+                throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
             _points = points;
         }
@@ -59,7 +59,7 @@ namespace OlegHcp.Mathematics
         public static Vector2 Evaluate(Span<Vector2> points, float ratio)
         {
             if (points.Length < REQUIRED_COUNT)
-                throw ThrowErrors.InvalidBezierPoints(nameof(points));
+                throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
             Span<Vector2> tmp = stackalloc Vector2[points.Length];
             points.CopyTo(tmp);
@@ -72,7 +72,7 @@ namespace OlegHcp.Mathematics
                 throw ThrowErrors.NullParameter(nameof(points));
 
             if (points.Count < REQUIRED_COUNT)
-                throw ThrowErrors.InvalidBezierPoints(nameof(points));
+                throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
             Span<Vector2> tmp = stackalloc Vector2[points.Count];
             points.CopyTo(tmp);
