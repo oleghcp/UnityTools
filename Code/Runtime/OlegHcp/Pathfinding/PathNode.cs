@@ -15,7 +15,7 @@ namespace OlegHcp.Pathfinding
 
         public abstract IReadOnlyList<PathTransition> GetTransitions();
 
-        internal void SetParent(PathNode parent, float passCost)
+        internal void AddPathData(PathNode parent, float passCost)
         {
             Parent = parent;
             PassCost = parent.PassCost + passCost;

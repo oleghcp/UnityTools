@@ -37,7 +37,7 @@ namespace OlegHcp.Pathfinding
                         _frontBuffer.Contains(neighbor))
                         continue;
 
-                    neighbor.SetParent(current, cost);
+                    neighbor.AddPathData(current, cost);
 
                     if (neighbor == target)
                     {
