@@ -9,6 +9,8 @@ namespace OlegHcp.Mathematics
     [Serializable]
     public class Bezier2
     {
+        internal const int REUIRED_COUNT = 3;
+
         [SerializeField]
         private Vector2[] _points;
 
@@ -19,8 +21,11 @@ namespace OlegHcp.Mathematics
 
         public Bezier2(Vector2[] points)
         {
-            if (points.IsNullOrEmpty())
-                throw ThrowErrors.InvalidArrayArgument(nameof(points));
+            if (points == null)
+                throw ThrowErrors.NullParameter(nameof(points));
+
+            if (points.Length < REUIRED_COUNT)
+                throw ThrowErrors.InvalidBezierPoints(nameof(points));
 
             _points = points;
         }
@@ -34,23 +39,28 @@ namespace OlegHcp.Mathematics
             return EvaluateInternal(_helpPoints, ratio);
         }
 
-        public static Vector2 Evaluate(Vector2 orig, Vector2 dest, Vector2 helpPoint, float ratio)
+        public static Vector2 Evaluate(in Vector2 origin, in Vector2 destination, in Vector2 controlPoint, float ratio)
         {
             ratio = ratio.Clamp01();
-            Vector2 p1 = Vector2.LerpUnclamped(orig, helpPoint, ratio);
-            Vector2 p2 = Vector2.LerpUnclamped(helpPoint, dest, ratio);
+            Vector2 p1 = Vector2.LerpUnclamped(origin, controlPoint, ratio);
+            Vector2 p2 = Vector2.LerpUnclamped(controlPoint, destination, ratio);
             return Vector2.LerpUnclamped(p1, p2, ratio);
-        }
-
-        public static Vector2 Evaluate(Span<Vector2> points, float ratio)
-        {
-            Span<Vector2> tmp = stackalloc Vector2[points.Length];
-            points.CopyTo(tmp);
-            return EvaluateInternal(tmp, ratio);
         }
 
         public static Vector2 Evaluate(Vector2[] points, float ratio)
         {
+#if UNITY_2021_2_OR_NEWER || !UNITY
+            return Evaluate((Span<Vector2>)points, ratio);
+#else
+            return Evaluate((IList<Vector2>)points, ratio);
+#endif
+        }
+
+        public static Vector2 Evaluate(Span<Vector2> points, float ratio)
+        {
+            if (points.Length < REUIRED_COUNT)
+                throw ThrowErrors.InvalidBezierPoints(nameof(points));
+
             Span<Vector2> tmp = stackalloc Vector2[points.Length];
             points.CopyTo(tmp);
             return EvaluateInternal(tmp, ratio);
@@ -58,6 +68,12 @@ namespace OlegHcp.Mathematics
 
         public static Vector2 Evaluate(IList<Vector2> points, float ratio)
         {
+            if (points == null)
+                throw ThrowErrors.NullParameter(nameof(points));
+
+            if (points.Count < REUIRED_COUNT)
+                throw ThrowErrors.InvalidBezierPoints(nameof(points));
+
             Span<Vector2> tmp = stackalloc Vector2[points.Count];
             points.CopyTo(tmp);
             return EvaluateInternal(tmp, ratio);

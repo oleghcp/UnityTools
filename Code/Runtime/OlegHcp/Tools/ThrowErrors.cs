@@ -44,9 +44,9 @@ namespace OlegHcp.Tools
             return new ArgumentNullException(paramName, "Value cannot be null.");
         }
 
-        public static ArgumentException InvalidArrayArgument(string paramName)
+        public static ArgumentException InvalidBezierPoints(string paramName)
         {
-            return new ArgumentException(paramName, "Array argument cannot be null or empty.");
+            return new ArgumentException(paramName, "Not enough points. There should be three at least.");
         }
 
         public static ArgumentOutOfRangeException OutOfRange(string paramName, string minName, string maxName)

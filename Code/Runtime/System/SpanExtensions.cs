@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using OlegHcp.CSharp;
-using OlegHcp.CSharp.Collections;
 
 namespace System
 {
