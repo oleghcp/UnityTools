@@ -107,9 +107,9 @@ public class Example : MonoBehaviour
 }
 ```
 
-## Bezier2/Bezier3
+## Curves
 
-Implementation of Bezier curve
+Implementation of Bezier curve and Catmull–Rom spline. Represented by `Bezier2`, `Bezier3`, `CatmullRom2`, `CatmullRom3` classes.
 
 ```csharp
 using System.Collections;
@@ -123,11 +123,11 @@ public class Example : MonoBehaviour
     [SerializeField]
     private float _speed;
 
-    private Bezier3 _bezier;
+    private ICurve<Vector3> _curve;
 
     private void Awake()
     {
-        _bezier = new Bezier3(_points);
+        _curve = new Bezier3(_points);
     }
 
     private void Start()
@@ -143,7 +143,7 @@ public class Example : MonoBehaviour
         {
             ratio += Time.deltaTime * _speed;
 
-            Vector3 newPosition = _bezier.Evaluate(ratio);
+            transform.position = _curve.Evaluate(ratio);
 
             yield return null;
         }
