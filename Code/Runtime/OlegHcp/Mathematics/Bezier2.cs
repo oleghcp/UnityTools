@@ -24,15 +24,21 @@ namespace OlegHcp.Mathematics
             set => _points[index] = value;
         }
 
-        public Bezier2(Vector2[] points)
+        public Bezier2(Vector2[] points) : this((IList<Vector2>)points)
+        {
+
+        }
+
+        public Bezier2(IList<Vector2> points)
         {
             if (points == null)
                 throw ThrowErrors.NullParameter(nameof(points));
 
-            if (points.Length < REQUIRED_COUNT)
+            if (points.Count < REQUIRED_COUNT)
                 throw ThrowErrors.InvalidCurvePoints(nameof(points), REQUIRED_COUNT);
 
-            _points = points;
+            _points = new Vector2[points.Count];
+            points.CopyTo(_points, 0);
         }
 
         public Vector2 Evaluate(float ratio)
