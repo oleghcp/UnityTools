@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using OlegHcp.Engine;
 using UnityEngine;
 
 namespace OlegHcp.Mathematics
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
     public struct Arc3
     {
+        /// <summary>
+        /// Start launch position.
+        /// </summary>
+        public Vector3 StartPos;
+
         /// <summary>
         /// Start launch horizontal angle in degrees.
         /// </summary>
@@ -28,11 +31,6 @@ namespace OlegHcp.Mathematics
         /// Gravity.
         /// </summary>
         public float Gravity;
-
-        /// <summary>
-        /// Start launch position.
-        /// </summary>
-        public Vector3 StartPos;
 
         /// <summary>
         /// Start launch direction (normalized).
