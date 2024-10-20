@@ -71,7 +71,8 @@ namespace OlegHcpEditor.Inspectors
 
         private void OnUpdate()
         {
-            CheckAndApplyParamChanges(false);
+            if (_camera != null)
+                CheckAndApplyParamChanges(false);
         }
 
         public override void OnInspectorGUI()
