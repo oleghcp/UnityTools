@@ -29,10 +29,10 @@ namespace OlegHcpEditor.Window
         private IList<Data> _searchResult;
 
         private BitList _flags;
-        private Action<BitList> _onClose;
+        private Action<BitList> _onMultiSelectableChanged;
         private EditorWindow _prevWindow;
 
-        public int ItemsCount => _items.Count;
+        private bool IsMultiSelectable => _flags != null;
 
         private void OnEnable()
         {
@@ -47,9 +47,6 @@ namespace OlegHcpEditor.Window
 
         private void OnDestroy()
         {
-            if (MultiSelectable())
-                _onClose?.Invoke(_flags);
-
             if (_prevWindow != null)
                 _prevWindow.Repaint();
         }
@@ -69,13 +66,19 @@ namespace OlegHcpEditor.Window
             {
                 string tapeString;
 
-                if (MultiSelectable())
+                if (IsMultiSelectable)
                 {
                     EditorGUILayout.BeginHorizontal();
                     tapeString = _searchField.OnGUI(_tapeString);
-                    if (GUILayout.Button("X", GUILayout.Height(16f), GUILayout.Width(EditorGuiUtility.SmallButtonWidth)))
-                        Close();
+                    bool closePressed = GUILayout.Button("X", GUILayout.Height(16f), GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
                     EditorGUILayout.EndHorizontal();
+
+                    if (closePressed)
+                    {
+                        UpdateMultiSelectable();
+                        Close();
+                        return;
+                    }
                 }
                 else
                 {
@@ -100,18 +103,18 @@ namespace OlegHcpEditor.Window
         }
 
         #region List functions
-        public static void CreateForFlags(BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void CreateForFlags(BitList flags, string[] displayedOptions, Action<BitList> onChanged)
         {
-            CreateForFlags(GetButtonRect(Event.current.mousePosition), flags, displayedOptions, onClose);
+            CreateForFlags(GetButtonRect(Event.current.mousePosition), flags, displayedOptions, onChanged);
         }
 
-        public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        public static void CreateForFlags(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onChanged)
         {
             DropDownWindow popup = CreateInstance<DropDownWindow>();
-            popup.CreateForFlagsInternal(buttonRect, flags, displayedOptions, onClose);
+            popup.CreateForFlagsInternal(buttonRect, flags, displayedOptions, onChanged);
         }
 
-        private void CreateForFlagsInternal(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose)
+        private void CreateForFlagsInternal(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onChanged)
         {
             if (flags.Length != displayedOptions.Length)
             {
@@ -120,7 +123,7 @@ namespace OlegHcpEditor.Window
             }
 
             _flags = flags;
-            _onClose = onClose;
+            _onMultiSelectableChanged = onChanged;
 
             for (int i = 0; i < displayedOptions.Length; i++)
             {
@@ -313,7 +316,7 @@ namespace OlegHcpEditor.Window
 
         private bool IsItemOn(in Data item)
         {
-            if (MultiSelectable())
+            if (IsMultiSelectable)
             {
                 switch (item.Text)
                 {
@@ -346,7 +349,9 @@ namespace OlegHcpEditor.Window
             {
                 _selectedItem.OnSelected();
 
-                if (!MultiSelectable())
+                if (IsMultiSelectable)
+                    UpdateMultiSelectable();
+                else
                     Close();
             }
         }
@@ -425,16 +430,18 @@ namespace OlegHcpEditor.Window
             }
         }
 
-        private bool MultiSelectable()
-        {
-            return _flags != null;
-        }
-
         private static Rect GetButtonRect(Vector2 position)
         {
             return new Rect(position, Vector2.zero);
         }
 
+        private void UpdateMultiSelectable()
+        {
+            _onMultiSelectableChanged?.Invoke(_flags);
+
+            if (_prevWindow != null)
+                _prevWindow.Repaint();
+        }
 
         private struct Data
         {

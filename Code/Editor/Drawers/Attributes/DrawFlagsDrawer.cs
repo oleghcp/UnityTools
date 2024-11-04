@@ -80,13 +80,13 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             position.width -= smallButtonWidth;
             if (EditorGUI.DropdownButton(position, EditorGuiUtility.TempContent(buttonText), FocusType.Keyboard))
-                EditorUtilityExt.DisplayMultiSelectableList(position, bits, names, onCloseMenu);
+                EditorUtilityExt.DisplayMultiSelectableList(position, bits, names, onChanged);
 
             position.xMin += position.width;
             position.width = smallButtonWidth;
             mutableProp.boolValue = EditorGui.ToggleButton(position, EditorGuiUtility.TempContent("M", "Switch mutability."), mutableProp.boolValue);
 
-            void onCloseMenu(BitList bitList)
+            void onChanged(BitList bitList)
             {
                 if (property.serializedObject.Disposed())
                     return;

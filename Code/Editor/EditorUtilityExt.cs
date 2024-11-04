@@ -104,14 +104,14 @@ namespace OlegHcpEditor
             list.ShowMenu(buttonRect);
         }
 
-        public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
+        public static void DisplayMultiSelectableList(Vector2 position, BitList flags, string[] displayedOptions, Action<BitList> onChanged = null)
         {
-            DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onClose);
+            DisplayMultiSelectableList(new Rect(position, Vector2.zero), flags, displayedOptions, onChanged);
         }
 
-        public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onClose = null)
+        public static void DisplayMultiSelectableList(in Rect buttonRect, BitList flags, string[] displayedOptions, Action<BitList> onChanged = null)
         {
-            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, onClose);
+            DropDownWindow.CreateForFlags(buttonRect, flags, displayedOptions, onChanged);
         }
 
         //The functions based on https://gist.github.com/bzgeb/3800350
