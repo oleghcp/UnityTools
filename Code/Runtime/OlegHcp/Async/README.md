@@ -89,20 +89,3 @@ public class MyClass
     }
 }
 ```
-
-### Cached Yield Instructions
-
-```csharp
-using OlegHcp.Async;
-using UnityEngine;
-public class ExampleClass : MonoBehaviour
-{
-    // Cached yield instructions
-    private IEnumerator GetRoutine()
-    {
-        yield return TaskSystem.WaitForEndOfFrame;
-        yield return TaskSystem.WaitForFixedUpdate;
-        yield return TaskSystem.GetWaitInstruction(10f);
-    }
-}
-```
