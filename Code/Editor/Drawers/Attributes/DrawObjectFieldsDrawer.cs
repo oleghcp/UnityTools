@@ -43,7 +43,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             EditorGUI.ObjectField(lineRect, property, typeof(ScriptableObject), EditorGuiUtility.TempContent(StringUtility.Space));
             EditorGUI.PrefixLabel(lineRect, label);
-            property.isExpanded = EditorGui.FoldoutIndented(lineRect, property.isExpanded, GUIContent.none, true);
+            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
 
             if (property.objectReferenceValue == null || !property.isExpanded)
                 return;

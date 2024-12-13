@@ -32,7 +32,7 @@ namespace OlegHcpEditor.Drawers
             rect = EditorGUI.PrefixLabel(rect, label);
             DrawExtendedContent(rect, property);
 
-            EditorGui.PropertyFieldIndented(position, property, GUIContent.none, true);
+            EditorGUI.PropertyField(position, property, GUIContent.none, true);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
