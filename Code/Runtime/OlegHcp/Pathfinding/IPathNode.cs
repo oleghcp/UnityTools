@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OlegHcp.Pathfinding
 {
@@ -8,9 +7,6 @@ namespace OlegHcp.Pathfinding
         IReadOnlyList<PathTransition> GetTransitions();
     }
 
-#if UNITY
-    [Serializable]
-#endif
     public struct PathTransition
     {
         public IPathNode Neighbor { get; }
