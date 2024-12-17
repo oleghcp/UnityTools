@@ -8,7 +8,7 @@ namespace OlegHcp.Pathfinding
 {
     internal class OrderedStack<TValue, TPriority> : HashSet<TValue> where TPriority : IComparable<TPriority>
     {
-        private static ObjectPool<Node> _objectPool = new ObjectPool<Node>(new StackStorage<Node>(), () => new Node());
+        private ObjectPool<Node> _objectPool = new ObjectPool<Node>(new StackStorage<Node>(), () => new Node());
 
         private Node _first;
         private Node _last;
@@ -106,9 +106,6 @@ namespace OlegHcp.Pathfinding
             base.Clear();
         }
 
-#if UNITY
-        [Serializable]
-#endif
         private class Node : IPoolable
         {
             public TValue Element;

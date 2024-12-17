@@ -4,10 +4,11 @@ namespace OlegHcp.Pathfinding
 {
     public class PathFinder
     {
-        private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();
-        private HashSet<PathNode> _checkBuffer = new HashSet<PathNode>();
+        private OrderedStack<IPathNode, float> _frontBuffer = new OrderedStack<IPathNode    , float>();
+        private HashSet<IPathNode> _checkBuffer = new HashSet<IPathNode>();
+        private NodeDataCollection _nodes = new NodeDataCollection();
 
-        public bool Find(PathNode origin, PathNode target, List<PathNode> result, bool directOrder = true)
+        public bool Find(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder = true)
         {
             result.Clear();
 
@@ -16,12 +17,13 @@ namespace OlegHcp.Pathfinding
 
             _frontBuffer.Clear();
             _checkBuffer.Clear();
+            _nodes.Clear();
 
-            _frontBuffer.Push(origin, origin.PassCost);
+            _frontBuffer.Push(origin, _nodes.GetPassCost(origin));
 
             while (_frontBuffer.Count > 0)
             {
-                PathNode current = _frontBuffer.Pop();
+                IPathNode current = _frontBuffer.Pop();
                 _checkBuffer.Add(current);
 
                 IReadOnlyList<PathTransition> transitions = current.GetTransitions();
@@ -33,7 +35,7 @@ namespace OlegHcp.Pathfinding
                         _frontBuffer.Contains(neighbor))
                         continue;
 
-                    neighbor.AddPathData(current, cost);
+                    _nodes.AddPathData(neighbor, current, cost);
 
                     if (neighbor == target)
                     {
@@ -41,19 +43,19 @@ namespace OlegHcp.Pathfinding
                         return true;
                     }
 
-                    _frontBuffer.Push(neighbor, neighbor.PassCost);
+                    _frontBuffer.Push(neighbor, _nodes.GetPassCost(neighbor));
                 }
             }
 
             return false;
         }
 
-        private static void FillResults(PathNode origin, PathNode target, List<PathNode> result, bool directOrder)
+        private void FillResults(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder)
         {
             do
             {
                 result.Add(target);
-                target = target.Parent;
+                target = _nodes.GetParent(target);
             } while (target != origin);
 
             if (directOrder)
