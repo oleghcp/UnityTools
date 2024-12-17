@@ -6,9 +6,6 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Pathfinding
 {
-#if UNITY
-    [Serializable]
-#endif
     internal class OrderedStack<TValue, TPriority> : HashSet<TValue> where TPriority : IComparable<TPriority>
     {
         private static ObjectPool<Node> _objectPool = new ObjectPool<Node>(new StackStorage<Node>(), () => new Node());

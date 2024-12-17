@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OlegHcp.Pathfinding
 {
-#if UNITY
-    [Serializable]
-#endif
     public class PathFinder
     {
         private OrderedStack<PathNode, float> _frontBuffer = new OrderedStack<PathNode, float>();
