@@ -8,17 +8,17 @@ namespace OlegHcp.Pathfinding
 {
     internal class OrderedStack<TValue, TPriority> : HashSet<TValue> where TPriority : IComparable<TPriority>
     {
-        private ObjectPool<Node> _objectPool = new ObjectPool<Node>(new StackStorage<Node>(), () => new Node());
+        private ObjectPool<ValueNode> _objectPool = new ObjectPool<ValueNode>(new StackStorage<ValueNode>(), () => new ValueNode());
 
-        private Node _first;
-        private Node _last;
+        private ValueNode _first;
+        private ValueNode _last;
 
         public void Push(TValue value, TPriority priority)
         {
             if (!Add(value))
                 return;
 
-            Node newNode = _objectPool.Get();
+            ValueNode newNode = _objectPool.Get();
             newNode.SetUp(value, priority);
 
             if (Count == 1)
@@ -28,10 +28,10 @@ namespace OlegHcp.Pathfinding
                 return;
             }
 
-            Node nextNode = null;
-            Node prevNode;
+            ValueNode nextNode = null;
+            ValueNode prevNode;
 
-            for (Node n = _first; n != null; n = n.Next)
+            for (ValueNode n = _first; n != null; n = n.Next)
             {
                 if (n.Priority.CompareTo(priority) < 0)
                 {
@@ -69,7 +69,7 @@ namespace OlegHcp.Pathfinding
             if (Count == 0)
                 throw ThrowErrors.NoElements();
 
-            Node lastNode = _last;
+            ValueNode lastNode = _last;
             TValue element = lastNode.Element;
             Remove(element);
 
@@ -94,7 +94,7 @@ namespace OlegHcp.Pathfinding
             if (Count == 0)
                 return;
 
-            for (Node n = _first?.Next; n != null; n = n.Next)
+            for (ValueNode n = _first?.Next; n != null; n = n.Next)
             {
                 _objectPool.Release(n.Prev);
             }
@@ -106,12 +106,12 @@ namespace OlegHcp.Pathfinding
             base.Clear();
         }
 
-        private class Node : IPoolable
+        private class ValueNode : IPoolable
         {
             public TValue Element;
             public TPriority Priority;
-            public Node Prev;
-            public Node Next;
+            public ValueNode Prev;
+            public ValueNode Next;
 
             public void SetUp(TValue value, TPriority priority)
             {
