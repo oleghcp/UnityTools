@@ -5,44 +5,40 @@
 ```csharp
 public class PathFinder
 {
-    public void Find(PathNode origin, PathNode target, List<PathNode> result);
+    public void Find(IPathNode origin, IPathNode target, List<IPathNode> result);
 }
 ```
 
 ```csharp
-public abstract class PathNode : IEquatable<PathNode>
+public interface IPathNode
 {
-    public int Id { get; }
-
-    public PathNode(int id);
-    public abstract IReadOnlyList<PathTransition> GetTransitions();
-    public bool Equals(PathNode other);
+    IReadOnlyList<PathTransition> GetTransitions();
 }
 ```
 
 ```csharp
 public struct PathTransition
 {
-    public PathNode Neighbor { get; }
+    public IPathNode Neighbor { get; }
     public float Cost { get; }
 
-    public PathTransition(PathNode neighbor, float cost);
-    public void Deconstruct(out PathNode neighbor, out float cost);
+    public PathTransition(IPathNode neighbor, float cost);
+    public void Deconstruct(out IPathNode neighbor, out float cost);
 }
 ```
 
 ### Example with rect grid
 
-Implementing abstract `PathNode` with a custom position struct.
+Implementing abstract `IPathNode` with a custom position struct.
 
 ```csharp
-public class ExamplePathNode : PathNode
+public class ExamplePathNode : IPathNode
 {
     private PathTransition[] _transitions;
 
     public NodePosition Position { get; }
 
-    public ExamplePathNode(NodePosition pos) : base(pos.GetHashCode())
+    public ExamplePathNode(NodePosition pos)
     {
         Position = pos;
     }
@@ -115,7 +111,7 @@ public class Example : MonoBehaviour
             "████████████████",
         };
 
-        PathNode[,] grid = GenerateGrid(field, out PathNode origin, out PathNode target);
+        IPathNode[,] grid = GenerateGrid(field, out IPathNode origin, out IPathNode target);
 
         // Set transitions in the grid
         foreach (ExamplePathNode node in grid)
@@ -124,7 +120,7 @@ public class Example : MonoBehaviour
             node?.SetTransitions(GetNeighbors(grid, node));
         }
 
-        List<PathNode> result = new List<PathNode>();
+        List<IPathNode> result = new List<IPathNode>();
         pathFinder.Find(origin, target, result);
 
         if (result.Count == 0)
@@ -152,12 +148,12 @@ public class Example : MonoBehaviour
         // ████████████████
     }
 
-    private static PathNode[,] GenerateGrid(string[] filed, out PathNode origin, out PathNode target)
+    private static IPathNode[,] GenerateGrid(string[] filed, out IPathNode origin, out IPathNode target)
     {
         int iDimension = filed.Length;
         int jDimension = filed[0].Length;
 
-        PathNode[,] grid = new PathNode[iDimension, jDimension];
+        IPathNode[,] grid = new IPathNode[iDimension, jDimension];
 
         origin = default;
         target = default;
@@ -184,7 +180,7 @@ public class Example : MonoBehaviour
         return grid;
     }
 
-    private static PathTransition[] GetNeighbors(PathNode[,] nodeGrid, ExamplePathNode sourceNode)
+    private static PathTransition[] GetNeighbors(IPathNode[,] nodeGrid, ExamplePathNode sourceNode)
     {
         List<PathTransition> neighbors = new List<PathTransition>();
 
@@ -226,7 +222,7 @@ public class Example : MonoBehaviour
 
         return neighbors.ToArray();
 
-        void tryAddNeighbor(PathNode neighbor, float cost)
+        void tryAddNeighbor(IPathNode neighbor, float cost)
         {
             // Null is unavailable cell
             if (neighbor == null)
@@ -236,7 +232,7 @@ public class Example : MonoBehaviour
         }
     }
 
-    private static void OverrideFieldWithPath(string[] field, List<PathNode> result)
+    private static void OverrideFieldWithPath(string[] field, List<IPathNode> result)
     {
         char[][] chars = new char[field.Length][];
 
