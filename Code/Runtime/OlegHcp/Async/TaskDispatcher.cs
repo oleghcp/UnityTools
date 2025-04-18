@@ -8,7 +8,7 @@ namespace OlegHcp.Async
     internal class TaskDispatcher : MonoBehaviour, IObjectFactory<TaskRunner>
     {
         private ObjectPool<TaskRunner> _taskPool;
-        private List<TaskRunner> _tasks = new List<TaskRunner>();
+        private List<TaskRunner> _activeTasks = new List<TaskRunner>();
 
         private void Awake()
         {
@@ -17,9 +17,9 @@ namespace OlegHcp.Async
 
         private void Update()
         {
-            for (int i = 0; i < _tasks.Count; i++)
+            for (int i = 0; i < _activeTasks.Count; i++)
             {
-                _tasks[i].Refresh();
+                _activeTasks[i].Refresh();
             }
         }
 
@@ -35,8 +35,8 @@ namespace OlegHcp.Async
 
         TaskRunner IObjectFactory<TaskRunner>.Create()
         {
-            TaskRunner taskRunner = _tasks.Place(gameObject.AddComponent<TaskRunner>());
-            return taskRunner.SetUp(this);
+            return _activeTasks.Place(gameObject.AddComponent<TaskRunner>())
+                               .SetUp(this);
         }
     }
 }
