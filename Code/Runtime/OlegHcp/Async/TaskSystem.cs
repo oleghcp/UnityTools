@@ -12,17 +12,14 @@ namespace OlegHcp.Async
     /// </summary>
     public static class TaskSystem
     {
-        private static readonly LongIdGenerator _idProvider = new LongIdGenerator();
-        private static readonly ObjectPool<RoutineIterator> _iteratorPool = new ObjectPool<RoutineIterator>(() => new RoutineIterator());
-        private static TaskRunner _globals;
-        private static TaskRunner _locals;
+        private static readonly Data _data = new Data();
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator routine, in CancellationToken token)
         {
-            return GetGlobal().RunAsync(routine, _idProvider.GetNewId(), false, token);
+            return _data.GetGlobal().RunAsync(routine, _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -30,7 +27,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator routine, bool unstoppable = false)
         {
-            return GetGlobal().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
+            return _data.GetGlobal().RunAsync(routine, _data.GetNewId(), unstoppable, default);
         }
 
         /// <summary>
@@ -38,7 +35,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator routine, in CancellationToken token)
         {
-            return GetLocal().RunAsync(routine, _idProvider.GetNewId(), false, token);
+            return _data.GetLocal().RunAsync(routine, _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -46,7 +43,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator routine, bool unstoppable = false)
         {
-            return GetLocal().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
+            return _data.GetLocal().RunAsync(routine, _data.GetNewId(), unstoppable, default);
         }
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return GetGlobal().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
+            return _data.GetGlobal().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -62,7 +59,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return GetLocal().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
+            return _data.GetLocal().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -70,7 +67,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run, in CancellationToken token = default)
         {
-            return GetGlobal().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
+            return _data.GetGlobal().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -78,7 +75,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunAfterFramesLocally(int frames, Action run, in CancellationToken token = default)
         {
-            return GetLocal().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
+            return _data.GetLocal().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -86,7 +83,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetGlobal().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return _data.GetGlobal().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -94,7 +91,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetLocal().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return _data.GetLocal().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -102,7 +99,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo Repeat(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetGlobal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return _data.GetGlobal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _data.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -110,31 +107,56 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RepeatLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetLocal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return _data.GetLocal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _data.GetNewId(), false, token);
         }
 
-        private static TaskRunner GetGlobal()
+        private class Data : IObjectFactory<RoutineIterator>
         {
-            if (_globals == null)
+            private LongIdGenerator _idProvider = new LongIdGenerator();
+            private ObjectPool<RoutineIterator> _iteratorPool;
+            private TaskRunner _globals;
+            private TaskRunner _locals;
+
+            internal ObjectPool<RoutineIterator> IteratorPool => _iteratorPool;
+
+            public Data()
             {
-                _globals = SceneTool.GetGlobal()
-                                    .AddComponent<TaskRunner>()
-                                    .SetUp(_iteratorPool, true);
+                _iteratorPool = new ObjectPool<RoutineIterator>(this);
             }
 
-            return _globals;
-        }
-
-        private static TaskRunner GetLocal()
-        {
-            if (_locals == null)
+            public long GetNewId()
             {
-                _locals = SceneTool.GetLocal()
-                                   .AddComponent<TaskRunner>()
-                                   .SetUp(_iteratorPool, false);
+                return _idProvider.GetNewId();
             }
 
-            return _locals;
+            public TaskRunner GetGlobal()
+            {
+                if (_globals == null)
+                {
+                    _globals = SceneTool.GetGlobal()
+                                        .AddComponent<TaskRunner>()
+                                        .SetUp(_iteratorPool, true);
+                }
+
+                return _globals;
+            }
+
+            public TaskRunner GetLocal()
+            {
+                if (_locals == null)
+                {
+                    _locals = SceneTool.GetLocal()
+                                       .AddComponent<TaskRunner>()
+                                       .SetUp(_iteratorPool, false);
+                }
+
+                return _locals;
+            }
+
+            RoutineIterator IObjectFactory<RoutineIterator>.Create()
+            {
+                return new RoutineIterator();
+            }
         }
     }
 }
