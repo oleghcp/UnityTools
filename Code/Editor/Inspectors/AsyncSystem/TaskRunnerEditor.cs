@@ -38,8 +38,6 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
         {
             EditorGUILayout.LabelField($"Pool: {target.PoolCount}");
 
-            EditorGUILayout.Space();
-
             for (int i = 0; i < _activeTasks.Count; i++)
             {
                 if (_activeTasks[i] == null)
@@ -48,12 +46,12 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
                     continue;
                 }
 
+                EditorGUILayout.Space();
+
                 if (_taskDrawers[i] == null)
                     _taskDrawers[i] = new TaskDrawer(_activeTasks[i], _stackTraceButtonLabel, _hyperLinkStyle, _buttonOptions);
 
                 _taskDrawers[i].Draw();
-
-                EditorGUILayout.Space();
             }
         }
 

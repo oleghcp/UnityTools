@@ -63,7 +63,6 @@ namespace OlegHcp.Async
 #if UNITY_EDITOR
             Version++;
 #endif
-            Debug.Log($"Count: {_activeTasks.Count} | index: {index}");
             _indices.Push(index);
             _activeTasks[index] = null;
             _iteratorPool.Release(iterator);
