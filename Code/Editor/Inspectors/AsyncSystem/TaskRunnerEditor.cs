@@ -36,6 +36,10 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 
         public override void OnInspectorGUI()
         {
+            EditorGUILayout.LabelField($"Pool: {target.PoolCount}");
+
+            EditorGUILayout.Space();
+
             for (int i = 0; i < _activeTasks.Count; i++)
             {
                 if (_activeTasks[i] == null)

@@ -100,10 +100,11 @@ namespace OlegHcp.Async
 #if UNITY_EDITOR
             StackTrace = null;
 #endif
+            _taskRunner = null;
+            _curRoutine = null;
             _id = 0L;
             _index = 0;
             _unstoppable = false;
-            _curRoutine = null;
             _token = default;
             _isStopped = false;
         }

@@ -17,6 +17,7 @@ namespace OlegHcp.Async
         private Stack<int> _indices = new Stack<int>();
 
         public IReadOnlyList<RoutineIterator> ActiveTasks => _activeTasks;
+        public int PoolCount => _iteratorPool.Count;
 
 #if UNITY_EDITOR
         public int Version { get; private set; }
