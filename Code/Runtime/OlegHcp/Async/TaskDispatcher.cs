@@ -12,6 +12,12 @@ namespace OlegHcp.Async
         private List<TaskRunner> _activeTasks = new List<TaskRunner>();
         private Stack<int> _indices = new Stack<int>();
 
+        public IReadOnlyList<TaskRunner> ActiveTasks => _activeTasks;
+
+#if UNITY_EDITOR
+        public int Version { get; private set; }
+#endif
+
         private void Awake()
         {
             _taskPool = new ObjectPool<TaskRunner>(this);
@@ -27,6 +33,10 @@ namespace OlegHcp.Async
 
         public void ReleaseRunner(TaskRunner runner, int index)
         {
+#if UNITY_EDITOR
+            Version++;
+#endif
+            Debug.Log($"Count: {_activeTasks.Count} | index: {index}");
             _indices.Push(index);
             _activeTasks[index] = null;
             _taskPool.Release(runner);
@@ -34,6 +44,9 @@ namespace OlegHcp.Async
 
         public TaskRunner GetRunner()
         {
+#if UNITY_EDITOR
+            Version++;
+#endif
             TaskRunner runner = _taskPool.Get();
 
             if (_indices.TryPop(out int index))

@@ -7,66 +7,38 @@ using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Inspectors.AsyncSystem
 {
-    [CustomEditor(typeof(TaskRunner))]
-    internal class TaskRunnerEditor : Editor<TaskRunner>
+    internal class TaskDrawer
     {
-        private static GUIStyle _hyperLinkStyle;
-        private static string _inactiveLabel = "Inactive";
-        private static string _stackTraceButtonLabel = "Stack Trace";
-        private static GUILayoutOption[] _buttonOptions = new GUILayoutOption[] { GUILayout.Height(EditorGUIUtility.singleLineHeight) };
-
-        private long _id;
+        private TaskRunner _target;
         private string _startPoint;
 
-        private void Awake()
-        {
-            if (_hyperLinkStyle == null)
-                _hyperLinkStyle = EditorStylesExt.HyperLink;
+        private static GUIStyle _hyperLinkStyle;
+        private static string _stackTraceButtonLabel;
+        private static GUILayoutOption[] _buttonOptions;
 
-            Init();
-            EditorApplication.update += Update;
+        public TaskDrawer(TaskRunner taskRunner, string stackTraceButtonLabel, GUIStyle hyperLinkStyle, GUILayoutOption[] buttonOptions)
+        {
+            _target = taskRunner;
+            _startPoint = GetStartLine(taskRunner.StackTrace, Application.dataPath.Length);
+
+            _stackTraceButtonLabel = stackTraceButtonLabel;
+            _hyperLinkStyle = hyperLinkStyle;
+            _buttonOptions = buttonOptions;
         }
 
-        private void OnDestroy()
+        public void Draw()
         {
-            EditorApplication.update -= Update;
-        }
-
-        public override void OnInspectorGUI()
-        {
-            if (target.Id == 0L)
-            {
-                EditorGUILayout.HelpBox(_inactiveLabel, MessageType.Info);
-                return;
-            }
-
             EditorGUILayout.BeginHorizontal();
 
-            GUILayout.Label($"Task {target.Id}", EditorStyles.boldLabel);
+            GUILayout.Label($"Task #{_target.Id}", EditorStyles.boldLabel);
 
             if (GUILayout.Button(_stackTraceButtonLabel, _buttonOptions))
-                StackTraceWindow.Create(target.StackTrace);
+                StackTraceWindow.Create(_target.StackTrace);
 
             EditorGUILayout.EndHorizontal();
 
             if (GUILayout.Button(_startPoint, _hyperLinkStyle))
-                OpenCode();
-        }
-
-        private void Init()
-        {
-            _id = target.Id;
-            _startPoint = _id == 0L ? string.Empty
-                                    : GetStartLine(target.StackTrace, Application.dataPath.Length);
-        }
-
-        private void Update()
-        {
-            if (_id != target.Id)
-            {
-                Init();
-                Repaint();
-            }
+                OpenCode(_target.StackTrace);
         }
 
         private static string GetStartLine(string stackTrace, int offset = 0)
@@ -89,10 +61,10 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
             return string.Empty;
         }
 
-        private void OpenCode()
+        private static void OpenCode(string stackTrace)
         {
             int offset = PathUtility.GetParentPath(Application.dataPath).Length + 1;
-            string startPoint = GetStartLine(target.StackTrace, offset);
+            string startPoint = GetStartLine(stackTrace, offset);
 
             int index = startPoint.LastIndexOf(':');
             string filePath = startPoint.Substring(0, index);
