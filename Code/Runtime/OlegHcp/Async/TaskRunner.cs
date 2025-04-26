@@ -15,8 +15,8 @@ namespace OlegHcp.Async
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
         private long _id;
-        private bool _enabled = true;
         private bool _unstoppable;
+        private int _index;
 
 #if UNITY_EDITOR
         public string StackTrace { get; private set; }
@@ -32,10 +32,15 @@ namespace OlegHcp.Async
             return this;
         }
 
+        public void SetIndex(int index)
+        {
+            _index = index;
+        }
+
         public void Refresh()
         {
-            if (_enabled && _id == 0L)
-                _owner.ReleaseRunner(this);
+            if (_id == 0L)
+                _owner.ReleaseRunner(this, _index);
         }
 
         public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
@@ -96,13 +101,13 @@ namespace OlegHcp.Async
 
         void IPoolable.Reinit()
         {
-            _enabled = true;
+
         }
 
         void IPoolable.CleanUp()
         {
+            _index = 0;
             _iterator.Reset();
-            _enabled = false;
 #if UNITY_EDITOR
             StackTrace = null;
 #endif
