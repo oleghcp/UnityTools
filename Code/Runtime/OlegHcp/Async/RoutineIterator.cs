@@ -23,6 +23,10 @@ namespace OlegHcp.Async
         public bool IsEmpty => _curRoutine == null;
         public object Current => _curRoutine.Current;
 
+#if UNITY_EDITOR
+        public string StackTrace { get; private set; }
+#endif
+
         public RoutineIterator(TaskRunner owner)
         {
             _owner = owner;
@@ -30,6 +34,9 @@ namespace OlegHcp.Async
 
         public void Initialize(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
         {
+#if UNITY_EDITOR
+            StackTrace = Environment.StackTrace;
+#endif
             _id = id;
             _unstoppable = unstoppable;
             _curRoutine = routine;
@@ -51,6 +58,9 @@ namespace OlegHcp.Async
 
         public void Reset()
         {
+#if UNITY_EDITOR
+            StackTrace = null;
+#endif
             _index = 0;
             _unstoppable = false;
             _curRoutine = null;
