@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using OlegHcp.Engine;
 using OlegHcp.IdGenerating;
+using OlegHcp.Pool;
 
 namespace OlegHcp.Async
 {
@@ -12,6 +12,7 @@ namespace OlegHcp.Async
     public static class TaskSystem
     {
         private static readonly LongIdGenerator _idProvider = new LongIdGenerator();
+        private static readonly ObjectPool<RoutineIterator> _iteratorPool = new ObjectPool<RoutineIterator>(() => new RoutineIterator());
         private static TaskDispatcher _globals;
         private static TaskDispatcher _locals;
 
@@ -116,7 +117,7 @@ namespace OlegHcp.Async
             if (_globals == null)
             {
                 _globals = ComponentUtility.CreateInstance<TaskDispatcher>();
-                _globals.Immortalize();
+                _globals.SetUp(_iteratorPool, true);
             }
 
             return _globals;
@@ -125,7 +126,10 @@ namespace OlegHcp.Async
         private static TaskDispatcher GetLocal()
         {
             if (_locals == null)
+            {
                 _locals = ComponentUtility.CreateInstance<TaskDispatcher>();
+                _locals.SetUp(_iteratorPool, false);
+            }
 
             return _locals;
         }

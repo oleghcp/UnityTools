@@ -2,27 +2,36 @@
 using System.Collections.Generic;
 using System.Threading;
 using OlegHcp.CSharp.Collections;
+using OlegHcp.Engine;
 using OlegHcp.Pool;
 using UnityEngine;
 
 namespace OlegHcp.Async
 {
     [DefaultExecutionOrder(10000)]
-    internal class TaskDispatcher : MonoBehaviour, IObjectFactory<TaskRunner>
+    internal class TaskDispatcher : MonoBehaviour
     {
-        private ObjectPool<TaskRunner> _taskPool;
-        private List<TaskRunner> _activeTasks = new List<TaskRunner>();
+        private ObjectPool<RoutineIterator> _iteratorPool;
+        private bool _global;
+        private List<RoutineIterator> _activeTasks = new List<RoutineIterator>();
         private Stack<int> _indices = new Stack<int>();
 
-        public IReadOnlyList<TaskRunner> ActiveTasks => _activeTasks;
+        public IReadOnlyList<RoutineIterator> ActiveTasks => _activeTasks;
 
 #if UNITY_EDITOR
         public int Version { get; private set; }
 #endif
 
-        private void Awake()
+        private void OnDestroy()
         {
-            _taskPool = new ObjectPool<TaskRunner>(this);
+            if (_global)
+                return;
+
+            for (int i = 0; i < _activeTasks.Count; i++)
+            {
+                if (_activeTasks[i] != null)
+                    _iteratorPool.Release(_activeTasks[i]);
+            }
         }
 
         private void LateUpdate()
@@ -33,12 +42,25 @@ namespace OlegHcp.Async
             }
         }
 
-        public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
+        public void SetUp(ObjectPool<RoutineIterator> iteratorPool, bool global)
         {
-            return GetRunner().RunAsync(routine, id, unstoppable, token);
+            _iteratorPool = iteratorPool;
+            _global = global;
+
+            if (global)
+                gameObject.Immortalize();
         }
 
-        public void ReleaseRunner(TaskRunner runner, int index)
+        public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
+        {
+            RoutineIterator iterator = GetIterator(out int index);
+            iterator.Initialize(this, routine, id, unstoppable, index, token);
+            TaskInfo task = new TaskInfo(iterator);
+            StartCoroutine(iterator);
+            return task;
+        }
+
+        public void ReleaseRunner(RoutineIterator iterator, int index)
         {
 #if UNITY_EDITOR
             Version++;
@@ -46,31 +68,19 @@ namespace OlegHcp.Async
             Debug.Log($"Count: {_activeTasks.Count} | index: {index}");
             _indices.Push(index);
             _activeTasks[index] = null;
-            _taskPool.Release(runner);
+            _iteratorPool.Release(iterator);
         }
 
-        TaskRunner IObjectFactory<TaskRunner>.Create()
-        {
-            return gameObject.AddComponent<TaskRunner>()
-                             .SetUp(this);
-        }
-
-        private TaskRunner GetRunner()
+        private RoutineIterator GetIterator(out int index)
         {
 #if UNITY_EDITOR
             Version++;
 #endif
-            TaskRunner runner = _taskPool.Get();
-
-            if (_indices.TryPop(out int index))
-            {
-                runner.SetIndex(index);
-                return _activeTasks[index] = runner;
-            }
+            if (_indices.TryPop(out index))
+                return _activeTasks[index] = _iteratorPool.Get();
 
             index = _activeTasks.Count;
-            runner.SetIndex(index);
-            return _activeTasks.Place(runner);
+            return _activeTasks.Place(_iteratorPool.Get());
         }
     }
 }

@@ -18,10 +18,10 @@ namespace OlegHcp.Async
         private IEnumerator _curRoutine;
         private bool _isStopped;
         private CancellationToken _token;
+        private TaskDispatcher _taskDispatcher;
 
         public long Id => _id;
         public bool CanBeStopped => !_unstoppable;
-        public int Index => _index;
         public bool IsEmpty => _curRoutine == null;
         public object Current => _curRoutine.Current;
 
@@ -29,25 +29,23 @@ namespace OlegHcp.Async
         public string StackTrace { get; private set; }
 #endif
 
-        public RoutineIterator()
-        {
-
-        }
-
-        public void Initialize(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
+        public void Initialize(TaskDispatcher taskDispatcher, IEnumerator routine, long id, bool unstoppable, int index, in CancellationToken token)
         {
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
+            _taskDispatcher = taskDispatcher;
+            _curRoutine = routine;
             _id = id;
             _unstoppable = unstoppable;
-            _curRoutine = routine;
+            _index = index;
             _token = token;
         }
 
-        public void SetIndex(int index)
+        public void Refresh()
         {
-            _index = index;
+            if (_id == 0L)
+                _taskDispatcher.ReleaseRunner(this, _index);
         }
 
         public void Stop()
@@ -82,7 +80,10 @@ namespace OlegHcp.Async
             CleanUp();
         }
 
-        void IPoolable.Reinit() { }
+        void IPoolable.Reinit()
+        {
+
+        }
 
         void IPoolable.CleanUp()
         {
@@ -101,6 +102,7 @@ namespace OlegHcp.Async
 #if UNITY_EDITOR
             StackTrace = null;
 #endif
+            _id = 0L;
             _index = 0;
             _unstoppable = false;
             _curRoutine = null;

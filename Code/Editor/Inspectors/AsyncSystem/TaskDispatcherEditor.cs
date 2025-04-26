@@ -13,7 +13,7 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
         private static string _stackTraceButtonLabel = "Stack Trace";
         private static GUILayoutOption[] _buttonOptions = new GUILayoutOption[] { GUILayout.Height(EditorGUIUtility.singleLineHeight) };
 
-        private IReadOnlyList<TaskRunner> _activeTasks;
+        private IReadOnlyList<RoutineIterator> _activeTasks;
         private List<TaskDrawer> _taskDrawers = new List<TaskDrawer>();
         private int _version;
 

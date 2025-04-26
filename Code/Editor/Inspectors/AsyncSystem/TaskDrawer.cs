@@ -9,17 +9,17 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 {
     internal class TaskDrawer
     {
-        private TaskRunner _target;
+        private RoutineIterator _iterator;
         private string _startPoint;
 
         private static GUIStyle _hyperLinkStyle;
         private static string _stackTraceButtonLabel;
         private static GUILayoutOption[] _buttonOptions;
 
-        public TaskDrawer(TaskRunner taskRunner, string stackTraceButtonLabel, GUIStyle hyperLinkStyle, GUILayoutOption[] buttonOptions)
+        public TaskDrawer(RoutineIterator iterator, string stackTraceButtonLabel, GUIStyle hyperLinkStyle, GUILayoutOption[] buttonOptions)
         {
-            _target = taskRunner;
-            _startPoint = GetStartLine(taskRunner.StackTrace, Application.dataPath.Length);
+            _iterator = iterator;
+            _startPoint = GetStartLine(iterator.StackTrace, Application.dataPath.Length);
 
             _stackTraceButtonLabel = stackTraceButtonLabel;
             _hyperLinkStyle = hyperLinkStyle;
@@ -30,15 +30,15 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
         {
             EditorGUILayout.BeginHorizontal();
 
-            GUILayout.Label($"Task #{_target.Id}", EditorStyles.boldLabel);
+            GUILayout.Label($"Task #{_iterator.Id}", EditorStyles.boldLabel);
 
             if (GUILayout.Button(_stackTraceButtonLabel, _buttonOptions))
-                StackTraceWindow.Create(_target.StackTrace);
+                StackTraceWindow.Create(_iterator.StackTrace);
 
             EditorGUILayout.EndHorizontal();
 
             if (GUILayout.Button(_startPoint, _hyperLinkStyle))
-                OpenCode(_target.StackTrace);
+                OpenCode(_iterator.StackTrace);
         }
 
         private static string GetStartLine(string stackTrace, int offset = 0)
