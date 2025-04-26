@@ -20,7 +20,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator routine, in CancellationToken token)
         {
-            return GetGlobalRunner().RunAsync(routine, _idProvider.GetNewId(), false, token);
+            return GetGlobal().RunAsync(routine, _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsync(IEnumerator routine, bool unstoppable = false)
         {
-            return GetGlobalRunner().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
+            return GetGlobal().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator routine, in CancellationToken token)
         {
-            return GetLocalRunner().RunAsync(routine, _idProvider.GetNewId(), false, token);
+            return GetLocal().RunAsync(routine, _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo StartAsyncLocally(IEnumerator routine, bool unstoppable = false)
         {
-            return GetLocalRunner().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
+            return GetLocal().RunAsync(routine, _idProvider.GetNewId(), unstoppable, default);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunDelayed(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
+            return GetGlobal().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunDelayedLocally(float time, Action run, bool scaledTime = true, in CancellationToken token = default)
         {
-            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
+            return GetLocal().RunAsync(CoroutineUtility.GetRunDelayedRoutine(time, run, scaledTime), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunAfterFrames(int frames, Action run, in CancellationToken token = default)
         {
-            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
+            return GetGlobal().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunAfterFramesLocally(int frames, Action run, in CancellationToken token = default)
         {
-            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
+            return GetLocal().RunAsync(CoroutineUtility.GetRunAfterFramesRoutine(frames, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunByCondition(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return GetGlobal().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RunByConditionLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return GetLocal().RunAsync(CoroutineUtility.GetRunByConditionRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo Repeat(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetGlobalRunner().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return GetGlobal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
         /// <summary>
@@ -108,10 +108,10 @@ namespace OlegHcp.Async
         /// </summary>
         public static TaskInfo RepeatLocally(Func<bool> condition, Action run, in CancellationToken token = default)
         {
-            return GetLocalRunner().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
+            return GetLocal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
-        private static TaskRunner GetGlobalRunner()
+        private static TaskDispatcher GetGlobal()
         {
             if (_globals == null)
             {
@@ -119,15 +119,15 @@ namespace OlegHcp.Async
                 _globals.Immortalize();
             }
 
-            return _globals.GetRunner();
+            return _globals;
         }
 
-        private static TaskRunner GetLocalRunner()
+        private static TaskDispatcher GetLocal()
         {
             if (_locals == null)
                 _locals = ComponentUtility.CreateInstance<TaskDispatcher>();
 
-            return _locals.GetRunner();
+            return _locals;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Pool;
 using UnityEngine;
@@ -31,6 +33,11 @@ namespace OlegHcp.Async
             }
         }
 
+        public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
+        {
+            return GetRunner().RunAsync(routine, id, unstoppable, token);
+        }
+
         public void ReleaseRunner(TaskRunner runner, int index)
         {
 #if UNITY_EDITOR
@@ -42,7 +49,13 @@ namespace OlegHcp.Async
             _taskPool.Release(runner);
         }
 
-        public TaskRunner GetRunner()
+        TaskRunner IObjectFactory<TaskRunner>.Create()
+        {
+            return gameObject.AddComponent<TaskRunner>()
+                             .SetUp(this);
+        }
+
+        private TaskRunner GetRunner()
         {
 #if UNITY_EDITOR
             Version++;
@@ -58,12 +71,6 @@ namespace OlegHcp.Async
             index = _activeTasks.Count;
             runner.SetIndex(index);
             return _activeTasks.Place(runner);
-        }
-
-        TaskRunner IObjectFactory<TaskRunner>.Create()
-        {
-            return gameObject.AddComponent<TaskRunner>()
-                             .SetUp(this);
         }
     }
 }

@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using OlegHcp.Pool;
 
 namespace OlegHcp.Async
 {
-    internal class RoutineIterator : IEnumerator
+    internal class RoutineIterator : IEnumerator, IPoolable
     {
         private readonly TaskRunner _owner;
 
@@ -56,18 +57,6 @@ namespace OlegHcp.Async
             _isStopped = true;
         }
 
-        public void Reset()
-        {
-#if UNITY_EDITOR
-            StackTrace = null;
-#endif
-            _index = 0;
-            _unstoppable = false;
-            _curRoutine = null;
-            _token = default;
-            _isStopped = false;
-        }
-
         bool IEnumerator.MoveNext()
         {
             if (_isStopped || _token.IsCancellationRequested)
@@ -87,10 +76,35 @@ namespace OlegHcp.Async
             return false;
         }
 
+        public void Reset()
+        {
+            CleanUp();
+        }
+
+        void IPoolable.Reinit() { }
+
+        void IPoolable.CleanUp()
+        {
+            CleanUp();
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnCoroutineEndedInternal()
         {
             _id = 0L;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void CleanUp()
+        {
+#if UNITY_EDITOR
+            StackTrace = null;
+#endif
+            _index = 0;
+            _unstoppable = false;
+            _curRoutine = null;
+            _token = default;
+            _isStopped = false;
         }
     }
 }
