@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace OlegHcp.Async
 {
+    [DefaultExecutionOrder(10000)]
     internal class TaskDispatcher : MonoBehaviour, IObjectFactory<TaskRunner>
     {
         private ObjectPool<TaskRunner> _taskPool;
@@ -15,7 +16,7 @@ namespace OlegHcp.Async
             _taskPool = new ObjectPool<TaskRunner>(this);
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             for (int i = 0; i < _activeTasks.Count; i++)
             {
