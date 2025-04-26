@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using OlegHcp.Engine;
 using OlegHcp.Tools;
 using UnityEngine;
 
@@ -62,26 +60,11 @@ namespace OlegHcp
             remove { CallbackKeeper.OnFixedTick_Event -= value; }
         }
 
-        private static CallbackKeeper _instance;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
-            _instance = ComponentUtility.CreateInstance<CallbackKeeper>();
-            _instance.gameObject.Immortalize();
-        }
-
-        public static IReadOnlyList<GameObject> GetDontDestroyOnLoadObjects()
-        {
-            var scene = _instance.gameObject.scene;
-            List<GameObject> buffer = new List<GameObject>(scene.rootCount);
-            scene.GetRootGameObjects(buffer);
-            return buffer;
-        }
-
-        public static void GetDontDestroyOnLoadObjects(List<GameObject> buffer)
-        {
-            _instance.gameObject.scene.GetRootGameObjects(buffer);
+            SceneTool.GetGlobal()
+                     .AddComponent<CallbackKeeper>();
         }
     }
 }

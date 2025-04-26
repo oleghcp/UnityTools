@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using OlegHcp.CSharp.Collections;
-using OlegHcp.Engine;
 using OlegHcp.Pool;
 using UnityEngine;
 
@@ -43,13 +42,11 @@ namespace OlegHcp.Async
             }
         }
 
-        public void SetUp(ObjectPool<RoutineIterator> iteratorPool, bool global)
+        public TaskRunner SetUp(ObjectPool<RoutineIterator> iteratorPool, bool global)
         {
             _iteratorPool = iteratorPool;
             _global = global;
-
-            if (global)
-                gameObject.Immortalize();
+            return this;
         }
 
         public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)

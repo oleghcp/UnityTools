@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading;
 using OlegHcp.IdGenerating;
 using OlegHcp.Pool;
+using OlegHcp.Tools;
 
 namespace OlegHcp.Async
 {
@@ -116,8 +117,9 @@ namespace OlegHcp.Async
         {
             if (_globals == null)
             {
-                _globals = ComponentUtility.CreateInstance<TaskRunner>();
-                _globals.SetUp(_iteratorPool, true);
+                _globals = SceneTool.GetGlobal()
+                                    .AddComponent<TaskRunner>()
+                                    .SetUp(_iteratorPool, true);
             }
 
             return _globals;
@@ -127,8 +129,9 @@ namespace OlegHcp.Async
         {
             if (_locals == null)
             {
-                _locals = ComponentUtility.CreateInstance<TaskRunner>();
-                _locals.SetUp(_iteratorPool, false);
+                _locals = SceneTool.GetLocal()
+                                   .AddComponent<TaskRunner>()
+                                   .SetUp(_iteratorPool, false);
             }
 
             return _locals;
