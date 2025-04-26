@@ -8,7 +8,8 @@ namespace OlegHcp.Async
 {
     internal class RoutineIterator : IEnumerator, IPoolable
     {
-        private readonly TaskRunner _owner;
+        public event Action<TaskResult> OnCompleted1_Event;
+        public event Action OnCompleted2_Event;
 
         private long _id;
         private bool _unstoppable;
@@ -28,9 +29,9 @@ namespace OlegHcp.Async
         public string StackTrace { get; private set; }
 #endif
 
-        public RoutineIterator(TaskRunner owner)
+        public RoutineIterator()
         {
-            _owner = owner;
+
         }
 
         public void Initialize(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
@@ -62,7 +63,7 @@ namespace OlegHcp.Async
             if (_isStopped || _token.IsCancellationRequested)
             {
                 OnCoroutineEndedInternal();
-                _owner.OnCoroutineInterrupted();
+                InvokeInterrupted();
                 return false;
             }
 
@@ -72,7 +73,7 @@ namespace OlegHcp.Async
             }
 
             OnCoroutineEndedInternal();
-            _owner.OnCoroutineEnded();
+            InvokeEnded();
             return false;
         }
 
@@ -105,6 +106,32 @@ namespace OlegHcp.Async
             _curRoutine = null;
             _token = default;
             _isStopped = false;
+        }
+
+        private void InvokeInterrupted()
+        {
+            OnCompleted2_Event = null;
+
+            if (OnCompleted1_Event == null)
+                return;
+
+            try { OnCompleted1_Event(default); }
+            finally { OnCompleted1_Event = null; }
+        }
+
+        private void InvokeEnded()
+        {
+            if (OnCompleted1_Event != null)
+            {
+                try { OnCompleted1_Event(new TaskResult(_curRoutine.Current, true)); }
+                finally { OnCompleted1_Event = null; }
+            }
+
+            if (OnCompleted2_Event != null)
+            {
+                try { OnCompleted2_Event(); }
+                finally { OnCompleted2_Event = null; }
+            }
         }
     }
 }
