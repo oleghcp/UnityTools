@@ -9,7 +9,7 @@ using UnityEngine;
 namespace OlegHcp.Async
 {
     [DefaultExecutionOrder(10000)]
-    internal class TaskDispatcher : MonoBehaviour
+    internal class TaskRunner : MonoBehaviour
     {
         private ObjectPool<RoutineIterator> _iteratorPool;
         private bool _global;

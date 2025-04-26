@@ -14,27 +14,25 @@ namespace OlegHcp.Async
         private long _id;
         private bool _unstoppable;
         private int _index;
-
         private IEnumerator _curRoutine;
         private bool _isStopped;
         private CancellationToken _token;
-        private TaskDispatcher _taskDispatcher;
+        private TaskRunner _taskRunner;
 
         public long Id => _id;
         public bool CanBeStopped => !_unstoppable;
-        public bool IsEmpty => _curRoutine == null;
-        public object Current => _curRoutine.Current;
+        object IEnumerator.Current => _curRoutine.Current;
 
 #if UNITY_EDITOR
         public string StackTrace { get; private set; }
 #endif
 
-        public void Initialize(TaskDispatcher taskDispatcher, IEnumerator routine, long id, bool unstoppable, int index, in CancellationToken token)
+        public void Initialize(TaskRunner taskRunner, IEnumerator routine, long id, bool unstoppable, int index, in CancellationToken token)
         {
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
-            _taskDispatcher = taskDispatcher;
+            _taskRunner = taskRunner;
             _curRoutine = routine;
             _id = id;
             _unstoppable = unstoppable;
@@ -45,7 +43,7 @@ namespace OlegHcp.Async
         public void Refresh()
         {
             if (_id == 0L)
-                _taskDispatcher.ReleaseRunner(this, _index);
+                _taskRunner.ReleaseRunner(this, _index);
         }
 
         public void Stop()

@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace OlegHcpEditor.Inspectors.AsyncSystem
 {
-    [CustomEditor(typeof(TaskDispatcher))]
-    internal class TaskDispatcherEditor : Editor<TaskDispatcher>
+    [CustomEditor(typeof(TaskRunner))]
+    internal class TaskRunnerEditor : Editor<TaskRunner>
     {
         private static GUIStyle _hyperLinkStyle;
         private static string _stackTraceButtonLabel = "Stack Trace";

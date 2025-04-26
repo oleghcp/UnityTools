@@ -13,8 +13,8 @@ namespace OlegHcp.Async
     {
         private static readonly LongIdGenerator _idProvider = new LongIdGenerator();
         private static readonly ObjectPool<RoutineIterator> _iteratorPool = new ObjectPool<RoutineIterator>(() => new RoutineIterator());
-        private static TaskDispatcher _globals;
-        private static TaskDispatcher _locals;
+        private static TaskRunner _globals;
+        private static TaskRunner _locals;
 
         /// <summary>
         /// The same as MonoBehaviour's StartCoroutine.
@@ -112,22 +112,22 @@ namespace OlegHcp.Async
             return GetLocal().RunAsync(CoroutineUtility.GetRunWhileRoutine(condition, run), _idProvider.GetNewId(), false, token);
         }
 
-        private static TaskDispatcher GetGlobal()
+        private static TaskRunner GetGlobal()
         {
             if (_globals == null)
             {
-                _globals = ComponentUtility.CreateInstance<TaskDispatcher>();
+                _globals = ComponentUtility.CreateInstance<TaskRunner>();
                 _globals.SetUp(_iteratorPool, true);
             }
 
             return _globals;
         }
 
-        private static TaskDispatcher GetLocal()
+        private static TaskRunner GetLocal()
         {
             if (_locals == null)
             {
-                _locals = ComponentUtility.CreateInstance<TaskDispatcher>();
+                _locals = ComponentUtility.CreateInstance<TaskRunner>();
                 _locals.SetUp(_iteratorPool, false);
             }
 
