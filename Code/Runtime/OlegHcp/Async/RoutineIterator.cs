@@ -8,8 +8,8 @@ namespace OlegHcp.Async
 {
     internal class RoutineIterator : IEnumerator, IPoolable
     {
-        public event Action<TaskResult> OnCompleted1_Event;
-        public event Action OnCompleted2_Event;
+        public event Action OnCompleted_Event;
+        public event Action<TaskResult> OnCompleted2_Event;
 
         private long _id;
         private bool _unstoppable;
@@ -111,26 +111,26 @@ namespace OlegHcp.Async
 
         private void InvokeInterrupted()
         {
-            OnCompleted2_Event = null;
+            OnCompleted_Event = null;
 
-            if (OnCompleted1_Event == null)
-                return;
-
-            try { OnCompleted1_Event(default); }
-            finally { OnCompleted1_Event = null; }
+            if (OnCompleted2_Event != null)
+            {
+                try { OnCompleted2_Event(default); }
+                finally { OnCompleted2_Event = null; }
+            }
         }
 
         private void InvokeEnded()
         {
-            if (OnCompleted1_Event != null)
+            if (OnCompleted_Event != null)
             {
-                try { OnCompleted1_Event(new TaskResult(_curRoutine.Current, true)); }
-                finally { OnCompleted1_Event = null; }
+                try { OnCompleted_Event(); }
+                finally { OnCompleted_Event = null; }
             }
 
             if (OnCompleted2_Event != null)
             {
-                try { OnCompleted2_Event(); }
+                try { OnCompleted2_Event(new TaskResult(_curRoutine.Current, true)); }
                 finally { OnCompleted2_Event = null; }
             }
         }

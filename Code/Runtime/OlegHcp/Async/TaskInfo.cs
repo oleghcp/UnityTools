@@ -41,15 +41,15 @@ namespace OlegHcp.Async
             _id = (_coroutine = coroutine).Id;
         }
 
-        public void AddCompleteListener(Action<TaskResult> onComplete)
+        public void AddCompleteListener(Action onComplete)
         {
             if (IsAliveInternal())
-                _coroutine.OnCompleted1_Event += onComplete;
+                _coroutine.OnCompleted_Event += onComplete;
             else
                 throw ThrowErrors.DeadTask();
         }
 
-        public void AddCompleteListener(Action onComplete)
+        public void AddCompleteListener(Action<TaskResult> onComplete)
         {
             if (IsAliveInternal())
                 _coroutine.OnCompleted2_Event += onComplete;
