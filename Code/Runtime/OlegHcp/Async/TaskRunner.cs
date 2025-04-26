@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using OlegHcp.Pool;
 using UnityEngine;
@@ -14,16 +13,13 @@ namespace OlegHcp.Async
 
         private RoutineIterator _iterator;
         private TaskDispatcher _owner;
-        private long _id;
-        private bool _unstoppable;
-        private int _index;
 
 #if UNITY_EDITOR
         public string StackTrace { get; private set; }
 #endif
         public TaskDispatcher Owner => _owner;
-        public long Id => _id;
-        public bool CanBeStopped => !_unstoppable;
+        public long Id => _iterator.Id;
+        public bool CanBeStopped => !_iterator.CanBeStopped;
 
         public TaskRunner SetUp(TaskDispatcher owner)
         {
@@ -34,13 +30,13 @@ namespace OlegHcp.Async
 
         public void SetIndex(int index)
         {
-            _index = index;
+            _iterator.SetIndex(index);
         }
 
         public void Refresh()
         {
-            if (_id == 0L)
-                _owner.ReleaseRunner(this, _index);
+            if (_iterator.Id == 0L)
+                _owner.ReleaseRunner(this, _iterator.Index);
         }
 
         public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
@@ -48,9 +44,7 @@ namespace OlegHcp.Async
 #if UNITY_EDITOR
             StackTrace = Environment.StackTrace;
 #endif
-            _id = id;
-            _unstoppable = unstoppable;
-            _iterator.Initialize(routine, token);
+            _iterator.Initialize(routine, id, unstoppable, token);
             TaskInfo task = new TaskInfo(this);
             StartCoroutine(_iterator);
             return task;
@@ -58,15 +52,11 @@ namespace OlegHcp.Async
 
         public void Stop()
         {
-            if (_unstoppable)
-                throw new InvalidOperationException("Task cannot be stopped.");
-
             _iterator.Stop();
         }
 
         public void OnCoroutineInterrupted()
         {
-            OnCoroutineEndedInternal();
             OnCompleted2_Event = null;
 
             if (OnCompleted1_Event == null)
@@ -78,8 +68,6 @@ namespace OlegHcp.Async
 
         public void OnCoroutineEnded()
         {
-            OnCoroutineEndedInternal();
-
             if (OnCompleted1_Event != null)
             {
                 try { OnCompleted1_Event(new TaskResult(_iterator.Current, true)); }
@@ -93,12 +81,6 @@ namespace OlegHcp.Async
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void OnCoroutineEndedInternal()
-        {
-            _id = 0L;
-        }
-
         void IPoolable.Reinit()
         {
 
@@ -106,7 +88,6 @@ namespace OlegHcp.Async
 
         void IPoolable.CleanUp()
         {
-            _index = 0;
             _iterator.Reset();
 #if UNITY_EDITOR
             StackTrace = null;
