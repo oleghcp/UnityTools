@@ -30,3 +30,13 @@ public static class Helper
     public static object CloneObject(object source);
 }
 ```
+
+## SceneTool
+
+```
+public static class SceneTool
+{
+    public static IReadOnlyList<GameObject> GetDontDestroyOnLoadObjects();
+    public static void GetDontDestroyOnLoadObjects(List<GameObject> buffer);
+}
+```
