@@ -7,37 +7,33 @@ using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Inspectors.AsyncSystem
 {
-    internal class TaskDrawer
+    internal readonly struct TaskDrawer
     {
-        private RoutineIterator _iterator;
-        private string _startPoint;
+        private readonly RoutineIterator _iterator;
+        private readonly string _startPoint;
 
-        private static GUIStyle _hyperLinkStyle;
-        private static string _stackTraceButtonLabel;
-        private static GUILayoutOption[] _buttonOptions;
+        public bool IsDead => _iterator == null || _iterator.Id == 0L;
 
-        public TaskDrawer(RoutineIterator iterator, string stackTraceButtonLabel, GUIStyle hyperLinkStyle, GUILayoutOption[] buttonOptions)
+        public TaskDrawer(RoutineIterator iterator)
         {
             _iterator = iterator;
             _startPoint = GetStartLine(iterator.StackTrace, Application.dataPath.Length);
-
-            _stackTraceButtonLabel = stackTraceButtonLabel;
-            _hyperLinkStyle = hyperLinkStyle;
-            _buttonOptions = buttonOptions;
         }
 
-        public void Draw()
+        public void Draw(GUIStyle hyperLinkStyle, string stackTraceButtonLabel, GUILayoutOption[] buttonOptions)
         {
+
+
             EditorGUILayout.BeginHorizontal();
 
             GUILayout.Label($"Task #{_iterator.Id}", EditorStyles.boldLabel);
 
-            if (GUILayout.Button(_stackTraceButtonLabel, _buttonOptions))
+            if (GUILayout.Button(stackTraceButtonLabel, buttonOptions))
                 StackTraceWindow.Create(_iterator.StackTrace);
 
             EditorGUILayout.EndHorizontal();
 
-            if (GUILayout.Button(_startPoint, _hyperLinkStyle))
+            if (GUILayout.Button(_startPoint, hyperLinkStyle))
                 OpenCode(_iterator.StackTrace);
         }
 

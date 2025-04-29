@@ -36,22 +36,22 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.LabelField($"Pool: {target.PoolCount}");
+            GUILayout.Label($"Pool: {target.PoolCount}", EditorStyles.boldLabel);
 
             for (int i = 0; i < _activeTasks.Count; i++)
             {
                 if (_activeTasks[i] == null)
                 {
-                    _taskDrawers[i] = null;
+                    _taskDrawers[i] = default;
                     continue;
                 }
 
-                EditorGUILayout.Space();
+                EditorGUILayout.Space(20f);
 
-                if (_taskDrawers[i] == null)
-                    _taskDrawers[i] = new TaskDrawer(_activeTasks[i], _stackTraceButtonLabel, _hyperLinkStyle, _buttonOptions);
+                if (_taskDrawers[i].IsDead)
+                    _taskDrawers[i] = new TaskDrawer(_activeTasks[i]);
 
-                _taskDrawers[i].Draw();
+                _taskDrawers[i].Draw(_hyperLinkStyle, _stackTraceButtonLabel, _buttonOptions);
             }
         }
 
