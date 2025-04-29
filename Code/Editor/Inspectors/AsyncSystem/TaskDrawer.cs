@@ -22,18 +22,21 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 
         public void Draw(GUIStyle hyperLinkStyle, string stackTraceButtonLabel, GUILayoutOption[] buttonOptions)
         {
-
+            GUILayout.BeginVertical(EditorStyles.helpBox);
 
             EditorGUILayout.BeginHorizontal();
-
             GUILayout.Label($"Task #{_iterator.Id}", EditorStyles.boldLabel);
-
-            if (GUILayout.Button(stackTraceButtonLabel, buttonOptions))
-                StackTraceWindow.Create(_iterator.StackTrace);
-
+            bool tracePressed = GUILayout.Button(stackTraceButtonLabel, buttonOptions);
             EditorGUILayout.EndHorizontal();
 
-            if (GUILayout.Button(_startPoint, hyperLinkStyle))
+            bool startPointPressed = GUILayout.Button(_startPoint, hyperLinkStyle);
+
+            GUILayout.EndVertical();
+
+            if (tracePressed)
+                StackTraceWindow.Create(_iterator.StackTrace);
+
+            if (startPointPressed)
                 OpenCode(_iterator.StackTrace);
         }
 

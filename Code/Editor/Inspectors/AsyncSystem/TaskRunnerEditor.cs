@@ -46,7 +46,7 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
                     continue;
                 }
 
-                EditorGUILayout.Space(20f);
+                EditorGUILayout.Space();
 
                 if (_taskDrawers[i].IsDead)
                     _taskDrawers[i] = new TaskDrawer(_activeTasks[i]);
