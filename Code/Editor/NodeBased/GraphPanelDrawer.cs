@@ -1,18 +1,22 @@
 ﻿using System.Collections.Generic;
+using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window.NodeBased;
 using UnityEditor;
 
 namespace OlegHcpEditor.NodeBased
 {
     public class GraphPanelDrawer
     {
+        private SerializedGraph _serializedGraph;
         private ICollection<string> _ignoredFields;
 
-        protected SerializedObject SerializedObject { get; private set; }
+        protected SerializedObject SerializedObject => _serializedGraph.SerializedObject;
+        protected RawGraph GraphAsset => _serializedGraph.GraphAsset;
 
-        internal void SetUp(SerializedObject serializedObject, ICollection<string> ignoredFields)
+        internal void SetUp(SerializedGraph serializedGraph, ICollection<string> ignoredFields)
         {
-            SerializedObject = serializedObject;
+            _serializedGraph = serializedGraph;
             _ignoredFields = ignoredFields;
         }
 

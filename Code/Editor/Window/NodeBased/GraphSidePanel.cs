@@ -42,7 +42,7 @@ namespace OlegHcpEditor.Window.NodeBased
             _selectedIndex = EditorPrefs.GetInt(PrefsKeys.SIDE_PANEL_TAB);
 
             _panelDrawer = new GraphPanelDrawer();
-            _panelDrawer.SetUp(window.SerializedGraph.SerializedObject, _ignoredFields);
+            _panelDrawer.SetUp(window.SerializedGraph, _ignoredFields);
         }
 
         public void Draw(bool opened, float height, float winWidth, Event e)
