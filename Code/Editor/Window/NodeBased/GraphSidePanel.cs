@@ -23,6 +23,7 @@ namespace OlegHcpEditor.Window.NodeBased
         private int _selectedIndex;
 
         public float Width => _opened ? _width : 0f;
+        public GraphPanelDrawer PanelDrawer => _panelDrawer;
 
         public GraphSidePanel(GraphEditorWindow window)
         {

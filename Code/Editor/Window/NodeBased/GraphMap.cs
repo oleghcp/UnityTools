@@ -56,7 +56,7 @@ namespace OlegHcpEditor.Window.NodeBased
             };
 
             _regularNodeDrawer = new NodeDrawer();
-            _regularNodeDrawer.SetUp(_nodeIgnoredFields);
+            _regularNodeDrawer.SetUp(_nodeIgnoredFields, _window.SidePanel);
 
             _nodeDrawers = new Dictionary<Type, NodeDrawer>()
             {
@@ -182,7 +182,7 @@ namespace OlegHcpEditor.Window.NodeBased
                 return _nodeDrawers.Place(nodeType, _regularNodeDrawer);
 
             NodeDrawer nodeDrawer = (NodeDrawer)drawerType.CreateInstance();
-            nodeDrawer.SetUp(_nodeIgnoredFields);
+            nodeDrawer.SetUp(_nodeIgnoredFields, _window.SidePanel);
             return _nodeDrawers.Place(nodeType, nodeDrawer);
         }
 

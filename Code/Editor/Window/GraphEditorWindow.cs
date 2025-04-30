@@ -35,6 +35,7 @@ namespace OlegHcpEditor.Window
         public GraphEditorSettings Settings => _settings;
         public GraphMap Map => _map;
         public bool FullDrawing => !_toolbar.HideContentToggle;
+        public GraphSidePanel SidePanel => _sidePanel;
 
         public Vector2 WinSize
         {

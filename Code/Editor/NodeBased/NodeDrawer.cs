@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OlegHcp;
 using OlegHcpEditor.Engine;
+using OlegHcpEditor.Window.NodeBased;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,14 +13,17 @@ namespace OlegHcpEditor.NodeBased
         private readonly string _label = "{...}";
         private ICollection<string> _ignoredFields;
         private Predicate<SerializedProperty> _ignoreCondition;
+        private GraphSidePanel _graphSidePanel;
 
+        protected GraphPanelDrawer PanelDrawer => _graphSidePanel.PanelDrawer;
         protected virtual string ShortDrawingView => _label;
         protected Predicate<SerializedProperty> FieldIgnoreCondition => _ignoreCondition;
 
-        internal void SetUp(ICollection<string> ignoredFields)
+        internal void SetUp(ICollection<string> ignoredFields, GraphSidePanel graphSidePanel)
         {
             _ignoredFields = ignoredFields;
             _ignoreCondition = IsServiceField;
+            _graphSidePanel = graphSidePanel;
         }
 
         internal void DrawHeader(bool rootNode, SerializedProperty nameProperty, ref bool renaming)
