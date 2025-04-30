@@ -32,20 +32,21 @@ namespace OlegHcpEditor.NodeBased
             GUI.color = Colours.White;
         }
 
-        internal void OnGui(SerializedProperty property, float width, bool enabled)
+        internal void OnGui(SerializedProperty property, float width, bool fullDrawing)
         {
-            if (enabled)
+            if (fullDrawing)
             {
+                EditorGUIUtility.labelWidth = width * 0.5f;
                 OnGui(property, width);
                 return;
             }
 
-            EditorGUILayout.LabelField(ShortDrawingView);
+            GUILayout.Label(ShortDrawingView);
         }
 
-        internal float GetHeight(SerializedProperty property, bool enabled)
+        internal float GetHeight(SerializedProperty property, bool fullDrawing)
         {
-            if (enabled)
+            if (fullDrawing)
                 return GetHeight(property);
 
             return EditorGUIUtility.singleLineHeight;
@@ -53,7 +54,6 @@ namespace OlegHcpEditor.NodeBased
 
         protected virtual void OnGui(SerializedProperty property, float width)
         {
-            EditorGUIUtility.labelWidth = width * 0.5f;
             foreach (SerializedProperty item in property.EnumerateInnerProperties())
             {
                 if (!IsServiceField(item))

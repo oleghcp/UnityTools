@@ -16,9 +16,9 @@ namespace OlegHcpEditor.NodeBased
             _headerColor = headerColor;
         }
 
-        protected override void OnGui(SerializedProperty property, float width)
+        protected override void OnGui(SerializedProperty property, float _)
         {
-            EditorGUILayout.LabelField(_label);
+            GUILayout.Label(_label);
         }
 
         protected override float GetHeight(SerializedProperty property)
