@@ -55,7 +55,9 @@ namespace OlegHcpEditor.Window.NodeBased
                 RawNode.PositionFieldName,
             };
 
-            _regularNodeDrawer = new NodeDrawer() { IgnoreCondition = IsServiceField };
+            _regularNodeDrawer = new NodeDrawer();
+            _regularNodeDrawer.SetUp(_nodeIgnoredFields);
+
             _nodeDrawers = new Dictionary<Type, NodeDrawer>()
             {
                 { typeof(HubNode), new ServiceNodeDrawer("► ► ►", Colours.Silver) },
@@ -168,7 +170,7 @@ namespace OlegHcpEditor.Window.NodeBased
         //    _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         //}
 
-        public NodeDrawer GetDrawer(Type nodeType)
+        public NodeDrawer GetNodeDrawer(Type nodeType)
         {
             if (_nodeDrawers.TryGetValue(nodeType, out NodeDrawer drawer))
                 return drawer;
@@ -180,7 +182,7 @@ namespace OlegHcpEditor.Window.NodeBased
                 return _nodeDrawers.Place(nodeType, _regularNodeDrawer);
 
             NodeDrawer nodeDrawer = (NodeDrawer)Activator.CreateInstance(drawerType);
-            nodeDrawer.IgnoreCondition = IsServiceField;
+            nodeDrawer.SetUp(_nodeIgnoredFields);
             return _nodeDrawers.Place(nodeType, nodeDrawer);
         }
 
@@ -382,11 +384,6 @@ namespace OlegHcpEditor.Window.NodeBased
             _nodeViewers.Add(new NodeViewer(nodeProp, this));
 
             _window.SerializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private bool IsServiceField(SerializedProperty property)
-        {
-            return _nodeIgnoredFields.Contains(property.name);
         }
     }
 }

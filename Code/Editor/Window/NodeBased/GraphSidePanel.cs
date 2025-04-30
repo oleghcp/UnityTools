@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OlegHcp.Mathematics;
 using OlegHcp.NodeBased.Service;
-using OlegHcpEditor.Engine;
+using OlegHcpEditor.NodeBased;
 using OlegHcpEditor.Utils;
 using UnityEditor;
 using UnityEngine;
@@ -20,6 +20,7 @@ namespace OlegHcpEditor.Window.NodeBased
         private bool _dragging;
         private string[] _toolbarLabels = { "Properties", "Node" };
         private int _selectedIndex;
+        private GraphPanelDrawer _panelDrawer;
 
         public float Width => _opened ? _width : 0f;
 
@@ -40,6 +41,8 @@ namespace OlegHcpEditor.Window.NodeBased
             _width = EditorPrefs.GetFloat(PrefsKeys.SIDE_PANEL_WIDTH, 300f);
             _selectedIndex = EditorPrefs.GetInt(PrefsKeys.SIDE_PANEL_TAB);
 
+            _panelDrawer = new GraphPanelDrawer();
+            _panelDrawer.SetUp(window.SerializedGraph.SerializedObject, _ignoredFields);
         }
 
         public void Draw(bool opened, float height, float winWidth, Event e)
@@ -59,7 +62,7 @@ namespace OlegHcpEditor.Window.NodeBased
             _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos).y;
             switch (_selectedIndex)
             {
-                case 0: DrawContent(); break;
+                case 0: _panelDrawer.Draw(_width); break;
                 case 1: DrawNode(); break;
             }
             EditorGUILayout.EndScrollView();
@@ -72,17 +75,6 @@ namespace OlegHcpEditor.Window.NodeBased
         {
             EditorPrefs.SetFloat(PrefsKeys.SIDE_PANEL_WIDTH, _width);
             EditorPrefs.SetInt(PrefsKeys.SIDE_PANEL_TAB, _selectedIndex);
-        }
-
-        private void DrawContent()
-        {
-            EditorGUIUtility.labelWidth = _width * 0.5f;
-
-            foreach (SerializedProperty item in _window.SerializedGraph.SerializedObject.EnumerateProperties())
-            {
-                if (!_ignoredFields.Contains(item.name))
-                    EditorGUILayout.PropertyField(item, true);
-            }
         }
 
         private void DrawNode()
@@ -99,7 +91,7 @@ namespace OlegHcpEditor.Window.NodeBased
             {
                 var selected = _window.Map.GetSelectedNode();
                 GUILayout.Label(selected.NameProp.stringValue, EditorStyles.boldLabel);
-                selected.NodeDrawer.OnGui(selected.NodeProp, _width, true);
+                selected.NodeDrawer.Draw(selected.NodeProp, _width, true);
             }
         }
 

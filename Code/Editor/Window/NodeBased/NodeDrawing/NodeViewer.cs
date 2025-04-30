@@ -139,7 +139,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             _transitionViewers = new List<TransitionViewer>();
             _in = new PortViewer(this, PortType.In, _map);
             _out = new PortViewer(this, PortType.Out, _map);
-            _nodeDrawer = _map.GetDrawer(_systemType);
+            _nodeDrawer = _map.GetNodeDrawer(_systemType);
         }
 
         public void SetSerializedProperty(SerializedProperty nodeProp)
@@ -210,9 +210,9 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             nodeRect.size -= _map.UiShrink;
 
             GUILayout.BeginArea(nodeRect);
-            _nodeDrawer.OnHeaderGui(_window.RootNodeId == _id, _nameProp, ref _renaming);
+            _nodeDrawer.DrawHeader(_window.RootNodeId == _id, _nameProp, ref _renaming);
             if (_window.Camera.Size <= 1f)
-                _nodeDrawer.OnGui(_nodeProp, nodeRect.width, _window.FullDrawing);
+                _nodeDrawer.Draw(_nodeProp, nodeRect.width, _window.FullDrawing);
             GUILayout.EndArea();
 
             void drawPorts()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OlegHcp;
 using OlegHcpEditor.Engine;
 using UnityEditor;
@@ -9,13 +10,19 @@ namespace OlegHcpEditor.NodeBased
     public class NodeDrawer
     {
         private readonly string _label = "{...}";
-
-        internal Predicate<SerializedProperty> IgnoreCondition;
+        private ICollection<string> _ignoredFields;
+        private Predicate<SerializedProperty> _ignoreCondition;
 
         protected virtual string ShortDrawingView => _label;
-        public Predicate<SerializedProperty> IsServiceField => IgnoreCondition;
+        protected Predicate<SerializedProperty> FieldIgnoreCondition => _ignoreCondition;
 
-        internal void OnHeaderGui(bool rootNode, SerializedProperty nameProperty, ref bool renaming)
+        internal void SetUp(ICollection<string> ignoredFields)
+        {
+            _ignoredFields = ignoredFields;
+            _ignoreCondition = IsServiceField;
+        }
+
+        internal void DrawHeader(bool rootNode, SerializedProperty nameProperty, ref bool renaming)
         {
             if (renaming)
             {
@@ -32,7 +39,7 @@ namespace OlegHcpEditor.NodeBased
             GUI.color = Colours.White;
         }
 
-        internal void OnGui(SerializedProperty property, float width, bool fullDrawing)
+        internal void Draw(SerializedProperty property, float width, bool fullDrawing)
         {
             if (fullDrawing)
             {
@@ -63,12 +70,17 @@ namespace OlegHcpEditor.NodeBased
 
         protected virtual float GetHeight(SerializedProperty property)
         {
-            return EditorGuiUtility.GetDrawHeight(property, IsServiceField);
+            return EditorGuiUtility.GetDrawHeight(property, _ignoreCondition);
         }
 
         protected virtual Color GetHeaderColor(bool rootNode)
         {
             return rootNode ? Colours.Orange : Colours.Cyan;
+        }
+
+        protected bool IsServiceField(SerializedProperty property)
+        {
+            return _ignoredFields.Contains(property.name);
         }
     }
 }
