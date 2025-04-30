@@ -121,7 +121,7 @@ namespace OlegHcpEditor.Window
             if (_serializedGraph.GraphAsset == null)
                 return;
 
-            Save();
+            OnClose();
         }
 
         public static void Open(RawGraph graphAsset)
@@ -151,7 +151,7 @@ namespace OlegHcpEditor.Window
             }
             else if (_serializedGraph.GraphAsset != graphAsset)
             {
-                Save();
+                OnClose();
 
                 _settings = GraphEditorSettings.Load(graphAsset.GetAssetGuid());
                 _serializedGraph.InitAssetReference(graphAsset);
@@ -163,7 +163,14 @@ namespace OlegHcpEditor.Window
                 return;
             }
 
+            _sidePanel.OnOpen();
             _map.Fill();
+        }
+
+        private void OnClose()
+        {
+            _sidePanel.OnClose();
+            Save();
         }
 
         private void Save()

@@ -14,13 +14,13 @@ namespace OlegHcpEditor.Window.NodeBased
 
         private GraphEditorWindow _window;
         private HashSet<string> _ignoredFields;
+        private GraphPanelDrawer _panelDrawer;
         private Vector2 _scrollPos;
         private float _width;
         private bool _opened;
         private bool _dragging;
         private string[] _toolbarLabels = { "Properties", "Node" };
         private int _selectedIndex;
-        private GraphPanelDrawer _panelDrawer;
 
         public float Width => _opened ? _width : 0f;
 
@@ -40,7 +40,17 @@ namespace OlegHcpEditor.Window.NodeBased
 
             _width = EditorPrefs.GetFloat(PrefsKeys.SIDE_PANEL_WIDTH, 300f);
             _selectedIndex = EditorPrefs.GetInt(PrefsKeys.SIDE_PANEL_TAB);
-            _panelDrawer = GraphPanelDrawer.Create(window.SerializedGraph, _ignoredFields);
+        }
+
+        public void OnOpen()
+        {
+            _panelDrawer = GraphPanelDrawer.Create(_window.SerializedGraph, _ignoredFields);
+            _panelDrawer.OnOpen();
+        }
+
+        public void OnClose()
+        {
+            _panelDrawer.OnClose();
         }
 
         public void Draw(bool opened, float height, float winWidth, Event e)

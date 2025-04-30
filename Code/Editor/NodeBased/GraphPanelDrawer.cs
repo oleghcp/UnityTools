@@ -15,8 +15,8 @@ namespace OlegHcpEditor.NodeBased
         private SerializedGraph _serializedGraph;
         private ICollection<string> _ignoredFields;
 
-        protected SerializedObject SerializedObject => _serializedGraph.SerializedObject;
-        protected RawGraph GraphAsset => _serializedGraph.GraphAsset;
+        public SerializedObject SerializedObject => _serializedGraph.SerializedObject;
+        public RawGraph GraphAsset => _serializedGraph.GraphAsset;
 
         internal static GraphPanelDrawer Create(SerializedGraph serializedGraph, ICollection<string> ignoredFields)
         {
@@ -40,12 +40,26 @@ namespace OlegHcpEditor.NodeBased
             };
         }
 
+        internal void OnOpen()
+        {
+            OnOpened();
+        }
+
+        internal void OnClose()
+        {
+            OnClosed();
+        }
+
         internal void Draw(float width)
         {
             EditorGUIUtility.labelWidth = width * 0.5f;
 
             OnGui();
         }
+
+        protected virtual void OnOpened() { }
+
+        protected virtual void OnClosed() { }
 
         protected virtual void OnGui()
         {
