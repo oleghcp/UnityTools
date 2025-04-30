@@ -181,7 +181,7 @@ namespace OlegHcpEditor.Window.NodeBased
             if (drawerType == null)
                 return _nodeDrawers.Place(nodeType, _regularNodeDrawer);
 
-            NodeDrawer nodeDrawer = (NodeDrawer)Activator.CreateInstance(drawerType);
+            NodeDrawer nodeDrawer = (NodeDrawer)drawerType.CreateInstance();
             nodeDrawer.SetUp(_nodeIgnoredFields);
             return _nodeDrawers.Place(nodeType, nodeDrawer);
         }

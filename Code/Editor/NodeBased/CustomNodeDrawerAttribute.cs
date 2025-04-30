@@ -12,7 +12,7 @@ namespace OlegHcpEditor.NodeBased
         public CustomNodeDrawerAttribute(Type nodeType)
         {
             if (!nodeType.IsAssignableTo(typeof(RawNode)))
-                throw new ArgumentException($"Given type is not assignable to {typeof(RawNode).FullName}");
+                throw new ArgumentException($"{nodeType.Name} is not a node type.");
 
             NodeType = nodeType;
         }

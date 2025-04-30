@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using OlegHcp.CSharp;
 using OlegHcp.NodeBased.Service;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Window.NodeBased;
@@ -14,10 +18,26 @@ namespace OlegHcpEditor.NodeBased
         protected SerializedObject SerializedObject => _serializedGraph.SerializedObject;
         protected RawGraph GraphAsset => _serializedGraph.GraphAsset;
 
-        internal void SetUp(SerializedGraph serializedGraph, ICollection<string> ignoredFields)
+        internal static GraphPanelDrawer Create(SerializedGraph serializedGraph, ICollection<string> ignoredFields)
         {
-            _serializedGraph = serializedGraph;
-            _ignoredFields = ignoredFields;
+            Type graphType = serializedGraph.GraphAsset.GetType();
+
+            Type drawerType = TypeCache.GetTypesDerivedFrom(typeof(GraphPanelDrawer))
+                                       .Where(item => !item.IsAbstract && item.IsDefined(typeof(CustomGraphPanelDrawerAttribute), true))
+                                       .FirstOrDefault(item => item.GetCustomAttribute<CustomGraphPanelDrawerAttribute>().GraphType == graphType);
+            if (drawerType != null)
+            {
+                GraphPanelDrawer drawer = (GraphPanelDrawer)drawerType.CreateInstance();
+                drawer._serializedGraph = serializedGraph;
+                drawer._ignoredFields = ignoredFields;
+                return drawer;
+            }
+
+            return new GraphPanelDrawer()
+            {
+                _serializedGraph = serializedGraph,
+                _ignoredFields = ignoredFields,
+            };
         }
 
         internal void Draw(float width)
