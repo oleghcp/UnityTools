@@ -249,16 +249,12 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
         public bool ProcessEvents(Event e)
         {
-            if (!IsInCamera)
-                return false;
-
             bool needLock = false;
 
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    Rect nodeRect = ScreenRect;
-                    if (nodeRect.Contains(e.mousePosition))
+                    if (ScreenRect.Contains(e.mousePosition))
                     {
                         switch (e.button)
                         {
@@ -279,11 +275,19 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     }
                     else
                     {
-                        _renaming = false;
+                        if (_renaming)
+                        {
+                            _renaming = false;
+                            GUI.FocusControl(null);
+                            GUI.changed = true;
+                        }
+
                         if (!(_isSelected && e.control))
+                        {
                             SelectInternal(false);
-                        GUI.FocusControl(null);
-                        GUI.changed = true;
+                            GUI.FocusControl(null);
+                            GUI.changed = true;
+                        }
                     }
                     break;
 
@@ -315,17 +319,23 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                             break;
 
                         case KeyCode.Return:
-                            _renaming = false;
-                            GUI.changed = true;
+                            if (_renaming)
+                            {
+                                _renaming = false;
+                                GUI.changed = true;
+                            }
                             break;
                     }
                     break;
             }
 
-            for (int i = 0; i < _transitionViewers.Count; i++)
+            if (IsInCamera)
             {
-                if (_transitionViewers[i].ProcessEvents(e))
-                    needLock = true;
+                for (int i = 0; i < _transitionViewers.Count; i++)
+                {
+                    if (_transitionViewers[i].ProcessEvents(e))
+                        needLock = true;
+                }
             }
 
             return needLock;
