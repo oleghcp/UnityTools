@@ -265,51 +265,38 @@ namespace OlegHcpEditor.Window.NodeBased
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    mouseDown();
+                    switch (e.button)
+                    {
+                        case 0:
+                            if (!_selectionRectOn)
+                            {
+                                _selectionRectOn = true;
+                                _downPoint = e.mousePosition;
+                                _selectedPort = null;
+                            }
+                            break;
+
+                        case 1:
+                            ProcessContextMenu(e.mousePosition);
+                            break;
+                    }
                     break;
 
                 case EventType.MouseUp:
-                    mouseUp();
+                    if (e.button == 0)
+                    {
+                        _selectionRectOn = false;
+                    }
                     break;
 
                     //case EventType.KeyDown:
-                    //    keyDown();
+                    //    if (e.keyCode == KeyCode.D)
+                    //    {
+                    //        CopySelectedNode();
+                    //        GUI.changed = true;
+                    //    }
                     //    break;
             }
-
-            void mouseDown()
-            {
-                if (e.button == 0)
-                {
-                    if (!_selectionRectOn)
-                    {
-                        _selectionRectOn = true;
-                        _downPoint = e.mousePosition;
-                        _selectedPort = null;
-                    }
-                }
-                else if (e.button == 1)
-                {
-                    ProcessContextMenu(e.mousePosition);
-                }
-            }
-
-            void mouseUp()
-            {
-                if (e.button == 0)
-                {
-                    _selectionRectOn = false;
-                }
-            }
-
-            //void keyDown()
-            //{
-            //    if (e.keyCode == KeyCode.D)
-            //    {
-            //        CopySelectedNode();
-            //        GUI.changed = true;
-            //    }
-            //}
         }
 
         private void ProcessNodeEvents(Event e)

@@ -29,7 +29,6 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private SerializedProperty _nameProp;
 
         private bool _isSelected;
-        private bool _isDragging;
         private bool _renaming;
         private float _height;
 
@@ -259,23 +258,23 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             {
                 case EventType.MouseDown:
                     Rect nodeRect = ScreenRect;
-
                     if (nodeRect.Contains(e.mousePosition))
                     {
-                        if (e.button == 0)
+                        switch (e.button)
                         {
-                            _draggedPosition = _position;
-                            SelectInternal(true);
-                            _isDragging = true;
-                            needLock = true;
-                            GUI.changed = true;
-                        }
-                        else if (e.button == 1)
-                        {
-                            SelectInternal(true);
-                            needLock = true;
-                            ProcessContextMenu();
-                            GUI.changed = true;
+                            case 0:
+                                _draggedPosition = _position;
+                                SelectInternal(true);
+                                needLock = true;
+                                GUI.changed = true;
+                                break;
+
+                            case 1:
+                                SelectInternal(true);
+                                needLock = true;
+                                ProcessContextMenu();
+                                GUI.changed = true;
+                                break;
                         }
                     }
                     else
@@ -289,7 +288,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     break;
 
                 case EventType.MouseDrag:
-                    if (e.button == 0 && _isSelected && _isDragging)
+                    if (e.button == 0 && _isSelected)
                     {
                         Drag(e.delta);
                         GUI.changed = true;
@@ -299,24 +298,27 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
                 case EventType.MouseUp:
                     if (e.button == 0)
-                        _isDragging = false;
+                    {
+
+                    }
                     break;
 
                 case EventType.KeyDown:
-                    if (e.keyCode == KeyCode.Delete)
+                    switch (e.keyCode)
                     {
-                        if (_isSelected)
-                        {
-                            _map.DeleteNode(this);
-                            GUI.changed = true;
-                        }
-                    }
-                    else if (e.keyCode == KeyCode.Return)
-                    {
-                        _renaming = false;
-                        GUI.changed = true;
-                    }
+                        case KeyCode.Delete:
+                            if (_isSelected)
+                            {
+                                _map.DeleteNode(this);
+                                GUI.changed = true;
+                            }
+                            break;
 
+                        case KeyCode.Return:
+                            _renaming = false;
+                            GUI.changed = true;
+                            break;
+                    }
                     break;
             }
 
