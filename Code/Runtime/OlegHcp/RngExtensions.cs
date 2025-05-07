@@ -221,7 +221,7 @@ namespace OlegHcp
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Ascending(this IRng self, float min, float max, float offsetIntensity)
+        public static float Ascending(this IRng self, float min, float max, float offsetIntensity = 1f)
         {
             if (min < max)
                 return AscendingInternal(self, min, max, offsetIntensity);
@@ -232,7 +232,7 @@ namespace OlegHcp
             throw ThrowErrors.MinMax(nameof(min), nameof(max));
         }
 
-        private static float AscendingInternal(IRng self, float min, float max, float offsetIntensity)
+        private static float AscendingInternal(IRng self, float min, float max, float offsetIntensity = 1f)
         {
             float range = max - min;
             float rnd = self.Next(0f, 1f);
@@ -243,7 +243,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Ascending(this IRng self, in Diapason range, float offsetIntensity)
+        public static float Ascending(this IRng self, in Diapason range, float offsetIntensity = 1f)
         {
             return Ascending(self, range.Min, range.Max, offsetIntensity);
         }
@@ -252,7 +252,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Ascending(this IRng self, in (float min, float max) range, float offsetIntensity)
+        public static float Ascending(this IRng self, in (float min, float max) range, float offsetIntensity = 1f)
         {
             return Ascending(self, range.min, range.max, offsetIntensity);
         }
@@ -261,7 +261,7 @@ namespace OlegHcp
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Descending(this IRng self, float min, float max, float offsetIntensity)
+        public static float Descending(this IRng self, float min, float max, float offsetIntensity = 1f)
         {
             if (min < max)
                 return DescendingInternal(self, min, max, offsetIntensity);
@@ -272,7 +272,7 @@ namespace OlegHcp
             throw ThrowErrors.MinMax(nameof(min), nameof(max));
         }
 
-        private static float DescendingInternal(IRng self, float min, float max, float offsetIntensity)
+        private static float DescendingInternal(IRng self, float min, float max, float offsetIntensity = 1f)
         {
             float range = max - min;
             float rnd = self.Next(0f, 1f);
@@ -283,7 +283,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Descending(this IRng self, in Diapason range, float offsetIntensity)
+        public static float Descending(this IRng self, in Diapason range, float offsetIntensity = 1f)
         {
             return Descending(self, range.Min, range.Max, offsetIntensity);
         }
@@ -292,7 +292,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to min values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Descending(this IRng self, in (float min, float max) range, float offsetIntensity)
+        public static float Descending(this IRng self, in (float min, float max) range, float offsetIntensity = 1f)
         {
             return Descending(self, range.min, range.max, offsetIntensity);
         }
@@ -301,7 +301,7 @@ namespace OlegHcp
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to min and max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float MinMax(this IRng self, float min, float max, float offsetIntensity)
+        public static float MinMax(this IRng self, float min, float max, float offsetIntensity = 1f)
         {
             if (min < max)
             {
@@ -319,7 +319,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to min and max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float MinMax(this IRng self, in Diapason range, float offsetIntensity)
+        public static float MinMax(this IRng self, in Diapason range, float offsetIntensity = 1f)
         {
             return MinMax(self, range.Min, range.Max, offsetIntensity);
         }
@@ -328,7 +328,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to min and max values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float MinMax(this IRng self, in (float min, float max) range, float offsetIntensity)
+        public static float MinMax(this IRng self, in (float min, float max) range, float offsetIntensity = 1f)
         {
             return MinMax(self, range.min, range.max, offsetIntensity);
         }
@@ -337,7 +337,7 @@ namespace OlegHcp
         /// Returns a random float number between min [inclusive] and max [inclusive] with chance offset to average values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Average(this IRng self, float min, float max, float offsetIntensity)
+        public static float Average(this IRng self, float min, float max, float offsetIntensity = 1f)
         {
             if (min < max)
             {
@@ -355,7 +355,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to average values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Average(this IRng self, in Diapason range, float offsetIntensity)
+        public static float Average(this IRng self, in Diapason range, float offsetIntensity = 1f)
         {
             return Average(self, range.Min, range.Max, offsetIntensity);
         }
@@ -364,7 +364,7 @@ namespace OlegHcp
         /// Returns a random float number within range (min/max inclusive) with chance offset to average values.
         /// </summary>
         /// <param name="offsetIntensity">Offset intensity from zero to infinity. There is no offset if intensity is zero.</param>
-        public static float Average(this IRng self, in (float min, float max) range, float offsetIntensity)
+        public static float Average(this IRng self, in (float min, float max) range, float offsetIntensity = 1f)
         {
             return Average(self, range.min, range.max, offsetIntensity);
         }

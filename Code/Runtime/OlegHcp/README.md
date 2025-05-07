@@ -381,6 +381,56 @@ public class MyClass
 }
 ```
 
+Linear increasing: 
+
+```csharp
+float[] floats = new float[1000];
+for (int i = 0; i < floats.Length; i++)
+    floats[i] = i * 0.1f;
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngLinear.png)
+
+Ordinary random number generating: 
+
+```csharp
+    floats[i] = rng.Next(0f, 100f);
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngRandom.png)
+
+Ascending: 
+
+```csharp
+    floats[i] = rng.Ascending(0f, 100f);
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngAscending.png)
+
+Descending: 
+
+```csharp
+    floats[i] = rng.Descending(0f, 100f);
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngDescending.png)
+
+MinMax: 
+
+```csharp
+    floats[i] = rng.MinMax(0f, 100f);
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngMinMax.png)
+
+Average: 
+
+```csharp
+    floats[i] = rng.Average(0f, 100f);
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/RngAverage.png)
+
 ## RectUtility
 
 ```csharp
