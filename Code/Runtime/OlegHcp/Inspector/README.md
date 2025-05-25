@@ -449,3 +449,19 @@ public class ClassC : Data { }
 ```
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Typename.png)
+
+## DateTimeTicksAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [DateTimeTicks]
+    private long _dateTime;
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DateTimeTicks.png)
