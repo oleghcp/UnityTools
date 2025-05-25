@@ -11,6 +11,7 @@ namespace Drawers
     [CustomPropertyDrawer(typeof(DateTimeTicksAttribute))]
     public class DateTimeTicksDrawer : PropertyDrawer
     {
+
         private GUIContent[] _dateLabels = new[] { new GUIContent("Year"), new GUIContent("Month"), new GUIContent("Day") };
         private GUIContent[] _timeLabels = new[] { new GUIContent("Hour"), new GUIContent("Min"), new GUIContent("Sec"), new GUIContent("..") };
         private int[] _date = new int[3];
@@ -29,12 +30,20 @@ namespace Drawers
 
             if (!property.isExpanded)
             {
-                property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, $"{label.text} ({value:MM.dd.yyyy H:mm:ss})", true);
+                Rect dataRect = EditorGUI.PrefixLabel(position, label);
+                property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none, true);
+                GUI.Label(dataRect, value.ToString("MM.dd.yyyy H:mm:ss"));
                 return;
             }
 
+
             Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
-            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, label, true);
+            Rect buttonRect = EditorGUI.PrefixLabel(lineRect, label);
+            bool pressed = DrawButton(buttonRect, property);
+            property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
+
+            if (pressed)
+                return;
 
             position.xMin += EditorGuiUtility.IndentLevelOffset;
 
@@ -73,10 +82,14 @@ namespace Drawers
             return EditorGUIUtility.singleLineHeight;
         }
 
-        private void DrawButton(in Rect pos, SerializedProperty property)
+        private bool DrawButton(in Rect pos, SerializedProperty property)
         {
-            if (GUI.Button(pos, "Now"))
+            bool pressed = GUI.Button(pos, "Now");
+
+            if (pressed)
                 property.longValue = DateTime.Now.Ticks;
+
+            return pressed;
         }
     }
 }
