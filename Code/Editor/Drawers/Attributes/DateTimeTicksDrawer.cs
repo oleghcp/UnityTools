@@ -2,14 +2,13 @@
 using OlegHcp.CSharp;
 using OlegHcp.Inspector;
 using OlegHcp.Mathematics;
-using OlegHcpEditor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Drawers
+namespace OlegHcpEditor.Drawers.Attributes
 {
     [CustomPropertyDrawer(typeof(DateTimeTicksAttribute))]
-    public class DateTimeTicksDrawer : PropertyDrawer
+    internal class DateTimeTicksDrawer : PropertyDrawer
     {
         private string _dateFormat = "MM.dd.yyyy H:mm:ss";
         private GUIContent[] _dateLabels = new[] { new GUIContent("Year"), new GUIContent("Month"), new GUIContent("Day") };
