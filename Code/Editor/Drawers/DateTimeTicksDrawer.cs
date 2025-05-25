@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using OlegHcp.Inspector;
 using OlegHcp.Mathematics;
 using OlegHcpEditor;
