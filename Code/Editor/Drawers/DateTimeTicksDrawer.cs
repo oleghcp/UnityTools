@@ -1,4 +1,5 @@
 ﻿using System;
+using OlegHcp.CSharp;
 using OlegHcp.Inspector;
 using OlegHcp.Mathematics;
 using OlegHcpEditor;
@@ -10,22 +11,25 @@ namespace Drawers
     [CustomPropertyDrawer(typeof(DateTimeTicksAttribute))]
     public class DateTimeTicksDrawer : PropertyDrawer
     {
-        private string _dateFormat = "MM.dd.yyyy H:mm:ss";
         private GUIContent[] _dateLabels = new[] { new GUIContent("Year"), new GUIContent("Month"), new GUIContent("Day") };
-        private GUIContent[] _timeLabels = new[] { GUIContent.none, new GUIContent(":"), new GUIContent(":"), new GUIContent("-") };
+        private GUIContent[] _timeLabels = new[] { new GUIContent("Hour"), new GUIContent("Min"), new GUIContent("Sec"), new GUIContent("..") };
         private int[] _date = new int[3];
         private int[] _time = new int[4];
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            if (EditorUtilityExt.GetFieldType(this).GetTypeCode() != TypeCode.Int64)
+            {
+                property.isExpanded = false;
+                EditorGui.ErrorLabel(position, label, $"Use {nameof(DateTimeTicksAttribute)} with {nameof(Int64)}.");
+                return;
+            }
+
             DateTime value = new DateTime(property.longValue);
 
             if (!property.isExpanded)
             {
-                property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, label, true);
-                Rect dataRect = position;
-                dataRect.xMin += EditorGUIUtility.labelWidth + EditorGuiUtility.StandardHorizontalSpacing;
-                GUI.Label(dataRect, value.ToString(_dateFormat));
+                property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, $"{label.text} ({value:MM.dd.yyyy H:mm:ss})", true);
                 return;
             }
 
@@ -67,6 +71,12 @@ namespace Drawers
                 return EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing * 2f;
 
             return EditorGUIUtility.singleLineHeight;
+        }
+
+        private void DrawButton(in Rect pos, SerializedProperty property)
+        {
+            if (GUI.Button(pos, "Now"))
+                property.longValue = DateTime.Now.Ticks;
         }
     }
 }
