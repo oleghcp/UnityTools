@@ -56,7 +56,7 @@ namespace Drawers
 
             _date[0] = _date[0].ClampMin(1);
             _date[1] = _date[1].Clamp(1, 12);
-            _date[2] = _date[2].Clamp(1, 31);
+            _date[2] = _date[2].Clamp(1, DateTime.DaysInMonth(_date[0], _date[1]));
 
             _time[0] = value.Hour;
             _time[1] = value.Minute;
