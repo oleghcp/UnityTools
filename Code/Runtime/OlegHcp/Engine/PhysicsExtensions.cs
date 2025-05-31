@@ -35,14 +35,19 @@ namespace OlegHcp.Engine
             return self.collider.GetComponent<T>();
         }
 
-        public static T GetComponentInParent<T>(this in RaycastHit self)
+        public static bool TryGetComponent<T>(this in RaycastHit self, out T component)
         {
-            return self.collider.GetComponentInParent<T>();
+            return self.collider.TryGetComponent(out component);
         }
 
-        public static T GetComponentInChildren<T>(this in RaycastHit self)
+        public static T GetComponentInParent<T>(this in RaycastHit self, bool includeInactive = false)
         {
-            return self.collider.GetComponentInChildren<T>();
+            return self.collider.GetComponentInParent<T>(includeInactive);
+        }
+
+        public static T GetComponentInChildren<T>(this in RaycastHit self, bool includeInactive = false)
+        {
+            return self.collider.GetComponentInChildren<T>(includeInactive);
         }
 
         /// <summary>
@@ -76,14 +81,19 @@ namespace OlegHcp.Engine
             return self.collider.GetComponent<T>();
         }
 
-        public static T GetComponentInParent<T>(this in RaycastHit2D self)
+        public static bool TryGetComponent<T>(this in RaycastHit2D self, out T component)
         {
-            return self.collider.GetComponentInParent<T>();
+            return self.collider.TryGetComponent(out component);
         }
 
-        public static T GetComponentInChildren<T>(this in RaycastHit2D self)
+        public static T GetComponentInParent<T>(this in RaycastHit2D self, bool includeInactive = false)
         {
-            return self.collider.GetComponentInChildren<T>();
+            return self.collider.GetComponentInParent<T>(includeInactive);
+        }
+
+        public static T GetComponentInChildren<T>(this in RaycastHit2D self, bool includeInactive = false)
+        {
+            return self.collider.GetComponentInChildren<T>(includeInactive);
         }
 
         /// <summary>
