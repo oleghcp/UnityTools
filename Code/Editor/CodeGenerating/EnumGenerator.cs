@@ -10,15 +10,17 @@ namespace OlegHcpEditor.CodeGenerating
     {
         public static string Generate(string nameSpace, string enumName,
                                       IEnumerable<string> enumValues,
-                                      EnumType enumType = EnumType.Int)
+                                      EnumType enumType = EnumType.Int,
+                                      bool isPublic = true)
         {
             int i = 0;
-            return Generate(nameSpace, enumName, enumValues.Select(item => (item, i++)), enumType);
+            return Generate(nameSpace, enumName, enumValues.Select(item => (item, i++)), enumType, isPublic);
         }
 
         public static string Generate(string nameSpace, string enumName,
                                       IEnumerable<(string name, int intValue)> enumValues,
-                                      EnumType enumType = EnumType.Int)
+                                      EnumType enumType = EnumType.Int,
+                                      bool isPublic = true)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -29,7 +31,8 @@ namespace OlegHcpEditor.CodeGenerating
                    .AppendLine(nameSpace)
                    .AppendLine("{")
                    .Append(StringUtility.Tab)
-                   .Append("public enum ")
+                   .Append(isPublic ? "public " : "internal ")
+                   .Append("enum ")
                    .Append(enumName);
 
             if (enumType == EnumType.Int)
