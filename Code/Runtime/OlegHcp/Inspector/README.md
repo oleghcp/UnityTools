@@ -113,7 +113,7 @@ public class ClassC : Data
 
 ## CertainTypesAttribute
 
-Allows to assign objects only of the specified types in inspector
+Allows to assign objects only of the specified types in inspector.
 
 ```csharp
 using OlegHcp.Inspector;
@@ -247,7 +247,7 @@ public class MyClass : MonoBehaviour
 
 ## FolderRequiredAttribute
 
-Allows to assign only folder assets in inspector
+Allows to assign only folder assets in inspector.
 
 ```csharp
 using OlegHcp.Inspector;

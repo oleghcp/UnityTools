@@ -6,6 +6,8 @@ namespace OlegHcpEditor.Window
 {
     internal class StackTraceWindow : EditorWindow
     {
+        public const string ExtensionClassName = "RoutineExtensions";
+
         private string _stackTrace;
         private GUILayoutOption[] _options;
         private Vector2 _scrollPosition;
@@ -24,7 +26,7 @@ namespace OlegHcpEditor.Window
 
         public void SetUp(string stackTrace)
         {
-            int index = stackTrace.IndexOf(nameof(RoutineExtensions));
+            int index = stackTrace.IndexOf(ExtensionClassName);
             if (index < 0)
                 index = stackTrace.IndexOf(nameof(TaskSystem));
 

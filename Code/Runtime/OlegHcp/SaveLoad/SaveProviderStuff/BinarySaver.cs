@@ -65,7 +65,7 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
 
         TaskInfo ISaver.SaveVersionAsync(string version)
         {
-            return getRoutine().StartAsync(true);
+            return TaskSystem.StartAsync(getRoutine(), true);
 
             IEnumerator getRoutine()
             {

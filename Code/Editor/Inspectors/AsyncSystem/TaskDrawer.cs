@@ -44,7 +44,7 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
         {
             string[] lines = stackTrace.Split('\n');
 
-            string searchLine1 = $"{nameof(RoutineExtensions)}.cs";
+            string searchLine1 = $"{StackTraceWindow.ExtensionClassName}.cs";
             string searchLine2 = $"{nameof(TaskSystem)}.cs";
 
             for (int i = lines.Length - 1; i >= 0; i--)
