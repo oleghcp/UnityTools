@@ -17,11 +17,13 @@ namespace OlegHcp.Async
             run();
         }
 
+#if UNITY_EDITOR
         public static IEnumerator GetRunDelayedRoutine(float seconds, Action run)
         {
             yield return new WaitForSecondsRealtime(seconds);
             run();
         }
+#endif
 
         public static IEnumerator GetRunByConditionRoutine(Func<bool> condition, Action run)
         {
