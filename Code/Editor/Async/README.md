@@ -2,7 +2,8 @@
 
 ### EditorTaskSystem
 
-Same as runtime `TaskSystem` just for editor scripts. Uses `com.unity.editorcoroutines` package.
+Same as runtime `TaskSystem` just for editor scripts.  
+Uses `com.unity.editorcoroutines` package.
 
 ```csharp
 public static class EditorTaskSystem

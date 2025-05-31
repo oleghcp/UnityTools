@@ -58,6 +58,7 @@ Mind that it uses assembly definitions.
 * [Extensions](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/Engine). Extensions for base unity editor stuff.
 * [Enum generator](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/CodeGenerating). Code generating for creating enums. Useful for generating enums based on serialized assets.
 * [Node drawer](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/NodeBased). Custom node drawing for the graph editor.
+* [Coroutine running](https://github.com/oleghcp/UnityTools/tree/master/Code/Editor/Async). Same as runtime `TaskSystem` just for editor scripts.
 
 # Editor Stuff Overview
 
