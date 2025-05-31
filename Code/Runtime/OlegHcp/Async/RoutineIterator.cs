@@ -25,18 +25,28 @@ namespace OlegHcp.Async
 
 #if UNITY_EDITOR
         public string StackTrace { get; private set; }
+
+        public RoutineIterator() { }
+
+        public RoutineIterator(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
+        {
+            Initialize(null, routine, id, false, default, token);
+        }
+
+        public void InitStackTrace(string stackTrace)
+        {
+            StackTrace = stackTrace;
+        }
 #endif
 
         public void Initialize(TaskRunner taskRunner, IEnumerator routine, long id, bool unstoppable, int index, in CancellationToken token)
         {
-#if UNITY_EDITOR
-            StackTrace = Environment.StackTrace;
-#endif
             _taskRunner = taskRunner;
+            _index = index;
+
             _curRoutine = routine;
             _id = id;
             _unstoppable = unstoppable;
-            _index = index;
             _token = token;
         }
 
@@ -97,13 +107,11 @@ namespace OlegHcp.Async
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void CleanUp()
         {
-#if UNITY_EDITOR
-            StackTrace = null;
-#endif
             _taskRunner = null;
+            _index = 0;
+
             _curRoutine = null;
             _id = 0L;
-            _index = 0;
             _unstoppable = false;
             _token = default;
             _isStopped = false;

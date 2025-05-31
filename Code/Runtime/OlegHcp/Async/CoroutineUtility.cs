@@ -17,6 +17,12 @@ namespace OlegHcp.Async
             run();
         }
 
+        public static IEnumerator GetRunDelayedRoutine(float seconds, Action run)
+        {
+            yield return new WaitForSecondsRealtime(seconds);
+            run();
+        }
+
         public static IEnumerator GetRunByConditionRoutine(Func<bool> condition, Action run)
         {
             while (!condition())

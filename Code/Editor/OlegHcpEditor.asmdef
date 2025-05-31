@@ -5,7 +5,8 @@
         "OlegHcp",
         "Unity.Addressables",
         "Unity.Postprocessing.Runtime",
-        "Unity.Postprocessing.Editor"
+        "Unity.Postprocessing.Editor",
+        "Unity.EditorCoroutines.Editor"
     ],
     "includePlatforms": [
         "Editor"
@@ -48,6 +49,11 @@
             "name": "com.unity.postprocessing",
             "expression": "",
             "define": "INCLUDE_POST_PROCESSING"
+        },
+        {
+            "name": "com.unity.editorcoroutines",
+            "expression": "",
+            "define": "EDITOR_COROUTINES"
         }
     ],
     "noEngineReferences": false

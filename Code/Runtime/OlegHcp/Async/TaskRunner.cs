@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using OlegHcp.CSharp.Collections;
@@ -52,6 +53,9 @@ namespace OlegHcp.Async
         public TaskInfo RunAsync(IEnumerator routine, long id, bool unstoppable, in CancellationToken token)
         {
             RoutineIterator iterator = GetIterator(out int index);
+#if UNITY_EDITOR
+            iterator.InitStackTrace(Environment.StackTrace);
+#endif
             iterator.Initialize(this, routine, id, unstoppable, index, token);
             TaskInfo task = new TaskInfo(iterator);
             StartCoroutine(iterator);
