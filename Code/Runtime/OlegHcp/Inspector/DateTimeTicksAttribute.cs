@@ -4,7 +4,5 @@ using UnityEngine;
 namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class DateTimeTicksAttribute : PropertyAttribute
-    {
-    }
+    public sealed class DateTimeTicksAttribute : PropertyAttribute { }
 }

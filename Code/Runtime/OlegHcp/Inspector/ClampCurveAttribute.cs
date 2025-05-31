@@ -4,7 +4,7 @@ using UnityEngine;
 namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class ClampCurveAttribute : PropertyAttribute
+    public sealed class ClampCurveAttribute : PropertyAttribute
     {
         internal Rect Bounds { get; }
         internal Color Color { get; }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class SeparatorAttribute : PropertyAttribute
+    public sealed class SeparatorAttribute : PropertyAttribute
     {
         const float DEFAULT_HEIGHT = 2f;
         const ColorCode DEFAULT_COLOR = ColorCode.Grey;
