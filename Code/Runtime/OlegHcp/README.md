@@ -23,33 +23,22 @@ public class MyClass
 }
 ```
 
-## AssetRef
+## TimeControl
 
 ```csharp
 using OlegHcp;
-using UnityEngine;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class MyClass : MonoBehaviour
+public class MyClass : MonoBehaviour 
 {
-    [SerializeField]
-    private AssetRef<MonoBehaviour> _ref;
-
-    private void Start()
+    private void Update()
     {
-        if (_ref.Type == RefType.Async) //For addressables
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            AsyncOperationHandle<GameObject> handle = _ref.AsyncRef.InstantiateAsync();
-        }
-        else
-        {
-            MonoBehaviour instance = Instantiate(_ref.Asset);
+            TimeControl.Paused = !TimeControl.Paused;
         }
     }
 }
 ```
-
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AssetRef.png)
 
 ## BitMask
 
@@ -81,6 +70,41 @@ public class MyClass
         }
 
         BitMask.RemoveFlag(ref anotherMask32, 1);
+
+        // And so on
+    }
+}
+```
+
+## IntMask
+
+```csharp
+using OlegHcp;
+
+public class MyClass
+{
+    private void MyMethod()
+    {
+        // Uses flag indices from 0 till 31
+        IntMask mask32 = BitMask.CreateMask(0, 1, 3);
+
+        if (mask32[0])
+        {
+            // Do something
+        }
+
+        mask32[2] = true;
+
+        IntMask anotherMask32 = BitMask.CreateMask(1, 2, 3);
+
+        // The mask size is 4 in this example because of using 4 flags: 0, 1, 2, 3
+        // The maximal mask size is 32
+        if (mask32.Intersects(anotherMask32, 4))
+        {
+            // Do something
+        }
+
+        anotherMask32[1] = false;
 
         // And so on
     }
@@ -205,41 +229,6 @@ public class MyClass : MonoBehaviour
         {
             // Do something
         }
-    }
-}
-```
-
-## IntMask
-
-```csharp
-using OlegHcp;
-
-public class MyClass
-{
-    private void MyMethod()
-    {
-        // Uses flag indices from 0 till 31
-        IntMask mask32 = BitMask.CreateMask(0, 1, 3);
-
-        if (mask32[0])
-        {
-            // Do something
-        }
-
-        mask32[2] = true;
-
-        IntMask anotherMask32 = BitMask.CreateMask(1, 2, 3);
-
-        // The mask size is 4 in this example because of using 4 flags: 0, 1, 2, 3
-        // The maximal mask size is 32
-        if (mask32.Intersects(anotherMask32, 4))
-        {
-            // Do something
-        }
-
-        anotherMask32[1] = false;
-
-        // And so on
     }
 }
 ```
@@ -606,3 +595,31 @@ public class MyClass
     }
 }
 ```
+
+## AssetRef
+
+```csharp
+using OlegHcp;
+using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    private AssetRef<MonoBehaviour> _ref;
+
+    private void Start()
+    {
+        if (_ref.Type == RefType.Async) //For addressables
+        {
+            AsyncOperationHandle<GameObject> handle = _ref.AsyncRef.InstantiateAsync();
+        }
+        else
+        {
+            MonoBehaviour instance = Instantiate(_ref.Asset);
+        }
+    }
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AssetRef.png)
