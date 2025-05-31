@@ -22,7 +22,7 @@ namespace OlegHcpEditor.Window
         private List<Data> _items = new List<Data>();
 
         private float _maxLineLength;
-        private Vector2 _scrollPos;
+        private float _scrollPos;
         private string _tapeString;
         private Data _selectedItem = new Data { Id = -1 };
         private bool _keyboardSelection;
@@ -94,7 +94,15 @@ namespace OlegHcpEditor.Window
                     maxSize = size;
                 }
 
-                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, false);
+                GUISkin skin = GUI.skin;
+                Vector2 currentPosition = new Vector2(0f, _scrollPos);
+                currentPosition = EditorGUILayout.BeginScrollView(currentPosition,
+                                                                  false,
+                                                                  false,
+                                                                  GUIStyle.none,
+                                                                  skin.verticalScrollbar,
+                                                                  skin.scrollView);
+                _scrollPos = currentPosition.y;
                 DrawResults();
                 EditorGUILayout.EndScrollView();
             }
@@ -300,7 +308,6 @@ namespace OlegHcpEditor.Window
 
                 Rect linePos = GUILayoutUtility.GetLastRect()
                                                .GetExpanded(new Vector2(2f, 2f));
-
                 if (_keyboardSelection)
                 {
                     if (item.Id == _selectedItem.Id)
@@ -370,11 +377,11 @@ namespace OlegHcpEditor.Window
                 _selectedItem = _searchResult[index];
 
                 if (index == _searchResult.Count - 1 && direction < 0)
-                    _scrollPos.y = float.PositiveInfinity;
+                    _scrollPos = float.PositiveInfinity;
                 else if (index == 0 && direction > 0)
-                    _scrollPos.y = 0f;
+                    _scrollPos = 0f;
                 else
-                    _scrollPos.y += EditorGUIUtility.singleLineHeight * direction;
+                    _scrollPos += EditorGUIUtility.singleLineHeight * direction;
                 GUI.changed = true;
             }
         }
