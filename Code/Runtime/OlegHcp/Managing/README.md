@@ -18,7 +18,7 @@ public class ExampleContext : Dictionary<Type, Func<IService>>, IInitialContext
         Add(typeof(ServiceC), ComponentUtility.CreateInstance<ServiceC>);
     }
 
-    public bool TryGetOrCreateInstance(Type serviceType, out IService service)
+    public bool TryCreateInstance(Type serviceType, out IService service)
     {
         bool success = TryGetValue(serviceType, out var func);
         service = func?.Invoke();

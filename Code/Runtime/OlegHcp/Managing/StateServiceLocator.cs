@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OlegHcp.Tools;
 
 #if !UNITY_2021_2_OR_NEWER
 using OlegHcp.CSharp.Collections;
@@ -60,7 +59,7 @@ namespace OlegHcp.Managing
 
             foreach (Type serviceType in _requiredTypes)
             {
-                if (Context.TryGetOrCreateInstance(serviceType, out IService service))
+                if (Context.TryCreateInstance(serviceType, out IService service))
                     ServiceCache.Add(serviceType, service);
                 else if (ThrowIfNotFound)
                     throw new ServiceNotFoundException(serviceType.Name);

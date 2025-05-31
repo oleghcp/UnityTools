@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using OlegHcp.CSharp.Collections;
-using OlegHcp.Tools;
 
 namespace OlegHcp.Managing
 {
     public interface IInitialContext
     {
-        bool TryGetOrCreateInstance(Type serviceType, out IService service);
+        bool TryCreateInstance(Type serviceType, out IService service);
     }
 
     public class BaseServiceLocator : IServiceLocator
@@ -36,7 +35,7 @@ namespace OlegHcp.Managing
             if (ServiceCache.TryGetValue(serviceType, out IService service))
                 return (TService)service;
 
-            if (Context.TryGetOrCreateInstance(serviceType, out service))
+            if (Context.TryCreateInstance(serviceType, out service))
                 return (TService)ServiceCache.Place(serviceType, service);
 
             if (_throwIfNotFound)
