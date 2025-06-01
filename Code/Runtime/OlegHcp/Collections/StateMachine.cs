@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OlegHcp.CSharp.Collections;
+using OlegHcp.Tools;
 
 namespace OlegHcp.Collections
 {
     public interface IState
     {
+        int Id { get; }
         void Begin();
         void End();
     }
@@ -31,13 +34,45 @@ namespace OlegHcp.Collections
         //    graph.InitializeMachine(this);
         //}
 
-        public void Start()
+        public void Run()
         {
             if (_currentNode != null)
                 return;
 
             _currentNode = _startNode;
             _currentNode.State.Begin();
+        }
+
+        public void Run(TState state)
+        {
+            if (state == null)
+                throw ThrowErrors.NullParameter(nameof(state));
+
+            TState prevState = _currentNode?.State;
+            prevState?.End();
+
+            _currentNode = _nodes[state];
+            state.Begin();
+
+            if (prevState != null)
+                OnStateChanged_Event?.Invoke(prevState, state);
+        }
+
+        public void Run(int stateId)
+        {
+            Node targetNode = _nodes.Values.First(item => item.State.Id == stateId);
+            Run(targetNode.State);
+        }
+
+        public void Stop()
+        {
+            if (_currentNode == null)
+                return;
+
+            TState prevState = _currentNode.State;
+            _currentNode = null;
+            prevState.End();
+            OnFinished_Event?.Invoke(prevState);
         }
 
         public void SetAsStart(TState startState)
