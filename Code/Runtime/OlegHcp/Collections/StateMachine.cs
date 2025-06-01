@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.NodeBased.Service;
 using OlegHcp.Tools;
@@ -9,7 +8,6 @@ namespace OlegHcp.Collections
 {
     public interface IState
     {
-        int Id { get; }
         void OnEnter();
         void OnExit();
     }
@@ -65,12 +63,6 @@ namespace OlegHcp.Collections
 
             if (prevState != null)
                 OnStateChanged_Event?.Invoke(prevState, state);
-        }
-
-        public void Run(int stateId)
-        {
-            TState targetState = _states.Keys.First(item => item.Id == stateId);
-            Run(targetState);
         }
 
         public void Stop()
