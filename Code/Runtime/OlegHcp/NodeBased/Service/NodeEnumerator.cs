@@ -26,7 +26,7 @@ namespace OlegHcp.NodeBased.Service
 
                 Transition transition = array[index];
                 RawNode nextNode = _node.Owner.Dict[transition.NextNodeId];
-                return new TransitionInfo<TNode>(transition.Condition, _node, nextNode);
+                return new TransitionInfo<TNode>(transition.Condition, nextNode);
             }
         }
 

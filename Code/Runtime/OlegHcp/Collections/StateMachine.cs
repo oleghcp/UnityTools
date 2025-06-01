@@ -14,9 +14,9 @@ namespace OlegHcp.Collections
         void OnExit();
     }
 
-    public interface ICondition<TState, TData> where TState : class, IState
+    public interface ICondition<TData>
     {
-        bool Check(TState prevState, TData data);
+        bool Check(TData data);
     }
 
     [Serializable]
@@ -93,12 +93,12 @@ namespace OlegHcp.Collections
             _startState = startState;
         }
 
-        public void AddTransition(TState from, Func<TState, TData, bool> condition, TState to = null)
+        public void AddTransition(TState from, Func<TData, bool> condition, TState to = null)
         {
             AddTransition(from, new InnerCondition(condition), to);
         }
 
-        public void AddTransition(TState from, ICondition<TState, TData> condition, TState to = null)
+        public void AddTransition(TState from, ICondition<TData> condition, TState to = null)
         {
             if (from == null)
                 throw ThrowErrors.NullParameter(nameof(from));
@@ -127,7 +127,7 @@ namespace OlegHcp.Collections
 
             foreach (Transition transition in _states[_currentState])
             {
-                if (transition.Condition.Check(_currentState, data))
+                if (transition.Condition.Check(data))
                 {
                     TState prevState = _currentState;
                     prevState.OnExit();
@@ -164,22 +164,22 @@ namespace OlegHcp.Collections
         private struct Transition
         {
             public TState Next;
-            public ICondition<TState, TData> Condition;
+            public ICondition<TData> Condition;
         }
 
         [Serializable]
-        private class InnerCondition : ICondition<TState, TData>
+        private class InnerCondition : ICondition<TData>
         {
-            private Func<TState, TData, bool> _condition;
+            private Func<TData, bool> _condition;
 
-            public InnerCondition(Func<TState, TData, bool> condition)
+            public InnerCondition(Func<TData, bool> condition)
             {
                 _condition = condition;
             }
 
-            public bool Check(TState prevState, TData data)
+            public bool Check(TData data)
             {
-                return _condition(prevState, data);
+                return _condition(data);
             }
         }
         #endregion

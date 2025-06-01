@@ -23,7 +23,7 @@ namespace OlegHcp.NodeBased
             throw new NotImplementedException();
         }
 
-        public virtual ICondition<TState, TData> CreateCondition<TState, TData>(TransitionInfo<TNode> transition) where TState : class, IState
+        public virtual ICondition<TData> CreateCondition<TData>(TransitionInfo<TNode> transition)
         {
             throw new NotImplementedException();
         }

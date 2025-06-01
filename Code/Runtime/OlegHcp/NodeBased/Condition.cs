@@ -1,5 +1,4 @@
 ﻿using System;
-using OlegHcp.NodeBased.Service;
 using UnityEngine;
 
 namespace OlegHcp.NodeBased
@@ -14,12 +13,12 @@ namespace OlegHcp.NodeBased
         internal static string NotFieldName => nameof(_not);
 #endif
 
-        internal bool Check(RawNode from, object data)
+        public bool Check(object data)
         {
-            return Satisfied(from, data) != _not;
+            return Satisfied(data) != _not;
         }
 
-        protected abstract bool Satisfied(RawNode from, object data);
+        protected abstract bool Satisfied(object data);
     }
 
     [Serializable]
@@ -28,11 +27,11 @@ namespace OlegHcp.NodeBased
         [SerializeReference]
         private Condition[] _conditions;
 
-        protected override bool Satisfied(RawNode from, object data)
+        protected override bool Satisfied(object data)
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (_conditions[i].Check(from, data))
+                if (_conditions[i].Check(data))
                     return true;
             }
 
@@ -46,11 +45,11 @@ namespace OlegHcp.NodeBased
         [SerializeReference]
         private Condition[] _conditions;
 
-        protected override bool Satisfied(RawNode from, object data)
+        protected override bool Satisfied(object data)
         {
             for (int i = 0; i < _conditions.Length; i++)
             {
-                if (!_conditions[i].Check(from, data))
+                if (!_conditions[i].Check(data))
                     return false;
             }
 

@@ -85,7 +85,7 @@ namespace OlegHcp.NodeBased
                                                   TNode node,
                                                   in TransitionInfo<TNode> transition) where TState : class, IState
         {
-            var condition = node.CreateCondition<TState, TData>(transition);
+            var condition = node.CreateCondition<TData>(transition);
 
             TState nextState = null;
 
