@@ -5,6 +5,10 @@ using System.Linq;
 using OlegHcp.Collections;
 using OlegHcp.NodeBased.Service;
 
+#if !UNITY_2021_2_OR_NEWER
+using OlegHcp.CSharp.Collections;
+#endif
+
 namespace OlegHcp.NodeBased
 {
     public abstract class Graph<TNode> : RawGraph where TNode : Node<TNode>
