@@ -10,8 +10,8 @@ namespace OlegHcp.Collections
     public interface IState
     {
         int Id { get; }
-        void Begin();
-        void End();
+        void OnEnter();
+        void OnExit();
     }
 
     public interface ICondition<TState, TData> where TState : class, IState
@@ -49,7 +49,7 @@ namespace OlegHcp.Collections
                 return;
 
             _currentNode = _startNode;
-            _currentNode.State.Begin();
+            _currentNode.State.OnEnter();
         }
 
         public void Run(TState state)
@@ -58,10 +58,10 @@ namespace OlegHcp.Collections
                 throw ThrowErrors.NullParameter(nameof(state));
 
             TState prevState = _currentNode?.State;
-            prevState?.End();
+            prevState?.OnExit();
 
             _currentNode = _nodes[state];
-            state.Begin();
+            state.OnEnter();
 
             if (prevState != null)
                 OnStateChanged_Event?.Invoke(prevState, state);
@@ -80,7 +80,7 @@ namespace OlegHcp.Collections
 
             TState prevState = _currentNode.State;
             _currentNode = null;
-            prevState.End();
+            prevState.OnExit();
             OnFinished_Event?.Invoke(prevState);
         }
 
@@ -114,31 +114,35 @@ namespace OlegHcp.Collections
             GetStateNode(from).Transitions.Add(transition);
         }
 
-        public void CheckConditions(TData data)
+        public bool CheckConditions(TData data)
         {
             if (_currentNode == null)
-                return;
+                return false;
 
             foreach (Transition transition in _currentNode.Transitions)
             {
                 if (transition.Condition.Check(_currentNode.State, data))
                 {
                     TState prevState = _currentNode.State;
-                    prevState.End();
-
+                    prevState.OnExit();
                     _currentNode = transition.Next;
+
                     if (_currentNode == null)
                     {
                         OnFinished_Event?.Invoke(prevState);
-                        break;
+                    }
+                    else
+                    {
+                        TState curState = _currentNode.State;
+                        curState.OnEnter();
+                        OnStateChanged_Event?.Invoke(prevState, curState);
                     }
 
-                    TState curState = _currentNode.State;
-                    curState.Begin();
-                    OnStateChanged_Event?.Invoke(prevState, curState);
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private Node GetStateNode(TState state)
