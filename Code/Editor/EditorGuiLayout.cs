@@ -8,6 +8,62 @@ namespace OlegHcpEditor
 {
     public static class EditorGuiLayout
     {
+        #region Vertical Scroll View
+        public static float BeginScrollViewVertical(float scrollPosition, params GUILayoutOption[] options)
+        {
+            return BeginScrollViewVertical(scrollPosition, false, options);
+        }
+
+        public static float BeginScrollViewVertical(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options)
+        {
+            return BeginScrollViewVertical(scrollPosition, GUI.skin.verticalScrollbar, options);
+        }
+
+        public static float BeginScrollViewVertical(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options)
+        {
+            return BeginScrollViewVertical(scrollPosition, false, scrollbar, GUI.skin.scrollView, options);
+        }
+
+        public static float BeginScrollViewVertical(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options)
+        {
+            return EditorGUILayout.BeginScrollView(new Vector2(0f, scrollPosition),
+                                                   false,
+                                                   alwaysShow,
+                                                   GUIStyle.none,
+                                                   scrollbar,
+                                                   background, options).y;
+        }
+        #endregion
+
+        #region Horizontal Scroll View
+        public static float BeginScrollViewHorizontal(float scrollPosition, params GUILayoutOption[] options)
+        {
+            return BeginScrollViewHorizontal(scrollPosition, false, options);
+        }
+
+        public static float BeginScrollViewHorizontal(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options)
+        {
+            return BeginScrollViewHorizontal(scrollPosition, GUI.skin.horizontalScrollbar, options);
+        }
+
+        public static float BeginScrollViewHorizontal(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options)
+        {
+            return BeginScrollViewHorizontal(scrollPosition, false, scrollbar, GUI.skin.scrollView, options);
+        }
+
+        public static float BeginScrollViewHorizontal(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options)
+        {
+            return EditorGUILayout.BeginScrollView(new Vector2(scrollPosition, 0f),
+                                                   alwaysShow,
+                                                   false,
+                                                   scrollbar,
+                                                   GUIStyle.none,
+                                                   background,
+                                                   options).x;
+        }
+        #endregion
+
+        #region DiapasonField
         public static Diapason DiapasonField(string label, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options)
         {
             Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
@@ -29,7 +85,9 @@ namespace OlegHcpEditor
         {
             return DiapasonField(label, diapason, float.NegativeInfinity, float.PositiveInfinity, options);
         }
+        #endregion
 
+        #region DiapasonIntField
         public static DiapasonInt DiapasonIntField(string label, DiapasonInt diapason, int minLimit, int maxLimit, params GUILayoutOption[] options)
         {
             Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
@@ -51,7 +109,9 @@ namespace OlegHcpEditor
         {
             return DiapasonIntField(label, diapason, int.MinValue, int.MaxValue, options);
         }
+        #endregion
 
+        #region ToggleButton
         public static bool ToggleButton(string text, bool value, params GUILayoutOption[] options)
         {
             return ToggleButton(text, value, GUI.skin.button, options);
@@ -71,7 +131,9 @@ namespace OlegHcpEditor
         {
             return GUILayout.Toggle(value, content, style, options);
         }
+        #endregion
 
+        #region DropArea
         public static UnityObject[] DropArea(params GUILayoutOption[] options)
         {
             Rect position = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, options);
@@ -98,6 +160,7 @@ namespace OlegHcpEditor
             Rect position = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight, options);
             return EditorGui.DropArea(position, content, style);
         }
+        #endregion
 
         public static int DropDown(int selectedIndex, string[] displayedOptions, params GUILayoutOption[] options)
         {
@@ -229,6 +292,7 @@ namespace OlegHcpEditor
             EditorGUILayout.EndVertical();
         }
 
+        #region Scopes
         public class HorizontalCenteringScope : GUI.Scope
         {
             public Rect Rect { get; private set; }
@@ -268,5 +332,66 @@ namespace OlegHcpEditor
                 EndVerticalCentering();
             }
         }
+
+        public class VerticalScrollViewScope : GUI.Scope
+        {
+            public float ScrollPosition { get; protected set; }
+
+            public VerticalScrollViewScope(float scrollPosition, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewVertical(scrollPosition, options);
+            }
+
+            public VerticalScrollViewScope(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewVertical(scrollPosition, alwaysShow, options);
+            }
+
+            public VerticalScrollViewScope(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewVertical(scrollPosition, scrollbar, options);
+            }
+
+            public VerticalScrollViewScope(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewVertical(scrollPosition, alwaysShow, scrollbar, background, options);
+            }
+
+            protected override void CloseScope()
+            {
+                EditorGUILayout.EndScrollView();
+            }
+        }
+
+        public class HorizontalScrollViewScope : GUI.Scope
+        {
+            public float ScrollPosition { get; protected set; }
+
+            public HorizontalScrollViewScope(float scrollPosition, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewHorizontal(scrollPosition, options);
+            }
+
+            public HorizontalScrollViewScope(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewHorizontal(scrollPosition, alwaysShow, options);
+            }
+
+            public HorizontalScrollViewScope(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewHorizontal(scrollPosition, scrollbar, options);
+            }
+
+            public HorizontalScrollViewScope(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options)
+            {
+                ScrollPosition = BeginScrollViewHorizontal(scrollPosition, alwaysShow, scrollbar, background, options);
+            }
+
+            protected override void CloseScope()
+            {
+                EditorGUILayout.EndScrollView();
+            }
+        }
+        #endregion
     }
 }

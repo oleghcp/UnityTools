@@ -94,15 +94,7 @@ namespace OlegHcpEditor.Window
                     maxSize = size;
                 }
 
-                GUISkin skin = GUI.skin;
-                Vector2 currentPosition = new Vector2(0f, _scrollPos);
-                currentPosition = EditorGUILayout.BeginScrollView(currentPosition,
-                                                                  false,
-                                                                  false,
-                                                                  GUIStyle.none,
-                                                                  skin.verticalScrollbar,
-                                                                  skin.scrollView);
-                _scrollPos = currentPosition.y;
+                _scrollPos = EditorGuiLayout.BeginScrollViewVertical(_scrollPos);
                 DrawResults();
                 EditorGUILayout.EndScrollView();
             }
