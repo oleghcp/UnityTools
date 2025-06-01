@@ -43,7 +43,9 @@ using UnityEngine;
 
 public class GameHud : MonoBehaviour
 {
+    [SerializeField]
     private Character _character;
+    [SerializeField]
     private Tracker _tracker;
 
     private void Awake()
@@ -67,6 +69,150 @@ public class GameHud : MonoBehaviour
     private void UpdateMoneyView(int money)
     {
         // Update money label
+    }
+}
+```
+
+## StateMachine
+
+```csharp
+using OlegHcp.Collections;
+using UnityEngine;
+
+public class SMState : IState
+{
+    private string _name;
+
+    public string Name => _name;
+
+    public SMState(string name)
+    {
+        _name = name;
+    }
+
+    void IState.OnEnter()
+    {
+        Debug.Log($"On enter {_name}");
+    }
+
+    void IState.OnExit()
+    {
+        Debug.Log($"On exit {_name}");
+    }
+}
+```
+
+```csharp
+using OlegHcp.Collections;
+
+public class SMCondition : ICondition<int>
+{
+    private int _code;
+
+    public SMCondition(int code)
+    {
+        _code = code;
+    }
+
+    public bool Check(int data)
+    {
+        return _code == data;
+    }
+}
+```
+
+```csharp
+using OlegHcp.Collections;
+using UnityEngine;
+
+public class ExampleClass : MonoBehaviour
+{
+    private StateMachine<SMState, int> _machine = new StateMachine<SMState, int>();
+
+    private void Awake()
+    {
+        SMState a = new SMState("A");
+        SMState b = new SMState("B");
+
+        _machine.SetAsStart(a); //Set a as the beginning state
+        _machine.AddTransition(a, b, new SMCondition(0)); //Transition a -> b
+        _machine.AddTransition(b, b, new SMCondition(0)); //Transition b -> a
+        _machine.AddTransition(b, new SMCondition(1)); //Exit from b
+
+        _machine.OnStateChanged_Event += (a, b) =>
+        {
+            Debug.Log($"Transition: {a.Name} -> {b.Name}");
+        };
+
+        _machine.OnFinished_Event += state =>
+        {
+            Debug.Log($"Finish from {state.Name}");
+        };
+    }
+
+    private void Start()
+    {
+        _machine.Run();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _machine.CheckConditions(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _machine.CheckConditions(1);
+        }
+    }
+}
+```
+
+Also the state machine can be configured with `OlegHcp.NodeBased.Graph<TNode>`.
+
+```csharp
+public class ExampleClass : MonoBehaviour
+{
+    [SerializeField]
+    private Graph<StateNode> _graph;
+
+    private StateMachine<SMState, int> _machine;
+
+    private void Awake()
+    {
+        _machine = new StateMachine<SMState, int>(_graph);
+    }
+}
+```
+
+It requires implementation of `CreateState` and `CreateCondition` methods in the Node class.
+
+```csharp
+[Serializable]
+public class StateNode : Node<StateNode>, IState
+{
+    public override TState CreateState<TState>()
+    {
+         return this as TState;
+    }
+
+    public override ICondition<TData> CreateCondition<TData>(TransitionInfo<StateNode> transition)
+    {
+        //Node condition has to implement OlegHcp.Collections.ICondition<TData> in this case
+        //Or you can create a wrapper for the transition parameter
+        return (ICondition<TData>)transition.Condition;
+    }
+
+    void IState.OnEnter()
+    {
+
+    }
+
+    void IState.OnExit()
+    {
+
     }
 }
 ```
