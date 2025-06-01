@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Collections
 {
@@ -12,12 +13,12 @@ namespace OlegHcp.Collections
     [Serializable]
     public class StateMachine<TState, TData> where TState : class, IState
     {
-        public event Action OnFinished_Event;
-        public event Action<TState, TState> OnStateChanging_Event;
+        public event Action<TState, TState> OnStateChanged_Event;
+        public event Action<TState> OnFinished_Event;
 
+        private Dictionary<TState, Node> _nodes = new Dictionary<TState, Node>();
         private Node _startNode;
         private Node _currentNode;
-        private Dictionary<TState, Node> _nodes = new Dictionary<TState, Node>();
 
         public TState CurrentState => _currentNode?.State;
         public bool IsAlive => _currentNode != null;
@@ -39,33 +40,20 @@ namespace OlegHcp.Collections
             _currentNode.State.Begin();
         }
 
-        public void AddState(TState state, bool startState = false)
+        public void SetAsStart(TState startState)
         {
-            Node node = new Node
-            {
-                State = state,
-            };
-
-            if (startState)
-                _startNode = node;
-
-            _nodes[state] = node;
+            _startNode = GetStateNode(startState);
         }
 
         public void AddTransition(TState from, Func<TState, TData, bool> condition, TState to = null)
         {
-            Transition transition = new Transition
+            Transition transition = new Transition()
             {
-                Next = to == null ? null : _nodes[to],
+                Next = to == null ? null : GetStateNode(to),
                 Condition = condition,
             };
 
-            _nodes[from].Transitions.Add(transition);
-        }
-
-        public void SetAsStart(TState startState)
-        {
-            _startNode = _nodes[startState];
+            GetStateNode(from).Transitions.Add(transition);
         }
 
         public void CheckConditions(TData data)
@@ -77,21 +65,30 @@ namespace OlegHcp.Collections
             {
                 if (transition.Condition(_currentNode.State, data))
                 {
-                    _currentNode.State.End();
-                    Node prevNode = _currentNode;
-                    _currentNode = transition.Next;
+                    TState prevState = _currentNode.State;
+                    prevState.End();
 
+                    _currentNode = transition.Next;
                     if (_currentNode == null)
                     {
-                        OnFinished_Event?.Invoke();
+                        OnFinished_Event?.Invoke(prevState);
                         break;
                     }
 
-                    OnStateChanging_Event?.Invoke(prevNode.State, _currentNode.State);
-                    _currentNode.State.Begin();
+                    TState curState = _currentNode.State;
+                    curState.Begin();
+                    OnStateChanged_Event?.Invoke(prevState, curState);
                     break;
                 }
             }
+        }
+
+        private Node GetStateNode(TState state)
+        {
+            if (_nodes.TryGetValue(state, out Node node))
+                return node;
+
+            return _nodes.Place(state, new Node { State = state });
         }
 
         #region Entities
