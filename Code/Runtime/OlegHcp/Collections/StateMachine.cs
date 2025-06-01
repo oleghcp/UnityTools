@@ -25,13 +25,13 @@ namespace OlegHcp.Collections
         public event Action<TState, TState> OnStateChanged_Event;
         public event Action<TState> OnFinished_Event;
 
-        private Dictionary<TState, Node> _nodes = new Dictionary<TState, Node>();
-        private Node _startNode;
-        private Node _currentNode;
+        private Dictionary<TState, List<Transition>> _states = new Dictionary<TState, List<Transition>>();
+        private TState _startState;
+        private TState _currentState;
 
-        public TState CurrentState => _currentNode?.State;
-        public bool IsAlive => _currentNode != null;
-        public bool AtStart => _startNode == _currentNode;
+        public bool IsAlive => _currentState != null;
+        public bool AtStart => _startState == _currentState;
+        public TState CurrentState => _currentState;
 
         public StateMachine()
         {
@@ -45,11 +45,11 @@ namespace OlegHcp.Collections
 
         public void Run()
         {
-            if (_currentNode != null)
+            if (_currentState != null)
                 return;
 
-            _currentNode = _startNode;
-            _currentNode.State.OnEnter();
+            _currentState = _startState;
+            _currentState.OnEnter();
         }
 
         public void Run(TState state)
@@ -57,10 +57,10 @@ namespace OlegHcp.Collections
             if (state == null)
                 throw ThrowErrors.NullParameter(nameof(state));
 
-            TState prevState = _currentNode?.State;
+            TState prevState = _currentState;
             prevState?.OnExit();
 
-            _currentNode = _nodes[state];
+            _currentState = state;
             state.OnEnter();
 
             if (prevState != null)
@@ -69,17 +69,17 @@ namespace OlegHcp.Collections
 
         public void Run(int stateId)
         {
-            Node targetNode = _nodes.Values.First(item => item.State.Id == stateId);
-            Run(targetNode.State);
+            TState targetState = _states.Keys.First(item => item.Id == stateId);
+            Run(targetState);
         }
 
         public void Stop()
         {
-            if (_currentNode == null)
+            if (_currentState == null)
                 return;
 
-            TState prevState = _currentNode.State;
-            _currentNode = null;
+            TState prevState = _currentState;
+            _currentState = null;
             prevState.OnExit();
             OnFinished_Event?.Invoke(prevState);
         }
@@ -89,7 +89,8 @@ namespace OlegHcp.Collections
             if (startState == null)
                 throw ThrowErrors.NullParameter(nameof(startState));
 
-            _startNode = GetStateNode(startState);
+            TryCacheState(startState);
+            _startState = startState;
         }
 
         public void AddTransition(TState from, Func<TState, TData, bool> condition, TState to = null)
@@ -105,35 +106,40 @@ namespace OlegHcp.Collections
             if (condition == null)
                 throw ThrowErrors.NullParameter(nameof(condition));
 
+            if (to != null)
+            {
+                TryCacheState(to);
+            }
+
             Transition transition = new Transition()
             {
-                Next = to == null ? null : GetStateNode(to),
+                Next = to,
                 Condition = condition,
             };
 
-            GetStateNode(from).Transitions.Add(transition);
+            TryCacheState(from).Add(transition);
         }
 
         public bool CheckConditions(TData data)
         {
-            if (_currentNode == null)
+            if (_currentState == null)
                 return false;
 
-            foreach (Transition transition in _currentNode.Transitions)
+            foreach (Transition transition in _states[_currentState])
             {
-                if (transition.Condition.Check(_currentNode.State, data))
+                if (transition.Condition.Check(_currentState, data))
                 {
-                    TState prevState = _currentNode.State;
+                    TState prevState = _currentState;
                     prevState.OnExit();
-                    _currentNode = transition.Next;
+                    _currentState = transition.Next;
 
-                    if (_currentNode == null)
+                    if (_currentState == null)
                     {
                         OnFinished_Event?.Invoke(prevState);
                     }
                     else
                     {
-                        TState curState = _currentNode.State;
+                        TState curState = _currentState;
                         curState.OnEnter();
                         OnStateChanged_Event?.Invoke(prevState, curState);
                     }
@@ -145,31 +151,19 @@ namespace OlegHcp.Collections
             return false;
         }
 
-        private Node GetStateNode(TState state)
+        private List<Transition> TryCacheState(TState state)
         {
-            if (_nodes.TryGetValue(state, out Node node))
-                return node;
+            if (_states.TryGetValue(state, out var transitions))
+                return transitions;
 
-            return _nodes.Place(state, new Node { State = state });
+            return _states.Place(state, new List<Transition>());
         }
 
         #region Entities
         [Serializable]
-        private class Node
-        {
-            public List<Transition> Transitions;
-            public TState State;
-
-            public Node()
-            {
-                Transitions = new List<Transition>();
-            }
-        }
-
-        [Serializable]
         private struct Transition
         {
-            public Node Next;
+            public TState Next;
             public ICondition<TState, TData> Condition;
         }
 
