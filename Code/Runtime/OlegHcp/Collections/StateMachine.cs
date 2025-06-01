@@ -77,11 +77,20 @@ namespace OlegHcp.Collections
 
         public void SetAsStart(TState startState)
         {
+            if (startState == null)
+                throw ThrowErrors.NullParameter(nameof(startState));
+
             _startNode = GetStateNode(startState);
         }
 
         public void AddTransition(TState from, Func<TState, TData, bool> condition, TState to = null)
         {
+            if (from == null)
+                throw ThrowErrors.NullParameter(nameof(from));
+
+            if (condition == null)
+                throw ThrowErrors.NullParameter(nameof(condition));
+
             Transition transition = new Transition()
             {
                 Next = to == null ? null : GetStateNode(to),
