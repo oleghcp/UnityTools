@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OlegHcp.CSharp.Collections;
+using OlegHcp.NodeBased.Service;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Collections
@@ -11,6 +12,11 @@ namespace OlegHcp.Collections
         int Id { get; }
         void Begin();
         void End();
+    }
+
+    public interface ICondition<TState, TData> where TState : class, IState
+    {
+        bool Check(TState prevState, TData data);
     }
 
     [Serializable]
@@ -27,12 +33,15 @@ namespace OlegHcp.Collections
         public bool IsAlive => _currentNode != null;
         public bool AtStart => _startNode == _currentNode;
 
-        //public StateMachine() { }
+        public StateMachine()
+        {
 
-        //public StateMachine(RawGraph graph)
-        //{
-        //    graph.InitializeMachine(this);
-        //}
+        }
+
+        public StateMachine(RawGraph graph)
+        {
+            graph.InitializeStateMachine(this);
+        }
 
         public void Run()
         {
@@ -85,6 +94,11 @@ namespace OlegHcp.Collections
 
         public void AddTransition(TState from, Func<TState, TData, bool> condition, TState to = null)
         {
+            AddTransition(from, new InnerCondition(condition), to);
+        }
+
+        public void AddTransition(TState from, ICondition<TState, TData> condition, TState to = null)
+        {
             if (from == null)
                 throw ThrowErrors.NullParameter(nameof(from));
 
@@ -107,7 +121,7 @@ namespace OlegHcp.Collections
 
             foreach (Transition transition in _currentNode.Transitions)
             {
-                if (transition.Condition(_currentNode.State, data))
+                if (transition.Condition.Check(_currentNode.State, data))
                 {
                     TState prevState = _currentNode.State;
                     prevState.End();
@@ -149,10 +163,26 @@ namespace OlegHcp.Collections
         }
 
         [Serializable]
-        private class Transition
+        private struct Transition
         {
             public Node Next;
-            public Func<TState, TData, bool> Condition;
+            public ICondition<TState, TData> Condition;
+        }
+
+        [Serializable]
+        private class InnerCondition : ICondition<TState, TData>
+        {
+            private Func<TState, TData, bool> _condition;
+
+            public InnerCondition(Func<TState, TData, bool> condition)
+            {
+                _condition = condition;
+            }
+
+            public bool Check(TState prevState, TData data)
+            {
+                return _condition(prevState, data);
+            }
         }
         #endregion
     }

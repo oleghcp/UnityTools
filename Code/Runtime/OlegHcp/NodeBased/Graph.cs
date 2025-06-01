@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using OlegHcp.Collections;
 using OlegHcp.NodeBased.Service;
 
 namespace OlegHcp.NodeBased
@@ -41,46 +42,48 @@ namespace OlegHcp.NodeBased
             return _commonNodeWrapper ?? (_commonNodeWrapper = new NodeWrapper(CommonNode));
         }
 
-        //internal override void InitializeMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
-        //{
-        //    Dictionary<RawNode, TState> states = new Dictionary<RawNode, TState>(Dict.Count);
+        internal override void InitializeStateMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
+        {
+            Dictionary<TNode, TState> states = createStates();
 
-        //    RawNode rootNode = RootNode;
+            stateMachine.SetAsStart(states[RootNode]);
 
-        //    foreach (RawNode node in Dict.Values)
-        //    {
-        //        if (node is HubNode)
-        //            continue;
+            foreach (var (node, state) in states)
+            {
+                foreach (TransitionInfo<TNode> transition in node)
+                {
+                    addTransition(state, node, transition);
+                }
 
-        //        TState state = states.Place(node, node.CreateState<TState>());
+                foreach (TransitionInfo<TNode> transition in EnumerateFromAny())
+                {
+                    addTransition(state, node, transition);
+                }
+            }
 
-        //        if (state != null)
-        //            stateMachine.AddState(state, node == rootNode);
-        //    }
+            Dictionary<TNode, TState> createStates()
+            {
+                Dictionary<TNode, TState> states = new Dictionary<TNode, TState>();
 
-        //    foreach (RawNode node in Dict.Values)
-        //    {
-        //        if (node.ServiceNode())
-        //            continue;
+                for (int i = 0; i < NodeArray.Length; i++)
+                {
+                    if (NodeArray[i].IsRegular())
+                    {
+                        TNode node = (TNode)NodeArray[i];
+                        states.Add(node, node.CreateState<TState>());
+                    }
+                }
 
-        //        foreach (TransitionInfo<TNode> transition in node as TNode)
-        //        {
-        //            addTransition(node, transition);
-        //        }
+                return states;
+            }
 
-        //        foreach (TransitionInfo<TNode> transition in EnumerateFromAny())
-        //        {
-        //            addTransition(node, transition);
-        //        }
-        //    }
-
-        //    void addTransition(RawNode node, in TransitionInfo<TNode> transition)
-        //    {
-        //        stateMachine.AddTransition(states[node],
-        //                                   transition.Condition.CreateCondition<TState, TData>(),
-        //                                   states[transition.NextNode]);
-        //    }
-        //}
+            void addTransition(TState state, TNode node, in TransitionInfo<TNode> transition)
+            {
+                var condition = node.CreateCondition<TState, TData>(transition);
+                states.TryGetValue(transition.NextNode, out TState nextState);
+                stateMachine.AddTransition(state, condition, nextState);
+            }
+        }
 
         private class NodeWrapper : IEnumerableNode<TNode>
         {

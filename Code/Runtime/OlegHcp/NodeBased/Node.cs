@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using OlegHcp.Collections;
 using OlegHcp.NodeBased.Service;
 
 namespace OlegHcp.NodeBased
@@ -15,6 +16,16 @@ namespace OlegHcp.NodeBased
         public NodeEnumerator<TNode> GetEnumerator()
         {
             return new NodeEnumerator<TNode>(this as TNode);
+        }
+
+        public virtual TState CreateState<TState>() where TState : class, IState
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual ICondition<TState, TData> CreateCondition<TState, TData>(TransitionInfo<TNode> transition) where TState : class, IState
+        {
+            throw new NotImplementedException();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
