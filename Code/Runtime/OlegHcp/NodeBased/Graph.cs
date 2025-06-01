@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using OlegHcp.Collections;
-using OlegHcp.CSharp.Collections;
 using OlegHcp.NodeBased.Service;
 
 namespace OlegHcp.NodeBased
@@ -92,7 +91,7 @@ namespace OlegHcp.NodeBased
             if (transition.NextNode != null)
                 states.TryGetValue(transition.NextNode, out nextState);
 
-            stateMachine.AddTransition(state, condition, nextState);
+            stateMachine.AddTransition(condition, state, nextState);
         }
 
         private class NodeWrapper : IEnumerableNode<TNode>

@@ -85,12 +85,12 @@ namespace OlegHcp.Collections
             _startState = startState;
         }
 
-        public void AddTransition(TState from, Func<TData, bool> condition, TState to = null)
+        public void AddTransition(Func<TData, bool> condition, TState from, TState to = null)
         {
-            AddTransition(from, new InnerCondition(condition), to);
+            AddTransition(new InnerCondition(condition), from, to);
         }
 
-        public void AddTransition(TState from, ICondition<TData> condition, TState to = null)
+        public void AddTransition(ICondition<TData> condition, TState from, TState to = null)
         {
             if (from == null)
                 throw ThrowErrors.NullParameter(nameof(from));
