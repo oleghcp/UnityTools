@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using OlegHcp.Collections;
+using OlegHcp.CSharp.Collections;
 using OlegHcp.NodeBased.Service;
 
 namespace OlegHcp.NodeBased
@@ -44,7 +45,7 @@ namespace OlegHcp.NodeBased
 
         internal override void InitializeStateMachine<TState, TData>(StateMachine<TState, TData> stateMachine)
         {
-            Dictionary<TNode, TState> states = createStates();
+            Dictionary<TNode, TState> states = createStates<TState>();
 
             stateMachine.SetAsStart(states[RootNode]);
 
@@ -52,42 +53,46 @@ namespace OlegHcp.NodeBased
             {
                 foreach (TransitionInfo<TNode> transition in node)
                 {
-                    addTransition(state, node, transition);
+                    addTransition(states, stateMachine, state, node, transition);
                 }
 
                 foreach (TransitionInfo<TNode> transition in EnumerateFromAny())
                 {
-                    addTransition(state, node, transition);
+                    addTransition(states, stateMachine, state, node, transition);
                 }
             }
+        }
 
-            Dictionary<TNode, TState> createStates()
+        private Dictionary<TNode, TState> createStates<TState>() where TState : class, IState
+        {
+            Dictionary<TNode, TState> dict = new Dictionary<TNode, TState>();
+
+            for (int i = 0; i < NodeArray.Length; i++)
             {
-                Dictionary<TNode, TState> states = new Dictionary<TNode, TState>();
-
-                for (int i = 0; i < NodeArray.Length; i++)
+                if (NodeArray[i].IsRegular())
                 {
-                    if (NodeArray[i].IsRegular())
-                    {
-                        TNode node = (TNode)NodeArray[i];
-                        states.Add(node, node.CreateState<TState>());
-                    }
+                    TNode node = (TNode)NodeArray[i];
+                    dict.Add(node, node.CreateState<TState>());
                 }
-
-                return states;
             }
 
-            void addTransition(TState state, TNode node, in TransitionInfo<TNode> transition)
-            {
-                var condition = node.CreateCondition<TState, TData>(transition);
+            return dict;
+        }
 
-                TState nextState = null;
+        private void addTransition<TState, TData>(Dictionary<TNode, TState> states,
+                                                  StateMachine<TState, TData> stateMachine,
+                                                  TState state,
+                                                  TNode node,
+                                                  in TransitionInfo<TNode> transition) where TState : class, IState
+        {
+            var condition = node.CreateCondition<TState, TData>(transition);
 
-                if (transition.NextNode != null)
-                    states.TryGetValue(transition.NextNode, out nextState);
+            TState nextState = null;
 
-                stateMachine.AddTransition(state, condition, nextState);
-            }
+            if (transition.NextNode != null)
+                states.TryGetValue(transition.NextNode, out nextState);
+
+            stateMachine.AddTransition(state, condition, nextState);
         }
 
         private class NodeWrapper : IEnumerableNode<TNode>
