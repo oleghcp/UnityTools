@@ -295,7 +295,7 @@ namespace OlegHcpEditor
         #region Scopes
         public class HorizontalCenteringScope : GUI.Scope
         {
-            public Rect Rect { get; private set; }
+            public Rect Rect { get; protected set; }
 
             public HorizontalCenteringScope(params GUILayoutOption[] options)
             {
@@ -315,7 +315,7 @@ namespace OlegHcpEditor
 
         public class VerticalCenteringScope : GUI.Scope
         {
-            public Rect Rect { get; private set; }
+            public Rect Rect { get; protected set; }
 
             public VerticalCenteringScope(params GUILayoutOption[] options)
             {
