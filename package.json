@@ -1,7 +1,7 @@
 ﻿{
     "name": "com.oleghcp.unitytools",
     "displayName": "OlegHcp Unity Tools",
-    "version": "2.5.6",
+    "version": "2.6.0",
     "description": "A set of helpful code stuff for Unity.",
     "unity": "2019.4",
     "documentationUrl": "https://github.com/oleghcp/UnityTools",
