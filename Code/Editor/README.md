@@ -70,6 +70,14 @@ public static class EditorGui
 ```csharp
 public static class EditorGuiLayout
 {
+    public static float BeginScrollViewVertical(float scrollPosition, params GUILayoutOption[] options);
+    public static float BeginScrollViewVertical(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options);
+    public static float BeginScrollViewVertical(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options);
+    public static float BeginScrollViewVertical(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options);
+    public static float BeginScrollViewHorizontal(float scrollPosition, params GUILayoutOption[] options);
+    public static float BeginScrollViewHorizontal(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options);
+    public static float BeginScrollViewHorizontal(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options);
+    public static float BeginScrollViewHorizontal(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options);
     public static Diapason DiapasonField(string label, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options);
     public static Diapason DiapasonField(GUIContent label, Diapason diapason, float minLimit, float maxLimit, params GUILayoutOption[] options);
     public static Diapason DiapasonField(string label, Diapason diapason, params GUILayoutOption[] options);
@@ -111,7 +119,7 @@ public static class EditorGuiLayout
 
     public class HorizontalCenteringScope : GUI.Scope
     {
-        public Rect Rect { get; }
+        public Rect Rect { get; protected set; }
 
         public HorizontalCenteringScope(params GUILayoutOption[] options);
         public HorizontalCenteringScope(GUIStyle style, params GUILayoutOption[] options);
@@ -121,10 +129,34 @@ public static class EditorGuiLayout
 
     public class VerticalCenteringScope : GUI.Scope
     {
-        public Rect Rect { get; }
+        public Rect Rect { get; protected set; }
 
         public VerticalCenteringScope(params GUILayoutOption[] options);
         public VerticalCenteringScope(GUIStyle style, params GUILayoutOption[] options);
+
+        protected override void CloseScope();
+    }
+    
+    public class VerticalScrollViewScope : GUI.Scope
+    {
+        public float ScrollPosition { get; protected set; }
+
+        public VerticalScrollViewScope(float scrollPosition, params GUILayoutOption[] options);
+        public VerticalScrollViewScope(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options);
+        public VerticalScrollViewScope(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options);
+        public VerticalScrollViewScope(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options);
+
+        protected override void CloseScope();
+    }
+
+    public class HorizontalScrollViewScope : GUI.Scope
+    {
+        public float ScrollPosition { get; protected set; }
+
+        public HorizontalScrollViewScope(float scrollPosition, params GUILayoutOption[] options);
+        public HorizontalScrollViewScope(float scrollPosition, bool alwaysShow, params GUILayoutOption[] options);
+        public HorizontalScrollViewScope(float scrollPosition, GUIStyle scrollbar, params GUILayoutOption[] options);
+        public HorizontalScrollViewScope(float scrollPosition, bool alwaysShow, GUIStyle scrollbar, GUIStyle background, params GUILayoutOption[] options);
 
         protected override void CloseScope();
     }
