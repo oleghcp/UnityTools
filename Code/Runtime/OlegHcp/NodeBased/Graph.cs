@@ -80,7 +80,12 @@ namespace OlegHcp.NodeBased
             void addTransition(TState state, TNode node, in TransitionInfo<TNode> transition)
             {
                 var condition = node.CreateCondition<TState, TData>(transition);
-                states.TryGetValue(transition.NextNode, out TState nextState);
+
+                TState nextState = null;
+
+                if (transition.NextNode != null)
+                    states.TryGetValue(transition.NextNode, out nextState);
+
                 stateMachine.AddTransition(state, condition, nextState);
             }
         }
