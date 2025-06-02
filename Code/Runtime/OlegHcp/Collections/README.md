@@ -136,12 +136,12 @@ public class ExampleClass : MonoBehaviour
 
         _machine.SetAsStart(a); //Set a as the beginning state
         _machine.AddTransition(a, b, new SMCondition(0)); //Transition a -> b
-        _machine.AddTransition(b, b, new SMCondition(0)); //Transition b -> a
+        _machine.AddTransition(b, a, new SMCondition(0)); //Transition b -> a
         _machine.AddTransition(b, new SMCondition(1)); //Exit from b
 
-        _machine.OnStateChanged_Event += (a, b) =>
+        _machine.OnStateChanged_Event += (state1, state2) =>
         {
-            Debug.Log($"Transition: {a.Name} -> {b.Name}");
+            Debug.Log($"Transition: {state1.Name} -> {state2.Name}");
         };
 
         _machine.OnFinished_Event += state =>
@@ -176,7 +176,7 @@ Also the state machine can be configured with `OlegHcp.NodeBased.Graph<TNode>`.
 public class ExampleClass : MonoBehaviour
 {
     [SerializeField]
-    private Graph<StateNode> _graph;
+    private CustomGraph _graph;
 
     private StateMachine<SMState, int> _machine;
 
