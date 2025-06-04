@@ -36,20 +36,16 @@ public class MyClass : MonoBehaviour
         {
             //pause game
             TimeControl.Paused = true;
-        }
 
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
             //change time scale
             TimeControl.Scale = 0.5f;
             //it's still paused
         }
 
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             //unpause game
-            TimeControl.Paused = true;
+            TimeControl.Paused = false;
             //time scale is 0.5f
         }
     }
