@@ -49,7 +49,7 @@ namespace OlegHcp.GameConsole
         [TerminalCommand, Preserve]
         internal bool set_time_scale(string[] opt)
         {
-            return ParseFloat(opt, scale => Time.timeScale = scale);
+            return ParseFloat(opt, scale => TimeControl.Scale = scale);
         }
 
         [TerminalCommand, Preserve]
