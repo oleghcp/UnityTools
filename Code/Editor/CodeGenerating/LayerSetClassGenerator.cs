@@ -54,20 +54,18 @@ namespace OlegHcpEditor.CodeGenerating
 
             if (config.TagFields)
             {
-                SerializedProperty tags = tagManager.FindProperty("tags");
-
-                foreach (var item in tags.EnumerateArrayElements())
+                foreach (SerializedProperty tagProperty in tagManager.FindProperty("tags").EnumerateArrayElements())
                 {
                     builder.Append(StringUtility.Tab)
                            .Append(StringUtility.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("string ")
-                           .Append(item.stringValue.RemoveWhiteSpaces())
+                           .Append(tagProperty.stringValue.Nicify())
                            .Append("Tag")
                            .Append(" = ")
                            .Append('"')
-                           .Append(item.stringValue)
+                           .Append(tagProperty.stringValue)
                            .Append('"')
                            .Append(';')
                            .AppendLine();
@@ -81,14 +79,14 @@ namespace OlegHcpEditor.CodeGenerating
                 if (needEmptyLine)
                     builder.AppendLine();
 
-                foreach (var layer in SortingLayer.layers)
+                foreach (SortingLayer layer in SortingLayer.layers)
                 {
                     builder.Append(StringUtility.Tab)
                            .Append(StringUtility.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
-                           .Append(layer.name.RemoveWhiteSpaces())
+                           .Append(layer.name.Nicify())
                            .Append("Id")
                            .Append(" = ")
                            .Append(layer.id)
@@ -104,11 +102,11 @@ namespace OlegHcpEditor.CodeGenerating
                 if (needEmptyLine)
                     builder.AppendLine();
 
-                SerializedProperty layers = tagManager.FindProperty("layers");
-
-                foreach (var item in layers.EnumerateArrayElements())
+                for (int i = 0; i < BitMask.SIZE; i++)
                 {
-                    if (item.stringValue.IsNullOrWhiteSpace())
+                    string layerName = LayerMask.LayerToName(i);
+
+                    if (layerName.IsNullOrWhiteSpace())
                         continue;
 
                     builder.Append(StringUtility.Tab)
@@ -116,10 +114,10 @@ namespace OlegHcpEditor.CodeGenerating
                            .Append("public ")
                            .Append("const ")
                            .Append("int ")
-                           .Append(item.stringValue.RemoveWhiteSpaces())
+                           .Append(layerName.Nicify())
                            .Append("Layer")
                            .Append(" = ")
-                           .Append(LayerMask.NameToLayer(item.stringValue))
+                           .Append(i)
                            .Append(';')
                            .AppendLine();
                 }
@@ -181,6 +179,11 @@ namespace OlegHcpEditor.CodeGenerating
                    .AppendLine();
 
             return builder.ToString();
+        }
+
+        private static string Nicify(this string self)
+        {
+            return self.RemoveWhiteSpaces().Replace('/', '_');
         }
     }
 }
