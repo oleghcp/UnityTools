@@ -13,22 +13,26 @@ namespace OlegHcpEditor.Window
 {
     internal class CreateAssetWindow : EditorWindow
     {
+        private const string ANY = "Any";
+
         private UnityObject _targetRoot;
 
-        private string[] _assemblies;
-        private Dictionary<string, Type[]> _types;
-        private Dictionary<string, string[]> _typeNames;
+        private string[] _assemblyNames;
+        private Dictionary<string, Type[]> _separatedTypes;
+        private Dictionary<string, string[]> _separatedNames;
+        private Type[] _types;
+        private string[] _names;
 
-        private static int _assemblyIndex;
+        private int _assemblyIndex;
         private int _typeIndex;
         private string _defaultFolder;
 
         private void OnEnable()
         {
-            maxSize = minSize = new Vector2(400f, 145f);
+            maxSize = minSize = new Vector2(400f, 130f);
 
-            _types = new Dictionary<string, Type[]>();
-            _typeNames = new Dictionary<string, string[]>();
+            _separatedTypes = new Dictionary<string, Type[]>();
+            _separatedNames = new Dictionary<string, string[]>();
 
             foreach (Assembly assembly in AssetDatabaseExt.LoadScriptAssemblies())
             {
@@ -40,12 +44,21 @@ namespace OlegHcpEditor.Window
 
                 string assemblyName = assembly.GetName().Name;
 
-                _types[assemblyName] = types;
-                _typeNames[assemblyName] = types.Select(EditorGuiUtility.GetTypeDisplayName)
-                                                .ToArray();
+                _separatedTypes[assemblyName] = types;
+                _separatedNames[assemblyName] = types.Select(EditorGuiUtility.GetTypeDisplayName)
+                                                     .ToArray();
             }
 
-            _assemblies = _types.Keys.ToArray();
+            _types = _separatedTypes.Values
+                                    .SelectMany(item => item)
+                                    .ToArray();
+            _names = _separatedNames.Values
+                                    .SelectMany(item => item)
+                                    .ToArray();
+
+            _assemblyNames = new string[_separatedTypes.Count + 1];
+            _assemblyNames[0] = ANY;
+            _separatedTypes.Keys.CopyTo(_assemblyNames, 1);
 
             bool select(Type type)
             {
@@ -59,7 +72,7 @@ namespace OlegHcpEditor.Window
 
         private void OnGUI()
         {
-            if (_assemblies.Length == 0)
+            if (_assemblyNames.Length == 0)
             {
                 EditorGUILayout.LabelField("There is no assemblies.");
                 return;
@@ -67,15 +80,25 @@ namespace OlegHcpEditor.Window
 
             GUILayout.Space(10f);
 
-            _assemblyIndex = EditorGuiLayout.DropDown("Assembly:", EditorPrefs.GetInt(PrefsKeys.ASSEMBLY_INDEX) % _assemblies.Length, _assemblies);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Assembly:", GUILayout.Width(position.width * 0.5f));
+            GUILayout.Label("ScriptableObject:");
+            EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal();
+            _assemblyIndex = EditorGuiLayout.DropDown(EditorPrefs.GetInt(PrefsKeys.ASSEMBLY_INDEX) % _assemblyNames.Length, _assemblyNames);
             EditorPrefs.SetInt(PrefsKeys.ASSEMBLY_INDEX, _assemblyIndex);
-            string assemblyName = _assemblies[_assemblyIndex];
-
-            GUILayout.Space(10f);
-
-            _typeIndex = Math.Min(_typeIndex, _types[assemblyName].Length - 1);
-            _typeIndex = EditorGuiLayout.DropDown("ScriptableObject:", _typeIndex, _typeNames[assemblyName]);
+            string assemblyName = _assemblyNames[_assemblyIndex];
+            if (_assemblyIndex == 0)
+            {
+                _typeIndex = EditorGuiLayout.DropDown(_typeIndex, _names);
+            }
+            else
+            {
+                _typeIndex = Math.Min(_typeIndex, _separatedTypes[assemblyName].Length - 1);
+                _typeIndex = EditorGuiLayout.DropDown(_typeIndex, _separatedNames[assemblyName]);
+            }
+            GUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
@@ -89,8 +112,8 @@ namespace OlegHcpEditor.Window
 
                 if (GUILayout.Button("Create", GUILayout.Width(100f), GUILayout.Height(30f)))
                 {
-                    Type type = _types[assemblyName][_typeIndex];
-
+                    Type type = _assemblyIndex > 0 ? _separatedTypes[assemblyName][_typeIndex]
+                                                   : _types[_typeIndex];
                     if (_targetRoot != null)
                     {
                         if (_defaultFolder.HasUsefulData())
