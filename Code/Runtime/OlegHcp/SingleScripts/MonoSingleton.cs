@@ -1,14 +1,13 @@
 ﻿using System;
 using OlegHcp.Engine;
 using OlegHcp.Tools;
-using UnityEngine;
 
 namespace OlegHcp.SingleScripts
 {
     /// <summary>
     /// Represents implementation of MonoBehaviour singleton with lazy initialization.
     /// </summary>
-    public abstract class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSingleton<T>
+    public abstract class MonoSingleton<T> : MonoBehaviourExtended, IDisposable where T : MonoSingleton<T>
     {
         private static T _instance;
 

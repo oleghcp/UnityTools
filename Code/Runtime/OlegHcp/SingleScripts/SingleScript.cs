@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OlegHcp.SingleScripts
 {
-    public abstract class SingleScript<T> : ScriptableObject where T : SingleScript<T>
+    public abstract class SingleScript<T> : ScriptableObjectExtended where T : SingleScript<T>
     {
         private static T _instance;
 
