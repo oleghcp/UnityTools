@@ -51,6 +51,15 @@ namespace OlegHcp.NumericEntities
             _filler = 0;
         }
 
+        public FilledInt(int threshold, int curValue)
+        {
+            if (threshold < 0)
+                throw ThrowErrors.NegativeParameter(nameof(threshold));
+
+            _threshold = threshold;
+            _filler = curValue.ClampMin(0);
+        }
+
         public void Fill(int delta)
         {
             if (delta < 0)

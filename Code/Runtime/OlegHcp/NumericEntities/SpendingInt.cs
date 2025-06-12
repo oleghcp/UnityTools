@@ -58,6 +58,15 @@ namespace OlegHcp.NumericEntities
             _curValue = _capacity = capacity;
         }
 
+        public SpendingInt(int capacity, int curValue)
+        {
+            if (capacity < 0)
+                throw ThrowErrors.NegativeParameter(nameof(capacity));
+
+            _capacity = capacity;
+            _curValue = curValue.ClampMax(capacity);
+        }
+
         public void Spend(int delta)
         {
             if (delta < 0)
