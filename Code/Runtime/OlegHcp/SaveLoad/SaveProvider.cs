@@ -11,6 +11,7 @@ using OlegHcp.CSharp.Collections;
 using OlegHcp.Mathematics;
 using OlegHcp.SaveLoad.SaveProviderStuff;
 using OlegHcp.Tools;
+using UnityEngine;
 
 namespace OlegHcp.SaveLoad
 {
@@ -26,6 +27,8 @@ namespace OlegHcp.SaveLoad
     /// </summary>
     public class SaveProvider
     {
+        private const BindingFlags _fieldMask = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+
         private readonly ISaver _saver;
         private readonly IKeyGenerator _keyGenerator;
         private readonly Dictionary<object, List<Container>> _storage = new Dictionary<object, List<Container>>();
@@ -93,24 +96,14 @@ namespace OlegHcp.SaveLoad
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
-            const BindingFlags fieldMask = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             List<Container> list = null;
             Type type = fieldsOwner.GetType();
-            IEnumerable<FieldInfo> fields = type.GetFields(fieldMask)
-                                                .Where(item => item.IsDefined(typeof(SaveLoadFieldAttribute)));
-            foreach (FieldInfo field in fields)
+
+            do
             {
-                var attribute = field.GetCustomAttribute<SaveLoadFieldAttribute>();
-                Container container = new Container(field, _keyGenerator.Generate(type, field, ownerId, attribute.Key));
-
-                if (list == null)
-                    list = new List<Container>();
-
-                list.Add(container);
-
-                if (initFields)
-                    container.InitField(fieldsOwner, _saver);
-            }
+                CollectFields(fieldsOwner, ownerId, type, initFields, ref list);
+                type = type.BaseType;
+            } while (type != typeof(MonoBehaviour) && type != typeof(object));
 
             if (list != null)
                 _storage.Add(fieldsOwner, list);
@@ -257,6 +250,25 @@ namespace OlegHcp.SaveLoad
         public void GetVersionList(List<string> versions)
         {
             _saver.GetVersionList(versions);
+        }
+
+        private void CollectFields(object fieldsOwner, string ownerId, Type type, bool initFields, ref List<Container> list)
+        {
+            IEnumerable<FieldInfo> fields = type.GetFields(_fieldMask)
+                                                .Where(item => item.IsDefined(typeof(SaveLoadFieldAttribute)));
+            foreach (FieldInfo field in fields)
+            {
+                var attribute = field.GetCustomAttribute<SaveLoadFieldAttribute>();
+                Container container = new Container(field, _keyGenerator.Generate(type, field, ownerId, attribute.Key));
+
+                if (list == null)
+                    list = new List<Container>();
+
+                list.Add(container);
+
+                if (initFields)
+                    container.InitField(fieldsOwner, _saver);
+            }
         }
 
         private struct Container
