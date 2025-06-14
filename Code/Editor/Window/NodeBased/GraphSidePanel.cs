@@ -63,7 +63,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
             float maxWidth = winWidth * 0.5f;
             _width = _width.ClampMax(maxWidth);
-            Rect position = new Rect(0f, 0f, _width, height);
+            Rect position = new Rect(winWidth - _width, 0f, _width, height);
 
             GUILayout.BeginArea(position, EditorStyles.helpBox);
             _selectedIndex = GUILayout.Toolbar(_selectedIndex, _toolbarLabels);
@@ -77,7 +77,7 @@ namespace OlegHcpEditor.Window.NodeBased
             EditorGUILayout.EndScrollView();
             GUILayout.EndArea();
 
-            HandleResize(height, maxWidth, e);
+            HandleResize(height, maxWidth, winWidth, e);
         }
 
         public void Save()
@@ -104,10 +104,10 @@ namespace OlegHcpEditor.Window.NodeBased
             }
         }
 
-        private void HandleResize(float height, float maxWidth, Event e)
+        private void HandleResize(float height, float maxWidth, float winWidth, Event e)
         {
-            const float resizeZoneWidth = 3f;
-            Rect resizeZone = new Rect(_width - resizeZoneWidth, 0f, resizeZoneWidth, height);
+            const float resizeZoneWidth = 6f;
+            Rect resizeZone = new Rect(winWidth - _width, 0f, resizeZoneWidth, height);
             EditorGUIUtility.AddCursorRect(resizeZone, MouseCursor.ResizeHorizontal);
 
             if (e.button == 0)
@@ -135,14 +135,14 @@ namespace OlegHcpEditor.Window.NodeBased
 
                         if (_dragging)
                         {
-                            _width = mousePosition.x;
+                            _width = winWidth - mousePosition.x;
+                            _width = _width.Clamp(MIN_WIDTH, maxWidth);
 
-                            if (!mousePosition.x.IsInBounds(MIN_WIDTH, maxWidth))
-                            {
-                                _width = _width.Clamp(MIN_WIDTH, maxWidth);
-                                _dragging = false;
-                                _outOfBounds = true;
-                            }
+                            //if (!mousePosition.x.IsInBounds(winWidth - maxWidth, winWidth - MIN_WIDTH))
+                            //{
+                            //    _dragging = false;
+                            //    _outOfBounds = true;
+                            //}
 
                             GUI.changed = true;
                         }

@@ -95,7 +95,7 @@ namespace OlegHcpEditor.Window
             _toolbar.Draw();
             _sidePanel.Draw(_toolbar.SidePanelToggle, MapSize.y, WinSize.x, Event.current);
 
-            Rect mapRect = new Rect(new Vector2(_sidePanel.Width, 0f), MapSize);
+            Rect mapRect = new Rect(new Vector2(0f, 0f), MapSize);
             GUI.BeginGroup(mapRect);
 
             _camera.ProcessEvents(Event.current);
