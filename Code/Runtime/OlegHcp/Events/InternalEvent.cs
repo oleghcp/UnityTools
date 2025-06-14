@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
@@ -9,38 +8,37 @@ namespace OlegHcp.Events
         private List<EventSubscription> _subscriptions = new List<EventSubscription>();
         private Stack<EventSubscription> _newItems;
         private Stack<int> _deadItems;
-        private object _owner;
         private bool _changed;
-        private bool _locked;
+        private bool _enumLocked;
+        private bool _ownerLocked;
 
         public override Type SignalType { get; }
-        public object Owner => _owner;
-        public override bool HasOwner => _owner != null;
+        public override bool Locked => _ownerLocked;
 
         public InternalEvent(Type signalType)
         {
             SignalType = signalType;
         }
 
-        public bool TrySetOwner(object owner)
+        public bool TryLockToOwner()
         {
-            if (_owner != null)
+            if (_ownerLocked)
                 return false;
 
-            _owner = owner;
+            _ownerLocked = true;
             return true;
         }
 
-        public override void UnregisterOwner()
+        public override void Unlock()
         {
-            _owner = null;
+            _ownerLocked = false;
         }
 
         public int Subscribe(object handler, int priority)
         {
             EventSubscription s = new EventSubscription(handler, priority);
 
-            if (_locked)
+            if (_enumLocked)
             {
                 if (_newItems == null)
                     _newItems = new Stack<EventSubscription>();
@@ -56,7 +54,7 @@ namespace OlegHcp.Events
 
         public void Unsubscribe(int hash)
         {
-            if (_locked)
+            if (_enumLocked)
             {
                 if (_deadItems == null)
                     _deadItems = new Stack<int>();
@@ -73,7 +71,7 @@ namespace OlegHcp.Events
             if (typeof(TSignal) != SignalType)
                 throw new ArgumentException("Wrong signal type.");
 
-            _locked = true;
+            _enumLocked = true;
 
             if (_changed)
             {
@@ -90,17 +88,17 @@ namespace OlegHcp.Events
             }
             finally
             {
-                _locked = false;
-
-                while (_deadItems.HasAnyData())
+                while (_deadItems.TryPop(out int item))
                 {
-                    RemoveItem(_deadItems.Pop());
+                    RemoveItem(item);
                 }
 
-                while (_newItems.HasAnyData())
+                while (_newItems.TryPop(out EventSubscription item))
                 {
-                    AddItem(_newItems.Pop());
+                    AddItem(item);
                 }
+
+                _enumLocked = false;
             }
         }
 

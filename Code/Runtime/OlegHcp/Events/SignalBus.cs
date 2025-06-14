@@ -16,17 +16,14 @@ namespace OlegHcp.Events
     {
         private Dictionary<Type, InternalEvent> _storage = new Dictionary<Type, InternalEvent>();
 
-        public BusEvent RegisterEventOwner<TSignal>(object owner) where TSignal : ISignal
+        public BusEvent LockEvent<TSignal>() where TSignal : ISignal
         {
-            if (owner == null)
-                throw ThrowErrors.NullParameter(nameof(owner));
-
             InternalEvent @event = GetOrCreateEvent(typeof(TSignal));
 
-            if (@event.TrySetOwner(owner))
+            if (@event.TryLockToOwner())
                 return @event;
 
-            throw new OwnerRegisteredException(@event);
+            throw new InvalidLockException(@event);
         }
 
         public SubscriptionToken Subscribe<TSignal>(Action<TSignal> callback, int priority = int.MaxValue) where TSignal : ISignal
@@ -76,17 +73,17 @@ namespace OlegHcp.Events
         {
             if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
             {
-                if (@event.HasOwner)
-                    throw new OwnerRegisteredException(@event);
+                if (@event.Locked)
+                    throw new EventLockedException(@event);
 
                 @event.Invoke(signal);
             }
         }
 
-        public bool HasOwner<TSignal>(TSignal signal)
+        public bool IsEventLocked<TSignal>(TSignal signal)
         {
             if (_storage.TryGetValue(typeof(TSignal), out InternalEvent @event))
-                return @event.HasOwner;
+                return @event.Locked;
 
             return false;
         }

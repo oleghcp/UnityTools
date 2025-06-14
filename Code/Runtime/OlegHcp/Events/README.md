@@ -3,7 +3,7 @@
 ```csharp
 using OlegHcp.Events;
 
-public static class Signals
+public static class Events
 {
     private static SignalBus _signalBus = new SignalBus();
     public static SignalBus Bus => _signalBus;
@@ -25,7 +25,7 @@ public class ExampleEventListener1 : IDisposable
     public ExampleEventListener1()
     {
         // Subscribe with priority 1
-        Signals.Bus.Subscribe<ExampleSignal>(OnGotEvent, 1);
+        Events.Bus.Subscribe<ExampleSignal>(OnGotEvent, 1);
     }
 
     private void OnGotEvent(ExampleSignal signal)
@@ -35,7 +35,7 @@ public class ExampleEventListener1 : IDisposable
 
     public void Dispose()
     {
-        Signals.Bus.Unsubscribe<ExampleSignal>(OnGotEvent);
+        Events.Bus.Unsubscribe<ExampleSignal>(OnGotEvent);
     }
 }
 
@@ -44,7 +44,7 @@ public class ExampleEventListener2 : IDisposable
     public ExampleEventListener2()
     {
         // Subscribe with priority 2 which is lower than 1 and will executed after
-        Signals.Bus.Subscribe<ExampleSignal>(OnGotEvent, 2);
+        Events.Bus.Subscribe<ExampleSignal>(OnGotEvent, 2);
     }
 
     private void OnGotEvent(ExampleSignal signal)
@@ -54,7 +54,7 @@ public class ExampleEventListener2 : IDisposable
 
     public void Dispose()
     {
-        Signals.Bus.Unsubscribe<ExampleSignal>(OnGotEvent);
+        Events.Bus.Unsubscribe<ExampleSignal>(OnGotEvent);
     }
 }
 ```
@@ -69,20 +69,24 @@ public class ExampleEventOwner : MonoBehaviour
 
     private void Awake()
     {
-        _event = Signals.Bus.RegisterEventOwner<ExampleSignal>(this);
+        _event = Events.Bus.LockEvent<ExampleSignal>();
     }
 
     private void Update()
     {
         if (/*some condition*/)
         {
+            //proper invocation
             _event.Invoke(new ExampleSignal { Value = /*some value*/ });
+            
+            //this invocation causes exception
+            Events.Bus.Invoke(new ExampleSignal { Value = /*some value*/ });
         }
     }
 
     private void OnDestroy()
     {
-        _event.UnregisterOwner();
+        _event.Unlock();
     }
 }
 ```
