@@ -13,21 +13,23 @@ namespace OlegHcpEditor.Window.NodeBased
     {
         public const float HEIGHT = 25f;
         private const float HINT_WIDTH = 200f;
-        private const float HINT_HEIGHT = 140f;
+        private const float HINT_HEIGHT = 135f;
         private const float HINT_OFFSET = 5f;
 
         private GraphEditorWindow _window;
 
         private string[] _transitionViewNames = Enum.GetNames(typeof(TransitionViewType));
-        private GUIContent _sidePanelButton = new GUIContent("Panel", "Side Panel");
+        private GUIContent _infoButton = new GUIContent("?", "Info");
+        private GUIContent _snapButton = new GUIContent("#", "Grid Snapping");
         private GUIContent _switchNodeDrawingButton = new GUIContent("Short View", "Hide Nodes Content");
-        private GUIContent _leftWidthButton = new GUIContent("<", "Node Width");
-        private GUIContent _rightWidthButton = new GUIContent(">", "Node Width");
+        private GUIContent _leftWidthButton = new GUIContent("-", "Node Width");
+        private GUIContent _rightWidthButton = new GUIContent("+", "Node Width");
+        private GUIContent _nodeWidthLabel = new GUIContent("Width");
         private GUIContent _selectButton = new GUIContent("[ . . . ]", "Select All");
         private GUIContent _alignButton = new GUIContent("■ □ ■", "Align Selected");
         private GUIContent _moveButton = new GUIContent("● ←", "Move to Root");
-        private GUIContent _snapButton = new GUIContent("#", "Grid Snapping");
-        private GUIContent _infoButton = new GUIContent("?", "Info");
+        private GUIContent _openSidePanelButton = new GUIContent("< Panel", "Side Panel");
+        private GUIContent _closeSidePanelButton = new GUIContent("Panel >", "Side Panel");
 
         private bool _hintToggle;
         private bool _sidePanelToggle;
@@ -58,13 +60,7 @@ namespace OlegHcpEditor.Window.NodeBased
             GUILayout.FlexibleSpace();
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.Space(5f);
-                DrawLeft();
-                GUILayout.FlexibleSpace();
-                DrawMiddle();
-                GUILayout.FlexibleSpace();
-                DrawRight();
-                GUILayout.Space(5f);
+                DrawContent();
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndArea();
@@ -81,16 +77,25 @@ namespace OlegHcpEditor.Window.NodeBased
             EditorPrefs.SetInt(PrefsKeys.TRANSITION_VIEW_TYPE, _transitionViewType);
         }
 
-        private void DrawLeft()
+        private void DrawContent()
         {
-            _sidePanelToggle = EditorGuiLayout.ToggleButton(_sidePanelButton, _sidePanelToggle, GUILayout.Width(100f));
-            _hideContentToggle = EditorGuiLayout.ToggleButton(_switchNodeDrawingButton, _hideContentToggle, GUILayout.Width(100f));
-        }
+            GUILayout.Space(5f);
 
-        private void DrawMiddle()
-        {
-            const float buttonWidth = 50f;
-            IReadOnlyList<NodeViewer> nodeViewers = _window.Map.NodeViewers;
+            _hintToggle = EditorGuiLayout.ToggleButton(_infoButton, _hintToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+
+            GUILayout.Space(10f);
+
+            _transitionViewType = EditorGUILayout.Popup(_transitionViewType, _transitionViewNames, GUILayout.Width(100f));
+
+            GUILayout.Space(10f);
+
+            _hideContentToggle = EditorGuiLayout.ToggleButton(_switchNodeDrawingButton, _hideContentToggle, GUILayout.Width(100f));
+
+            GUILayout.Space(10f);
+
+            _gridSnapToggle = EditorGuiLayout.ToggleButton(_snapButton, _gridSnapToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
+
+            GUILayout.FlexibleSpace();
 
             GUILayoutOption nodeWidthButtonSize = GUILayout.Width(30f);
 
@@ -100,7 +105,18 @@ namespace OlegHcpEditor.Window.NodeBased
                 GUI.changed = true;
             }
 
-            GUILayout.Space(5f);
+            GUILayout.Label(_nodeWidthLabel);
+
+            if (GUILayout.RepeatButton(_rightWidthButton, nodeWidthButtonSize))
+            {
+                _window.SerializedGraph.ChangeNodeWidth(1);
+                GUI.changed = true;
+            }
+
+            GUILayout.FlexibleSpace();
+
+            const float buttonWidth = 50f;
+            IReadOnlyList<NodeViewer> nodeViewers = _window.Map.NodeViewers;
 
             GUI.enabled = nodeViewers.Count > 0;
 
@@ -140,44 +156,30 @@ namespace OlegHcpEditor.Window.NodeBased
 
             GUI.enabled = true;
 
+            GUILayout.FlexibleSpace();
+
+            GUIContent panelButton = _sidePanelToggle ? _closeSidePanelButton : _openSidePanelButton;
+            _sidePanelToggle = EditorGuiLayout.ToggleButton(panelButton, _sidePanelToggle, GUILayout.Width(100f));
+
             GUILayout.Space(5f);
-
-            if (GUILayout.RepeatButton(_rightWidthButton, nodeWidthButtonSize))
-            {
-                _window.SerializedGraph.ChangeNodeWidth(1);
-                GUI.changed = true;
-            }
-        }
-
-        private void DrawRight()
-        {
-            _transitionViewType = EditorGUILayout.Popup(_transitionViewType, _transitionViewNames, GUILayout.Width(100f));
-
-            GUILayout.Space(10f);
-
-            _gridSnapToggle = EditorGuiLayout.ToggleButton(_snapButton, _gridSnapToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
-
-            GUILayout.Space(10f);
-
-            _hintToggle = EditorGuiLayout.ToggleButton(_infoButton, _hintToggle, GUILayout.Width(EditorGuiUtility.SmallButtonWidth));
         }
 
         private void DrawHint(Vector2 winSize)
         {
-            Rect rect = new Rect(winSize.x - HINT_WIDTH - HINT_OFFSET,
+            Rect rect = new Rect(HINT_OFFSET,
                                  winSize.y - HINT_HEIGHT - HINT_OFFSET - HEIGHT,
                                  HINT_WIDTH,
                                  HINT_HEIGHT);
 
             using (new GUILayout.AreaScope(rect, (string)null, EditorStyles.helpBox))
             {
-                EditorGUILayout.LabelField("Use Ctrl for:");
-                EditorGUILayout.LabelField(" - multiple nodes dragging");
-                EditorGUILayout.LabelField(" - transitions deleting");
-                EditorGUILayout.LabelField(" - transitions points dragging");
-                EditorGUILayout.Space(10f);
-                EditorGUILayout.LabelField("\"Ctrl + Z\" doesn't work");
-                EditorGUILayout.LabelField("Sorry for that =(");
+                GUILayout.Label("Use Ctrl for:");
+                GUILayout.Label(" - multiple nodes dragging");
+                GUILayout.Label(" - transitions deleting");
+                GUILayout.Label(" - transitions points dragging");
+                GUILayout.Space(10f);
+                GUILayout.Label("\"Ctrl + Z\" isn't supported");
+                GUILayout.Label("Sorry for that :(");
             }
         }
     }
