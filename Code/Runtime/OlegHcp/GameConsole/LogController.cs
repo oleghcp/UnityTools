@@ -8,7 +8,7 @@ using UnityEngine;
 namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
-    internal class LogController : UiMonoBehaviour, IObjectFactory<LogLine>
+    internal class LogController : MonoBehaviour, IObjectFactory<LogLine>
     {
         [SerializeField]
         private LogLine _prefab;

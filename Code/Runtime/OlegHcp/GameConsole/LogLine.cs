@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
-    internal class LogLine : UiMonoBehaviour, IPoolable, IPointerClickHandler
+    internal class LogLine : MonoBehaviour, IPoolable, IPointerClickHandler
     {
         [SerializeField]
         private Text _text;
@@ -19,6 +19,10 @@ namespace OlegHcp.GameConsole
         private int _initSizeCount = 3;
 
         private string _info;
+
+#pragma warning disable IDE1006
+        public RectTransform rectTransform => transform as RectTransform;
+#pragma warning restore IDE1006
 
         public void SetText(string text, string info, in Color color)
         {

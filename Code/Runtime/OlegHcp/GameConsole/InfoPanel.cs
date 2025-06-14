@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
-    public class InfoPanel : UiMonoBehaviour, IPointerClickHandler
+    internal class InfoPanel : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField]
         private Text _textComponent;

@@ -21,7 +21,7 @@ using static UnityEngine.RectTransform;
 namespace OlegHcp.GameConsole
 {
     [DisallowMultipleComponent]
-    public sealed class Terminal : SingleUiBehaviour<Terminal>
+    public sealed class Terminal : SingleBehaviour<Terminal>
     {
         private const float TARGET_CANVAS_SIDE = 720f;
 
@@ -50,6 +50,9 @@ namespace OlegHcp.GameConsole
         private bool _initialized;
         private bool _isOn;
 
+#pragma warning disable IDE1006
+        public RectTransform rectTransform => transform as RectTransform;
+#pragma warning restore IDE1006
         public bool IsOn => _isOn;
         public TerminalOptions Options => _options;
 
