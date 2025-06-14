@@ -131,6 +131,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
             serializedGraph.SerializedObject.Update();
 
+            _selectedNodes.Remove(node);
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
             serializedGraph.RemoveNode(node);
