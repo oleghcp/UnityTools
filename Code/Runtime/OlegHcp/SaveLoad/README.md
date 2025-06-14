@@ -41,7 +41,8 @@ public class Example : MonoBehaviour
     [SaveLoadField]
     private float _field2 = 3.14f;
 
-    [SaveLoadField]
+    // With custom key
+    [SaveLoadField("1efb1c1b6a15cd944bb23d80d6c9d2a1")]
     private string _field3 = "DefaultValue";
 
     private void Start()
