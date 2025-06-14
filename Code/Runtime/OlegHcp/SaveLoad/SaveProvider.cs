@@ -89,8 +89,7 @@ namespace OlegHcp.SaveLoad
         /// </summary>
         /// <param name="ownerId">Specific id for the fields owner if there are more than one instance of the owner class.</param>
         /// <param name="initFields">The fields of the registered object will be initialized from saved data if true.</param>
-        /// <param name="declaredFieldsOnly">Save provider will ignore inherited fields if true.</param>
-        public void RegMember(object fieldsOwner, string ownerId, bool initFields = true, bool declaredFieldsOnly = true)
+        public void RegMember(object fieldsOwner, string ownerId, bool initFields = true)
         {
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
@@ -98,18 +97,6 @@ namespace OlegHcp.SaveLoad
             List<Container> list = null;
             Type type = fieldsOwner.GetType();
 
-            do
-            {
-                AnalyzeAndCollectFields(fieldsOwner, ownerId, type, initFields, ref list);
-                type = type.BaseType;
-            } while (!declaredFieldsOnly && type != typeof(object));
-
-            if (list != null)
-                _storage.Add(fieldsOwner, list);
-        }
-
-        private void AnalyzeAndCollectFields(object fieldsOwner, string ownerId, Type type, bool initFields, ref List<Container> list)
-        {
             foreach (FieldInfo field in type.GetFields(FIELD_MASK))
             {
                 var attribute = field.GetCustomAttribute<SaveLoadFieldAttribute>();
@@ -126,6 +113,9 @@ namespace OlegHcp.SaveLoad
                 if (initFields)
                     container.InitField(fieldsOwner, _saver);
             }
+
+            if (list != null)
+                _storage.Add(fieldsOwner, list);
         }
 
         /// <summary>
