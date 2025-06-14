@@ -550,22 +550,6 @@ public class MyClass : MonoBehaviour
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AlignPositions.png)
 
-## UiMonoBehaviour
-
-```csharp
-using OlegHcp;
-using UnityEngine;
-
-public class MyClass : UiMonoBehaviour
-{
-    private void Start()
-    {
-        // Inherited property
-        rectTransform.anchoredPosition = Vector3.zero;
-    }
-}
-```
-
 ## UnityObjectUtility
 
 ```csharp
