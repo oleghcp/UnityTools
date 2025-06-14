@@ -1,13 +1,13 @@
-﻿using System;
+﻿#if !UNITY_2021_2_OR_NEWER
+using OlegHcp.CSharp.Collections;
+#endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using OlegHcp.Async;
-#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
 using OlegHcp.Mathematics;
 using OlegHcp.SaveLoad.SaveProviderStuff;
 using OlegHcp.Tools;

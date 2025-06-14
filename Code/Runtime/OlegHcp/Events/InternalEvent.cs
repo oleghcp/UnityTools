@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if !UNITY_2021_2_OR_NEWER
+using OlegHcp.CSharp.Collections;
+#endif
+using System;
 using System.Collections.Generic;
 
 namespace OlegHcp.Events
