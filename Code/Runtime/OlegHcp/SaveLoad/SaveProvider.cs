@@ -94,14 +94,13 @@ namespace OlegHcp.SaveLoad
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
-            Type type = fieldsOwner.GetType();
-            FieldInfo[] fields = type.GetFields(FIELD_MASK);
-
             List<SaveLoadFieldAttribute> list = null;
 
-            for (int i = 0; i < fields.Length; i++)
+            Type type = fieldsOwner.GetType();
+
+            foreach (FieldInfo field in type.GetFields(FIELD_MASK))
             {
-                SaveLoadFieldAttribute a = fields[i].GetCustomAttribute<SaveLoadFieldAttribute>();
+                SaveLoadFieldAttribute a = field.GetCustomAttribute<SaveLoadFieldAttribute>();
 
                 if (a == null)
                     continue;
@@ -109,8 +108,8 @@ namespace OlegHcp.SaveLoad
                 if (list == null)
                     list = new List<SaveLoadFieldAttribute>();
 
-                a.Field = fields[i];
-                a.Key = _keyGenerator.Generate(type, a.Key ?? a.Field.Name, ownerId);
+                a.Field = field;
+                a.Key = _keyGenerator.Generate(type, field, ownerId, a.Key);
 
                 list.Add(a);
 

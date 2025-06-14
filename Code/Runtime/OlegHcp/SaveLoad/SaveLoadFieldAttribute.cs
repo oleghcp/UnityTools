@@ -11,5 +11,15 @@ namespace OlegHcp.SaveLoad
     {
         internal FieldInfo Field { get; set; }
         internal string Key { get; set; }
+
+        public SaveLoadFieldAttribute()
+        {
+
+        }
+
+        public SaveLoadFieldAttribute(string key)
+        {
+            Key = key;
+        }
     }
 }

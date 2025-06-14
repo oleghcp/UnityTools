@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using OlegHcp.Async;
 
 namespace OlegHcp.SaveLoad
@@ -20,6 +21,6 @@ namespace OlegHcp.SaveLoad
 
     public interface IKeyGenerator
     {
-        string Generate(Type objectType, string fieldName, string objectID);
+        string Generate(Type objectType, FieldInfo field, string objectID, string keyDefinedByUser);
     }
 }
