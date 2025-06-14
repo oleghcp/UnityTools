@@ -59,8 +59,8 @@ namespace OlegHcpEditor.Inspectors
             for (int i = 0; i < _methods.Count; i++)
             {
                 var (method, attribute) = _methods[i];
-                string buttonName = attribute.ButtonName.IsNullOrEmpty() ? method.Name : attribute.ButtonName;
-
+                string buttonName = attribute.ButtonName.IsNullOrEmpty() ? method.Name
+                                                                         : attribute.ButtonName;
                 pressed[i] = GUILayout.Button(buttonName, GUILayout.Height(attribute.Size));
             }
 
@@ -87,13 +87,8 @@ namespace OlegHcpEditor.Inspectors
         private static IEnumerable<Data> GetMethods(Type targetType, BindingFlags mask)
         {
             return targetType.GetMethods(mask)
-                             .Select(methodToContainer)
-                             .Where(item => item.Attribute != null);
-
-            Data methodToContainer(MethodInfo method)
-            {
-                return new Data(method, method.GetCustomAttribute<InspectorButtonAttribute>(true));
-            }
+                             .Where(method => method.IsDefined(typeof(InspectorButtonAttribute)))
+                             .Select(method => new Data(method, method.GetCustomAttribute<InspectorButtonAttribute>()));
         }
 
         #region entities

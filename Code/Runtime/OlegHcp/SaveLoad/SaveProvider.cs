@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using OlegHcp.Async;
@@ -25,8 +26,6 @@ namespace OlegHcp.SaveLoad
     /// </summary>
     public class SaveProvider
     {
-        private const BindingFlags FIELD_MASK = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
         private readonly ISaver _saver;
         private readonly IKeyGenerator _keyGenerator;
         private readonly Dictionary<object, List<Container>> _storage = new Dictionary<object, List<Container>>();
@@ -94,20 +93,19 @@ namespace OlegHcp.SaveLoad
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
+            const BindingFlags fieldMask = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             List<Container> list = null;
             Type type = fieldsOwner.GetType();
-
-            foreach (FieldInfo field in type.GetFields(FIELD_MASK))
+            IEnumerable<FieldInfo> fields = type.GetFields(fieldMask)
+                                                .Where(item => item.IsDefined(typeof(SaveLoadFieldAttribute)));
+            foreach (FieldInfo field in fields)
             {
                 var attribute = field.GetCustomAttribute<SaveLoadFieldAttribute>();
-
-                if (attribute == null)
-                    continue;
+                Container container = new Container(field, _keyGenerator.Generate(type, field, ownerId, attribute.Key));
 
                 if (list == null)
                     list = new List<Container>();
 
-                Container container = new Container(field, _keyGenerator.Generate(type, field, ownerId, attribute.Key));
                 list.Add(container);
 
                 if (initFields)
