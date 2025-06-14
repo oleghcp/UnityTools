@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 namespace OlegHcp.SaveLoad
 {
@@ -9,7 +8,6 @@ namespace OlegHcp.SaveLoad
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class SaveLoadFieldAttribute : Attribute
     {
-        internal FieldInfo Field { get; set; }
         internal string Key { get; set; }
 
         public SaveLoadFieldAttribute()

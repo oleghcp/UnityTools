@@ -29,7 +29,7 @@ namespace OlegHcp.SaveLoad
 
         private readonly ISaver _saver;
         private readonly IKeyGenerator _keyGenerator;
-        private readonly Dictionary<object, List<SaveLoadFieldAttribute>> _storage = new Dictionary<object, List<SaveLoadFieldAttribute>>();
+        private readonly Dictionary<object, List<Container>> _storage = new Dictionary<object, List<Container>>();
         private int _asyncSaveFieldsPerFrame = 50;
 
         public int AsyncSaveFieldsPerFrame
@@ -88,37 +88,44 @@ namespace OlegHcp.SaveLoad
         /// Registers an object of which fields should be saved and loaded.
         /// </summary>
         /// <param name="ownerId">Specific id for the fields owner if there are more than one instance of the owner class.</param>
-        /// <param name="initFields">If true the registered object fields will be initialized from saved data.</param>
-        public void RegMember(object fieldsOwner, string ownerId, bool initFields = true)
+        /// <param name="initFields">The fields of the registered object will be initialized from saved data if true.</param>
+        /// <param name="declaredFieldsOnly">Save provider will ignore inherited fields if true.</param>
+        public void RegMember(object fieldsOwner, string ownerId, bool initFields = true, bool declaredFieldsOnly = true)
         {
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
-            List<SaveLoadFieldAttribute> list = null;
-
+            List<Container> list = null;
             Type type = fieldsOwner.GetType();
 
-            foreach (FieldInfo field in type.GetFields(FIELD_MASK))
+            do
             {
-                SaveLoadFieldAttribute a = field.GetCustomAttribute<SaveLoadFieldAttribute>();
-
-                if (a == null)
-                    continue;
-
-                if (list == null)
-                    list = new List<SaveLoadFieldAttribute>();
-
-                a.Field = field;
-                a.Key = _keyGenerator.Generate(type, field, ownerId, a.Key);
-
-                list.Add(a);
-
-                if (initFields)
-                    InitField(fieldsOwner, a);
-            }
+                AnalyzeAndCollectFields(fieldsOwner, ownerId, type, initFields, ref list);
+                type = type.BaseType;
+            } while (!declaredFieldsOnly && type != typeof(object));
 
             if (list != null)
                 _storage.Add(fieldsOwner, list);
+        }
+
+        private void AnalyzeAndCollectFields(object fieldsOwner, string ownerId, Type type, bool initFields, ref List<Container> list)
+        {
+            foreach (FieldInfo field in type.GetFields(FIELD_MASK))
+            {
+                var attribute = field.GetCustomAttribute<SaveLoadFieldAttribute>();
+
+                if (attribute == null)
+                    continue;
+
+                if (list == null)
+                    list = new List<Container>();
+
+                Container container = new Container(field, _keyGenerator.Generate(type, field, ownerId, attribute.Key));
+                list.Add(container);
+
+                if (initFields)
+                    container.InitField(fieldsOwner, _saver);
+            }
         }
 
         /// <summary>
@@ -130,19 +137,19 @@ namespace OlegHcp.SaveLoad
             if (fieldsOwner == null)
                 throw ThrowErrors.NullParameter(nameof(fieldsOwner));
 
-            if (!_storage.Remove(fieldsOwner, out var aList))
+            if (!_storage.Remove(fieldsOwner, out var list))
                 return;
 
             switch (option)
             {
                 case UnregOption.SaveObjectState:
-                    foreach (var attribute in aList)
-                        _saver.SaveValue(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                    foreach (var item in list)
+                        _saver.SaveValue(item.Key, item.GetValue(fieldsOwner));
                     break;
 
                 case UnregOption.DeleteObjectState:
-                    foreach (var attribute in aList)
-                        _saver.DeleteKey(attribute.Key);
+                    foreach (var item in list)
+                        _saver.DeleteKey(item.Key);
                     break;
             }
         }
@@ -156,18 +163,18 @@ namespace OlegHcp.SaveLoad
             switch (option)
             {
                 case UnregOption.SaveObjectState:
-                    foreach (var aList in _storage.Values)
+                    foreach (var list in _storage.Values)
                     {
-                        foreach (var attribute in aList)
-                            _saver.DeleteKey(attribute.Key);
+                        foreach (var item in list)
+                            _saver.DeleteKey(item.Key);
                     }
                     break;
 
                 case UnregOption.DeleteObjectState:
-                    foreach (var (fieldsOwner, aList) in _storage)
+                    foreach (var (fieldsOwner, list) in _storage)
                     {
-                        foreach (var attribute in aList)
-                            _saver.SaveValue(attribute.Key, attribute.Field.GetValue(fieldsOwner));
+                        foreach (var item in list)
+                            _saver.SaveValue(item.Key, item.GetValue(fieldsOwner));
                     }
                     break;
             }
@@ -185,7 +192,7 @@ namespace OlegHcp.SaveLoad
                 {
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        InitField(fieldsOwner, aList[i]);
+                        aList[i].InitField(fieldsOwner, _saver);
                     }
                 }
             }
@@ -212,7 +219,7 @@ namespace OlegHcp.SaveLoad
                 {
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        _saver.SaveValue(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+                        _saver.SaveValue(aList[i].Key, aList[i].GetValue(fieldsOwner));
                     }
                 }
             }
@@ -240,7 +247,7 @@ namespace OlegHcp.SaveLoad
                 {
                     for (int i = 0; i < aList.Count; i++)
                     {
-                        _saver.SaveValue(aList[i].Key, aList[i].Field.GetValue(fieldsOwner));
+                        _saver.SaveValue(aList[i].Key, aList[i].GetValue(fieldsOwner));
 
                         if (++counter >= spf)
                         {
@@ -264,10 +271,29 @@ namespace OlegHcp.SaveLoad
             _saver.GetVersionList(versions);
         }
 
-        private void InitField(object fieldsOwner, SaveLoadFieldAttribute a)
+        private struct Container
         {
-            if (_saver.TryLoadValue(a.Key, a.Field.FieldType, out var value))
-                a.Field.SetValue(fieldsOwner, value);
+            private FieldInfo _field;
+            private string _key;
+
+            public string Key => _key;
+
+            public Container(FieldInfo field, string key)
+            {
+                _field = field;
+                _key = key;
+            }
+
+            public object GetValue(object fieldsOwner)
+            {
+                return _field.GetValue(fieldsOwner);
+            }
+
+            public void InitField(object fieldsOwner, ISaver saver)
+            {
+                if (saver.TryLoadValue(_key, _field.FieldType, out var value))
+                    _field.SetValue(fieldsOwner, value);
+            }
         }
     }
 }
