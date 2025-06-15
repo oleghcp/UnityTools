@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
@@ -272,20 +271,15 @@ namespace OlegHcpEditor.Window.NodeBased
             if (_selectedPort == null)
                 return;
 
-            switch (_window.TransitionView)
+            if (_window.ShowPorts)
             {
-                case TransitionViewType.Splines:
-                    Vector2 startTangentDir = _selectedPort.Type == PortType.In ? Vector2.left : Vector2.right;
-                    Vector2 endTangentDir = _selectedPort.Type == PortType.In ? Vector2.right : Vector2.left;
-                    TransitionViewer.DrawSpline(_selectedPort.ScreenRect.center, e.mousePosition, startTangentDir, endTangentDir);
-                    break;
-
-                case TransitionViewType.Arrows:
-                    TransitionViewer.DrawDirection(_selectedPort.Node.ScreenRect.center, e.mousePosition);
-                    break;
-
-                default:
-                    throw new SwitchExpressionException(_window.TransitionView);
+                Vector2 startTangentDir = _selectedPort.Type == PortType.In ? Vector2.left : Vector2.right;
+                Vector2 endTangentDir = _selectedPort.Type == PortType.In ? Vector2.right : Vector2.left;
+                TransitionViewer.DrawSpline(_selectedPort.ScreenRect.center, e.mousePosition, startTangentDir, endTangentDir);
+            }
+            else
+            {
+                TransitionViewer.DrawDirection(_selectedPort.Node.ScreenRect.center, e.mousePosition);
             }
 
             GUI.changed = true;

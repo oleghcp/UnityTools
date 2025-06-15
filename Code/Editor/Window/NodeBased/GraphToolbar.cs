@@ -40,7 +40,7 @@ namespace OlegHcpEditor.Window.NodeBased
         public bool HideContentToggle => _hideContentToggle;
         public bool SidePanelToggle => _sidePanelToggle;
         public bool GridToggle => _gridSnapToggle;
-        public TransitionViewType TransitionView => (TransitionViewType)_transitionViewType;
+        public bool ShowPorts => _transitionViewType == (int)TransitionViewType.Splines;
 
         public GraphToolbar(GraphEditorWindow window)
         {

@@ -31,7 +31,7 @@ namespace OlegHcpEditor.Window
         public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
         public bool GridSnapping => _toolbar.GridToggle;
-        public TransitionViewType TransitionView => _toolbar.TransitionView;
+        public bool ShowPorts => _toolbar.ShowPorts;
         public GraphEditorSettings Settings => _settings;
         public GraphMap Map => _map;
         public bool FullDrawing => !_toolbar.HideContentToggle;

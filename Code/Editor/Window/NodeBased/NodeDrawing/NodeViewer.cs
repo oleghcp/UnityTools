@@ -216,7 +216,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
             void drawPorts()
             {
-                if (_window.TransitionView == TransitionViewType.Splines)
+                if (_window.ShowPorts)
                 {
                     if (_type != NodeType.Common) _in.Draw();
                     if (_type != NodeType.Exit) _out.Draw();
@@ -226,24 +226,19 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
         public void DrawTransitions()
         {
-            switch (_window.TransitionView)
+            if (_window.ShowPorts)
             {
-                case TransitionViewType.Splines:
-                    for (int i = 0; i < _transitionViewers.Count; i++)
-                    {
-                        _transitionViewers[i].DrawSpline();
-                    }
-                    break;
-
-                case TransitionViewType.Arrows:
-                    for (int i = 0; i < _transitionViewers.Count; i++)
-                    {
-                        _transitionViewers[i].DrawArrow();
-                    }
-                    break;
-
-                default:
-                    throw new SwitchExpressionException(_window.TransitionView);
+                for (int i = 0; i < _transitionViewers.Count; i++)
+                {
+                    _transitionViewers[i].DrawSpline();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _transitionViewers.Count; i++)
+                {
+                    _transitionViewers[i].DrawArrow();
+                }
             }
         }
 
@@ -360,7 +355,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             Vector2 clickPosition = Event.current.mousePosition;
             GenericMenu genericMenu = new GenericMenu();
 
-            bool arrows = _window.TransitionView == TransitionViewType.Arrows;
+            bool arrows = !_window.ShowPorts;
             string addTransition = "Add Transition";
             string delete = "Delete";
             string info = "Info";
