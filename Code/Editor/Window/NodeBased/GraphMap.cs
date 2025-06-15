@@ -30,6 +30,7 @@ namespace OlegHcpEditor.Window.NodeBased
         private HashSet<string> _nodeIgnoredFields;
 
         private bool _selectionRectOn;
+        private bool _mouseDown;
         private Vector2 _downPoint;
         private PortViewer _selectedPort;
         private Dictionary<Type, NodeDrawer> _nodeDrawers;
@@ -308,6 +309,7 @@ namespace OlegHcpEditor.Window.NodeBased
                         case 0:
                             if (!_selectionRectOn)
                             {
+                                _mouseDown = true;
                                 _downPoint = e.mousePosition;
                                 _selectedPort = null;
                             }
@@ -321,13 +323,16 @@ namespace OlegHcpEditor.Window.NodeBased
                     break;
 
                 case EventType.MouseDrag:
-                    if (e.button == 0)
+                    if (_mouseDown && e.button == 0)
                         _selectionRectOn = true;
                     break;
 
                 case EventType.MouseUp:
                     if (e.button == 0)
+                    {
+                        _mouseDown = false;
                         _selectionRectOn = false;
+                    }
                     break;
             }
         }
