@@ -14,7 +14,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Window
 {
-    internal class AddressablesAnalysisResultsWindow : EditorWindow
+    public class AddressablesAnalysisResultsWindow : EditorWindow
     {
         private readonly GUILayoutOption[] _buttonOptions = new[]
         {
@@ -121,6 +121,15 @@ namespace OlegHcpEditor.Window
                 }
             }
             EditorGUILayout.EndScrollView();
+        }
+
+        public static void Create()
+        {
+#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
+            GetWindow<AddressablesAnalysisResultsWindow>(false, "Analysis Results", true);
+#else
+            GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
+#endif
         }
 
         private void Deserialize(string json)

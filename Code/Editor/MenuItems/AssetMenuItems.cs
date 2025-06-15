@@ -32,8 +32,7 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(CREATE_ASSET_PATH)]
         private static void CreateAsset()
         {
-            CreateAssetWindow window = EditorWindow.GetWindow<CreateAssetWindow>(true, "Scriptable Objects");
-            window.SetParent(Selection.activeObject);
+            CreateAssetWindow.Create(true);
         }
 
         [MenuItem(CREATE_ASSET_PATH, true)]

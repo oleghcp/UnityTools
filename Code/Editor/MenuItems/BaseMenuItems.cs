@@ -49,7 +49,7 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(MAIN_MENU_NAME + "Assets/Create Scriptable Object Asset")]
         private static void GetScriptableObjectWindow()
         {
-            EditorWindow.GetWindow(typeof(CreateAssetWindow), true, "Create Asset");
+            CreateAssetWindow.Create(false);
         }
 
         [MenuItem(MAIN_MENU_NAME + "Terminal/Create Terminal Prefab")]
@@ -69,7 +69,7 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(MAIN_MENU_NAME + "Code/Generate Layer Set Class")]
         private static void GenerateLayerSetClass()
         {
-            LayerSetWindow.CreateWindow();
+            LayerSetWindow.Create();
         }
 
         [MenuItem(MAIN_MENU_NAME + "Folders/Open Project Folder")]
@@ -111,12 +111,9 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(MAIN_MENU_NAME + "Addressables/Analysis Results")]
         private static void OpenAddressablesAnalysisResultsWindow()
         {
-#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
-            EditorWindow.GetWindow<AddressablesAnalysisResultsWindow>(false, "Analysis Results", true);
-#else
-            EditorWindow.GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
-#endif
+            AddressablesAnalysisResultsWindow.Create();
         }
+
         [MenuItem(MAIN_MENU_NAME + "Capture Screen/Take Screenshot")]
         private static void Screenshot()
         {

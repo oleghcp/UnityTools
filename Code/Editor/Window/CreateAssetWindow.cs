@@ -11,7 +11,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Window
 {
-    internal class CreateAssetWindow : EditorWindow
+    public class CreateAssetWindow : EditorWindow
     {
         private const string ANY = "Any";
 
@@ -141,7 +141,15 @@ namespace OlegHcpEditor.Window
             }
         }
 
-        public void SetParent(UnityObject parent)
+        public static CreateAssetWindow Create(bool initializeParentAsset)
+        {
+            CreateAssetWindow window = GetWindow<CreateAssetWindow>(true, "Scriptable Objects");
+            if (initializeParentAsset)
+                window.SetParent(Selection.activeObject);
+            return window;
+        }
+
+        private void SetParent(UnityObject parent)
         {
             _targetRoot = parent;
 

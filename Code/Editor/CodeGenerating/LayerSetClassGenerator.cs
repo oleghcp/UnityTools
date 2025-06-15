@@ -1,18 +1,17 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.Strings;
 using OlegHcpEditor.Configs;
-using OlegHcpEditor.Engine;
-using UnityEditor;
 using UnityEngine;
 
 namespace OlegHcpEditor.CodeGenerating
 {
     internal static class LayerSetClassGenerator
     {
-        public static string Generate(LayerSetConfig config, SerializedObject tagManager)
+        public static string Generate(LayerSetConfig config, IEnumerable<string> tags)
         {
             bool needEmptyLine = false;
 
@@ -54,18 +53,18 @@ namespace OlegHcpEditor.CodeGenerating
 
             if (config.TagFields)
             {
-                foreach (SerializedProperty tagProperty in tagManager.FindProperty("tags").EnumerateArrayElements())
+                foreach (string tag in tags)
                 {
                     builder.Append(StringUtility.Tab)
                            .Append(StringUtility.Tab)
                            .Append("public ")
                            .Append("const ")
                            .Append("string ")
-                           .Append(tagProperty.stringValue.Nicify())
+                           .Append(tag.Nicify())
                            .Append("Tag")
                            .Append(" = ")
                            .Append('"')
-                           .Append(tagProperty.stringValue)
+                           .Append(tag)
                            .Append('"')
                            .Append(';')
                            .AppendLine();

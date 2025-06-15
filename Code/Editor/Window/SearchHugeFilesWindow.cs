@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using OlegHcp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.IO;
 using OlegHcp.Mathematics;
@@ -13,7 +12,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Window
 {
-    internal class SearchHugeFilesWindow : EditorWindow
+    public class SearchHugeFilesWindow : EditorWindow
     {
         private const float WIDTH = 100f;
 

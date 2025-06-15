@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.Tools;
 using OlegHcpEditor.CodeGenerating;
@@ -15,9 +16,10 @@ using static OlegHcpEditor.Configs.LayerSetConfig;
 
 namespace OlegHcpEditor.Window
 {
-    internal class LayerSetWindow : EditorWindow
+    public class LayerSetWindow : EditorWindow
     {
-        private string _settingsPath;
+        private const string _tagFieldName = "tags";
+        private static string _settingsPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}{nameof(LayerSetConfig)}.json";
 
         private LayerSetConfigWrapper _configWrapper;
         private LayerSetConfig _altConfigVersion = new LayerSetConfig();
@@ -25,35 +27,14 @@ namespace OlegHcpEditor.Window
         private ListDrawer<MaskField> _listDrawer;
         private SerializedObject _tagManager;
         private SerializedProperty _tags;
-        private SerializedProperty _layers;
 
         private Vector2 _scrollPos;
 
-        public static void CreateWindow()
-        {
-            LayerSetWindow window = GetWindow<LayerSetWindow>("Layer Set", true);
-            window.minSize = new Vector2(350f, 500f);
-        }
-
         private void OnEnable()
         {
-            _settingsPath = $"{AssetDatabaseExt.PROJECT_SETTINGS_FOLDER}{nameof(LayerSetConfig)}.json";
-
-            _configWrapper = CreateInstance<LayerSetConfigWrapper>();
-
-            if (File.Exists(_settingsPath))
-            {
-                string json = File.ReadAllText(_settingsPath);
-                _configWrapper.Config = JsonUtility.FromJson<LayerSetConfig>(json);
-            }
-            else
-            {
-                _configWrapper.Config = new LayerSetConfig();
-            }
-
+            _configWrapper = GetConfig();
             _tagManager = new SerializedObject(Managers.GetTagManager());
-            _tags = _tagManager.FindProperty("tags");
-            _layers = _tagManager.FindProperty("layers");
+            _tags = _tagManager.FindProperty(_tagFieldName);
 
             string labelName = ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerMasks));
             _listDrawer = new ListDrawer<MaskField>(labelName, new LayerMaskFieldDrawer());
@@ -81,27 +62,22 @@ namespace OlegHcpEditor.Window
             EditorGUILayout.Space();
 
             _altConfigVersion.TagFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.TagFields)), config.TagFields);
-            DrawCollection(_altConfigVersion.TagFields, _tags.EnumerateArrayElements(), item => EditorGUILayout.LabelField(CreateItemString(item.stringValue)));
+            if (_altConfigVersion.TagFields)
+                DrawCollection(_tags.EnumerateArrayElements(), item => GUILayout.Label(CreateItemString(item.stringValue)));
 
             _altConfigVersion.SortingLayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.SortingLayerFields)), config.SortingLayerFields);
-            DrawCollection(_altConfigVersion.SortingLayerFields, SortingLayer.layers, item => EditorGUILayout.LabelField(CreateItemString(item.name)));
+            if (_altConfigVersion.SortingLayerFields)
+                DrawCollection(SortingLayer.layers, item => GUILayout.Label(CreateItemString(item.name)));
 
             _altConfigVersion.LayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerFields)), config.LayerFields);
-            DrawCollection(_altConfigVersion.LayerFields, _layers.EnumerateArrayElements(), drawLayer);
-            void drawLayer(SerializedProperty item)
-            {
-                if (item.stringValue.HasUsefulData())
-                    EditorGUILayout.LabelField(CreateItemString(item.stringValue));
-            }
+            if (_altConfigVersion.LayerFields)
+                DrawCollection(EnumerateLayerNames(), item => GUILayout.Label(CreateItemString(item)));
 
             if (_altConfigVersion.LayerFields)
             {
                 _altConfigVersion.MaskFieldType = (LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.MaskFieldType)), config.MaskFieldType);
                 LayerMaskFieldDrawer drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
-                drawer.Names = _layers.EnumerateArrayElements()
-                                      .Select(item => item.stringValue)
-                                      .ToArray();
-
+                drawer.Names = EnumerateLayerNames().ToArray();
                 _altConfigVersion.LayerMasks = _listDrawer.Draw(config.LayerMasks);
             }
 
@@ -111,8 +87,7 @@ namespace OlegHcpEditor.Window
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Generate Class", GUILayout.Width(120f), GUILayout.Height(25f)))
-                GenerateClass();
+            bool generateClass = GUILayout.Button("Generate Class", GUILayout.Width(120f), GUILayout.Height(25f));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
@@ -123,12 +98,58 @@ namespace OlegHcpEditor.Window
                 Helper.Swap(ref _configWrapper.Config, ref _altConfigVersion);
                 SaveAsset();
             }
+
+            if (generateClass)
+                GenerateClass(_configWrapper, _tags);
         }
 
-        public void GenerateClass()
+        public static void Create()
         {
-            LayerSetConfig config = _configWrapper.Config;
-            string classText = LayerSetClassGenerator.Generate(config, _tagManager);
+            LayerSetWindow window = GetWindow<LayerSetWindow>("Layer Set", true);
+            window.minSize = new Vector2(350f, 500f);
+        }
+
+        public static void GenerateClass()
+        {
+            LayerSetConfigWrapper configWrapper = GetConfig();
+            SerializedObject tagManager = new SerializedObject(Managers.GetTagManager());
+            GenerateClass(configWrapper, tagManager.FindProperty(_tagFieldName));
+        }
+
+        private static IEnumerable<string> EnumerateLayerNames()
+        {
+            for (int i = 0; i < BitMask.SIZE; i++)
+            {
+                string name = LayerMask.LayerToName(i);
+
+                if (name.HasUsefulData())
+                    yield return name;
+            }
+        }
+
+        private static LayerSetConfigWrapper GetConfig()
+        {
+            LayerSetConfigWrapper wrapper = CreateInstance<LayerSetConfigWrapper>();
+
+            if (File.Exists(_settingsPath))
+            {
+                string json = File.ReadAllText(_settingsPath);
+                wrapper.Config = JsonUtility.FromJson<LayerSetConfig>(json);
+            }
+            else
+            {
+                wrapper.Config = new LayerSetConfig();
+            }
+
+            return wrapper;
+        }
+
+        private static void GenerateClass(LayerSetConfigWrapper configWrapper, SerializedProperty tagArrayProperty)
+        {
+            LayerSetConfig config = configWrapper.Config;
+            IEnumerable<string> tags = tagArrayProperty.EnumerateArrayElements()
+                                                       .Select(item => item.stringValue);
+            string classText = LayerSetClassGenerator.Generate(config, tags);
             GeneratingTools.CreateCsFile(classText, config.RootFolder, config.ClassName, config.Namespace);
         }
 
@@ -138,11 +159,8 @@ namespace OlegHcpEditor.Window
             File.WriteAllText(_settingsPath, json);
         }
 
-        private void DrawCollection<T>(bool draw, IEnumerable<T> collection, Action<T> drawer)
+        private void DrawCollection<T>(IEnumerable<T> collection, Action<T> drawer)
         {
-            if (!draw)
-                return;
-
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             foreach (T item in collection)
             {
@@ -152,7 +170,7 @@ namespace OlegHcpEditor.Window
             EditorGUILayout.Space();
         }
 
-        private string CreateItemString<T>(T item)
+        private string CreateItemString(string item)
         {
             return $"- {item}";
         }
