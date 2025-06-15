@@ -353,10 +353,16 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             Vector2 clickPosition = Event.current.mousePosition;
             GenericMenu genericMenu = new GenericMenu();
 
+            bool arrows = _window.TransitionView == TransitionViewType.Arrows;
+            string addTransition = "Add Transition";
+            string delete = "Delete";
+            string info = "Info";
+
             switch (_type)
             {
                 case NodeType.Regular:
-                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
+                    if (arrows)
+                        genericMenu.AddItem(new GUIContent(addTransition), false, () => ProcessDropdownList(clickPosition));
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
@@ -367,27 +373,29 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
                     //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _field.CopySelectedNode());
                     //genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
+                    genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoPopup.Open(this, _window));
+                    genericMenu.AddItem(new GUIContent(info), false, () => NodeInfoPopup.Open(this, _window));
                     break;
 
                 case NodeType.Hub:
-                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
+                    if (arrows)
+                        genericMenu.AddItem(new GUIContent(addTransition), false, () => ProcessDropdownList(clickPosition));
+                    genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoPopup.Open(this, _window));
+                    genericMenu.AddItem(new GUIContent(info), false, () => NodeInfoPopup.Open(this, _window));
                     break;
 
                 case NodeType.Common:
-                    genericMenu.AddItem(new GUIContent("Add Transition"), false, () => ProcessDropdownList(clickPosition));
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
+                    if (arrows)
+                        genericMenu.AddItem(new GUIContent(addTransition), false, () => ProcessDropdownList(clickPosition));
+                    genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
-                    genericMenu.AddItem(new GUIContent("Info"), false, () => NodeInfoPopup.Open(this, _window));
+                    genericMenu.AddItem(new GUIContent(info), false, () => NodeInfoPopup.Open(this, _window));
                     break;
 
                 case NodeType.Exit:
-                    genericMenu.AddItem(new GUIContent("Delete"), false, () => _map.DeleteNode(this));
+                    genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     break;
 
                 default:
