@@ -39,6 +39,7 @@ namespace OlegHcpEditor.Window.NodeBased
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int SelectionCount => _selectedNodes.Count;
+        public bool CreatingTransition => _selectedPort != null;
 
         public GraphMap(GraphEditorWindow window)
         {
@@ -100,7 +101,35 @@ namespace OlegHcpEditor.Window.NodeBased
             ProcessEvents(e);
         }
 
-        public void OnClickOnPort(PortViewer targetPort)
+        public void BeginTransitionFrom(NodeViewer source)
+        {
+            _selectedPort = source.Out;
+        }
+
+        public void FinishTransitionTo(NodeViewer destination)
+        {
+            if (_selectedPort.Node == destination)
+                return;
+
+            if (destination.Type == NodeType.Common)
+            {
+                Debug.LogWarning("Common node cannot have input.");
+                return;
+            }
+
+            if (_selectedPort.Node.Type == NodeType.Hub && destination.Type == NodeType.Hub)
+            {
+                _selectedPort = destination.Out;
+                Debug.LogWarning("Hub nodes cannot be connected to each other.");
+                return;
+            }
+
+            _selectedPort.Node.CreateTransition(destination.In);
+
+            _selectedPort = null;
+        }
+
+        public void OnPortSelected(PortViewer targetPort)
         {
             if (_selectedPort == targetPort)
                 return;
@@ -114,13 +143,14 @@ namespace OlegHcpEditor.Window.NodeBased
             if (_selectedPort.Node.Type == NodeType.Hub && targetPort.Node.Type == NodeType.Hub)
             {
                 _selectedPort = targetPort;
+                Debug.LogWarning("Hub nodes cannot be connected to each other.");
                 return;
             }
 
             PortViewer source = targetPort.Type == PortType.Out ? targetPort : _selectedPort;
-            PortViewer dest = targetPort.Type == PortType.In ? targetPort : _selectedPort;
+            PortViewer destination = targetPort.Type == PortType.In ? targetPort : _selectedPort;
 
-            source.Node.CreateTransition(dest);
+            source.Node.CreateTransition(destination);
 
             _selectedPort = null;
         }
@@ -290,13 +320,13 @@ namespace OlegHcpEditor.Window.NodeBased
                     }
                     break;
 
-                //case EventType.KeyDown:
-                //    if (e.keyCode == KeyCode.D)
-                //    {
-                //        CopySelectedNode();
-                //        GUI.changed = true;
-                //    }
-                //    break;
+                    //case EventType.KeyDown:
+                    //    if (e.keyCode == KeyCode.D)
+                    //    {
+                    //        CopySelectedNode();
+                    //        GUI.changed = true;
+                    //    }
+                    //    break;
             }
         }
 

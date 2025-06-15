@@ -256,21 +256,28 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                 case EventType.MouseDown:
                     if (ScreenRect.Contains(e.mousePosition))
                     {
-                        switch (e.button)
+                        if (_map.CreatingTransition)
                         {
-                            case 0:
-                                _draggedPosition = _position;
-                                SelectInternal(true);
-                                needLock = true;
-                                GUI.changed = true;
-                                break;
+                            _map.FinishTransitionTo(this);
+                        }
+                        else
+                        {
+                            switch (e.button)
+                            {
+                                case 0:
+                                    _draggedPosition = _position;
+                                    SelectInternal(true);
+                                    needLock = true;
+                                    GUI.changed = true;
+                                    break;
 
-                            case 1:
-                                SelectInternal(true);
-                                needLock = true;
-                                ProcessContextMenu();
-                                GUI.changed = true;
-                                break;
+                                case 1:
+                                    SelectInternal(true);
+                                    needLock = true;
+                                    ProcessContextMenu();
+                                    GUI.changed = true;
+                                    break;
+                            }
                         }
                     }
                     else
@@ -362,7 +369,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             {
                 case NodeType.Regular:
                     if (arrows)
-                        genericMenu.AddItem(new GUIContent(addTransition), false, () => ProcessDropdownList(clickPosition));
+                        genericMenu.AddItem(new GUIContent(addTransition), false, () => _map.BeginTransitionFrom(this));
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
@@ -380,7 +387,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
                 case NodeType.Hub:
                     if (arrows)
-                        genericMenu.AddItem(new GUIContent(addTransition), false, () => ProcessDropdownList(clickPosition));
+                        genericMenu.AddItem(new GUIContent(addTransition), false, () => _map.BeginTransitionFrom(this));
                     genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent(info), false, () => NodeInfoPopup.Open(this, _window));
@@ -388,7 +395,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
                 case NodeType.Common:
                     if (arrows)
-                        genericMenu.AddItem(new GUIContent(addTransition), false, () => ProcessDropdownList(clickPosition));
+                        genericMenu.AddItem(new GUIContent(addTransition), false, () => _map.BeginTransitionFrom(this));
                     genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
                     genericMenu.AddItem(new GUIContent(info), false, () => NodeInfoPopup.Open(this, _window));
@@ -409,28 +416,6 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                 string defaultName = SerializedGraph.GetDefaultNodeName(_systemType, _id);
                 _nodeProp.serializedObject.Update();
                 _nameProp.stringValue = defaultName;
-                _nodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
-        }
-
-        private void ProcessDropdownList(Vector2 clickPosition)
-        {
-            DropDownWindow list = ScriptableObject.CreateInstance<DropDownWindow>();
-
-            foreach (NodeViewer item in _map.NodeViewers)
-            {
-                if (item == this || item.Type == NodeType.Common)
-                    continue;
-
-                list.AddItem(item._nameProp.stringValue, false, () => createTransition(item.In));
-            }
-
-            list.ShowMenu(clickPosition);
-
-            void createTransition(PortViewer port)
-            {
-                _nodeProp.serializedObject.Update();
-                CreateTransition(port);
                 _nodeProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }

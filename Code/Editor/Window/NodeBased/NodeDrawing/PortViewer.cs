@@ -57,7 +57,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         public void Draw()
         {
             if (GUI.Button(ScreenRect, GraphEditorStyles.Styles.RightTriangle, _style))
-                _map.OnClickOnPort(this);
+                _map.OnPortSelected(this);
         }
 
         //public void DrawList(IReadOnlyList<TransitionViewer> transitions)
