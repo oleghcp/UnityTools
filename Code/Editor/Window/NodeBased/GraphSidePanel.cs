@@ -114,43 +114,26 @@ namespace OlegHcpEditor.Window.NodeBased
             {
                 switch (e.type)
                 {
-                    case EventType.MouseUp:
-                        _dragging = false;
-                        _outOfBounds = false;
-                        break;
-
                     case EventType.MouseDown:
                         if (resizeZone.Contains(e.mousePosition))
                             _dragging = true;
                         break;
 
                     case EventType.MouseDrag:
-                        Vector2 mousePosition = e.mousePosition;
-
-                        if (resizeZone.Contains(mousePosition) || (_outOfBounds && mousePosition.x.IsInBounds(MIN_WIDTH, maxWidth)))
-                        {
-                            _dragging = true;
-                            _outOfBounds = false;
-                        }
-
                         if (_dragging)
                         {
-                            _width = winWidth - mousePosition.x;
+                            _width = winWidth - e.mousePosition.x;
                             _width = _width.Clamp(MIN_WIDTH, maxWidth);
-
-                            //if (!mousePosition.x.IsInBounds(winWidth - maxWidth, winWidth - MIN_WIDTH))
-                            //{
-                            //    _dragging = false;
-                            //    _outOfBounds = true;
-                            //}
-
                             GUI.changed = true;
+                            e.Use();
                         }
+                        break;
+
+                    case EventType.MouseUp:
+                        _dragging = false;
                         break;
                 }
             }
         }
-
-        private bool _outOfBounds;
     }
 }

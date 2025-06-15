@@ -26,8 +26,7 @@ namespace OlegHcpEditor.Window.NodeBased
         private GUIContent _rightWidthButton = new GUIContent("+", "Node Width");
         private GUIContent _nodeWidthLabel = new GUIContent("Width");
         private GUIContent _selectButton = new GUIContent("[ . . . ]", "Select All");
-        private GUIContent _alignButton = new GUIContent("■ □ ■", "Align Selected");
-        private GUIContent _moveButton = new GUIContent("● ←", "Move to Root");
+        private GUIContent _moveButton = new GUIContent("→ ● ←", "Move to Root");
         private GUIContent _openSidePanelButton = new GUIContent("< Panel", "Side Panel");
         private GUIContent _closeSidePanelButton = new GUIContent("Panel >", "Side Panel");
 
@@ -51,7 +50,7 @@ namespace OlegHcpEditor.Window.NodeBased
             _transitionViewType = EditorPrefs.GetInt(PrefsKeys.TRANSITION_VIEW_TYPE);
         }
 
-        public void Draw()
+        public void Draw(Event e)
         {
             Vector2 winSize = _window.WinSize;
             Rect rect = new Rect(0f, winSize.y - HEIGHT, winSize.x, HEIGHT);
@@ -67,6 +66,10 @@ namespace OlegHcpEditor.Window.NodeBased
 
             if (_hintToggle)
                 DrawHint(winSize);
+
+            bool isKey = e.type == EventType.KeyDown || e.type == EventType.KeyUp || e.type == EventType.MouseDrag;
+            if (isKey && rect.Contains(e.mousePosition))
+                e.Use();
         }
 
         public void Save()
@@ -124,27 +127,6 @@ namespace OlegHcpEditor.Window.NodeBased
             {
                 nodeViewers.ForEach(item => item.Select(true));
                 GUI.changed = true;
-            }
-
-            if (GUILayout.Button(_alignButton, GUILayout.Width(buttonWidth)))
-            {
-                Vector2? pos = null;
-                foreach (NodeViewer item in nodeViewers)
-                {
-                    Rect nodeRect = item.WorldRect;
-
-                    if (item.IsSelected)
-                    {
-                        if (pos.HasValue)
-                            item.Position = pos.Value;
-                        else
-                            pos = nodeRect.position;
-
-                        Vector2 newPos = pos.Value;
-                        newPos.x += nodeRect.width + 20f;
-                        pos = newPos;
-                    }
-                }
             }
 
             if (GUILayout.Button(_moveButton, GUILayout.Width(buttonWidth)))

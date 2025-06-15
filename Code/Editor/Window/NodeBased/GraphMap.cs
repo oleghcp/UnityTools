@@ -34,11 +34,13 @@ namespace OlegHcpEditor.Window.NodeBased
         private PortViewer _selectedPort;
         private Dictionary<Type, NodeDrawer> _nodeDrawers;
         private NodeDrawer _regularNodeDrawer;
+        private NodeViewer _lastSelected;
 
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int SelectionCount => _selectedNodes.Count;
         public bool CreatingTransition => _selectedPort != null;
+        public NodeViewer LastSelected => _lastSelected;
 
         public GraphMap(GraphEditorWindow window)
         {
@@ -160,7 +162,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
             serializedGraph.SerializedObject.Update();
 
-            _selectedNodes.Remove(node);
+            OnNodeSelectionChanged(node, false);
             _nodeViewers.Remove(node);
             _nodeViewers.ForEach(item => item.RemoveTransition(node));
             serializedGraph.RemoveNode(node);
@@ -231,13 +233,24 @@ namespace OlegHcpEditor.Window.NodeBased
         public void OnNodeSelectionChanged(NodeViewer node, bool on)
         {
             if (on)
-                _selectedNodes.Add(node);
-            else
-                _selectedNodes.Remove(node);
+            {
+                _lastSelected = _selectedNodes.Place(node);
+                return;
+            }
+
+            bool wasSelected = _selectedNodes.Remove(node);
+            if (wasSelected && _lastSelected == node)
+                _lastSelected = null;
         }
 
         private void DrawNodes()
         {
+            if (_lastSelected != null && _lastSelected != _nodeViewers.FromEnd(0))
+            {
+                if (_nodeViewers.Remove(_lastSelected))
+                    _nodeViewers.Add(_lastSelected);
+            }
+
             for (int i = 0; i < _nodeViewers.Count; i++)
             {
                 _nodeViewers[i].DrawTransitions();
@@ -295,32 +308,27 @@ namespace OlegHcpEditor.Window.NodeBased
                         case 0:
                             if (!_selectionRectOn)
                             {
-                                _selectionRectOn = true;
                                 _downPoint = e.mousePosition;
                                 _selectedPort = null;
                             }
                             break;
 
                         case 1:
+                            _selectionRectOn = false;
                             ProcessContextMenu(e.mousePosition);
                             break;
                     }
                     break;
 
-                case EventType.MouseUp:
+                case EventType.MouseDrag:
                     if (e.button == 0)
-                    {
-                        _selectionRectOn = false;
-                    }
+                        _selectionRectOn = true;
                     break;
 
-                    //case EventType.KeyDown:
-                    //    if (e.keyCode == KeyCode.D)
-                    //    {
-                    //        CopySelectedNode();
-                    //        GUI.changed = true;
-                    //    }
-                    //    break;
+                case EventType.MouseUp:
+                    if (e.button == 0)
+                        _selectionRectOn = false;
+                    break;
             }
         }
 
@@ -333,12 +341,21 @@ namespace OlegHcpEditor.Window.NodeBased
 
             for (int i = _nodeViewers.Count - 1; i >= 0; i--)
             {
-                if (_nodeViewers[i].ProcessEvents(e))
+                if (_nodeViewers[i].ProcessBaseEvents(e))
                     needLockEvent = true;
             }
 
             if (needLockEvent)
                 e.Use();
+
+            for (int i = 0; i < _nodeViewers.Count; i++)
+            {
+                if (_nodeViewers[i].ProcessLineEvents(e))
+                {
+                    e.Use();
+                    return;
+                }
+            }
         }
 
         private void ProcessContextMenu(Vector2 mousePosition)

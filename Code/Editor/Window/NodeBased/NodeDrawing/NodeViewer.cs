@@ -29,6 +29,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private SerializedProperty _nameProp;
 
         private bool _isSelected;
+        private int _selectionVersion;
         private bool _renaming;
         private float _height;
 
@@ -57,6 +58,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         public SerializedProperty NodeProp => _nodeProp;
         public SerializedProperty NameProp => _nameProp;
         public NodeDrawer NodeDrawer => _nodeDrawer;
+        public int SelectionVersion => _selectionVersion;
 
         public Vector2 Position
         {
@@ -242,7 +244,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             }
         }
 
-        public bool ProcessEvents(Event e)
+        public bool ProcessBaseEvents(Event e)
         {
             bool needLock = false;
 
@@ -255,7 +257,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                         {
                             _map.FinishTransitionTo(this);
                         }
-                        else
+                        else if (_map.LastSelected == null || _map.LastSelected.SelectionVersion != _window.OnGuiCounter)
                         {
                             switch (e.button)
                             {
@@ -330,6 +332,22 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     }
                     break;
             }
+
+            //if (IsInCamera)
+            //{
+            //    for (int i = 0; i < _transitionViewers.Count; i++)
+            //    {
+            //        if (_transitionViewers[i].ProcessEvents(e))
+            //            needLock = true;
+            //    }
+            //}
+
+            return needLock;
+        }
+
+        public bool ProcessLineEvents(Event e)
+        {
+            bool needLock = false;
 
             if (IsInCamera)
             {
@@ -444,6 +462,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             if (_isSelected == on)
                 return;
 
+            _selectionVersion = on ? _window.OnGuiCounter : _selectionVersion;
             _isSelected = on;
             _map.OnNodeSelectionChanged(this, on);
         }

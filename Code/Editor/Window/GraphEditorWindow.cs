@@ -89,10 +89,10 @@ namespace OlegHcpEditor.Window
             }
 
             _onGuiCounter++;
-
+            
             _serializedGraph.SerializedObject.Update();
 
-            _toolbar.Draw();
+            _toolbar.Draw(Event.current);
             _sidePanel.Draw(_toolbar.SidePanelToggle, MapSize.y, WinSize.x, Event.current);
 
             Rect mapRect = new Rect(new Vector2(0f, 0f), MapSize);
