@@ -355,7 +355,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             Vector2 clickPosition = Event.current.mousePosition;
             GenericMenu genericMenu = new GenericMenu();
 
-            bool arrows = !_window.ShowPorts;
+            string setAsRoot = "Set as root";
             string addTransition = "Add Transition";
             string delete = "Delete";
             string info = "Info";
@@ -363,15 +363,15 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             switch (_type)
             {
                 case NodeType.Regular:
-                    if (arrows)
+                    if (!_window.ShowPorts)
                         genericMenu.AddItem(new GUIContent(addTransition), false, () => _map.BeginTransitionFrom(this));
                     genericMenu.AddItem(new GUIContent("Rename"), false, () => _renaming = true);
                     genericMenu.AddItem(new GUIContent("Set default name"), false, () => renameAsset());
 
                     if (_window.RootNodeId != _id)
-                        genericMenu.AddItem(new GUIContent("Set as root"), false, () => _window.SetAsRoot(this));
+                        genericMenu.AddItem(new GUIContent(setAsRoot), false, () => _window.SetAsRoot(this));
                     else
-                        genericMenu.AddDisabledItem(new GUIContent("Set as root"));
+                        genericMenu.AddDisabledItem(new GUIContent(setAsRoot));
 
                     //genericMenu.AddItem(new GUIContent("Duplicate"), false, () => _field.CopySelectedNode());
                     //genericMenu.AddSeparator(null);
@@ -381,7 +381,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     break;
 
                 case NodeType.Hub:
-                    if (arrows)
+                    if (!_window.ShowPorts)
                         genericMenu.AddItem(new GUIContent(addTransition), false, () => _map.BeginTransitionFrom(this));
                     genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
@@ -389,7 +389,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                     break;
 
                 case NodeType.Common:
-                    if (arrows)
+                    if (!_window.ShowPorts)
                         genericMenu.AddItem(new GUIContent(addTransition), false, () => _map.BeginTransitionFrom(this));
                     genericMenu.AddItem(new GUIContent(delete), false, () => _map.DeleteNode(this));
                     genericMenu.AddSeparator(null);
