@@ -111,7 +111,11 @@ namespace OlegHcpEditor.MenuItems
         [MenuItem(MAIN_MENU_NAME + "Addressables/Analysis Results")]
         private static void OpenAddressablesAnalysisResultsWindow()
         {
+#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
             AddressablesAnalysisResultsWindow.Create();
+#else
+            GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
+#endif
         }
 
         [MenuItem(MAIN_MENU_NAME + "Capture Screen/Take Screenshot")]

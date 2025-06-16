@@ -125,11 +125,7 @@ namespace OlegHcpEditor.Window
 
         public static void Create()
         {
-#if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
             GetWindow<AddressablesAnalysisResultsWindow>(false, "Analysis Results", true);
-#else
-            GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
-#endif
         }
 
         private void Deserialize(string json)
