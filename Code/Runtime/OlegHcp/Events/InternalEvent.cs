@@ -1,16 +1,14 @@
-﻿#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
-using System;
+﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
 {
     internal class InternalEvent : BusEvent
     {
         private List<EventSubscription> _subscriptions = new List<EventSubscription>();
-        private Stack<EventSubscription> _newItems;
-        private Stack<int> _deadItems;
+        private List<EventSubscription> _newItems;
+        private List<int> _deadItems;
         private bool _changed;
         private bool _enumLocked;
         private bool _ownerLocked;
@@ -44,8 +42,8 @@ namespace OlegHcp.Events
             if (_enumLocked)
             {
                 if (_newItems == null)
-                    _newItems = new Stack<EventSubscription>();
-                _newItems.Push(s);
+                    _newItems = new List<EventSubscription>();
+                _newItems.Add(s);
             }
             else
             {
@@ -60,8 +58,8 @@ namespace OlegHcp.Events
             if (_enumLocked)
             {
                 if (_deadItems == null)
-                    _deadItems = new Stack<int>();
-                _deadItems.Push(hash);
+                    _deadItems = new List<int>();
+                _deadItems.Add(hash);
             }
             else
             {
@@ -91,17 +89,17 @@ namespace OlegHcp.Events
             }
             finally
             {
-                while (_deadItems.TryPop(out int item))
-                {
-                    RemoveItem(item);
-                }
-
-                while (_newItems.TryPop(out EventSubscription item))
-                {
-                    AddItem(item);
-                }
-
                 _enumLocked = false;
+
+                while (_deadItems.HasAnyData())
+                {
+                    RemoveItem(_deadItems.Pop());
+                }
+
+                while (_newItems.HasAnyData())
+                {
+                    AddItem(_newItems.Pop());
+                }
             }
         }
 
