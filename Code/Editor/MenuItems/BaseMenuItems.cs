@@ -114,7 +114,7 @@ namespace OlegHcpEditor.MenuItems
 #if INCLUDE_ADDRESSABLES && INCLUDE_NEWTONSOFT_JSON
             AddressablesAnalysisResultsWindow.Create();
 #else
-            GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
+            EditorWindow.GetWindow<AddressablesAnalysisInfo>(true, "Analysis Results", true);
 #endif
         }
 
