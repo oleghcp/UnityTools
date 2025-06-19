@@ -92,15 +92,16 @@ namespace OlegHcpEditor.Window
 
             _serializedGraph.SerializedObject.Update();
 
+            Event guiEvent = Event.current;
             Vector2 mapSize = MapSize;
 
-            _toolbar.Draw(Event.current);
-            _sidePanel.Draw(_toolbar.SidePanelToggle, mapSize.y, WinSize.x, Event.current);
+            _toolbar.Draw(guiEvent);
+            _sidePanel.Draw(_toolbar.SidePanelToggle, mapSize.y, WinSize.x, guiEvent);
 
             Rect mapRect = new Rect(0f, 0f, mapSize.x, mapSize.y);
             GUI.BeginGroup(mapRect);
-            _camera.ProcessEvents(Event.current, mapRect);
-            _map.Draw(Event.current);
+            _camera.ProcessEvents(guiEvent, mapRect);
+            _map.Draw(guiEvent);
             GUI.EndGroup();
 
             _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
