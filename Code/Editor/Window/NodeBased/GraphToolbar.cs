@@ -123,17 +123,17 @@ namespace OlegHcpEditor.Window.NodeBased
 
             GUI.enabled = nodeViewers.Count > 0;
 
-            if (GUILayout.Button(_selectButton, GUILayout.Width(buttonWidth)))
-            {
-                nodeViewers.ForEach(item => item.Select(true));
-                GUI.changed = true;
-            }
-
             if (GUILayout.Button(_moveButton, GUILayout.Width(buttonWidth)))
             {
                 NodeViewer viewer = _window.Map.NodeViewers.FirstOrDefault(item => item.Id == _window.RootNodeId);
                 if (viewer != null)
                     _window.Camera.Position = viewer.WorldRect.center;
+            }
+
+            if (GUILayout.Button(_selectButton, GUILayout.Width(buttonWidth)))
+            {
+                nodeViewers.ForEach(item => item.Select(true));
+                GUI.changed = true;
             }
 
             GUI.enabled = true;
