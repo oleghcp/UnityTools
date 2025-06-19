@@ -244,12 +244,6 @@ namespace OlegHcpEditor.Window.NodeBased
 
         private void DrawNodes()
         {
-            if (_lastSelected != null && _lastSelected != _nodeViewers.FromEnd(0))
-            {
-                if (_nodeViewers.Remove(_lastSelected))
-                    _nodeViewers.Add(_lastSelected);
-            }
-
             for (int i = 0; i < _nodeViewers.Count; i++)
             {
                 _nodeViewers[i].DrawTransitions();
@@ -356,8 +350,14 @@ namespace OlegHcpEditor.Window.NodeBased
                 if (_nodeViewers[i].ProcessLineEvents(e))
                 {
                     e.Use();
-                    return;
+                    break;
                 }
+            }
+
+            if (_lastSelected != null && _lastSelected != _nodeViewers.FromEnd(0))
+            {
+                if (_nodeViewers.Remove(_lastSelected))
+                    _nodeViewers.Add(_lastSelected);
             }
         }
 
