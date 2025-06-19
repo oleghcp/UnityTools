@@ -24,7 +24,6 @@ namespace OlegHcpEditor.Window.NodeBased
         public readonly float NodeHeaderHeight;
 
         private GraphEditorWindow _window;
-        private GraphGrid _grid;
         private List<NodeViewer> _nodeViewers;
         private HashSet<NodeViewer> _selectedNodes = new HashSet<NodeViewer>();
         private HashSet<string> _nodeIgnoredFields;
@@ -47,7 +46,6 @@ namespace OlegHcpEditor.Window.NodeBased
         {
             NodeHeaderHeight = EditorGUIUtility.singleLineHeight + UiShrink.y;
             _window = window;
-            _grid = new GraphGrid(window);
 
             _nodeIgnoredFields = new HashSet<string>
             {
@@ -93,7 +91,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public void Draw(Event e)
         {
-            _grid.Draw();
+            GraphGrid.Draw(_window);
 
             DrawConnectionLine(e);
             DrawNodes();
