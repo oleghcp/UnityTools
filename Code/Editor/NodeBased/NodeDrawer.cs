@@ -43,38 +43,38 @@ namespace OlegHcpEditor.NodeBased
             GUI.color = Colours.White;
         }
 
-        internal void Draw(SerializedProperty property, float width, bool fullDrawing)
+        internal void Draw(SerializedProperty node, float width, bool fullDrawing)
         {
             if (fullDrawing)
             {
                 EditorGUIUtility.labelWidth = width * 0.5f;
-                OnGui(property, width);
+                OnGui(node, width);
                 return;
             }
 
             GUILayout.Label(ShortDrawingView);
         }
 
-        internal float GetHeight(SerializedProperty property, bool fullDrawing)
+        internal float GetHeight(SerializedProperty node, bool fullDrawing)
         {
             if (fullDrawing)
-                return GetHeight(property);
+                return GetHeight(node);
 
             return EditorGUIUtility.singleLineHeight;
         }
 
-        protected virtual void OnGui(SerializedProperty property, float width)
+        protected virtual void OnGui(SerializedProperty node, float width)
         {
-            foreach (SerializedProperty item in property.EnumerateInnerProperties())
+            foreach (SerializedProperty item in node.EnumerateInnerProperties())
             {
                 if (!IsServiceField(item))
                     EditorGUILayout.PropertyField(item, true);
             }
         }
 
-        protected virtual float GetHeight(SerializedProperty property)
+        protected virtual float GetHeight(SerializedProperty node)
         {
-            return EditorGuiUtility.GetDrawHeight(property, _ignoreCondition);
+            return EditorGuiUtility.GetDrawHeight(node, _ignoreCondition);
         }
 
         protected virtual Color GetHeaderColor(bool rootNode)

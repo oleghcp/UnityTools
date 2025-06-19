@@ -25,7 +25,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
         private GraphEditorWindow _window;
         private List<NodeViewer> _nodeViewers;
-        private HashSet<NodeViewer> _selectedNodes = new HashSet<NodeViewer>();
+        private List<NodeViewer> _selectedNodes = new List<NodeViewer>();
         private HashSet<string> _nodeIgnoredFields;
 
         private bool _selectionRectOn;
@@ -34,7 +34,6 @@ namespace OlegHcpEditor.Window.NodeBased
         private PortViewer _selectedPort;
         private Dictionary<Type, NodeDrawer> _nodeDrawers;
         private NodeDrawer _regularNodeDrawer;
-        private NodeViewer _lastSelected;
 
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
@@ -230,15 +229,8 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public void OnNodeSelectionChanged(NodeViewer node, bool on)
         {
-            if (on)
-            {
-                _lastSelected = _selectedNodes.Place(node);
-                return;
-            }
-
-            bool wasSelected = _selectedNodes.Remove(node);
-            if (wasSelected && _lastSelected == node)
-                _lastSelected = null;
+            if (on) _selectedNodes.Add(node);
+            else _selectedNodes.Remove(node);
         }
 
         private void DrawNodes()
@@ -337,27 +329,20 @@ namespace OlegHcpEditor.Window.NodeBased
                 return;
 
             bool needLockEvent = false;
-
-            NodeViewer pointedNode = null;
+            bool pointed = false;
 
             for (int i = _nodeViewers.Count - 1; i >= 0; i--)
             {
-                if (_nodeViewers[i].ScreenRect.Contains(e.mousePosition))
+                if (!pointed && _nodeViewers[i].ScreenRect.Contains(e.mousePosition))
                 {
                     needLockEvent |= _nodeViewers[i].ProcessBaseEventsUnderPointer(e);
-                    pointedNode = _nodeViewers[i];
-                    break;
+                    pointed = true;
                 }
-            }
-
-            for (int i = 0; i < _nodeViewers.Count; i++)
-            {
-                if (_nodeViewers[i] != pointedNode)
+                else
+                {
                     needLockEvent |= _nodeViewers[i].ProcessBaseEventsOutOfPointer(e);
-            }
+                }
 
-            for (int i = 0; i < _nodeViewers.Count; i++)
-            {
                 _nodeViewers[i].ProcessBaseEventsAnyway(e);
             }
 
@@ -378,14 +363,16 @@ namespace OlegHcpEditor.Window.NodeBased
 
         private void ReorderNodes()
         {
-            if (_lastSelected == null)
+            if (_selectedNodes.Count == 0)
                 return;
 
-            if (_lastSelected == _nodeViewers.FromEnd(0))
+            NodeViewer lastSelected = _selectedNodes.FromEnd(0);
+
+            if (lastSelected == _nodeViewers.FromEnd(0))
                 return;
 
-            if (_nodeViewers.Remove(_lastSelected))
-                _nodeViewers.Add(_lastSelected);
+            if (_nodeViewers.Remove(lastSelected))
+                _nodeViewers.Add(lastSelected);
         }
 
         private void ProcessContextMenu(Vector2 mousePosition)

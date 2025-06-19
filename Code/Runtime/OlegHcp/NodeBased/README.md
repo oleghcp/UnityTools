@@ -67,9 +67,9 @@ using UnityEngine;
 [CustomNodeDrawer(typeof(ExampleNode))]
 public class ExampleNodeDrawer : NodeDrawer
 {
-    protected override float GetHeight(SerializedProperty property)
+    protected override float GetHeight(SerializedProperty node)
     {
-        return base.GetHeight(property) * 2f + EditorGUIUtility.standardVerticalSpacing;
+        return base.GetHeight(node) * 2f + EditorGUIUtility.standardVerticalSpacing;
     }
 
     protected override Color GetHeaderColor(bool rootNode)
@@ -77,7 +77,7 @@ public class ExampleNodeDrawer : NodeDrawer
         return rootNode ? Colours.Sky : Colours.Lime;
     }
 
-    protected override void OnGui(SerializedProperty property, float width)
+    protected override void OnGui(SerializedProperty node, float width)
     {
         EditorGUILayout.LabelField("Overridden", "Qwerty");
         GUILayout.Button("Button");

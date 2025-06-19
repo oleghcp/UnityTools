@@ -258,10 +258,19 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                         switch (e.button)
                         {
                             case 0:
-                                _draggedPosition = _position;
-                                SelectInternal(true);
-                                needLock = true;
-                                GUI.changed = true;
+                                if (e.control && _isSelected)
+                                {
+                                    SelectInternal(false);
+                                    needLock = true;
+                                    GUI.changed = true;
+                                }
+                                else
+                                {
+                                    _draggedPosition = _position;
+                                    SelectInternal(true);
+                                    needLock = true;
+                                    GUI.changed = true;
+                                }
                                 break;
 
                             case 1:
