@@ -89,21 +89,18 @@ namespace OlegHcpEditor.Window
             }
 
             _onGuiCounter++;
-            
+
             _serializedGraph.SerializedObject.Update();
 
+            Vector2 mapSize = MapSize;
+
             _toolbar.Draw(Event.current);
-            _sidePanel.Draw(_toolbar.SidePanelToggle, MapSize.y, WinSize.x, Event.current);
+            _sidePanel.Draw(_toolbar.SidePanelToggle, mapSize.y, WinSize.x, Event.current);
 
-            Rect mapRect = new Rect(new Vector2(0f, 0f), MapSize);
+            Rect mapRect = new Rect(0f, 0f, mapSize.x, mapSize.y);
             GUI.BeginGroup(mapRect);
-
-            _camera.ProcessEvents(Event.current);
-            if (_camera.IsDragging)
-                EditorGUIUtility.AddCursorRect(mapRect, MouseCursor.Pan);
-
+            _camera.ProcessEvents(Event.current, mapRect);
             _map.Draw(Event.current);
-
             GUI.EndGroup();
 
             _serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();

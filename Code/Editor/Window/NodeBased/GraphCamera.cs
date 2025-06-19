@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased
 {
@@ -12,7 +13,6 @@ namespace OlegHcpEditor.Window.NodeBased
         private int _worldRectVersion;
 
         public float Size => _sizeFactor;
-        public bool IsDragging => _isDragging;
 
         public Vector2 Position
         {
@@ -52,15 +52,20 @@ namespace OlegHcpEditor.Window.NodeBased
             return (worldPoint - _position) / _sizeFactor + GetWindowHalfSize();
         }
 
-        public void ProcessEvents(Event e)
+        public void ProcessEvents(Event e, in Rect mapRect)
         {
+            if (!mapRect.Contains(e.mousePosition))
+                return;
+
+            bool changed = false;
+
             switch (e.type)
             {
                 case EventType.MouseDown:
                     if (e.button == 2)
                     {
                         _isDragging = true;
-                        GUI.changed = true;
+                        changed = true;
                     }
                     break;
 
@@ -68,23 +73,33 @@ namespace OlegHcpEditor.Window.NodeBased
                     if (e.button == 2)
                     {
                         _isDragging = false;
-                        GUI.changed = true;
+                        changed = true;
                     }
                     break;
 
                 case EventType.MouseDrag:
                     if (e.button == 2)
                     {
+                        _isDragging = true;
                         _position -= e.delta * _sizeFactor;
-                        GUI.changed = true;
+                        changed = true;
                     }
                     break;
 
                 case EventType.ScrollWheel:
                     _sizeFactor = e.delta.y > 0f ? 2f : 1f;
-                    GUI.changed = true;
+                    changed = true;
                     break;
             }
+
+            if (changed)
+            {
+                e.Use();
+                GUI.changed = true;
+            }
+
+            if (_isDragging)
+                EditorGUIUtility.AddCursorRect(mapRect, MouseCursor.Pan);
         }
 
         private Vector2 GetWindowHalfSize()
