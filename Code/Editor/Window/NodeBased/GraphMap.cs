@@ -40,7 +40,6 @@ namespace OlegHcpEditor.Window.NodeBased
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int SelectionCount => _selectedNodes.Count;
         public bool CreatingTransition => _selectedPort != null;
-        public NodeViewer LastSelected => _lastSelected;
 
         public GraphMap(GraphEditorWindow window)
         {
@@ -265,8 +264,11 @@ namespace OlegHcpEditor.Window.NodeBased
 
                 for (int i = 0; i < _nodeViewers.Count; i++)
                 {
-                    _nodeViewers[i].Select(selectionRect.Overlaps(_nodeViewers[i].ScreenRect, true));
+                    bool overlaps = selectionRect.Overlaps(_nodeViewers[i].ScreenRect, true);
+                    _nodeViewers[i].Select(overlaps);
                 }
+
+                ReorderNodes();
 
                 GUI.changed = true;
             }
@@ -336,10 +338,27 @@ namespace OlegHcpEditor.Window.NodeBased
 
             bool needLockEvent = false;
 
+            NodeViewer pointedNode = null;
+
             for (int i = _nodeViewers.Count - 1; i >= 0; i--)
             {
-                if (_nodeViewers[i].ProcessBaseEvents(e))
-                    needLockEvent = true;
+                if (_nodeViewers[i].ScreenRect.Contains(e.mousePosition))
+                {
+                    needLockEvent |= _nodeViewers[i].ProcessBaseEventsUnderPointer(e);
+                    pointedNode = _nodeViewers[i];
+                    break;
+                }
+            }
+
+            for (int i = 0; i < _nodeViewers.Count; i++)
+            {
+                if (_nodeViewers[i] != pointedNode)
+                    needLockEvent |= _nodeViewers[i].ProcessBaseEventsOutOfPointer(e);
+            }
+
+            for (int i = 0; i < _nodeViewers.Count; i++)
+            {
+                _nodeViewers[i].ProcessBaseEventsAnyway(e);
             }
 
             if (needLockEvent)
@@ -354,11 +373,19 @@ namespace OlegHcpEditor.Window.NodeBased
                 }
             }
 
-            if (_lastSelected != null && _lastSelected != _nodeViewers.FromEnd(0))
-            {
-                if (_nodeViewers.Remove(_lastSelected))
-                    _nodeViewers.Add(_lastSelected);
-            }
+            ReorderNodes();
+        }
+
+        private void ReorderNodes()
+        {
+            if (_lastSelected == null)
+                return;
+
+            if (_lastSelected == _nodeViewers.FromEnd(0))
+                return;
+
+            if (_nodeViewers.Remove(_lastSelected))
+                _nodeViewers.Add(_lastSelected);
         }
 
         private void ProcessContextMenu(Vector2 mousePosition)

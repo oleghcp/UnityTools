@@ -29,7 +29,6 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private SerializedProperty _nameProp;
 
         private bool _isSelected;
-        private int _selectionVersion;
         private bool _renaming;
         private float _height;
 
@@ -58,7 +57,6 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         public SerializedProperty NodeProp => _nodeProp;
         public SerializedProperty NameProp => _nameProp;
         public NodeDrawer NodeDrawer => _nodeDrawer;
-        public int SelectionVersion => _selectionVersion;
 
         public Vector2 Position
         {
@@ -244,53 +242,34 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             }
         }
 
-        public bool ProcessBaseEvents(Event e)
+        public bool ProcessBaseEventsUnderPointer(Event e)
         {
             bool needLock = false;
 
             switch (e.type)
             {
                 case EventType.MouseDown:
-                    if (ScreenRect.Contains(e.mousePosition))
+                    if (_map.CreatingTransition)
                     {
-                        if (_map.CreatingTransition)
-                        {
-                            _map.FinishTransitionTo(this);
-                        }
-                        else if (_map.LastSelected == null || _map.LastSelected.SelectionVersion != _window.OnGuiCounter)
-                        {
-                            switch (e.button)
-                            {
-                                case 0:
-                                    _draggedPosition = _position;
-                                    SelectInternal(true);
-                                    needLock = true;
-                                    GUI.changed = true;
-                                    break;
-
-                                case 1:
-                                    SelectInternal(true);
-                                    needLock = true;
-                                    ProcessContextMenu();
-                                    GUI.changed = true;
-                                    break;
-                            }
-                        }
+                        _map.FinishTransitionTo(this);
                     }
                     else
                     {
-                        if (_renaming)
+                        switch (e.button)
                         {
-                            _renaming = false;
-                            GUI.FocusControl(null);
-                            GUI.changed = true;
-                        }
+                            case 0:
+                                _draggedPosition = _position;
+                                SelectInternal(true);
+                                needLock = true;
+                                GUI.changed = true;
+                                break;
 
-                        if (!(_isSelected && e.control))
-                        {
-                            SelectInternal(false);
-                            GUI.FocusControl(null);
-                            GUI.changed = true;
+                            case 1:
+                                SelectInternal(true);
+                                needLock = true;
+                                ProcessContextMenu();
+                                GUI.changed = true;
+                                break;
                         }
                     }
                     break;
@@ -303,46 +282,69 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                         needLock = true;
                     }
                     break;
+            }
 
-                case EventType.MouseUp:
-                    if (e.button == 0)
+            return needLock;
+        }
+
+        public bool ProcessBaseEventsOutOfPointer(Event e)
+        {
+            bool needLock = false;
+
+            switch (e.type)
+            {
+                case EventType.MouseDown:
+                    if (_renaming)
                     {
+                        _renaming = false;
+                        GUI.FocusControl(null);
+                        GUI.changed = true;
+                    }
 
+                    if (!(_isSelected && e.control))
+                    {
+                        SelectInternal(false);
+                        GUI.FocusControl(null);
+                        GUI.changed = true;
                     }
                     break;
 
-                case EventType.KeyDown:
-                    switch (e.keyCode)
+                case EventType.MouseDrag:
+                    if (e.button == 0 && _isSelected)
                     {
-                        case KeyCode.Delete:
-                            if (_isSelected)
-                            {
-                                _map.DeleteNode(this);
-                                GUI.changed = true;
-                            }
-                            break;
-
-                        case KeyCode.Return:
-                            if (_renaming)
-                            {
-                                _renaming = false;
-                                GUI.changed = true;
-                            }
-                            break;
+                        Drag(e.delta);
+                        GUI.changed = true;
+                        needLock = true;
                     }
                     break;
             }
 
-            //if (IsInCamera)
-            //{
-            //    for (int i = 0; i < _transitionViewers.Count; i++)
-            //    {
-            //        if (_transitionViewers[i].ProcessEvents(e))
-            //            needLock = true;
-            //    }
-            //}
-
             return needLock;
+        }
+
+        public void ProcessBaseEventsAnyway(Event e)
+        {
+            if (e.type == EventType.KeyDown)
+            {
+                switch (e.keyCode)
+                {
+                    case KeyCode.Delete:
+                        if (_isSelected)
+                        {
+                            _map.DeleteNode(this);
+                            GUI.changed = true;
+                        }
+                        break;
+
+                    case KeyCode.Return:
+                        if (_renaming)
+                        {
+                            _renaming = false;
+                            GUI.changed = true;
+                        }
+                        break;
+                }
+            }
         }
 
         public bool ProcessLineEvents(Event e)
@@ -462,7 +464,6 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             if (_isSelected == on)
                 return;
 
-            _selectionVersion = on ? _window.OnGuiCounter : _selectionVersion;
             _isSelected = on;
             _map.OnNodeSelectionChanged(this, on);
         }
