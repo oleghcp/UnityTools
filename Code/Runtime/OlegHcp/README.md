@@ -382,7 +382,7 @@ public class MyClass
 }
 ```
 
-Linear increasing: 
+Linear increasing (just for comparison): 
 
 ```csharp
 float[] floats = new float[1000];
