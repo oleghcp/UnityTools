@@ -15,11 +15,11 @@ namespace OlegHcpEditor.Window.NodeBased
         private GraphEditorWindow _window;
         private HashSet<string> _ignoredFields;
         private GraphPanelDrawer _panelDrawer;
-        private Vector2 _scrollPos;
+        private float _scrollPos;
         private float _width;
         private bool _opened;
         private bool _dragging;
-        private string[] _toolbarLabels = { "Properties", "Node" };
+        private string[] _toolbarLabels = { "Graph", "Node" };
         private int _selectedIndex;
 
         public float Width => _opened ? _width : 0f;
@@ -66,14 +66,24 @@ namespace OlegHcpEditor.Window.NodeBased
             Rect position = new Rect(winWidth - _width, 0f, _width, height);
 
             GUILayout.BeginArea(position, EditorStyles.helpBox);
-            _selectedIndex = GUILayout.Toolbar(_selectedIndex, _toolbarLabels);
-            GUILayout.Space(5f);
-            _scrollPos.y = EditorGUILayout.BeginScrollView(_scrollPos).y;
-            switch (_selectedIndex)
+
+            if (_window.FullDrawing)
             {
-                case 0: _panelDrawer.Draw(_width); break;
-                case 1: DrawNode(); break;
+                _scrollPos = EditorGuiLayout.BeginScrollViewVertical(_scrollPos);
+                _panelDrawer.Draw(_width);
             }
+            else
+            {
+                _selectedIndex = GUILayout.Toolbar(_selectedIndex, _toolbarLabels);
+                GUILayout.Space(5f);
+                _scrollPos = EditorGuiLayout.BeginScrollViewVertical(_scrollPos);
+                switch (_selectedIndex)
+                {
+                    case 0: _panelDrawer.Draw(_width); break;
+                    case 1: DrawNode(); break;
+                }
+            }
+
             EditorGUILayout.EndScrollView();
             GUILayout.EndArea();
 
