@@ -25,7 +25,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
         private GraphEditorWindow _window;
         private List<NodeViewer> _nodeViewers;
-        private List<NodeViewer> _selectedNodes = new List<NodeViewer>();
+        private HashSet<NodeViewer> _selectedNodes = new HashSet<NodeViewer>();
         private HashSet<string> _nodeIgnoredFields;
 
         private bool _selectionRectOn;
@@ -34,6 +34,7 @@ namespace OlegHcpEditor.Window.NodeBased
         private PortViewer _selectedPort;
         private Dictionary<Type, NodeDrawer> _nodeDrawers;
         private NodeDrawer _regularNodeDrawer;
+        private int _lastSelectionVersion;
 
         public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
@@ -217,9 +218,12 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public NodeViewer GetSelectedNode()
         {
-            var iterator = _selectedNodes.GetEnumerator();
-            iterator.MoveNext();
-            return iterator.Current;
+            foreach (NodeViewer node in _selectedNodes)
+            {
+                return node;
+            }
+
+            return null;
         }
 
         public void Save()
@@ -229,8 +233,15 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public void OnNodeSelectionChanged(NodeViewer node, bool on)
         {
-            if (on) _selectedNodes.Add(node);
-            else _selectedNodes.Remove(node);
+            if (on)
+            {
+                _lastSelectionVersion = _window.OnGuiCounter;
+                _selectedNodes.Add(node);
+            }
+            else
+            {
+                _selectedNodes.Remove(node);
+            }
         }
 
         private void DrawNodes()
@@ -363,16 +374,13 @@ namespace OlegHcpEditor.Window.NodeBased
 
         private void ReorderNodes()
         {
-            if (_selectedNodes.Count == 0)
+            if (_nodeViewers.Count == 0 || _selectedNodes.Count == 0)
                 return;
 
-            NodeViewer lastSelected = _selectedNodes.FromEnd(0);
-
-            if (lastSelected == _nodeViewers.FromEnd(0))
+            if (_nodeViewers.FromEnd(0).SelectionVersion == _lastSelectionVersion)
                 return;
 
-            if (_nodeViewers.Remove(lastSelected))
-                _nodeViewers.Add(lastSelected);
+            _nodeViewers.Sort(item => item.SelectionVersion);
         }
 
         private void ProcessContextMenu(Vector2 mousePosition)

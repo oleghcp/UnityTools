@@ -27,7 +27,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private NodeDrawer _nodeDrawer;
         private SerializedProperty _nodeProp;
         private SerializedProperty _nameProp;
-
+        private int _selectionVersion;
         private bool _isSelected;
         private bool _renaming;
         private float _height;
@@ -57,6 +57,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         public SerializedProperty NodeProp => _nodeProp;
         public SerializedProperty NameProp => _nameProp;
         public NodeDrawer NodeDrawer => _nodeDrawer;
+        public int SelectionVersion => _selectionVersion;
 
         public Vector2 Position
         {
@@ -162,19 +163,19 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             SelectInternal(on);
         }
 
-        public void CreateTransition(PortViewer dest)
+        public void CreateTransition(PortViewer destination)
         {
-            if (_transitionViewers.Any(item => item.Destination.Node.Id == dest.Node.Id))
+            if (_transitionViewers.Any(item => item.Destination.Node.Id == destination.Node.Id))
                 return;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.AddArrayElement();
 
-            newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = dest.Node.Id;
+            newItem.FindPropertyRelative(Transition.NodeIdFieldName).intValue = destination.Node.Id;
             newItem.FindPropertyRelative(Transition.ConditionFieldName).managedReferenceValue = null;
             newItem.FindPropertyRelative(Transition.PointsFieldName).ClearArray();
 
-            _transitionViewers.Add(new TransitionViewer(_out, dest, _window));
+            _transitionViewers.Add(new TransitionViewer(_out, destination, _window));
         }
 
         public void RemoveTransition(NodeViewer nextNodeViewer)
@@ -472,6 +473,9 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             if (_isSelected == on)
                 return;
+
+            if (on)
+                _selectionVersion = _window.OnGuiCounter;
 
             _isSelected = on;
             _map.OnNodeSelectionChanged(this, on);
