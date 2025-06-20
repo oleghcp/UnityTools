@@ -235,7 +235,7 @@ namespace OlegHcpEditor.Window.NodeBased
         {
             if (on)
             {
-                _lastSelectionVersion = _window.OnGuiCounter;
+                _lastSelectionVersion = node.SelectionVersion;
                 _selectedNodes.Add(node);
             }
             else
@@ -380,7 +380,7 @@ namespace OlegHcpEditor.Window.NodeBased
             if (_nodeViewers.FromEnd(0).SelectionVersion == _lastSelectionVersion)
                 return;
 
-            _nodeViewers.Sort(item => item.SelectionVersion);
+            _nodeViewers.Sort();
         }
 
         private void ProcessContextMenu(Vector2 mousePosition)

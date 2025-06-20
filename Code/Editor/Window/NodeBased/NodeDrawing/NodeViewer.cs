@@ -11,9 +11,11 @@ using UnityEngine;
 
 namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 {
-    internal class NodeViewer
+    internal class NodeViewer : IComparable<NodeViewer>
     {
         private const float SERV_NODE_WIDTH = 150f;
+
+        private static int _selectionCounter;
 
         private readonly int _id;
         private readonly Type _systemType;
@@ -380,6 +382,11 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             _transitionViewers.ForEach(item => item.Save());
         }
 
+        public int CompareTo(NodeViewer other)
+        {
+            return _selectionVersion.CompareTo(other._selectionVersion);
+        }
+
         private void ProcessContextMenu()
         {
             Vector2 clickPosition = Event.current.mousePosition;
@@ -475,7 +482,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                 return;
 
             if (on)
-                _selectionVersion = _window.OnGuiCounter;
+                _selectionVersion = ++_selectionCounter;
 
             _isSelected = on;
             _map.OnNodeSelectionChanged(this, on);
