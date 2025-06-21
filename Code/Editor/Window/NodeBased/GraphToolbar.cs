@@ -52,7 +52,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
         public void Draw(Event e)
         {
-            Vector2 winSize = _window.WinSize;
+            Vector2 winSize = _window.position.size;
             Rect rect = new Rect(0f, winSize.y - HEIGHT, winSize.x, HEIGHT);
 
             GUILayout.BeginArea(rect, (string)null, GraphEditorStyles.Styles.Toolbar);

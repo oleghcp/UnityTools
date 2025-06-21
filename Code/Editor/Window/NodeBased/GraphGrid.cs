@@ -24,7 +24,6 @@ namespace OlegHcpEditor.Window.NodeBased
             Handles.color = _largeColor;
             DrawInternal(camera, worldRect, winSize, LARGE_STEP);
             Handles.color = Colours.White;
-
         }
 
         private static void DrawInternal(GraphCamera camera, in Rect worldRect, Vector2 winSize, float spacing)

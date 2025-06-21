@@ -37,28 +37,13 @@ namespace OlegHcpEditor.Window
         public bool FullDrawing => !_toolbar.HideContentToggle;
         public GraphSidePanel SidePanel => _sidePanel;
 
-        public Vector2 WinSize
-        {
-            get
-            {
-                if (_winSizeVersion != _onGuiCounter)
-                {
-                    _winSize.x = position.width;
-                    _winSize.y = position.height;
-                    _winSizeVersion = _onGuiCounter;
-                }
-
-                return _winSize;
-            }
-        }
-
         public Vector2 MapSize
         {
             get
             {
                 if (_mapSizeVersion != _onGuiCounter)
                 {
-                    _mapSize = WinSize - new Vector2(_sidePanel.Width, GraphToolbar.HEIGHT);
+                    _mapSize = new Vector2(position.width - _sidePanel.Width, position.height - GraphToolbar.HEIGHT);
                     _mapSizeVersion = _onGuiCounter;
                 }
 
@@ -96,7 +81,7 @@ namespace OlegHcpEditor.Window
             Vector2 mapSize = MapSize;
 
             _toolbar.Draw(guiEvent);
-            _sidePanel.Draw(_toolbar.SidePanelToggle, mapSize.y, WinSize.x, guiEvent);
+            _sidePanel.Draw(_toolbar.SidePanelToggle, mapSize.y, position.width, guiEvent);
 
             Rect mapRect = new Rect(0f, 0f, mapSize.x, mapSize.y);
             GUI.BeginGroup(mapRect);
