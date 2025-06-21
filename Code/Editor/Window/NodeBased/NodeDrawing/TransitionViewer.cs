@@ -152,7 +152,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             DrawArrowButon(pos, rot, targetColor);
         }
 
-        public bool ProcessEvents(Event e)
+        public bool HandleEvents(Event e)
         {
             _controlPressed = e.control;
 
@@ -160,7 +160,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
             for (int i = 0; i < _points.Count; i++)
             {
-                if (_points[i].ProcessEvents(e))
+                if (_points[i].HandleEvents(e))
                     needLock = true;
             }
 

@@ -95,8 +95,8 @@ namespace OlegHcpEditor.Window.NodeBased
             DrawNodes();
             DrawSelectionRect(e);
 
-            ProcessNodeEvents(e);
-            ProcessEvents(e);
+            HandleNodeEvents(e);
+            HandleMapEvents(e);
         }
 
         public void BeginTransitionFrom(NodeViewer source)
@@ -175,29 +175,6 @@ namespace OlegHcpEditor.Window.NodeBased
 
             serializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
-
-        //public void CopySelectedNode()
-        //{
-        //    _graphAssetEditor.SerializedObject.Update();
-
-        //    List<NodeViewer> newNodes = new List<NodeViewer>();
-
-        //    foreach (NodeViewer item in _nodeViewers.Where(item => item.IsSelected))
-        //    {
-        //        if (item.Type.ServiceNode())
-        //            continue;
-
-        //        Rect rect = item.WorldRect;
-        //        SerializedProperty nodeProp = _graphAssetEditor.CloneNode(rect.position + Vector2.up * (rect.height + 30f), item.Id);
-        //        newNodes.Place(new NodeViewer(nodeProp, this))
-        //                .Select(true);
-        //        item.Select(false);
-        //    }
-
-        //    _nodeViewers.AddRange(newNodes);
-
-        //    _graphAssetEditor.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
-        //}
 
         public NodeDrawer GetNodeDrawer(Type nodeType)
         {
@@ -295,7 +272,7 @@ namespace OlegHcpEditor.Window.NodeBased
             GUI.changed = true;
         }
 
-        private void ProcessEvents(Event e)
+        private void HandleMapEvents(Event e)
         {
             switch (e.type)
             {
@@ -313,7 +290,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
                         case 1:
                             _selectionRectOn = false;
-                            ProcessContextMenu(e.mousePosition);
+                            OpenContextMenu(e.mousePosition);
                             break;
                     }
                     break;
@@ -333,7 +310,7 @@ namespace OlegHcpEditor.Window.NodeBased
             }
         }
 
-        private void ProcessNodeEvents(Event e)
+        private void HandleNodeEvents(Event e)
         {
             if (_selectionRectOn)
                 return;
@@ -345,15 +322,15 @@ namespace OlegHcpEditor.Window.NodeBased
             {
                 if (!pointed && _nodeViewers[i].ScreenRect.Contains(e.mousePosition))
                 {
-                    needLockEvent |= _nodeViewers[i].ProcessBaseEventsUnderPointer(e);
+                    needLockEvent |= _nodeViewers[i].HandleBaseEventsUnderPointer(e);
                     pointed = true;
                 }
                 else
                 {
-                    needLockEvent |= _nodeViewers[i].ProcessBaseEventsOutOfPointer(e);
+                    needLockEvent |= _nodeViewers[i].HandleBaseEventsOutOfPointer(e);
                 }
 
-                _nodeViewers[i].ProcessBaseEventsAnyway(e);
+                _nodeViewers[i].HandleBaseEventsAnyway(e);
             }
 
             if (needLockEvent)
@@ -361,7 +338,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
             for (int i = 0; i < _nodeViewers.Count; i++)
             {
-                if (_nodeViewers[i].ProcessLineEvents(e))
+                if (_nodeViewers[i].HandleLineEvents(e))
                 {
                     e.Use();
                     break;
@@ -382,7 +359,7 @@ namespace OlegHcpEditor.Window.NodeBased
             _nodeViewers.Sort();
         }
 
-        private void ProcessContextMenu(Vector2 mousePosition)
+        private void OpenContextMenu(Vector2 mousePosition)
         {
             SerializedGraph serializedGraph = _window.SerializedGraph;
 

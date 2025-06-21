@@ -245,7 +245,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             }
         }
 
-        public bool ProcessBaseEventsUnderPointer(Event e)
+        public bool HandleBaseEventsUnderPointer(Event e)
         {
             bool needLock = false;
 
@@ -279,7 +279,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                             case 1:
                                 SelectInternal(true);
                                 needLock = true;
-                                ProcessContextMenu();
+                                OpenContextMenu();
                                 GUI.changed = true;
                                 break;
                         }
@@ -299,7 +299,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             return needLock;
         }
 
-        public bool ProcessBaseEventsOutOfPointer(Event e)
+        public bool HandleBaseEventsOutOfPointer(Event e)
         {
             bool needLock = false;
 
@@ -334,7 +334,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             return needLock;
         }
 
-        public void ProcessBaseEventsAnyway(Event e)
+        public void HandleBaseEventsAnyway(Event e)
         {
             if (e.type == EventType.KeyDown)
             {
@@ -359,7 +359,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             }
         }
 
-        public bool ProcessLineEvents(Event e)
+        public bool HandleLineEvents(Event e)
         {
             bool needLock = false;
 
@@ -367,7 +367,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             {
                 for (int i = 0; i < _transitionViewers.Count; i++)
                 {
-                    if (_transitionViewers[i].ProcessEvents(e))
+                    if (_transitionViewers[i].HandleEvents(e))
                         needLock = true;
                 }
             }
@@ -387,7 +387,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             return _selectionVersion.CompareTo(other._selectionVersion);
         }
 
-        private void ProcessContextMenu()
+        private void OpenContextMenu()
         {
             Vector2 clickPosition = Event.current.mousePosition;
             GenericMenu genericMenu = new GenericMenu();

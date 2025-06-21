@@ -82,7 +82,7 @@ namespace OlegHcpEditor.Window
 
             Rect mapRect = new Rect(0f, 0f, MapSize.x, MapSize.y);
             GUI.BeginGroup(mapRect);
-            _camera.ProcessEvents(guiEvent, mapRect);
+            _camera.Update(guiEvent, mapRect);
             _map.Draw(guiEvent);
             GUI.EndGroup();
 

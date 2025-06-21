@@ -32,7 +32,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             Handles.color = Colours.White;
         }
 
-        public bool ProcessEvents(Event e)
+        public bool HandleEvents(Event e)
         {
             bool needLock = false;
 

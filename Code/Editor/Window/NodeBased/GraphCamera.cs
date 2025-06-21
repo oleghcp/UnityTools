@@ -51,7 +51,7 @@ namespace OlegHcpEditor.Window.NodeBased
             return (worldPoint - _position) / _sizeFactor + _mapSize * 0.5f;
         }
 
-        public void ProcessEvents(Event e, in Rect mapRect)
+        public void Update(Event e, in Rect mapRect)
         {
             _mapSize = mapRect.size;
 
