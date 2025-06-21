@@ -107,6 +107,7 @@ public class Example : MonoBehaviour
 
         _other.SetLocalPositionAndRotation(new Vector3(), Quaternion.identity);
         _other.SetParams(transform);
+        _other.ResetLocalParams(transform);
 
         _other.IncreaseSiblingIndex();
         _other.DecreaseSiblingIndex();

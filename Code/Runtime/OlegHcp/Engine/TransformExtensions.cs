@@ -60,6 +60,11 @@ namespace OlegHcp.Engine
             self.SetLocalPositionAndRotation(targetLocalPos, targetLocalRot);
         }
 
+        public static void SetParent(this Transform self, GameObject parent)
+        {
+            self.SetParent(parent.transform);
+        }
+
 #if !UNITY_2022_1_OR_NEWER
         public static void SetLocalPositionAndRotation(this Transform self, in Vector3 localPos, in Quaternion localRot)
         {
@@ -74,21 +79,39 @@ namespace OlegHcp.Engine
             self.localScale = localScl;
         }
 
-        public static void SetParams(this Transform self, Transform source)
+        /// <summary>
+        /// Copies local values from other transform.
+        /// Warning: it will not work properly if transforms have different parents.
+        /// </summary>
+        public static void SetLocalParams(this Transform self, Transform other, bool includeScale = false)
         {
-            self.SetPositionAndRotation(source.position, source.rotation);
-        }
-
-        public static void SetLocalParams(this Transform self, Transform source, bool includeScale = false)
-        {
-            self.SetLocalPositionAndRotation(source.localPosition, source.localRotation);
+            self.SetLocalPositionAndRotation(other.localPosition, other.localRotation);
             if (includeScale)
-                self.localScale = source.localScale;
+                self.localScale = other.localScale;
         }
 
-        public static void SetParent(this Transform self, GameObject parent)
+        public static void SetParams(this Transform self, Transform other)
         {
-            self.SetParent(parent.transform);
+            self.SetPositionAndRotation(other.position, other.rotation);
+        }
+
+        public static void FromLocalToWorldParams(this Transform self, Transform other)
+        {
+            self.SetPositionAndRotation(other.localPosition, other.localRotation);
+        }
+
+        public static void FromWorldToParamsLocal(this Transform self, Transform other, bool includeScale = false)
+        {
+            self.SetLocalPositionAndRotation(other.position, other.rotation);
+            if (includeScale)
+                self.localScale = other.lossyScale;
+        }
+
+        public static void ResetLocalParams(this Transform self, bool includeScale = true)
+        {
+            self.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            if (includeScale)
+                self.localScale = Vector3.one;
         }
 
         /// <summary>
