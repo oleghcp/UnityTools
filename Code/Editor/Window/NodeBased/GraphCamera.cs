@@ -5,12 +5,12 @@ namespace OlegHcpEditor.Window.NodeBased
 {
     internal class GraphCamera
     {
-        private GraphEditorWindow _window;
         private float _sizeFactor = 1f;
         private Rect _rect;
         private Vector2 _position;
         private bool _isDragging;
         private int _worldRectVersion;
+        private Vector2 _mapSize;
 
         public float Size => _sizeFactor;
 
@@ -24,36 +24,37 @@ namespace OlegHcpEditor.Window.NodeBased
         {
             get
             {
-                if (_worldRectVersion != _window.OnGuiCounter)
+                if (_worldRectVersion != GraphEditorWindow.OnGuiCounter)
                 {
-                    Vector2 size = _window.MapSize * _sizeFactor;
+                    Vector2 size = _mapSize * _sizeFactor;
                     _rect.size = size;
                     _rect.position = _position - size * 0.5f;
-                    _worldRectVersion = _window.OnGuiCounter;
+                    _worldRectVersion = GraphEditorWindow.OnGuiCounter;
                 }
 
                 return _rect;
             }
         }
 
-        public GraphCamera(GraphEditorWindow window)
+        public GraphCamera(Vector2 position)
         {
-            _window = window;
-            _position = _window.Settings.CameraPosition;
+            _position = position;
         }
 
         public Vector2 ScreenToWorld(Vector2 screenPoint)
         {
-            return (screenPoint - GetWindowHalfSize()) * _sizeFactor + _position;
+            return (screenPoint - _mapSize * 0.5f) * _sizeFactor + _position;
         }
 
         public Vector2 WorldToScreen(Vector2 worldPoint)
         {
-            return (worldPoint - _position) / _sizeFactor + GetWindowHalfSize();
+            return (worldPoint - _position) / _sizeFactor + _mapSize * 0.5f;
         }
 
         public void ProcessEvents(Event e, in Rect mapRect)
         {
+            _mapSize = mapRect.size;
+
             if (!mapRect.Contains(e.mousePosition))
                 return;
 
@@ -100,11 +101,6 @@ namespace OlegHcpEditor.Window.NodeBased
 
             if (_isDragging)
                 EditorGUIUtility.AddCursorRect(mapRect, MouseCursor.Pan);
-        }
-
-        private Vector2 GetWindowHalfSize()
-        {
-            return _window.MapSize * 0.5f;
         }
     }
 }

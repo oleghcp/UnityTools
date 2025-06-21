@@ -22,7 +22,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             get
             {
-                if (_screenRectVersion != _map.Window.OnGuiCounter)
+                if (_screenRectVersion != GraphEditorWindow.OnGuiCounter)
                 {
                     Rect nodeScreenRect = _node.ScreenRect;
                     _screenRect.y = nodeScreenRect.y + (nodeScreenRect.height * 0.5f) - _screenRect.height * 0.5f;
@@ -38,7 +38,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                             break;
                     }
 
-                    _screenRectVersion = _map.Window.OnGuiCounter;
+                    _screenRectVersion = GraphEditorWindow.OnGuiCounter;
                 }
 
                 return _screenRect;
@@ -59,25 +59,5 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             if (GUI.Button(ScreenRect, GraphEditorStyles.Styles.RightTriangle, _style))
                 _map.OnPortSelected(this);
         }
-
-        //public void DrawList(IReadOnlyList<TransitionViewer> transitions)
-        //{
-        //    if (_node.Type == NodeType.Exit)
-        //        return;
-
-        //    Rect position = ScreenRect;
-
-        //    position.x += 5f;
-        //    position.height = (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing) * transitions.Count + EditorGUIUtility.standardVerticalSpacing * 2f;
-        //    position.y = ScreenRect.center.y - position.height * 0.5f;
-        //    position.width = 120f;
-
-        //    GUILayout.BeginArea(position, (string)null, EditorStyles.helpBox);
-        //    for (int i = 0; i < transitions.Count; i++)
-        //    {
-        //        EditorGUILayout.LabelField(transitions[i].Destination.Node.Name);
-        //    }
-        //    GUILayout.EndArea();
-        //}
     }
 }

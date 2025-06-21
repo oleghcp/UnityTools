@@ -36,7 +36,6 @@ namespace OlegHcpEditor.Window.NodeBased
         private NodeDrawer _regularNodeDrawer;
         private int _lastSelectionVersion;
 
-        public GraphEditorWindow Window => _window;
         public IReadOnlyList<NodeViewer> NodeViewers => _nodeViewers;
         public int SelectionCount => _selectedNodes.Count;
         public bool CreatingTransition => _selectedPort != null;
@@ -77,12 +76,12 @@ namespace OlegHcpEditor.Window.NodeBased
         {
             foreach (SerializedProperty nodeProp in _window.SerializedGraph.NodesProperty.EnumerateArrayElements())
             {
-                _nodeViewers.Add(new NodeViewer(nodeProp, this));
+                _nodeViewers.Add(new NodeViewer(nodeProp, this, _window));
             }
 
             if (_window.SerializedGraph.CommonNodeProperty.HasManagedReferenceValue())
             {
-                _nodeViewers.Add(new NodeViewer(_window.SerializedGraph.CommonNodeProperty, this));
+                _nodeViewers.Add(new NodeViewer(_window.SerializedGraph.CommonNodeProperty, this, _window));
             }
 
             _nodeViewers.ForEach(item => item.CreateConnections());
@@ -435,7 +434,7 @@ namespace OlegHcpEditor.Window.NodeBased
 
             Vector2 position = _window.Camera.ScreenToWorld(mousePosition);
             SerializedProperty nodeProp = _window.SerializedGraph.CreateNode(position, type);
-            _nodeViewers.Add(new NodeViewer(nodeProp, this));
+            _nodeViewers.Add(new NodeViewer(nodeProp, this, _window));
 
             _window.SerializedGraph.SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }

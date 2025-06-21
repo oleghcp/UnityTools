@@ -54,13 +54,15 @@ namespace OlegHcpEditor.Window.NodeBased
             _panelDrawer.OnClose();
         }
 
-        public void Draw(bool opened, float height, float winWidth, Event e)
+        public void Draw(Event e)
         {
-            _opened = opened;
+            _opened = _window.SidePanelOpened;
 
-            if (!opened)
+            if (!_opened)
                 return;
 
+            float winWidth = _window.position.width;
+            float height = _window.position.height - GraphToolbar.HEIGHT;
             float maxWidth = winWidth * 0.5f;
             _width = _width.ClampMax(maxWidth);
             Rect position = new Rect(winWidth - _width, 0f, _width, height);

@@ -71,10 +71,10 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             get
             {
-                if (_widthVersion != _window.OnGuiCounter)
+                if (_widthVersion != GraphEditorWindow.OnGuiCounter)
                 {
                     _width = _type.IsServiceNode() ? SERV_NODE_WIDTH : _window.SerializedGraph.NodeWidth;
-                    _widthVersion = _window.OnGuiCounter;
+                    _widthVersion = GraphEditorWindow.OnGuiCounter;
                 }
 
                 return _width;
@@ -85,12 +85,12 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             get
             {
-                if (_screenRectVersion != _window.OnGuiCounter)
+                if (_screenRectVersion != GraphEditorWindow.OnGuiCounter)
                 {
                     _screenRect.position = _window.Camera.WorldToScreen(_position);
                     _screenRect.width = Width / _window.Camera.Size;
                     _screenRect.height = _window.Camera.Size > 1f ? _map.NodeHeaderHeight : GetBigNodeHeight();
-                    _screenRectVersion = _window.OnGuiCounter;
+                    _screenRectVersion = GraphEditorWindow.OnGuiCounter;
                 }
 
                 return _screenRect;
@@ -101,12 +101,12 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             get
             {
-                if (_worldRectVersion != _window.OnGuiCounter)
+                if (_worldRectVersion != GraphEditorWindow.OnGuiCounter)
                 {
                     _worldRect.position = _position;
                     _worldRect.width = Width;
                     _worldRect.height = _window.Camera.Size > 1f ? _map.NodeHeaderHeight : GetBigNodeHeight();
-                    _worldRectVersion = _window.OnGuiCounter;
+                    _worldRectVersion = GraphEditorWindow.OnGuiCounter;
                 }
 
                 return _worldRect;
@@ -117,20 +117,20 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             get
             {
-                if (_overlapVersion != _window.OnGuiCounter)
+                if (_overlapVersion != GraphEditorWindow.OnGuiCounter)
                 {
                     _isInCamera = _window.Camera.WorldRect.Overlaps(WorldRect);
-                    _overlapVersion = _window.OnGuiCounter;
+                    _overlapVersion = GraphEditorWindow.OnGuiCounter;
                 }
 
                 return _isInCamera;
             }
         }
 
-        public NodeViewer(SerializedProperty nodeProp, GraphMap map)
+        public NodeViewer(SerializedProperty nodeProp, GraphMap map, GraphEditorWindow window)
         {
             _map = map;
-            _window = map.Window;
+            _window = window;
 
             SetSerializedProperty(nodeProp);
 
@@ -454,10 +454,10 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
         private float GetBigNodeHeight()
         {
-            if (_heightVersion != _window.OnGuiCounter)
+            if (_heightVersion != GraphEditorWindow.OnGuiCounter)
             {
                 _height = _map.NodeHeaderHeight + _nodeDrawer.GetHeight(_nodeProp, _window.FullDrawing);
-                _heightVersion = _window.OnGuiCounter;
+                _heightVersion = GraphEditorWindow.OnGuiCounter;
             }
 
             return _height;

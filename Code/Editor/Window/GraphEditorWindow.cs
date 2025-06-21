@@ -10,6 +10,8 @@ namespace OlegHcpEditor.Window
 {
     internal class GraphEditorWindow : EditorWindow
     {
+        private static int _onGuiCounter;
+
         private SerializedGraph _serializedGraph;
         private GraphEditorSettings _settings;
         private GraphCamera _camera;
@@ -17,24 +19,20 @@ namespace OlegHcpEditor.Window
         private GraphMap _map;
         private GraphToolbar _toolbar;
 
-        private int _onGuiCounter;
-
         private Vector2 _mapSize;
-        private Vector2 _winSize;
         private int _rootNodeId;
-
         private int _mapSizeVersion;
-        private int _winSizeVersion;
         private int _rootNodeVersion;
 
+        public static int OnGuiCounter => _onGuiCounter;
         public SerializedGraph SerializedGraph => _serializedGraph;
-        public int OnGuiCounter => _onGuiCounter;
         public GraphCamera Camera => _camera;
         public bool GridSnapping => _toolbar.GridToggle;
         public bool ShowPorts => _toolbar.ShowPorts;
         public GraphEditorSettings Settings => _settings;
         public GraphMap Map => _map;
         public bool FullDrawing => !_toolbar.HideContentToggle;
+        public bool SidePanelOpened => _toolbar.SidePanelToggle;
         public GraphSidePanel SidePanel => _sidePanel;
 
         public Vector2 MapSize
@@ -78,12 +76,11 @@ namespace OlegHcpEditor.Window
             _serializedGraph.SerializedObject.Update();
 
             Event guiEvent = Event.current;
-            Vector2 mapSize = MapSize;
 
             _toolbar.Draw(guiEvent);
-            _sidePanel.Draw(_toolbar.SidePanelToggle, mapSize.y, position.width, guiEvent);
+            _sidePanel.Draw(guiEvent);
 
-            Rect mapRect = new Rect(0f, 0f, mapSize.x, mapSize.y);
+            Rect mapRect = new Rect(0f, 0f, MapSize.x, MapSize.y);
             GUI.BeginGroup(mapRect);
             _camera.ProcessEvents(guiEvent, mapRect);
             _map.Draw(guiEvent);
@@ -131,7 +128,7 @@ namespace OlegHcpEditor.Window
                 _sidePanel = new GraphSidePanel(this);
                 _map = new GraphMap(this);
                 _toolbar = new GraphToolbar(this);
-                _camera = new GraphCamera(this);
+                _camera = new GraphCamera(_settings.CameraPosition);
             }
             else if (_serializedGraph.GraphAsset != graphAsset)
             {
