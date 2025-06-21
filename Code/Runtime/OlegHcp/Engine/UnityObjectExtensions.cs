@@ -5,6 +5,11 @@ namespace OlegHcp.Engine
 {
     public static class UnityObjectExtensions
     {
+        public static bool HasHideFlag(this UnityObject self, HideFlags flag)
+        {
+            return (self.hideFlags & HideFlags.NotEditable) != 0;
+        }
+
         /// <summary>
         /// Destroys the unity object.
         /// </summary>
