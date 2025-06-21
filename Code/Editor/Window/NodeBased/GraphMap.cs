@@ -94,8 +94,9 @@ namespace OlegHcpEditor.Window.NodeBased
             DrawConnectionLine(e);
             DrawNodes();
             DrawSelectionRect(e);
-
+            ReorderNodes();
             HandleNodeEvents(e);
+            ReorderNodes();
             HandleMapEvents(e);
         }
 
@@ -247,8 +248,6 @@ namespace OlegHcpEditor.Window.NodeBased
                     _nodeViewers[i].Select(overlaps);
                 }
 
-                ReorderNodes();
-
                 GUI.changed = true;
             }
         }
@@ -334,7 +333,10 @@ namespace OlegHcpEditor.Window.NodeBased
             }
 
             if (needLockEvent)
+            {
                 e.Use();
+                return;
+            }
 
             for (int i = 0; i < _nodeViewers.Count; i++)
             {
@@ -344,8 +346,6 @@ namespace OlegHcpEditor.Window.NodeBased
                     break;
                 }
             }
-
-            ReorderNodes();
         }
 
         private void ReorderNodes()
