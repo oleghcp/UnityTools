@@ -165,10 +165,10 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             SelectInternal(on);
         }
 
-        public void CreateTransition(PortViewer destination)
+        public bool CreateTransition(PortViewer destination)
         {
-            if (_lineViewers.Any(item => item.Destination.Node.Id == destination.Node.Id))
-                return;
+            if (_lineViewers.Any(item => item.Destination.Node == destination.Node))
+                return false;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
             SerializedProperty newItem = transitionsProperty.AddArrayElement();
@@ -178,6 +178,8 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             newItem.FindPropertyRelative(Transition.PointsFieldName).ClearArray();
 
             _lineViewers.Add(new TransitionViewer(_out, destination, _window));
+
+            return true;
         }
 
         public void RemoveTransition(NodeViewer nextNodeViewer)
