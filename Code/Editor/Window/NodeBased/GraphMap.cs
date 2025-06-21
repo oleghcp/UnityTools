@@ -330,7 +330,7 @@ namespace OlegHcpEditor.Window.NodeBased
                     needLockEvent |= _nodeViewers[i].HandleBaseEventsOutOfPointer(e);
                 }
 
-                _nodeViewers[i].HandleBaseEventsAnyway(e);
+                _nodeViewers[i].HandleBaseEvents(e);
             }
 
             if (needLockEvent)

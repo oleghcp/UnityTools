@@ -55,13 +55,13 @@ namespace OlegHcpEditor.Window.NodeBased
                 EditorGUILayout.Space(10f);
             }
 
-            EditorGUILayout.LabelField($"Connections ( {_nodeEditor.TransitionViewers.Count} ):");
+            EditorGUILayout.LabelField($"Connections ( {_nodeEditor.LineViewers.Count} ):");
 
             string tab = " -";
             GUILayoutOption tabWidth = GUILayout.Width(10f);
             GUILayoutOption buttonWidth = GUILayout.Width(70f);
 
-            foreach (TransitionViewer item in _nodeEditor.TransitionViewers)
+            foreach (TransitionViewer item in _nodeEditor.LineViewers)
             {
                 bool stop = false;
 

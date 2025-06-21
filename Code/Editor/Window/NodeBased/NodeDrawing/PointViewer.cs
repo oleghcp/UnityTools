@@ -28,7 +28,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         public void Draw(in Color color)
         {
             Handles.color = color;
-            Handles.DrawSolidDisc(_window.Camera.WorldToScreen(Position), Vector3.back, VIEW_RADIUS);
+            Handles.DrawSolidDisc(_window.Camera.WorldToScreen(_position), Vector3.back, VIEW_RADIUS);
             Handles.color = Colours.White;
         }
 
@@ -40,7 +40,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             {
                 case EventType.MouseDown:
                     Vector2 rectSize = new Vector2(PICK_SIZE, PICK_SIZE);
-                    Vector2 rectPos = _window.Camera.WorldToScreen(Position) - rectSize * 0.5f;
+                    Vector2 rectPos = _window.Camera.WorldToScreen(_position) - rectSize * 0.5f;
                     Rect pointRect = new Rect(rectPos, rectSize);
 
                     if (e.button == 0)
@@ -49,13 +49,13 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
                         {
                             if (e.control)
                             {
-                                _draggedPosition = Position;
+                                _draggedPosition = _position;
                                 _isDragged = e.control;
                                 needLock = true;
                             }
                             else
                             {
-                                _transitionViewer.ShowTransitionInfoWindow();
+                                _transitionViewer.ShowInfoWindow();
                             }
                         }
                         else

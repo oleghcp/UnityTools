@@ -24,7 +24,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         private readonly PortViewer _out;
         private readonly GraphMap _map;
         private readonly GraphEditorWindow _window;
-        private readonly List<TransitionViewer> _transitionViewers;
+        private readonly List<TransitionViewer> _lineViewers;
 
         private NodeDrawer _nodeDrawer;
         private SerializedProperty _nodeProp;
@@ -55,7 +55,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         public NodeType Type => _type;
         public Type SystemType => _systemType;
 
-        public IReadOnlyList<TransitionViewer> TransitionViewers => _transitionViewers;
+        public IReadOnlyList<TransitionViewer> LineViewers => _lineViewers;
         public SerializedProperty NodeProp => _nodeProp;
         public SerializedProperty NameProp => _nameProp;
         public NodeDrawer NodeDrawer => _nodeDrawer;
@@ -138,7 +138,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             _systemType = EditorUtilityExt.GetTypeFromSerializedPropertyTypename(nodeProp.managedReferenceFullTypename);
             _type = GraphUtility.GetNodeType(_systemType);
             _position = nodeProp.FindPropertyRelative(RawNode.PositionFieldName).vector2Value;
-            _transitionViewers = new List<TransitionViewer>();
+            _lineViewers = new List<TransitionViewer>();
             _in = new PortViewer(this, PortType.In, _map);
             _out = new PortViewer(this, PortType.Out, _map);
             _nodeDrawer = _map.GetNodeDrawer(_systemType);
@@ -156,7 +156,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             {
                 int nextNodeId = transitionProp.FindPropertyRelative(Transition.NodeIdFieldName).intValue;
                 NodeViewer connectedNodeViewer = _map.NodeViewers.First(itm => itm.Id == nextNodeId);
-                _transitionViewers.Add(new TransitionViewer(_out, connectedNodeViewer.In, _window));
+                _lineViewers.Add(new TransitionViewer(_out, connectedNodeViewer.In, _window));
             }
         }
 
@@ -167,7 +167,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
         public void CreateTransition(PortViewer destination)
         {
-            if (_transitionViewers.Any(item => item.Destination.Node.Id == destination.Node.Id))
+            if (_lineViewers.Any(item => item.Destination.Node.Id == destination.Node.Id))
                 return;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
@@ -177,19 +177,19 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             newItem.FindPropertyRelative(Transition.ConditionFieldName).managedReferenceValue = null;
             newItem.FindPropertyRelative(Transition.PointsFieldName).ClearArray();
 
-            _transitionViewers.Add(new TransitionViewer(_out, destination, _window));
+            _lineViewers.Add(new TransitionViewer(_out, destination, _window));
         }
 
         public void RemoveTransition(NodeViewer nextNodeViewer)
         {
-            TransitionViewer transition = _transitionViewers.Find(item => item.Destination.Node == nextNodeViewer);
+            TransitionViewer transition = _lineViewers.Find(item => item.Destination.Node == nextNodeViewer);
             if (transition != null)
                 RemoveTransition(transition);
         }
 
         public void RemoveTransition(TransitionViewer transition)
         {
-            _transitionViewers.Remove(transition);
+            _lineViewers.Remove(transition);
             NodeViewer next = transition.Destination.Node;
 
             SerializedProperty transitionsProperty = _nodeProp.FindPropertyRelative(RawNode.ArrayFieldName);
@@ -231,16 +231,16 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             if (_window.ShowPorts)
             {
-                for (int i = 0; i < _transitionViewers.Count; i++)
+                for (int i = 0; i < _lineViewers.Count; i++)
                 {
-                    _transitionViewers[i].DrawSpline();
+                    _lineViewers[i].DrawSpline();
                 }
             }
             else
             {
-                for (int i = 0; i < _transitionViewers.Count; i++)
+                for (int i = 0; i < _lineViewers.Count; i++)
                 {
-                    _transitionViewers[i].DrawArrow();
+                    _lineViewers[i].DrawArrow();
                 }
             }
         }
@@ -334,7 +334,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
             return needLock;
         }
 
-        public void HandleBaseEventsAnyway(Event e)
+        public void HandleBaseEvents(Event e)
         {
             if (e.type == EventType.KeyDown)
             {
@@ -365,9 +365,9 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
 
             if (IsInCamera)
             {
-                for (int i = 0; i < _transitionViewers.Count; i++)
+                for (int i = 0; i < _lineViewers.Count; i++)
                 {
-                    if (_transitionViewers[i].HandleEvents(e))
+                    if (_lineViewers[i].HandleEvents(e, _window.ShowPorts))
                         needLock = true;
                 }
             }
@@ -379,7 +379,7 @@ namespace OlegHcpEditor.Window.NodeBased.NodeDrawing
         {
             SerializedProperty positionProperty = _nodeProp.FindPropertyRelative(RawNode.PositionFieldName);
             positionProperty.vector2Value = _position;
-            _transitionViewers.ForEach(item => item.Save());
+            _lineViewers.ForEach(item => item.Save());
         }
 
         public int CompareTo(NodeViewer other)
