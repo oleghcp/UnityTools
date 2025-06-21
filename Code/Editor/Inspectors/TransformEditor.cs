@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using OlegHcp;
+using OlegHcp.Engine;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.MenuItems;
@@ -66,29 +67,6 @@ namespace OlegHcpEditor.Inspectors
             _builtInEditor.DestroyImmediate();
         }
 
-        public override void OnInspectorGUI()
-        {
-            DrawPanel();
-
-            if (_world)
-            {
-                DrawGlobal();
-                return;
-            }
-
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.BeginVertical(_areaOptions);
-            DrawResetButtons();
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.BeginVertical();
-            _builtInEditor.OnInspectorGUI();
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.EndHorizontal();
-        }
-
         private void OnSceneGUI()
         {
             Handles.BeginGUI();
@@ -111,10 +89,38 @@ namespace OlegHcpEditor.Inspectors
             Handles.EndGUI();
         }
 
-        private void DrawPanel()
+        public override void OnInspectorGUI()
+        {
+            DrawToolbar();
+
+            bool editable = !target.HasHideFlag(HideFlags.NotEditable);
+
+            if (_world)
+            {
+                GUI.enabled = editable;
+                DrawGlobal();
+                GUI.enabled = true;
+                return;
+            }
+
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.BeginVertical(_areaOptions);
+            GUI.enabled = editable;
+            DrawResetButtons();
+            GUI.enabled = true;
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.BeginVertical();
+            _builtInEditor.OnInspectorGUI();
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawToolbar()
         {
             bool hasParent = target.parent;
-
             GUI.enabled = hasParent;
             _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames) > 0;
             GUI.enabled = true;
@@ -127,22 +133,23 @@ namespace OlegHcpEditor.Inspectors
             GUILayout.Space(VERTICAL_OFFSET);
 
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
-            {
-                GetProp("m_LocalPosition").vector3Value = Vector3.zero;
-            }
+                getProp("m_LocalPosition").vector3Value = Vector3.zero;
 
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
             {
-                GetProp("m_LocalRotation").quaternionValue = Quaternion.identity;
-                GetProp("m_LocalEulerAnglesHint").vector3Value = Vector3.zero;
+                getProp("m_LocalRotation").quaternionValue = Quaternion.identity;
+                getProp("m_LocalEulerAnglesHint").vector3Value = Vector3.zero;
             }
 
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
-            {
-                GetProp("m_LocalScale").vector3Value = Vector3.one;
-            }
+                getProp("m_LocalScale").vector3Value = Vector3.one;
 
             serializedObject.ApplyModifiedProperties();
+
+            SerializedProperty getProp(string name)
+            {
+                return serializedObject.FindProperty(name);
+            }
         }
 
         private void DrawGlobal()
@@ -181,18 +188,15 @@ namespace OlegHcpEditor.Inspectors
             }
         }
 
-        private SerializedProperty GetProp(string name)
-        {
-            return serializedObject.FindProperty(name);
-        }
-
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(Transform) + "/Copy Values to Clipboard (ext.)")]
+        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(Transform) + "/Copy/To Clipboard (ext.)")]
         private static void CopyToClipboard(MenuCommand command)
         {
             GUIUtility.systemCopyBuffer = EditorJsonUtility.ToJson(command.context);
         }
 
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(Transform) + "/Paste Values from Clipboard (ext.)")]
+        private const string pastFromClipboardMenuName = MenuItemsUtility.CONTEXT_MENU_NAME + nameof(Transform) + "/Paste/From Clipboard (ext.)";
+
+        [MenuItem(pastFromClipboardMenuName)]
         private static void PastFromClipboard(MenuCommand command)
         {
             try
@@ -204,6 +208,12 @@ namespace OlegHcpEditor.Inspectors
             {
                 Debug.LogWarning(e.Message);
             }
+        }
+
+        [MenuItem(pastFromClipboardMenuName, true)]
+        private static bool PastFromClipboardValidate(MenuCommand command)
+        {
+            return !command.context.HasHideFlag(HideFlags.NotEditable);
         }
     }
 }

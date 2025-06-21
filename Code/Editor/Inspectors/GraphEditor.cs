@@ -33,10 +33,12 @@ namespace OlegHcpEditor.Inspectors
                 EditorUtilityExt.OpenScriptableObjectCode(target);
         }
 
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
+        private const string resetMenuItemName = MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItemsUtility.RESET_ITEM_NAME;
+
+        [MenuItem(resetMenuItemName)]
         private static void ResetMenuItem() { }
 
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + MenuItemsUtility.RESET_ITEM_NAME, true)]
+        [MenuItem(resetMenuItemName, true)]
         private static bool ResetMenuItemValidate() => false;
 
         [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RawGraph) + "/" + OPEN_ITEM_NAME)]

@@ -1,4 +1,5 @@
 ﻿using OlegHcp;
+using OlegHcp.Engine;
 using OlegHcpEditor.Gui;
 using OlegHcpEditor.MenuItems;
 using UnityEditor;
@@ -31,7 +32,9 @@ namespace OlegHcpEditor.Inspectors
             _drawer.Draw(_renderer);
         }
 
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
+        private const string resetMenuItemName = MenuItemsUtility.CONTEXT_MENU_NAME + nameof(RenderSorter) + "/" + MenuItemsUtility.RESET_ITEM_NAME;
+
+        [MenuItem(resetMenuItemName)]
         private static void ResetMenuItem(MenuCommand command)
         {
             Renderer renderer = (command.context as RenderSorter).Renderer;
@@ -42,6 +45,12 @@ namespace OlegHcpEditor.Inspectors
             renderer.sortingOrder = 0;
 
             EditorUtility.SetDirty(renderer);
+        }
+
+        [MenuItem(resetMenuItemName, true)]
+        private static bool ResetMenuItemValidate(MenuCommand command)
+        {
+            return !command.context.HasHideFlag(HideFlags.NotEditable);
         }
     }
 }

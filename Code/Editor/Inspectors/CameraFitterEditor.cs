@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using OlegHcp;
+using OlegHcp.Engine;
 using OlegHcp.Mathematics;
 using OlegHcpEditor.MenuItems;
 using OlegHcpEditor.Utils;
@@ -69,21 +70,6 @@ namespace OlegHcpEditor.Inspectors
             EditorApplication.update -= OnUpdate;
         }
 
-        private void OnUpdate()
-        {
-            if (_camera != null)
-                CheckAndApplyParamChanges(false);
-        }
-
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-            Draw();
-            serializedObject.ApplyModifiedProperties();
-
-            CheckAndApplyParamChanges(GUI.changed);
-        }
-
         private void OnSceneGUI()
         {
             if (!_camera.orthographic)
@@ -112,6 +98,27 @@ namespace OlegHcpEditor.Inspectors
             Handles.DrawLine(d, a);
 
             Handles.color = Colours.White;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            if (_camera.HasHideFlag(HideFlags.NotEditable))
+            {
+                GUILayout.Label("Camera is not editable.");
+                return;
+            }
+
+            serializedObject.Update();
+            Draw();
+            serializedObject.ApplyModifiedProperties();
+
+            CheckAndApplyParamChanges(GUI.changed);
+        }
+
+        private void OnUpdate()
+        {
+            if (_camera != null)
+                CheckAndApplyParamChanges(false);
         }
 
         private void Draw()
@@ -182,18 +189,6 @@ namespace OlegHcpEditor.Inspectors
             }
         }
 
-        private static void DrawLine(Vector3 axis, Vector3 center, float size)
-        {
-            Vector3 up = axis * size;
-            Vector3 p1 = center - up;
-            Vector3 p2 = center + up;
-#if UNITY_2020_2_OR_NEWER
-            Handles.DrawLine(p1, p2, 2f);
-#else
-            Handles.DrawLine(p1, p2);
-#endif
-        }
-
         private float GetGameViewRatio()
         {
             Vector2 res = _getSizeOfMainGameView();
@@ -228,7 +223,12 @@ namespace OlegHcpEditor.Inspectors
             }
         }
 
-        [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItemsUtility.RESET_ITEM_NAME)]
+        private const string resetMenuItemName = MenuItemsUtility.CONTEXT_MENU_NAME + nameof(CameraFitter) + "/" + MenuItemsUtility.RESET_ITEM_NAME;
+
+        [MenuItem(resetMenuItemName)]
         private static void ResetMenuItem() { }
+
+        [MenuItem(resetMenuItemName, true)]
+        private static bool ResetMenuItemValidate() => false;
     }
 }
