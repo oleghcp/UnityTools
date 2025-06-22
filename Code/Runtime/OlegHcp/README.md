@@ -247,6 +247,8 @@ public class MyClass : MonoBehaviour
 
 ## Messaging
 
+Works only with public methods.
+
 ```csharp
 using OlegHcp;
 using UnityEngine;
