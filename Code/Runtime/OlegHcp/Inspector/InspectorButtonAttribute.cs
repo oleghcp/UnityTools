@@ -1,10 +1,9 @@
 ﻿using System;
-using UnityEngine;
 
 namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public sealed class InspectorButtonAttribute : PropertyAttribute
+    public sealed class InspectorButtonAttribute : Attribute
     {
         internal string ButtonName { get; private set; }
         internal float Size { get; private set; } = 20f;

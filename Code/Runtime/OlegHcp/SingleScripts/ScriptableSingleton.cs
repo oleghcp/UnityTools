@@ -1,11 +1,12 @@
 ﻿using OlegHcp.Tools;
+using UnityEngine;
 
 namespace OlegHcp.SingleScripts
 {
     /// <summary>
     /// Represents implementation of ScriptableObject singleton with lazy initialization.
     /// </summary>
-    public abstract class ScriptableSingleton<T> : ScriptableObjectExtended where T : ScriptableSingleton<T>
+    public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
     {
         private static T _instance;
 

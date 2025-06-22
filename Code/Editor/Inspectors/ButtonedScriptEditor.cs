@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Inspector;
@@ -42,7 +41,7 @@ namespace OlegHcpEditor.Inspectors
 
             do
             {
-                _methods.AddRange(GetMethods(targetType, mask));
+                _methods.AddRange(EnumerateMethods(targetType, mask));
                 targetType = targetType.BaseType;
             } while (targetType != ParentType);
         }
@@ -84,14 +83,13 @@ namespace OlegHcpEditor.Inspectors
             }
         }
 
-        private static IEnumerable<Data> GetMethods(Type targetType, BindingFlags mask)
+        private static IEnumerable<Data> EnumerateMethods(Type targetType, BindingFlags mask)
         {
             return targetType.GetMethods(mask)
                              .Where(method => method.IsDefined(typeof(InspectorButtonAttribute)))
                              .Select(method => new Data(method, method.GetCustomAttribute<InspectorButtonAttribute>()));
         }
 
-        #region entities
         private struct Data
         {
             public MethodInfo Method;
@@ -110,17 +108,18 @@ namespace OlegHcpEditor.Inspectors
             }
         }
 
-        [CustomEditor(typeof(MonoBehaviourExtended), true)]
-        private class MonoBehaviourExtendedEditor : ButtonedScriptEditor
+        [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)]
+        [CanEditMultipleObjects]
+        private class MonoBehaviourEditor : ButtonedScriptEditor
         {
             protected override Type ParentType => typeof(MonoBehaviour);
         }
 
-        [CustomEditor(typeof(ScriptableObjectExtended), true)]
-        private class ScriptableObjectExtendedEditor : ButtonedScriptEditor
+        [CustomEditor(typeof(ScriptableObject), true, isFallback = true)]
+        [CanEditMultipleObjects]
+        private class ScriptableObjectEditor : ButtonedScriptEditor
         {
             protected override Type ParentType => typeof(ScriptableObject);
         }
-        #endregion
     }
 }

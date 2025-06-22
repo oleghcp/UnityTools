@@ -16,14 +16,12 @@ public class MyClass : MonoBehaviour
 
 ## InspectorButtonAttribute
 
-In order to use InspectorButtonAttribute inherit class from 'MonoBehaviourExtended' or 'ScriptableObjectExtended'.
-
 ```csharp
 using System;
 using OlegHcp.Inspector;
 using UnityEngine;
 
-public class ExampleClass : MonoBehaviourExtended
+public class ExampleClass : MonoBehaviour
 {
     [SerializeField]
     private string _text;
