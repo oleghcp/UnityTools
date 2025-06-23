@@ -1,4 +1,5 @@
 ﻿using System;
+using OlegHcp.Mathematics;
 
 namespace OlegHcp
 {
@@ -36,12 +37,12 @@ namespace OlegHcp
         /// Needs to be called in each frame.
         /// </summary>
         /// <param name="deltaTime">Time passed from previous frame.</param>
-        public void Update(float deltaTime)
+        public bool Update(float deltaTime)
         {
-            if (_checker.Interval <= float.Epsilon)
+            if (_checker.Interval <= MathUtility.kEpsilon)
             {
                 _currentFps = 1f / deltaTime;
-                return;
+                return true;
             }
 
             _frameCounter++;
@@ -50,7 +51,10 @@ namespace OlegHcp
             {
                 _currentFps = _frameCounter / _checker.Interval;
                 _frameCounter = 0;
+                return true;
             }
+
+            return false;
         }
     }
 }

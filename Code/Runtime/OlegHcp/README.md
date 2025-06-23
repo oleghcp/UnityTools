@@ -203,15 +203,17 @@ using UnityEngine;
 public class MyClass : MonoBehaviour
 {
     private FpsCounter _fpsCounter = new FpsCounter();
+    private string _text;
 
     private void Update()
     {
-        _fpsCounter.Update(Time.deltaTime);
+        if (_fpsCounter.Update(Time.deltaTime))
+            _text = $"FPS: {_fpsCounter.FrameRate}";
     }
 
     private void OnGUI()
     {
-        GUILayout.Label($"FPS: {_fpsCounter.FrameRate}");
+        GUILayout.Label(_text);
     }
 }
 ```
