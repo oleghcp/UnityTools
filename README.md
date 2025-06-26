@@ -4,8 +4,12 @@
 [![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master)
 [![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
 
-# Social [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Useful%20toolset%20for%20Unity%20&url=https://github.com/oleghcp/UnityTools&hashtags=unity,unitytools,csharp,asset,unityscript)
-[Unity Discussions Topic](https://discussions.unity.com/t/oleghcp-unitytools/1486467).
+# Social
+
+[Local Discussions on github](https://github.com/oleghcp/UnityTools/discussions).
+[Unity Discussions](https://discussions.unity.com/t/oleghcp-unitytools/1486467).
+Also you can [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Useful%20toolset%20for%20Unity%20&url=https://github.com/oleghcp/UnityTools&hashtags=unity,unitytools,csharp,asset,unityscript) about it.
+
 
 # About
 
