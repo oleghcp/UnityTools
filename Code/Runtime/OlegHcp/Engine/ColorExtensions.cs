@@ -52,6 +52,26 @@ namespace OlegHcp.Engine
             return value;
         }
 
+        public static string ToStringHexRGB(this in Color value)
+        {
+            return ToStringHexRGB((Color32)value);
+        }
+
+        public static string ToStringHexRGBA(this in Color value)
+        {
+            return ToStringHexRGBA((Color32)value);
+        }
+
+        public static string ToStringHexRGB(this in Color32 value)
+        {
+            return $"#{value.r:X2}{value.g:X2}{value.b:x2}";
+        }
+
+        public static string ToStringHexRGBA(this in Color32 value)
+        {
+            return $"#{value.r:X2}{value.g:X2}{value.b:x2}{value.a:x2}";
+        }
+
         public static void Deconstruct(this in Color value, out float r, out float g, out float b, out float a)
         {
             r = value.r;
