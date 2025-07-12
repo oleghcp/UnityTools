@@ -35,9 +35,12 @@ namespace OlegHcp
         /// <summary>
         /// Returns true with chance from 0f to 1f.
         /// </summary>
-        public static bool Chance(this IRng self, float chance)
+        public static bool Chance(this IRng self, float likelihood)
         {
-            return chance >= 1f || chance > self.Next(0f, 1f);
+            if (likelihood == 0f)
+                return false;
+
+            return likelihood >= 1f || likelihood > self.Next(0f, 1f);
         }
 
         /// <summary>
