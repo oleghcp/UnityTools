@@ -3,7 +3,7 @@ using OlegHcp.Strings;
 using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
-using static OlegHcp.NumericEntities.RngParam;
+using static UnityEditor.EditorGUIUtility;
 
 namespace OlegHcpEditor.Drawers
 {
@@ -17,16 +17,18 @@ namespace OlegHcpEditor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return GetHeight(property, label);
+            return GetHeight(property);
         }
 
-        public static void Draw(in Rect position, SerializedProperty property, GUIContent label)
+        public static void Draw(in Rect position, SerializedProperty property, GUIContent label, float min = float.NegativeInfinity, float max = float.PositiveInfinity)
         {
             string name = label.text;
-            Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
 
-            property.FindPropertyRelative(RngParam.RangeFieldName)
-                    .Draw(lineRect, EditorGuiUtility.TempContent(StringUtility.Space));
+            Rect lineRect = position;
+            lineRect.height = singleLineHeight;
+
+            DiapasonDrawerHelper.DrawFloat(lineRect, property.FindPropertyRelative(RngParam.RangeFieldName), EditorGuiUtility.TempContent(StringUtility.Space), min, max);
+
             EditorGUI.PrefixLabel(lineRect, EditorGuiUtility.TempContent(name));
             property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
 
@@ -34,48 +36,22 @@ namespace OlegHcpEditor.Drawers
                 return;
 
             EditorGUI.indentLevel++;
-            lineRect = EditorGuiUtility.GetLinePosition(position, 1);
-            SerializedProperty paramProp = property.FindPropertyRelative(RngParam.ParamsFieldName);
-            paramProp.Draw(lineRect);
+            lineRect = position;
+            lineRect.yMin += singleLineHeight + standardVerticalSpacing;
+            property.FindPropertyRelative(RngParam.ParamsFieldName)
+                    .Draw(lineRect);
             EditorGUI.indentLevel--;
         }
 
-        public static float GetHeight(SerializedProperty property, GUIContent label)
+        public static float GetHeight(SerializedProperty property)
         {
-            if (property.isExpanded)
-                return property.GetHeight(label, true) - EditorGUIUtility.singleLineHeight - EditorGUIUtility.standardVerticalSpacing;
+            if (!property.isExpanded)
+                return singleLineHeight;
 
-            return EditorGUIUtility.singleLineHeight;
-        }
-    }
-
-    [CustomPropertyDrawer(typeof(Option))]
-    internal class RngParamOptionDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            SerializedProperty modeProp = property.FindPropertyRelative(Option.ModeFieldName);
-
-            Rect lineRect = EditorGuiUtility.GetLinePosition(position, 0);
-            EditorGUI.PropertyField(lineRect, modeProp);
-
-            if (modeProp.enumValueIndex == 0)
-                return;
-
-            SerializedProperty intProp = property.FindPropertyRelative(Option.IntensityFieldName);
-            lineRect = EditorGuiUtility.GetLinePosition(position, 1);
-            EditorGUI.PropertyField(lineRect, intProp);
-        }
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            using (SerializedProperty modeProp = property.FindPropertyRelative(Option.ModeFieldName))
+            using (SerializedProperty paramProp = property.FindPropertyRelative(RngParam.ParamsFieldName))
             {
-                if (modeProp.enumValueIndex == 0)
-                    return EditorGUIUtility.singleLineHeight;
+                return RngParamOptionDrawer.GetHeight(paramProp) + singleLineHeight + standardVerticalSpacing;
             }
-
-            return EditorGUIUtility.singleLineHeight * 2f + EditorGUIUtility.standardVerticalSpacing;
         }
     }
 }

@@ -25,7 +25,11 @@ namespace OlegHcpEditor.Drawers
 
     internal static class DiapasonDrawerHelper
     {
-        private static GUIContent[] _subLabels = { new GUIContent("Min"), new GUIContent("Max") };
+        private static GUIContent[] _subLabels = new[]
+        {
+            new GUIContent(Diapason.MinFieldName),
+            new GUIContent(Diapason.MaxFieldName),
+        };
 
         public static GUIContent[] SubLabels => _subLabels;
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using OlegHcp.Inspector;
-using OlegHcp.Mathematics;
 using OlegHcp.NumericEntities;
-using OlegHcpEditor.Engine;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,12 +27,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             if (type == typeof(RngParam))
             {
-                RngParamDrawer.Draw(position, property, label);
-                SerializedProperty rangeProp = property.FindPropertyRelative(RngParam.RangeFieldName);
-                Diapason range = rangeProp.GetDiapasonValue();
-                range.Min = range.Min.Clamp(attribute.Min, attribute.Max);
-                range.Max = range.Max.Clamp(attribute.Min, attribute.Max);
-                rangeProp.SetDiapasonValue(range);
+                RngParamDrawer.Draw(position, property, label, attribute.Min, attribute.Max);
                 return;
             }
 
@@ -43,10 +36,10 @@ namespace OlegHcpEditor.Drawers.Attributes
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (EditorUtilityExt.GetFieldType(this) == typeof(RngParam))
-                return RngParamDrawer.GetHeight(property, label);
+            if (EditorUtilityExt.GetFieldType(this) != typeof(RngParam))
+                return EditorGUIUtility.singleLineHeight;
 
-            return EditorGUIUtility.singleLineHeight;
+            return RngParamDrawer.GetHeight(property);
         }
     }
 }
