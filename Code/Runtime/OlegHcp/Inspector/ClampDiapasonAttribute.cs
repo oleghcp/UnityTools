@@ -11,6 +11,7 @@ namespace OlegHcp.Inspector
         internal float Max { get; }
         internal int MinInt => (int)Min;
         internal int MaxInt => (int)Max.ClampMax(int.MaxValue - 500);
+        internal bool Slider { get; }
 
         public ClampDiapasonAttribute(float min, float max = float.PositiveInfinity)
         {
@@ -22,6 +23,19 @@ namespace OlegHcp.Inspector
 
             Min = min;
             Max = max;
+        }
+
+        public ClampDiapasonAttribute(float min, float max, bool slider)
+        {
+            if (max < min)
+            {
+                Debug.LogError("Incorrect min-max order.");
+                return;
+            }
+
+            Min = min;
+            Max = max;
+            Slider = slider;
         }
     }
 }

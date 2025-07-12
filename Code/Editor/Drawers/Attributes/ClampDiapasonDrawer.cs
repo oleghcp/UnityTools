@@ -15,7 +15,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             if (type == typeof(Diapason))
             {
-                DiapasonDrawerHelper.DrawFloat(position, property, label, attribute.Min, attribute.Max);
+                DiapasonDrawerHelper.DrawFloat(position, property, label, attribute.Slider, attribute.Min, attribute.Max);
                 return;
             }
 
@@ -27,7 +27,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             if (type == typeof(RngParam))
             {
-                RngParamDrawer.Draw(position, property, label, attribute.Min, attribute.Max);
+                RngParamDrawer.Draw(position, property, label, attribute.Slider, attribute.Min, attribute.Max);
                 return;
             }
 

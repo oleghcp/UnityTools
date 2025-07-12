@@ -12,7 +12,7 @@ namespace OlegHcpEditor.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Draw(position, property, label);
+            Draw(position, property, label, false);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -20,14 +20,14 @@ namespace OlegHcpEditor.Drawers
             return GetHeight(property);
         }
 
-        public static void Draw(in Rect position, SerializedProperty property, GUIContent label, float min = float.NegativeInfinity, float max = float.PositiveInfinity)
+        public static void Draw(in Rect position, SerializedProperty property, GUIContent label, bool slider, float min = float.NegativeInfinity, float max = float.PositiveInfinity)
         {
             string name = label.text;
 
             Rect lineRect = position;
             lineRect.height = singleLineHeight;
 
-            DiapasonDrawerHelper.DrawFloat(lineRect, property.FindPropertyRelative(RngParam.RangeFieldName), EditorGuiUtility.TempContent(StringUtility.Space), min, max);
+            DiapasonDrawerHelper.DrawFloat(lineRect, property.FindPropertyRelative(RngParam.RangeFieldName), EditorGuiUtility.TempContent(StringUtility.Space), slider, min, max);
 
             EditorGUI.PrefixLabel(lineRect, EditorGuiUtility.TempContent(name));
             property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, GUIContent.none, true);
