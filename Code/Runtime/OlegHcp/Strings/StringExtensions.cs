@@ -4,9 +4,9 @@ namespace OlegHcp.Strings
 {
     public static class StringExtensions
     {
-        public static string Dyed(this string self, in Color color)
+        public static string Colored(this string self, in Color color)
         {
-            return StringUtility.Dye(self, color);
+            return StringUtility.Colorize(self, color);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace OlegHcp.Strings
         public static readonly string Tab = "    ";
         public static readonly string Alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        public static string Dye(string self, in Color color)
+        public static string Colorize(string self, in Color color)
         {
             return $"<color={color.ToStringHexRGB()}>{self}</color>";
         }
