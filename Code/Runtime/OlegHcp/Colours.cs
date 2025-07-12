@@ -35,6 +35,18 @@ namespace OlegHcp
             get => Color.red;
         }
 
+        public static Color LightRed
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => new Color(1f, 0.5f, 0.5f, 1f);
+        }
+
+        public static Color Pink
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => new Color(1f, 0.8f, 0.8f, 1f);
+        }
+
         public static Color Black
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
