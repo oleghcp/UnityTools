@@ -11,82 +11,61 @@ using UnityEngine;
 namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(Transform))]
+    [CanEditMultipleObjects]
     internal class TransformEditor : Editor<Transform>
     {
-        private const string UNDO_NAME = "Transform";
-        private const string BUTTON_NAME = "X";
-        private const float VERTICAL_OFFSET = 2f;
+        private readonly string UNDO_NAME = "Transform";
+        private readonly string BUTTON_NAME = "X";
+        private readonly float VERTICAL_OFFSET = 2f;
 
-        private const string POSITION_LABEL = "Position";
-        private const string ROTATION_LABEL = "Rotation";
-        private const string SCALE_LABEL = "Scale";
+        private readonly string POSITION_LABEL = "Position";
+        private readonly string ROTATION_LABEL = "Rotation";
+        private readonly string SCALE_LABEL = "Scale";
 
-        private Editor _builtInEditor;
+        private static readonly string _pivotModeWarning = $"→ {PivotMode.Center}";
+        private static readonly string _pivotRotationWarning = $"→ {PivotRotation.Global}";
 
-        private readonly string[] _toolbarNames = new string[] { "Local", "World" };
-        private static bool _world;
+        private readonly string[] _toolbarNames = new[]
+        {
+            "Local",
+            "World",
+        };
 
-        private readonly Rect _sceneGuiArea = new Rect(5f, 5f, 65f, 100f);
-        private readonly string _pivotModeWarning = $"→ {PivotMode.Center}";
-        private readonly string _pivotRotationWarning = $"→ {PivotRotation.Global}";
-
-        private GUILayoutOption[] _buttonOptions = new[]
+        private readonly GUILayoutOption[] _buttonOptions = new[]
         {
             GUILayout.Height(EditorGUIUtility.singleLineHeight),
             GUILayout.Width(EditorGUIUtility.singleLineHeight),
         };
 
-        private GUILayoutOption[] _areaOptions = new[]
+        private readonly GUILayoutOption[] _areaOptions = new[]
         {
             GUILayout.Width(EditorGUIUtility.singleLineHeight),
         };
 
-        private GUILayoutOption[] _labelOptions = new[]
+        private readonly GUILayoutOption[] _labelOptions = new[]
         {
             GUILayout.Width(60f),
         };
+
+        private Editor _builtInEditor;
+        private static bool _world;
 
         private void OnEnable()
         {
             Type type = Assembly.GetAssembly(typeof(Editor))
                                 .GetType("UnityEditor.TransformInspector");
             _builtInEditor = CreateEditor(target, type);
-
-#if UNITY_2021_1_OR_NEWER
-            Tools.pivotModeChanged += SceneView.RepaintAll;
-            Tools.pivotRotationChanged += SceneView.RepaintAll;
-#endif
         }
 
         private void OnDisable()
         {
-#if UNITY_2021_1_OR_NEWER
-            Tools.pivotModeChanged -= SceneView.RepaintAll;
-            Tools.pivotRotationChanged -= SceneView.RepaintAll;
-#endif
             _builtInEditor.DestroyImmediate();
         }
 
-        private void OnSceneGUI()
+        [InitializeOnLoadMethod]
+        private static void InitializeOnLoad()
         {
-            Handles.BeginGUI();
-            GUILayout.BeginArea(_sceneGuiArea);
-
-            if (Tools.pivotMode != PivotMode.Pivot)
-            {
-                GUI.color = Colours.Cyan;
-                GUILayout.Label(_pivotModeWarning, EditorStylesExt.Rect, GUILayout.Height(25f));
-            }
-
-            if (Tools.pivotRotation != PivotRotation.Local)
-            {
-                GUI.color = Colours.Yellow;
-                GUILayout.Label(_pivotRotationWarning, EditorStylesExt.Rect, GUILayout.Height(25f));
-            }
-
-            GUI.color = Colours.White;
-            GUILayout.EndArea();
-            Handles.EndGUI();
+            SceneView.duringSceneGui += OnDuringSceneGui;
         }
 
         public override void OnInspectorGUI()
@@ -97,18 +76,14 @@ namespace OlegHcpEditor.Inspectors
 
             if (_world)
             {
-                GUI.enabled = editable;
-                DrawGlobal();
-                GUI.enabled = true;
+                DrawGlobal(editable);
                 return;
             }
 
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical(_areaOptions);
-            GUI.enabled = editable;
-            DrawResetButtons();
-            GUI.enabled = true;
+            DrawResetButtons(editable);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical();
@@ -120,15 +95,23 @@ namespace OlegHcpEditor.Inspectors
 
         private void DrawToolbar()
         {
-            bool hasParent = target.parent;
-            GUI.enabled = hasParent;
-            _world = GUILayout.Toolbar((hasParent && _world).ToInt(), _toolbarNames) > 0;
+            if (targets.Count <= 1 && target.parent)
+            {
+                _world = GUILayout.Toolbar(_world.ToInt(), _toolbarNames) > 0;
+                return;
+            }
+
+            GUI.enabled = false;
+            _world = false;
+            GUILayout.Toolbar(0, _toolbarNames);
             GUI.enabled = true;
         }
 
-        private void DrawResetButtons()
+        private void DrawResetButtons(bool enabled)
         {
             serializedObject.Update();
+
+            GUI.enabled = enabled;
 
             GUILayout.Space(VERTICAL_OFFSET);
 
@@ -144,6 +127,8 @@ namespace OlegHcpEditor.Inspectors
             if (GUILayout.Button(BUTTON_NAME, _buttonOptions))
                 getProp("m_LocalScale").vector3Value = Vector3.one;
 
+            GUI.enabled = true;
+
             serializedObject.ApplyModifiedProperties();
 
             SerializedProperty getProp(string name)
@@ -152,8 +137,10 @@ namespace OlegHcpEditor.Inspectors
             }
         }
 
-        private void DrawGlobal()
+        private void DrawGlobal(bool enabled)
         {
+            GUI.enabled = enabled;
+
             GUILayout.Space(VERTICAL_OFFSET);
 
             if (drawLine(POSITION_LABEL, target.position, out Vector3 pos))
@@ -163,6 +150,8 @@ namespace OlegHcpEditor.Inspectors
                 target.eulerAngles = rot;
 
             drawLine(SCALE_LABEL, target.lossyScale, out _, true);
+
+            GUI.enabled = true;
 
             bool drawLine(string label, in Vector3 curValue, out Vector3 newValue, bool locked = false)
             {
@@ -186,6 +175,28 @@ namespace OlegHcpEditor.Inspectors
                 EditorGUILayout.EndHorizontal();
                 return changed;
             }
+        }
+
+        private static void OnDuringSceneGui(SceneView sceneView)
+        {
+            Handles.BeginGUI();
+            GUILayout.BeginArea(new Rect(5f, 5f, 60f, 35f));
+
+            if (Tools.pivotMode != PivotMode.Pivot)
+            {
+                GUI.color = Colours.Cyan;
+                GUILayout.Label(_pivotModeWarning);
+            }
+
+            if (Tools.pivotRotation != PivotRotation.Local)
+            {
+                GUI.color = Colours.Yellow;
+                GUILayout.Label(_pivotRotationWarning);
+            }
+
+            GUI.color = Colours.White;
+            GUILayout.EndArea();
+            Handles.EndGUI();
         }
 
         [MenuItem(MenuItemsUtility.CONTEXT_MENU_NAME + nameof(Transform) + "/Copy/To Clipboard (ext.)")]
