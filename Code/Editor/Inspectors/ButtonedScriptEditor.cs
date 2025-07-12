@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using OlegHcp.Inspector;
 using UnityEditor;
@@ -53,33 +52,24 @@ namespace OlegHcpEditor.Inspectors
 
             EditorGUILayout.Space();
 
-            Span<bool> pressed = stackalloc bool[_methods.Count];
-
-            for (int i = 0; i < _methods.Count; i++)
+            foreach (var (method, name, size) in _methods)
             {
-                var (method, attribute) = _methods[i];
-                string buttonName = attribute.ButtonName.IsNullOrEmpty() ? method.Name
-                                                                         : attribute.ButtonName;
-                pressed[i] = GUILayout.Button(buttonName, GUILayout.Height(attribute.Size));
-            }
-
-            for (int i = 0; i < pressed.Length; i++)
-            {
-                if (!pressed[i])
+                if (!GUILayout.Button(name, GUILayout.Height(size)))
                     continue;
-
-                MethodInfo method = _methods[i].Method;
 
                 if (method.IsStatic)
                 {
                     method.Invoke(null, null);
-                    continue;
+                }
+                else
+                {
+                    for (int j = 0; j < targets.Length; j++)
+                    {
+                        method.Invoke(targets[j], null);
+                    }
                 }
 
-                for (int j = 0; j < targets.Length; j++)
-                {
-                    method.Invoke(targets[j], null);
-                }
+                break;
             }
         }
 
@@ -92,19 +82,24 @@ namespace OlegHcpEditor.Inspectors
 
         private struct Data
         {
-            public MethodInfo Method;
-            public InspectorButtonAttribute Attribute;
+            private InspectorButtonAttribute _attribute;
+
+            public MethodInfo Method { get; }
 
             public Data(MethodInfo method, InspectorButtonAttribute attribute)
             {
                 Method = method;
-                Attribute = attribute;
+                _attribute = attribute;
+
+                if (_attribute.ButtonName == null)
+                    _attribute.ButtonName = ObjectNames.NicifyVariableName(method.Name);
             }
 
-            public void Deconstruct(out MethodInfo method, out InspectorButtonAttribute attribute)
+            public void Deconstruct(out MethodInfo method, out string name, out float size)
             {
                 method = Method;
-                attribute = Attribute;
+                name = _attribute.ButtonName;
+                size = _attribute.Size;
             }
         }
 
