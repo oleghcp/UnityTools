@@ -11,11 +11,11 @@ using UnityEngine;
 namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(Transform))]
-    [CanEditMultipleObjects]
+    //[CanEditMultipleObjects]
     internal class TransformEditor : Editor<Transform>
     {
-        private readonly string UNDO_NAME = "Transform";
-        private readonly string BUTTON_NAME = "X";
+        private static readonly string UNDO_NAME = "Transform";
+        private static readonly string BUTTON_NAME = "X";
         private readonly float VERTICAL_OFFSET = 2f;
 
         private readonly string POSITION_LABEL = "Position";
@@ -25,24 +25,24 @@ namespace OlegHcpEditor.Inspectors
         private static readonly string _pivotModeWarning = $"→ {PivotMode.Center}";
         private static readonly string _pivotRotationWarning = $"→ {PivotRotation.Global}";
 
-        private readonly string[] _toolbarNames = new[]
+        private static readonly string[] _toolbarNames = new[]
         {
             "Local",
             "World",
         };
 
-        private readonly GUILayoutOption[] _buttonOptions = new[]
+        private static readonly GUILayoutOption[] _buttonOptions = new[]
         {
             GUILayout.Height(EditorGUIUtility.singleLineHeight),
             GUILayout.Width(EditorGUIUtility.singleLineHeight),
         };
 
-        private readonly GUILayoutOption[] _areaOptions = new[]
+        private static readonly GUILayoutOption[] _areaOptions = new[]
         {
             GUILayout.Width(EditorGUIUtility.singleLineHeight),
         };
 
-        private readonly GUILayoutOption[] _labelOptions = new[]
+        private static readonly GUILayoutOption[] _labelOptions = new[]
         {
             GUILayout.Width(60f),
         };
