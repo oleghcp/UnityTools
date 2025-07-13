@@ -11,7 +11,6 @@ using UnityEngine;
 namespace OlegHcpEditor.Inspectors
 {
     [CustomEditor(typeof(Transform))]
-    //[CanEditMultipleObjects]
     internal class TransformEditor : Editor<Transform>
     {
         private static readonly string UNDO_NAME = "Transform";
