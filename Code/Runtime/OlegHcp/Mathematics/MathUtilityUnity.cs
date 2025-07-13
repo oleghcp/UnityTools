@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using OlegHcp.Tools;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
@@ -112,6 +113,28 @@ namespace OlegHcp.Mathematics
                 return onNormal * Vector2.Dot(vector, onNormal) / num;
 
             return Vector2.zero;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Slerp(Vector2 a, Vector2 b, float t)
+        {
+            return SlerpUnclamped(a, b, t.Clamp01());
+        }
+
+        public static Vector2 SlerpUnclamped(Vector2 a, Vector2 b, float t)
+        {
+            float ti = 1f - t;
+
+            float theta = Atan2(a.x * b.y - a.y * b.x, Vector2.Dot(a, b));
+
+            float ma = Sqrt(Vector2.Dot(a, a));
+            float mb = Sqrt(Vector2.Dot(b, b));
+
+            float s = Sin(theta);
+            float j = Sin(ti * theta);
+            float k = Sin(t * theta);
+
+            return (ma * ti + mb * t) * (j * mb * a + k * ma * b) / (s * ma * mb);
         }
 
         public static Vector3 AveragePosition(IList<Vector3> self)
