@@ -12,9 +12,7 @@ public class MyClass
     public void Start()
     {
         // Base start option
-        _task = TaskSystem.StartAsync(RunAsyncStuff());
-        // Or use extension
-        _task = RunAsyncStuff().StartAsyncLocally();
+        _task = TaskSystem.StartAsyncLocally(YieldFunction());
 
         // Complete callback
         _task.AddCompleteListener(onComplete);
@@ -23,6 +21,8 @@ public class MyClass
         {
             if (resultInfo.Successful)
                 Debug.Log(resultInfo.Result);
+            else
+                Debug.Log("Task was interrupted");
         }
     }
 
@@ -31,7 +31,7 @@ public class MyClass
         _task.Stop();
     }
 
-    private IEnumerator RunAsyncStuff()
+    private IEnumerator YieldFunction()
     {
         while (/*condition*/)
         {
@@ -46,10 +46,9 @@ public class MyClass
 
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/TaskSystem.png)
 
-Also if you want to facilitate starting of coroutines you can create an extension class.  
-Important: in order to consider the extensions in analyzing of stack trace the class should be named `RoutineExtensions`.
+Also if you want to facilitate starting of coroutines you can create an extension class:
 
-```
+```csharp
 public static class RoutineExtensions
 {
     public static TaskInfo StartAsync(this IEnumerator self, bool unstoppable = false)
@@ -71,6 +70,15 @@ public static class RoutineExtensions
     {
         return TaskSystem.StartAsyncLocally(self, token);
     }
+}
+```
+Important: in order to consider the extensions in analyzing of stack trace the class should be named `RoutineExtensions`.  
+The usage will look like this:
+
+```csharp
+public void Method()
+{
+    _task = YieldFunction().StartAsyncLocally();
 }
 ```
 
