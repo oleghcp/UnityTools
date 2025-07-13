@@ -172,6 +172,36 @@ public class MyClass : MonoBehaviour
 }
 ```
 
+```csharp
+public static class Colours
+{
+    public static Color Yellow { get; }
+    public static Color Grey { get; }
+    public static Color Magenta { get; }
+    public static Color Cyan { get; }
+    public static Color Red { get; }
+    public static Color LightRed { get; }
+    public static Color Pink { get; }
+    public static Color Black { get; }
+    public static Color White { get; }
+    public static Color Blue { get; }
+    public static Color Sky { get; }
+    public static Color Lime { get; }
+    public static Color Green { get; }
+    public static Color Maroon { get; }
+    public static Color Cherry { get; }
+    public static Color Olive { get; }
+    public static Color Navy { get; }
+    public static Color Teal { get; }
+    public static Color Purple { get; }
+    public static Color Silver { get; }
+    public static Color Orange { get; }
+    public static Color Violet { get; }
+
+    public static Color Random { get; }
+}
+```
+
 ## ComponentUtility
 
 ```csharp

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using OlegHcp.Strings;
 using UnityEngine;
 
-public class MyClass : MonoBehaviour
+public class MyClass
 {
-    private void Start()
+    public void Method1()
     {
         List<string> strings = new List<string>()
         {
@@ -26,6 +26,12 @@ public class MyClass : MonoBehaviour
         strings.Sort(new AlphanumComparer());
 
         //Result: 2, 3, 10, 15, 20, 100
+    }
+
+    public void Method2()
+    {
+        //Colorized log strings
+        Debug.Log($"Some new {"message".Colored(Color.red)}.");
     }
 }
 ```

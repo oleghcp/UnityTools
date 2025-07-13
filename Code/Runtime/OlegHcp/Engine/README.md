@@ -365,6 +365,9 @@ public class Example : MonoBehaviour
         Color newColor2 = _color.AlterG(0.5f);
         Color newColor3 = _color.AlterB(0.5f);
 
+        string hex = _color.ToStringHexRGB();
+        //#FFFFFF and so on
+
         // Deconstruction
         var (r, g, b, a) = _color;
     }
