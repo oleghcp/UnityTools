@@ -83,28 +83,28 @@ namespace OlegHcp.Engine
         /// Copies local values from other transform.
         /// Warning: it will not work properly if transforms have different parents.
         /// </summary>
-        public static void SetLocalParams(this Transform self, Transform other, bool includeScale = false)
+        public static void SetLocalParams(this Transform self, Transform source, bool includeScale = false)
         {
-            self.SetLocalPositionAndRotation(other.localPosition, other.localRotation);
+            self.SetLocalPositionAndRotation(source.localPosition, source.localRotation);
             if (includeScale)
-                self.localScale = other.localScale;
+                self.localScale = source.localScale;
         }
 
-        public static void SetParams(this Transform self, Transform other)
+        public static void SetParams(this Transform self, Transform source)
         {
-            self.SetPositionAndRotation(other.position, other.rotation);
+            self.SetPositionAndRotation(source.position, source.rotation);
         }
 
-        public static void FromLocalToWorldParams(this Transform self, Transform other)
+        public static void FromLocalToWorldParams(this Transform self, Transform source)
         {
-            self.SetPositionAndRotation(other.localPosition, other.localRotation);
+            self.SetPositionAndRotation(source.localPosition, source.localRotation);
         }
 
-        public static void FromWorldToParamsLocal(this Transform self, Transform other, bool includeScale = false)
+        public static void FromWorldToParamsLocal(this Transform self, Transform source, bool includeScale = false)
         {
-            self.SetLocalPositionAndRotation(other.position, other.rotation);
+            self.SetLocalPositionAndRotation(source.position, source.rotation);
             if (includeScale)
-                self.localScale = other.lossyScale;
+                self.localScale = source.lossyScale;
         }
 
         public static void ResetLocalParams(this Transform self, bool includeScale = true)
