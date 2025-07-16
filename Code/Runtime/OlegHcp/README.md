@@ -257,7 +257,7 @@ using UnityEngine;
 public class MyClass : MonoBehaviour
 {
     [SerializeField]
-    private float _interval = 1f;
+    private float _interval = 0.5f;
 
     private IntervalChecker _intervalChecker;
 
@@ -268,7 +268,7 @@ public class MyClass : MonoBehaviour
 
     private void Update()
     {
-        // Returns true each second
+        // Returns true each time when elapsed (in this case each half a minute)
         if (_intervalChecker.SmoothCheckDelta(Time.deltaTime))
         {
             // Do something
