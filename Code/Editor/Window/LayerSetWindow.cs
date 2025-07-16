@@ -71,13 +71,13 @@ namespace OlegHcpEditor.Window
 
             _altConfigVersion.LayerFields = EditorGUILayout.Toggle(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.LayerFields)), config.LayerFields);
             if (_altConfigVersion.LayerFields)
-                DrawCollection(EnumerateLayerNames(), item => GUILayout.Label(CreateItemString(item)));
+                DrawCollection(EnumerateLayerNames(false), item => GUILayout.Label(CreateItemString(item)));
 
             if (_altConfigVersion.LayerFields)
             {
                 _altConfigVersion.MaskFieldType = (LayerMaskFieldType)EditorGUILayout.EnumPopup(ObjectNames.NicifyVariableName(nameof(LayerSetConfig.MaskFieldType)), config.MaskFieldType);
                 LayerMaskFieldDrawer drawer = _listDrawer.ElementDrawer as LayerMaskFieldDrawer;
-                drawer.Names = EnumerateLayerNames().ToArray();
+                drawer.Names = EnumerateLayerNames(true).ToArray();
                 _altConfigVersion.LayerMasks = _listDrawer.Draw(config.LayerMasks);
             }
 
@@ -116,13 +116,13 @@ namespace OlegHcpEditor.Window
             GenerateClass(configWrapper, tagManager.FindProperty(_tagFieldName));
         }
 
-        private static IEnumerable<string> EnumerateLayerNames()
+        private static IEnumerable<string> EnumerateLayerNames(bool includingEmpty)
         {
             for (int i = 0; i < BitMask.SIZE; i++)
             {
                 string name = LayerMask.LayerToName(i);
 
-                if (name.HasUsefulData())
+                if (name.HasUsefulData() || includingEmpty)
                     yield return name;
             }
         }
