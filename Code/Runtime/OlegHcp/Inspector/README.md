@@ -346,15 +346,22 @@ using UnityEngine;
 
 public class MyClass : MonoBehaviour
 {
-    [SerializeField]
-    [LayerField]
+    [SerializeField, LayerField]
     private int _layer;
+
+    [SerializeField, LayerField(true)]
+    private int _layerMask;
 
     private void Awake()
     {
         if (gameObject.layer == _layer)
         {
             // Do something
+        }
+
+        if (_layerMask.HasLayer(gameObject.layer))
+        {
+            // Do something else
         }
     }
 }
