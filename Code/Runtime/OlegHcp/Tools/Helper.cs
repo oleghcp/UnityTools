@@ -66,9 +66,14 @@ namespace OlegHcp.Tools
                 formatter.Serialize(stream, source);
                 stream.Seek(0, SeekOrigin.Begin);
                 return formatter.Deserialize(stream);
-            };
+            }
         }
 #endif
+
+        internal static T CreateDelegate<T>(Type classType, string methodName) where T : Delegate
+        {
+            return (T)Delegate.CreateDelegate(typeof(T), classType, methodName);
+        }
 
         internal static string SimplifyTypeName(string assemblyQualifiedName)
         {

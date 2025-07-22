@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using OlegHcp.CSharp;
+using OlegHcp.Tools;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -8,7 +9,7 @@ namespace OlegHcp
 {
     public static class UnityObjectUtility
     {
-        private static readonly Func<UnityObject, bool> _isNativeObjectAlive = CreateDelegate<Func<UnityObject, bool>>(typeof(UnityObject), "IsNativeObjectAlive");
+        private static readonly Func<UnityObject, bool> _isNativeObjectAlive = Helper.CreateDelegate<Func<UnityObject, bool>>(typeof(UnityObject), "IsNativeObjectAlive");
 
         public static bool IsNullOrDead(object obj)
         {
@@ -19,11 +20,6 @@ namespace OlegHcp
                 return !_isNativeObjectAlive.Invoke(uObj);
 
             return false;
-        }
-
-        private static T CreateDelegate<T>(Type classType, string methodName) where T : Delegate
-        {
-            return (T)Delegate.CreateDelegate(typeof(T), classType, methodName);
         }
 
         /// <summary>
