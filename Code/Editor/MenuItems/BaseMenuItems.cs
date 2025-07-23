@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using OlegHcp.CSharp;
+using OlegHcp.Engine;
 using OlegHcp.IO;
 using OlegHcpEditor.Engine;
 using OlegHcpEditor.Utils;
@@ -144,6 +147,48 @@ namespace OlegHcpEditor.MenuItems
             string text = "-nowarn:8632,8524\n-warnaserror:0108,0114,8509";
             File.WriteAllText($"{AssetDatabaseExt.ASSET_FOLDER}csc.rsp", text);
             AssetDatabase.Refresh();
+        }
+
+        [MenuItem(MAIN_MENU_NAME + "Scene/Get Distance between Selected")]
+        private static void Distance()
+        {
+            GameObject[] objects = Selection.objects
+                                            .Select(item => item as GameObject)
+                                            .Where(item => item != null && !item.IsAsset())
+                                            .ToArray();
+            switch (objects.Length)
+            {
+                case 0:
+                    Debug.Log("Select scene objects.");
+                    break;
+
+                case 1:
+                    Debug.Log("Select more than one object in scene.");
+                    break;
+
+                case 2:
+                    Debug.Log($"Distance: {Vector3.Distance(objects[0].transform.position, objects[1].transform.position)}.");
+                    break;
+
+                default:
+                {
+                    var measured = new HashSet<GameObject>();
+
+                    for (int i = 0; i < objects.Length; i++)
+                    {
+                        for (int j = 0; j < objects.Length; j++)
+                        {
+                            if (objects[i] == objects[j] || measured.Contains(objects[j]))
+                                continue;
+
+                            Debug.Log($"{objects[i].name} - {objects[j].name}: {Vector3.Distance(objects[i].transform.position, objects[j].transform.position)}");
+                        }
+
+                        measured.Add(objects[i]);
+                    }
+                    break;
+                }
+            }
         }
     }
 }
