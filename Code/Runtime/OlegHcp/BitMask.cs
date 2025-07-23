@@ -22,30 +22,30 @@ namespace OlegHcp
             return mask == -1;
         }
 
-        public static void AddFlag(ref int mask, int index)
+        public static void AddFlag(ref int mask, int flagIndex)
         {
-            mask |= 1 << index;
+            mask |= 1 << flagIndex;
         }
 
-        public static void RemoveFlag(ref int mask, int index)
+        public static void RemoveFlag(ref int mask, int flagIndex)
         {
-            mask &= ~(1 << index);
+            mask &= ~(1 << flagIndex);
         }
 
-        public static void SwitchFlag(ref int mask, int index)
+        public static void SwitchFlag(ref int mask, int flagIndex)
         {
-            mask ^= 1 << index;
+            mask ^= 1 << flagIndex;
         }
 
-        public static bool HasFlag(int mask, int index)
+        public static bool HasFlag(int mask, int flagIndex)
         {
-            return (mask & (1 << index)) != 0;
+            return (mask & (1 << flagIndex)) != 0;
         }
 
-        public static void SetFlag(ref int mask, int index, bool flagValue)
+        public static void SetFlag(ref int mask, int flagIndex, bool flagValue)
         {
-            if (flagValue) { AddFlag(ref mask, index); }
-            else { RemoveFlag(ref mask, index); }
+            if (flagValue) { AddFlag(ref mask, flagIndex); }
+            else { RemoveFlag(ref mask, flagIndex); }
         }
 
         public static void Except(ref int targetMask, int otherMask)

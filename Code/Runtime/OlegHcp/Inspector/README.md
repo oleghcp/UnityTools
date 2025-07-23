@@ -359,7 +359,7 @@ public class MyClass : MonoBehaviour
             // Do something
         }
 
-        if (_layerMask.HasLayer(gameObject.layer))
+        if (BitMask.HasFlag(_layerMask, gameObject.layer))
         {
             // Do something else
         }
