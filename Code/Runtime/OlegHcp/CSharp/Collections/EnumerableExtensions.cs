@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.CSharp.Collections.ReadOnly;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections
@@ -245,8 +246,22 @@ namespace OlegHcp.CSharp.Collections
             if (action == null)
                 throw ThrowErrors.NullParameter(nameof(action));
 
+            if (self is IList<T> list)
+            {
+                list.ForEach(action);
+                return;
+            }
+
+            if (self is IReadOnlyList<T> roList)
+            {
+                roList.ForEach_(action);
+                return;
+            }
+
             foreach (var item in self)
+            {
                 action(item);
+            }
         }
 
         public static void AddTo<T>(this IEnumerable<T> self, List<T> targetCollection)

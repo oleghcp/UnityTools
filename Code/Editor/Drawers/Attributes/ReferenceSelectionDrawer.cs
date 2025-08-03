@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
@@ -45,8 +47,7 @@ namespace OlegHcpEditor.Drawers.Attributes
                 {
                     addMenuItem(fieldType);
 
-                    TypeCache.GetTypesDerivedFrom(fieldType)
-                             .ForEach(type => addMenuItem(type));
+                    GetTypesDerivedFrom(fieldType).ForEach(type => addMenuItem(type));
                 }
                 else
                 {
@@ -60,8 +61,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
                         addMenuItem(rootType);
 
-                        TypeCache.GetTypesDerivedFrom(rootType)
-                                 .ForEach(type => addMenuItem(type));
+                        GetTypesDerivedFrom(rootType).ForEach(type => addMenuItem(type));
                     }
                 }
 
@@ -86,6 +86,12 @@ namespace OlegHcpEditor.Drawers.Attributes
             }
 
             GUI.color = Colours.White;
+        }
+
+        private static IEnumerable<Type> GetTypesDerivedFrom(Type rootType)
+        {
+            return TypeCache.GetTypesDerivedFrom(rootType)
+                            .Where(item => !item.IsDefined(typeof(RemoveFromSelectionAttribute), false));
         }
     }
 }
