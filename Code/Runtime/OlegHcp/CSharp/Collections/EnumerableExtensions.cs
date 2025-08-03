@@ -20,36 +20,19 @@ namespace OlegHcp.CSharp.Collections
         /// </summary>
         public static TSource GetWithMin<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> keySelector, out TKey minKey)
         {
-            if (keySelector == null)
-                throw ThrowErrors.NullParameter(nameof(keySelector));
-
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-
-            TSource result = default;
-            minKey = default;
-            bool nonFirstIteration = false;
-
-            foreach (var item in self)
+            if (self is IList<TSource> list)
             {
-                if (nonFirstIteration)
-                {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, minKey) < 0)
-                    {
-                        minKey = key;
-                        result = item;
-                    }
-                }
-                else
-                {
-                    minKey = keySelector(item);
-                    result = item;
-                    nonFirstIteration = true;
-                }
+                int index = list.IndexOfMin(keySelector, out minKey);
+                return list[index];
             }
 
-            return result;
+            if (self is IReadOnlyList<TSource> roList)
+            {
+                int index = roList.IndexOfMin_(keySelector, out minKey);
+                return roList[index];
+            }
+
+            return GetWithMinInternal(self, keySelector, out minKey);
         }
 
         /// <summary>
@@ -65,36 +48,21 @@ namespace OlegHcp.CSharp.Collections
         /// </summary>
         public static TSource GetWithMax<TSource, TKey>(this IEnumerable<TSource> self, Func<TSource, TKey> keySelector, out TKey maxKey)
         {
-            if (keySelector == null)
-                throw ThrowErrors.NullParameter(nameof(keySelector));
-
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-
-            maxKey = default;
-            TSource result = default;
-            bool nonFirstIteration = false;
-
-            foreach (var item in self)
+            if (self is IList<TSource> list)
             {
-                if (nonFirstIteration)
-                {
-                    TKey key = keySelector(item);
-
-                    if (comparer.Compare(key, maxKey) > 0)
-                    {
-                        maxKey = key;
-                        result = item;
-                    }
-                }
-                else
-                {
-                    maxKey = keySelector(item);
-                    result = item;
-                    nonFirstIteration = true;
-                }
+                int index = list.IndexOfMax(keySelector, out maxKey);
+                if (index < 0) return default;
+                return list[index];
             }
 
-            return result;
+            if (self is IReadOnlyList<TSource> roList)
+            {
+                int index = roList.IndexOfMax_(keySelector, out maxKey);
+                if (index < 0) return default;
+                return roList[index];
+            }
+
+            return GetWithMaxInternal(self, keySelector, out maxKey);
         }
 
         public static IEnumerable<T> AppendItem<T>(this IEnumerable<T> self, T newElement)
@@ -312,5 +280,79 @@ namespace OlegHcp.CSharp.Collections
             return new HashSet<T>(self);
         }
 #endif
+
+        private static TSource GetWithMinInternal<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TKey minKey)
+        {
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            TSource result = default;
+            minKey = default;
+            bool nonFirstIteration = false;
+
+            foreach (var item in collection)
+            {
+                if (nonFirstIteration)
+                {
+                    TKey key = keySelector(item);
+
+                    if (comparer.Compare(key, minKey) < 0)
+                    {
+                        minKey = key;
+                        result = item;
+                    }
+                }
+                else
+                {
+                    minKey = keySelector(item);
+                    result = item;
+                    nonFirstIteration = true;
+                }
+            }
+
+            if (nonFirstIteration)
+                return result;
+
+            throw ThrowErrors.NoElements();
+        }
+
+        private static TSource GetWithMaxInternal<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TKey maxKey)
+        {
+            if (keySelector == null)
+                throw ThrowErrors.NullParameter(nameof(keySelector));
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            maxKey = default;
+            TSource result = default;
+            bool nonFirstIteration = false;
+
+            foreach (var item in collection)
+            {
+                if (nonFirstIteration)
+                {
+                    TKey key = keySelector(item);
+
+                    if (comparer.Compare(key, maxKey) > 0)
+                    {
+                        maxKey = key;
+                        result = item;
+                    }
+                }
+                else
+                {
+                    maxKey = keySelector(item);
+                    result = item;
+                    nonFirstIteration = true;
+                }
+            }
+
+            if (nonFirstIteration)
+                return result;
+
+            throw ThrowErrors.NoElements();
+        }
     }
 }
