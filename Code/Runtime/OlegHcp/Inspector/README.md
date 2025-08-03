@@ -101,6 +101,16 @@ public class ClassC : Data
 }
 ```
 
+In order to exclude a class from the dropdown menu use 'RemoveFromSelectionAttribute'.
+
+```csharp
+[RemoveFromSelection]
+public class ClassD : Data
+{
+
+}
+```
+
 ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ReferenceSelection.png)
 
 ## CertainTypesAttribute
