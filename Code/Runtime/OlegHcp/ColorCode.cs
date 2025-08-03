@@ -10,6 +10,7 @@ namespace OlegHcp
         Magenta,
         Cyan,
         Red,
+        LightRed,
         Black,
         White,
         Blue,
@@ -25,6 +26,7 @@ namespace OlegHcp
         Silver,
         Orange,
         Violet,
+        Pink,
         Random,
     }
 
@@ -39,6 +41,7 @@ namespace OlegHcp
                 case ColorCode.Magenta: return Colours.Magenta;
                 case ColorCode.Cyan: return Colours.Cyan;
                 case ColorCode.Red: return Colours.Red;
+                case ColorCode.LightRed: return Colours.LightRed;
                 case ColorCode.Black: return Colours.Black;
                 case ColorCode.White: return Colours.White;
                 case ColorCode.Blue: return Colours.Blue;
@@ -54,6 +57,7 @@ namespace OlegHcp
                 case ColorCode.Silver: return Colours.Silver;
                 case ColorCode.Orange: return Colours.Orange;
                 case ColorCode.Violet: return Colours.Violet;
+                case ColorCode.Pink: return Colours.Pink;
                 case ColorCode.Random: return Colours.Random;
                 default: throw new SwitchExpressionException(self);
             }
