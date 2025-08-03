@@ -425,7 +425,7 @@ namespace OlegHcp.Collections
                     return false;
             }
 
-            return BitMask.Intersects(_array[lastElement], other._array[lastElement], GetAppendixLength());
+            return BitMask.Intersect(_array[lastElement], other._array[lastElement], GetAppendixLength());
         }
 
         public bool Coincides(BitList other)

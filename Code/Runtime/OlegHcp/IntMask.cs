@@ -75,7 +75,7 @@ namespace OlegHcp
 
         public bool Intersects(IntMask other, int length = SIZE)
         {
-            return BitMask.Intersects(_mask, other._mask, length);
+            return BitMask.Intersect(_mask, other._mask, length);
         }
 
         public bool All(int length = SIZE)
