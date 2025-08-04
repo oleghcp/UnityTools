@@ -115,6 +115,9 @@ namespace OlegHcp.Async
             _unstoppable = false;
             _token = default;
             _isStopped = false;
+
+            OnCompleted_Event = null;
+            OnCompleted2_Event = null;
         }
 
         private void InvokeInterrupted()
