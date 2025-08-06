@@ -84,12 +84,17 @@ namespace OlegHcp.Shooting
             _left = 0;
         }
 
+        public bool HasLayer(int layer)
+        {
+            return BitMask.HasFlag(_mask, layer);
+        }
+
         internal void Reset()
         {
             _left = Count;
         }
 
-        internal void DecreaseCounter()
+        internal void UpdateHit()
         {
             _left--;
         }

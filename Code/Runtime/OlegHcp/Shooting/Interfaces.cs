@@ -27,7 +27,7 @@ namespace OlegHcp.Shooting
     public interface IProjectileEventListener
     {
         void OnHitFinal(in RaycastHit hitInfo, in Vector3 velocity, float speed);
-        void OnHitReflected(in RaycastHit hitInfo, in Vector3 previousVelocity, float previousSpeed);
+        void OnHitModified(in RaycastHit hitInfo, in Vector3 previousVelocity, float previousSpeed, HitReactionType reaction);
         void OnTimeOut();
         void PreUpdate(bool isPlaying);
         void PostUpdate(bool isPlaying);
@@ -38,7 +38,7 @@ namespace OlegHcp.Shooting
     public interface IProjectile2DEventListener
     {
         void OnHitFinal(in RaycastHit2D hitInfo, in Vector2 velocity, float speed);
-        void OnHitReflected(in RaycastHit2D hitInfo, in Vector2 previousVelocity, float previousSpeed);
+        void OnHitModified(in RaycastHit2D hitInfo, in Vector2 previousVelocity, float previousSpeed, HitReactionType reaction);
         void OnTimeOut();
         void PreUpdate(bool isPlaying);
         void PostUpdate(bool isPlaying);
