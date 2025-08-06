@@ -273,10 +273,13 @@ namespace OlegHcp.Shooting
 
         public void Stop()
         {
-            _isPlaying = false;
-            _currentTime = 0f;
-            _speed = 0f;
-            _velocity = default;
+            if (_isPlaying)
+            {
+                if (_autodestruct)
+                    gameObject.Destroy();
+
+                StopInternal();
+            }
         }
 
         public void SetRicochetOptionsCount(int count)
@@ -322,6 +325,15 @@ namespace OlegHcp.Shooting
             {
                 UpdateState(currentPosition, GetDeltaTime(), _moving.MoveInInitialFrame);
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void StopInternal()
+        {
+            _isPlaying = false;
+            _currentTime = 0f;
+            _speed = 0f;
+            _velocity = default;
         }
 
         private void UpdateState(Vector3 currentPosition, float deltaTime, float speedScale)
@@ -405,20 +417,16 @@ namespace OlegHcp.Shooting
             if (_autodestruct)
                 gameObject.Destroy();
 
-            _currentTime = 0f;
-            _velocity = default;
-            _speed = 0f;
-
+            StopInternal();
             _listener?.OnHitFinal(_hitInfo, _prevVelocity, _prevSpeed);
         }
 
         private void InvokeTimeOut()
         {
-            _currentTime = 0f;
-
             if (_autodestruct)
                 gameObject.Destroy();
 
+            StopInternal();
             _listener?.OnTimeOut();
         }
 
