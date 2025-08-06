@@ -44,7 +44,7 @@ namespace OlegHcp.Shooting
         public bool IsPlaying => _isPlaying;
         public float Speed => _speed;
         public Vector3 PrevPos => _prevPos;
-        public HitOptions[] Ricochets => _hitOptions;
+        public HitOptions[] HitOptions => _hitOptions;
 
         public float Timer
         {
@@ -283,19 +283,19 @@ namespace OlegHcp.Shooting
             }
         }
 
-        public void SetRicochetOptionsCount(int count)
+        public void SetHitOptionCount(int count)
         {
-            ProjectileHelper.SetRicochetOptionsCount(ref _hitOptions, count);
+            ProjectileHelper.SetHitOptionCount(ref _hitOptions, count);
         }
 
-        public void AddRicochetOptions(in HitOptions options)
+        public void AddHitOption(in HitOptions options)
         {
-            ProjectileHelper.AddRicochetOptions(ref _hitOptions, options);
+            ProjectileHelper.AddHitOption(ref _hitOptions, options);
         }
 
-        public void RemoveRicochetOptionsAt(int index)
+        public void RemoveHitOptionAt(int index)
         {
-            ProjectileHelper.RemoveRicochetOptionsAt(ref _hitOptions, index);
+            ProjectileHelper.RemoveHitOption(ref _hitOptions, index);
         }
 
         private void PlayInternal(in Vector3 currentDirection)
