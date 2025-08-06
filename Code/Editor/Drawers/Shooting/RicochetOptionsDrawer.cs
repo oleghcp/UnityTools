@@ -23,7 +23,11 @@ namespace OlegHcpEditor.Drawers.Shooting
 
             linePos = GetLinePosition(position, 1);
             linePos.width *= 0.75f;
-            countProp.intValue = EditorGUI.IntField(linePos, label, countProp.intValue).ClampMin(1);
+
+            if (countProp.intValue == 0)
+                countProp.intValue = EditorGUI.IntField(linePos, label, int.MaxValue);
+            else
+                countProp.intValue = EditorGUI.IntField(linePos, label, countProp.intValue).ClampMin(1);
 
             linePos.x += linePos.width + StandardHorizontalSpacing;
             linePos.width = position.width - linePos.width - StandardHorizontalSpacing;
