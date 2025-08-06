@@ -7,21 +7,21 @@ namespace OlegHcp.Shooting
 {
     internal static class ProjectileHelper
     {
-        public static void SetRicochetOptionsCount(ref RicochetOptions[] array, int count)
+        public static void SetRicochetOptionsCount(ref HitOptions[] array, int count)
         {
             if (count == 0)
-                array = Array.Empty<RicochetOptions>();
+                array = Array.Empty<HitOptions>();
             else
                 Array.Resize(ref array, count);
         }
 
-        public static void AddRicochetOptions(ref RicochetOptions[] array, in RicochetOptions options)
+        public static void AddRicochetOptions(ref HitOptions[] array, in HitOptions options)
         {
             Array.Resize(ref array, array.Length + 1);
             array.FromEnd(0) = options;
         }
 
-        public static void RemoveRicochetOptionsAt(ref RicochetOptions[] array, int index)
+        public static void RemoveRicochetOptionsAt(ref HitOptions[] array, int index)
         {
             if ((uint)index >= (uint)array.Length)
                 throw ThrowErrors.IndexOutOfRange();

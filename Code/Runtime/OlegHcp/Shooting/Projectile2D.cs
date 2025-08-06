@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace OlegHcp.Shooting
 {
@@ -25,8 +26,8 @@ namespace OlegHcp.Shooting
         private ProjectileCaster _casting;
         [SerializeField]
         private ProjectileMover2D _moving;
-        [SerializeField]
-        private RicochetOptions[] _ricochets;
+        [SerializeField, FormerlySerializedAs("_ricochets")]
+        private HitOptions[] _hitOptions;
 
         private IRotationProvider _rotationProvider;
         private ITimeProvider _timeProvider;
@@ -45,7 +46,7 @@ namespace OlegHcp.Shooting
         public bool IsPlaying => _isPlaying;
         public float Speed => _speed;
         public Vector2 PrevPos => _prevPos;
-        public RicochetOptions[] Ricochets => _ricochets;
+        public HitOptions[] Ricochets => _hitOptions;
 
         public float Timer
         {
@@ -273,26 +274,26 @@ namespace OlegHcp.Shooting
 
         public void SetRicochetOptionsCount(int count)
         {
-            ProjectileHelper.SetRicochetOptionsCount(ref _ricochets, count);
+            ProjectileHelper.SetRicochetOptionsCount(ref _hitOptions, count);
         }
 
-        public void AddRicochetOptions(in RicochetOptions options)
+        public void AddRicochetOptions(in HitOptions options)
         {
-            ProjectileHelper.AddRicochetOptions(ref _ricochets, options);
+            ProjectileHelper.AddRicochetOptions(ref _hitOptions, options);
         }
 
         public void RemoveRicochetOptionsAt(int index)
         {
-            ProjectileHelper.RemoveRicochetOptionsAt(ref _ricochets, index);
+            ProjectileHelper.RemoveRicochetOptionsAt(ref _hitOptions, index);
         }
 
         private void PlayInternal(in Vector3 currentDirection)
         {
             _isPlaying = true;
 
-            for (int i = 0; i < _ricochets.Length; i++)
+            for (int i = 0; i < _hitOptions.Length; i++)
             {
-                _ricochets[i].ResetRicochets();
+                _hitOptions[i].Reset();
             }
 
             Vector3 currentPosition = transform.position;
@@ -350,11 +351,11 @@ namespace OlegHcp.Shooting
 
                 if (_casting.Cast(source, direction, magnitude, out _hitInfo))
                 {
-                    for (int i = 0; i < _ricochets.Length; i++)
+                    for (int i = 0; i < _hitOptions.Length; i++)
                     {
-                        ref RicochetOptions ricochetOption = ref _ricochets[i];
+                        ref HitOptions ricochetOption = ref _hitOptions[i];
 
-                        if (ricochetOption.RicochetsLeft > 0 && ricochetOption.RicochetMask.HasLayer(_hitInfo.GetLayer()))
+                        if (ricochetOption.Left > 0 && ricochetOption.Mask.HasLayer(_hitInfo.GetLayer()))
                         {
                             ricochetOption.DecreaseCounter();
 

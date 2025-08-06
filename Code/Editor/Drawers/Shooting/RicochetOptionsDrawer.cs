@@ -3,44 +3,45 @@ using OlegHcp.Mathematics;
 using OlegHcp.Shooting;
 using UnityEditor;
 using UnityEngine;
+using static OlegHcpEditor.EditorGuiUtility;
+using static UnityEditor.EditorGUIUtility;
 
 namespace OlegHcpEditor.Drawers.Shooting
 {
-    [CustomPropertyDrawer(typeof(RicochetOptions))]
+    [CustomPropertyDrawer(typeof(HitOptions))]
     internal class RicochetOptionsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty countProp = property.FindPropertyRelative(RicochetOptions.CountFieldName);
-            SerializedProperty maskProp = property.FindPropertyRelative(RicochetOptions.MaskFieldName);
-            SerializedProperty lossProp = property.FindPropertyRelative(RicochetOptions.LossFieldName);
+            SerializedProperty reactProp = property.FindPropertyRelative(HitOptions.ReactionFieldName);
+            SerializedProperty countProp = property.FindPropertyRelative(HitOptions.CountFieldName);
+            SerializedProperty maskProp = property.FindPropertyRelative(HitOptions.MaskFieldName);
+            SerializedProperty lossProp = property.FindPropertyRelative(HitOptions.LossFieldName);
 
-            Rect linePos = position;
-            linePos.height = EditorGUIUtility.singleLineHeight;
+            Rect linePos = GetLinePosition(position, 0);
+            EditorGUI.PropertyField(linePos, reactProp);
+
+            linePos = GetLinePosition(position, 1);
             linePos.width *= 0.75f;
-            countProp.intValue = EditorGUI.IntField(linePos, label, countProp.intValue).ClampMin(0);
+            countProp.intValue = EditorGUI.IntField(linePos, label, countProp.intValue).ClampMin(1);
 
-            linePos.x += linePos.width + EditorGuiUtility.StandardHorizontalSpacing;
-            linePos.width = position.width - linePos.width - EditorGuiUtility.StandardHorizontalSpacing;
+            linePos.x += linePos.width + StandardHorizontalSpacing;
+            linePos.width = position.width - linePos.width - StandardHorizontalSpacing;
+            bool maxPressed = GUI.Button(linePos, "Max");
 
-            if (GUI.Button(linePos, "Max"))
+            linePos = GetLinePosition(position, 2);
+            EditorGUI.PropertyField(linePos, maskProp);
+            linePos = GetLinePosition(position, 3);
+            EditorGUI.PropertyField(linePos, lossProp);
+
+            if (maxPressed)
                 countProp.intValue = int.MaxValue;
-
-            if (countProp.intValue != 0)
-            {
-                linePos = EditorGuiUtility.GetLinePosition(position, 1);
-                EditorGUI.PropertyField(linePos, maskProp);
-                linePos = EditorGuiUtility.GetLinePosition(position, 2);
-                EditorGUI.PropertyField(linePos, lossProp);
-            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (property.FindPropertyRelative(RicochetOptions.CountFieldName).intValue != 0)
-                return EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing * 2f;
-
-            return EditorGUIUtility.singleLineHeight;
+            int lineCount = 4;
+            return singleLineHeight * lineCount + standardVerticalSpacing * (lineCount - 1);
         }
     }
 }
