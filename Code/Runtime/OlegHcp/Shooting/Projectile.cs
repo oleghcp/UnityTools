@@ -1,5 +1,6 @@
 ﻿#if INCLUDE_PHYSICS
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
@@ -31,7 +32,7 @@ namespace OlegHcp.Shooting
         private ITimeProvider _timeProvider;
         private IGravityProvider _gravityProvider;
         private IProjectileEventListener _listener;
-
+        private HashSet<Component> _hits;
         private bool _isPlaying;
         private float _currentTime;
         private Vector3 _currentPosition;
@@ -272,8 +273,11 @@ namespace OlegHcp.Shooting
             {
                 if (_currentTime >= _timer)
                 {
-                    _isPlaying = false;
-                    InvokeTimeOut();
+                    if (_autodestruct)
+                        gameObject.Destroy();
+
+                    StopInternal();
+                    _listener?.OnTimeOut();
                 }
                 else
                 {
@@ -321,26 +325,28 @@ namespace OlegHcp.Shooting
             _currentTime = 0f;
             _speed = 0f;
             _velocity = default;
+            _hits?.Clear();
         }
 
         private void UpdateState(float deltaTime, float speedScale)
         {
             if (_doubleCollisionCheck)
             {
-                if (!ProcessMovement(_prevPos, _currentPosition))
+                if (!ProcessMovement(_prevPos, _currentPosition, true))
                 {
-                    transform.SetPositionAndRotation(_currentPosition, GetRotation());
+                    ApplyMovement();
                     InvokeHit();
                     return;
                 }
+                _hits?.Clear();
             }
 
             UpdatePrevSpeed();
             _prevPos = _currentPosition;
             _currentPosition = _moving.GetNextPos(_currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
             _speed = _velocity.magnitude;
-            bool canPlay = ProcessMovement(_prevPos, _currentPosition);
-            transform.SetPositionAndRotation(_currentPosition, GetRotation());
+            bool canPlay = ProcessMovement(_prevPos, _currentPosition, false);
+            ApplyMovement();
 
             if (!canPlay)
             {
@@ -348,7 +354,7 @@ namespace OlegHcp.Shooting
             }
         }
 
-        private bool ProcessMovement(in Vector3 source, in Vector3 destination)
+        private bool ProcessMovement(in Vector3 source, in Vector3 destination, bool additional)
         {
             Vector3 direction = (destination - source).GetNormalized(out float magnitude);
 
@@ -359,14 +365,16 @@ namespace OlegHcp.Shooting
             {
                 ref HitOptions hitOption = ref _hitOptions[i];
 
-                if (hitOption.Left > 0 && hitOption.HasLayer(_hitInfo.GetLayer()))
+                if (hitOption.HasLayer(_hitInfo.GetLayer()))
                 {
-                    hitOption.UpdateHit();
-
                     switch (hitOption.Reaction)
                     {
                         case HitReactionType.Ricochet:
                         {
+                            if (hitOption.Left <= 0)
+                                goto ExitLabel;
+
+                            hitOption.UpdateHit();
                             var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedRemainder);
 
                             UpdatePrevSpeed();
@@ -374,11 +382,39 @@ namespace OlegHcp.Shooting
                             _velocity = newDir * _speed;
 
                             _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-                            return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest);
+                            return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest, additional);
                         }
 
                         case HitReactionType.MoveThrough:
                         {
+                            bool duplicated = false;
+
+                            if (_doubleCollisionCheck)
+                            {
+                                if (additional)
+                                {
+                                    if (_hits != null && _hits.Contains(_hitInfo.collider))
+                                        duplicated = true;
+                                }
+                                else
+                                {
+                                    if (_hits == null) _hits = new HashSet<Component>();
+                                    _hits.Add(_hitInfo.collider);
+                                }
+                            }
+
+                            if (duplicated)
+                            {
+                                return ProcessMovement(_moving.GetHitPosition(_hitInfo, _casting.CastRadius) + direction * 0.01f,
+                                                       destination,
+                                                       additional);
+                            }
+
+                            if (hitOption.Left <= 0)
+                                goto ExitLabel;
+
+                            hitOption.UpdateHit();
+
                             var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedRemainder);
 
                             UpdatePrevSpeed();
@@ -386,12 +422,13 @@ namespace OlegHcp.Shooting
                             _velocity = direction * _speed;
 
                             _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-                            return ProcessMovement(hitPos + direction * 0.01f, _currentPosition = newDest);
+                            return ProcessMovement(hitPos + direction * 0.01f, _currentPosition = newDest, additional);
                         }
                     }
                 }
             }
 
+        ExitLabel:
             _currentPosition = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
             return false;
         }
@@ -414,24 +451,14 @@ namespace OlegHcp.Shooting
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void InvokeTimeOut()
-        {
-            if (_autodestruct)
-                gameObject.Destroy();
-
-            StopInternal();
-            _listener?.OnTimeOut();
-        }
-
-        private Quaternion GetRotation()
+        private void ApplyMovement()
         {
             if (_rotationProvider != null)
-                return _rotationProvider.GetRotation();
-
-            if (_speed > MathUtility.kEpsilon)
-                return (_velocity / _speed).ToLookRotation();
-
-            return transform.forward.ToLookRotation();
+                transform.SetPositionAndRotation(_currentPosition, _rotationProvider.GetRotation());
+            else if (_speed > MathUtility.kEpsilon)
+                transform.SetPositionAndRotation(_currentPosition, _velocity.ToLookRotation());
+            else
+                transform.position = _currentPosition;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

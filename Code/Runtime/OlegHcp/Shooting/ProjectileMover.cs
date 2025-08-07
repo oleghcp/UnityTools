@@ -120,7 +120,6 @@ namespace OlegHcp.Shooting
             if (speedRemainder == 1f)
                 return (destination, hitPosition);
 
-            Debug.Log("-");
             float distanceAfterHit = Vector3.Distance(hitPosition, destination) * speedRemainder;
             return (hitPosition + direction * distanceAfterHit, hitPosition);
         }
