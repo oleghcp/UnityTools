@@ -34,6 +34,7 @@ namespace OlegHcp.Shooting
 
         private bool _isPlaying;
         private float _currentTime;
+        private Vector3 _currentPosition;
         private Vector3 _prevPos;
         private Vector3 _prevVelocity;
         private float _prevSpeed;
@@ -132,22 +133,10 @@ namespace OlegHcp.Shooting
             set => _casting.CastRadius = value;
         }
 
-        public bool HighPrecision
-        {
-            get => _casting.HighPrecision;
-            set => _casting.HighPrecision = value;
-        }
-
         public LayerMask HitMask
         {
             get => _casting.HitMask;
             set => _casting.HitMask = value;
-        }
-
-        public float ReflectedCastNear
-        {
-            get => _casting.ReflectedCastNear;
-            set => _casting.ReflectedCastNear = value;
         }
 
         public float InitialPrecastBackOffset
@@ -213,31 +202,8 @@ namespace OlegHcp.Shooting
 #endif
 
             _casting.HitMask = LayerMask.GetMask("Default");
-            _casting.ReflectedCastNear = 0.1f;
         }
 #endif
-
-        void IProjectile.OnUpdate()
-        {
-            _listener?.PreUpdate(_isPlaying);
-
-            if (_isPlaying)
-            {
-                if (_currentTime >= _timer)
-                {
-                    _isPlaying = false;
-                    InvokeTimeOut();
-                }
-                else
-                {
-                    float deltaTime = GetDeltaTime();
-                    _currentTime += deltaTime;
-                    UpdateState(transform.position, deltaTime, 1f);
-                }
-            }
-
-            _listener?.PostUpdate(_isPlaying);
-        }
 
         public void Play()
         {
@@ -298,6 +264,28 @@ namespace OlegHcp.Shooting
             ProjectileHelper.RemoveHitOption(ref _hitOptions, index);
         }
 
+        void IProjectile.OnUpdate()
+        {
+            _listener?.PreUpdate(_isPlaying);
+
+            if (_isPlaying)
+            {
+                if (_currentTime >= _timer)
+                {
+                    _isPlaying = false;
+                    InvokeTimeOut();
+                }
+                else
+                {
+                    float deltaTime = GetDeltaTime();
+                    _currentTime += deltaTime;
+                    UpdateState(deltaTime, 1f);
+                }
+            }
+
+            _listener?.PostUpdate(_isPlaying);
+        }
+
         private void PlayInternal(in Vector3 currentDirection)
         {
             _isPlaying = true;
@@ -307,9 +295,9 @@ namespace OlegHcp.Shooting
                 _hitOptions[i].Reset();
             }
 
-            Vector3 currentPosition = transform.position;
+            _currentPosition = transform.position;
 
-            _prevPos = currentPosition - (currentDirection * _casting.InitialPrecastBackOffset);
+            _prevPos = _currentPosition - (currentDirection * _casting.InitialPrecastBackOffset);
             _velocity = currentDirection * _moving.StartSpeed;
 
             if (_moving.HasLocks)
@@ -323,9 +311,7 @@ namespace OlegHcp.Shooting
             }
 
             if (_moving.MoveInInitialFrame > 0f)
-            {
-                UpdateState(currentPosition, GetDeltaTime(), _moving.MoveInInitialFrame);
-            }
+                UpdateState(GetDeltaTime(), _moving.MoveInInitialFrame);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -337,82 +323,89 @@ namespace OlegHcp.Shooting
             _velocity = default;
         }
 
-        private void UpdateState(Vector3 currentPosition, float deltaTime, float speedScale)
+        private void UpdateState(float deltaTime, float speedScale)
         {
             if (_doubleCollisionCheck)
             {
-                CheckMovement(_prevPos, currentPosition, out _prevPos, out currentPosition);
-                if (!_isPlaying)
+                if (!ProcessMovement(_prevPos, _currentPosition))
                 {
-                    transform.SetPositionAndRotation(currentPosition, GetRotation());
+                    transform.SetPositionAndRotation(_currentPosition, GetRotation());
                     InvokeHit();
                     return;
                 }
             }
 
-            UpdatePrevState();
-            Vector3 newPos = _moving.GetNextPos(currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
+            UpdatePrevSpeed();
+            _prevPos = _currentPosition;
+            _currentPosition = _moving.GetNextPos(_currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
             _speed = _velocity.magnitude;
-            CheckMovement(currentPosition, newPos, out _prevPos, out currentPosition);
-            transform.SetPositionAndRotation(currentPosition, GetRotation());
+            bool canPlay = ProcessMovement(_prevPos, _currentPosition);
+            transform.SetPositionAndRotation(_currentPosition, GetRotation());
 
-            if (!_isPlaying)
+            if (!canPlay)
+            {
                 InvokeHit();
+            }
         }
 
-        private void CheckMovement(in Vector3 source, in Vector3 dest, out Vector3 newSource, out Vector3 newDest)
+        private bool ProcessMovement(in Vector3 source, in Vector3 destination)
         {
-            Vector3 vector = dest - source;
-            float magnitude = vector.magnitude;
+            Vector3 direction = (destination - source).GetNormalized(out float magnitude);
 
-            if (magnitude > MathUtility.kEpsilon)
+            if (magnitude <= MathUtility.kEpsilon || !_casting.Cast(source, direction, magnitude, out _hitInfo))
+                return true;
+
+            for (int i = 0; i < _hitOptions.Length; i++)
             {
-                Vector3 direction = vector / magnitude;
+                ref HitOptions hitOption = ref _hitOptions[i];
 
-                if (_casting.Cast(source, direction, magnitude, out _hitInfo))
+                if (hitOption.Left > 0 && hitOption.HasLayer(_hitInfo.GetLayer()))
                 {
-                    for (int i = 0; i < _hitOptions.Length; i++)
+                    hitOption.UpdateHit();
+
+                    switch (hitOption.Reaction)
                     {
-                        ref HitOptions ricochetOption = ref _hitOptions[i];
-
-                        if (ricochetOption.Left > 0 && ricochetOption.Mask.HasLayer(_hitInfo.GetLayer()))
+                        case HitReactionType.Ricochet:
                         {
-                            ricochetOption.DecreaseCounter();
+                            var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedRemainder);
 
-                            UpdatePrevState();
-                            var reflectionInfo = _moving.Reflect(_hitInfo, dest, direction, _casting.CastRadius, ricochetOption.SpeedRemainder);
-                            _velocity = reflectionInfo.newDir * (_speed * ricochetOption.SpeedRemainder);
-                            _speed = _velocity.magnitude;
+                            UpdatePrevSpeed();
+                            _speed *= hitOption.SpeedRemainder;
+                            _velocity = newDir * _speed;
 
-                            _listener?.OnHitReflected(_hitInfo, _prevVelocity, _prevSpeed);
+                            _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
+                            ProcessMovement(_prevPos = hitPos, _currentPosition = newDest);
+                            return true;
+                        }
 
-                            float near = _casting.ReflectedCastNear;
-                            Vector3 from = near == 0f ? _hitInfo.point
-                                                      : Vector3.LerpUnclamped(_hitInfo.point, reflectionInfo.newDest, near);
+                        case HitReactionType.MoveThrough:
+                        {
+                            var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedRemainder);
 
-                            CheckMovement(from, reflectionInfo.newDest, out newSource, out newDest);
-                            return;
+                            UpdatePrevSpeed();
+                            _speed *= hitOption.SpeedRemainder;
+                            _velocity = direction * _speed;
+
+                            _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
+                            ProcessMovement(hitPos + direction * 0.01f, _currentPosition = newDest);
+                            return true;
                         }
                     }
-
-                    _isPlaying = false;
-                    newSource = source;
-                    newDest = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
-                    return;
                 }
             }
 
-            newSource = source;
-            newDest = dest;
+            _currentPosition = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
+            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdatePrevState()
+        private void UpdatePrevSpeed()
         {
             _prevVelocity = _velocity;
             _prevSpeed = _speed;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void InvokeHit()
         {
             if (_autodestruct)
@@ -422,6 +415,7 @@ namespace OlegHcp.Shooting
             _listener?.OnHitFinal(_hitInfo, _prevVelocity, _prevSpeed);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void InvokeTimeOut()
         {
             if (_autodestruct)
@@ -442,12 +436,14 @@ namespace OlegHcp.Shooting
             return transform.forward.ToLookRotation();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private float GetDeltaTime()
         {
             return _timeProvider != null ? _timeProvider.GetDeltaTime()
                                          : Time.deltaTime;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Vector3 GetGravity()
         {
             return _gravityProvider != null ? _gravityProvider.GetGravity()

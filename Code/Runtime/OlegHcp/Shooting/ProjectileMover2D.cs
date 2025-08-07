@@ -68,16 +68,27 @@ namespace OlegHcp.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        public (Vector2 newDest, Vector2 newDir) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius, float speedRemainder)
+        public (Vector2 newDest, Vector2 newDir, Vector2 hitPos) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius, float speedRemainder)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
             Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
             float distanceAfterHit = Vector2.Distance(hitPosition, dest) * speedRemainder;
 
-            return (hitPosition + newDirection * distanceAfterHit, newDirection);
+            return (hitPosition + newDirection * distanceAfterHit, newDirection, hitPosition);
         }
 
-        public Vector3 GetHitPosition(in RaycastHit2D hitInfo, float castRadius)
+        public (Vector2 newDest, Vector2 hitPos) Penetrate(in RaycastHit2D hitInfo, in Vector2 destination, in Vector2 direction, float castRadius, float speedRemainder)
+        {
+            Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
+
+            if (speedRemainder == 1f)
+                return (destination, hitPosition);
+
+            float distanceAfterHit = Vector2.Distance(hitPosition, destination) * speedRemainder;
+            return (hitPosition + direction * distanceAfterHit, hitPosition);
+        }
+
+        public Vector2 GetHitPosition(in RaycastHit2D hitInfo, float castRadius)
         {
             if (castRadius <= MathUtility.kEpsilon)
                 return hitInfo.point;

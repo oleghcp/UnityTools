@@ -15,8 +15,6 @@ namespace OlegHcp.Shooting
         private LayerMask _hitMask;
         [SerializeField]
         private float _initialPrecastBackOffset;
-        [SerializeField, Range(0f, 1f)]
-        private float _reflectedCastNear;
 
         public float CastRadius
         {
@@ -24,22 +22,10 @@ namespace OlegHcp.Shooting
             set => _castRadius.CastRadius = value.ClampMin(0f);
         }
 
-        public bool HighPrecision
-        {
-            get => _castRadius.HighPrecision;
-            set => _castRadius.HighPrecision = value;
-        }
-
         public LayerMask HitMask
         {
             get => _hitMask;
             set => _hitMask = value;
-        }
-
-        public float ReflectedCastNear
-        {
-            get => _reflectedCastNear;
-            set => _reflectedCastNear = value.Clamp01();
         }
 
         public float InitialPrecastBackOffset
@@ -52,15 +38,7 @@ namespace OlegHcp.Shooting
         public bool Cast(in Vector3 source, in Vector3 direction, float distance, out RaycastHit hitInfo)
         {
             if (_castRadius.CastRadius > float.Epsilon)
-            {
-                bool hit = Physics.SphereCast(source, _castRadius.CastRadius, direction, out hitInfo, distance, _hitMask);
-
-                if (!_castRadius.HighPrecision)
-                    return hit;
-
-                if (hit)
-                    return true;
-            }
+                return Physics.SphereCast(source, _castRadius.CastRadius, direction, out hitInfo, distance, _hitMask);
 
             return Physics.Raycast(source, direction, out hitInfo, distance, _hitMask);
         }
@@ -72,12 +50,7 @@ namespace OlegHcp.Shooting
             if (_castRadius.CastRadius > float.Epsilon)
             {
                 hitInfo = Physics2D.CircleCast(source, _castRadius.CastRadius, direction, distance, _hitMask);
-
-                if (!_castRadius.HighPrecision)
-                    return hitInfo.Hit();
-
-                if (hitInfo.Hit())
-                    return true;
+                return hitInfo.Hit();
             }
 
             hitInfo = Physics2D.Raycast(source, direction, distance, _hitMask);

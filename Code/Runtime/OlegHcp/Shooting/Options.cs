@@ -7,27 +7,6 @@ using UnityEngine.Serialization;
 namespace OlegHcp.Shooting
 {
     [Serializable]
-    internal struct DragOptions
-    {
-        public DragMethod Method;
-        [Min(0f)]
-        public float Value;
-    }
-
-    public enum DragMethod
-    {
-        None = 0,
-        Linear = 1,
-        NonLinear = 2,
-    }
-
-    public enum HitReactionType
-    {
-        Ricochet = 0,
-        MoveThrough = 1,
-    }
-
-    [Serializable]
     public struct HitOptions
     {
         [SerializeField]
@@ -105,7 +84,27 @@ namespace OlegHcp.Shooting
     {
         [Min(0f)]
         public float CastRadius;
-        public bool HighPrecision;
+    }
+
+    [Serializable]
+    internal struct DragOptions
+    {
+        public DragMethod Method;
+        [Min(0f)]
+        public float Value;
+    }
+
+    public enum DragMethod
+    {
+        None = 0,
+        Linear = 1,
+        NonLinear = 2,
+    }
+
+    public enum HitReactionType
+    {
+        Ricochet = 0,
+        MoveThrough = 1,
     }
 }
 #endif
