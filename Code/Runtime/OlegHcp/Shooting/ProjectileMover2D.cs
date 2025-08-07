@@ -68,23 +68,23 @@ namespace OlegHcp.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        public (Vector2 newDest, Vector2 newDir, Vector2 hitPos) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius, float speedRemainder)
+        public (Vector2 newDest, Vector2 newDir, Vector2 hitPos) Reflect(in RaycastHit2D hitInfo, in Vector2 dest, in Vector2 direction, float castRadius, float speedMultiplier)
         {
             Vector2 newDirection = Vector2.Reflect(direction, hitInfo.normal);
             Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
-            float distanceAfterHit = Vector2.Distance(hitPosition, dest) * speedRemainder;
+            float distanceAfterHit = Vector2.Distance(hitPosition, dest) * speedMultiplier;
 
             return (hitPosition + newDirection * distanceAfterHit, newDirection, hitPosition);
         }
 
-        public (Vector2 newDest, Vector2 hitPos) Penetrate(in RaycastHit2D hitInfo, in Vector2 destination, in Vector2 direction, float castRadius, float speedRemainder)
+        public (Vector2 newDest, Vector2 hitPos) Penetrate(in RaycastHit2D hitInfo, in Vector2 destination, in Vector2 direction, float castRadius, float speedMultiplier)
         {
             Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
 
-            if (speedRemainder == 1f)
+            if (speedMultiplier == 1f)
                 return (destination, hitPosition);
 
-            float distanceAfterHit = Vector2.Distance(hitPosition, destination) * speedRemainder;
+            float distanceAfterHit = Vector2.Distance(hitPosition, destination) * speedMultiplier;
             return (hitPosition + direction * distanceAfterHit, hitPosition);
         }
 

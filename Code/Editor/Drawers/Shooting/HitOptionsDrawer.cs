@@ -1,5 +1,4 @@
 ﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
-using OlegHcp.Mathematics;
 using OlegHcp.Shooting;
 using UnityEditor;
 using UnityEngine;
@@ -9,7 +8,7 @@ using static UnityEditor.EditorGUIUtility;
 namespace OlegHcpEditor.Drawers.Shooting
 {
     [CustomPropertyDrawer(typeof(HitOptions))]
-    internal class RicochetOptionsDrawer : PropertyDrawer
+    internal class HitOptionsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -17,6 +16,7 @@ namespace OlegHcpEditor.Drawers.Shooting
             SerializedProperty countProp = property.FindPropertyRelative(HitOptions.CountFieldName);
             SerializedProperty maskProp = property.FindPropertyRelative(HitOptions.MaskFieldName);
             SerializedProperty lossProp = property.FindPropertyRelative(HitOptions.LossFieldName);
+            SerializedProperty multProp = property.FindPropertyRelative(HitOptions.MultiplierFieldName);
 
             Rect linePos = GetLinePosition(position, 0);
             EditorGUI.PropertyField(linePos, reactProp);
@@ -25,9 +25,8 @@ namespace OlegHcpEditor.Drawers.Shooting
             linePos.width *= 0.75f;
 
             if (countProp.intValue == 0)
-                countProp.intValue = EditorGUI.IntField(linePos, label, int.MaxValue);
-            else
-                countProp.intValue = EditorGUI.IntField(linePos, label, countProp.intValue).ClampMin(1);
+                countProp.intValue = int.MaxValue;
+            EditorGUI.PropertyField(linePos, countProp);
 
             linePos.x += linePos.width + StandardHorizontalSpacing;
             linePos.width = position.width - linePos.width - StandardHorizontalSpacing;
@@ -36,7 +35,9 @@ namespace OlegHcpEditor.Drawers.Shooting
             linePos = GetLinePosition(position, 2);
             EditorGUI.PropertyField(linePos, maskProp);
             linePos = GetLinePosition(position, 3);
-            EditorGUI.PropertyField(linePos, lossProp);
+            if (multProp.floatValue == 0)
+                multProp.floatValue = 1f - lossProp.floatValue;
+            EditorGUI.PropertyField(linePos, multProp);
 
             if (maxPressed)
                 countProp.intValue = int.MaxValue;

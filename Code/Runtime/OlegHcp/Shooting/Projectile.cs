@@ -375,10 +375,10 @@ namespace OlegHcp.Shooting
                                 goto ExitLabel;
 
                             hitOption.UpdateHit();
-                            var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedRemainder);
+                            var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedMultiplier);
 
                             UpdatePrevSpeed();
-                            _speed *= hitOption.SpeedRemainder;
+                            _speed *= hitOption.SpeedMultiplier;
                             _velocity = newDir * _speed;
 
                             _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
@@ -415,10 +415,10 @@ namespace OlegHcp.Shooting
 
                             hitOption.UpdateHit();
 
-                            var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedRemainder);
+                            var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedMultiplier);
 
                             UpdatePrevSpeed();
-                            _speed *= hitOption.SpeedRemainder;
+                            _speed *= hitOption.SpeedMultiplier;
                             _velocity = direction * _speed;
 
                             _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);

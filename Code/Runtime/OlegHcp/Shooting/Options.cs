@@ -9,14 +9,18 @@ namespace OlegHcp.Shooting
     [Serializable]
     public struct HitOptions
     {
+        private const float MIN_SPEED_MULTIPLIER = 0.0001f;
+
         [SerializeField]
         private HitReactionType _reaction;
-        [SerializeField]
+        [SerializeField, Min(1f)]
         private int _count;
         [SerializeField, FormerlySerializedAs("_ricochetMask")]
         private LayerMask _mask;
-        [SerializeField, Range(0f, 1f)]
-        private float _speedLoss;
+        [SerializeField, HideInInspector]
+        private float _speedLoss; // TODO: obsolete parameter, should be removed
+        [SerializeField, Min(MIN_SPEED_MULTIPLIER)]
+        private float _speedMultiplier;
 
         private int _left;
 
@@ -25,6 +29,7 @@ namespace OlegHcp.Shooting
         public static string CountFieldName => nameof(_count);
         public static string MaskFieldName => nameof(_mask);
         public static string LossFieldName => nameof(_speedLoss);
+        public static string MultiplierFieldName => nameof(_speedMultiplier);
 #endif
 
         public HitReactionType Reaction
@@ -45,21 +50,21 @@ namespace OlegHcp.Shooting
             set => _mask = value;
         }
 
-        public float SpeedLoss
+        public float SpeedMultiplier
         {
-            get => _speedLoss;
-            set => _speedLoss = value.Clamp01();
+            get => _speedMultiplier > 0f ? _speedMultiplier : 1f - _speedLoss;
+            set => _speedMultiplier = value.ClampMin(MIN_SPEED_MULTIPLIER);
         }
 
-        internal float SpeedRemainder => 1f - _speedLoss;
         internal int Left => _left;
 
-        public HitOptions(HitReactionType reaction, int count, LayerMask mask, float speedLoss)
+        public HitOptions(HitReactionType reaction, int count, LayerMask mask, float speedMultiplier)
         {
             _reaction = reaction;
             _count = count.ClampMin(0);
             _mask = mask;
-            _speedLoss = speedLoss.Clamp01();
+            _speedMultiplier = speedMultiplier;
+            _speedLoss = 0;
             _left = 0;
         }
 

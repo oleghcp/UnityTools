@@ -90,7 +90,7 @@ namespace OlegHcp.Shooting
             return curPos + velocity * (deltaTime * speedScale);
         }
 
-        public (Vector3 newDest, Vector3 newDir, Vector3 hitPos) Reflect(in RaycastHit hitInfo, in Vector3 destination, in Vector3 direction, float castRadius, float speedRemainder)
+        public (Vector3 newDest, Vector3 newDir, Vector3 hitPos) Reflect(in RaycastHit hitInfo, in Vector3 destination, in Vector3 direction, float castRadius, float speedMultiplier)
         {
             Vector3 newDirection = Vector3.Reflect(direction, hitInfo.normal);
 
@@ -104,7 +104,7 @@ namespace OlegHcp.Shooting
             }
 
             Vector3 hitPosition = GetHitPosition(hitInfo, castRadius);
-            float distanceAfterHit = Vector3.Distance(hitPosition, destination) * speedRemainder;
+            float distanceAfterHit = Vector3.Distance(hitPosition, destination) * speedMultiplier;
             Vector3 newDest = hitPosition + newDirection * distanceAfterHit;
 
             if (locked)
@@ -113,14 +113,14 @@ namespace OlegHcp.Shooting
             return (newDest, newDirection, hitPosition);
         }
 
-        public (Vector3 newDest, Vector3 hitPos) Penetrate(in RaycastHit hitInfo, in Vector3 destination, in Vector3 direction, float castRadius, float speedRemainder)
+        public (Vector3 newDest, Vector3 hitPos) Penetrate(in RaycastHit hitInfo, in Vector3 destination, in Vector3 direction, float castRadius, float speedMultiplier)
         {
             Vector3 hitPosition = GetHitPosition(hitInfo, castRadius);
 
-            if (speedRemainder == 1f)
+            if (speedMultiplier == 1f)
                 return (destination, hitPosition);
 
-            float distanceAfterHit = Vector3.Distance(hitPosition, destination) * speedRemainder;
+            float distanceAfterHit = Vector3.Distance(hitPosition, destination) * speedMultiplier;
             return (hitPosition + direction * distanceAfterHit, hitPosition);
         }
 
