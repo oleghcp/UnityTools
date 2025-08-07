@@ -354,8 +354,7 @@ namespace OlegHcp.Shooting
                             _velocity = newDir * _speed;
 
                             _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-                            ProcessMovement(_prevPos = hitPos, _currentPosition = newDest);
-                            return true;
+                            return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest);
                         }
 
                         case HitReactionType.MoveThrough:
@@ -367,8 +366,7 @@ namespace OlegHcp.Shooting
                             _velocity = direction * _speed;
 
                             _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-                            ProcessMovement(hitPos + direction * 0.01f, _currentPosition = newDest);
-                            return true;
+                            return ProcessMovement(hitPos + direction * 0.01f, _currentPosition = newDest);
                         }
                     }
                 }
