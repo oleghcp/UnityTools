@@ -19,8 +19,6 @@ namespace OlegHcp.Shooting
         [SerializeField]
         private bool _autodestruct;
         [SerializeField]
-        private bool _autoFlippingX = true;
-        [SerializeField]
         private bool _doubleCollisionCheck = true;
         [SerializeField]
         private ProjectileCaster _casting;
@@ -72,12 +70,6 @@ namespace OlegHcp.Shooting
         {
             get => _autodestruct;
             set => _autodestruct = value;
-        }
-
-        public bool AutoFlippingX
-        {
-            get => _autoFlippingX;
-            set => _autoFlippingX = value;
         }
 
         public bool DoubleCollisionCheck
@@ -441,8 +433,8 @@ namespace OlegHcp.Shooting
             }
             else if (_speed > MathUtility.kEpsilon)
             {
-                Vector3 forward = _autoFlippingX ? new Vector3(0f, 0f, _velocity.x.Sign()) : Vector3.forward;
-                Quaternion rotation = forward.ToLookRotation(transform.right.XY().GetRotated(90f * forward.z));
+                Vector3 forward = new Vector3(0f, 0f, _velocity.x.Sign());
+                Quaternion rotation = forward.ToLookRotation(_velocity.GetRotated(90f * forward.z));
                 transform.SetPositionAndRotation(newPosition, rotation);
             }
             else
