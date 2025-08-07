@@ -322,8 +322,10 @@ namespace OlegHcp.Shooting
             bool canPlay = ProcessMovement(_prevPos, _currentPosition);
             transform.SetPositionAndRotation(_currentPosition.To_XYz(transform.position.z), GetRotation());
 
-            if (!_isPlaying)
+            if (!canPlay)
+            {
                 InvokeHit();
+            }
         }
 
         private bool ProcessMovement(in Vector2 source, in Vector2 destination)
