@@ -1,4 +1,4 @@
-#if EDITOR_COROUTINES
+﻿#if EDITOR_COROUTINES
 using System;
 using System.Collections;
 using System.Threading;

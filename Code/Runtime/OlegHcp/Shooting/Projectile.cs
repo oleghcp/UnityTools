@@ -1,6 +1,5 @@
 ﻿#if INCLUDE_PHYSICS
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
@@ -32,7 +31,7 @@ namespace OlegHcp.Shooting
         private ITimeProvider _timeProvider;
         private IGravityProvider _gravityProvider;
         private IProjectileEventListener _listener;
-        private HashSet<Component> _hits;
+        private PoolableSet _hits;
         private bool _isPlaying;
         private float _currentTime;
         private Vector3 _currentPosition;
@@ -184,6 +183,7 @@ namespace OlegHcp.Shooting
         private void OnDisable()
         {
             ProjectileRunner.I.Remove(this);
+            ProjectileRunner.I.ReleaseSet(ref _hits);
         }
 
 #if UNITY_EDITOR
@@ -398,7 +398,7 @@ namespace OlegHcp.Shooting
                                 }
                                 else
                                 {
-                                    if (_hits == null) _hits = new HashSet<Component>();
+                                    if (_hits == null) _hits = ProjectileRunner.I.GetSet();
                                     _hits.Add(_hitInfo.collider);
                                 }
                             }

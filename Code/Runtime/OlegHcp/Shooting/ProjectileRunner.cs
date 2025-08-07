@@ -1,19 +1,27 @@
 ﻿using System.Collections.Generic;
+using OlegHcp.Pool;
+using UnityEngine;
 
 namespace OlegHcp.Shooting
 {
-    internal class ProjectileRunner
+    internal class PoolableSet : HashSet<Component>
+    {
+    }
+
+    internal class ProjectileRunner : IObjectFactory<PoolableSet>
     {
         private static ProjectileRunner _instance;
         private List<IProjectile> _items = new List<IProjectile>();
         private Stack<IProjectile> _newItems = new Stack<IProjectile>();
         private Stack<IProjectile> _deadItems = new Stack<IProjectile>();
         private bool _locked;
+        private ObjectPool<PoolableSet> _objectPool;
 
         public static ProjectileRunner I => _instance ?? (_instance = new ProjectileRunner());
 
         public ProjectileRunner()
         {
+            _objectPool = new ObjectPool<PoolableSet>(this);
             ApplicationUtility.OnLateUpdate_Event += OnLateUpdate;
         }
 
@@ -31,6 +39,26 @@ namespace OlegHcp.Shooting
                 _deadItems.Push(projectile);
             else
                 _items.Remove(projectile);
+        }
+
+        public PoolableSet GetSet()
+        {
+            return _objectPool.Get();
+        }
+
+        public void ReleaseSet(ref PoolableSet set)
+        {
+            if (set != null)
+            {
+                _objectPool.Clear();
+                _objectPool.Release(set);
+                set = null;
+            }
+        }
+
+        PoolableSet IObjectFactory<PoolableSet>.Create()
+        {
+            return new PoolableSet();
         }
 
         private void OnLateUpdate()
