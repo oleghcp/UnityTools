@@ -23,27 +23,27 @@ public class ExampleBullet : MonoBehaviour, IProjectileEventListener
 
     void IProjectileEventListener.PreUpdate(bool isPlaying)
     {
-        // Per frame function which called before motion and collision checking
+        // Per frame function which called before motion and collision check
     }
 
     void IProjectileEventListener.PostUpdate(bool isPlaying)
     {
-        // Per frame function which called after motion and collision checking
+        // Per frame function which called after motion and collision check
     }
 
-    void IProjectileEventListener.OnHitReflected(in RaycastHit hitInfo, in Vector3 previousVelocity, float previousSpeed)
+    void IProjectileEventListener.OnHitModified(in RaycastHit hitInfo, float previousSpeed, in Vector3 previousDirection, HitReactionType reaction)
     {
-        // Play visual effect or something else
+        // Called on modified hit: ricochet or moving through target object
     }
 
     void IProjectileEventListener.OnHitFinal(in RaycastHit hitInfo, in Vector3 velocity, float speed)
     {
-        // Destroy or return to object pool
+        // Called on final hit without modifications
     }
 
     void IProjectileEventListener.OnTimeOut()
     {
-        // Destroy or return to object pool
+        // Called when timer elapsed
     }
 }
 ```
