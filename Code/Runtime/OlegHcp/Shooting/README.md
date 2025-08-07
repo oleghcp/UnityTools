@@ -1,6 +1,6 @@
 ﻿## Projectile
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Projectile.png)
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Projectile1.png)
 
 ```csharp
 using OlegHcp.Shooting;
@@ -50,4 +50,8 @@ public class ExampleBullet : MonoBehaviour, IProjectileEventListener
 
 ## Projectile2D
 
-Same as Projectile but in two dimensions
+Same as Projectile but in two dimensions  
+
+Warning: for correct work of `Projectile2D` starting in colliders queries should be disabled:
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Projectile2.png)
