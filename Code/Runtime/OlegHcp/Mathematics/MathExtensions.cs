@@ -588,7 +588,13 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double Clamp01(this double value)
         {
-            return Clamp(value, 0, 1);
+            if (value < 0d)
+                return 0d;
+
+            if (value > 1d)
+                return 1d;
+
+            return value;
         }
 
         /// <summary>

@@ -377,24 +377,28 @@ namespace OlegHcp.Shooting
 
                             if (duplicated)
                             {
-                                return ProcessMovement(_moving.GetHitPosition(_hitInfo, _casting.CastRadius) + direction * 0.01f,
-                                                       destination,
-                                                       additional);
+                                Vector3 newSource = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
+                                newSource = Vector2.LerpUnclamped(newSource, destination, (1f / _speed).Clamp(0.5f, 1f));
+                                return ProcessMovement(newSource, destination, additional);
                             }
+                            else
+                            {
+                                if (hitOption.Left <= 0)
+                                    goto ExitLabel;
 
-                            if (hitOption.Left <= 0)
-                                goto ExitLabel;
+                                hitOption.UpdateHit();
 
-                            hitOption.UpdateHit();
+                                var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedMultiplier);
 
-                            var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedMultiplier);
+                                UpdatePrevSpeed();
+                                _speed *= hitOption.SpeedMultiplier;
+                                _velocity = direction * _speed;
 
-                            UpdatePrevSpeed();
-                            _speed *= hitOption.SpeedMultiplier;
-                            _velocity = direction * _speed;
+                                _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
 
-                            _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-                            return ProcessMovement(hitPos + direction * 0.01f, _currentPosition = newDest, additional);
+                                Vector3 newSource = Vector2.LerpUnclamped(hitPos, newDest, (1f / _speed).Clamp(0.5f, 1f));
+                                return ProcessMovement(newSource, _currentPosition = newDest, additional);
+                            }
                         }
                     }
                 }
