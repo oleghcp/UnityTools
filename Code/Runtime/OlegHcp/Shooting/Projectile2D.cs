@@ -309,14 +309,19 @@ namespace OlegHcp.Shooting
         {
             if (_doubleCollisionCheck)
             {
-                if (!ProcessMovement(_prevPos, _currentPosition, true))
-                {
+                bool stopped = !ProcessMovement(_prevPos, _currentPosition, true);
+                _penetratedHits.CleanUp2D(true);
+
+                if (stopped)
                     ApplyMovement();
-                    _performer.Hits2D.Invoke(_listener);
+
+                _performer.Hits2D.Invoke(_listener);
+
+                if (stopped)
+                {
                     InvokeHit();
                     return;
                 }
-                _penetratedHits.CleanUp2D(true);
             }
 
             UpdatePrevSpeed();
