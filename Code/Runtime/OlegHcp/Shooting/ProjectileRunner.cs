@@ -7,13 +7,19 @@ namespace OlegHcp.Shooting
     internal class ProjectileRunner : IObjectFactory<HashSet<Component>>
     {
         private static ProjectileRunner _instance;
+
         private List<IProjectile> _items = new List<IProjectile>();
         private Stack<IProjectile> _newItems = new Stack<IProjectile>();
         private Stack<IProjectile> _deadItems = new Stack<IProjectile>();
         private bool _locked;
         private ObjectPool<HashSet<Component>> _objectPool;
+        private List<HitInfo> _hits = new List<HitInfo>();
+        private List<HitInfo2D> _hits2D = new List<HitInfo2D>();
 
         public static ProjectileRunner I => _instance ?? (_instance = new ProjectileRunner());
+
+        public List<HitInfo> Hits => _hits;
+        public List<HitInfo2D> Hits2D => _hits2D;
 
         public ProjectileRunner()
         {

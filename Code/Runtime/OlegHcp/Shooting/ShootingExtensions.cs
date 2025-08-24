@@ -7,6 +7,7 @@ namespace OlegHcp.Shooting
 {
     internal static class ShootingExtensions
     {
+#if INCLUDE_PHYSICS
         public static void CleanUp(this HashSet<Component> self, bool clearCollection)
         {
             if (self.IsNullOrEmpty())
@@ -21,6 +22,22 @@ namespace OlegHcp.Shooting
                 self.Clear();
         }
 
+        public static void Invoke(this List<HitInfo> self, IProjectileEventListener listener)
+        {
+            if (listener != null)
+            {
+                for (int i = 0; i < self.Count; i++)
+                {
+                    HitInfo hit = self[i];
+                    listener.OnHitModified(hit.HitData, hit.HitPosition, hit.PreviousVelocity, hit.NewVelocity, hit.Reaction);
+                }
+            }
+
+            self.Clear();
+        }
+#endif
+
+#if INCLUDE_PHYSICS_2D
         public static void CleanUp2D(this HashSet<Component> self, bool clearCollection)
         {
             if (self.IsNullOrEmpty())
@@ -34,6 +51,21 @@ namespace OlegHcp.Shooting
             if (clearCollection)
                 self.Clear();
         }
+
+        public static void Invoke(this List<HitInfo2D> self, IProjectile2DEventListener listener)
+        {
+            if (listener != null)
+            {
+                for (int i = 0; i < self.Count; i++)
+                {
+                    HitInfo2D hit = self[i];
+                    listener.OnHitModified(hit.HitData, hit.HitPosition, hit.PreviousVelocity, hit.NewVelocity, hit.Reaction);
+                }
+            }
+
+            self.Clear();
+        }
+#endif
 
         public static bool Has(this HashSet<Component> self, Component item)
         {

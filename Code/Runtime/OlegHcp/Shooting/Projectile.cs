@@ -171,25 +171,6 @@ namespace OlegHcp.Shooting
             set => _listener = value;
         }
 
-        private void Awake()
-        {
-            _performer = ProjectileRunner.I;
-
-            if (_playOnAwake)
-                Play();
-        }
-
-        private void OnEnable()
-        {
-            _performer.Add(this);
-        }
-
-        private void OnDisable()
-        {
-            _performer.Remove(this);
-            _performer.ReleaseSet(ref _penetratedHits);
-        }
-
 #if UNITY_EDITOR
         private void Reset()
         {
@@ -204,6 +185,49 @@ namespace OlegHcp.Shooting
             _casting.HitMask = LayerMask.GetMask("Default");
         }
 #endif
+
+        private void OnEnable()
+        {
+            _performer = ProjectileRunner.I;
+            _performer.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            _performer.Remove(this);
+            _performer.ReleaseSet(ref _penetratedHits);
+        }
+
+        private void Start()
+        {
+            if (_playOnAwake)
+                Play();
+        }
+
+        void IProjectile.OnUpdate()
+        {
+            _listener?.PreUpdate(_isPlaying);
+
+            if (_isPlaying)
+            {
+                if (_currentTime >= _timer)
+                {
+                    if (_autodestruct)
+                        gameObject.Destroy();
+
+                    StopInternal();
+                    _listener?.OnTimeOut();
+                }
+                else
+                {
+                    float deltaTime = GetDeltaTime();
+                    _currentTime += deltaTime;
+                    UpdateState(deltaTime, 1f);
+                }
+            }
+
+            _listener?.PostUpdate(_isPlaying);
+        }
 
         public void Play()
         {
@@ -264,31 +288,6 @@ namespace OlegHcp.Shooting
             ProjectileHelper.RemoveHitOption(ref _hitOptions, index);
         }
 
-        void IProjectile.OnUpdate()
-        {
-            _listener?.PreUpdate(_isPlaying);
-
-            if (_isPlaying)
-            {
-                if (_currentTime >= _timer)
-                {
-                    if (_autodestruct)
-                        gameObject.Destroy();
-
-                    StopInternal();
-                    _listener?.OnTimeOut();
-                }
-                else
-                {
-                    float deltaTime = GetDeltaTime();
-                    _currentTime += deltaTime;
-                    UpdateState(deltaTime, 1f);
-                }
-            }
-
-            _listener?.PostUpdate(_isPlaying);
-        }
-
         private void PlayInternal(in Vector3 currentDirection)
         {
             _isPlaying = true;
@@ -334,6 +333,7 @@ namespace OlegHcp.Shooting
                 if (!ProcessMovement(_prevPos, _currentPosition, true))
                 {
                     ApplyMovement();
+                    _performer.Hits.Invoke(_listener);
                     InvokeHit();
                     return;
                 }
@@ -347,6 +347,7 @@ namespace OlegHcp.Shooting
             bool canPlay = ProcessMovement(_prevPos, _currentPosition, false);
             _penetratedHits.CleanUp(!_doubleCollisionCheck);
             ApplyMovement();
+            _performer.Hits.Invoke(_listener);
 
             if (!canPlay)
             {
@@ -382,9 +383,19 @@ namespace OlegHcp.Shooting
 
                         UpdatePrevSpeed();
                         _speed *= hitOptionRef.SpeedMultiplier;
-                        _velocity = newDir * _speed;
+                        Vector3 newVelocity = newDir * _speed;
 
-                        _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOptionRef.Reaction);
+                        HitInfo hits = new HitInfo()
+                        {
+                            Reaction = hitOptionRef.Reaction,
+                            HitData = _hitInfo,
+                            HitPosition = hitPos,
+                            PreviousVelocity = _velocity,
+                            NewVelocity = newVelocity,
+                        };
+                        _performer.Hits.Add(hits);
+
+                        _velocity = newVelocity;
                         return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest, additional);
                     }
 
@@ -413,10 +424,19 @@ namespace OlegHcp.Shooting
 
                         UpdatePrevSpeed();
                         _speed *= hitOptionRef.SpeedMultiplier;
-                        _velocity = direction * _speed;
+                        Vector3 newVelocity = direction * _speed;
 
-                        _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOptionRef.Reaction);
+                        HitInfo hits = new HitInfo()
+                        {
+                            Reaction = hitOptionRef.Reaction,
+                            HitData = _hitInfo,
+                            HitPosition = _moving.GetHitPosition(_hitInfo, _casting.CastRadius),
+                            PreviousVelocity = _velocity,
+                            NewVelocity = newVelocity,
+                        };
+                        _performer.Hits.Add(hits);
 
+                        _velocity = newVelocity;
                         return ProcessMovement(source, _currentPosition = newDestination, additional);
                     }
                 }
@@ -441,7 +461,7 @@ namespace OlegHcp.Shooting
                 gameObject.Destroy();
 
             StopInternal();
-            _listener?.OnHitFinal(_hitInfo, _prevVelocity, _prevSpeed);
+            _listener?.OnHitFinal(_hitInfo, _prevVelocity);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

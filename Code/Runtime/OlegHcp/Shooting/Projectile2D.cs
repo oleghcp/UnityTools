@@ -152,26 +152,6 @@ namespace OlegHcp.Shooting
             set => _listener = value;
         }
 
-        private void Awake()
-        {
-            _performer = ProjectileRunner.I;
-            _casting.UpdateContactFilter2D();
-
-            if (_playOnAwake)
-                Play();
-        }
-
-        private void OnEnable()
-        {
-            _performer.Add(this);
-        }
-
-        private void OnDisable()
-        {
-            _performer.Remove(this);
-            _performer.ReleaseSet(ref _penetratedHits);
-        }
-
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -192,6 +172,24 @@ namespace OlegHcp.Shooting
             _casting.UpdateContactFilter2D();
         }
 #endif
+
+        private void OnEnable()
+        {
+            _performer = ProjectileRunner.I;
+            _performer.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            _performer.Remove(this);
+            _performer.ReleaseSet(ref _penetratedHits);
+        }
+
+        private void Start()
+        {
+            if (_playOnAwake)
+                Play();
+        }
 
         void IProjectile.OnUpdate()
         {
@@ -281,6 +279,7 @@ namespace OlegHcp.Shooting
         {
             _isPlaying = true;
 
+            _casting.UpdateContactFilter2D();
             for (int i = 0; i < _hitOptions.Length; i++)
             {
                 _hitOptions[i].Reset();
@@ -313,6 +312,7 @@ namespace OlegHcp.Shooting
                 if (!ProcessMovement(_prevPos, _currentPosition, true))
                 {
                     ApplyMovement();
+                    _performer.Hits2D.Invoke(_listener);
                     InvokeHit();
                     return;
                 }
@@ -326,6 +326,7 @@ namespace OlegHcp.Shooting
             bool canPlay = ProcessMovement(_prevPos, _currentPosition, false);
             _penetratedHits.CleanUp2D(!_doubleCollisionCheck);
             ApplyMovement();
+            _performer.Hits2D.Invoke(_listener);
 
             if (!canPlay)
             {
@@ -361,9 +362,20 @@ namespace OlegHcp.Shooting
 
                         UpdatePrevSpeed();
                         _speed *= hitOptionRef.SpeedMultiplier;
-                        _velocity = newDir * _speed;
+                        Vector3 newVelocity = newDir * _speed;
 
-                        _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOptionRef.Reaction);
+                        HitInfo2D hits = new HitInfo2D()
+                        {
+                            Reaction = hitOptionRef.Reaction,
+                            HitData = _hitInfo,
+                            HitPosition = hitPos,
+                            PreviousVelocity = _velocity,
+                            NewVelocity = newVelocity,
+                        };
+                        _performer.Hits2D.Add(hits);
+
+                        _velocity = newVelocity;
+
                         return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest, additional);
                     }
 
@@ -392,10 +404,19 @@ namespace OlegHcp.Shooting
 
                         UpdatePrevSpeed();
                         _speed *= hitOptionRef.SpeedMultiplier;
-                        _velocity = direction * _speed;
+                        Vector3 newVelocity = direction * _speed;
 
-                        _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOptionRef.Reaction);
+                        HitInfo2D hits = new HitInfo2D()
+                        {
+                            Reaction = hitOptionRef.Reaction,
+                            HitData = _hitInfo,
+                            HitPosition = _moving.GetHitPosition(_hitInfo, _casting.CastRadius),
+                            PreviousVelocity = _velocity,
+                            NewVelocity = newVelocity,
+                        };
+                        _performer.Hits2D.Add(hits);
 
+                        _velocity = newVelocity;
                         return ProcessMovement(source, _currentPosition = newDestination, additional);
                     }
                 }
@@ -420,7 +441,7 @@ namespace OlegHcp.Shooting
                 gameObject.Destroy();
 
             StopInternal();
-            _listener?.OnHitFinal(_hitInfo, _prevVelocity, _prevSpeed);
+            _listener?.OnHitFinal(_hitInfo, _prevVelocity);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
