@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if INCLUDE_PHYSICS || INCLUDE_PHYSICS_2D
+using System.Collections.Generic;
 using OlegHcp.CSharp.Collections;
 using UnityEngine;
 
@@ -43,3 +44,4 @@ namespace OlegHcp.Shooting
         }
     }
 }
+#endif
