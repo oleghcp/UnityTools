@@ -18,6 +18,8 @@ namespace OlegHcp.Shooting
         [SerializeField]
         private QueryTriggerInteraction _triggerInteraction;
 
+        private ContactFilter2D _contactFilter2D;
+
         public float CastRadius
         {
             get => _castRadius.CastRadius;
@@ -49,28 +51,31 @@ namespace OlegHcp.Shooting
 #if INCLUDE_PHYSICS_2D
         public bool Cast(in Vector2 origin, in Vector2 direction, float distance, out RaycastHit2D hitInfo)
         {
-            ContactFilter2D contactFilter = default;
-            contactFilter.useTriggers = UseTriggers(_triggerInteraction);
-            contactFilter.SetLayerMask(_hitMask);
-            contactFilter.SetDepth(float.NegativeInfinity, float.PositiveInfinity);
-
             if (_castRadius.CastRadius > MathUtility.kEpsilon)
             {
-                hitInfo = Physics2D.defaultPhysicsScene.CircleCast(origin, _castRadius.CastRadius, direction, distance, contactFilter);
+                hitInfo = Physics2D.defaultPhysicsScene.CircleCast(origin, _castRadius.CastRadius, direction, distance, _contactFilter2D);
                 return hitInfo.Hit();
             }
 
-            hitInfo = Physics2D.defaultPhysicsScene.Raycast(origin, direction, distance, contactFilter);
+            hitInfo = Physics2D.defaultPhysicsScene.Raycast(origin, direction, distance, _contactFilter2D);
             return hitInfo.Hit();
         }
 
-        private static bool UseTriggers(QueryTriggerInteraction triggerInteraction)
+        public void UpdateContactFilter2D()
         {
-            switch (triggerInteraction)
+            _contactFilter2D = default;
+            _contactFilter2D.useTriggers = useTriggers(_triggerInteraction);
+            _contactFilter2D.SetLayerMask(_hitMask);
+            _contactFilter2D.SetDepth(float.NegativeInfinity, float.PositiveInfinity);
+
+            bool useTriggers(QueryTriggerInteraction triggerInteraction)
             {
-                case QueryTriggerInteraction.Ignore: return false;
-                case QueryTriggerInteraction.Collide: return true;
-                default: return Physics2D.queriesHitTriggers;
+                switch (triggerInteraction)
+                {
+                    case QueryTriggerInteraction.Ignore: return false;
+                    case QueryTriggerInteraction.Collide: return true;
+                    default: return Physics2D.queriesHitTriggers;
+                }
             }
         }
 #endif

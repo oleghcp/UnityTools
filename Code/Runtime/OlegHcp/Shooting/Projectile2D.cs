@@ -155,6 +155,7 @@ namespace OlegHcp.Shooting
         private void Awake()
         {
             _performer = ProjectileRunner.I;
+            _casting.UpdateContactFilter2D();
 
             if (_playOnAwake)
                 Play();
@@ -172,6 +173,11 @@ namespace OlegHcp.Shooting
         }
 
 #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            _casting.UpdateContactFilter2D();
+        }
+
         private void Reset()
         {
 #if INCLUDE_PHYSICS
@@ -183,6 +189,7 @@ namespace OlegHcp.Shooting
 #endif
 
             _casting.HitMask = LayerMask.GetMask("Default");
+            _casting.UpdateContactFilter2D();
         }
 #endif
 
