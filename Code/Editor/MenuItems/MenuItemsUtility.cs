@@ -120,6 +120,8 @@ namespace OlegHcpEditor.MenuItems
                 case ".scenetemplate":
                 case ".terrainlayer":
                 case ".shadervariants":
+                case ".shadergraph":
+                case ".asmdef":
                     return true;
 
                 default:
