@@ -77,15 +77,15 @@ namespace OlegHcp.Shooting
             return (hitPosition + newDirection * distanceAfterHit, newDirection, hitPosition);
         }
 
-        public (Vector2 newDest, Vector2 hitPos) Penetrate(in RaycastHit2D hitInfo, in Vector2 destination, in Vector2 direction, float castRadius, float speedMultiplier)
+        public Vector2 Penetrate(in RaycastHit2D hitInfo, in Vector2 destination, in Vector2 direction, float castRadius, float speedMultiplier)
         {
-            Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
 
             if (speedMultiplier == 1f)
-                return (destination, hitPosition);
+                return destination;
 
+            Vector2 hitPosition = GetHitPosition(hitInfo, castRadius);
             float distanceAfterHit = Vector2.Distance(hitPosition, destination) * speedMultiplier;
-            return (hitPosition + direction * distanceAfterHit, hitPosition);
+            return hitPosition + direction * distanceAfterHit;
         }
 
         public Vector2 GetHitPosition(in RaycastHit2D hitInfo, float castRadius)

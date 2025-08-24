@@ -33,7 +33,7 @@ namespace OlegHcp.Shooting
         private ITimeProvider _timeProvider;
         private IGravityProvider2D _gravityProvider;
         private IProjectile2DEventListener _listener;
-        private HashSet<Component> _hits;
+        private HashSet<Component> _penetratedHits;
         private bool _isPlaying;
         private float _currentTime;
         private Vector2 _prevPos;
@@ -168,7 +168,7 @@ namespace OlegHcp.Shooting
         private void OnDisable()
         {
             _performer.Remove(this);
-            _performer.ReleaseSet(ref _hits);
+            _performer.ReleaseSet(ref _penetratedHits);
         }
 
 #if UNITY_EDITOR
@@ -296,7 +296,7 @@ namespace OlegHcp.Shooting
             _currentTime = 0f;
             _speed = 0f;
             _velocity = default;
-            _hits?.Clear();
+            _penetratedHits?.Clear();
         }
 
         private void UpdateState(float deltaTime, float speedScale)
@@ -309,7 +309,7 @@ namespace OlegHcp.Shooting
                     InvokeHit();
                     return;
                 }
-                _hits?.Clear();
+                _penetratedHits.CleanUp2D(true);
             }
 
             UpdatePrevSpeed();
@@ -317,6 +317,7 @@ namespace OlegHcp.Shooting
             _currentPosition = _moving.GetNextPos(_currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
             _speed = _velocity.magnitude;
             bool canPlay = ProcessMovement(_prevPos, _currentPosition, false);
+            _penetratedHits.CleanUp2D(!_doubleCollisionCheck);
             ApplyMovement();
 
             if (!canPlay)
@@ -334,71 +335,61 @@ namespace OlegHcp.Shooting
 
             for (int i = 0; i < _hitOptions.Length; i++)
             {
-                ref HitOptions hitOption = ref _hitOptions[i];
+                ref HitOptions hitOptionRef = ref _hitOptions[i];
 
-                if (hitOption.HasLayer(_hitInfo.GetLayer()))
+                if (!hitOptionRef.HasLayer(_hitInfo.GetLayer()))
+                    continue;
+
+                switch (hitOptionRef.Reaction)
                 {
-                    switch (hitOption.Reaction)
+                    case HitReactionType.Ricochet:
                     {
-                        case HitReactionType.Ricochet:
+                        if (hitOptionRef.Left <= 0)
+                            goto ExitLabel;
+
+                        _penetratedHits.CleanUp2D(true);
+
+                        hitOptionRef.UpdateHit();
+                        var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOptionRef.SpeedMultiplier);
+
+                        UpdatePrevSpeed();
+                        _speed *= hitOptionRef.SpeedMultiplier;
+                        _velocity = newDir * _speed;
+
+                        _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOptionRef.Reaction);
+                        return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest, additional);
+                    }
+
+                    case HitReactionType.MoveThrough:
+                    {
+                        _hitInfo.collider.enabled = false;
+
+                        if (additional)
                         {
-                            if (hitOption.Left <= 0)
-                                goto ExitLabel;
-
-                            hitOption.UpdateHit();
-                            var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedMultiplier);
-
-                            UpdatePrevSpeed();
-                            _speed *= hitOption.SpeedMultiplier;
-                            _velocity = newDir * _speed;
-
-                            _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-                            return ProcessMovement(_prevPos = hitPos, _currentPosition = newDest, additional);
+                            if (_penetratedHits.Has(_hitInfo.collider))
+                                return ProcessMovement(source, destination, additional);
+                        }
+                        else
+                        {
+                            if (_penetratedHits == null)
+                                _penetratedHits = _performer.GetSet();
+                            _penetratedHits.Add(_hitInfo.collider);
                         }
 
-                        case HitReactionType.MoveThrough:
-                        {
-                            bool duplicated = false;
+                        if (hitOptionRef.Left <= 0)
+                            goto ExitLabel;
 
-                            if (_doubleCollisionCheck)
-                            {
-                                if (additional)
-                                {
-                                    if (_hits != null && _hits.Contains(_hitInfo.collider))
-                                        duplicated = true;
-                                }
-                                else
-                                {
-                                    if (_hits == null) _hits = _performer.GetSet();
-                                    _hits.Add(_hitInfo.collider);
-                                }
-                            }
+                        hitOptionRef.UpdateHit();
 
-                            if (duplicated)
-                            {
-                                Vector3 newSource = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
-                                newSource = Vector2.LerpUnclamped(newSource, destination, (1f / _speed).Clamp(0.5f, 1f));
-                                return ProcessMovement(newSource, destination, additional);
-                            }
-                            else
-                            {
-                                if (hitOption.Left <= 0)
-                                    goto ExitLabel;
+                        Vector2 newDestination = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOptionRef.SpeedMultiplier);
 
-                                hitOption.UpdateHit();
+                        UpdatePrevSpeed();
+                        _speed *= hitOptionRef.SpeedMultiplier;
+                        _velocity = direction * _speed;
 
-                                var (newDest, hitPos) = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOption.SpeedMultiplier);
+                        _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOptionRef.Reaction);
 
-                                UpdatePrevSpeed();
-                                _speed *= hitOption.SpeedMultiplier;
-                                _velocity = direction * _speed;
-
-                                _listener?.OnHitModified(_hitInfo, _prevSpeed, direction, hitOption.Reaction);
-
-                                Vector3 newSource = Vector2.LerpUnclamped(hitPos, newDest, (1f / _speed).Clamp(0.5f, 1f));
-                                return ProcessMovement(newSource, _currentPosition = newDest, additional);
-                            }
-                        }
+                        return ProcessMovement(source, _currentPosition = newDestination, additional);
                     }
                 }
             }
