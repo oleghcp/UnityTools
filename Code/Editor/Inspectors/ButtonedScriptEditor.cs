@@ -16,10 +16,23 @@ namespace OlegHcpEditor.Inspectors
 
         protected abstract Type ParentType { get; }
 
+        private void OnEnable()
+        {
+            InitMethodList();
+
+            if (_methods.Count > 0)
+                EditorApplication.pauseStateChanged += OnPauseStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            if (_methods.Count > 0)
+                EditorApplication.pauseStateChanged -= OnPauseStateChanged;
+        }
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            InitMethodList();
             DrawButtons();
         }
 
@@ -52,20 +65,23 @@ namespace OlegHcpEditor.Inspectors
 
             EditorGUILayout.Space();
 
-            foreach (var (method, name, size) in _methods)
+            foreach (Data data in _methods)
             {
-                if (!GUILayout.Button(name, GUILayout.Height(size)))
+                if (!data.CanDraw)
                     continue;
 
-                if (method.IsStatic)
+                if (!GUILayout.Button(data.Name, GUILayout.Height(data.Size)))
+                    continue;
+
+                if (data.IsStatic)
                 {
-                    method.Invoke(null, null);
+                    data.InvokeStatic();
                 }
                 else
                 {
                     for (int j = 0; j < targets.Length; j++)
                     {
-                        method.Invoke(targets[j], null);
+                        data.Invoke(targets[j]);
                     }
                 }
 
@@ -80,26 +96,50 @@ namespace OlegHcpEditor.Inspectors
                              .Select(method => new Data(method, method.GetCustomAttribute<InspectorButtonAttribute>()));
         }
 
+        private void OnPauseStateChanged(PauseState state)
+        {
+            Repaint();
+        }
+
         private struct Data
         {
             private InspectorButtonAttribute _attribute;
+            private MethodInfo _method;
 
-            public MethodInfo Method { get; }
+            public bool IsStatic => _method.IsStatic;
+            public float Size => _attribute.Size;
+            public string Name => _attribute.ButtonName;
+
+            public bool CanDraw
+            {
+                get
+                {
+                    switch (_attribute.ShowState)
+                    {
+                        case EditorPlayState.PlayModeActive: return EditorApplication.isPlaying && !EditorApplication.isPaused;
+                        case EditorPlayState.PlayModeStopped: return !EditorApplication.isPlaying || EditorApplication.isPaused;
+                        default: return true;
+                    }
+                }
+            }
 
             public Data(MethodInfo method, InspectorButtonAttribute attribute)
             {
-                Method = method;
+                _method = method;
                 _attribute = attribute;
 
                 if (_attribute.ButtonName == null)
                     _attribute.ButtonName = ObjectNames.NicifyVariableName(method.Name);
             }
 
-            public void Deconstruct(out MethodInfo method, out string name, out float size)
+            public void Invoke(object obj)
             {
-                method = Method;
-                name = _attribute.ButtonName;
-                size = _attribute.Size;
+                _method.Invoke(obj, null);
+            }
+
+            public void InvokeStatic()
+            {
+                _method.Invoke(null, null);
             }
         }
 
