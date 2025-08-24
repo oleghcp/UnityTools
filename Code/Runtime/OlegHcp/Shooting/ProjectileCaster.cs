@@ -13,7 +13,7 @@ namespace OlegHcp.Shooting
         private CastOptions _castRadius;
         [SerializeField]
         private LayerMask _hitMask;
-        [SerializeField]
+        [SerializeField, Min(0f)]
         private float _initialPrecastBackOffset;
 
         public float CastRadius

@@ -1,5 +1,6 @@
 ﻿#if INCLUDE_PHYSICS_2D
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using OlegHcp.Engine;
 using OlegHcp.Mathematics;
@@ -27,11 +28,12 @@ namespace OlegHcp.Shooting
         [SerializeField, FormerlySerializedAs("_ricochets")]
         private HitOptions[] _hitOptions;
 
+        private ProjectileRunner _performer;
         private IRotationProvider _rotationProvider;
         private ITimeProvider _timeProvider;
         private IGravityProvider2D _gravityProvider;
         private IProjectile2DEventListener _listener;
-        private PoolableSet _hits;
+        private HashSet<Component> _hits;
         private bool _isPlaying;
         private float _currentTime;
         private Vector2 _prevPos;
@@ -150,29 +152,26 @@ namespace OlegHcp.Shooting
             set => _listener = value;
         }
 
-        private void Start()
+        private void Awake()
         {
+            _performer = ProjectileRunner.I;
+
             if (_playOnAwake)
                 Play();
         }
 
         private void OnEnable()
         {
-            ProjectileRunner.I.Add(this);
+            _performer.Add(this);
         }
 
         private void OnDisable()
         {
-            ProjectileRunner.I.Remove(this);
-            ProjectileRunner.I.ReleaseSet(ref _hits);
+            _performer.Remove(this);
+            _performer.ReleaseSet(ref _hits);
         }
 
 #if UNITY_EDITOR
-        private void OnValidate()
-        {
-            _casting.InitialPrecastBackOffset = _casting.InitialPrecastBackOffset;
-        }
-
         private void Reset()
         {
 #if INCLUDE_PHYSICS
@@ -370,7 +369,7 @@ namespace OlegHcp.Shooting
                                 }
                                 else
                                 {
-                                    if (_hits == null) _hits = ProjectileRunner.I.GetSet();
+                                    if (_hits == null) _hits = _performer.GetSet();
                                     _hits.Add(_hitInfo.collider);
                                 }
                             }
