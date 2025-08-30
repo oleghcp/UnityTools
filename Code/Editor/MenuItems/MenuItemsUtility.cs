@@ -113,6 +113,7 @@ namespace OlegHcpEditor.MenuItems
                 case ".spriteatlasv2":
                 case ".controller":
                 case ".overrideController":
+                case ".vfx":
                 case ".preset":
                 case ".mask":
                 case ".playable":
