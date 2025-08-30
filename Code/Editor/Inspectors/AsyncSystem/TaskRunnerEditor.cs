@@ -24,8 +24,6 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 
             _activeTasks = target.ActiveTasks;
 
-            Update();
-
             EditorApplication.update += Update;
         }
 
@@ -36,6 +34,8 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 
         public override void OnInspectorGUI()
         {
+            UpdateList();
+
             GUILayout.Label($"Pool: {target.PoolCount}", EditorStyles.boldLabel);
 
             for (int i = 0; i < _activeTasks.Count; i++)
@@ -57,12 +57,19 @@ namespace OlegHcpEditor.Inspectors.AsyncSystem
 
         private void Update()
         {
-            if (_version != target.Version)
-            {
-                _taskDrawers.SetCount(_activeTasks.Count);
-                _version = target.Version;
+            if (UpdateList())
                 Repaint();
-            }
+        }
+
+        private bool UpdateList()
+        {
+            if (_version == target.Version)
+                return false;
+
+            _taskDrawers.SetCount(_activeTasks.Count);
+            _version = target.Version;
+
+            return true;
         }
     }
 }
