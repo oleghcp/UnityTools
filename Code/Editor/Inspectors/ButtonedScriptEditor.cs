@@ -67,25 +67,26 @@ namespace OlegHcpEditor.Inspectors
 
             foreach (Data data in _methods)
             {
-                if (!data.CanDraw)
-                    continue;
+                GUI.enabled = data.CanDraw;
+                bool pressed = GUILayout.Button(data.Name, GUILayout.Height(data.Size));
+                GUI.enabled = true;
 
-                if (!GUILayout.Button(data.Name, GUILayout.Height(data.Size)))
-                    continue;
-
-                if (data.IsStatic)
+                if (pressed)
                 {
-                    data.InvokeStatic();
-                }
-                else
-                {
-                    for (int j = 0; j < targets.Length; j++)
+                    if (data.IsStatic)
                     {
-                        data.Invoke(targets[j]);
+                        data.InvokeStatic();
                     }
-                }
+                    else
+                    {
+                        for (int j = 0; j < targets.Length; j++)
+                        {
+                            data.Invoke(targets[j]);
+                        }
+                    }
 
-                break;
+                    break;
+                }
             }
         }
 
