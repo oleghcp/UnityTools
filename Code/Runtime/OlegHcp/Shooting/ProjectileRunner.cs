@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OlegHcp.Shooting
 {
-    internal class ProjectileRunner : IObjectFactory<HashSet<Component>>
+    internal class ProjectileRunner
     {
         private static ProjectileRunner _instance;
 
@@ -23,7 +23,7 @@ namespace OlegHcp.Shooting
 
         public ProjectileRunner()
         {
-            _objectPool = new ObjectPool<HashSet<Component>>(this);
+            _objectPool = new ObjectPool<HashSet<Component>>(() => new HashSet<Component>());
             ApplicationUtility.OnLateUpdate_Event += OnLateUpdate;
         }
 
@@ -58,28 +58,28 @@ namespace OlegHcp.Shooting
             }
         }
 
-        HashSet<Component> IObjectFactory<HashSet<Component>>.Create()
-        {
-            return new HashSet<Component>();
-        }
-
         private void OnLateUpdate()
         {
-            _locked = true;
-            for (int i = 0; i < _items.Count; i++)
+            try
             {
-                _items[i].OnUpdate();
+                _locked = true;
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    _items[i].OnUpdate();
+                }
+                _locked = false;
             }
-            _locked = false;
-
-            while (_deadItems.Count > 0)
+            finally
             {
-                _items.Remove(_deadItems.Pop());
-            }
+                while (_deadItems.Count > 0)
+                {
+                    _items.Remove(_deadItems.Pop());
+                }
 
-            while (_newItems.Count > 0)
-            {
-                _items.Add(_newItems.Pop());
+                while (_newItems.Count > 0)
+                {
+                    _items.Add(_newItems.Pop());
+                }
             }
         }
     }

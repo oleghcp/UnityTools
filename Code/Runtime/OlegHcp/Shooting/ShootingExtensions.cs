@@ -24,13 +24,13 @@ namespace OlegHcp.Shooting
 
         public static void Invoke(this List<HitInfo> self, IProjectileEventListener listener)
         {
-            if (listener != null)
+            for (int i = 0; i < self.Count; i++)
             {
-                for (int i = 0; i < self.Count; i++)
-                {
-                    HitInfo hit = self[i];
-                    listener.OnHitModified(hit.HitData, hit.HitPosition, hit.PreviousVelocity, hit.NewVelocity, hit.Reaction);
-                }
+                if (UnityObjectUtility.IsNullOrDead(listener))
+                    break;
+
+                HitInfo hit = self[i];
+                listener.OnHitModified(hit.HitData, hit.HitPosition, hit.PreviousVelocity, hit.NewVelocity, hit.Reaction);
             }
 
             self.Clear();
@@ -54,13 +54,13 @@ namespace OlegHcp.Shooting
 
         public static void Invoke(this List<HitInfo2D> self, IProjectile2DEventListener listener)
         {
-            if (listener != null)
+            for (int i = 0; i < self.Count; i++)
             {
-                for (int i = 0; i < self.Count; i++)
-                {
-                    HitInfo2D hit = self[i];
-                    listener.OnHitModified(hit.HitData, hit.HitPosition, hit.PreviousVelocity, hit.NewVelocity, hit.Reaction);
-                }
+                if (UnityObjectUtility.IsNullOrDead(listener))
+                    break;
+
+                HitInfo2D hit = self[i];
+                listener.OnHitModified(hit.HitData, hit.HitPosition, hit.PreviousVelocity, hit.NewVelocity, hit.Reaction);
             }
 
             self.Clear();
