@@ -17,9 +17,20 @@ namespace OlegHcp
                 return true;
 
             if (obj is UnityObject uObj)
-                return !_isNativeObjectAlive.Invoke(uObj);
+                return !_isNativeObjectAlive(uObj);
 
             return false;
+        }
+
+        public static bool ExistsAndAlive(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is UnityObject uObj)
+                return _isNativeObjectAlive(uObj);
+
+            return true;
         }
 
         /// <summary>

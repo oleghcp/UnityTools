@@ -119,7 +119,7 @@ namespace OlegHcp.Engine
 
         public static bool ExistsAndAlive(this UnityObject self)
         {
-            return !UnityObjectUtility.IsNullOrDead(self);
+            return UnityObjectUtility.ExistsAndAlive(self);
         }
     }
 }
