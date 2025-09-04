@@ -39,7 +39,6 @@ namespace OlegHcp.Shooting
         private Vector2 _prevPos;
         private Vector2 _currentPosition;
         private Vector2 _prevVelocity;
-        private float _prevSpeed;
         private Vector2 _velocity;
         private float _speed;
         private RaycastHit2D _hitInfo;
@@ -310,7 +309,7 @@ namespace OlegHcp.Shooting
             if (_doubleCollisionCheck)
             {
                 bool stopped = !ProcessMovement(_prevPos, _currentPosition, true);
-                _penetratedHits.CleanUp2D(true);
+                _penetratedHits.Restore(true);
 
                 if (stopped)
                     ApplyMovement();
@@ -324,12 +323,12 @@ namespace OlegHcp.Shooting
                 }
             }
 
-            UpdatePrevSpeed();
+            _prevVelocity = _velocity;
             _prevPos = _currentPosition;
             _currentPosition = _moving.GetNextPos(_currentPosition, ref _velocity, GetGravity(), deltaTime, speedScale);
             _speed = _velocity.magnitude;
             bool canPlay = ProcessMovement(_prevPos, _currentPosition, false);
-            _penetratedHits.CleanUp2D(!_doubleCollisionCheck);
+            _penetratedHits.Restore(!_doubleCollisionCheck);
             ApplyMovement();
             _performer.Hits2D.Invoke(_listener);
 
@@ -360,12 +359,12 @@ namespace OlegHcp.Shooting
                         if (hitOptionRef.Left <= 0)
                             goto ExitLabel;
 
-                        _penetratedHits.CleanUp2D(true);
+                        _penetratedHits.Restore(true);
 
                         hitOptionRef.UpdateHit();
                         var (newDest, newDir, hitPos) = _moving.Reflect(_hitInfo, destination, direction, _casting.CastRadius, hitOptionRef.SpeedMultiplier);
 
-                        UpdatePrevSpeed();
+                        _prevVelocity = _velocity;
                         _speed *= hitOptionRef.SpeedMultiplier;
                         Vector3 newVelocity = newDir * _speed;
 
@@ -386,18 +385,16 @@ namespace OlegHcp.Shooting
 
                     case HitReactionType.MoveThrough:
                     {
-                        _hitInfo.collider.enabled = false;
+                        _hitInfo.collider.gameObject.SetActive(false);
 
                         if (additional)
                         {
-                            if (_penetratedHits.Has(_hitInfo.collider))
+                            if (!getHitCollection().Add(_hitInfo.collider))
                                 return ProcessMovement(source, destination, additional);
                         }
                         else
                         {
-                            if (_penetratedHits == null)
-                                _penetratedHits = _performer.GetSet();
-                            _penetratedHits.Add(_hitInfo.collider);
+                            getHitCollection().Add(_hitInfo.collider);
                         }
 
                         if (hitOptionRef.Left <= 0)
@@ -407,7 +404,7 @@ namespace OlegHcp.Shooting
 
                         Vector2 newDestination = _moving.Penetrate(_hitInfo, destination, direction, _casting.CastRadius, hitOptionRef.SpeedMultiplier);
 
-                        UpdatePrevSpeed();
+                        _prevVelocity = _velocity;
                         _speed *= hitOptionRef.SpeedMultiplier;
                         Vector3 newVelocity = direction * _speed;
 
@@ -430,13 +427,11 @@ namespace OlegHcp.Shooting
         ExitLabel:
             _currentPosition = _moving.GetHitPosition(_hitInfo, _casting.CastRadius);
             return false;
-        }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdatePrevSpeed()
-        {
-            _prevVelocity = _velocity;
-            _prevSpeed = _speed;
+            HashSet<Component> getHitCollection()
+            {
+                return _penetratedHits ?? (_penetratedHits = _performer.GetSet());
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
