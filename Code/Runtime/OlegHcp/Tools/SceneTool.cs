@@ -26,7 +26,7 @@ namespace OlegHcp.Tools
         {
             if (_globalGameObject == null)
             {
-                _globalGameObject = new GameObject(nameof(OlegHcp));
+                _globalGameObject = new GameObject($"{nameof(OlegHcp)}Global");
                 _globalGameObject.Immortalize();
             }
 
@@ -36,7 +36,7 @@ namespace OlegHcp.Tools
         internal static GameObject GetLocal()
         {
             if (_localGameObject == null)
-                _localGameObject = new GameObject(nameof(OlegHcp));
+                _localGameObject = new GameObject($"{nameof(OlegHcp)}Local");
 
             return _localGameObject;
         }
