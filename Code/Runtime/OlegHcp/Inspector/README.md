@@ -1,4 +1,20 @@
-﻿## DisableEditingAttribute
+﻿## LabelAttribute
+
+```csharp
+using OlegHcp.Inspector;
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    [SerializeField]
+    [Label("Just Text")]
+    private string _fieldForKeepingText = "Qwerty";
+}
+```
+
+![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Label.png)
+
+## DisableEditingAttribute
 
 ```csharp
 using OlegHcp.Inspector;
