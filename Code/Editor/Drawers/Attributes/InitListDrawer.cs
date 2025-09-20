@@ -102,7 +102,7 @@ namespace OlegHcpEditor.Drawers.Attributes
                     return true;
                 }
 
-                if (type.IsAbstract || type.IsInterface)
+                if (type.IsAbstract)
                 {
                     error = $"Bound type ({type.Name}) is abstract.";
                     return true;

@@ -13,7 +13,7 @@ namespace OlegHcpEditor.Drawers.Attributes
         {
             Type type = EditorUtilityExt.GetFieldType(this);
 
-            if (type.IsAbstract || type.IsInterface)
+            if (type.IsAbstract)
             {
                 GUI.Label(position, "Use non-abstract type.");
                 return;

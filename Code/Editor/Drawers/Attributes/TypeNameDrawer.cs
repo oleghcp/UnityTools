@@ -55,18 +55,20 @@ namespace OlegHcpEditor.Drawers.Attributes
         {
             DropDownWindow menu = ScriptableObject.CreateInstance<DropDownWindow>();
 
-            addMenuItem(attribute.TargetType.GetTypeName());
+            addMenuItem(attribute.TargetType);
 
             foreach (Type type in TypeCache.GetTypesDerivedFrom(attribute.TargetType))
             {
-                addMenuItem(type.GetTypeName());
+                addMenuItem(type);
             }
 
             menu.ShowMenu(buttonPosition);
 
-            void addMenuItem(string entryName)
+            void addMenuItem(Type type)
             {
-                menu.AddItem(entryName, entryName == property.stringValue, () => assignField(property, entryName));
+                string displayName = $"{type.Name}  ({type.Namespace})"; ;
+                string entryName = type.GetTypeName();
+                menu.AddItem(displayName, entryName == property.stringValue, () => assignField(property, entryName));
             }
 
             void assignField(SerializedProperty prop, string newValue)

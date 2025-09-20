@@ -1,4 +1,4 @@
-﻿## LabelAttribute
+﻿## PropertyLabelAttribute
 
 ```csharp
 using OlegHcp.Inspector;
@@ -7,7 +7,7 @@ using UnityEngine;
 public class MyClass : MonoBehaviour
 {
     [SerializeField]
-    [Label("Just Text")]
+    [PropertyLabel("Just Text")]
     private string _fieldForKeepingText = "Qwerty";
 }
 ```

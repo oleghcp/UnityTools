@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace OlegHcpEditor.Drawers.Attributes
 {
-    [CustomPropertyDrawer(typeof(LabelAttribute))]
-    internal class LabelAttributeDrawer : AttributeDrawer<LabelAttribute>
+    [CustomPropertyDrawer(typeof(PropertyLabelAttribute))]
+    internal class PropertyLabelDrawer : AttributeDrawer<PropertyLabelAttribute>
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

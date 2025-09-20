@@ -4,11 +4,11 @@ using UnityEngine;
 namespace OlegHcp.Inspector
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class LabelAttribute : PropertyAttribute
+    public class PropertyLabelAttribute : PropertyAttribute
     {
         internal readonly string Label;
 
-        public LabelAttribute(string label)
+        public PropertyLabelAttribute(string label)
         {
             Label = label;
         }

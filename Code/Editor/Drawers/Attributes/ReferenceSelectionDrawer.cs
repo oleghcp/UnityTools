@@ -69,11 +69,11 @@ namespace OlegHcpEditor.Drawers.Attributes
 
                 void addMenuItem(Type type)
                 {
-                    if (!type.IsAbstract && !type.IsInterface)
-                    {
-                        string entryName = $"{type.Name}  ({type.Namespace})";
-                        menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
-                    }
+                    if (type.IsAbstract)
+                        return;
+
+                    string entryName = $"{type.Name}  ({type.Namespace})";
+                    menu.AddItem(entryName, type == assignedType, () => assignField(property, Activator.CreateInstance(type)));
                 }
 
                 void assignField(SerializedProperty prop, object newValue)
