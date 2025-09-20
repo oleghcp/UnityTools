@@ -32,7 +32,7 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             string shortName;
 
-            if (savedType == null)
+            if (savedType == null || (attribute.SkipAbstract && savedType.IsAbstract))
             {
                 shortName = "Unknown";
                 GUI.color = Colours.Red;
@@ -66,6 +66,9 @@ namespace OlegHcpEditor.Drawers.Attributes
 
             void addMenuItem(Type type)
             {
+                if (attribute.SkipAbstract && type.IsAbstract)
+                    return;
+
                 string displayName = $"{type.Name}  ({type.Namespace})"; ;
                 string entryName = type.GetTypeName();
                 menu.AddItem(displayName, entryName == property.stringValue, () => assignField(property, entryName));

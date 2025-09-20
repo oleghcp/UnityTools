@@ -6,11 +6,13 @@ namespace OlegHcp.Inspector
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class TypeNameAttribute : PropertyAttribute
     {
-        internal Type TargetType { get; }
+        internal readonly Type TargetType;
+        internal readonly bool SkipAbstract;
 
-        public TypeNameAttribute(Type baseType)
+        public TypeNameAttribute(Type baseType, bool skipAbstract = false)
         {
             TargetType = baseType;
+            SkipAbstract = skipAbstract;
         }
     }
 }
