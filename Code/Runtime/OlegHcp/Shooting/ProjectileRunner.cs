@@ -48,13 +48,12 @@ namespace OlegHcp.Shooting
             return _objectPool.Get();
         }
 
-        public void ReleaseSet(ref HashSet<Component> set)
+        public void ReleaseSet(HashSet<Component> set)
         {
             if (set != null)
             {
-                _objectPool.Clear();
+                set.Clear();
                 _objectPool.Release(set);
-                set = null;
             }
         }
 

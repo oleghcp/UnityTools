@@ -194,7 +194,8 @@ namespace OlegHcp.Shooting
         private void OnDisable()
         {
             _performer.Remove(this);
-            _performer.ReleaseSet(ref _penetratedHits);
+            _performer.ReleaseSet(_penetratedHits);
+            _penetratedHits = null;
         }
 
         private void Start()
