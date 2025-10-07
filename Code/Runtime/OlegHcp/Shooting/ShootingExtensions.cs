@@ -14,7 +14,8 @@ namespace OlegHcp.Shooting
 
             foreach (Component item in self)
             {
-                item.gameObject.SetActive(true);
+                if (item != null)
+                    item.gameObject.SetActive(true);
             }
 
             if (clearCollection)
