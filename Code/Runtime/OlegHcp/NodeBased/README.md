@@ -47,7 +47,7 @@ public class Example : MonoBehaviour
 
         foreach (TransitionInfo<ExampleNode> transition in node)
         {
-            if (!transition.IsExit)
+            if (!transition.Exists)
             {
                 Debug.Log(transition.NextNode.Text);
             }

@@ -9,7 +9,7 @@ namespace OlegHcp.NodeBased
 
         public Condition Condition => _condition;
         public TNode NextNode => _to as TNode;
-        public bool IsExit => _to is ExitNode;
+        public bool Exists => _to is ExitNode;
 
         internal TransitionInfo(Condition condition, RawNode to)
         {
