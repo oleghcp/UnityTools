@@ -15,7 +15,11 @@ namespace OlegHcpEditor
         [OnOpenAsset]
         private static bool OpenScriptableObjectClass(int instanceID, int _)
         {
+#if UNITY_6000_3_OR_NEWER
+            UnityObject obj = EditorUtility.EntityIdToObject(instanceID);
+#else
             UnityObject obj = EditorUtility.InstanceIDToObject(instanceID);
+#endif
 
             if (obj is RawGraph graphAsset)
             {

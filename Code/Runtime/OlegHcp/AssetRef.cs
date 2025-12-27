@@ -66,7 +66,12 @@ namespace OlegHcp
                 switch (_type)
                 {
                     case RefType.Simple: return _directRef.GetInstanceID();
-                    case RefType.Lazy: return _lazyRef.instanceID;
+                    case RefType.Lazy:
+#if UNITY_6000_3_OR_NEWER
+                        return _lazyRef.entityId;
+#else
+                        return _lazyRef.instanceID;
+#endif
 #if INCLUDE_ADDRESSABLES
                     case RefType.Async: throw new InvalidOperationException("Cannot get instance ID from addressable asset reference.");
 #endif
