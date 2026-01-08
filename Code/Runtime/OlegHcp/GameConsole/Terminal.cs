@@ -66,7 +66,7 @@ namespace OlegHcp.GameConsole
         {
             if (!_initialized)
             {
-                Init(new TerminalCommands(), new TerminalOptions(), new DefaultTrigger());
+                Init(new TerminalCommands(), new TerminalOptions(), new DefaultSwitchTrigger());
 
                 if (EventSystem.current == null)
                     InstantiateEventSystem();
@@ -96,16 +96,16 @@ namespace OlegHcp.GameConsole
 
             if (_isOn)
             {
-                if (Input.GetKeyDown(KeyCode.Tab))
+                if (ButtonUtility.TabDown)
                 {
                     FindCmd(_field.text);
                 }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow))
+                if (ButtonUtility.UpArrowDown)
                 {
                     SwitchHistoryLine(true);
                 }
-                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                else if (ButtonUtility.DownArrowDown)
                 {
                     SwitchHistoryLine(false);
                 }
@@ -122,7 +122,7 @@ namespace OlegHcp.GameConsole
         public static void CreateTerminal(bool createEventSystem = false)
         {
             if (TryCreateTerminal(createEventSystem))
-                I.Init(new TerminalCommands(), new TerminalOptions(), new DefaultTrigger());
+                I.Init(new TerminalCommands(), new TerminalOptions(), new DefaultSwitchTrigger());
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace OlegHcp.GameConsole
         public static void CreateTerminal(TerminalCommands commands, bool createEventSystem = false)
         {
             if (TryCreateTerminal(createEventSystem))
-                I.Init(commands, new TerminalOptions(), new DefaultTrigger());
+                I.Init(commands, new TerminalOptions(), new DefaultSwitchTrigger());
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace OlegHcp.GameConsole
         public static void CreateTerminal(TerminalCommands commands, TerminalOptions options, bool createEventSystem = false)
         {
             if (TryCreateTerminal(createEventSystem))
-                I.Init(commands, options, new DefaultTrigger());
+                I.Init(commands, options, new DefaultSwitchTrigger());
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace OlegHcp.GameConsole
         /// </summary>
         public void OnDone()
         {
-            if (!Input.GetKey(KeyCode.BackQuote))
+            if (!ButtonUtility.BackQuotePressed)
                 EnterCmd(_field.text);
 
             _field.text = string.Empty;
@@ -508,11 +508,6 @@ namespace OlegHcp.GameConsole
 
             if (!_isOn)
                 _border.SetActive(false);
-        }
-
-        private class DefaultTrigger : ITerminalSwitchTrigger
-        {
-            public bool SwitchThisFrame => Input.GetKeyDown(KeyCode.BackQuote);
         }
     }
 }

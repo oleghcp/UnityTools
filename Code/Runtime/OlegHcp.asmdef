@@ -1,9 +1,9 @@
 {
     "name": "OlegHcp",
-    "rootNamespace": "",
     "references": [
         "Unity.Addressables",
-        "Unity.Postprocessing.Runtime"
+        "Unity.Postprocessing.Runtime",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
