@@ -5,6 +5,7 @@ using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.Strings;
 using OlegHcpEditor.Configs;
+using OlegHcpEditor.Utils;
 using UnityEngine;
 
 namespace OlegHcpEditor.CodeGenerating
@@ -34,7 +35,7 @@ namespace OlegHcpEditor.CodeGenerating
                     case LayerSetConfig.LayerMaskFieldType.IntMask:
                         builder.AppendLine()
                                .Append("using ")
-                               .Append(nameof(OlegHcp))
+                               .Append(LibConstants.LIB_NAME)
                                .Append(';')
                                .AppendLine();
                         break;

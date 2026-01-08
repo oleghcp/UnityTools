@@ -81,7 +81,7 @@ namespace OlegHcpEditor.Inspectors.PostProcessing
         private void CreateShaders()
         {
             const string extension = ".shader";
-            string destFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Shaders/{nameof(OlegHcp)}/{nameof(PostProcessing)}";
+            string destFolder = $"{AssetDatabaseExt.ASSET_FOLDER}Shaders/{LibConstants.LIB_NAME}/{nameof(PostProcessing)}";
             Directory.CreateDirectory(destFolder);
 
             CreateAssetFromTemplate("610b257f6f84e644ab720a276f478350", destFolder, extension, "f7ed684984420634fbe1a903eb536700");
