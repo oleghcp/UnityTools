@@ -401,6 +401,12 @@ namespace OlegHcp.CSharp.Collections
             return self.IndexOf(condition) >= 0;
         }
 
+        public static void RemoveAt<T>(this IList<T> self, int index, out T item)
+        {
+            item = self[index];
+            self.RemoveAt(index);
+        }
+
         /// <summary>
         /// Removes the element at the specified index of the list and returns that element.
         /// </summary>
