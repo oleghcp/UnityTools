@@ -13,9 +13,15 @@ namespace OlegHcpEditor
     internal static class AssetOpenEditor
     {
         [OnOpenAsset]
+#if UNITY_6000_4_OR_NEWER
+        private static bool OpenScriptableObjectClass(EntityId entityId, int _)
+#else
         private static bool OpenScriptableObjectClass(int instanceID, int _)
+#endif
         {
-#if UNITY_6000_3_OR_NEWER
+#if UNITY_6000_4_OR_NEWER
+            UnityObject obj = EditorUtility.EntityIdToObject(entityId);
+#elif UNITY_6000_3_OR_NEWER
             UnityObject obj = EditorUtility.EntityIdToObject(instanceID);
 #else
             UnityObject obj = EditorUtility.InstanceIDToObject(instanceID);
@@ -33,7 +39,11 @@ namespace OlegHcpEditor
                 return true;
             }
 
+#if UNITY_6000_4_OR_NEWER
+            if (ProjectWindowUtil.IsFolder(entityId) && OlegHcpUserSettings.OpenFoldersByDoubleClick)
+#else
             if (ProjectWindowUtil.IsFolder(instanceID) && OlegHcpUserSettings.OpenFoldersByDoubleClick)
+#endif
             {
                 EditorUtilityExt.OpenFolder(obj.GetAssetPath());
                 return true;
