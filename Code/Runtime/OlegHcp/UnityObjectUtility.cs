@@ -55,11 +55,15 @@ namespace OlegHcp
         /// </summary>
         public static bool IsAsset(ScriptableObject obj)
         {
-#if UNITY_2020_3_OR_NEWER
+#if UNITY_6000_4_OR_NEWER
+            return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude)
+                               .Contains(obj);
+#elif UNITY_2020_3_OR_NEWER
             return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                                .Contains(obj);
 #else
-            return !UnityObject.FindObjectsOfType(obj.GetType()).Contains(obj);
+            return !UnityObject.FindObjectsOfType(obj.GetType())
+                               .Contains(obj);
 #endif
         }
     }
