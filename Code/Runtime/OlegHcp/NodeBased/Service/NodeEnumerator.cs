@@ -25,7 +25,7 @@ namespace OlegHcp.NodeBased.Service
                     return default;
 
                 Transition transition = array[index];
-                RawNode nextNode = _node.Owner.Dict[transition.NextNodeId];
+                RawNode nextNode = _node.Owner.NodeDict[transition.NextNodeId];
                 return new TransitionInfo<TNode>(transition.Condition, nextNode);
             }
         }
@@ -77,7 +77,7 @@ namespace OlegHcp.NodeBased.Service
                 return false;
 
             Transition transition = array[index];
-            RawNode nextNode = node.Owner.Dict[transition.NextNodeId];
+            RawNode nextNode = node.Owner.NodeDict[transition.NextNodeId];
             index++;
 
             if (!(nextNode is HubNode hub))

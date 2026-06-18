@@ -24,9 +24,9 @@ namespace OlegHcp.NodeBased
             get
             {
                 if (_nodeList == null)
-                    _nodeList = Dict.Where(item => item.Value.IsRegular())
-                                    .Select(item => (TNode)item.Value)
-                                    .ToArray();
+                    _nodeList = NodeDict.Where(item => item.Value.IsRegular())
+                                        .Select(item => (TNode)item.Value)
+                                        .ToArray();
                 return _nodeList;
             }
         }

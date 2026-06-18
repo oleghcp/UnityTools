@@ -34,7 +34,6 @@ namespace OlegHcpEditor.Window.NodeBased
                 EditorUtilityExt.SCRIPT_FIELD,
                 RawGraph.NodesFieldName,
                 RawGraph.RootNodeFieldName,
-                RawGraph.IdGeneratorFieldName,
                 RawGraph.WidthFieldName,
                 RawGraph.CommonNodeFieldName,
             };

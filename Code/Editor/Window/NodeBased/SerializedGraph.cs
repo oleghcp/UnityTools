@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using OlegHcp;
 using OlegHcp.CSharp;
 using OlegHcp.IdGenerating;
 using OlegHcp.Mathematics;
@@ -42,8 +42,11 @@ namespace OlegHcpEditor.Window.NodeBased
         public void InitAssetReference(RawGraph graphAsset)
         {
             _graphAsset = graphAsset;
+
+            uint maxId = graphAsset.NodeArray.Max(item => (uint)item.Id);
+            _idGenerator = new IntIdGenerator((int)maxId);
+
             _serializedObject = new SerializedObject(graphAsset);
-            _idGenerator = new IntIdGenerator(_serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue);
             _nodesProperty = _serializedObject.FindProperty(RawGraph.NodesFieldName);
             _rootNodeProperty = _serializedObject.FindProperty(RawGraph.RootNodeFieldName);
             _commonNodeProperty = _serializedObject.FindProperty(RawGraph.CommonNodeFieldName);
@@ -70,8 +73,6 @@ namespace OlegHcpEditor.Window.NodeBased
             newNodeAsset.Owner = _graphAsset;
             newNodeAsset.Position = position;
             newNodeAsset.NodeName = GetDefaultNodeName(type, newNodeAsset.Id);
-
-            _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = newNodeAsset.Id;
 
             SerializedProperty nodeProp = nodeType == NodeType.Common ? _commonNodeProperty : _nodesProperty.AddArrayElement();
             nodeProp.managedReferenceValue = newNodeAsset;
@@ -104,7 +105,6 @@ namespace OlegHcpEditor.Window.NodeBased
             {
                 _serializedObject.FindProperty(RawGraph.RootNodeFieldName).intValue = 0;
                 _idGenerator = new IntIdGenerator();
-                _serializedObject.FindProperty(RawGraph.IdGeneratorFieldName).intValue = 0;
             }
             else
             {
