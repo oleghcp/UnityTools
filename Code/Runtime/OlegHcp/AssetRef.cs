@@ -59,19 +59,32 @@ namespace OlegHcp
             }
         }
 
+#if UNITY_6000_4_OR_NEWER
+        public EntityId InstanceId
+#else
         public int InstanceId
+#endif
         {
             get
             {
                 switch (_type)
                 {
-                    case RefType.Simple: return _directRef.GetInstanceID();
+                    case RefType.Simple:
+#if UNITY_6000_4_OR_NEWER
+                        return _directRef.GetEntityId();
+#else
+                        return _directRef.GetInstanceID();
+#endif
+
                     case RefType.Lazy:
-#if UNITY_6000_3_OR_NEWER
+#if UNITY_6000_4_OR_NEWER
+                        return _lazyRef.entityId;
+#elif UNITY_6000_3_OR_NEWER
                         return _lazyRef.entityId;
 #else
                         return _lazyRef.instanceID;
 #endif
+
 #if INCLUDE_ADDRESSABLES
                     case RefType.Async: throw new InvalidOperationException("Cannot get instance ID from addressable asset reference.");
 #endif
