@@ -6,6 +6,7 @@ using OlegHcp.IO;
 using OlegHcpEditor.Configs;
 using OlegHcpEditor.Engine;
 using UnityEditor;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace OlegHcpEditor.Utils
