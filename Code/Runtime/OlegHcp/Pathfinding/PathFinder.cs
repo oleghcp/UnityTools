@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using OlegHcp.Pool;
 
 namespace OlegHcp.Pathfinding
@@ -11,12 +12,22 @@ namespace OlegHcp.Pathfinding
         private HashSet<IPathNode> _checkBuffer = new HashSet<IPathNode>();
         private NodeDataCollection _nodes = new NodeDataCollection();
 
+        private bool _locked;
+
         public bool Find(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder = true)
         {
+            if (_locked)
+                throw new PathFinderLockedException();
+
+            _locked = true;
+
             result.Clear();
 
             if (origin == target)
+            {
+                Unlock();
                 return true;
+            }
 
             _frontBuffer.Clear();
             _checkBuffer.Clear();
@@ -43,6 +54,7 @@ namespace OlegHcp.Pathfinding
                     if (neighbor == target)
                     {
                         FillResults(origin, target, result, directOrder);
+                        Unlock();
                         return true;
                     }
 
@@ -50,6 +62,7 @@ namespace OlegHcp.Pathfinding
                 }
             }
 
+            Unlock();
             return false;
         }
 
@@ -71,6 +84,12 @@ namespace OlegHcp.Pathfinding
 
             if (directOrder)
                 result.Reverse();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Unlock()
+        {
+            _locked = false;
         }
     }
 }

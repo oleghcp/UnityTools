@@ -108,10 +108,10 @@ namespace OlegHcp.Pathfinding
 
         private class ValueNode : IPoolable
         {
-            public TValue Element;
-            public TPriority Priority;
-            public ValueNode Prev;
-            public ValueNode Next;
+            public TValue Element { get; private set; }
+            public TPriority Priority { get; private set; }
+            public ValueNode Prev { get; set; }
+            public ValueNode Next { get; set; }
 
             public void SetUp(TValue value, TPriority priority)
             {
@@ -120,9 +120,11 @@ namespace OlegHcp.Pathfinding
             }
 
             #region IPoolable
-            public void Reinit() { }
+            void IPoolable.Reinit()
+            {
+            }
 
-            public void CleanUp()
+            void IPoolable.CleanUp()
             {
                 Element = default;
                 Next = null;
