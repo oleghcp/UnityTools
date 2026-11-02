@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using OlegHcp.Pool;
 
 namespace OlegHcp.Pathfinding
 {
     public class PathFinder
     {
-        private OrderedStack<IPathNode, float> _frontBuffer = new OrderedStack<IPathNode    , float>();
+        private static ObjectPool<PathFinder> _objectPool = new ObjectPool<PathFinder>(() => new PathFinder());
+
+        private OrderedStack<IPathNode, float> _frontBuffer = new OrderedStack<IPathNode, float>();
         private HashSet<IPathNode> _checkBuffer = new HashSet<IPathNode>();
         private NodeDataCollection _nodes = new NodeDataCollection();
 
@@ -48,6 +51,14 @@ namespace OlegHcp.Pathfinding
             }
 
             return false;
+        }
+
+        public static bool FindPath(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder = true)
+        {
+            PathFinder pathFinder = _objectPool.Get();
+            bool done = pathFinder.Find(origin, target, result, directOrder);
+            _objectPool.Release(pathFinder);
+            return done;
         }
 
         private void FillResults(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder)
