@@ -17,7 +17,7 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "UNITY_2019_4_OR_NEWER"
+        "UNITY_2021_3_OR_NEWER"
     ],
     "versionDefines": [
         {

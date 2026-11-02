@@ -3,7 +3,7 @@
     "displayName": "OlegHcp Unity Tools",
     "version": "2.7.14",
     "description": "A set of helpful code stuff for Unity.",
-    "unity": "2019.4",
+    "unity": "2021.3",
     "documentationUrl": "https://github.com/oleghcp/UnityTools",
     "licensesUrl": "https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md",
     "keywords": [ "oleghcp", "oleg", "hcp", "unitytools", "tools" ],
