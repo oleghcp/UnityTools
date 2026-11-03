@@ -10,7 +10,7 @@ namespace OlegHcp.Pathfinding
 
         private OrderedStack<IPathNode, float> _frontBuffer = new OrderedStack<IPathNode, float>();
         private HashSet<IPathNode> _checkBuffer = new HashSet<IPathNode>();
-        private NodeDataCollection _nodes = new NodeDataCollection();
+        private NodeDataCollection _nodeStuff = new NodeDataCollection();
 
         private bool _locked;
 
@@ -31,9 +31,9 @@ namespace OlegHcp.Pathfinding
 
             _frontBuffer.Clear();
             _checkBuffer.Clear();
-            _nodes.Clear();
+            _nodeStuff.Clear();
 
-            _frontBuffer.Push(origin, _nodes.GetPassCost(origin));
+            _frontBuffer.Push(origin, _nodeStuff.GetPassCost(origin));
 
             while (_frontBuffer.Count > 0)
             {
@@ -49,7 +49,7 @@ namespace OlegHcp.Pathfinding
                         _frontBuffer.Contains(neighbor))
                         continue;
 
-                    _nodes.AddPathData(neighbor, current, cost);
+                    _nodeStuff.AddPathData(neighbor, current, cost);
 
                     if (neighbor == target)
                     {
@@ -58,7 +58,7 @@ namespace OlegHcp.Pathfinding
                         return true;
                     }
 
-                    _frontBuffer.Push(neighbor, _nodes.GetPassCost(neighbor));
+                    _frontBuffer.Push(neighbor, _nodeStuff.GetPassCost(neighbor));
                 }
             }
 
@@ -79,7 +79,7 @@ namespace OlegHcp.Pathfinding
             do
             {
                 result.Add(target);
-                target = _nodes.GetParent(target);
+                target = _nodeStuff.GetParent(target);
             } while (target != origin);
 
             if (directOrder)
