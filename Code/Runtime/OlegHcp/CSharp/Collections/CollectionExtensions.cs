@@ -575,55 +575,5 @@ namespace OlegHcp.CSharp.Collections
 
             self[newIndex] = value;
         }
-
-#if !UNITY_2021_2_OR_NEWER
-        public static bool TryPeek<T>(this Stack<T> self, out T item)
-        {
-            if (self.Count > 0)
-            {
-                item = self.Peek();
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public static bool TryPop<T>(this Stack<T> self, out T item)
-        {
-            if (self.Count > 0)
-            {
-                item = self.Pop();
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public static bool TryPeek<T>(this Queue<T> self, out T item)
-        {
-            if (self.Count > 0)
-            {
-                item = self.Peek();
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public static bool TryDequeue<T>(this Queue<T> self, out T item)
-        {
-            if (self.Count > 0)
-            {
-                item = self.Dequeue();
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-#endif
     }
 }

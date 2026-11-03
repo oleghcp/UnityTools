@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
 
 namespace OlegHcp.Pool.Storages
 {
@@ -9,7 +6,7 @@ namespace OlegHcp.Pool.Storages
     {
         public StackStorage() { }
         public StackStorage(int capacity) : base(capacity) { }
-        public StackStorage(IEnumerable<T> collection):base(collection) { }
+        public StackStorage(IEnumerable<T> collection) : base(collection) { }
 
         public bool TryAdd(T value)
         {
@@ -19,11 +16,7 @@ namespace OlegHcp.Pool.Storages
 
         public bool TryGet(out T value)
         {
-#if UNITY_2021_2_OR_NEWER
             return TryPop(out value);
-#else
-            return this.TryPop(out value);
-#endif
         }
     }
 }

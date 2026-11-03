@@ -18,7 +18,6 @@ namespace OlegHcp.CSharp.Collections
             set => _items[_offset + index] = value;
         }
 
-#if UNITY_2021_2_OR_NEWER || !UNITY
         public ListSegment<T> this[Range range]
         {
             get
@@ -27,7 +26,6 @@ namespace OlegHcp.CSharp.Collections
                 return new ListSegment<T>(_items, _offset + offset, length);
             }
         }
-#endif
 
         public IList<T> Items => _items;
         public int Offset => _offset;

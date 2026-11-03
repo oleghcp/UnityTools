@@ -412,11 +412,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double Cbrt(this double value)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return Math.Cbrt(value);
-#else
-            return Math.Pow(value, MathUtility.THIRD);
-#endif
         }
 
         /// <summary>
@@ -448,11 +444,7 @@ namespace OlegHcp.Mathematics
         /// </summary>
         public static double Cbrt(this long value)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return Math.Cbrt(value);
-#else
-            return Math.Pow(value, MathUtility.THIRD);
-#endif
         }
 
         /// <summary>

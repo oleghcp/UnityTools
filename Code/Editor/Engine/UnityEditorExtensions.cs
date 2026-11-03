@@ -119,11 +119,11 @@ namespace OlegHcpEditor.Engine
                 case SerializedPropertyType.BoundsInt:
                     self.boundsIntValue = default;
                     break;
-#if UNITY_2021_1_OR_NEWER
+
                 case SerializedPropertyType.Hash128:
                     self.hash128Value = default;
                     break;
-#endif
+
                 default:
                     throw new SwitchExpressionException(self.propertyType);
             }
@@ -132,11 +132,7 @@ namespace OlegHcpEditor.Engine
 
         public static bool HasManagedReferenceValue(this SerializedProperty self)
         {
-#if UNITY_2021_2_OR_NEWER
             return self.managedReferenceValue != null;
-#else
-            return self.managedReferenceFullTypename.HasAnyData();
-#endif
         }
 
         public static IEnumerable<SerializedProperty> EnumerateProperties(this SerializedObject self, bool copyIterationState = true)

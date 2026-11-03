@@ -320,7 +320,6 @@ namespace OlegHcp.CSharp
             return GetRandomItem(self, RandomNumberGenerator.Default);
         }
 
-#if UNITY_2021_2_OR_NEWER || !UNITY
         public static int Sum(this ReadOnlySpan<int> self)
         {
             int sum = 0;
@@ -451,6 +450,5 @@ namespace OlegHcp.CSharp
         {
             return GetRandomItem(self, RandomNumberGenerator.Default);
         }
-#endif
     }
 }

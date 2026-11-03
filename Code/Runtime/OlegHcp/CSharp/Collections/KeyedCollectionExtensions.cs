@@ -15,34 +15,6 @@ namespace OlegHcp.CSharp.Collections
             return newItem;
         }
 
-#if !UNITY_2021_2_OR_NEWER
-        /// <summary>
-        /// Removes the element with the specified key from the dictionary and returns it or default value.
-        /// </summary>
-        public static bool Remove<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, out TValue value)
-        {
-            if (self.TryGetValue(key, out value))
-            {
-                self.Remove(key);
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Attempts to add the specified key and value to the dictionary.
-        /// </summary>
-        public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> self, TKey key, TValue value)
-        {
-            if (self.ContainsKey(key))
-                return false;
-
-            self.Add(key, value);
-            return true;
-        }
-#endif
-
         /// <summary>
         /// Returns a read-only System.Collections.ObjectModel.ReadOnlyDictionary`2 wrapper for the current dictionary.
         /// </summary>        
@@ -98,13 +70,5 @@ namespace OlegHcp.CSharp.Collections
                 self.Add(key, value = creator(key));
             return value;
         }
-
-#if !UNITY_2021_2_OR_NEWER
-        public static void Deconstruct<TKey, TValue>(this in KeyValuePair<TKey, TValue> self, out TKey key, out TValue value)
-        {
-            key = self.Key;
-            value = self.Value;
-        }
-#endif
     }
 }

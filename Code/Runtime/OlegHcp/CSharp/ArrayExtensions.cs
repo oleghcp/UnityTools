@@ -11,14 +11,7 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static void Fill<T>(this T[] self, T value)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             Array.Fill(self, value);
-#else
-            for (int i = 0; i < self.Length; i++)
-            {
-                self[i] = value;
-            }
-#endif
         }
 
         /// <summary>
@@ -26,20 +19,7 @@ namespace OlegHcp.CSharp
         /// </summary>
         public static void Fill<T>(this T[] self, T value, int startIndex, int count)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             Array.Fill(self, value, startIndex, count);
-#else
-            if ((uint)startIndex >= (uint)self.Length)
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-
-            if (startIndex + count > self.Length)
-                throw ThrowErrors.SegmentOutOfRange();
-
-            for (int i = startIndex; i < count + startIndex; i++)
-            {
-                self[i] = value;
-            }
-#endif
         }
 
         /// <summary>

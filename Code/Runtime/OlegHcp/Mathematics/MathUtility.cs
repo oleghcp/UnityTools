@@ -7,10 +7,6 @@ namespace OlegHcp.Mathematics
 {
     public static partial class MathUtility
     {
-#if !UNITY_2021_2_OR_NEWER
-        internal const double THIRD = 1d / 3d;
-#endif
-
         public const float Deg2Rad = PI / 180f;
         public const float Rad2Deg = 57.29578f;
 

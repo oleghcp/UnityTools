@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#if !UNITY_2021_2_OR_NEWER
-using OlegHcp.CSharp.Collections;
-#endif
-
 namespace OlegHcp.Managing
 {
     public interface IStateTracker

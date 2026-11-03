@@ -71,11 +71,7 @@ namespace OlegHcp.Mathematics
 
         public static Vector2 Evaluate(Vector2[] points, float ratio)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return Evaluate((Span<Vector2>)points, ratio);
-#else
-            return Evaluate((IList<Vector2>)points, ratio);
-#endif
         }
 
         public static Vector2 Evaluate(Span<Vector2> points, float ratio)

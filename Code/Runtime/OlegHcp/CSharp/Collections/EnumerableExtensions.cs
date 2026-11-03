@@ -274,13 +274,6 @@ namespace OlegHcp.CSharp.Collections
             }
         }
 
-#if !UNITY_2021_2_OR_NEWER
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
-        {
-            return new HashSet<T>(self);
-        }
-#endif
-
         private static TSource GetWithMinInternal<TSource, TKey>(IEnumerable<TSource> collection, Func<TSource, TKey> keySelector, out TKey minKey)
         {
             if (keySelector == null)
