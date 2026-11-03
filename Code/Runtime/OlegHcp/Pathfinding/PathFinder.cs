@@ -8,7 +8,7 @@ namespace OlegHcp.Pathfinding
     {
         private static ObjectPool<PathFinder> _objectPool = new ObjectPool<PathFinder>(() => new PathFinder());
 
-        private OrderedStack<IPathNode, float> _frontBuffer = new OrderedStack<IPathNode, float>();
+        private OrderedStack _frontBuffer = new OrderedStack();
         private HashSet<IPathNode> _checkBuffer = new HashSet<IPathNode>();
         private NodeDataCollection _nodeStuff = new NodeDataCollection();
 

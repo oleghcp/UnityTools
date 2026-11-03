@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OlegHcp.Pool;
 using OlegHcp.Pool.Storages;
 using OlegHcp.Tools;
 
 namespace OlegHcp.Pathfinding
 {
-    internal class OrderedStack<TValue, TPriority> : HashSet<TValue> where TPriority : IComparable<TPriority>
+    internal class OrderedStack : HashSet<IPathNode>
     {
         private ObjectPool<ValueNode> _objectPool = new ObjectPool<ValueNode>(new StackStorage<ValueNode>(), () => new ValueNode());
 
         private ValueNode _first;
         private ValueNode _last;
 
-        public void Push(TValue value, TPriority priority)
+        public void Push(IPathNode value, float priority)
         {
             if (!Add(value))
                 return;
@@ -33,7 +32,7 @@ namespace OlegHcp.Pathfinding
 
             for (ValueNode n = _first; n != null; n = n.Next)
             {
-                if (n.Priority.CompareTo(priority) < 0)
+                if (n.Priority < priority)
                 {
                     nextNode = n;
                     break;
@@ -64,13 +63,13 @@ namespace OlegHcp.Pathfinding
             }
         }
 
-        public TValue Pop()
+        public IPathNode Pop()
         {
             if (Count == 0)
                 throw ThrowErrors.NoElements();
 
             ValueNode lastNode = _last;
-            TValue element = lastNode.Element;
+            IPathNode element = lastNode.Element;
             Remove(element);
 
             if (Count == 0)
@@ -108,12 +107,12 @@ namespace OlegHcp.Pathfinding
 
         private class ValueNode : IPoolable
         {
-            public TValue Element { get; private set; }
-            public TPriority Priority { get; private set; }
+            public IPathNode Element { get; private set; }
+            public float Priority { get; private set; }
             public ValueNode Prev { get; set; }
             public ValueNode Next { get; set; }
 
-            public void SetUp(TValue value, TPriority priority)
+            public void SetUp(IPathNode value, float priority)
             {
                 Element = value;
                 Priority = priority;
