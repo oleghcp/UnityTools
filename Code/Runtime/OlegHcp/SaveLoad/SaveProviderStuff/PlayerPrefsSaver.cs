@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using OlegHcp.Async;
 using OlegHcp.CSharp;
 using OlegHcp.Mathematics;
@@ -118,7 +119,7 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
                     break;
 
                 default:
-                    throw new UnsupportedValueException(typeCode);
+                    throw new SwitchExpressionException(typeCode);
             }
         }
 
@@ -204,7 +205,7 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
                     return JsonUtility.FromJson(PlayerPrefs.GetString(key), type);
 
                 default:
-                    throw new UnsupportedValueException(typeCode);
+                    throw new SwitchExpressionException(typeCode);
             }
         }
     }
