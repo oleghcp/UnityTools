@@ -43,44 +43,24 @@ namespace OlegHcp.Rng.BytesBased
 
         private void UpdateBytes()
         {
-            Guid guid = Guid.NewGuid();
-
-#if UNITY_2021_2_OR_NEWER || !UNITY
             Span<byte> bytes = stackalloc byte[COUNT + 2];
-            if (guid.TryWriteBytes(bytes))
-            {
-                int j = 0;
-                for (int i = 0; i < COUNT; i++)
-                {
-                    while (j == EXCL_BYTE_INDEX0 ||
-                           j == EXCL_BYTE_INDEX1)
-                    { j++; }
+            bool success = Guid.NewGuid()
+                               .TryWriteBytes(bytes);
+            if (!success)
+                throw new InvalidOperationException("Writing GUID bytes failed.");
 
-                    _bytes[i] = bytes[j];
-                    j++;
-                }
-            }
-            else
+            int j = 0;
+            for (int i = 0; i < COUNT; i++)
             {
-                throw new Exception("Cannot write GUID bytes.");
-            }
-#else
-            unsafe
-            {
-                byte* bytes = (byte*)&guid;
+                while (j == EXCL_BYTE_INDEX0 ||
+                       j == EXCL_BYTE_INDEX1)
+                { j++; }
 
-                int j = 0;
-                for (int i = 0; i < COUNT; i++)
-                {
-                    while (j == EXCL_BYTE_INDEX0 ||
-                           j == EXCL_BYTE_INDEX1)
-                    { j++; }
-
-                    _bytes[i] = bytes[j];
-                    j++;
-                }
+                _bytes[i] = bytes[j];
+                j++;
             }
-#endif
+
+
             _counter = 0;
         }
     }
