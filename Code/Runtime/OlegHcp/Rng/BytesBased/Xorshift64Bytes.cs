@@ -61,21 +61,12 @@ namespace OlegHcp.Rng.BytesBased
         private void UpdateBytes()
         {
             Xorshift64();
-
-#if UNITY_2021_2_OR_NEWER || !UNITY
             Span<byte> bytes = _bytes;
-            BitConverter.TryWriteBytes(bytes, _num64);
-#else
-            unsafe
-            {
-                ulong rn = _num64;
-                byte* bytes = (byte*)&rn;
-                for (int i = 0; i < COUNT; i++)
-                {
-                    _bytes[i] = bytes[i];
-                }
-            }
-#endif
+            bool success = BitConverter.TryWriteBytes(bytes, _num64);
+
+            if (!success)
+                throw new InvalidOperationException("Writing Xorshift64Bytes bytes failed.");
+
             _counter = 0;
         }
 

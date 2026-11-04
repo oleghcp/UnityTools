@@ -1,5 +1,4 @@
-﻿#if UNITY_2020_1_OR_NEWER
-#if INCLUDE_ADDRESSABLES
+﻿#if INCLUDE_ADDRESSABLES
 using UnityEngine.AddressableAssets;
 #endif
 using System.Runtime.CompilerServices;
@@ -123,4 +122,3 @@ namespace OlegHcp
 #endif
     }
 }
-#endif

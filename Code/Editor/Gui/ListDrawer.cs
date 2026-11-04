@@ -107,10 +107,7 @@ namespace OlegHcpEditor.Gui
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
 
-#if !UNITY_2020_3_OR_NEWER
-            using (new EditorGUILayout.VerticalScope())
-#endif
-                _drawer.DoLayoutList();
+            _drawer.DoLayoutList();
 
             GUILayout.Space(EditorGuiUtility.StandardHorizontalSpacing);
             EditorGUILayout.EndHorizontal();
@@ -206,18 +203,12 @@ namespace OlegHcpEditor.Gui
             if (_drawer.list.IsFixedSize)
                 _drawer.list = list.ToArray();
 
-#if UNITY_2021_1_OR_NEWER
             _drawer.Select(list.Count - 1);
-#endif
         }
 
         private void OnRemoveElement(ReorderableList _)
         {
-#if UNITY_2021_1_OR_NEWER
             IList<int> indices = _drawer.selectedIndices;
-#else
-            IList<int> indices = new[] { _drawer.index };
-#endif
             IList<T> list = _drawer.List;
 
             if (_drawer.list.IsFixedSize)
@@ -238,10 +229,8 @@ namespace OlegHcpEditor.Gui
             if (_drawer.list.IsFixedSize)
                 _drawer.list = list.ToArray();
 
-#if UNITY_2021_1_OR_NEWER
             if (list.Count > 0)
                 _drawer.Select(list.Count - 1);
-#endif
         }
 
         private void OnChanged(ReorderableList _)

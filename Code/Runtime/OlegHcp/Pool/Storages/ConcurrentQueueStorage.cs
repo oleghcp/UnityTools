@@ -18,12 +18,5 @@ namespace OlegHcp.Pool.Storages
         {
             return TryDequeue(out value);
         }
-
-#if !UNITY_2021_2_OR_NEWER
-        public void Clear()
-        {
-            throw new System.NotImplementedException();
-        }
-#endif
     }
 }

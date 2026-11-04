@@ -2,7 +2,6 @@
 using System.Globalization;
 using OlegHcp.CSharp;
 using OlegHcp.Engine;
-using OlegHcp.Tools;
 using UnityEngine;
 
 namespace OlegHcp.Mathematics
@@ -134,12 +133,7 @@ namespace OlegHcp.Mathematics
             if (formatProvider == null)
                 formatProvider = CultureInfo.InvariantCulture.NumberFormat;
 
-#if UNITY_2020_1_OR_NEWER
             string stringPosition = Position.ToString(format, formatProvider);
-#else
-            string stringPosition = Position.ToString(format);
-#endif
-
             return string.Format(formatProvider, "(Pos:{0}, Rad:{1})", stringPosition, Radius.ToString(format, formatProvider));
         }
 

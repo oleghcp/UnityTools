@@ -4,9 +4,6 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Rng
 {
-#if UNITY && !UNITY_2021_2_OR_NEWER
-    [Serializable]
-#endif
     public class BaseRng : Random, IRng
     {
         public BaseRng() : base() { }
@@ -28,15 +25,5 @@ namespace OlegHcp.Rng
 
             return MathUtility.LerpUnclamped(0f, maxValue, (float)Sample());
         }
-
-#if UNITY && !UNITY_2021_2_OR_NEWER
-        public void NextBytes(Span<byte> buffer)
-        {
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                buffer[i] = (byte)base.Next(256);
-            }
-        }
-#endif
     }
 }

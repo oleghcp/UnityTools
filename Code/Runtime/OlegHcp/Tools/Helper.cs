@@ -50,6 +50,9 @@ namespace OlegHcp.Tools
         }
 
 #if UNITY
+#if UNITY_6000_4_OR_NEWER
+        [Obsolete("CloneObject is deprecated due to the deprecation of BinaryFormatter.")]
+#endif
         public static object CloneObject(object source)
         {
             if (source is null)
@@ -62,7 +65,9 @@ namespace OlegHcp.Tools
 
             using (MemoryStream stream = new MemoryStream())
             {
+#pragma warning disable UAC0023
                 IFormatter formatter = new BinaryFormatter();
+#pragma warning restore
                 formatter.Serialize(stream, source);
                 stream.Seek(0, SeekOrigin.Begin);
                 return formatter.Deserialize(stream);

@@ -18,11 +18,7 @@ namespace OlegHcp.CSharp
 
         public static string ConcatToString<T>(this IEnumerable<T> self, char separator)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return string.Join(separator, self);
-#else
-            return string.Join($"{separator}", self);
-#endif
         }
 
         public static string ConcatToString(this IEnumerable<string> self)
@@ -37,11 +33,7 @@ namespace OlegHcp.CSharp
 
         public static string ConcatToString(this IEnumerable<string> self, char separator)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return string.Join(separator, self);
-#else
-            return string.Join($"{separator}", self);
-#endif
         }
 
         public static string ConcatToString(this object[] self)
@@ -56,11 +48,7 @@ namespace OlegHcp.CSharp
 
         public static string ConcatToString(this object[] self, char separator)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return string.Join(separator, self);
-#else
-            return string.Join($"{separator}", self);
-#endif
         }
 
         public static string ConcatToString(this string[] self)
@@ -75,11 +63,7 @@ namespace OlegHcp.CSharp
 
         public static string ConcatToString(this string[] self, char separator)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return string.Join(separator, self);
-#else
-            return string.Join($"{separator}", self);
-#endif
         }
 
         public static string ConcatToString(this string[] self, int startIndex, int count)
@@ -94,11 +78,7 @@ namespace OlegHcp.CSharp
 
         public static string ConcatToString(this string[] self, int startIndex, int count, char separator)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return string.Join(separator, self, startIndex, count);
-#else
-            return string.Join($"{separator}", self, startIndex, count);
-#endif
         }
 
         public static string ConcatToString<T>(this Span<T> self) where T : unmanaged

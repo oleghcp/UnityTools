@@ -26,10 +26,8 @@ namespace OlegHcp.SingleScripts
                 {
 #if UNITY_2023_1_OR_NEWER
                     T instance = FindAnyObjectByType<T>(FindObjectsInactive.Include);
-#elif UNITY_2020_1_OR_NEWER
-                    T instance = FindObjectOfType<T>(true);
 #else
-                    T instance = FindObjectOfType<T>();
+                    T instance = FindObjectOfType<T>(true);
 #endif
 
                     if (instance == null)

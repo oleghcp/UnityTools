@@ -138,11 +138,7 @@ namespace OlegHcp.Collections
         }
         #endregion
 
-#if UNITY_2021_2_OR_NEWER || !UNITY
         public BitList(bool[] values) : this((Span<bool>)values) { }
-#else
-        public BitList(bool[] values) : this((ICollection<bool>)values) { }
-#endif
 
         public BitList(ICollection<bool> values)
         {
@@ -181,11 +177,7 @@ namespace OlegHcp.Collections
             }
         }
 
-#if UNITY_2021_2_OR_NEWER || !UNITY
         public BitList(int[] intBlocks) : this((Span<int>)intBlocks) { }
-#else
-        public BitList(int[] intBlocks) : this((ICollection<int>)intBlocks) { }
-#endif
 
         public BitList(ICollection<int> intBlocks)
         {
@@ -644,7 +636,7 @@ namespace OlegHcp.Collections
                     if (Changed())
                         throw ThrowErrors.CollectionChanged();
 
-                    label:
+                label:
                     if ((uint)_index < (uint)_count)
                     {
                         if (!_collection[_index])

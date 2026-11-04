@@ -1,6 +1,6 @@
 ﻿[![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/Other/Logo.png)](https://github.com/oleghcp/UnityTools)
 
-[![](https://img.shields.io/badge/unity-2019.4%2B-teal)](https://unity.com)
+[![](https://img.shields.io/badge/unity-2021.3%2B-teal)](https://unity.com)
 [![](https://img.shields.io/github/last-commit/oleghcp/unitytools/master)](https://github.com/oleghcp/UnityTools/commits/master)
 [![](https://img.shields.io/github/license/oleghcp/unitytools)](https://github.com/oleghcp/UnityTools/blob/master/LICENSE.md)
 
@@ -15,7 +15,7 @@ Also you can [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?st
 # About
 
 The package is a set of C# utility code stuff for projects based on Unity Engine.  
-It works with Unity 2019.4 and newer.  
+It works with Unity 2021.3 and newer.  
 
 # Usage
 

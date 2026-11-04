@@ -48,11 +48,7 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, float[] weights, int weightOfNone = 0)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return Random(self, (Span<float>)weights, weightOfNone);
-#else
-            return Random(self, (IList<float>)weights, weightOfNone);
-#endif
         }
 
         /// <summary>
@@ -122,11 +118,7 @@ namespace OlegHcp
         /// </summary>
         public static int Random(this IRng self, int[] weights, int weightOfNone = 0)
         {
-#if UNITY_2021_2_OR_NEWER || !UNITY
             return Random(self, (Span<int>)weights, weightOfNone);
-#else
-            return Random(self, (IList<int>)weights, weightOfNone);
-#endif
         }
 
         /// <summary>
@@ -449,31 +441,15 @@ namespace OlegHcp
             const int stackLenCup = 256;
             string symbols = StringUtility.Alphanumeric;
 
-#if UNITY_2021_2_OR_NEWER || !UNITY
-            Span<char> charArray = length > stackLenCup ? new char[length] : stackalloc char[length];
-            for (int i = 0; i < length; i++) { charArray[i] = getChar(); }
-            return new string(charArray);
-#else
-            if (length > stackLenCup)
-            {
-                char[] charArray = new char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = getChar(); }
-                return new string(charArray);
-            }
-
-            unsafe
-            {
-                char* charArray = stackalloc char[length];
-                for (int i = 0; i < length; i++) { charArray[i] = getChar(); }
-                return new string(charArray, 0, length);
-            }
-#endif
-
-            char getChar()
+            Span<char> charArray = length > stackLenCup ? new char[length]
+                                                        : stackalloc char[length];
+            for (int i = 0; i < length; i++)
             {
                 char ch = symbols.GetRandomChar(self);
-                return (char.IsDigit(ch) || self.Next(2) == 0) ? ch : char.ToLower(ch);
+                charArray[i] = (char.IsDigit(ch) || self.Next(2) == 0) ? ch : char.ToLower(ch);
             }
+
+            return new string(charArray);
         }
     }
 }

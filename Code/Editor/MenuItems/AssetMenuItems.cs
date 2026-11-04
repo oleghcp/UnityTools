@@ -115,11 +115,7 @@ namespace OlegHcpEditor.MenuItems
             }
         }
 
-#if UNITY_2020_2_OR_NEWER
         private const int CREATE_CS_SCRIPT_PRIORITY = 80;
-#else
-        private const int CREATE_CS_SCRIPT_PRIORITY = 81;
-#endif
 
         [MenuItem(MENU_PARENT + "Create/C# Script (ext.)", false, CREATE_CS_SCRIPT_PRIORITY)]
         private static void CreateScript()

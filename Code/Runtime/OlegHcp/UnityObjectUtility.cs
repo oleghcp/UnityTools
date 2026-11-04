@@ -58,11 +58,8 @@ namespace OlegHcp
 #if UNITY_6000_4_OR_NEWER
             return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude)
                                .Contains(obj);
-#elif UNITY_2020_3_OR_NEWER
-            return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude, FindObjectsSortMode.None)
-                               .Contains(obj);
 #else
-            return !UnityObject.FindObjectsOfType(obj.GetType())
+            return !UnityObject.FindObjectsByType(obj.GetType(), FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                                .Contains(obj);
 #endif
         }
