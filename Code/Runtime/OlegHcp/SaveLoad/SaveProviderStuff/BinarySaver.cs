@@ -12,6 +12,9 @@ using UnityEngine;
 
 namespace OlegHcp.SaveLoad.SaveProviderStuff
 {
+#if UNITY_6000_4_OR_NEWER
+    [Obsolete("BinarySaver is deprecated due to the deprecation of BinaryFormatter.")]
+#endif
     public class BinarySaver : ISaver
     {
         private Dictionary<string, object> _storage = new Dictionary<string, object>();
@@ -49,7 +52,9 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
 
             if (File.Exists(path))
             {
+#pragma warning disable UAC0023
                 try { _storage = BinaryFileUtility.Load<Dictionary<string, object>>(path); }
+#pragma warning restore
                 catch (Exception) { return false; }
                 return true;
             }
@@ -60,7 +65,9 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
         void ISaver.SaveVersion(string version)
         {
             string path = Path.Combine(_dataPath, version);
+#pragma warning disable UAC0023
             BinaryFileUtility.Save(path, _storage);
+#pragma warning restore
         }
 
         TaskInfo ISaver.SaveVersionAsync(string version)
@@ -79,8 +86,9 @@ namespace OlegHcp.SaveLoad.SaveProviderStuff
             string asyncSave()
             {
                 string path = Path.Combine(_dataPath, version);
-
+#pragma warning disable UAC0023
                 try { BinaryFileUtility.Save(path, _storage); }
+#pragma warning restore
                 catch (Exception e) { return e.Message; }
 
                 return null;
