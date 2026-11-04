@@ -44,7 +44,7 @@ public class ExamplePathNode : IPathNode
         Position = pos;
     }
 
-    public override IReadOnlyList<PathTransition> GetTransitions()
+    public IReadOnlyList<PathTransition> GetTransitions()
     {
         return _transitions;
     }
