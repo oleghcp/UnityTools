@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using OlegHcp.Pool;
 using UnityEngine;
 
@@ -9,8 +10,7 @@ namespace OlegHcp.Shooting
         private static ProjectileRunner _instance;
 
         private List<IProjectile> _items = new List<IProjectile>();
-        private Stack<IProjectile> _newItems = new Stack<IProjectile>();
-        private Stack<IProjectile> _deadItems = new Stack<IProjectile>();
+        private Stack<ChangeToken> _changes = new Stack<ChangeToken>();
         private bool _locked;
         private ObjectPool<HashSet<Component>> _objectPool;
         private List<HitInfo> _hits = new List<HitInfo>();
@@ -30,17 +30,23 @@ namespace OlegHcp.Shooting
         public void Add(IProjectile projectile)
         {
             if (_locked)
-                _newItems.Push(projectile);
-            else
-                _items.Add(projectile);
+            {
+                _changes.Push(new ChangeToken(projectile, ChangeActionType.Add));
+                return;
+            }
+
+            _items.Add(projectile);
         }
 
         public void Remove(IProjectile projectile)
         {
             if (_locked)
-                _deadItems.Push(projectile);
-            else
-                _items.Remove(projectile);
+            {
+                _changes.Push(new ChangeToken(projectile, ChangeActionType.Remove));
+                return;
+            }
+
+            _items.Remove(projectile);
         }
 
         public HashSet<Component> GetSet()
@@ -50,36 +56,69 @@ namespace OlegHcp.Shooting
 
         public void ReleaseSet(HashSet<Component> set)
         {
-            if (set != null)
-            {
-                set.Clear();
-                _objectPool.Release(set);
-            }
+            if (set == null)
+                return;
+
+            set.Clear();
+            _objectPool.Release(set);
         }
 
         private void OnLateUpdate()
         {
+            _locked = true;
+
             try
             {
-                _locked = true;
                 for (int i = 0; i < _items.Count; i++)
                 {
                     _items[i].OnUpdate();
                 }
-                _locked = false;
             }
             finally
             {
-                while (_deadItems.Count > 0)
-                {
-                    _items.Remove(_deadItems.Pop());
-                }
+                _locked = false;
 
-                while (_newItems.Count > 0)
+                while (_changes.Count > 0)
                 {
-                    _items.Add(_newItems.Pop());
+                    _changes.Pop()
+                            .Proceed(_items);
                 }
             }
+        }
+
+        private struct ChangeToken
+        {
+            private IProjectile _item;
+            private ChangeActionType _actionType;
+
+            public ChangeToken(IProjectile item, ChangeActionType actionType)
+            {
+                _item = item;
+                _actionType = actionType;
+            }
+
+            public void Proceed(List<IProjectile> mainCollection)
+            {
+                switch (_actionType)
+                {
+                    case ChangeActionType.Add:
+                        mainCollection.Add(_item);
+                        break;
+
+                    case ChangeActionType.Remove:
+                        mainCollection.Remove(_item);
+                        break;
+
+                    default:
+                        throw new SwitchExpressionException(_actionType);
+                }
+            }
+        }
+
+        private enum ChangeActionType
+        {
+            Add,
+            Remove,
         }
     }
 }

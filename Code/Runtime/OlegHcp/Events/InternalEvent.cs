@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using OlegHcp.CSharp.Collections;
 
 namespace OlegHcp.Events
@@ -7,9 +8,8 @@ namespace OlegHcp.Events
     internal class InternalEvent : BusEvent
     {
         private List<EventSubscription> _subscriptions = new List<EventSubscription>();
-        private List<EventSubscription> _newItems;
-        private List<int> _deadItems;
-        private bool _changed;
+        private Queue<ChangeToken> _changes;
+        private bool _orderRequired;
         private bool _enumLocked;
         private bool _ownerLocked;
 
@@ -41,25 +41,23 @@ namespace OlegHcp.Events
 
             if (_enumLocked)
             {
-                if (_newItems == null)
-                    _newItems = new List<EventSubscription>();
-                _newItems.Add(s);
+                _changes ??= new Queue<ChangeToken>();
+                _changes.Enqueue(new ChangeToken(s));
             }
             else
             {
                 AddItem(s);
             }
 
-            return s.GetHashCode();
+            return s.HashCode;
         }
 
         public void Unsubscribe(int hash)
         {
             if (_enumLocked)
             {
-                if (_deadItems == null)
-                    _deadItems = new List<int>();
-                _deadItems.Add(hash);
+                _changes ??= new Queue<ChangeToken>();
+                _changes.Enqueue(new ChangeToken(hash));
             }
             else
             {
@@ -74,10 +72,10 @@ namespace OlegHcp.Events
 
             _enumLocked = true;
 
-            if (_changed)
+            if (_orderRequired)
             {
                 _subscriptions.Sort();
-                _changed = false;
+                _orderRequired = false;
             }
 
             try
@@ -91,14 +89,13 @@ namespace OlegHcp.Events
             {
                 _enumLocked = false;
 
-                while (_deadItems.HasAnyData())
+                if (_changes != null)
                 {
-                    RemoveItem(_deadItems.Pop());
-                }
-
-                while (_newItems.HasAnyData())
-                {
-                    AddItem(_newItems.Pop());
+                    while (_changes.Count > 0)
+                    {
+                        _changes.Dequeue()
+                                .Proceed(this);
+                    }
                 }
             }
         }
@@ -106,27 +103,58 @@ namespace OlegHcp.Events
         private void AddItem(in EventSubscription subscription)
         {
             if (subscription.Priority != int.MaxValue)
-                _changed = true;
+                _orderRequired = true;
 
             _subscriptions.Add(subscription);
         }
 
         private void RemoveItem(int hash)
         {
-            int index = -1;
-
-            for (int i = 0; i < _subscriptions.Count; i++)
-            {
-                EventSubscription s = _subscriptions[i];
-                if (s.GetHashCode() == hash)
-                {
-                    index = i;
-                    break;
-                }
-            }
+            int index = _subscriptions.IndexOf(item => item.HashCode == hash);
 
             if (index >= 0)
                 _subscriptions.RemoveAt(index);
+        }
+
+        private struct ChangeToken
+        {
+            private EventSubscription _item;
+            private ChangeActionType _actionType;
+
+            public ChangeToken(EventSubscription item)
+            {
+                _item = item;
+                _actionType = ChangeActionType.Add;
+            }
+
+            public ChangeToken(int hash)
+            {
+                _item = new EventSubscription(hash);
+                _actionType = ChangeActionType.Remove;
+            }
+
+            public void Proceed(InternalEvent thisEvent)
+            {
+                switch (_actionType)
+                {
+                    case ChangeActionType.Add:
+                        thisEvent.AddItem(_item);
+                        break;
+
+                    case ChangeActionType.Remove:
+                        thisEvent.RemoveItem(_item.HashCode);
+                        break;
+
+                    default:
+                        throw new SwitchExpressionException(_actionType);
+                }
+            }
+        }
+
+        private enum ChangeActionType
+        {
+            Add,
+            Remove,
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace OlegHcp.Events
 {
@@ -8,7 +9,17 @@ namespace OlegHcp.Events
         private int _priority;
         private int _hashCode;
 
-        public int Priority => _priority;
+        public int Priority
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => _priority;
+        }
+
+        public int HashCode
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => _hashCode;
+        }
 
         public EventSubscription(object handler, int priority)
         {
@@ -17,12 +28,23 @@ namespace OlegHcp.Events
             _hashCode = handler.GetHashCode();
         }
 
+        public EventSubscription(int hash)
+        {
+            _hashCode = hash;
+            _handler = default;
+            _priority = default;
+        }
+
         public void Invoke<TSignal>(TSignal signal) where TSignal : ISignal
         {
-            if (_handler is Action<TSignal> func)
-                func.Invoke(signal);
-            else
-                ((IEventListener<TSignal>)_handler).HandleEvent(signal);
+            if (_handler is IEventListener<TSignal> handler)
+            {
+                handler.HandleEvent(signal);
+                return;
+            }
+
+            ((Action<TSignal>)_handler).Invoke(signal);
+
         }
 
         public bool Equals(EventSubscription other)
