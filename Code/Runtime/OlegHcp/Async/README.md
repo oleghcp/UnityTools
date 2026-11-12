@@ -44,7 +44,7 @@ public class MyClass
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/TaskSystem.png)
+![](https://drive.google.com/uc?export=view&id=1Gx-6TplO94vwRYJ3fkpZits4PrJyLczC)
 
 Also if you want to facilitate starting of coroutines you can create an extension class:
 
