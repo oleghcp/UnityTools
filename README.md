@@ -69,20 +69,20 @@ Mind that it uses assembly definitions.
 
 ## Preferences
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Preferences.png)
+![](https://drive.google.com/uc?export=view&id=1oEDcBWrQJlo-13iNrmTqe36nBb1bGSmm)
 
 ## Base Menu
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/BaseMenu.png)
+![](https://drive.google.com/uc?export=view&id=1-oVUWR9w9v7colGuvj4oIvW6cnYBVwJz)
 
 | Menu Item | Description |
 | - | - |
-| Tools/OlegHcp/Addressables/Analysis Results | Converts analysis results from bundle-duplicates to duplicate-bundles. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Addressables1.png) |
-| Tools/OlegHcp/Assets/Create Scriptable Object Asset | Allows to create assets based on `ScriptableObject` without `CreateAssetMenuAttribute`. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CreateAsset2.png) |
+| Tools/OlegHcp/Addressables/Analysis Results | Converts analysis results from bundle-duplicates to duplicate-bundles. ![](https://drive.google.com/uc?export=view&id=1FMZXO8Q3TjEf83jbfsb8FbP7UQafucbM) |
+| Tools/OlegHcp/Assets/Create Scriptable Object Asset | Allows to create assets based on `ScriptableObject` without `CreateAssetMenuAttribute`. ![](https://drive.google.com/uc?export=view&id=1tfNF_SxhuEtYI3la2H4wymP9hnIMJmO8) |
 | Tools/OlegHcp/Assets/Find Asset By Guid | Asset searching by guid. |
 | Tools/OlegHcp/Assets/Meshes/ | Creates simple mesh assets using mesh generating. |
 | Tools/OlegHcp/CaptureScreen/ | Creates screenshots and saves them to a file. |
-| Tools/OlegHcp/Code/Generate Layer Set Class | Allows to generate static class with layer and mask constants. ![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/LayerSet1.png) |
+| Tools/OlegHcp/Code/Generate Layer Set Class | Allows to generate static class with layer and mask constants. ![](https://drive.google.com/uc?export=view&id=1Sg0BAxC5q6GhudDgINjndF75DN03_9uR) |
 | Tools/OlegHcp/Files/Convert Code Files to UTF8 | Converts project code files to UTF8 including shaders. |
 | Tools/OlegHcp/Files/Convert Text Files to UTF8 | Converts all text files to UTF8 including code files. |
 | Tools/OlegHcp/Files/Find Huge Files | Searches files by given size. |
@@ -95,49 +95,49 @@ Mind that it uses assembly definitions.
 ## Custom Transform Editor
 
 Has quick reset buttons and can be switched between local and world view.  
-Has indicators of tool handles if they are switched to center and global value.
+Has indicators of tool handles if they are switched to center and global value.  
 Transform parameters can be copied to the clipboard as json string.
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform1.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform2.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform3.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/Transform4.png)
+![](https://drive.google.com/uc?export=view&id=1stLjPpHNO9p-s_bS2b0JBuowph96snKm)
+![](https://drive.google.com/uc?export=view&id=1YU6KvSFZT0ELQMQfLCxLFxLfwlmXs5tq)
+![](https://drive.google.com/uc?export=view&id=1LepuHkOKmqZPFKZMYDe_OM3xNrUBPSqS)
+![](https://drive.google.com/uc?export=view&id=1yXQtf_tTaU4qg2Wh10i3bMe2dhDEFYEH)
 
 ## Custom MeshRenderer Editor
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/MeshRendererEditor.png)
+![](https://drive.google.com/uc?export=view&id=1xnEFqGxdfUIRecCteRBa9x74NFiKseXf)
 
 ## Custom AnimationClip Editor
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/AnimationClipEditor.png)
+![](https://drive.google.com/uc?export=view&id=1BvC0YMkJPfsPeKRT1AgjgEHY64eJYkDS)
 
 ## Asset Context Menu
 
 - **Order Children**. Sorts siblings by name.
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderChildren1.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/OrderChildren2.png)
+![](https://drive.google.com/uc?export=view&id=1UhB_KmWsSU_Regy93RBeaY6p-pT3yaIy)
+![](https://drive.google.com/uc?export=view&id=1_jueottMWbkiTt6tAsBR1QDcBGfRSKvZ)
 
 - **Create Script From Template**. Template can be modified: \your_project\UserSettings\Templates\C#ScriptTemplate.cs.txt.
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CreateScriptFromTemplate.png)
+![](https://drive.google.com/uc?export=view&id=1ioAAabbSctRDP3KosIhoWC-exjqbtMI_)
 
 - **Show Asset Guid**
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ShowAssetGuid.png)
+![](https://drive.google.com/uc?export=view&id=1iIGWzIONejgMk04IaNptVvcqXquo6j53)
 
 - **Find References In Project**. The search via text also finds addressable references.
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/FindReferencesInProject.png)
+![](https://drive.google.com/uc?export=view&id=1BmSTjGloWMcKXz3QkxR-wAgo2jV5dc55)
 
 - **Create Asset Based On ScriptableObject**
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CreateAsset1.png)
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/CreateAsset2.png)
+![](https://drive.google.com/uc?export=view&id=11D3oMxpNjCqS0MKblQFdFXerKMXJPmCZ)
+![](https://drive.google.com/uc?export=view&id=1tfNF_SxhuEtYI3la2H4wymP9hnIMJmO8)
 
 - **Destroy Subasset**
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/DestroySubasset.png)
+![](https://drive.google.com/uc?export=view&id=1wGi8gFAyPDbdLiyJMIL5pcKyNyxSOQ9P)
 
 # License
 
