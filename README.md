@@ -91,6 +91,8 @@ Mind that it uses assembly definitions.
 | Tools/OlegHcp/Folders/Remove Empty Folders | Removes empty folders within Assets folder. |
 | Tools/OlegHcp/Misc/Generate GUID | Generates new GUID and outputs it to the console. |
 | Tools/OlegHcp/Misc/Create csc.rsp | Creates csc.rsp file with precreated compiler arguments. |
+| Tools/OlegHcp/Scene/Get Distance between Selected | Calculates the distance between two selected game objects. |
+| Tools/OlegHcp/Terminal/Create Terminal Prefab | Creates a terminal prefab variant based on the terminal template. |
 
 ## Custom Transform Editor
 
