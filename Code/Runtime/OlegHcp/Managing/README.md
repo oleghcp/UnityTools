@@ -96,4 +96,4 @@ public class ExampleClass : MonoBehaviour
 }
 ```
 
-![](https://raw.githubusercontent.com/oleghcp/UnityTools/master/_images/ServiceLocator.png)
++![](https://drive.google.com/uc?export=view&id=1hvrHVxT5kVADJeUuPH6FJDjf0y7AWE1s)
