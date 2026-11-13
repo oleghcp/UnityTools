@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using OlegHcp.Pool;
+using OlegHcp.Pool.Storages;
 
 namespace OlegHcp.Pathfinding
 {
     public class PathFinder
     {
-        private static ObjectPool<PathFinder> _objectPool = new ObjectPool<PathFinder>(() => new PathFinder());
-
+        private static ObjectPool<PathFinder> _objectPool = new(new ConcurrentQueueStorage<PathFinder>(),
+                                                                () => new PathFinder());
         private OrderedStack _frontBuffer = new OrderedStack();
         private HashSet<IPathNode> _checkBuffer = new HashSet<IPathNode>();
         private NodeDataCollection _nodeStuff = new NodeDataCollection();

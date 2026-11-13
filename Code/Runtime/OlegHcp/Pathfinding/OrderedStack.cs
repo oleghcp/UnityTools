@@ -5,17 +5,12 @@ using OlegHcp.Tools;
 
 namespace OlegHcp.Pathfinding
 {
-    internal class OrderedStack : HashSet<IPathNode>, IObjectFactory<OrderedStack.ValueNode>
+    internal class OrderedStack : HashSet<IPathNode>
     {
-        private ObjectPool<ValueNode> _objectPool;
-
+        private static ObjectPool<ValueNode> _objectPool = new(new ConcurrentQueueStorage<ValueNode>(),
+                                                               () => new ValueNode());
         private ValueNode _first;
         private ValueNode _last;
-
-        public OrderedStack()
-        {
-            _objectPool = new ObjectPool<ValueNode>(new StackStorage<ValueNode>(), this);
-        }
 
         public void Push(IPathNode value, float priority)
         {
@@ -108,11 +103,6 @@ namespace OlegHcp.Pathfinding
             _first = null;
             _last = null;
             base.Clear();
-        }
-
-        ValueNode IObjectFactory<ValueNode>.Create()
-        {
-            return new ValueNode();
         }
 
         private class ValueNode : IPoolable
