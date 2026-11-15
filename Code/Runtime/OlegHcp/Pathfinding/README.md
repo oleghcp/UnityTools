@@ -5,7 +5,7 @@
 ```csharp
 public class PathFinder
 {
-    public void Find(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder = true);
+    public bool Find(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder = true);
     public static bool FindPath(IPathNode origin, IPathNode target, List<IPathNode> result, bool directOrder = true);
 }
 ```
