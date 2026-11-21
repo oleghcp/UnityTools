@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OlegHcp.Mathematics;
 using OlegHcp.Tools;
 
 namespace OlegHcp.CSharp.Collections
@@ -515,36 +516,6 @@ namespace OlegHcp.CSharp.Collections
             }
         }
 
-        public static void DisplaceLeft<T>(this IList<T> self)
-        {
-            if (self.Count < 2)
-                return;
-
-            T tmp = self[0];
-
-            for (int i = 1; i < self.Count; i++)
-            {
-                self[i - 1] = self[i];
-            }
-
-            self[self.Count - 1] = tmp;
-        }
-
-        public static void DisplaceRight<T>(this IList<T> self)
-        {
-            if (self.Count < 2)
-                return;
-
-            T tmp = self.FromEnd(0);
-
-            for (int i = self.Count - 2; i >= 0; i--)
-            {
-                self[i + 1] = self[i];
-            }
-
-            self[0] = tmp;
-        }
-
         public static void MoveElement<T>(this IList<T> self, int oldIndex, int newIndex)
         {
             if ((uint)oldIndex >= (uint)self.Count)
@@ -574,6 +545,87 @@ namespace OlegHcp.CSharp.Collections
             }
 
             self[newIndex] = value;
+        }
+
+        public static void Shift<T>(this IList<T> self, int directedShift)
+        {
+            if (self.Count < 2)
+                return;
+
+            directedShift = directedShift.Repeat(self.Count);
+
+            if (directedShift > 0)
+                ShiftRight(self, directedShift);
+            else if (directedShift < 0)
+                ShiftLeft(self, directedShift);
+        }
+
+        private static void ShiftRight<T>(IList<T> list, int shift)
+        {
+            CacheContainer<T> cache = new CacheContainer<T>(shift);
+
+            for (int i = 0; i < shift; i++)
+            {
+                cache[shift - i - 1] = list.FromEnd(i);
+            }
+
+            for (int i = list.Count - 1; i >= shift; i--)
+            {
+                list[i] = list[i - shift];
+            }
+
+            for (int i = 0; i < shift; i++)
+            {
+                list[i] = cache[i];
+            }
+        }
+
+        private static void ShiftLeft<T>(IList<T> list, int shift)
+        {
+            CacheContainer<T> cache = new CacheContainer<T>(shift);
+
+            for (int i = 0; i < shift; i++)
+            {
+                cache[i] = list[i];
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i + shift];
+            }
+
+            for (int i = 1; i <= shift; i++)
+            {
+                list[^i] = cache[shift - i];
+            }
+        }
+
+        private struct CacheContainer<T>
+        {
+            private T[] _valueArray;
+            private T _singleValue;
+
+            public T this[int i]
+            {
+                get
+                {
+                    return _valueArray == null ? _singleValue
+                                               : _valueArray[i];
+                }
+                set
+                {
+                    if (_valueArray == null)
+                        _singleValue = value;
+                    else
+                        _valueArray[i] = value;
+                }
+            }
+
+            public CacheContainer(int count)
+            {
+                _valueArray = count == 1 ? null : new T[count];
+                _singleValue = default;
+            }
         }
     }
 }
