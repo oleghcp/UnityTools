@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using UnityEngine;
@@ -229,39 +228,46 @@ namespace OlegHcp.Engine
 
         public static void DestroyChildren(this Transform self)
         {
-            Transform[] children = self.GetTopChildren();
-
-            for (int i = 0; i < children.Length; i++)
-            {
-                children[i].gameObject.Destroy();
-            }
+            DestroyChildren(self.GetTopChildren());
         }
 
         public static void DestroyChildren(this Transform self, Predicate<Transform> predicate)
         {
-            Transform[] children = GetSelectedChildren(self, predicate);
+            DestroyChildren(GetSelectedChildren(self, predicate));
+        }
 
-            for (int i = 0; i < children.Length; i++)
+        private static void DestroyChildren(IList<Transform> children)
+        {
+            for (int i = children.Count - 1; i >= 0; i--)
             {
                 children[i].gameObject.Destroy();
             }
         }
 
+        private static IList<Transform> GetSelectedChildren(Transform self, Predicate<Transform> predicate)
+        {
+            int count = self.childCount;
+            List<Transform> children = new List<Transform>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                Transform child = self.GetChild(i);
+
+                if (predicate(child))
+                    children.Add(child);
+            }
+
+            return children;
+        }
+
         public static void DetachChildren(this Transform self, Predicate<Transform> predicate)
         {
-            Transform[] children = GetSelectedChildren(self, predicate);
+            IList<Transform> children = GetSelectedChildren(self, predicate);
 
-            for (int i = 0; i < children.Length; i++)
+            for (int i = children.Count - 1; i >= 0; i--)
             {
                 children[i].SetParent(null);
             }
-        }
-
-        private static Transform[] GetSelectedChildren(Transform self, Predicate<Transform> predicate)
-        {
-            return self.EnumerateChildren(false)
-                       .Where(item => predicate(item))
-                       .ToArray();
         }
 
         /// <summary>
