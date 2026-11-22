@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OlegHcp.CSharp;
 using OlegHcp.CSharp.Collections;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace OlegHcp.Engine
 {
@@ -240,7 +241,7 @@ namespace OlegHcp.Engine
         {
             for (int i = children.Count - 1; i >= 0; i--)
             {
-                children[i].gameObject.Destroy();
+                UnityObject.Destroy(children[i].gameObject, 0f);
             }
         }
 

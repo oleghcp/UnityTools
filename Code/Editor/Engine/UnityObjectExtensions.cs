@@ -17,9 +17,9 @@ namespace OlegHcpEditor.Engine
         {
             Transform[] children = self.GetTopChildren();
 
-            for (int i = 0; i < children.Length; i++)
+            for (int i = children.Length - 1; i >= 0; i--)
             {
-                children[i].gameObject.DestroyImmediate();
+                UnityObject.DestroyImmediate(children[i].gameObject);
             }
         }
 
@@ -29,9 +29,9 @@ namespace OlegHcpEditor.Engine
                                        .Where(item => predicate(item))
                                        .ToArray();
 
-            for (int i = 0; i < children.Length; i++)
+            for (int i = children.Length - 1; i >= 0; i--)
             {
-                children[i].gameObject.DestroyImmediate();
+                UnityObject.DestroyImmediate(children[i].gameObject);
             }
         }
     }
